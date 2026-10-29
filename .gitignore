@@ -1,0 +1,39 @@
+# Thư viện đã cài
+node_modules/
+
+# Kết quả build và kiểm thử
+dist/
+build/
+coverage/
+*.tsbuildinfo
+*.log
+
+# Biến môi trường
+.env
+.env.*
+!.env.example
+
+# Cấu hình riêng của WebStorm
+.idea/
+
+# HTML nguồn và dữ liệu chuyển đổi ban đầu
+/ieltspace-giao-dien.html
+/boards.json
+
+# Tài liệu tổng hợp
+/TONG_HOP_THAY_DOI.md
+/frontend/UI_REVIEW.md
+
+# Ảnh và kết quả kiểm tra tạm
+/frontend/*.png
+/frontend/*-check.json
+
+# Script chuyển đổi và kiểm tra dùng trong quá trình dựng giao diện
+/frontend/scripts/
+
+# File lock sinh nhầm ở thư mục gốc
+/package-lock.json
+
+# File hệ điều hành
+.DS_Store
+Thumbs.db

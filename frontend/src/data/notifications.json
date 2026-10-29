@@ -1,0 +1,62 @@
+{
+  "learner": [
+    {
+      "id": "learner-1",
+      "title": "Bài Writing Task 2 · Public transport đã có kết quả",
+      "description": "Cô Lan Hương công bố điểm 6.5 · 22/10 16:30",
+      "unread": true
+    },
+    {
+      "id": "learner-2",
+      "title": "Yêu cầu chấm Speaking Part 3 · Technology đã bị hủy",
+      "description": "Quá 72 giờ chưa có giáo viên phù hợp, đã hoàn 1 bonus · 21/10 19:41",
+      "unread": true
+    },
+    {
+      "id": "learner-3",
+      "title": "Yêu cầu chấm Writing Task 2 · Urban noise đã bị hủy",
+      "description": "Giáo viên không thể hoàn thành, đã hoàn 1 bonus · 15/10 09:00",
+      "unread": false
+    },
+    {
+      "id": "learner-4",
+      "title": "Bài Writing Task 1 Academic · Pie chart đã có kết quả",
+      "description": "Thầy Quốc Bảo công bố điểm 6.0 · 10/10 11:20",
+      "unread": false
+    }
+  ],
+  "teacher": [
+    {
+      "id": "teacher-1",
+      "title": "Bạn được phân công bài mới",
+      "description": "Writing Task 1 Academic · Hoàng Nam · 23/10 08:10",
+      "unread": true
+    },
+    {
+      "id": "teacher-2",
+      "title": "Bạn được phân công bài mới",
+      "description": "Speaking Part 2 · Nguyễn Minh Anh · 22/10 20:40",
+      "unread": false
+    },
+    {
+      "id": "teacher-3",
+      "title": "Quyền chấm Speaking của bạn đã được thu hồi",
+      "description": "Quản lý đã hoàn tất thu hồi sau khi bạn chấm xong bài cuối · 12/10 17:00",
+      "unread": false
+    }
+  ],
+  "admin": [
+    {
+      "id": "admin-1",
+      "title": "Cần xác nhận: Giáo viên không thể hoàn thành",
+      "description": "Thầy Quốc Bảo · 3 bài Writing chưa có kết quả · 23/10 07:55",
+      "unread": true
+    },
+    {
+      "id": "admin-2",
+      "title": "Cần xác nhận: Giáo viên không thể hoàn thành",
+      "description": "Cô Mai Anh · 1 bài Speaking · 14/10 10:30",
+      "unread": false
+    }
+  ]
+}

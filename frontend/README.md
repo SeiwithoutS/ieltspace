@@ -63,59 +63,59 @@ AdminSidebar, AdminTopbar, AuthHero, AuthError, LoginForm, RegisterForm, Questio
 
 | Tên trong HTML | File React |
 |---|---|
-| Main | `src/pages/Main.jsx` |
-| AvatarMenu | `src/pages/AvatarMenu.jsx` |
-| Login | `src/pages/Login.jsx` |
-| Register | `src/pages/Register.jsx` |
-| ForgotPassword | `src/pages/ForgotPassword.jsx` |
-| CheckEmail | `src/pages/CheckEmail.jsx` |
-| ResetPassword | `src/pages/ResetPassword.jsx` |
-| AuthHero | `src/components/AuthHero.jsx` |
-| LoginForm | `src/components/LoginForm.jsx` |
-| RegisterForm | `src/components/RegisterForm.jsx` |
-| AuthError | `src/components/AuthError.jsx` |
-| StudentLanding | `src/pages/StudentLanding.jsx` |
-| StudentHome | `src/pages/StudentHome.jsx` |
-| FullTests | `src/pages/FullTests.jsx` |
-| ExamDetail | `src/pages/ExamDetail.jsx` |
-| PracticeLibrary | `src/pages/PracticeLibrary.jsx` |
-| ReadingTest | `src/pages/ReadingTest.jsx` |
-| ListeningTest | `src/pages/ListeningTest.jsx` |
-| WritingTest | `src/pages/WritingTest.jsx` |
-| SpeakingTest | `src/pages/SpeakingTest.jsx` |
-| SubmitDialogs | `src/pages/SubmitDialogs.jsx` |
-| ResultLR | `src/pages/ResultLR.jsx` |
-| ResultWS | `src/pages/ResultWS.jsx` |
-| MyWS | `src/pages/MyWS.jsx` |
-| PracticeWS | `src/pages/PracticeWS.jsx` |
-| SampleLibrary | `src/pages/SampleLibrary.jsx` |
-| SampleWriting | `src/pages/SampleWriting.jsx` |
-| SampleSpeaking | `src/pages/SampleSpeaking.jsx` |
-| Vocab | `src/pages/Vocab.jsx` |
-| Flashcard | `src/pages/Flashcard.jsx` |
-| Profile | `src/pages/Profile.jsx` |
-| Notifications | `src/pages/Notifications.jsx` |
-| TeacherHome | `src/pages/TeacherHome.jsx` |
-| TeacherQueue | `src/pages/TeacherQueue.jsx` |
-| TeacherGrade | `src/pages/TeacherGrade.jsx` |
-| TeacherHistory | `src/pages/TeacherHistory.jsx` |
-| StaffProfile | `src/pages/StaffProfile.jsx` |
-| AdminHome | `src/pages/AdminHome.jsx` |
-| AdminUsers | `src/pages/AdminUsers.jsx` |
-| AdminGrading | `src/pages/AdminGrading.jsx` |
-| AdminExams | `src/pages/AdminExams.jsx` |
-| AdminExamSet | `src/pages/AdminExamSet.jsx` |
-| AdminReadingEditor | `src/pages/AdminReadingEditor.jsx` |
-| AdminListeningEditor | `src/pages/AdminListeningEditor.jsx` |
-| AdminWritingEditor | `src/pages/AdminWritingEditor.jsx` |
-| AdminSpeakingEditor | `src/pages/AdminSpeakingEditor.jsx` |
-| QuestionCards | `src/pages/QuestionCards.jsx` |
-| QuestionCard | `src/components/QuestionCard.jsx` |
-| AdminSamples | `src/pages/AdminSamples.jsx` |
-| AdminSampleWriting | `src/pages/AdminSampleWriting.jsx` |
-| AdminSampleSpeaking | `src/pages/AdminSampleSpeaking.jsx` |
-| AdminSidebar | `src/components/AdminSidebar.jsx` |
-| AdminTopbar | `src/components/AdminTopbar.jsx` |
+| Main | `src/pages/public/Main.jsx` |
+| AvatarMenu | `src/pages/account/AvatarMenu.jsx` |
+| Login | `src/pages/auth/Login.jsx` |
+| Register | `src/pages/auth/Register.jsx` |
+| ForgotPassword | `src/pages/auth/ForgotPassword.jsx` |
+| CheckEmail | `src/pages/auth/CheckEmail.jsx` |
+| ResetPassword | `src/pages/auth/ResetPassword.jsx` |
+| AuthHero | `src/components/auth/AuthHero.jsx` |
+| LoginForm | `src/components/auth/LoginForm.jsx` |
+| RegisterForm | `src/components/auth/RegisterForm.jsx` |
+| AuthError | `src/components/auth/AuthError.jsx` |
+| StudentLanding | `src/pages/learner/StudentLanding.jsx` |
+| StudentHome | `src/pages/learner/StudentHome.jsx` |
+| FullTests | `src/pages/exams/FullTests.jsx` |
+| ExamDetail | `src/pages/exams/ExamDetail.jsx` |
+| PracticeLibrary | `src/pages/practice/PracticeLibrary.jsx` |
+| ReadingTest | `src/pages/attempts/ReadingTest.jsx` |
+| ListeningTest | `src/pages/attempts/ListeningTest.jsx` |
+| WritingTest | `src/pages/attempts/WritingTest.jsx` |
+| SpeakingTest | `src/pages/attempts/SpeakingTest.jsx` |
+| SubmitDialogs | `src/pages/attempts/SubmitDialogs.jsx` |
+| ResultLR | `src/pages/results/ResultLR.jsx` |
+| ResultWS | `src/pages/results/ResultWS.jsx` |
+| MyWS | `src/pages/results/MyWS.jsx` |
+| PracticeWS | `src/pages/practice/PracticeWS.jsx` |
+| SampleLibrary | `src/pages/samples/SampleLibrary.jsx` |
+| SampleWriting | `src/pages/samples/SampleWriting.jsx` |
+| SampleSpeaking | `src/pages/samples/SampleSpeaking.jsx` |
+| Vocab | `src/pages/vocabulary/Vocab.jsx` |
+| Flashcard | `src/pages/vocabulary/Flashcard.jsx` |
+| Profile | `src/pages/account/Profile.jsx` |
+| Notifications | `src/pages/notifications/Notifications.jsx` |
+| TeacherHome | `src/pages/grading/TeacherHome.jsx` |
+| TeacherQueue | `src/pages/grading/TeacherQueue.jsx` |
+| TeacherGrade | `src/pages/grading/TeacherGrade.jsx` |
+| TeacherHistory | `src/pages/grading/TeacherHistory.jsx` |
+| StaffProfile | `src/pages/account/StaffProfile.jsx` |
+| AdminHome | `src/pages/admin/dashboard/AdminHome.jsx` |
+| AdminUsers | `src/pages/admin/users/AdminUsers.jsx` |
+| AdminGrading | `src/pages/admin/grading/AdminGrading.jsx` |
+| AdminExams | `src/pages/admin/exams/AdminExams.jsx` |
+| AdminExamSet | `src/pages/admin/exams/AdminExamSet.jsx` |
+| AdminReadingEditor | `src/pages/admin/exams/editors/AdminReadingEditor.jsx` |
+| AdminListeningEditor | `src/pages/admin/exams/editors/AdminListeningEditor.jsx` |
+| AdminWritingEditor | `src/pages/admin/exams/editors/AdminWritingEditor.jsx` |
+| AdminSpeakingEditor | `src/pages/admin/exams/editors/AdminSpeakingEditor.jsx` |
+| QuestionCards | `src/pages/admin/exams/editors/QuestionCards.jsx` |
+| QuestionCard | `src/components/exams/QuestionCard.jsx` |
+| AdminSamples | `src/pages/admin/samples/AdminSamples.jsx` |
+| AdminSampleWriting | `src/pages/admin/samples/AdminSampleWriting.jsx` |
+| AdminSampleSpeaking | `src/pages/admin/samples/AdminSampleSpeaking.jsx` |
+| AdminSidebar | `src/components/navigation/AdminSidebar.jsx` |
+| AdminTopbar | `src/components/navigation/AdminTopbar.jsx` |
 
 ## Kết quả kiểm tra
 
@@ -127,3 +127,7 @@ AdminSidebar, AdminTopbar, AuthHero, AuthError, LoginForm, RegisterForm, Questio
 ## Cập nhật điều hướng, giao diện tối và báo cáo
 
 Báo cáo hiện lưu trong localStorage của trình duyệt, chưa đồng bộ giữa máy hoặc tài khoản thật. Mã React đã được chỉnh sửa sau bước chuyển đổi; không chạy lại scripts/convert.py vì sẽ ghi đè các sửa đổi thủ công.
+
+## Tổ chức thư mục
+
+Pages và components đã được chia theo chức năng. Xem `src/README.md` để tra cứu. Không chạy lại các script chuyển đổi hoặc sắp xếp cũ vì chúng dùng cấu trúc trước đây.

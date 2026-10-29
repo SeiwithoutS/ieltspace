@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AccountMenu from '../components/AccountMenu';
+import AccountMenu from '../components/account/AccountMenu';
 import { pages, type PageName } from './pages';
 const initialRoute = location.hash.slice(1);
 const initialContext = /^(Admin|Question)/.test(initialRoute) ? 'AdminHome' : /^Teacher/.test(initialRoute) ? 'TeacherHome' : /^(Student|Profile$|MyWS$|Vocab$|Flashcard$)/.test(initialRoute) ? 'StudentHome' : sessionStorage.getItem('ieltspace-context') || 'StudentHome';

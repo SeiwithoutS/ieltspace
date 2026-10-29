@@ -37,3 +37,5 @@ coverage/
 # File hệ điều hành
 .DS_Store
 Thumbs.db
+# Tài liệu nguồn, ảnh kiểm tra và công cụ phụ trên máy
+/_local/

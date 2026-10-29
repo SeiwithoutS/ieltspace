@@ -29,7 +29,7 @@ frontend/
 ├── tsconfig.json
 ├── tailwind.config.js
 ├── postcss.config.js
-├── scripts/convert.py          # Công cụ chuyển từ HTML nguồn
+├── ../_local/tools/scripts/convert.py          # Công cụ chuyển từ HTML nguồn
 └── src/
     ├── main.tsx
     ├── app/
@@ -126,8 +126,10 @@ AdminSidebar, AdminTopbar, AuthHero, AuthError, LoginForm, RegisterForm, Questio
 
 ## Cập nhật điều hướng, giao diện tối và báo cáo
 
-Báo cáo hiện lưu trong localStorage của trình duyệt, chưa đồng bộ giữa máy hoặc tài khoản thật. Mã React đã được chỉnh sửa sau bước chuyển đổi; không chạy lại scripts/convert.py vì sẽ ghi đè các sửa đổi thủ công.
+Báo cáo hiện lưu trong localStorage của trình duyệt, chưa đồng bộ giữa máy hoặc tài khoản thật. Mã React đã được chỉnh sửa sau bước chuyển đổi; không chạy lại ../_local/tools/scripts/convert.py vì sẽ ghi đè các sửa đổi thủ công.
 
 ## Tổ chức thư mục
 
 Pages và components đã được chia theo chức năng. Xem `src/README.md` để tra cứu. Không chạy lại các script chuyển đổi hoặc sắp xếp cũ vì chúng dùng cấu trúc trước đây.
+
+Tài liệu nguồn, báo cáo kiểm tra và công cụ chuyển đổi đã được chuyển sang `../_local/` (không đưa lên Git). Hướng dẫn clone và chạy dự án nằm ở `../README.md`.

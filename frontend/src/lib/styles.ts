@@ -17,7 +17,7 @@ export function styleOf(value: string): CSSProperties {
  for(let i=0;i<declaration.length;i++){ const k=declaration[i]; const key=k.startsWith('--')?k:k.replace(/^-ms-/,'ms-').replace(/-([a-z])/g,(_,c)=>c.toUpperCase()); style[key]=declaration.getPropertyValue(k); }
  if(document.documentElement.classList.contains('dark')) {
  const bg=style.backgroundColor || style.background;
- if(bg && /^#[a-f0-9]{6}$/i.test(bg)) { const n=parseInt(bg.slice(1),16); const light=(((n>>16)&255)*299+((n>>8)&255)*587+(n&255)*114)/1000; if(light>180 && style.color)style.color='#211a26'; }
+ if(bg && /^#[a-f0-9]{6}$/i.test(bg)) { const n=parseInt(bg.slice(1),16); const light=(((n>>16)&255)*299+((n>>8)&255)*587+(n&255)*114)/1000; if(light>180 && style.color)style.color='#202125'; }
  }
  cache.set(css,style);return style;
 }

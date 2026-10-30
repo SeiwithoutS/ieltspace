@@ -1,5 +1,5 @@
 .support-shell,.support-panel {font-family:'Inter','Be Vietnam Pro','Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.6;color:var(--support-text);--support-text:#352637;--support-muted:#706473;--support-bg:#FCFBF7;--support-card:#FFFFFF;--support-line:#D6D4D0;--support-soft:#F3F0EA;--support-accent:#2963CC;--support-selected:#E3ECFD;background:var(--support-bg)}
-html.dark .support-shell,html.dark .support-panel {--support-text:#F2ECF3;--support-muted:#B4A8B7;--support-bg:#1A141C;--support-card:#221B25;--support-line:#3E3A55;--support-soft:#2B232E;--support-accent:#8DB0F7;--support-selected:#1E2740}
+html.dark .support-shell,html.dark .support-panel {--support-text:#F1F2F4;--support-muted:#B2B3B9;--support-bg:#202125;--support-card:#292A2E;--support-line:#46474D;--support-soft:#333438;--support-accent:#8DB0F7;--support-selected:#26314D}
 .support-panel {padding:28px 32px;box-sizing:border-box;width:100%;max-width:1400px;margin:0 auto}
 .support-profile {max-width:100%;background:var(--support-card);border:1.5px solid var(--support-line);border-radius:22px;margin:24px 0}
 .support-heading {display:flex;align-items:center;gap:14px}

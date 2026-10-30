@@ -1,9 +1,12 @@
 @tailwind components;
 @tailwind utilities;
 body { margin: 0; }
-html.dark,html.dark body {background:#1A141C;color-scheme:dark}
+html.dark,html.dark body {background:#202125;color-scheme:dark}
 html.dark mark {color:inherit}
-html:not(.dark) [data-theme-toggle=light],html.dark [data-theme-toggle=dark]{font-weight:600!important}
+html:not(.dark) [data-theme-toggle=light]{background:#FFFFFF!important;border-color:#D6D4D0!important;color:#352637!important;font-weight:600!important}
+html:not(.dark) [data-theme-toggle=dark]{background:transparent!important;border-color:transparent!important;color:#6A5D6C!important;font-weight:500!important}
+html.dark [data-theme-toggle=dark]{background:#292A2E!important;border-color:#46474D!important;color:#F1F2F4!important;font-weight:600!important}
+html.dark [data-theme-toggle=light]{background:transparent!important;border-color:transparent!important;color:#B2B3B9!important;font-weight:500!important}
 html.dark button,html.dark input,html.dark textarea,html.dark select {color-scheme:dark}
 /* Navigation shells occupy the viewport; their main column owns scrolling. */
 body:has(.app-shell), body:has(.app-shell) #root {height:100dvh;overflow:hidden}

@@ -4,155 +4,3045 @@ import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar from "../../../components/navigation/AdminTopbar";
 
 class AdminSampleSpeaking extends React.Component {
+  componentDidMount() {
+    var self = this;
+    this._key = function (e) {
+      var tag = (e.target && e.target.tagName) || "";
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        !e.shiftKey &&
+        (e.key === "z" || e.key === "Z") &&
+        tag !== "INPUT" &&
+        tag !== "TEXTAREA"
+      ) {
+        e.preventDefault();
+        if (self._undo) {
+          self._undo();
+        }
+      }
+      if (e.key === "Escape") {
+        var st = self.state || {};
+        if (st.leave) {
+          self.setState({ leave: false });
+        } else if (st.pubAsk) {
+          self.setState({ pubAsk: false });
+        } else if (st.confirm) {
+          self.setState({ confirm: null });
+        }
+      }
+    };
+    document.addEventListener("keydown", this._key);
+  }
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this._key);
+  }
+  renderVals() {
+    var me = this,
+      PR = me.props || {},
+      DEF = "Part 1 · Websites (đã đăng)";
+    if (me._in === undefined) {
+      me._in = (function () {
+        try {
+          var o = JSON.parse(
+            sessionStorage.getItem("ieltspace-sample") || "null",
+          );
+          if (o && Date.now() - o.at < 20000) {
+            sessionStorage.removeItem("ieltspace-sample");
+            return o.v;
+          }
+        } catch (err) {}
+        return null;
+      })();
+    }
+    var IN = me._in,
+      MAU = PR.mau || DEF;
+    var VAR = IN ? "in" : MAU,
+      S0 = me.state || {},
+      s = (S0.v || VAR) === VAR ? S0 : {};
+    var self = Object.create(me);
+    self.setState = function (o, cb) {
+      var x = {},
+        k;
+      if ((S0.v || VAR) !== VAR) {
+        for (k in S0) {
+          x[k] = undefined;
+        }
+      }
+      for (k in o || {}) {
+        x[k] = o[k];
+      }
+      x.v = VAR;
+      return me.setState(x, cb);
+    };
+    var FULL = {
+        s1: {
+          id: "s1",
+          part: 1,
+          title: "Websites",
+          topic: "Technology",
+          source: "Q3/2026",
+          band: "8.0",
+          cover: null,
+          outlineIntro: "",
+          outline: "",
+          items: [
+            {
+              q: "Do you prefer getting information from websites or books?",
+              a: "Honestly, I'm more of a **website person**. Whenever I need to look something up, I can **get the answer within seconds** and I can compare several sources. That said, I still pick up a book when I want to understand a topic in depth, because it feels **more reliable and less distracting**.",
+              audio: { name: "websites-q1.mp3", size: "380 KB" },
+            },
+            {
+              q: "How often do you visit websites to find information?",
+              a: "Pretty much every day. I use the internet to **check the news in the morning**, and I often **look up unfamiliar words** while studying. On a busy day I might open dozens of pages without even noticing.",
+              audio: { name: "websites-q2.mp3", size: "470 KB" },
+            },
+            {
+              q: "Is there a website that you visit regularly?",
+              a: "Yes, there's an English-learning site that I **go back to on a daily basis**. It's well organised, so I can **pick up new vocabulary** in just ten minutes before bed.",
+              audio: { name: "websites-q3.mp3", size: "560 KB" },
+            },
+          ],
+          status: "pub",
+        },
+        s3: {
+          id: "s3",
+          part: 2,
+          title: "Describe a law on environmental protection",
+          topic: "Environment",
+          source: "Q3/2026",
+          band: "8.0",
+          cover: null,
+          outlineIntro:
+            "Với đề này, ta chọn luật cấm túi nilon dùng một lần: dễ kể, dễ giải thích ảnh hưởng và dễ nêu quan điểm.",
+          outline:
+            "## Giới thiệu luật\n- Cấm túi nilon dùng một lần trên toàn quốc\n- Cửa hàng không được phát túi miễn phí\n## Ảnh hưởng\n- Người dân mang túi vải, ít rác thải hơn\n## Quan điểm\n- Đây là luật tốt vì thay đổi thói quen",
+          items: [
+            {
+              q: "Describe a law on environmental protection\nYou should say:\n- what the law is\n- when it was introduced\n- how it affects people\nand explain whether you think it is a good law.",
+              a: "There are a few laws that I can think of, but the one that comes to mind is the **nationwide ban on single-use plastic bags**, which was introduced in my country a few years ago.\n\nIn short, shops and supermarkets are no longer allowed to **give away free plastic bags**, and customers have to pay a small fee or bring their own. I first heard about it on the news, and at the beginning a lot of people complained because it felt **inconvenient**.\n\nPersonally, I think it is a **really good law**. It has changed our habits: I now keep a **reusable tote bag** in my backpack, and I see far fewer bags floating in rivers. It also made people more **aware of the environmental impact** of everyday choices.",
+              audio: { name: "law-environment-part2.mp3", size: "2,4 MB" },
+            },
+          ],
+          status: "pub",
+        },
+        s5: {
+          id: "s5",
+          part: 3,
+          title: "Laws to protect the environment",
+          topic: "Environment",
+          source: "Q3/2026",
+          band: "8.0",
+          cover: null,
+          outlineIntro: "",
+          outline: "",
+          items: [
+            {
+              q: "Why do some people not follow rules?",
+              a: "I think there are **two main reasons**. Some people simply don't see the point, especially when a rule seems **unreasonable**. Others know the rule but believe nobody will **notice or punish** them.",
+              audio: { name: "laws-q1.mp3", size: "640 KB" },
+            },
+            {
+              q: "What is the purpose of punishment?",
+              a: "Mainly to **discourage bad behaviour**. If people know there are **real consequences**, they will think twice before breaking the law. It also protects people who follow the rules.",
+              audio: { name: "laws-q2.mp3", size: "640 KB" },
+            },
+            {
+              q: "How can parents and teachers help children follow rules?",
+              a: "By **setting a good example** and explaining the reasons behind each rule instead of just giving orders. Praise also helps, because children **repeat what gets rewarded**.",
+              audio: null,
+            },
+            {
+              q: "What kinds of rules do schools in Vietnam have?",
+              a: "Most schools require students to **wear uniforms**, arrive on time and respect their teachers. Some also have rules about **mobile phones** in class.",
+              audio: null,
+            },
+          ],
+          status: "pub",
+        },
+      },
+      EMPTY = {
+        id: "",
+        part: 1,
+        title: "",
+        topic: "",
+        source: "",
+        band: "8.0",
+        cover: null,
+        outlineIntro: "",
+        outline: "",
+        items: [{ q: "", a: "" }],
+        status: "draft",
+      },
+      MAPS = {
+        "Part 1 · Websites (đã đăng)": "s1",
+        "Part 2 · Describe a law on environmental protection (đã đăng)": "s3",
+        "Part 3 · Laws to protect the environment (đã đăng)": "s5",
+      };
+    function clone(o) {
+      return JSON.parse(JSON.stringify(o));
+    }
+    function ensure(x) {
+      if (!x.items || !x.items.length) {
+        x.items = [{ q: "", a: "" }];
+      }
+      if (x.part === 2) {
+        x.items = [x.items[0]];
+      }
+    }
+    function initial() {
+      if (IN) {
+        var b;
+        if (IN.id && FULL[IN.id]) {
+          b = clone(FULL[IN.id]);
+        } else {
+          b = clone(EMPTY);
+          if (IN.meta) {
+            var m = IN.meta;
+            b.id = m.id;
+            b.title = m.title;
+            b.topic = m.topic;
+            b.band = m.band;
+            b.part = m.part || 1;
+            b.status = m.status;
+          }
+        }
+        if (IN.mode === "new") {
+          b = clone(EMPTY);
+          b.edit = true;
+          if (IN.part) {
+            b.part = IN.part;
+          }
+        }
+        ensure(b);
+        return b;
+      }
+      if (MAPS[MAU]) {
+        return clone(FULL[MAPS[MAU]]);
+      }
+      if (MAU === "Bản nháp thiếu nội dung") {
+        var n = clone(EMPTY);
+        n.title = "Hometown";
+        n.topic = "Places";
+        n.band = "7.5";
+        n.items = [
+          { q: "Where is your hometown?", a: "" },
+          { q: "", a: "" },
+        ];
+        return n;
+      }
+      return clone(EMPTY);
+    }
+    var ex = s.ex || initial();
+    var editing = s.editing == null ? !!ex.edit : !!s.editing;
+    var base = s.base || ex,
+      dirty = editing && JSON.stringify(base) !== JSON.stringify(ex),
+      nChange = (s.hist || []).length;
+    function stop(e) {
+      if (e && e.preventDefault) {
+        e.preventDefault();
+      }
+    }
+    function upd(fn, extra, tag) {
+      if (!editing) {
+        return;
+      }
+      var n = clone(ex);
+      fn(n);
+      var hist = s.hist || [];
+      if (!(tag && s.lastTag === tag)) {
+        hist = hist.concat([ex]).slice(-50);
+      }
+      var st = {
+        ex: n,
+        issues: null,
+        hist: hist,
+        lastTag: tag || null,
+        snack: null,
+      };
+      if (extra) {
+        for (var k in extra) {
+          st[k] = extra[k];
+        }
+      }
+      self.setState(st);
+    }
+    function setter(fn) {
+      return function (e) {
+        var v = e.target.value;
+        upd(
+          function (x) {
+            fn(x, v);
+          },
+          null,
+          "type",
+        );
+      };
+    }
+    function ask(title, sub, run) {
+      self.setState({
+        confirm: { title: title, sub: sub },
+        confirmRun: run,
+        snack: null,
+      });
+    }
+    function undo(e) {
+      stop(e);
+      var h = s.hist || [];
+      if (!h.length) {
+        return;
+      }
+      self.setState({
+        ex: h[h.length - 1],
+        hist: h.slice(0, -1),
+        lastTag: null,
+        snack: null,
+        issues: null,
+        confirm: null,
+      });
+    }
+    me._undo = undo;
+    var CHIP =
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600",
+      PILL =
+        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 999px; box-sizing: border-box; font-size: 13.5px; font-weight: 600; text-decoration: none; cursor: pointer; white-space: nowrap";
+    function plural(n) {
+      return n;
+    }
+    function lines(t) {
+      return String(t || "").split("\n");
+    }
+    function segsOf(l) {
+      var segs = [];
+      String(l)
+        .split(/(\*\*[^*]+\*\*|\*[^*]+\*)/)
+        .forEach(function (t) {
+          if (!t) {
+            return;
+          }
+          if (/^\*\*[^*]+\*\*$/.test(t)) {
+            segs.push({ t: t.slice(2, -2), st: "font-weight: 700" });
+          } else if (/^\*[^*]+\*$/.test(t)) {
+            segs.push({ t: t.slice(1, -1), st: "font-style: italic" });
+          } else {
+            segs.push({ t: t, st: "" });
+          }
+        });
+      return segs;
+    }
+    function mdLines(text) {
+      return lines(text).map(function (raw) {
+        var l = raw.trim(),
+          kind = "p";
+        if (!l) {
+          return { li: false, segs: [], st: "height: 8px" };
+        }
+        if (/^#{1,3} /.test(l)) {
+          kind = "h";
+          l = l.replace(/^#{1,3} /, "");
+        } else if (/^[-•] /.test(l)) {
+          kind = "li";
+          l = l.slice(2);
+        }
+        return {
+          li: kind === "li",
+          segs: segsOf(l),
+          st:
+            "display: flex; gap: 4px; " +
+            (kind === "h"
+              ? "font-weight: 700; font-size: 15.5px"
+              : kind === "li"
+                ? "padding-left: 4px"
+                : ""),
+        };
+      });
+    }
+    function words(t) {
+      var x = String(t || "")
+        .replace(/[*#]/g, " ")
+        .replace(/^\s*- /gm, " ")
+        .trim();
+      return x ? x.split(/\s+/).length : 0;
+    }
 
-componentDidMount() {
-  var self = this;
-  this._key = function (e) { var tag = (e.target && e.target.tagName) || '';
-    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && (e.key === 'z' || e.key === 'Z') && tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); if (self._undo) { self._undo(); } }
-    if (e.key === 'Escape') { var st = self.state || {}; if (st.leave) { self.setState({ leave: false }); } else if (st.pubAsk) { self.setState({ pubAsk: false }); } else if (st.confirm) { self.setState({ confirm: null }); } } };
-  document.addEventListener('keydown', this._key);
-}
-componentWillUnmount() { document.removeEventListener('keydown', this._key); }
-renderVals() {
-var me = this, PR = me.props || {}, DEF = 'Part 1 · Websites (đã đăng)';
-if (me._in === undefined) { me._in = (function () { try { var o = JSON.parse(sessionStorage.getItem('ieltspace-sample') || 'null'); if (o && Date.now() - o.at < 20000) { sessionStorage.removeItem('ieltspace-sample'); return o.v; } } catch (err) { } return null; })(); }
-var IN = me._in, MAU = PR.mau || DEF;
-var VAR = IN ? 'in' : MAU, S0 = me.state || {}, s = (S0.v || VAR) === VAR ? S0 : {};
-var self = Object.create(me); self.setState = function (o, cb) { var x = {}, k;
-  if ((S0.v || VAR) !== VAR) { for (k in S0) { x[k] = undefined; } } for (k in (o || {})) { x[k] = o[k]; } x.v = VAR; return me.setState(x, cb); };
-var FULL = {"s1": {"id": "s1", "part": 1, "title": "Websites", "topic": "Technology", "source": "Q3/2026", "band": "8.0", "cover": null, "outlineIntro": "", "outline": "", "items": [{"q": "Do you prefer getting information from websites or books?", "a": "Honestly, I'm more of a **website person**. Whenever I need to look something up, I can **get the answer within seconds** and I can compare several sources. That said, I still pick up a book when I want to understand a topic in depth, because it feels **more reliable and less distracting**.", "audio": {"name": "websites-q1.mp3", "size": "380 KB"}}, {"q": "How often do you visit websites to find information?", "a": "Pretty much every day. I use the internet to **check the news in the morning**, and I often **look up unfamiliar words** while studying. On a busy day I might open dozens of pages without even noticing.", "audio": {"name": "websites-q2.mp3", "size": "470 KB"}}, {"q": "Is there a website that you visit regularly?", "a": "Yes, there's an English-learning site that I **go back to on a daily basis**. It's well organised, so I can **pick up new vocabulary** in just ten minutes before bed.", "audio": {"name": "websites-q3.mp3", "size": "560 KB"}}], "status": "pub"}, "s3": {"id": "s3", "part": 2, "title": "Describe a law on environmental protection", "topic": "Environment", "source": "Q3/2026", "band": "8.0", "cover": null, "outlineIntro": "Với đề này, ta chọn luật cấm túi nilon dùng một lần: dễ kể, dễ giải thích ảnh hưởng và dễ nêu quan điểm.", "outline": "## Giới thiệu luật\n- Cấm túi nilon dùng một lần trên toàn quốc\n- Cửa hàng không được phát túi miễn phí\n## Ảnh hưởng\n- Người dân mang túi vải, ít rác thải hơn\n## Quan điểm\n- Đây là luật tốt vì thay đổi thói quen", "items": [{"q": "Describe a law on environmental protection\nYou should say:\n- what the law is\n- when it was introduced\n- how it affects people\nand explain whether you think it is a good law.", "a": "There are a few laws that I can think of, but the one that comes to mind is the **nationwide ban on single-use plastic bags**, which was introduced in my country a few years ago.\n\nIn short, shops and supermarkets are no longer allowed to **give away free plastic bags**, and customers have to pay a small fee or bring their own. I first heard about it on the news, and at the beginning a lot of people complained because it felt **inconvenient**.\n\nPersonally, I think it is a **really good law**. It has changed our habits: I now keep a **reusable tote bag** in my backpack, and I see far fewer bags floating in rivers. It also made people more **aware of the environmental impact** of everyday choices.", "audio": {"name": "law-environment-part2.mp3", "size": "2,4 MB"}}], "status": "pub"}, "s5": {"id": "s5", "part": 3, "title": "Laws to protect the environment", "topic": "Environment", "source": "Q3/2026", "band": "8.0", "cover": null, "outlineIntro": "", "outline": "", "items": [{"q": "Why do some people not follow rules?", "a": "I think there are **two main reasons**. Some people simply don't see the point, especially when a rule seems **unreasonable**. Others know the rule but believe nobody will **notice or punish** them.", "audio": {"name": "laws-q1.mp3", "size": "640 KB"}}, {"q": "What is the purpose of punishment?", "a": "Mainly to **discourage bad behaviour**. If people know there are **real consequences**, they will think twice before breaking the law. It also protects people who follow the rules.", "audio": {"name": "laws-q2.mp3", "size": "640 KB"}}, {"q": "How can parents and teachers help children follow rules?", "a": "By **setting a good example** and explaining the reasons behind each rule instead of just giving orders. Praise also helps, because children **repeat what gets rewarded**.", "audio": null}, {"q": "What kinds of rules do schools in Vietnam have?", "a": "Most schools require students to **wear uniforms**, arrive on time and respect their teachers. Some also have rules about **mobile phones** in class.", "audio": null}], "status": "pub"}}, EMPTY = {"id": "", "part": 1, "title": "", "topic": "", "source": "", "band": "8.0", "cover": null, "outlineIntro": "", "outline": "", "items": [{"q": "", "a": ""}], "status": "draft"}, MAPS = {"Part 1 · Websites (đã đăng)": "s1", "Part 2 · Describe a law on environmental protection (đã đăng)": "s3", "Part 3 · Laws to protect the environment (đã đăng)": "s5"};
-function clone(o) { return JSON.parse(JSON.stringify(o)); }
-function ensure(x) { if (!x.items || !x.items.length) { x.items = [{ q: '', a: '' }]; } if (x.part === 2) { x.items = [x.items[0]]; } }
-function initial() {
-  if (IN) { var b; if (IN.id && FULL[IN.id]) { b = clone(FULL[IN.id]); } else { b = clone(EMPTY); if (IN.meta) { var m = IN.meta; b.id = m.id; b.title = m.title; b.topic = m.topic; b.band = m.band; b.part = m.part || 1; b.status = m.status; } }
-    if (IN.mode === 'new') { b = clone(EMPTY); b.edit = true; if (IN.part) { b.part = IN.part; } } ensure(b); return b; }
-  if (MAPS[MAU]) { return clone(FULL[MAPS[MAU]]); }
-  if (MAU === 'Bản nháp thiếu nội dung') { var n = clone(EMPTY); n.title = 'Hometown'; n.topic = 'Places'; n.band = '7.5'; n.items = [{ q: 'Where is your hometown?', a: '' }, { q: '', a: '' }]; return n; }
-  return clone(EMPTY); }
-var ex = s.ex || initial();
-var editing = s.editing == null ? !!ex.edit : !!s.editing;
-var base = s.base || ex, dirty = editing && JSON.stringify(base) !== JSON.stringify(ex), nChange = (s.hist || []).length;
-function stop(e) { if (e && e.preventDefault) { e.preventDefault(); } }
-function upd(fn, extra, tag) { if (!editing) { return; } var n = clone(ex); fn(n); var hist = s.hist || [];
-  if (!(tag && s.lastTag === tag)) { hist = hist.concat([ex]).slice(-50); }
-  var st = { ex: n, issues: null, hist: hist, lastTag: tag || null, snack: null }; if (extra) { for (var k in extra) { st[k] = extra[k]; } } self.setState(st); }
-function setter(fn) { return function (e) { var v = e.target.value; upd(function (x) { fn(x, v); }, null, 'type'); }; }
-function ask(title, sub, run) { self.setState({ confirm: { title: title, sub: sub }, confirmRun: run, snack: null }); }
-function undo(e) { stop(e); var h = s.hist || []; if (!h.length) { return; } self.setState({ ex: h[h.length - 1], hist: h.slice(0, -1), lastTag: null, snack: null, issues: null, confirm: null }); }
-me._undo = undo;
-var CHIP = 'display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600', PILL = 'display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 999px; box-sizing: border-box; font-size: 13.5px; font-weight: 600; text-decoration: none; cursor: pointer; white-space: nowrap';
-function plural(n) { return n; }
-function lines(t) { return String(t || '').split('\n'); }
-function segsOf(l) { var segs = []; String(l).split(/(\*\*[^*]+\*\*|\*[^*]+\*)/).forEach(function (t) { if (!t) { return; }
-    if (/^\*\*[^*]+\*\*$/.test(t)) { segs.push({ t: t.slice(2, -2), st: 'font-weight: 700' }); } else if (/^\*[^*]+\*$/.test(t)) { segs.push({ t: t.slice(1, -1), st: 'font-style: italic' }); } else { segs.push({ t: t, st: '' }); } }); return segs; }
-function mdLines(text) { return lines(text).map(function (raw) { var l = raw.trim(), kind = 'p';
-    if (!l) { return { li: false, segs: [], st: 'height: 8px' }; }
-    if (/^#{1,3} /.test(l)) { kind = 'h'; l = l.replace(/^#{1,3} /, ''); } else if (/^[-•] /.test(l)) { kind = 'li'; l = l.slice(2); }
-    return { li: kind === 'li', segs: segsOf(l), st: 'display: flex; gap: 4px; ' + (kind === 'h' ? 'font-weight: 700; font-size: 15.5px' : kind === 'li' ? 'padding-left: 4px' : '') }; }); }
-function words(t) { var x = String(t || '').replace(/[*#]/g, ' ').replace(/^\s*- /gm, ' ').trim(); return x ? x.split(/\s+/).length : 0; }
+    function pillList(list, cur, pick) {
+      return list.map(function (o) {
+        var on = cur === o[0];
+        return {
+          name: o[1],
+          on: on,
+          pick: function (e) {
+            stop(e);
+            if (editing) {
+              pick(o[0]);
+            }
+          },
+          st:
+            PILL +
+            "; " +
+            (on
+              ? "background: #E3ECFD; border: 1.5px solid #2963CC; color: #2257B8"
+              : "background: #FFFFFF; border: 1.5px solid #D6D4D0; color: #4B3D4D"),
+        };
+      });
+    }
+    var items = ex.items || [],
+      isP2 = ex.part === 2,
+      F = {};
+    F.partPills = pillList(
+      [
+        [1, "Part 1"],
+        [2, "Part 2"],
+        [3, "Part 3"],
+      ],
+      ex.part,
+      function (v) {
+        upd(function (x) {
+          x.part = v;
+          ensure(x);
+        });
+      },
+    );
+    F.bandPills = pillList(
+      ["7.0", "7.5", "8.0", "8.5", "9.0"].map(function (b) {
+        return [b, b];
+      }),
+      ex.band,
+      function (v) {
+        upd(function (x) {
+          x.band = v;
+        });
+      },
+    );
+    F.title = ex.title;
+    F.setTitle = setter(function (x, v) {
+      x.title = v;
+    });
+    F.topic = ex.topic;
+    F.setTopic = setter(function (x, v) {
+      x.topic = v;
+    });
+    F.source = ex.source;
+    F.setSource = setter(function (x, v) {
+      x.source = v;
+    });
+    F.outlineIntro = ex.outlineIntro || "";
+    F.setOutlineIntro = setter(function (x, v) {
+      x.outlineIntro = v;
+    });
+    var ids =
+      me._ids ||
+      (me._ids = { ol: "ol-" + Math.random().toString(36).slice(2, 7) });
+    function mkEd(p, field) {
+      var id = ids[p];
+      var edit = function (fn) {
+        return function (e) {
+          stop(e);
+          var el = document.getElementById(id),
+            v = ex[field] || "",
+            a = v.length,
+            b = v.length;
+          if (el) {
+            v = el.value;
+            a = el.selectionStart;
+            b = el.selectionEnd;
+          }
+          var r = fn(v, a, b);
+          upd(function (x) {
+            x[field] = r;
+          });
+        };
+      };
+      var wrap = function (m, ph) {
+        return edit(function (v, a, b) {
+          return v.slice(0, a) + m + (v.slice(a, b) || ph) + m + v.slice(b);
+        });
+      };
+      var pre = function (pf) {
+        return edit(function (v, a, b) {
+          var st = v.lastIndexOf("\n", a - 1) + 1,
+            en = v.indexOf("\n", b);
+          if (en < 0) {
+            en = v.length;
+          }
+          var blk = v.slice(st, en).split("\n"),
+            all = blk.every(function (l) {
+              return l.indexOf(pf) === 0;
+            });
+          blk = blk.map(function (l) {
+            var c = l.replace(/^(#{1,3} |- |• )/, "");
+            return all ? c : pf + c;
+          });
+          return v.slice(0, st) + blk.join("\n") + v.slice(en);
+        });
+      };
+      return {
+        id: id,
+        text: ex[field] || "",
+        set: setter(function (x, v) {
+          x[field] = v;
+        }),
+        b: wrap("**", "chữ đậm"),
+        i: wrap("*", "chữ nghiêng"),
+        h: pre("## "),
+        l: pre("- "),
+      };
+    }
+    F.ol = mkEd("ol", "outline");
+    // ---- đề bài và bài mẫu
+    F.isP2 = isP2;
+    F.notP2 = !isP2;
+    F.qSub = isP2
+      ? "Part 2: một cue card, một bài mẫu và audio của bài mẫu."
+      : "Part " +
+        ex.part +
+        ": danh sách câu hỏi, mỗi câu có bài mẫu và audio riêng.";
+    var it0 = items[0] || { q: "", a: "" };
+    F.cue = it0.q;
+    F.setCue = function (e) {
+      var v = e.target.value;
+      upd(
+        function (x) {
+          ensure(x);
+          x.items[0].q = v;
+        },
+        null,
+        "cue",
+      );
+    };
+    F.ans2 = it0.a;
+    F.setAns2 = function (e) {
+      var v = e.target.value;
+      upd(
+        function (x) {
+          ensure(x);
+          x.items[0].a = v;
+        },
+        null,
+        "ans2",
+      );
+    };
+    var n2 = words(it0.a);
+    F.wc2 = n2 + " từ";
+    F.wc2St = "color: #6A5D6C";
+    F.items = items.map(function (it, i) {
+      return {
+        label: "Câu " + (i + 1),
+        q: it.q,
+        a: it.a,
+        wc: words(it.a) + " từ",
+        canDel: items.length > 1,
+        setQ: function (e) {
+          var v = e.target.value;
+          upd(
+            function (x) {
+              x.items[i].q = v;
+            },
+            null,
+            "q" + i,
+          );
+        },
+        setA: function (e) {
+          var v = e.target.value;
+          upd(
+            function (x) {
+              x.items[i].a = v;
+            },
+            null,
+            "a" + i,
+          );
+        },
+        del: function (e) {
+          stop(e);
+          ask(
+            "Xóa câu " + (i + 1) + "?",
+            "Câu hỏi và bài mẫu của câu này sẽ bị xóa. Có thể hoàn tác ngay sau khi xóa.",
+            function () {
+              upd(
+                function (x) {
+                  x.items.splice(i, 1);
+                },
+                { confirm: null, snack: "Đã xóa câu " + (i + 1) + "." },
+              );
+            },
+          );
+        },
+      };
+    });
+    F.addQ = function (e) {
+      stop(e);
+      upd(function (x) {
+        x.items.push({ q: "", a: "" });
+      });
+    };
+    // ---- audio (mỗi thẻ bài mẫu có audio riêng: it.audio)
+    function mkAudio(i) {
+      var a = (items[i] || {}).audio,
+        bad = s.audioErrAt === i && s.audioErr;
+      return {
+        hasAudio: !!a,
+        noAudio: !a,
+        audioName: a ? a.name : "",
+        audioSize: a ? a.size : "",
+        audioErr: !!bad,
+        audioErrText: bad || "",
+        pickAudio: function (e) {
+          var f = e && e.target && e.target.files && e.target.files[0];
+          if (!f) {
+            return;
+          }
+          if (!/\.(mp3|m4a|wav)$/i.test(f.name) && !/^audio\//.test(f.type)) {
+            self.setState({
+              audioErr: "Audio phải là MP3, M4A hoặc WAV.",
+              audioErrAt: i,
+            });
+            return;
+          }
+          if (f.size > 20 * 1024 * 1024) {
+            self.setState({
+              audioErr: "Audio lớn hơn 20 MB, hãy chọn tệp nhỏ hơn.",
+              audioErrAt: i,
+            });
+            return;
+          }
+          var size =
+            f.size >= 1048576
+              ? (f.size / 1048576).toFixed(1).replace(".", ",") + " MB"
+              : Math.max(1, Math.round(f.size / 1024)) + " KB";
+          upd(
+            function (x) {
+              x.items[i].audio = { name: f.name, size: size };
+            },
+            { audioErr: "", audioErrAt: null },
+          );
+          try {
+            e.target.value = "";
+          } catch (err) {}
+        },
+        delAudio: function (e) {
+          stop(e);
+          if (!a) {
+            return;
+          }
+          ask(
+            "Xóa audio " + a.name + "?",
+            "Bài mẫu này sẽ không còn audio. Có thể hoàn tác ngay sau khi xóa.",
+            function () {
+              upd(
+                function (x) {
+                  x.items[i].audio = null;
+                },
+                {
+                  confirm: null,
+                  audioErr: "",
+                  audioErrAt: null,
+                  snack: "Đã xóa audio mẫu.",
+                },
+              );
+            },
+          );
+        },
+      };
+    }
+    F.au2 = mkAudio(0);
+    items.forEach(function (it, i) {
+      var o = mkAudio(i),
+        r = F.items[i];
+      for (var k in o) {
+        r[k] = o[k];
+      }
+    });
 
-function pillList(list, cur, pick) { return list.map(function (o) { var on = cur === o[0]; return { name: o[1], on: on, pick: function (e) { stop(e); if (editing) { pick(o[0]); } },
-  st: PILL + '; ' + (on ? 'background: #E3ECFD; border: 1.5px solid #2963CC; color: #2257B8' : 'background: #FFFFFF; border: 1.5px solid #D6D4D0; color: #4B3D4D') }; }); }
-var items = ex.items || [], isP2 = ex.part === 2, F = {};
-F.partPills = pillList([[1, 'Part 1'], [2, 'Part 2'], [3, 'Part 3']], ex.part, function (v) { upd(function (x) { x.part = v; ensure(x); }); });
-F.bandPills = pillList(['7.0', '7.5', '8.0', '8.5', '9.0'].map(function (b) { return [b, b]; }), ex.band, function (v) { upd(function (x) { x.band = v; }); });
-F.title = ex.title; F.setTitle = setter(function (x, v) { x.title = v; }); F.topic = ex.topic; F.setTopic = setter(function (x, v) { x.topic = v; }); F.source = ex.source; F.setSource = setter(function (x, v) { x.source = v; });
-F.outlineIntro = ex.outlineIntro || ''; F.setOutlineIntro = setter(function (x, v) { x.outlineIntro = v; });
-var ids = me._ids || (me._ids = { ol: 'ol-' + Math.random().toString(36).slice(2, 7) });
-function mkEd(p, field) { var id = ids[p];
-  var edit = function (fn) { return function (e) { stop(e); var el = document.getElementById(id), v = ex[field] || '', a = v.length, b = v.length;
-    if (el) { v = el.value; a = el.selectionStart; b = el.selectionEnd; } var r = fn(v, a, b); upd(function (x) { x[field] = r; }); }; };
-  var wrap = function (m, ph) { return edit(function (v, a, b) { return v.slice(0, a) + m + (v.slice(a, b) || ph) + m + v.slice(b); }); };
-  var pre = function (pf) { return edit(function (v, a, b) { var st = v.lastIndexOf('\n', a - 1) + 1, en = v.indexOf('\n', b); if (en < 0) { en = v.length; }
-    var blk = v.slice(st, en).split('\n'), all = blk.every(function (l) { return l.indexOf(pf) === 0; });
-    blk = blk.map(function (l) { var c = l.replace(/^(#{1,3} |- |• )/, ''); return all ? c : pf + c; }); return v.slice(0, st) + blk.join('\n') + v.slice(en); }); };
-  return { id: id, text: ex[field] || '', set: setter(function (x, v) { x[field] = v; }), b: wrap('**', 'chữ đậm'), i: wrap('*', 'chữ nghiêng'), h: pre('## '), l: pre('- ') }; }
-F.ol = mkEd('ol', 'outline');
-// ---- đề bài và bài mẫu
-F.isP2 = isP2; F.notP2 = !isP2;
-F.qSub = isP2 ? 'Part 2: một cue card, một bài mẫu và audio của bài mẫu.' : 'Part ' + ex.part + ': danh sách câu hỏi, mỗi câu có bài mẫu và audio riêng.';
-var it0 = items[0] || { q: '', a: '' };
-F.cue = it0.q; F.setCue = function (e) { var v = e.target.value; upd(function (x) { ensure(x); x.items[0].q = v; }, null, 'cue'); };
-F.ans2 = it0.a; F.setAns2 = function (e) { var v = e.target.value; upd(function (x) { ensure(x); x.items[0].a = v; }, null, 'ans2'); };
-var n2 = words(it0.a); F.wc2 = n2 + ' từ'; F.wc2St = 'color: #6A5D6C';
-F.items = items.map(function (it, i) { return { label: 'Câu ' + (i + 1), q: it.q, a: it.a, wc: words(it.a) + ' từ', canDel: items.length > 1,
-  setQ: function (e) { var v = e.target.value; upd(function (x) { x.items[i].q = v; }, null, 'q' + i); }, setA: function (e) { var v = e.target.value; upd(function (x) { x.items[i].a = v; }, null, 'a' + i); },
-  del: function (e) { stop(e); ask('Xóa câu ' + (i + 1) + '?', 'Câu hỏi và bài mẫu của câu này sẽ bị xóa. Có thể hoàn tác ngay sau khi xóa.',
-    function () { upd(function (x) { x.items.splice(i, 1); }, { confirm: null, snack: 'Đã xóa câu ' + (i + 1) + '.' }); }); } }; });
-F.addQ = function (e) { stop(e); upd(function (x) { x.items.push({ q: '', a: '' }); }); };
-// ---- audio (mỗi thẻ bài mẫu có audio riêng: it.audio)
-function mkAudio(i) { var a = (items[i] || {}).audio, bad = s.audioErrAt === i && s.audioErr;
-  return { hasAudio: !!a, noAudio: !a, audioName: a ? a.name : '', audioSize: a ? a.size : '', audioErr: !!bad, audioErrText: bad || '',
-  pickAudio: function (e) { var f = e && e.target && e.target.files && e.target.files[0]; if (!f) { return; }
-    if (!/\.(mp3|m4a|wav)$/i.test(f.name) && !/^audio\//.test(f.type)) { self.setState({ audioErr: 'Audio phải là MP3, M4A hoặc WAV.', audioErrAt: i }); return; }
-    if (f.size > 20 * 1024 * 1024) { self.setState({ audioErr: 'Audio lớn hơn 20 MB, hãy chọn tệp nhỏ hơn.', audioErrAt: i }); return; }
-    var size = f.size >= 1048576 ? (f.size / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB';
-    upd(function (x) { x.items[i].audio = { name: f.name, size: size }; }, { audioErr: '', audioErrAt: null }); try { e.target.value = ''; } catch (err) { } },
-  delAudio: function (e) { stop(e); if (!a) { return; } ask('Xóa audio ' + a.name + '?', 'Bài mẫu này sẽ không còn audio. Có thể hoàn tác ngay sau khi xóa.',
-    function () { upd(function (x) { x.items[i].audio = null; }, { confirm: null, audioErr: '', audioErrAt: null, snack: 'Đã xóa audio mẫu.' }); }); } }; }
-F.au2 = mkAudio(0);
-items.forEach(function (it, i) { var o = mkAudio(i), r = F.items[i]; for (var k in o) { r[k] = o[k]; } });
+    var cv = ex.cover;
+    F.hasCover = !!cv;
+    F.noCover = !cv;
+    F.coverUrl = cv ? cv.url : "";
+    F.coverName = cv ? cv.name : "";
+    F.coverSize = cv ? cv.size : "";
+    F.coverErr = !!s.coverErr;
+    F.coverErrText = s.coverErr || "";
+    F.coverNote = !!(cv && s.coverNote);
+    F.coverNoteText = s.coverNote || "";
+    F.pickCover = function (e) {
+      var f = e && e.target && e.target.files && e.target.files[0];
+      if (!f) {
+        return;
+      }
+      if (!/^image\/(png|jpeg|webp)$/.test(f.type)) {
+        self.setState({ coverErr: "Ảnh bìa phải là JPG, PNG hoặc WebP." });
+        return;
+      }
+      if (f.size > 5 * 1024 * 1024) {
+        self.setState({ coverErr: "Ảnh lớn hơn 5 MB, hãy chọn ảnh nhỏ hơn." });
+        return;
+      }
+      var r = new FileReader();
+      r.onload = function () {
+        var url = r.result,
+          size =
+            f.size >= 1048576
+              ? (f.size / 1048576).toFixed(1).replace(".", ",") + " MB"
+              : Math.max(1, Math.round(f.size / 1024)) + " KB",
+          im2 = new Image();
+        im2.onload = function () {
+          var note =
+            Math.abs(im2.width / im2.height - 1.5) > 0.12
+              ? "Ảnh " +
+                im2.width +
+                " × " +
+                im2.height +
+                " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
+              : "";
+          upd(
+            function (x) {
+              x.cover = { name: f.name, size: size, url: url };
+            },
+            { coverErr: "", coverNote: note },
+          );
+        };
+        im2.onerror = function () {
+          upd(
+            function (x) {
+              x.cover = { name: f.name, size: size, url: url };
+            },
+            { coverErr: "", coverNote: "" },
+          );
+        };
+        im2.src = url;
+      };
+      r.readAsDataURL(f);
+      try {
+        e.target.value = "";
+      } catch (err) {}
+    };
+    F.delCover = function (e) {
+      stop(e);
+      if (!cv) {
+        return;
+      }
+      ask(
+        "Xóa ảnh bìa " + cv.name + "?",
+        "Thẻ bài mẫu sẽ quay về màu nền. Có thể hoàn tác ngay sau khi xóa.",
+        function () {
+          upd(
+            function (x) {
+              x.cover = null;
+            },
+            {
+              confirm: null,
+              coverErr: "",
+              coverNote: "",
+              snack: "Đã xóa ảnh bìa.",
+            },
+          );
+        },
+      );
+    };
 
-var cv = ex.cover; F.hasCover = !!cv; F.noCover = !cv; F.coverUrl = cv ? cv.url : ''; F.coverName = cv ? cv.name : ''; F.coverSize = cv ? cv.size : '';
-F.coverErr = !!s.coverErr; F.coverErrText = s.coverErr || ''; F.coverNote = !!(cv && s.coverNote); F.coverNoteText = s.coverNote || '';
-F.pickCover = function (e) { var f = e && e.target && e.target.files && e.target.files[0]; if (!f) { return; }
-  if (!/^image\/(png|jpeg|webp)$/.test(f.type)) { self.setState({ coverErr: 'Ảnh bìa phải là JPG, PNG hoặc WebP.' }); return; }
-  if (f.size > 5 * 1024 * 1024) { self.setState({ coverErr: 'Ảnh lớn hơn 5 MB, hãy chọn ảnh nhỏ hơn.' }); return; }
-  var r = new FileReader(); r.onload = function () { var url = r.result, size = f.size >= 1048576 ? (f.size / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB', im2 = new Image();
-    im2.onload = function () { var note = Math.abs(im2.width / im2.height - 1.5) > 0.12 ? 'Ảnh ' + im2.width + ' × ' + im2.height + ' không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu.' : '';
-      upd(function (x) { x.cover = { name: f.name, size: size, url: url }; }, { coverErr: '', coverNote: note }); };
-    im2.onerror = function () { upd(function (x) { x.cover = { name: f.name, size: size, url: url }; }, { coverErr: '', coverNote: '' }); }; im2.src = url; };
-  r.readAsDataURL(f); try { e.target.value = ''; } catch (err) { } };
-F.delCover = function (e) { stop(e); if (!cv) { return; } ask('Xóa ảnh bìa ' + cv.name + '?', 'Thẻ bài mẫu sẽ quay về màu nền. Có thể hoàn tác ngay sau khi xóa.',
-  function () { upd(function (x) { x.cover = null; }, { confirm: null, coverErr: '', coverNote: '', snack: 'Đã xóa ảnh bìa.' }); }); };
+    // ---- xem trước
+    F.partChip = "Part " + ex.part;
+    F.formChip = F.partChip;
+    F.formChipSt =
+      "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #E8E4FA; color: #5543B0";
+    F.hasTopic = !!String(ex.topic || "").trim();
+    F.titleShow = ex.title || "Chưa đặt tiêu đề";
+    F.metaLine = [
+      ex.source,
+      "Band mục tiêu " + ex.band + "+",
+      items.length > 1 || !isP2 ? items.length + " câu hỏi" : "",
+    ]
+      .filter(Boolean)
+      .join(" · ");
+    F.pvCue = mdLines(it0.q);
+    F.noCue = !String(it0.q || "").trim();
+    F.pvQs = items.map(function (it, i) {
+      return { n: i + 1, q: it.q || "(chưa nhập câu hỏi)" };
+    });
+    F.pvItems = items.map(function (it, i) {
+      return {
+        hasAudio: !!it.audio,
+        audioName: it.audio ? it.audio.name : "",
+        hasQ: !isP2,
+        label: "Câu " + (i + 1) + ":",
+        q: it.q,
+        a: mdLines(it.a),
+        noA: !String(it.a || "").trim(),
+        wc: words(it.a) + " từ",
+      };
+    });
+    F.hasOutline = !!(
+      String(ex.outline || "").trim() || String(ex.outlineIntro || "").trim()
+    );
+    F.hasIntro = !!String(ex.outlineIntro || "").trim();
+    F.hasBox = !!String(ex.outline || "").trim();
+    F.introText = ex.outlineIntro || "";
+    F.pvOutline = mdLines(ex.outline);
+    var ST =
+      ex.status === "pub"
+        ? ["Đã đăng", "#DCEDE2", "#2E6A48"]
+        : ["Bản nháp", "#FBEDBF", "#7A5A0E"];
+    F.statusText = ST[0];
+    F.statusSt =
+      "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: " +
+      ST[1] +
+      "; color: " +
+      ST[2];
+    F.pubLabel = ex.status === "pub" ? "Gỡ về bản nháp" : "Đăng";
+    // ---- lỗi khi đăng
+    function allIssues() {
+      var out = [];
+      if (!String(ex.title || "").trim()) {
+        out.push({ text: "Chưa nhập tiêu đề bài mẫu." });
+      }
+      if (!String(ex.topic || "").trim()) {
+        out.push({ text: "Chưa nhập chủ đề." });
+      }
+      items.forEach(function (it, i) {
+        var nm = isP2 ? "" : "Câu " + (i + 1) + ": ";
+        if (!String(it.q || "").trim()) {
+          out.push({
+            text: nm + (isP2 ? "Chưa có cue card." : "Chưa nhập câu hỏi."),
+          });
+        }
+        if (!String(it.a || "").trim()) {
+          out.push({ text: nm + "Chưa có bài mẫu." });
+        }
+      });
+      return out;
+    }
+    var iss = s.issues || [];
+    var CHIP_OK = CHIP + "; background: #DCEDE2; color: #2E6A48";
+    return {
+      F: F,
+      viewing: !editing,
+      editing: editing,
+      modeCls: editing ? "" : "ro",
+      modeText: editing ? "Đang chỉnh sửa" : "Chỉ xem",
+      modeSt:
+        CHIP +
+        "; " +
+        (editing
+          ? "background: #E3ECFD; color: #2257B8"
+          : "background: #F3F0EA; color: #6A5D6C"),
+      dirtyText: dirty
+        ? "Chưa lưu · " + Math.max(nChange, 1) + " thay đổi"
+        : "Chưa có thay đổi",
+      dirtyColor: dirty ? "#7A5A0E" : "#706473",
+      undo: undo,
+      undoSt:
+        "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; " +
+        ((s.hist || []).length
+          ? "color: #352637; cursor: pointer"
+          : "color: #B5ADB7; cursor: default; pointer-events: none"),
+      startEdit: function (e) {
+        stop(e);
+        self.setState({
+          editing: true,
+          base: ex,
+          hist: [],
+          lastTag: null,
+          issues: null,
+          toast: "",
+        });
+      },
+      saveEdit: function (e) {
+        stop(e);
+        self.setState({
+          editing: false,
+          base: null,
+          hist: [],
+          lastTag: null,
+          leave: false,
+          snack: null,
+          toast: dirty ? "Đã lưu bài mẫu." : "",
+        });
+      },
+      cancelEdit: function (e) {
+        stop(e);
+        if (dirty) {
+          self.setState({ leave: true });
+        } else {
+          self.setState({ editing: false, base: null, hist: [], snack: null });
+        }
+      },
+      leaveOpen: !!s.leave,
+      leaveSub:
+        "Bạn có " +
+        Math.max(nChange, 1) +
+        " thay đổi chưa lưu trong bài mẫu này. Chọn Không lưu thì bài quay về bản đã lưu gần nhất.",
+      stayEdit: function (e) {
+        stop(e);
+        self.setState({ leave: false });
+      },
+      discardEdit: function (e) {
+        stop(e);
+        self.setState({
+          ex: base,
+          editing: false,
+          base: null,
+          hist: [],
+          lastTag: null,
+          leave: false,
+          snack: null,
+          imgErr: "",
+          toast: "Đã bỏ các thay đổi chưa lưu.",
+        });
+      },
+      publish: function (e) {
+        stop(e);
+        if (ex.status === "pub") {
+          self.setState({ pubAsk: true, issues: null, toast: "" });
+          return;
+        }
+        var li = allIssues();
+        if (li.length) {
+          self.setState({ issues: li, toast: "" });
+        } else {
+          self.setState({ issues: null, toast: "", pubAsk: true });
+        }
+      },
+      pubOpen: !!s.pubAsk,
+      pubTitle:
+        ex.status === "pub" ? "Gỡ bài mẫu về bản nháp?" : "Đăng bài mẫu này?",
+      pubBtn: ex.status === "pub" ? "Gỡ về nháp" : "Đăng",
+      pubSub:
+        ex.status === "pub"
+          ? "“" +
+            ex.title +
+            "” sẽ biến mất khỏi thư viện bài mẫu của người học cho đến khi đăng lại."
+          : "“" +
+            ex.title +
+            "” sẽ hiển thị trong thư viện bài mẫu của người học.",
+      pubCancel: function (e) {
+        stop(e);
+        self.setState({ pubAsk: false });
+      },
+      pubOk: function (e) {
+        stop(e);
+        var n = clone(ex);
+        n.status = ex.status === "pub" ? "draft" : "pub";
+        self.setState({
+          pubAsk: false,
+          ex: n,
+          base: editing ? n : null,
+          toast:
+            n.status === "pub"
+              ? "Bài mẫu đã được đăng."
+              : "Đã gỡ bài mẫu về bản nháp.",
+        });
+      },
+      hasIssues: iss.length > 0,
+      issueHead: "Chưa đăng được: " + iss.length + " lỗi cần sửa",
+      closeIssues: function (e) {
+        stop(e);
+        self.setState({ issues: null });
+      },
+      issues: iss,
+      confirmOpen: !!s.confirm,
+      confirmTitle: s.confirm ? s.confirm.title : "",
+      confirmSub: s.confirm ? s.confirm.sub : "",
+      confirmCancel: function (e) {
+        stop(e);
+        self.setState({ confirm: null });
+      },
+      confirmOk: function (e) {
+        stop(e);
+        if (s.confirmRun) {
+          s.confirmRun();
+        }
+      },
+      snackOpen: !!s.snack,
+      snack: s.snack || "",
+      hideSnack: function (e) {
+        stop(e);
+        self.setState({ snack: null });
+      },
+      toast: !!s.toast,
+      toastText: s.toast || "",
+      hideToast: function (e) {
+        stop(e);
+        self.setState({ toast: "" });
+      },
+    };
+  }
 
-// ---- xem trước
-F.partChip = 'Part ' + ex.part; F.formChip = F.partChip; F.formChipSt = 'display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #E8E4FA; color: #5543B0';
-F.hasTopic = !!String(ex.topic || '').trim(); F.titleShow = ex.title || 'Chưa đặt tiêu đề';
-F.metaLine = [ex.source, 'Band mục tiêu ' + ex.band + '+', items.length > 1 || !isP2 ? items.length + ' câu hỏi' : ''].filter(Boolean).join(' · ');
-F.pvCue = mdLines(it0.q); F.noCue = !String(it0.q || '').trim();
-F.pvQs = items.map(function (it, i) { return { n: i + 1, q: it.q || '(chưa nhập câu hỏi)' }; });
-F.pvItems = items.map(function (it, i) { return { hasAudio: !!it.audio, audioName: it.audio ? it.audio.name : '', hasQ: !isP2, label: 'Câu ' + (i + 1) + ':', q: it.q, a: mdLines(it.a), noA: !String(it.a || '').trim(), wc: words(it.a) + ' từ' }; });
-F.hasOutline = !!(String(ex.outline || '').trim() || String(ex.outlineIntro || '').trim()); F.hasIntro = !!String(ex.outlineIntro || '').trim(); F.hasBox = !!String(ex.outline || '').trim(); F.introText = ex.outlineIntro || ''; F.pvOutline = mdLines(ex.outline);
-var ST = ex.status === 'pub' ? ['Đã đăng', '#DCEDE2', '#2E6A48'] : ['Bản nháp', '#FBEDBF', '#7A5A0E'];
-F.statusText = ST[0]; F.statusSt = 'display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: ' + ST[1] + '; color: ' + ST[2]; F.pubLabel = ex.status === 'pub' ? 'Gỡ về bản nháp' : 'Đăng';
-// ---- lỗi khi đăng
-function allIssues() { var out = [];
-  if (!String(ex.title || '').trim()) { out.push({ text: 'Chưa nhập tiêu đề bài mẫu.' }); }
-  if (!String(ex.topic || '').trim()) { out.push({ text: 'Chưa nhập chủ đề.' }); }
-  items.forEach(function (it, i) { var nm = isP2 ? '' : 'Câu ' + (i + 1) + ': ';
-    if (!String(it.q || '').trim()) { out.push({ text: nm + (isP2 ? 'Chưa có cue card.' : 'Chưa nhập câu hỏi.') }); }
-    if (!String(it.a || '').trim()) { out.push({ text: nm + 'Chưa có bài mẫu.' }); } });
-  return out; }
-var iss = s.issues || [];
-var CHIP_OK = CHIP + '; background: #DCEDE2; color: #2E6A48';
-return {
-  F: F, viewing: !editing, editing: editing, modeCls: editing ? '' : 'ro',
-  modeText: editing ? 'Đang chỉnh sửa' : 'Chỉ xem', modeSt: CHIP + '; ' + (editing ? 'background: #E3ECFD; color: #2257B8' : 'background: #F3F0EA; color: #6A5D6C'),
-  dirtyText: dirty ? 'Chưa lưu · ' + Math.max(nChange, 1) + ' thay đổi' : 'Chưa có thay đổi', dirtyColor: dirty ? '#7A5A0E' : '#706473',
-  undo: undo, undoSt: 'display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; '
-    + ((s.hist || []).length ? 'color: #352637; cursor: pointer' : 'color: #B5ADB7; cursor: default; pointer-events: none'),
-  startEdit: function (e) { stop(e); self.setState({ editing: true, base: ex, hist: [], lastTag: null, issues: null, toast: '' }); },
-  saveEdit: function (e) { stop(e); self.setState({ editing: false, base: null, hist: [], lastTag: null, leave: false, snack: null, toast: dirty ? 'Đã lưu bài mẫu.' : '' }); },
-  cancelEdit: function (e) { stop(e); if (dirty) { self.setState({ leave: true }); } else { self.setState({ editing: false, base: null, hist: [], snack: null }); } },
-  leaveOpen: !!s.leave, leaveSub: 'Bạn có ' + Math.max(nChange, 1) + ' thay đổi chưa lưu trong bài mẫu này. Chọn Không lưu thì bài quay về bản đã lưu gần nhất.',
-  stayEdit: function (e) { stop(e); self.setState({ leave: false }); },
-  discardEdit: function (e) { stop(e); self.setState({ ex: base, editing: false, base: null, hist: [], lastTag: null, leave: false, snack: null, imgErr: '', toast: 'Đã bỏ các thay đổi chưa lưu.' }); },
-  publish: function (e) { stop(e); if (ex.status === 'pub') { self.setState({ pubAsk: true, issues: null, toast: '' }); return; } var li = allIssues(); if (li.length) { self.setState({ issues: li, toast: '' }); } else { self.setState({ issues: null, toast: '', pubAsk: true }); } },
-  pubOpen: !!s.pubAsk, pubTitle: ex.status === 'pub' ? 'Gỡ bài mẫu về bản nháp?' : 'Đăng bài mẫu này?', pubBtn: ex.status === 'pub' ? 'Gỡ về nháp' : 'Đăng',
-  pubSub: ex.status === 'pub' ? '“' + ex.title + '” sẽ biến mất khỏi thư viện bài mẫu của người học cho đến khi đăng lại.' : '“' + ex.title + '” sẽ hiển thị trong thư viện bài mẫu của người học.',
-  pubCancel: function (e) { stop(e); self.setState({ pubAsk: false }); },
-  pubOk: function (e) { stop(e); var n = clone(ex); n.status = ex.status === 'pub' ? 'draft' : 'pub'; self.setState({ pubAsk: false, ex: n, base: editing ? n : null, toast: n.status === 'pub' ? 'Bài mẫu đã được đăng.' : 'Đã gỡ bài mẫu về bản nháp.' }); },
-  hasIssues: iss.length > 0, issueHead: 'Chưa đăng được: ' + iss.length + ' lỗi cần sửa', closeIssues: function (e) { stop(e); self.setState({ issues: null }); }, issues: iss,
-  confirmOpen: !!s.confirm, confirmTitle: s.confirm ? s.confirm.title : '', confirmSub: s.confirm ? s.confirm.sub : '',
-  confirmCancel: function (e) { stop(e); self.setState({ confirm: null }); }, confirmOk: function (e) { stop(e); if (s.confirmRun) { s.confirmRun(); } },
-  snackOpen: !!s.snack, snack: s.snack || '', hideSnack: function (e) { stop(e); self.setState({ snack: null }); },
-  toast: !!s.toast, toastText: s.toast || '', hideToast: function (e) { stop(e); self.setState({ toast: '' }); } };
-}
-
-
-static defaultProps = {"mau": "Part 1 · Websites (đã đăng)"};
-render() { const v = this.renderVals(); return <>{"\n"}{"\n"}<style>{cssText("\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\n@keyframes isFade{from{opacity:0}to{opacity:1}}@keyframes isPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes isDrop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}@keyframes isToast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes isFlash{0%{background:#E3ECFD}100%{background:transparent}}@keyframes isSpin{to{transform:rotate(360deg)}}@keyframes isGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes isCheck{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}@keyframes isRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.an-fade{animation:isFade .2s ease-out both}.an-pop{animation:isPop .28s cubic-bezier(.2,.8,.2,1) both}.an-drop{animation:isDrop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.an-toast{animation:isToast .3s cubic-bezier(.2,.8,.2,1) both}.an-check{animation:isCheck .45s cubic-bezier(.2,.8,.2,1) both}.an-rise{animation:isRise .32s cubic-bezier(.2,.8,.2,1) both}.an-flash>td{animation:isFlash 2s ease-out}.an-spin{animation:isSpin .8s linear infinite}a,label,input,textarea,select,[role=button]{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .2s ease,transform .18s ease,opacity .16s ease,outline-color .16s ease}.lift:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(53,38,55,.05),0 12px 28px rgba(53,38,55,.10)}.press:active{transform:scale(.97)}.hov>tbody>tr{transition:background-color .15s ease}.hov>tbody>tr:hover{background:#FDFCF8}.thumb-h{transition:transform .2s ease,box-shadow .2s ease}.thumb-h:hover{transform:translateY(-3px) rotate(-1deg)}input:focus,textarea:focus,select:focus{outline:none;border-color:#2963CC !important;box-shadow:0 0 0 3px rgba(41,99,204,.16)}@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}input::placeholder,textarea::placeholder{color:#9A8F9C}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #B3A9B5 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}.ro .pills a,.ro select{pointer-events:none}\n")}</style>{"\n"}{"\n"}<div className="app-shell-ancestor" style={styleOf("font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; font-size: 15px; line-height: 1.6; background: #FCFBF7")}>{"\n"}<div className="app-shell" style={styleOf("display: flex; flex-wrap: wrap; align-items: stretch; min-height: 1400px")}><div className="app-sidebar-slot" style={styleOf("display: flex; flex: none; align-self: stretch")}><AdminSidebar active={"samples"}></AdminSidebar></div><div className="app-content" style={styleOf("flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column")}><AdminTopbar crumb={"Quản lý / Quản lý bài mẫu / Soạn bài mẫu Speaking"}></AdminTopbar><main className={v.modeCls} style={styleOf("flex: 1; background: #FAF9F5; display: flex; flex-direction: column; min-width: 0")}><div style={styleOf("display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 16px 24px; border-bottom: 1.5px solid #D6D4D0; background: #FCFBF7")}><div style={styleOf("min-width: 0; flex: 1 1 320px")}><a href={"AdminSamples.dc.html"} style={styleOf("display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #706473; text-decoration: none")}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M19 12H5M11 6l-6 6 6 6"}></path></svg>{" Quản lý bài mẫu"}</a><div style={styleOf("display: flex; align-items: center; gap: 8px")}><div style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 22px; font-weight: 600; letter-spacing: -0.015em")}>{"Soạn bài mẫu · Speaking"}</div><a href={"SampleSpeaking.dc.html"} title={"Xem như người học"} aria-label={"Xem như người học"} style={styleOf("display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 10px; color: #4B3D4D; text-decoration: none; border: 1.5px solid #E4E1DB; background: #FFFFFF; box-sizing: border-box")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"}></path><circle cx={"12"} cy={"12"} r={"3"}></circle></svg></a></div><div style={styleOf("display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 6px")}><span style={styleOf(v.F.formChipSt)}>{v.F.formChip}</span><span style={styleOf(v.F.statusSt)}>{v.F.statusText}</span><span style={styleOf(v.modeSt)}>{v.modeText}</span></div></div><div style={styleOf("display: flex; align-items: center; gap: 10px; flex-wrap: wrap")}>{v.viewing ? <><a href={"#"} onClick={v.startEdit} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M15 5l4 4L8 20H4v-4z"}></path></svg>{" Chỉnh sửa"}</a><a href={"#"} onClick={v.publish} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF")}>{v.F.pubLabel}</a></> : null}{v.editing ? <><span style={styleOf("font-size: 13px; color: " + v.dirtyColor)}>{v.dirtyText}</span><a href={"#"} onClick={v.undo} aria-label={"Hoàn tác (Ctrl+Z)"} style={styleOf(v.undoSt)}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M19 12H5M11 6l-6 6 6 6"}></path></svg>{" Hoàn tác"}</a><a href={"#"} onClick={v.cancelEdit} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A")}>{"Hủy"}</a><a href={"#"} onClick={v.saveEdit} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M5 12.5l4.5 4.5L19 7"}></path></svg>{" Lưu"}</a></> : null}</div></div>{v.viewing ? <div role={"note"} data-ro-bar={"1"} style={styleOf("display: flex; align-items: center; gap: 10px; padding: 9px 24px; background: #E3ECFD; border-bottom: 1.5px solid #D6D4D0; font-size: 13.5px; line-height: 1.5; color: #352637")}><span style={styleOf("flex: none; display: flex; color: #2963CC")}><svg width={"17"} height={"17"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.9"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><rect x={"5"} y={"11"} width={"14"} height={"9"} rx={"2"}></rect><path d={"M8 11V8a4 4 0 0 1 8 0v3"}></path></svg></span><span style={styleOf("min-width: 0")}><b>Chế độ chỉ xem.</b>{" Nội dung đang khóa để tránh sửa nhầm. Bấm "}<b>Chỉnh sửa</b>{" để soạn; xong thì "}<b>Lưu</b>{", hoặc "}<b>Hủy</b>{" để bỏ thay đổi."}</span></div> : null}{v.hasIssues ? <><div role={"alert"} style={styleOf("margin: 16px 24px 0; padding: 14px 16px; border-radius: 14px; background: #FDECE8; border: 1.5px solid #F1B3A3; display: flex; flex-direction: column; gap: 8px")}><div style={styleOf("display: flex; justify-content: space-between; gap: 12px")}><div style={styleOf("font-weight: 700; color: #A8321E")}>{v.issueHead}</div><a href={"#"} onClick={v.closeIssues} aria-label={"Đóng"} style={styleOf("display: flex; color: #A8321E")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M6 6l12 12M18 6L6 18"}></path></svg></a></div>{(v.issues || []).map((i, index) => <React.Fragment key={index}><div style={styleOf("font-size: 14px; color: #7A2A1B")}>{i.text}</div></React.Fragment>)}</div></> : null}{v.confirmOpen ? <><div style={styleOf("position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.32); display: flex; align-items: center; justify-content: center; padding: 16px")}><div role={"alertdialog"} aria-modal={"true"} aria-labelledby={"xoa-bm"} style={styleOf("width: 440px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px")}><div id={"xoa-bm"} style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600")}>{v.confirmTitle}</div><div style={styleOf("font-size: 14.5px; color: #6A5D6C")}>{v.confirmSub}</div><div style={styleOf("display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap")}><a href={"#"} onClick={v.confirmCancel} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A")}>{"Hủy"}</a><a href={"#"} onClick={v.confirmOk} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; background: #C0412A; border-color: #C0412A; color: #FFFFFF")}>{"Xóa"}</a></div></div></div></> : null}{v.leaveOpen ? <><div style={styleOf("position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.32); display: flex; align-items: center; justify-content: center; padding: 16px")}><div role={"alertdialog"} aria-modal={"true"} aria-labelledby={"luu-bm"} style={styleOf("width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px")}><div id={"luu-bm"} style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600")}>{"Lưu thay đổi trước khi thoát?"}</div><div style={styleOf("font-size: 14.5px; color: #6A5D6C")}>{v.leaveSub}</div><div style={styleOf("display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap")}><a href={"#"} onClick={v.stayEdit} style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; margin-right: auto")}>{"Tiếp tục sửa"}</a><a href={"#"} onClick={v.discardEdit} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; color: #C0412A")}>{"Không lưu"}</a><a href={"#"} onClick={v.saveEdit} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF")}>{"Lưu"}</a></div></div></div></> : null}{v.pubOpen ? <><div style={styleOf("position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.32); display: flex; align-items: center; justify-content: center; padding: 16px")}><div role={"alertdialog"} aria-modal={"true"} aria-labelledby={"dang-bm"} style={styleOf("width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px")}><div id={"dang-bm"} style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600")}>{v.pubTitle}</div><div style={styleOf("font-size: 14.5px; color: #6A5D6C")}>{v.pubSub}</div><div style={styleOf("display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap")}><a href={"#"} onClick={v.pubCancel} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A")}>{"Hủy"}</a><a href={"#"} onClick={v.pubOk} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF")}>{v.pubBtn}</a></div></div></div></> : null}{v.snackOpen ? <><div role={"status"} style={styleOf("position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)")}><span >{v.snack}</span><a href={"#"} onClick={v.undo} style={styleOf("color: #A9C4F5; font-weight: 600; text-decoration: none")}>{"Hoàn tác"}</a><a href={"#"} onClick={v.hideSnack} aria-label={"Đóng"} style={styleOf("display: flex; color: #FFFFFF")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M6 6l12 12M18 6L6 18"}></path></svg></a></div></> : null}{v.toast ? <><div role={"status"} style={styleOf("position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)")}><span >{v.toastText}</span><a href={"#"} onClick={v.hideToast} aria-label={"Đóng"} style={styleOf("display: flex; color: #FFFFFF")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M6 6l12 12M18 6L6 18"}></path></svg></a></div></> : null}<div style={styleOf("display: flex; flex-wrap: nowrap; align-items: stretch; height: max(560px, calc(100vh - 250px)); min-height: 0; margin-top: 16px; border-top: 1.5px solid #D6D4D0; overflow: hidden")}><div style={styleOf("flex: 1 1 520px; min-width: 0; padding: 20px 24px 40px; overflow-y: auto; min-height: 0; display: flex; flex-direction: column; gap: 16px; border-right: 1.5px solid #D6D4D0; background: #FCFBF7")}><section style={styleOf("display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border-radius: 16px; border: 1.5px solid #D6D4D0; background: #FFFFFF")}><div ><div style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 18px; font-weight: 600")}>{"Thông tin chung"}</div><div style={styleOf("font-size: 13px; color: #6A5D6C")}>{"Dùng để phân loại bài mẫu trong thư viện. Một editor cho cả Part 1, 2 và 3."}</div></div><div style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Part"}</span><div className={"pills"} style={styleOf("display: flex; gap: 8px; flex-wrap: wrap")}>{(v.F.partPills || []).map((p, index) => <React.Fragment key={index}><a href={"#"} onClick={p.pick} aria-pressed={p.on} style={styleOf(p.st)}>{p.name}</a></React.Fragment>)}</div></div><div style={styleOf("display: flex; flex-direction: column; gap: 8px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Ảnh bìa (hiện ở thẻ bài mẫu trong thư viện)"}</span><div style={styleOf("display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start")}><div style={styleOf("position: relative; flex: none; width: 192px; height: 128px; box-sizing: border-box; border-radius: 12px; overflow: hidden; background: #C5DECE")}>{v.F.hasCover ? <><img src={v.F.coverUrl} alt={"Ảnh bìa"} style={styleOf("display: block; width: 100%; height: 100%; object-fit: contain")} /></> : null}{v.F.noCover ? <><label className={"eo"} style={styleOf("position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; color: #2E6A48; text-align: center; font-size: 13px; font-weight: 600; border: 1.5px dashed #8FB59F; border-radius: 12px; box-sizing: border-box")}><svg width={"20"} height={"20"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 16V4M7 9l5-5 5 5M4 20h16"}></path></svg>{"Tải ảnh bìa"}<input type={"file"} accept={"image/png,image/jpeg,image/webp"} onChange={v.F.pickCover} style={styleOf("display: none")} /></label></> : null}</div><div style={styleOf("flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 8px")}>{v.F.hasCover ? <><div style={styleOf("display: flex; align-items: center; gap: 8px; flex-wrap: wrap")}><div style={styleOf("min-width: 0; flex: 1 1 140px; display: flex; flex-direction: column")}><span style={styleOf("font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis")}>{v.F.coverName}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{v.F.coverSize}</span></div><label className={"eo"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; height: 34px; cursor: pointer")}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 16V4M7 9l5-5 5 5M4 20h16"}></path></svg>{" Thay ảnh"}<input type={"file"} accept={"image/png,image/jpeg,image/webp"} onChange={v.F.pickCover} style={styleOf("display: none")} /></label><a href={"#"} className={"eo"} onClick={v.F.delCover} title={"Xóa ảnh bìa"} aria-label={"Xóa ảnh bìa"} style={styleOf("flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer")}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path></svg></a></div></> : null}<span style={styleOf("font-size: 12px; line-height: 1.5; color: #706473")}>{"Ảnh ngang tỉ lệ 3:2 (ví dụ 1200 × 800 px), JPG, PNG hoặc WebP, tối đa 5 MB. Ảnh khác tỉ lệ sẽ thu vừa khung trên nền màu. Chưa có ảnh thì thẻ hiện màu nền."}</span>{v.F.coverNote ? <><div style={styleOf("font-size: 12.5px; color: #7A5A0E")}>{v.F.coverNoteText}</div></> : null}{v.F.coverErr ? <><div role={"alert"} style={styleOf("font-size: 13px; color: #A8321E")}>{v.F.coverErrText}</div></> : null}</div></div></div><div style={styleOf("display: flex; gap: 12px; flex-wrap: wrap")}><label style={styleOf("display: flex; flex-direction: column; gap: 6px; flex: 1 1 200px; min-width: 0")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Tiêu đề bài mẫu"}</span><input aria-label={"Tiêu đề bài mẫu"} value={v.F.title} onChange={v.F.setTitle} placeholder={"Websites"} style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC")} /><span style={styleOf("font-size: 12px; color: #706473")}></span></label><label style={styleOf("display: flex; flex-direction: column; gap: 6px; flex: 1 1 200px; min-width: 0")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Chủ đề"}</span><input aria-label={"Chủ đề"} value={v.F.topic} onChange={v.F.setTopic} placeholder={"Technology"} style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC")} /><span style={styleOf("font-size: 12px; color: #706473")}></span></label></div><div style={styleOf("display: flex; gap: 12px; flex-wrap: wrap")}><label style={styleOf("display: flex; flex-direction: column; gap: 6px; flex: 1 1 200px; min-width: 0")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Nguồn hoặc quý đề (không bắt buộc)"}</span><input aria-label={"Nguồn hoặc quý đề (không bắt buộc)"} value={v.F.source} onChange={v.F.setSource} placeholder={"Q3/2026"} style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC")} /><span style={styleOf("font-size: 12px; color: #706473")}></span></label></div><div style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Band của bài mẫu"}</span><div className={"pills"} style={styleOf("display: flex; gap: 8px; flex-wrap: wrap")}>{(v.F.bandPills || []).map((p, index) => <React.Fragment key={index}><a href={"#"} onClick={p.pick} aria-pressed={p.on} style={styleOf(p.st)}>{p.name}</a></React.Fragment>)}</div></div></section><section style={styleOf("display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border-radius: 16px; border: 1.5px solid #D6D4D0; background: #FFFFFF")}><div ><div style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 18px; font-weight: 600")}>{"Đề bài và bài mẫu"}</div><div style={styleOf("font-size: 13px; color: #6A5D6C")}>{v.F.qSub}</div></div>{v.F.isP2 ? <><div style={styleOf("display: flex; flex-direction: column; gap: 16px")}><label style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Cue card (đề bài Part 2)"}</span><textarea rows={"7"} aria-label={"Cue card (đề bài Part 2)"} value={v.F.cue} onChange={v.F.setCue} placeholder={"Describe ...\nYou should say:\n- ý 1\n- ý 2\n- ý 3\nand explain ..."} style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC")}></textarea></label><label style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Bài mẫu"}</span><textarea rows={"12"} aria-label={"Bài mẫu"} value={v.F.ans2} onChange={v.F.setAns2} placeholder={"Gõ hoặc dán bài mẫu. Bọc cụm quan trọng bằng **hai dấu sao** để tô đậm."} style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC")}></textarea></label><div style={styleOf("font-size: 13px; " + v.F.wc2St)}>{v.F.wc2}</div><div style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Audio mẫu (không bắt buộc)"}</span>{v.F.au2.hasAudio ? <><div style={styleOf("display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid #8E8392; background: #FFFFFF")}><span style={styleOf("flex: none; display: flex; color: #5543B0")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><rect x={"9"} y={"3"} width={"6"} height={"11"} rx={"3"}></rect><path d={"M5 11a7 7 0 0 0 14 0M12 18v3"}></path></svg></span><div style={styleOf("min-width: 0; flex: 1; display: flex; flex-direction: column")}><span style={styleOf("font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis")}>{v.F.au2.audioName}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{v.F.au2.audioSize}</span></div><label className={"eo"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; height: 34px; cursor: pointer")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 16V4M7 9l5-5 5 5M4 20h16"}></path></svg>{" Thay audio"}<input type={"file"} accept={"audio/mpeg,audio/mp4,audio/wav,audio/x-m4a,.mp3,.m4a,.wav"} onChange={v.F.au2.pickAudio} style={styleOf("display: none")} /></label><a href={"#"} className={"eo"} onClick={v.F.au2.delAudio} title={"Xóa audio"} aria-label={"Xóa audio"} style={styleOf("flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer")}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path></svg></a></div></> : null}{v.F.au2.noAudio ? <><label className={"eo"} style={styleOf("display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #6A5D6C; cursor: pointer")}><span style={styleOf("display: flex; color: #2257B8")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 16V4M7 9l5-5 5 5M4 20h16"}></path></svg></span><span ><span style={styleOf("font-weight: 600; color: #352637")}>{"Tải audio lên"}</span>{" "}<span style={styleOf("font-size: 12.5px")}>{"MP3, M4A hoặc WAV, tối đa 20 MB."}</span></span><input type={"file"} accept={"audio/mpeg,audio/mp4,audio/wav,audio/x-m4a,.mp3,.m4a,.wav"} onChange={v.F.au2.pickAudio} style={styleOf("display: none")} /></label></> : null}{v.F.au2.audioErr ? <><div role={"alert"} style={styleOf("font-size: 13px; color: #A8321E")}>{v.F.au2.audioErrText}</div></> : null}</div></div></> : null}{v.F.notP2 ? <><div style={styleOf("display: flex; flex-direction: column; gap: 12px")}>{(v.F.items || []).map((it, index) => <React.Fragment key={index}><div style={styleOf("display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 14px; border: 1.5px solid #D6D4D0; background: #FCFBF7")}><div style={styleOf("display: flex; align-items: center; justify-content: space-between; gap: 8px")}><span style={styleOf("font-weight: 700")}>{it.label}</span>{it.canDel ? <><a href={"#"} className={"eo"} onClick={it.del} title={"Xóa câu hỏi"} aria-label={"Xóa " + it.label} style={styleOf("flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer")}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path></svg></a></> : null}</div><label style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Câu hỏi"}</span><textarea rows={"2"} aria-label={"Câu hỏi"} value={it.q} onChange={it.setQ} placeholder={"Gõ câu hỏi"} style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC")}></textarea></label><label style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Bài mẫu cho câu này"}</span><textarea rows={"5"} aria-label={"Bài mẫu cho câu này"} value={it.a} onChange={it.setA} placeholder={"Gõ bài mẫu. Bọc cụm quan trọng bằng **hai dấu sao**."} style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC")}></textarea></label><span style={styleOf("font-size: 12.5px; color: #706473")}>{it.wc}</span><div style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Audio mẫu (không bắt buộc)"}</span>{it.hasAudio ? <><div style={styleOf("display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid #8E8392; background: #FFFFFF")}><span style={styleOf("flex: none; display: flex; color: #5543B0")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><rect x={"9"} y={"3"} width={"6"} height={"11"} rx={"3"}></rect><path d={"M5 11a7 7 0 0 0 14 0M12 18v3"}></path></svg></span><div style={styleOf("min-width: 0; flex: 1; display: flex; flex-direction: column")}><span style={styleOf("font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis")}>{it.audioName}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{it.audioSize}</span></div><label className={"eo"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; height: 34px; cursor: pointer")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 16V4M7 9l5-5 5 5M4 20h16"}></path></svg>{" Thay audio"}<input type={"file"} accept={"audio/mpeg,audio/mp4,audio/wav,audio/x-m4a,.mp3,.m4a,.wav"} onChange={it.pickAudio} style={styleOf("display: none")} /></label><a href={"#"} className={"eo"} onClick={it.delAudio} title={"Xóa audio"} aria-label={"Xóa audio"} style={styleOf("flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer")}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path></svg></a></div></> : null}{it.noAudio ? <><label className={"eo"} style={styleOf("display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #6A5D6C; cursor: pointer")}><span style={styleOf("display: flex; color: #2257B8")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 16V4M7 9l5-5 5 5M4 20h16"}></path></svg></span><span ><span style={styleOf("font-weight: 600; color: #352637")}>{"Tải audio lên"}</span>{" "}<span style={styleOf("font-size: 12.5px")}>{"MP3, M4A hoặc WAV, tối đa 20 MB."}</span></span><input type={"file"} accept={"audio/mpeg,audio/mp4,audio/wav,audio/x-m4a,.mp3,.m4a,.wav"} onChange={it.pickAudio} style={styleOf("display: none")} /></label></> : null}{it.audioErr ? <><div role={"alert"} style={styleOf("font-size: 13px; color: #A8321E")}>{it.audioErrText}</div></> : null}</div></div></React.Fragment>)}<a href={"#"} className={"eo"} onClick={v.F.addQ} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; align-self: flex-start")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 5v14M5 12h14"}></path></svg>{" Thêm câu hỏi"}</a></div></> : null}</section><section style={styleOf("display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border-radius: 16px; border: 1.5px solid #D6D4D0; background: #FFFFFF")}><div ><div style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 18px; font-weight: 600")}>{"Dàn ý"}</div><div style={styleOf("font-size: 13px; color: #6A5D6C")}>{"Không bắt buộc. Thường dùng cho Part 2; người học thấy dàn ý trước bài mẫu."}</div></div><label style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Đoạn giới thiệu dàn ý (hiện bên ngoài ô dàn ý)"}</span><textarea rows={"3"} aria-label={"Đoạn giới thiệu dàn ý"} value={v.F.outlineIntro} onChange={v.F.setOutlineIntro} placeholder={"Một đoạn ngắn nói cách chọn ý và triển khai"} style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC")}></textarea></label><div style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Dàn ý"}</span><div style={styleOf("border: 1.5px solid #8E8392; border-radius: 12px; overflow: hidden; background: #FFFFFF")}><div role={"toolbar"} className={"eo"} aria-label={"Định dạng"} style={styleOf("display: flex; align-items: center; gap: 2px; flex-wrap: wrap; padding: 4px 6px; border-bottom: 1px solid #E6E4E0; background: #F3F0EA")}><a href={"#"} onClick={v.F.ol.b} title={"In đậm"} aria-label={"In đậm"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-weight: 800")}>{"B"}</a><a href={"#"} onClick={v.F.ol.i} title={"In nghiêng"} aria-label={"In nghiêng"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-style: italic; font-family: Georgia, serif")}>{"I"}</a><span style={styleOf("width: 1px; height: 18px; background: #D6D4D0; margin: 0 4px")}></span><a href={"#"} onClick={v.F.ol.h} title={"Tiêu đề mục"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap")}>{"Tiêu đề"}</a><a href={"#"} onClick={v.F.ol.l} title={"Gạch đầu dòng"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap")}>{"• Gạch đầu dòng"}</a></div><textarea id={v.F.ol.id} rows={"7"} aria-label={"Dàn ý"} placeholder={"## Mở đầu\n- Ý chính\n- Ví dụ"} value={v.F.ol.text} onChange={v.F.ol.set} style={styleOf("box-sizing: border-box; display: block; width: 100%; min-width: 0; padding: 10px 12px; border: 0; background: transparent; color: #352637; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.7; resize: vertical; outline: none")}></textarea></div><span style={styleOf("font-size: 12px; color: #706473")}>{"## tiêu đề đoạn; - gạch đầu dòng; **đậm**, *nghiêng*."}</span></div></section></div><div style={styleOf("flex: 1 1 460px; min-width: 0; padding: 20px 28px 40px; overflow-y: auto; min-height: 0; display: flex; flex-direction: column; gap: 28px; background: #FAF9F5")}><div style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>{"Xem trước như người học thấy"}</div><div style={styleOf("display: flex; flex-direction: column; gap: 8px")}><div style={styleOf("display: flex; gap: 6px; flex-wrap: wrap")}><span style={styleOf("display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #E8E4FA; color: #5543B0")}>{v.F.partChip}</span>{v.F.hasTopic ? <><span style={styleOf("display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #F3F0EA; color: #4B3D4D")}>{v.F.topic}</span></> : null}</div><div style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25")}>{v.F.titleShow}</div><div style={styleOf("font-size: 13.5px; color: #6A5D6C")}>{v.F.metaLine}</div></div><section style={styleOf("display: flex; flex-direction: column; gap: 14px")}><h2 style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637")}>{"Đề bài"}</h2>{v.F.isP2 ? <><div style={styleOf("display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16.5px; line-height: 1.7; color: #352637")}><div style={styleOf("display: flex; flex-direction: column; gap: 4px; ")}>{(v.F.pvCue || []).map((ln, index) => <React.Fragment key={index}><div style={styleOf(ln.st)}>{ln.li ? <><span style={styleOf("flex: none; width: 14px")}>{"•"}</span></> : null}<span >{(ln.segs || []).map((sg, index) => <React.Fragment key={index}><span style={styleOf(sg.st)}>{sg.t}</span></React.Fragment>)}</span></div></React.Fragment>)}</div>{v.F.noCue ? <><div style={styleOf("color: #706473")}>{"Chưa có cue card."}</div></> : null}</div></> : null}{v.F.notP2 ? <><div style={styleOf("display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16.5px; line-height: 1.7; color: #352637")}>{(v.F.pvQs || []).map((qq, index) => <React.Fragment key={index}><div style={styleOf("display: flex; gap: 10px")}><span style={styleOf("flex: none; min-width: 22px; font-weight: 700; color: #2257B8")}>{qq.n + "."}</span><span >{qq.q}</span></div></React.Fragment>)}</div></> : null}</section>{v.F.hasOutline ? <><section style={styleOf("display: flex; flex-direction: column; gap: 14px")}><h2 style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637")}>{"Dàn ý"}</h2>{v.F.hasIntro ? <><p style={styleOf("margin: 0; font-size: 16.5px; line-height: 1.75; color: #352637")}>{v.F.introText}</p></> : null}{v.F.hasBox ? <><div style={styleOf("padding: 18px 22px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 15px; line-height: 1.7")}><div style={styleOf("display: flex; flex-direction: column; gap: 4px; ")}>{(v.F.pvOutline || []).map((ln, index) => <React.Fragment key={index}><div style={styleOf(ln.st)}>{ln.li ? <><span style={styleOf("flex: none; width: 14px")}>{"•"}</span></> : null}<span >{(ln.segs || []).map((sg, index) => <React.Fragment key={index}><span style={styleOf(sg.st)}>{sg.t}</span></React.Fragment>)}</span></div></React.Fragment>)}</div></div></> : null}</section></> : null}<section style={styleOf("display: flex; flex-direction: column; gap: 14px")}><h2 style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637")}>{"Bài mẫu"}</h2><div style={styleOf("display: flex; flex-direction: column; gap: 20px")}>{(v.F.pvItems || []).map((pv, index) => <React.Fragment key={index}><div style={styleOf("display: flex; flex-direction: column; gap: 8px")}>{pv.hasQ ? <><div style={styleOf("font-weight: 700; font-size: 16px; color: #352637")}>{pv.label + " " + pv.q}</div></> : null}<div style={styleOf("padding: 18px 22px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 15px; line-height: 1.75; display: flex; flex-direction: column; gap: 12px")}>{pv.hasAudio ? <><div style={styleOf("display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: #E8E4FA")}><span style={styleOf("flex: none; width: 34px; height: 34px; border-radius: 50%; background: #352637; color: #FFFFFF; display: flex; align-items: center; justify-content: center")}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M8 5l11 7-11 7z"}></path></svg></span><div style={styleOf("flex: 1 1 120px; min-width: 0; display: flex; flex-direction: column; gap: 4px")}><div style={styleOf("height: 4px; border-radius: 2px; background: #FFFFFF")}></div><span style={styleOf("font-size: 12.5px; color: #6A5D6C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis")}>{pv.audioName}</span></div></div></> : null}<div style={styleOf("display: flex; flex-direction: column; gap: 4px; ")}>{(pv.a || []).map((ln, index) => <React.Fragment key={index}><div style={styleOf(ln.st)}>{ln.li ? <><span style={styleOf("flex: none; width: 14px")}>{"•"}</span></> : null}<span >{(ln.segs || []).map((sg, index) => <React.Fragment key={index}><span style={styleOf(sg.st)}>{sg.t}</span></React.Fragment>)}</span></div></React.Fragment>)}</div>{pv.noA ? <><div style={styleOf("color: #706473")}>{"Chưa có bài mẫu."}</div></> : null}</div><div style={styleOf("font-size: 12.5px; color: #706473")}>{pv.wc}</div></div></React.Fragment>)}</div></section><div style={styleOf("font-size: 13px; color: #6A5D6C")}>{"Từ vựng và bài tập chưa có trong bản này."}</div></div></div></main></div></div>{"\n"}</div>{"\n"}</>; }
+  static defaultProps = { mau: "Part 1 · Websites (đã đăng)" };
+  render() {
+    const v = this.renderVals();
+    return (
+      <>
+        {"\n"}
+        {"\n"}
+        <style>
+          {cssText(
+            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\n@keyframes isFade{from{opacity:0}to{opacity:1}}@keyframes isPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes isDrop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}@keyframes isToast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes isFlash{0%{background:#E3ECFD}100%{background:transparent}}@keyframes isSpin{to{transform:rotate(360deg)}}@keyframes isGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes isCheck{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}@keyframes isRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.an-fade{animation:isFade .2s ease-out both}.an-pop{animation:isPop .28s cubic-bezier(.2,.8,.2,1) both}.an-drop{animation:isDrop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.an-toast{animation:isToast .3s cubic-bezier(.2,.8,.2,1) both}.an-check{animation:isCheck .45s cubic-bezier(.2,.8,.2,1) both}.an-rise{animation:isRise .32s cubic-bezier(.2,.8,.2,1) both}.an-flash>td{animation:isFlash 2s ease-out}.an-spin{animation:isSpin .8s linear infinite}a,label,input,textarea,select,[role=button]{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .2s ease,transform .18s ease,opacity .16s ease,outline-color .16s ease}.lift:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(53,38,55,.05),0 12px 28px rgba(53,38,55,.10)}.press:active{transform:scale(.97)}.hov>tbody>tr{transition:background-color .15s ease}.hov>tbody>tr:hover{background:#FDFCF8}.thumb-h{transition:transform .2s ease,box-shadow .2s ease}.thumb-h:hover{transform:translateY(-3px) rotate(-1deg)}input:focus,textarea:focus,select:focus{outline:none;border-color:#2963CC !important;box-shadow:0 0 0 3px rgba(41,99,204,.16)}@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}input::placeholder,textarea::placeholder{color:#9A8F9C}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #B3A9B5 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}.ro .pills a,.ro select{pointer-events:none}\n",
+          )}
+        </style>
+        {"\n"}
+        {"\n"}
+        <div
+          className="app-shell-ancestor"
+          style={styleOf(
+            "font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; font-size: 15px; line-height: 1.6; background: #FCFBF7",
+          )}
+        >
+          {"\n"}
+          <div
+            className="app-shell"
+            style={styleOf(
+              "display: flex; flex-wrap: wrap; align-items: stretch; min-height: 1400px",
+            )}
+          >
+            <div
+              className="app-sidebar-slot"
+              style={styleOf("display: flex; flex: none; align-self: stretch")}
+            >
+              <AdminSidebar active={"samples"}></AdminSidebar>
+            </div>
+            <div
+              className="app-content"
+              style={styleOf(
+                "flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column",
+              )}
+            >
+              <AdminTopbar
+                crumb={"Quản lý / Quản lý bài mẫu / Soạn bài mẫu Speaking"}
+              ></AdminTopbar>
+              <main
+                className={v.modeCls}
+                style={styleOf(
+                  "flex: 1; background: #FAF9F5; display: flex; flex-direction: column; min-width: 0",
+                )}
+              >
+                <div
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 16px 24px; border-bottom: 1.5px solid #D6D4D0; background: #FCFBF7",
+                  )}
+                >
+                  <div style={styleOf("min-width: 0; flex: 1 1 320px")}>
+                    <a
+                      href={"AdminSamples.dc.html"}
+                      style={styleOf(
+                        "display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #706473; text-decoration: none",
+                      )}
+                    >
+                      <svg
+                        width={"14"}
+                        height={"14"}
+                        viewBox={"0 0 24 24"}
+                        fill={"none"}
+                        stroke={"currentColor"}
+                        strokeWidth={"2"}
+                        strokeLinecap={"round"}
+                        strokeLinejoin={"round"}
+                        aria-hidden={"true"}
+                      >
+                        <path d={"M19 12H5M11 6l-6 6 6 6"}></path>
+                      </svg>
+                      {" Quản lý bài mẫu"}
+                    </a>
+                    <div
+                      style={styleOf(
+                        "display: flex; align-items: center; gap: 8px",
+                      )}
+                    >
+                      <div
+                        style={styleOf(
+                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 22px; font-weight: 600; letter-spacing: -0.015em",
+                        )}
+                      >
+                        {"Soạn bài mẫu · Speaking"}
+                      </div>
+                      <a
+                        href={"SampleSpeaking.dc.html"}
+                        title={"Xem như người học"}
+                        aria-label={"Xem như người học"}
+                        style={styleOf(
+                          "display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 10px; color: #4B3D4D; text-decoration: none; border: 1.5px solid #E4E1DB; background: #FFFFFF; box-sizing: border-box",
+                        )}
+                      >
+                        <svg
+                          width={"18"}
+                          height={"18"}
+                          viewBox={"0 0 24 24"}
+                          fill={"none"}
+                          stroke={"currentColor"}
+                          strokeWidth={"2"}
+                          strokeLinecap={"round"}
+                          strokeLinejoin={"round"}
+                          aria-hidden={"true"}
+                        >
+                          <path
+                            d={"M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"}
+                          ></path>
+                          <circle cx={"12"} cy={"12"} r={"3"}></circle>
+                        </svg>
+                      </a>
+                    </div>
+                    <div
+                      style={styleOf(
+                        "display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 6px",
+                      )}
+                    >
+                      <span style={styleOf(v.F.formChipSt)}>
+                        {v.F.formChip}
+                      </span>
+                      <span style={styleOf(v.F.statusSt)}>
+                        {v.F.statusText}
+                      </span>
+                      <span style={styleOf(v.modeSt)}>{v.modeText}</span>
+                    </div>
+                  </div>
+                  <div
+                    style={styleOf(
+                      "display: flex; align-items: center; gap: 10px; flex-wrap: wrap",
+                    )}
+                  >
+                    {v.viewing ? (
+                      <>
+                        <a
+                          href={"#"}
+                          onClick={v.startEdit}
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
+                          )}
+                        >
+                          <svg
+                            width={"16"}
+                            height={"16"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"2"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M15 5l4 4L8 20H4v-4z"}></path>
+                          </svg>
+                          {" Chỉnh sửa"}
+                        </a>
+                        <a
+                          href={"#"}
+                          onClick={v.publish}
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                          )}
+                        >
+                          {v.F.pubLabel}
+                        </a>
+                      </>
+                    ) : null}
+                    {v.editing ? (
+                      <>
+                        <span
+                          style={styleOf(
+                            "font-size: 13px; color: " + v.dirtyColor,
+                          )}
+                        >
+                          {v.dirtyText}
+                        </span>
+                        <a
+                          href={"#"}
+                          onClick={v.undo}
+                          aria-label={"Hoàn tác (Ctrl+Z)"}
+                          style={styleOf(v.undoSt)}
+                        >
+                          <svg
+                            width={"15"}
+                            height={"15"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"2"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M19 12H5M11 6l-6 6 6 6"}></path>
+                          </svg>
+                          {" Hoàn tác"}
+                        </a>
+                        <a
+                          href={"#"}
+                          onClick={v.cancelEdit}
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
+                          )}
+                        >
+                          {"Hủy"}
+                        </a>
+                        <a
+                          href={"#"}
+                          onClick={v.saveEdit}
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                          )}
+                        >
+                          <svg
+                            width={"16"}
+                            height={"16"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"2"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M5 12.5l4.5 4.5L19 7"}></path>
+                          </svg>
+                          {" Lưu"}
+                        </a>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+                {v.viewing ? (
+                  <div
+                    role={"note"}
+                    data-ro-bar={"1"}
+                    style={styleOf(
+                      "display: flex; align-items: center; gap: 10px; padding: 9px 24px; background: #E3ECFD; border-bottom: 1.5px solid #D6D4D0; font-size: 13.5px; line-height: 1.5; color: #352637",
+                    )}
+                  >
+                    <span
+                      style={styleOf(
+                        "flex: none; display: flex; color: #2963CC",
+                      )}
+                    >
+                      <svg
+                        width={"17"}
+                        height={"17"}
+                        viewBox={"0 0 24 24"}
+                        fill={"none"}
+                        stroke={"currentColor"}
+                        strokeWidth={"1.9"}
+                        strokeLinecap={"round"}
+                        strokeLinejoin={"round"}
+                        aria-hidden={"true"}
+                      >
+                        <rect
+                          x={"5"}
+                          y={"11"}
+                          width={"14"}
+                          height={"9"}
+                          rx={"2"}
+                        ></rect>
+                        <path d={"M8 11V8a4 4 0 0 1 8 0v3"}></path>
+                      </svg>
+                    </span>
+                    <span style={styleOf("min-width: 0")}>
+                      <b>Chế độ chỉ xem.</b>
+                      {" Nội dung đang khóa để tránh sửa nhầm. Bấm "}
+                      <b>Chỉnh sửa</b>
+                      {" để soạn; xong thì "}
+                      <b>Lưu</b>
+                      {", hoặc "}
+                      <b>Hủy</b>
+                      {" để bỏ thay đổi."}
+                    </span>
+                  </div>
+                ) : null}
+                {v.hasIssues ? (
+                  <>
+                    <div
+                      role={"alert"}
+                      style={styleOf(
+                        "margin: 16px 24px 0; padding: 14px 16px; border-radius: 14px; background: #FDECE8; border: 1.5px solid #F1B3A3; display: flex; flex-direction: column; gap: 8px",
+                      )}
+                    >
+                      <div
+                        style={styleOf(
+                          "display: flex; justify-content: space-between; gap: 12px",
+                        )}
+                      >
+                        <div
+                          style={styleOf("font-weight: 700; color: #A8321E")}
+                        >
+                          {v.issueHead}
+                        </div>
+                        <a
+                          href={"#"}
+                          onClick={v.closeIssues}
+                          aria-label={"Đóng"}
+                          style={styleOf("display: flex; color: #A8321E")}
+                        >
+                          <svg
+                            width={"16"}
+                            height={"16"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"2"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M6 6l12 12M18 6L6 18"}></path>
+                          </svg>
+                        </a>
+                      </div>
+                      {(v.issues || []).map((i, index) => (
+                        <React.Fragment key={index}>
+                          <div
+                            style={styleOf("font-size: 14px; color: #7A2A1B")}
+                          >
+                            {i.text}
+                          </div>
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </>
+                ) : null}
+                {v.confirmOpen ? (
+                  <>
+                    <div
+                      style={styleOf(
+                        "position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.32); display: flex; align-items: center; justify-content: center; padding: 16px",
+                      )}
+                    >
+                      <div
+                        role={"alertdialog"}
+                        aria-modal={"true"}
+                        aria-labelledby={"xoa-bm"}
+                        style={styleOf(
+                          "width: 440px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                        )}
+                      >
+                        <div
+                          id={"xoa-bm"}
+                          style={styleOf(
+                            "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600",
+                          )}
+                        >
+                          {v.confirmTitle}
+                        </div>
+                        <div
+                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                        >
+                          {v.confirmSub}
+                        </div>
+                        <div
+                          style={styleOf(
+                            "display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap",
+                          )}
+                        >
+                          <a
+                            href={"#"}
+                            onClick={v.confirmCancel}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
+                            )}
+                          >
+                            {"Hủy"}
+                          </a>
+                          <a
+                            href={"#"}
+                            onClick={v.confirmOk}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; background: #C0412A; border-color: #C0412A; color: #FFFFFF",
+                            )}
+                          >
+                            {"Xóa"}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : null}
+                {v.leaveOpen ? (
+                  <>
+                    <div
+                      style={styleOf(
+                        "position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.32); display: flex; align-items: center; justify-content: center; padding: 16px",
+                      )}
+                    >
+                      <div
+                        role={"alertdialog"}
+                        aria-modal={"true"}
+                        aria-labelledby={"luu-bm"}
+                        style={styleOf(
+                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                        )}
+                      >
+                        <div
+                          id={"luu-bm"}
+                          style={styleOf(
+                            "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600",
+                          )}
+                        >
+                          {"Lưu thay đổi trước khi thoát?"}
+                        </div>
+                        <div
+                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                        >
+                          {v.leaveSub}
+                        </div>
+                        <div
+                          style={styleOf(
+                            "display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap",
+                          )}
+                        >
+                          <a
+                            href={"#"}
+                            onClick={v.stayEdit}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; margin-right: auto",
+                            )}
+                          >
+                            {"Tiếp tục sửa"}
+                          </a>
+                          <a
+                            href={"#"}
+                            onClick={v.discardEdit}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; color: #C0412A",
+                            )}
+                          >
+                            {"Không lưu"}
+                          </a>
+                          <a
+                            href={"#"}
+                            onClick={v.saveEdit}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                            )}
+                          >
+                            {"Lưu"}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : null}
+                {v.pubOpen ? (
+                  <>
+                    <div
+                      style={styleOf(
+                        "position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.32); display: flex; align-items: center; justify-content: center; padding: 16px",
+                      )}
+                    >
+                      <div
+                        role={"alertdialog"}
+                        aria-modal={"true"}
+                        aria-labelledby={"dang-bm"}
+                        style={styleOf(
+                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                        )}
+                      >
+                        <div
+                          id={"dang-bm"}
+                          style={styleOf(
+                            "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600",
+                          )}
+                        >
+                          {v.pubTitle}
+                        </div>
+                        <div
+                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                        >
+                          {v.pubSub}
+                        </div>
+                        <div
+                          style={styleOf(
+                            "display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap",
+                          )}
+                        >
+                          <a
+                            href={"#"}
+                            onClick={v.pubCancel}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
+                            )}
+                          >
+                            {"Hủy"}
+                          </a>
+                          <a
+                            href={"#"}
+                            onClick={v.pubOk}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                            )}
+                          >
+                            {v.pubBtn}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : null}
+                {v.snackOpen ? (
+                  <>
+                    <div
+                      role={"status"}
+                      style={styleOf(
+                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                      )}
+                    >
+                      <span>{v.snack}</span>
+                      <a
+                        href={"#"}
+                        onClick={v.undo}
+                        style={styleOf(
+                          "color: #A9C4F5; font-weight: 600; text-decoration: none",
+                        )}
+                      >
+                        {"Hoàn tác"}
+                      </a>
+                      <a
+                        href={"#"}
+                        onClick={v.hideSnack}
+                        aria-label={"Đóng"}
+                        style={styleOf("display: flex; color: #FFFFFF")}
+                      >
+                        <svg
+                          width={"16"}
+                          height={"16"}
+                          viewBox={"0 0 24 24"}
+                          fill={"none"}
+                          stroke={"currentColor"}
+                          strokeWidth={"2"}
+                          strokeLinecap={"round"}
+                          strokeLinejoin={"round"}
+                          aria-hidden={"true"}
+                        >
+                          <path d={"M6 6l12 12M18 6L6 18"}></path>
+                        </svg>
+                      </a>
+                    </div>
+                  </>
+                ) : null}
+                {v.toast ? (
+                  <>
+                    <div
+                      role={"status"}
+                      style={styleOf(
+                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
+                      )}
+                    >
+                      <span>{v.toastText}</span>
+                      <a
+                        href={"#"}
+                        onClick={v.hideToast}
+                        aria-label={"Đóng"}
+                        style={styleOf("display: flex; color: #FFFFFF")}
+                      >
+                        <svg
+                          width={"16"}
+                          height={"16"}
+                          viewBox={"0 0 24 24"}
+                          fill={"none"}
+                          stroke={"currentColor"}
+                          strokeWidth={"2"}
+                          strokeLinecap={"round"}
+                          strokeLinejoin={"round"}
+                          aria-hidden={"true"}
+                        >
+                          <path d={"M6 6l12 12M18 6L6 18"}></path>
+                        </svg>
+                      </a>
+                    </div>
+                  </>
+                ) : null}
+                <div
+                  style={styleOf(
+                    "display: flex; flex-wrap: nowrap; align-items: stretch; height: max(560px, calc(100vh - 250px)); min-height: 0; margin-top: 16px; border-top: 1.5px solid #D6D4D0; overflow: hidden",
+                  )}
+                >
+                  <div
+                    style={styleOf(
+                      "flex: 1 1 520px; min-width: 0; padding: 20px 24px 40px; overflow-y: auto; min-height: 0; display: flex; flex-direction: column; gap: 16px; border-right: 1.5px solid #D6D4D0; background: #FCFBF7",
+                    )}
+                  >
+                    <section
+                      style={styleOf(
+                        "display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border-radius: 16px; border: 1.5px solid #D6D4D0; background: #FFFFFF",
+                      )}
+                    >
+                      <div>
+                        <div
+                          style={styleOf(
+                            "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 18px; font-weight: 600",
+                          )}
+                        >
+                          {"Thông tin chung"}
+                        </div>
+                        <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                          {
+                            "Dùng để phân loại bài mẫu trong thư viện. Một editor cho cả Part 1, 2 và 3."
+                          }
+                        </div>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-direction: column; gap: 6px",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "font-size: 13px; font-weight: 700; color: #352637",
+                          )}
+                        >
+                          {"Part"}
+                        </span>
+                        <div
+                          className={"pills"}
+                          style={styleOf(
+                            "display: flex; gap: 8px; flex-wrap: wrap",
+                          )}
+                        >
+                          {(v.F.partPills || []).map((p, index) => (
+                            <React.Fragment key={index}>
+                              <a
+                                href={"#"}
+                                onClick={p.pick}
+                                aria-pressed={p.on}
+                                style={styleOf(p.st)}
+                              >
+                                {p.name}
+                              </a>
+                            </React.Fragment>
+                          ))}
+                        </div>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-direction: column; gap: 8px",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "font-size: 13px; font-weight: 700; color: #352637",
+                          )}
+                        >
+                          {"Ảnh bìa (hiện ở thẻ bài mẫu trong thư viện)"}
+                        </span>
+                        <div
+                          style={styleOf(
+                            "display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start",
+                          )}
+                        >
+                          <div
+                            style={styleOf(
+                              "position: relative; flex: none; width: 192px; height: 128px; box-sizing: border-box; border-radius: 12px; overflow: hidden; background: #C5DECE",
+                            )}
+                          >
+                            {v.F.hasCover ? (
+                              <>
+                                <img
+                                  src={v.F.coverUrl}
+                                  alt={"Ảnh bìa"}
+                                  style={styleOf(
+                                    "display: block; width: 100%; height: 100%; object-fit: contain",
+                                  )}
+                                />
+                              </>
+                            ) : null}
+                            {v.F.noCover ? (
+                              <>
+                                <label
+                                  className={"eo"}
+                                  style={styleOf(
+                                    "position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; color: #2E6A48; text-align: center; font-size: 13px; font-weight: 600; border: 1.5px dashed #8FB59F; border-radius: 12px; box-sizing: border-box",
+                                  )}
+                                >
+                                  <svg
+                                    width={"20"}
+                                    height={"20"}
+                                    viewBox={"0 0 24 24"}
+                                    fill={"none"}
+                                    stroke={"currentColor"}
+                                    strokeWidth={"2"}
+                                    strokeLinecap={"round"}
+                                    strokeLinejoin={"round"}
+                                    aria-hidden={"true"}
+                                  >
+                                    <path
+                                      d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
+                                    ></path>
+                                  </svg>
+                                  {"Tải ảnh bìa"}
+                                  <input
+                                    type={"file"}
+                                    accept={"image/png,image/jpeg,image/webp"}
+                                    onChange={v.F.pickCover}
+                                    style={styleOf("display: none")}
+                                  />
+                                </label>
+                              </>
+                            ) : null}
+                          </div>
+                          <div
+                            style={styleOf(
+                              "flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 8px",
+                            )}
+                          >
+                            {v.F.hasCover ? (
+                              <>
+                                <div
+                                  style={styleOf(
+                                    "display: flex; align-items: center; gap: 8px; flex-wrap: wrap",
+                                  )}
+                                >
+                                  <div
+                                    style={styleOf(
+                                      "min-width: 0; flex: 1 1 140px; display: flex; flex-direction: column",
+                                    )}
+                                  >
+                                    <span
+                                      style={styleOf(
+                                        "font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                      )}
+                                    >
+                                      {v.F.coverName}
+                                    </span>
+                                    <span
+                                      style={styleOf(
+                                        "font-size: 12.5px; color: #706473",
+                                      )}
+                                    >
+                                      {v.F.coverSize}
+                                    </span>
+                                  </div>
+                                  <label
+                                    className={"eo"}
+                                    style={styleOf(
+                                      "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; height: 34px; cursor: pointer",
+                                    )}
+                                  >
+                                    <svg
+                                      width={"15"}
+                                      height={"15"}
+                                      viewBox={"0 0 24 24"}
+                                      fill={"none"}
+                                      stroke={"currentColor"}
+                                      strokeWidth={"2"}
+                                      strokeLinecap={"round"}
+                                      strokeLinejoin={"round"}
+                                      aria-hidden={"true"}
+                                    >
+                                      <path
+                                        d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
+                                      ></path>
+                                    </svg>
+                                    {" Thay ảnh"}
+                                    <input
+                                      type={"file"}
+                                      accept={"image/png,image/jpeg,image/webp"}
+                                      onChange={v.F.pickCover}
+                                      style={styleOf("display: none")}
+                                    />
+                                  </label>
+                                  <a
+                                    href={"#"}
+                                    className={"eo"}
+                                    onClick={v.F.delCover}
+                                    title={"Xóa ảnh bìa"}
+                                    aria-label={"Xóa ảnh bìa"}
+                                    style={styleOf(
+                                      "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                    )}
+                                  >
+                                    <svg
+                                      width={"15"}
+                                      height={"15"}
+                                      viewBox={"0 0 24 24"}
+                                      fill={"none"}
+                                      stroke={"currentColor"}
+                                      strokeWidth={"2"}
+                                      strokeLinecap={"round"}
+                                      strokeLinejoin={"round"}
+                                      aria-hidden={"true"}
+                                    >
+                                      <path
+                                        d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}
+                                      ></path>
+                                    </svg>
+                                  </a>
+                                </div>
+                              </>
+                            ) : null}
+                            <span
+                              style={styleOf(
+                                "font-size: 12px; line-height: 1.5; color: #706473",
+                              )}
+                            >
+                              {
+                                "Ảnh ngang tỉ lệ 3:2 (ví dụ 1200 × 800 px), JPG, PNG hoặc WebP, tối đa 5 MB. Ảnh khác tỉ lệ sẽ thu vừa khung trên nền màu. Chưa có ảnh thì thẻ hiện màu nền."
+                              }
+                            </span>
+                            {v.F.coverNote ? (
+                              <>
+                                <div
+                                  style={styleOf(
+                                    "font-size: 12.5px; color: #7A5A0E",
+                                  )}
+                                >
+                                  {v.F.coverNoteText}
+                                </div>
+                              </>
+                            ) : null}
+                            {v.F.coverErr ? (
+                              <>
+                                <div
+                                  role={"alert"}
+                                  style={styleOf(
+                                    "font-size: 13px; color: #A8321E",
+                                  )}
+                                >
+                                  {v.F.coverErrText}
+                                </div>
+                              </>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; gap: 12px; flex-wrap: wrap",
+                        )}
+                      >
+                        <label
+                          style={styleOf(
+                            "display: flex; flex-direction: column; gap: 6px; flex: 1 1 200px; min-width: 0",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-size: 13px; font-weight: 700; color: #352637",
+                            )}
+                          >
+                            {"Tiêu đề bài mẫu"}
+                          </span>
+                          <input
+                            aria-label={"Tiêu đề bài mẫu"}
+                            value={v.F.title}
+                            onChange={v.F.setTitle}
+                            placeholder={"Websites"}
+                            style={styleOf(
+                              "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
+                            )}
+                          />
+                          <span
+                            style={styleOf("font-size: 12px; color: #706473")}
+                          ></span>
+                        </label>
+                        <label
+                          style={styleOf(
+                            "display: flex; flex-direction: column; gap: 6px; flex: 1 1 200px; min-width: 0",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-size: 13px; font-weight: 700; color: #352637",
+                            )}
+                          >
+                            {"Chủ đề"}
+                          </span>
+                          <input
+                            aria-label={"Chủ đề"}
+                            value={v.F.topic}
+                            onChange={v.F.setTopic}
+                            placeholder={"Technology"}
+                            style={styleOf(
+                              "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
+                            )}
+                          />
+                          <span
+                            style={styleOf("font-size: 12px; color: #706473")}
+                          ></span>
+                        </label>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; gap: 12px; flex-wrap: wrap",
+                        )}
+                      >
+                        <label
+                          style={styleOf(
+                            "display: flex; flex-direction: column; gap: 6px; flex: 1 1 200px; min-width: 0",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-size: 13px; font-weight: 700; color: #352637",
+                            )}
+                          >
+                            {"Nguồn hoặc quý đề (không bắt buộc)"}
+                          </span>
+                          <input
+                            aria-label={"Nguồn hoặc quý đề (không bắt buộc)"}
+                            value={v.F.source}
+                            onChange={v.F.setSource}
+                            placeholder={"Q3/2026"}
+                            style={styleOf(
+                              "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
+                            )}
+                          />
+                          <span
+                            style={styleOf("font-size: 12px; color: #706473")}
+                          ></span>
+                        </label>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-direction: column; gap: 6px",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "font-size: 13px; font-weight: 700; color: #352637",
+                          )}
+                        >
+                          {"Band của bài mẫu"}
+                        </span>
+                        <div
+                          className={"pills"}
+                          style={styleOf(
+                            "display: flex; gap: 8px; flex-wrap: wrap",
+                          )}
+                        >
+                          {(v.F.bandPills || []).map((p, index) => (
+                            <React.Fragment key={index}>
+                              <a
+                                href={"#"}
+                                onClick={p.pick}
+                                aria-pressed={p.on}
+                                style={styleOf(p.st)}
+                              >
+                                {p.name}
+                              </a>
+                            </React.Fragment>
+                          ))}
+                        </div>
+                      </div>
+                    </section>
+                    <section
+                      style={styleOf(
+                        "display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border-radius: 16px; border: 1.5px solid #D6D4D0; background: #FFFFFF",
+                      )}
+                    >
+                      <div>
+                        <div
+                          style={styleOf(
+                            "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 18px; font-weight: 600",
+                          )}
+                        >
+                          {"Đề bài và bài mẫu"}
+                        </div>
+                        <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                          {v.F.qSub}
+                        </div>
+                      </div>
+                      {v.F.isP2 ? (
+                        <>
+                          <div
+                            style={styleOf(
+                              "display: flex; flex-direction: column; gap: 16px",
+                            )}
+                          >
+                            <label
+                              style={styleOf(
+                                "display: flex; flex-direction: column; gap: 6px",
+                              )}
+                            >
+                              <span
+                                style={styleOf(
+                                  "font-size: 13px; font-weight: 700; color: #352637",
+                                )}
+                              >
+                                {"Cue card (đề bài Part 2)"}
+                              </span>
+                              <textarea
+                                rows={"7"}
+                                aria-label={"Cue card (đề bài Part 2)"}
+                                value={v.F.cue}
+                                onChange={v.F.setCue}
+                                placeholder={
+                                  "Describe ...\nYou should say:\n- ý 1\n- ý 2\n- ý 3\nand explain ..."
+                                }
+                                style={styleOf(
+                                  "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC",
+                                )}
+                              ></textarea>
+                            </label>
+                            <label
+                              style={styleOf(
+                                "display: flex; flex-direction: column; gap: 6px",
+                              )}
+                            >
+                              <span
+                                style={styleOf(
+                                  "font-size: 13px; font-weight: 700; color: #352637",
+                                )}
+                              >
+                                {"Bài mẫu"}
+                              </span>
+                              <textarea
+                                rows={"12"}
+                                aria-label={"Bài mẫu"}
+                                value={v.F.ans2}
+                                onChange={v.F.setAns2}
+                                placeholder={
+                                  "Gõ hoặc dán bài mẫu. Bọc cụm quan trọng bằng **hai dấu sao** để tô đậm."
+                                }
+                                style={styleOf(
+                                  "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC",
+                                )}
+                              ></textarea>
+                            </label>
+                            <div
+                              style={styleOf("font-size: 13px; " + v.F.wc2St)}
+                            >
+                              {v.F.wc2}
+                            </div>
+                            <div
+                              style={styleOf(
+                                "display: flex; flex-direction: column; gap: 6px",
+                              )}
+                            >
+                              <span
+                                style={styleOf(
+                                  "font-size: 13px; font-weight: 700; color: #352637",
+                                )}
+                              >
+                                {"Audio mẫu (không bắt buộc)"}
+                              </span>
+                              {v.F.au2.hasAudio ? (
+                                <>
+                                  <div
+                                    style={styleOf(
+                                      "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid #8E8392; background: #FFFFFF",
+                                    )}
+                                  >
+                                    <span
+                                      style={styleOf(
+                                        "flex: none; display: flex; color: #5543B0",
+                                      )}
+                                    >
+                                      <svg
+                                        width={"18"}
+                                        height={"18"}
+                                        viewBox={"0 0 24 24"}
+                                        fill={"none"}
+                                        stroke={"currentColor"}
+                                        strokeWidth={"2"}
+                                        strokeLinecap={"round"}
+                                        strokeLinejoin={"round"}
+                                        aria-hidden={"true"}
+                                      >
+                                        <rect
+                                          x={"9"}
+                                          y={"3"}
+                                          width={"6"}
+                                          height={"11"}
+                                          rx={"3"}
+                                        ></rect>
+                                        <path
+                                          d={"M5 11a7 7 0 0 0 14 0M12 18v3"}
+                                        ></path>
+                                      </svg>
+                                    </span>
+                                    <div
+                                      style={styleOf(
+                                        "min-width: 0; flex: 1; display: flex; flex-direction: column",
+                                      )}
+                                    >
+                                      <span
+                                        style={styleOf(
+                                          "font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                        )}
+                                      >
+                                        {v.F.au2.audioName}
+                                      </span>
+                                      <span
+                                        style={styleOf(
+                                          "font-size: 12.5px; color: #706473",
+                                        )}
+                                      >
+                                        {v.F.au2.audioSize}
+                                      </span>
+                                    </div>
+                                    <label
+                                      className={"eo"}
+                                      style={styleOf(
+                                        "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; height: 34px; cursor: pointer",
+                                      )}
+                                    >
+                                      <svg
+                                        width={"16"}
+                                        height={"16"}
+                                        viewBox={"0 0 24 24"}
+                                        fill={"none"}
+                                        stroke={"currentColor"}
+                                        strokeWidth={"2"}
+                                        strokeLinecap={"round"}
+                                        strokeLinejoin={"round"}
+                                        aria-hidden={"true"}
+                                      >
+                                        <path
+                                          d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
+                                        ></path>
+                                      </svg>
+                                      {" Thay audio"}
+                                      <input
+                                        type={"file"}
+                                        accept={
+                                          "audio/mpeg,audio/mp4,audio/wav,audio/x-m4a,.mp3,.m4a,.wav"
+                                        }
+                                        onChange={v.F.au2.pickAudio}
+                                        style={styleOf("display: none")}
+                                      />
+                                    </label>
+                                    <a
+                                      href={"#"}
+                                      className={"eo"}
+                                      onClick={v.F.au2.delAudio}
+                                      title={"Xóa audio"}
+                                      aria-label={"Xóa audio"}
+                                      style={styleOf(
+                                        "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                      )}
+                                    >
+                                      <svg
+                                        width={"15"}
+                                        height={"15"}
+                                        viewBox={"0 0 24 24"}
+                                        fill={"none"}
+                                        stroke={"currentColor"}
+                                        strokeWidth={"2"}
+                                        strokeLinecap={"round"}
+                                        strokeLinejoin={"round"}
+                                        aria-hidden={"true"}
+                                      >
+                                        <path
+                                          d={
+                                            "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                          }
+                                        ></path>
+                                      </svg>
+                                    </a>
+                                  </div>
+                                </>
+                              ) : null}
+                              {v.F.au2.noAudio ? (
+                                <>
+                                  <label
+                                    className={"eo"}
+                                    style={styleOf(
+                                      "display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #6A5D6C; cursor: pointer",
+                                    )}
+                                  >
+                                    <span
+                                      style={styleOf(
+                                        "display: flex; color: #2257B8",
+                                      )}
+                                    >
+                                      <svg
+                                        width={"16"}
+                                        height={"16"}
+                                        viewBox={"0 0 24 24"}
+                                        fill={"none"}
+                                        stroke={"currentColor"}
+                                        strokeWidth={"2"}
+                                        strokeLinecap={"round"}
+                                        strokeLinejoin={"round"}
+                                        aria-hidden={"true"}
+                                      >
+                                        <path
+                                          d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
+                                        ></path>
+                                      </svg>
+                                    </span>
+                                    <span>
+                                      <span
+                                        style={styleOf(
+                                          "font-weight: 600; color: #352637",
+                                        )}
+                                      >
+                                        {"Tải audio lên"}
+                                      </span>{" "}
+                                      <span
+                                        style={styleOf("font-size: 12.5px")}
+                                      >
+                                        {"MP3, M4A hoặc WAV, tối đa 20 MB."}
+                                      </span>
+                                    </span>
+                                    <input
+                                      type={"file"}
+                                      accept={
+                                        "audio/mpeg,audio/mp4,audio/wav,audio/x-m4a,.mp3,.m4a,.wav"
+                                      }
+                                      onChange={v.F.au2.pickAudio}
+                                      style={styleOf("display: none")}
+                                    />
+                                  </label>
+                                </>
+                              ) : null}
+                              {v.F.au2.audioErr ? (
+                                <>
+                                  <div
+                                    role={"alert"}
+                                    style={styleOf(
+                                      "font-size: 13px; color: #A8321E",
+                                    )}
+                                  >
+                                    {v.F.au2.audioErrText}
+                                  </div>
+                                </>
+                              ) : null}
+                            </div>
+                          </div>
+                        </>
+                      ) : null}
+                      {v.F.notP2 ? (
+                        <>
+                          <div
+                            style={styleOf(
+                              "display: flex; flex-direction: column; gap: 12px",
+                            )}
+                          >
+                            {(v.F.items || []).map((it, index) => (
+                              <React.Fragment key={index}>
+                                <div
+                                  style={styleOf(
+                                    "display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 14px; border: 1.5px solid #D6D4D0; background: #FCFBF7",
+                                  )}
+                                >
+                                  <div
+                                    style={styleOf(
+                                      "display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                                    )}
+                                  >
+                                    <span style={styleOf("font-weight: 700")}>
+                                      {it.label}
+                                    </span>
+                                    {it.canDel ? (
+                                      <>
+                                        <a
+                                          href={"#"}
+                                          className={"eo"}
+                                          onClick={it.del}
+                                          title={"Xóa câu hỏi"}
+                                          aria-label={"Xóa " + it.label}
+                                          style={styleOf(
+                                            "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                          )}
+                                        >
+                                          <svg
+                                            width={"15"}
+                                            height={"15"}
+                                            viewBox={"0 0 24 24"}
+                                            fill={"none"}
+                                            stroke={"currentColor"}
+                                            strokeWidth={"2"}
+                                            strokeLinecap={"round"}
+                                            strokeLinejoin={"round"}
+                                            aria-hidden={"true"}
+                                          >
+                                            <path
+                                              d={
+                                                "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                              }
+                                            ></path>
+                                          </svg>
+                                        </a>
+                                      </>
+                                    ) : null}
+                                  </div>
+                                  <label
+                                    style={styleOf(
+                                      "display: flex; flex-direction: column; gap: 6px",
+                                    )}
+                                  >
+                                    <span
+                                      style={styleOf(
+                                        "font-size: 13px; font-weight: 700; color: #352637",
+                                      )}
+                                    >
+                                      {"Câu hỏi"}
+                                    </span>
+                                    <textarea
+                                      rows={"2"}
+                                      aria-label={"Câu hỏi"}
+                                      value={it.q}
+                                      onChange={it.setQ}
+                                      placeholder={"Gõ câu hỏi"}
+                                      style={styleOf(
+                                        "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC",
+                                      )}
+                                    ></textarea>
+                                  </label>
+                                  <label
+                                    style={styleOf(
+                                      "display: flex; flex-direction: column; gap: 6px",
+                                    )}
+                                  >
+                                    <span
+                                      style={styleOf(
+                                        "font-size: 13px; font-weight: 700; color: #352637",
+                                      )}
+                                    >
+                                      {"Bài mẫu cho câu này"}
+                                    </span>
+                                    <textarea
+                                      rows={"5"}
+                                      aria-label={"Bài mẫu cho câu này"}
+                                      value={it.a}
+                                      onChange={it.setA}
+                                      placeholder={
+                                        "Gõ bài mẫu. Bọc cụm quan trọng bằng **hai dấu sao**."
+                                      }
+                                      style={styleOf(
+                                        "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC",
+                                      )}
+                                    ></textarea>
+                                  </label>
+                                  <span
+                                    style={styleOf(
+                                      "font-size: 12.5px; color: #706473",
+                                    )}
+                                  >
+                                    {it.wc}
+                                  </span>
+                                  <div
+                                    style={styleOf(
+                                      "display: flex; flex-direction: column; gap: 6px",
+                                    )}
+                                  >
+                                    <span
+                                      style={styleOf(
+                                        "font-size: 13px; font-weight: 700; color: #352637",
+                                      )}
+                                    >
+                                      {"Audio mẫu (không bắt buộc)"}
+                                    </span>
+                                    {it.hasAudio ? (
+                                      <>
+                                        <div
+                                          style={styleOf(
+                                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid #8E8392; background: #FFFFFF",
+                                          )}
+                                        >
+                                          <span
+                                            style={styleOf(
+                                              "flex: none; display: flex; color: #5543B0",
+                                            )}
+                                          >
+                                            <svg
+                                              width={"18"}
+                                              height={"18"}
+                                              viewBox={"0 0 24 24"}
+                                              fill={"none"}
+                                              stroke={"currentColor"}
+                                              strokeWidth={"2"}
+                                              strokeLinecap={"round"}
+                                              strokeLinejoin={"round"}
+                                              aria-hidden={"true"}
+                                            >
+                                              <rect
+                                                x={"9"}
+                                                y={"3"}
+                                                width={"6"}
+                                                height={"11"}
+                                                rx={"3"}
+                                              ></rect>
+                                              <path
+                                                d={
+                                                  "M5 11a7 7 0 0 0 14 0M12 18v3"
+                                                }
+                                              ></path>
+                                            </svg>
+                                          </span>
+                                          <div
+                                            style={styleOf(
+                                              "min-width: 0; flex: 1; display: flex; flex-direction: column",
+                                            )}
+                                          >
+                                            <span
+                                              style={styleOf(
+                                                "font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                              )}
+                                            >
+                                              {it.audioName}
+                                            </span>
+                                            <span
+                                              style={styleOf(
+                                                "font-size: 12.5px; color: #706473",
+                                              )}
+                                            >
+                                              {it.audioSize}
+                                            </span>
+                                          </div>
+                                          <label
+                                            className={"eo"}
+                                            style={styleOf(
+                                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; height: 34px; cursor: pointer",
+                                            )}
+                                          >
+                                            <svg
+                                              width={"16"}
+                                              height={"16"}
+                                              viewBox={"0 0 24 24"}
+                                              fill={"none"}
+                                              stroke={"currentColor"}
+                                              strokeWidth={"2"}
+                                              strokeLinecap={"round"}
+                                              strokeLinejoin={"round"}
+                                              aria-hidden={"true"}
+                                            >
+                                              <path
+                                                d={
+                                                  "M12 16V4M7 9l5-5 5 5M4 20h16"
+                                                }
+                                              ></path>
+                                            </svg>
+                                            {" Thay audio"}
+                                            <input
+                                              type={"file"}
+                                              accept={
+                                                "audio/mpeg,audio/mp4,audio/wav,audio/x-m4a,.mp3,.m4a,.wav"
+                                              }
+                                              onChange={it.pickAudio}
+                                              style={styleOf("display: none")}
+                                            />
+                                          </label>
+                                          <a
+                                            href={"#"}
+                                            className={"eo"}
+                                            onClick={it.delAudio}
+                                            title={"Xóa audio"}
+                                            aria-label={"Xóa audio"}
+                                            style={styleOf(
+                                              "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                            )}
+                                          >
+                                            <svg
+                                              width={"15"}
+                                              height={"15"}
+                                              viewBox={"0 0 24 24"}
+                                              fill={"none"}
+                                              stroke={"currentColor"}
+                                              strokeWidth={"2"}
+                                              strokeLinecap={"round"}
+                                              strokeLinejoin={"round"}
+                                              aria-hidden={"true"}
+                                            >
+                                              <path
+                                                d={
+                                                  "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                }
+                                              ></path>
+                                            </svg>
+                                          </a>
+                                        </div>
+                                      </>
+                                    ) : null}
+                                    {it.noAudio ? (
+                                      <>
+                                        <label
+                                          className={"eo"}
+                                          style={styleOf(
+                                            "display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #6A5D6C; cursor: pointer",
+                                          )}
+                                        >
+                                          <span
+                                            style={styleOf(
+                                              "display: flex; color: #2257B8",
+                                            )}
+                                          >
+                                            <svg
+                                              width={"16"}
+                                              height={"16"}
+                                              viewBox={"0 0 24 24"}
+                                              fill={"none"}
+                                              stroke={"currentColor"}
+                                              strokeWidth={"2"}
+                                              strokeLinecap={"round"}
+                                              strokeLinejoin={"round"}
+                                              aria-hidden={"true"}
+                                            >
+                                              <path
+                                                d={
+                                                  "M12 16V4M7 9l5-5 5 5M4 20h16"
+                                                }
+                                              ></path>
+                                            </svg>
+                                          </span>
+                                          <span>
+                                            <span
+                                              style={styleOf(
+                                                "font-weight: 600; color: #352637",
+                                              )}
+                                            >
+                                              {"Tải audio lên"}
+                                            </span>{" "}
+                                            <span
+                                              style={styleOf(
+                                                "font-size: 12.5px",
+                                              )}
+                                            >
+                                              {
+                                                "MP3, M4A hoặc WAV, tối đa 20 MB."
+                                              }
+                                            </span>
+                                          </span>
+                                          <input
+                                            type={"file"}
+                                            accept={
+                                              "audio/mpeg,audio/mp4,audio/wav,audio/x-m4a,.mp3,.m4a,.wav"
+                                            }
+                                            onChange={it.pickAudio}
+                                            style={styleOf("display: none")}
+                                          />
+                                        </label>
+                                      </>
+                                    ) : null}
+                                    {it.audioErr ? (
+                                      <>
+                                        <div
+                                          role={"alert"}
+                                          style={styleOf(
+                                            "font-size: 13px; color: #A8321E",
+                                          )}
+                                        >
+                                          {it.audioErrText}
+                                        </div>
+                                      </>
+                                    ) : null}
+                                  </div>
+                                </div>
+                              </React.Fragment>
+                            ))}
+                            <a
+                              href={"#"}
+                              className={"eo"}
+                              onClick={v.F.addQ}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; align-self: flex-start",
+                              )}
+                            >
+                              <svg
+                                width={"16"}
+                                height={"16"}
+                                viewBox={"0 0 24 24"}
+                                fill={"none"}
+                                stroke={"currentColor"}
+                                strokeWidth={"2"}
+                                strokeLinecap={"round"}
+                                strokeLinejoin={"round"}
+                                aria-hidden={"true"}
+                              >
+                                <path d={"M12 5v14M5 12h14"}></path>
+                              </svg>
+                              {" Thêm câu hỏi"}
+                            </a>
+                          </div>
+                        </>
+                      ) : null}
+                    </section>
+                    <section
+                      style={styleOf(
+                        "display: flex; flex-direction: column; gap: 14px; padding: 18px 20px; border-radius: 16px; border: 1.5px solid #D6D4D0; background: #FFFFFF",
+                      )}
+                    >
+                      <div>
+                        <div
+                          style={styleOf(
+                            "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 18px; font-weight: 600",
+                          )}
+                        >
+                          {"Dàn ý"}
+                        </div>
+                        <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                          {
+                            "Không bắt buộc. Thường dùng cho Part 2; người học thấy dàn ý trước bài mẫu."
+                          }
+                        </div>
+                      </div>
+                      <label
+                        style={styleOf(
+                          "display: flex; flex-direction: column; gap: 6px",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "font-size: 13px; font-weight: 700; color: #352637",
+                          )}
+                        >
+                          {"Đoạn giới thiệu dàn ý (hiện bên ngoài ô dàn ý)"}
+                        </span>
+                        <textarea
+                          rows={"3"}
+                          aria-label={"Đoạn giới thiệu dàn ý"}
+                          value={v.F.outlineIntro}
+                          onChange={v.F.setOutlineIntro}
+                          placeholder={
+                            "Một đoạn ngắn nói cách chọn ý và triển khai"
+                          }
+                          style={styleOf(
+                            "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC",
+                          )}
+                        ></textarea>
+                      </label>
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-direction: column; gap: 6px",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "font-size: 13px; font-weight: 700; color: #352637",
+                          )}
+                        >
+                          {"Dàn ý"}
+                        </span>
+                        <div
+                          style={styleOf(
+                            "border: 1.5px solid #8E8392; border-radius: 12px; overflow: hidden; background: #FFFFFF",
+                          )}
+                        >
+                          <div
+                            role={"toolbar"}
+                            className={"eo"}
+                            aria-label={"Định dạng"}
+                            style={styleOf(
+                              "display: flex; align-items: center; gap: 2px; flex-wrap: wrap; padding: 4px 6px; border-bottom: 1px solid #E6E4E0; background: #F3F0EA",
+                            )}
+                          >
+                            <a
+                              href={"#"}
+                              onClick={v.F.ol.b}
+                              title={"In đậm"}
+                              aria-label={"In đậm"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-weight: 800",
+                              )}
+                            >
+                              {"B"}
+                            </a>
+                            <a
+                              href={"#"}
+                              onClick={v.F.ol.i}
+                              title={"In nghiêng"}
+                              aria-label={"In nghiêng"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-style: italic; font-family: Georgia, serif",
+                              )}
+                            >
+                              {"I"}
+                            </a>
+                            <span
+                              style={styleOf(
+                                "width: 1px; height: 18px; background: #D6D4D0; margin: 0 4px",
+                              )}
+                            ></span>
+                            <a
+                              href={"#"}
+                              onClick={v.F.ol.h}
+                              title={"Tiêu đề mục"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
+                              )}
+                            >
+                              {"Tiêu đề"}
+                            </a>
+                            <a
+                              href={"#"}
+                              onClick={v.F.ol.l}
+                              title={"Gạch đầu dòng"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
+                              )}
+                            >
+                              {"• Gạch đầu dòng"}
+                            </a>
+                          </div>
+                          <textarea
+                            id={v.F.ol.id}
+                            rows={"7"}
+                            aria-label={"Dàn ý"}
+                            placeholder={"## Mở đầu\n- Ý chính\n- Ví dụ"}
+                            value={v.F.ol.text}
+                            onChange={v.F.ol.set}
+                            style={styleOf(
+                              "box-sizing: border-box; display: block; width: 100%; min-width: 0; padding: 10px 12px; border: 0; background: transparent; color: #352637; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.7; resize: vertical; outline: none",
+                            )}
+                          ></textarea>
+                        </div>
+                        <span
+                          style={styleOf("font-size: 12px; color: #706473")}
+                        >
+                          {
+                            "## tiêu đề đoạn; - gạch đầu dòng; **đậm**, *nghiêng*."
+                          }
+                        </span>
+                      </div>
+                    </section>
+                  </div>
+                  <div
+                    style={styleOf(
+                      "flex: 1 1 460px; min-width: 0; padding: 20px 28px 40px; overflow-y: auto; min-height: 0; display: flex; flex-direction: column; gap: 28px; background: #FAF9F5",
+                    )}
+                  >
+                    <div
+                      style={styleOf(
+                        "font-size: 13px; font-weight: 700; color: #352637",
+                      )}
+                    >
+                      {"Xem trước như người học thấy"}
+                    </div>
+                    <div
+                      style={styleOf(
+                        "display: flex; flex-direction: column; gap: 8px",
+                      )}
+                    >
+                      <div
+                        style={styleOf(
+                          "display: flex; gap: 6px; flex-wrap: wrap",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #E8E4FA; color: #5543B0",
+                          )}
+                        >
+                          {v.F.partChip}
+                        </span>
+                        {v.F.hasTopic ? (
+                          <>
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #F3F0EA; color: #4B3D4D",
+                              )}
+                            >
+                              {v.F.topic}
+                            </span>
+                          </>
+                        ) : null}
+                      </div>
+                      <div
+                        style={styleOf(
+                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25",
+                        )}
+                      >
+                        {v.F.titleShow}
+                      </div>
+                      <div style={styleOf("font-size: 13.5px; color: #6A5D6C")}>
+                        {v.F.metaLine}
+                      </div>
+                    </div>
+                    <section
+                      style={styleOf(
+                        "display: flex; flex-direction: column; gap: 14px",
+                      )}
+                    >
+                      <h2
+                        style={styleOf(
+                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637",
+                        )}
+                      >
+                        {"Đề bài"}
+                      </h2>
+                      {v.F.isP2 ? (
+                        <>
+                          <div
+                            style={styleOf(
+                              "display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16.5px; line-height: 1.7; color: #352637",
+                            )}
+                          >
+                            <div
+                              style={styleOf(
+                                "display: flex; flex-direction: column; gap: 4px; ",
+                              )}
+                            >
+                              {(v.F.pvCue || []).map((ln, index) => (
+                                <React.Fragment key={index}>
+                                  <div style={styleOf(ln.st)}>
+                                    {ln.li ? (
+                                      <>
+                                        <span
+                                          style={styleOf(
+                                            "flex: none; width: 14px",
+                                          )}
+                                        >
+                                          {"•"}
+                                        </span>
+                                      </>
+                                    ) : null}
+                                    <span>
+                                      {(ln.segs || []).map((sg, index) => (
+                                        <React.Fragment key={index}>
+                                          <span style={styleOf(sg.st)}>
+                                            {sg.t}
+                                          </span>
+                                        </React.Fragment>
+                                      ))}
+                                    </span>
+                                  </div>
+                                </React.Fragment>
+                              ))}
+                            </div>
+                            {v.F.noCue ? (
+                              <>
+                                <div style={styleOf("color: #706473")}>
+                                  {"Chưa có cue card."}
+                                </div>
+                              </>
+                            ) : null}
+                          </div>
+                        </>
+                      ) : null}
+                      {v.F.notP2 ? (
+                        <>
+                          <div
+                            style={styleOf(
+                              "display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16.5px; line-height: 1.7; color: #352637",
+                            )}
+                          >
+                            {(v.F.pvQs || []).map((qq, index) => (
+                              <React.Fragment key={index}>
+                                <div
+                                  style={styleOf("display: flex; gap: 10px")}
+                                >
+                                  <span
+                                    style={styleOf(
+                                      "flex: none; min-width: 22px; font-weight: 700; color: #2257B8",
+                                    )}
+                                  >
+                                    {qq.n + "."}
+                                  </span>
+                                  <span>{qq.q}</span>
+                                </div>
+                              </React.Fragment>
+                            ))}
+                          </div>
+                        </>
+                      ) : null}
+                    </section>
+                    {v.F.hasOutline ? (
+                      <>
+                        <section
+                          style={styleOf(
+                            "display: flex; flex-direction: column; gap: 14px",
+                          )}
+                        >
+                          <h2
+                            style={styleOf(
+                              "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637",
+                            )}
+                          >
+                            {"Dàn ý"}
+                          </h2>
+                          {v.F.hasIntro ? (
+                            <>
+                              <p
+                                style={styleOf(
+                                  "margin: 0; font-size: 16.5px; line-height: 1.75; color: #352637",
+                                )}
+                              >
+                                {v.F.introText}
+                              </p>
+                            </>
+                          ) : null}
+                          {v.F.hasBox ? (
+                            <>
+                              <div
+                                style={styleOf(
+                                  "padding: 18px 22px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 15px; line-height: 1.7",
+                                )}
+                              >
+                                <div
+                                  style={styleOf(
+                                    "display: flex; flex-direction: column; gap: 4px; ",
+                                  )}
+                                >
+                                  {(v.F.pvOutline || []).map((ln, index) => (
+                                    <React.Fragment key={index}>
+                                      <div style={styleOf(ln.st)}>
+                                        {ln.li ? (
+                                          <>
+                                            <span
+                                              style={styleOf(
+                                                "flex: none; width: 14px",
+                                              )}
+                                            >
+                                              {"•"}
+                                            </span>
+                                          </>
+                                        ) : null}
+                                        <span>
+                                          {(ln.segs || []).map((sg, index) => (
+                                            <React.Fragment key={index}>
+                                              <span style={styleOf(sg.st)}>
+                                                {sg.t}
+                                              </span>
+                                            </React.Fragment>
+                                          ))}
+                                        </span>
+                                      </div>
+                                    </React.Fragment>
+                                  ))}
+                                </div>
+                              </div>
+                            </>
+                          ) : null}
+                        </section>
+                      </>
+                    ) : null}
+                    <section
+                      style={styleOf(
+                        "display: flex; flex-direction: column; gap: 14px",
+                      )}
+                    >
+                      <h2
+                        style={styleOf(
+                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637",
+                        )}
+                      >
+                        {"Bài mẫu"}
+                      </h2>
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-direction: column; gap: 20px",
+                        )}
+                      >
+                        {(v.F.pvItems || []).map((pv, index) => (
+                          <React.Fragment key={index}>
+                            <div
+                              style={styleOf(
+                                "display: flex; flex-direction: column; gap: 8px",
+                              )}
+                            >
+                              {pv.hasQ ? (
+                                <>
+                                  <div
+                                    style={styleOf(
+                                      "font-weight: 700; font-size: 16px; color: #352637",
+                                    )}
+                                  >
+                                    {pv.label + " " + pv.q}
+                                  </div>
+                                </>
+                              ) : null}
+                              <div
+                                style={styleOf(
+                                  "padding: 18px 22px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 15px; line-height: 1.75; display: flex; flex-direction: column; gap: 12px",
+                                )}
+                              >
+                                {pv.hasAudio ? (
+                                  <>
+                                    <div
+                                      style={styleOf(
+                                        "display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: #E8E4FA",
+                                      )}
+                                    >
+                                      <span
+                                        style={styleOf(
+                                          "flex: none; width: 34px; height: 34px; border-radius: 50%; background: #352637; color: #FFFFFF; display: flex; align-items: center; justify-content: center",
+                                        )}
+                                      >
+                                        <svg
+                                          width={"14"}
+                                          height={"14"}
+                                          viewBox={"0 0 24 24"}
+                                          fill={"none"}
+                                          stroke={"currentColor"}
+                                          strokeWidth={"2"}
+                                          strokeLinecap={"round"}
+                                          strokeLinejoin={"round"}
+                                          aria-hidden={"true"}
+                                        >
+                                          <path d={"M8 5l11 7-11 7z"}></path>
+                                        </svg>
+                                      </span>
+                                      <div
+                                        style={styleOf(
+                                          "flex: 1 1 120px; min-width: 0; display: flex; flex-direction: column; gap: 4px",
+                                        )}
+                                      >
+                                        <div
+                                          style={styleOf(
+                                            "height: 4px; border-radius: 2px; background: #FFFFFF",
+                                          )}
+                                        ></div>
+                                        <span
+                                          style={styleOf(
+                                            "font-size: 12.5px; color: #6A5D6C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                          )}
+                                        >
+                                          {pv.audioName}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </>
+                                ) : null}
+                                <div
+                                  style={styleOf(
+                                    "display: flex; flex-direction: column; gap: 4px; ",
+                                  )}
+                                >
+                                  {(pv.a || []).map((ln, index) => (
+                                    <React.Fragment key={index}>
+                                      <div style={styleOf(ln.st)}>
+                                        {ln.li ? (
+                                          <>
+                                            <span
+                                              style={styleOf(
+                                                "flex: none; width: 14px",
+                                              )}
+                                            >
+                                              {"•"}
+                                            </span>
+                                          </>
+                                        ) : null}
+                                        <span>
+                                          {(ln.segs || []).map((sg, index) => (
+                                            <React.Fragment key={index}>
+                                              <span style={styleOf(sg.st)}>
+                                                {sg.t}
+                                              </span>
+                                            </React.Fragment>
+                                          ))}
+                                        </span>
+                                      </div>
+                                    </React.Fragment>
+                                  ))}
+                                </div>
+                                {pv.noA ? (
+                                  <>
+                                    <div style={styleOf("color: #706473")}>
+                                      {"Chưa có bài mẫu."}
+                                    </div>
+                                  </>
+                                ) : null}
+                              </div>
+                              <div
+                                style={styleOf(
+                                  "font-size: 12.5px; color: #706473",
+                                )}
+                              >
+                                {pv.wc}
+                              </div>
+                            </div>
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    </section>
+                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                      {"Từ vựng và bài tập chưa có trong bản này."}
+                    </div>
+                  </div>
+                </div>
+              </main>
+            </div>
+          </div>
+          {"\n"}
+        </div>
+        {"\n"}
+      </>
+    );
+  }
 }
 
 export default AdminSampleSpeaking;

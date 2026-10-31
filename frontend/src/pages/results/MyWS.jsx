@@ -2,20 +2,1626 @@ import NotificationBadge from "../../components/notifications/NotificationBadge"
 import React from "react";
 import { styleOf, cssText } from "../../lib/styles";
 
-
 class MyWS extends React.Component {
-renderVals() {
-var accent = this.props.accent ?? '#2963CC';
-var h = String(accent).replace('#', '');
-if (h.length === 3) { h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2]; }
-var n = parseInt(h, 16);
-var r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
-var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-return { accent: accent, onAccent: lum > 0.6 ? '#1A1A1A' : '#FFFFFF' };
-}
+  renderVals() {
+    var accent = this.props.accent ?? "#2963CC";
+    var h = String(accent).replace("#", "");
+    if (h.length === 3) {
+      h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    }
+    var n = parseInt(h, 16);
+    var r = (n >> 16) & 255,
+      g = (n >> 8) & 255,
+      b = n & 255;
+    var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return { accent: accent, onAccent: lum > 0.6 ? "#1A1A1A" : "#FFFFFF" };
+  }
 
-static defaultProps = {"accent": "#2963CC"};
-render() { const v = this.renderVals(); return <>{"\n"}{"\n"}<style>{cssText("\nbody{margin:0;background:#FCFBF7}\na{color:#2963CC}\n.bu-dd-menu{display:none}.bu-dd:hover .bu-dd-menu,.bu-dd:focus-within .bu-dd-menu{display:block}.bu-dd:hover > a{background:#F3F0EA}\n\n")}</style>{"\n"}{"\n"}<div style={styleOf("font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; background: #FCFBF7; font-size: 15px; line-height: 1.6; min-height: 1150px")}>{"\n"}<header style={styleOf("border-bottom: 1.5px solid #D6D4D0; background: #FCFBF7")}><div style={styleOf("max-width: 1200px; margin: 0 auto; padding: 0 24px; min-height: 68px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px")}><a href={"StudentLanding.dc.html"} style={styleOf("display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px")}><span style={styleOf("width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " + v.accent + "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " + v.onAccent)}>{"IS"}</span><span >{"IELTSpace"}</span></a><nav style={styleOf("display: flex; flex-wrap: wrap; gap: 4px")}><div className={"bu-dd"} style={styleOf("position: relative")}><a href={"FullTests.dc.html"} style={styleOf("display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500")} aria-haspopup={"true"}>{"Thư viện đề"}<svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2.2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M6 9l6 6 6-6"}></path></svg></a><div className={"bu-dd-menu"} style={styleOf("position: absolute; top: 100%; left: 0; padding-top: 8px; z-index: 30")}><div role={"menu"} style={styleOf("width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)")}><a href={"FullTests.dc.html"} data-nav={"IELTS Full Tests"} style={styleOf("display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637")}><span style={styleOf("width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 3l9 5-9 5-9-5z"}></path><path d={"M3 13l9 5 9-5"}></path></svg></span><span style={styleOf("display: flex; flex-direction: column")}><span style={styleOf("font-weight: 600; font-size: 14.5px")}>{"IELTS Full Tests"}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{"Đề đầy đủ, chấm band như thi thật"}</span></span></a><a href={"PracticeLibrary.dc.html"} data-nav={"IELTS Listening Practice"} style={styleOf("display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637")}><span style={styleOf("width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M4 14v-2a8 8 0 0 1 16 0v2"}></path><rect x={"3"} y={"14"} width={"4"} height={"6"} rx={"1.5"}></rect><rect x={"17"} y={"14"} width={"4"} height={"6"} rx={"1.5"}></rect></svg></span><span style={styleOf("display: flex; flex-direction: column")}><span style={styleOf("font-weight: 600; font-size: 14.5px")}>{"IELTS Listening Practice"}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{"Luyện từng Question Group, nghe lại được"}</span></span></a><a href={"PracticeLibrary.dc.html"} data-nav={"IELTS Reading Practice"} style={styleOf("display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637")}><span style={styleOf("width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"}></path><circle cx={"12"} cy={"12"} r={"3"}></circle></svg></span><span style={styleOf("display: flex; flex-direction: column")}><span style={styleOf("font-weight: 600; font-size: 14.5px")}>{"IELTS Reading Practice"}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{"Luyện từng Question Group, có lời giải"}</span></span></a><a href={"PracticeWS.dc.html"} data-nav={"IELTS Writing Practice"} style={styleOf("display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637")}><span style={styleOf("width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M15 5l4 4L8 20H4v-4z"}></path></svg></span><span style={styleOf("display: flex; flex-direction: column")}><span style={styleOf("font-weight: 600; font-size: 14.5px")}>{"IELTS Writing Practice"}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{"Luyện riêng Task 1 hoặc Task 2"}</span></span></a><a href={"PracticeWS.dc.html"} data-nav={"IELTS Speaking Practice"} style={styleOf("display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637")}><span style={styleOf("width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><rect x={"9"} y={"3"} width={"6"} height={"11"} rx={"3"}></rect><path d={"M5 11a7 7 0 0 0 14 0M12 18v3"}></path></svg></span><span style={styleOf("display: flex; flex-direction: column")}><span style={styleOf("font-weight: 600; font-size: 14.5px")}>{"IELTS Speaking Practice"}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{"Luyện riêng Part 1, 2 hoặc 3"}</span></span></a></div></div></div><div className={"bu-dd"} style={styleOf("position: relative")}><a href={"SampleLibrary.dc.html"} style={styleOf("display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500")} aria-haspopup={"true"}>{"Thư viện bài mẫu"}<svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2.2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M6 9l6 6 6-6"}></path></svg></a><div className={"bu-dd-menu"} style={styleOf("position: absolute; top: 100%; left: 0; padding-top: 8px; z-index: 30")}><div role={"menu"} style={styleOf("width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)")}><a href={"PracticeLibrary.dc.html"} data-nav={"Writing Task 1 Academic"} style={styleOf("display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637")}><span style={styleOf("width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M4 20V10M10 20V4M16 20v-7M22 20H2"}></path></svg></span><span style={styleOf("display: flex; flex-direction: column")}><span style={styleOf("font-weight: 600; font-size: 14.5px")}>{"Writing Task 1 Academic"}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{"Mô tả biểu đồ, bảng, bản đồ, quy trình"}</span></span></a><a href={"PracticeLibrary.dc.html"} data-nav={"Writing Task 1 General"} style={styleOf("display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637")}><span style={styleOf("width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><rect x={"3"} y={"5"} width={"18"} height={"14"} rx={"2"}></rect><path d={"M3 7l9 6 9-6"}></path></svg></span><span style={styleOf("display: flex; flex-direction: column")}><span style={styleOf("font-weight: 600; font-size: 14.5px")}>{"Writing Task 1 General"}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{"Bài mẫu viết thư"}</span></span></a><a href={"PracticeLibrary.dc.html"} data-nav={"Writing Task 2"} style={styleOf("display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637")}><span style={styleOf("width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M15 5l4 4L8 20H4v-4z"}></path></svg></span><span style={styleOf("display: flex; flex-direction: column")}><span style={styleOf("font-weight: 600; font-size: 14.5px")}>{"Writing Task 2"}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{"Bài mẫu bài luận"}</span></span></a><a href={"SampleSpeaking.dc.html"} data-nav={"Speaking Part 1, 2, 3"} style={styleOf("display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637")}><span style={styleOf("width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><rect x={"9"} y={"3"} width={"6"} height={"11"} rx={"3"}></rect><path d={"M5 11a7 7 0 0 0 14 0M12 18v3"}></path></svg></span><span style={styleOf("display: flex; flex-direction: column")}><span style={styleOf("font-weight: 600; font-size: 14.5px")}>{"Speaking Part 1, 2, 3"}</span><span style={styleOf("font-size: 12.5px; color: #706473")}>{"Bản ghi lời nói, kèm audio mẫu"}</span></span></a></div></div></div><a href={"Vocab.dc.html"} style={styleOf("display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500")}>{"Thư viện từ vựng"}</a><a href={"Flashcard.dc.html"} style={styleOf("display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500")}>{"Flashcard của tôi"}</a></nav><div style={styleOf("margin-left: auto; display: flex; align-items: center; gap: 10px")}><a href={"Notifications.dc.html"} aria-label={"Thông báo"} style={styleOf("position: relative; width: 44px; height: 44px; box-sizing: border-box; border-radius: 50%; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; color: #352637; text-decoration: none; background: #FFFFFF")}><svg width={"19"} height={"19"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"}></path><path d={"M10.3 21a1.94 1.94 0 0 0 3.4 0"}></path></svg><NotificationBadge style={styleOf("position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF")} /></a><a href={"AvatarMenu.dc.html"} aria-label={"Tài khoản: tiến độ học tập và cài đặt"} style={styleOf("display: flex; padding: 3px; border-radius: 50%; border: 2px solid " + v.accent + "; text-decoration: none")}><span style={styleOf("width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px")}>{"MA"}</span></a></div></div></header><div style={styleOf("background: #FCFBF7; min-height: 1081px")}><main style={styleOf("max-width: 1280px; margin: 0 auto; padding: 36px 24px 56px; display: flex; flex-direction: column; gap: 24px")}><div style={styleOf("display: flex; justify-content: space-between; align-items: flex-end; gap: 16px")}><div ><h1 style={styleOf("margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em")}>{"Bài Writing và Speaking của tôi"}</h1><div style={styleOf("font-size: 15px; color: #6A5D6C; margin-top: 4px")}>{"Bài đã hoàn thành, trạng thái yêu cầu chấm và thời hạn nội dung."}</div></div><div style={styleOf("display: flex; gap: 10px")}><a href={"PracticeWS.dc.html"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}>{"Luyện Writing, Speaking"}</a></div></div><div style={styleOf("display: flex; flex-wrap: wrap; gap: 14px; align-items: center")}><div style={styleOf("display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA")}><span style={styleOf("display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600")}>{"Tất cả"}</span><span style={styleOf("display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500")}>{"Writing"}</span><span style={styleOf("display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500")}>{"Speaking"}</span></div><div style={styleOf("display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA")}><span style={styleOf("display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600")}>{"Mọi trạng thái"}</span><span style={styleOf("display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500")}>{"Chưa gửi chấm"}</span><span style={styleOf("display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500")}>{"Chờ phân công"}</span><span style={styleOf("display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500")}>{"Chờ chấm"}</span><span style={styleOf("display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500")}>{"Đã có kết quả"}</span><span style={styleOf("display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500")}>{"Đã hủy"}</span></div></div><div style={styleOf("display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start")}><div style={styleOf("flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 24px")}><div style={styleOf("padding: 22px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ")}><div style={styleOf("display: flex; flex-direction: column; gap: 12px; ")}><div style={styleOf("font-size: 17px; font-weight: 600")}>{"Lượt hỗ trợ chấm còn hiệu lực"}</div><div style={styleOf("display: flex; gap: 12px; align-items: flex-start")}><div style={styleOf("flex: 1; padding: 14px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #DCEDE2")}><div style={styleOf("font-size: 28px; font-weight: 700; color: #2E6A48; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em")}>{"1"}</div><div style={styleOf("font-weight: 600")}>{"Lượt miễn phí"}</div><div style={styleOf("font-size: 13px; color: #4B3D4D")}>{"Hết hạn 00:00 thứ Hai 26/10"}</div></div><div style={styleOf("flex: 1; padding: 14px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #E8E4FA")}><div style={styleOf("font-size: 28px; font-weight: 700; color: #5543B0; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em")}>{"1"}</div><div style={styleOf("font-weight: 600")}>{"Lượt bonus"}</div><div style={styleOf("font-size: 13px; color: #4B3D4D")}>{"Hết hạn hết Chủ nhật 01/11"}</div></div></div><div style={styleOf("font-size: 13.5px; color: #6A5D6C")}>{"Mỗi tuần (từ 00:00 thứ Hai, giờ Việt Nam) bạn có 1 lượt miễn phí dùng chung Writing và Speaking, không cộng dồn. Bonus được hoàn khi yêu cầu bị hủy vì quá 72 giờ chưa có giáo viên hoặc giáo viên không thể hoàn thành."}</div></div></div></div><div style={styleOf("flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 24px")}><div style={styleOf("padding: 22px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ")}><div style={styleOf("display: flex; flex-direction: column; gap: 2px; ")}><div style={styleOf("font-size: 17px; font-weight: 600")}>{"Thời hạn lưu nội dung"}</div><div style={styleOf("display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px")}><span style={styleOf("color: #6A5D6C")}>{"Bài chưa gửi chấm"}</span><span style={styleOf("font-weight: 600; text-align: right")}>{"14 ngày từ lúc hoàn thành"}</span></div><div style={styleOf("display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px")}><span style={styleOf("color: #6A5D6C")}>{"Đang chờ phân công hoặc chờ chấm"}</span><span style={styleOf("font-weight: 600; text-align: right")}>{"Tạm giữ, không xóa"}</span></div><div style={styleOf("display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px")}><span style={styleOf("color: #6A5D6C")}>{"Yêu cầu bị hủy"}</span><span style={styleOf("font-weight: 600; text-align: right")}>{"Quay về hạn ban đầu"}</span></div><div style={styleOf("display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px")}><span style={styleOf("color: #6A5D6C")}>{"Đã có kết quả"}</span><span style={styleOf("font-weight: 600; text-align: right")}>{"14 ngày từ lúc công bố"}</span></div><div style={styleOf("font-size: 13px; color: #706473")}>{"Hết hạn thì bài viết, bản ghi âm bị xóa; điểm và nhận xét vẫn được giữ. Xem hay tải bài không gia hạn."}</div></div></div></div></div><div style={styleOf("border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden")}><div style={styleOf("padding: 18px 20px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap")}><div ><div style={styleOf("font-size: 17px; font-weight: 600")}>{"6 bài trong 30 ngày"}</div></div><span style={styleOf("display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: #6A5D6C")}><span aria-label={"Chưa xem"} style={styleOf("display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #E5604A; flex: 0 0 8px")}></span>{" mới có kết quả hoặc vừa bị hủy"}</span></div><div style={styleOf("overflow-x: auto")}><table style={styleOf("width: 100%; border-collapse: collapse")}><thead ><tr ><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}>{"Bài"}</th><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}>{"Kỹ năng"}</th><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}>{"Trạng thái"}</th><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}>{"Nội dung bài"}</th><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}></th></tr></thead><tbody ><tr ><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><div ><div style={styleOf("font-weight: 600")}>{"Writing Task 2 · Public transport"}</div><div style={styleOf("font-size: 12.5px; color: #706473")}>{"Hoàn thành 20/10 10:05"}</div></div></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Writing"}</span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 8px")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Đã có kết quả · 6.5"}</span><span aria-label={"Chưa xem"} style={styleOf("display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #E5604A; flex: 0 0 8px")}></span></span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}>{"Giữ đến 05/11"}</td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: flex; flex-wrap: wrap; gap: 6px")}><a href={"ResultWS.dc.html"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}>{"Xem kết quả"}</a><a href={"#"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 4v12M7 11l5 5 5-5M4 20h16"}></path></svg>{"Tải .docx"}</a></span></td></tr><tr ><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><div ><div style={styleOf("font-weight: 600")}>{"Speaking Part 2 · A skill worth learning"}</div><div style={styleOf("font-size: 12.5px; color: #706473")}>{"Hoàn thành 22/10 20:30"}</div></div></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Speaking"}</span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 8px")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Chờ chấm · phân công 22/10 20:40"}</span></span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}>{"Tạm giữ"}</td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: flex; flex-wrap: wrap; gap: 6px")}><a href={"#"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M8 5l11 7-11 7z"}></path></svg>{"Nghe lại"}</a><a href={"#"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 4v12M7 11l5 5 5-5M4 20h16"}></path></svg>{"Tải ghi âm"}</a></span></td></tr><tr ><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><div ><div style={styleOf("font-weight: 600")}>{"Writing Task 1 Academic · Energy use"}</div><div style={styleOf("font-size: 12.5px; color: #706473")}>{"Hoàn thành 21/10 08:55"}</div></div></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Writing"}</span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 8px")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Chờ phân công · còn 21 giờ"}</span></span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}>{"Tạm giữ"}</td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: flex; flex-wrap: wrap; gap: 6px")}><a href={"#"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 4v12M7 11l5 5 5-5M4 20h16"}></path></svg>{"Tải .docx"}</a></span></td></tr><tr ><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><div ><div style={styleOf("font-weight: 600")}>{"Speaking Part 3 · Technology"}</div><div style={styleOf("font-size: 12.5px; color: #706473")}>{"Hoàn thành 18/10 19:40"}</div></div></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Speaking"}</span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 8px")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Đã hủy · đã hoàn 1 bonus"}</span><span aria-label={"Chưa xem"} style={styleOf("display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #E5604A; flex: 0 0 8px")}></span></span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}>{"Hạn ban đầu 01/11"}</td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: flex; flex-wrap: wrap; gap: 6px")}><a href={"SubmitDialogs.dc.html"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}>{"Gửi lại yêu cầu"}</a><a href={"#"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 4v12M7 11l5 5 5-5M4 20h16"}></path></svg>{"Tải ghi âm"}</a></span></td></tr><tr ><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><div ><div style={styleOf("font-weight: 600")}>{"Writing Task 2 · Online education"}</div><div style={styleOf("font-size: 12.5px; color: #706473")}>{"Hoàn thành 22/10 21:15"}</div></div></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Writing"}</span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 8px")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Đã lưu · chưa gửi chấm"}</span></span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}>{"Giữ đến 05/11"}</td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: flex; flex-wrap: wrap; gap: 6px")}><a href={"SubmitDialogs.dc.html"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}>{"Gửi yêu cầu chấm"}</a><a href={"#"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 4v12M7 11l5 5 5-5M4 20h16"}></path></svg>{"Tải .docx"}</a></span></td></tr><tr ><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><div ><div style={styleOf("font-weight: 600")}>{"Writing Task 1 General · Complaint letter"}</div><div style={styleOf("font-size: 12.5px; color: #706473")}>{"Hoàn thành 02/10 09:30"}</div></div></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Writing"}</span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: inline-flex; align-items: center; gap: 8px")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Chưa có điểm"}</span></span></td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}>{"Nội dung đã hết hạn 16/10"}</td><td style={styleOf("padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("font-size: 13px; color: #706473")}>{"Không mở hoặc tải được"}</span></td></tr></tbody></table></div></div></main></div>{"\n"}</div>{"\n"}</>; }
+  static defaultProps = { accent: "#2963CC" };
+  render() {
+    const v = this.renderVals();
+    return (
+      <>
+        {"\n"}
+        {"\n"}
+        <style>
+          {cssText(
+            "\nbody{margin:0;background:#FCFBF7}\na{color:#2963CC}\n.bu-dd-menu{display:none}.bu-dd:hover .bu-dd-menu,.bu-dd:focus-within .bu-dd-menu{display:block}.bu-dd:hover > a{background:#F3F0EA}\n\n",
+          )}
+        </style>
+        {"\n"}
+        {"\n"}
+        <div
+          style={styleOf(
+            "font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; background: #FCFBF7; font-size: 15px; line-height: 1.6; min-height: 1150px",
+          )}
+        >
+          {"\n"}
+          <header
+            style={styleOf(
+              "border-bottom: 1.5px solid #D6D4D0; background: #FCFBF7",
+            )}
+          >
+            <div
+              style={styleOf(
+                "max-width: 1200px; margin: 0 auto; padding: 0 24px; min-height: 68px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px",
+              )}
+            >
+              <a
+                href={"StudentLanding.dc.html"}
+                style={styleOf(
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                      v.accent +
+                      "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
+                      v.onAccent,
+                  )}
+                >
+                  {"IS"}
+                </span>
+                <span>{"IELTSpace"}</span>
+              </a>
+              <nav style={styleOf("display: flex; flex-wrap: wrap; gap: 4px")}>
+                <div className={"bu-dd"} style={styleOf("position: relative")}>
+                  <a
+                    href={"FullTests.dc.html"}
+                    style={styleOf(
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    )}
+                    aria-haspopup={"true"}
+                  >
+                    {"Thư viện đề"}
+                    <svg
+                      width={"14"}
+                      height={"14"}
+                      viewBox={"0 0 24 24"}
+                      fill={"none"}
+                      stroke={"currentColor"}
+                      strokeWidth={"2.2"}
+                      strokeLinecap={"round"}
+                      strokeLinejoin={"round"}
+                      aria-hidden={"true"}
+                    >
+                      <path d={"M6 9l6 6 6-6"}></path>
+                    </svg>
+                  </a>
+                  <div
+                    className={"bu-dd-menu"}
+                    style={styleOf(
+                      "position: absolute; top: 100%; left: 0; padding-top: 8px; z-index: 30",
+                    )}
+                  >
+                    <div
+                      role={"menu"}
+                      style={styleOf(
+                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                      )}
+                    >
+                      <a
+                        href={"FullTests.dc.html"}
+                        data-nav={"IELTS Full Tests"}
+                        style={styleOf(
+                          "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"18"}
+                            height={"18"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M12 3l9 5-9 5-9-5z"}></path>
+                            <path d={"M3 13l9 5 9-5"}></path>
+                          </svg>
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: flex; flex-direction: column",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; font-size: 14.5px",
+                            )}
+                          >
+                            {"IELTS Full Tests"}
+                          </span>
+                          <span
+                            style={styleOf("font-size: 12.5px; color: #706473")}
+                          >
+                            {"Đề đầy đủ, chấm band như thi thật"}
+                          </span>
+                        </span>
+                      </a>
+                      <a
+                        href={"PracticeLibrary.dc.html"}
+                        data-nav={"IELTS Listening Practice"}
+                        style={styleOf(
+                          "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"18"}
+                            height={"18"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M4 14v-2a8 8 0 0 1 16 0v2"}></path>
+                            <rect
+                              x={"3"}
+                              y={"14"}
+                              width={"4"}
+                              height={"6"}
+                              rx={"1.5"}
+                            ></rect>
+                            <rect
+                              x={"17"}
+                              y={"14"}
+                              width={"4"}
+                              height={"6"}
+                              rx={"1.5"}
+                            ></rect>
+                          </svg>
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: flex; flex-direction: column",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; font-size: 14.5px",
+                            )}
+                          >
+                            {"IELTS Listening Practice"}
+                          </span>
+                          <span
+                            style={styleOf("font-size: 12.5px; color: #706473")}
+                          >
+                            {"Luyện từng Question Group, nghe lại được"}
+                          </span>
+                        </span>
+                      </a>
+                      <a
+                        href={"PracticeLibrary.dc.html"}
+                        data-nav={"IELTS Reading Practice"}
+                        style={styleOf(
+                          "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"18"}
+                            height={"18"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path
+                              d={"M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"}
+                            ></path>
+                            <circle cx={"12"} cy={"12"} r={"3"}></circle>
+                          </svg>
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: flex; flex-direction: column",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; font-size: 14.5px",
+                            )}
+                          >
+                            {"IELTS Reading Practice"}
+                          </span>
+                          <span
+                            style={styleOf("font-size: 12.5px; color: #706473")}
+                          >
+                            {"Luyện từng Question Group, có lời giải"}
+                          </span>
+                        </span>
+                      </a>
+                      <a
+                        href={"PracticeWS.dc.html"}
+                        data-nav={"IELTS Writing Practice"}
+                        style={styleOf(
+                          "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"18"}
+                            height={"18"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M15 5l4 4L8 20H4v-4z"}></path>
+                          </svg>
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: flex; flex-direction: column",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; font-size: 14.5px",
+                            )}
+                          >
+                            {"IELTS Writing Practice"}
+                          </span>
+                          <span
+                            style={styleOf("font-size: 12.5px; color: #706473")}
+                          >
+                            {"Luyện riêng Task 1 hoặc Task 2"}
+                          </span>
+                        </span>
+                      </a>
+                      <a
+                        href={"PracticeWS.dc.html"}
+                        data-nav={"IELTS Speaking Practice"}
+                        style={styleOf(
+                          "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"18"}
+                            height={"18"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <rect
+                              x={"9"}
+                              y={"3"}
+                              width={"6"}
+                              height={"11"}
+                              rx={"3"}
+                            ></rect>
+                            <path d={"M5 11a7 7 0 0 0 14 0M12 18v3"}></path>
+                          </svg>
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: flex; flex-direction: column",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; font-size: 14.5px",
+                            )}
+                          >
+                            {"IELTS Speaking Practice"}
+                          </span>
+                          <span
+                            style={styleOf("font-size: 12.5px; color: #706473")}
+                          >
+                            {"Luyện riêng Part 1, 2 hoặc 3"}
+                          </span>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className={"bu-dd"} style={styleOf("position: relative")}>
+                  <a
+                    href={"SampleLibrary.dc.html"}
+                    style={styleOf(
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    )}
+                    aria-haspopup={"true"}
+                  >
+                    {"Thư viện bài mẫu"}
+                    <svg
+                      width={"14"}
+                      height={"14"}
+                      viewBox={"0 0 24 24"}
+                      fill={"none"}
+                      stroke={"currentColor"}
+                      strokeWidth={"2.2"}
+                      strokeLinecap={"round"}
+                      strokeLinejoin={"round"}
+                      aria-hidden={"true"}
+                    >
+                      <path d={"M6 9l6 6 6-6"}></path>
+                    </svg>
+                  </a>
+                  <div
+                    className={"bu-dd-menu"}
+                    style={styleOf(
+                      "position: absolute; top: 100%; left: 0; padding-top: 8px; z-index: 30",
+                    )}
+                  >
+                    <div
+                      role={"menu"}
+                      style={styleOf(
+                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                      )}
+                    >
+                      <a
+                        href={"PracticeLibrary.dc.html"}
+                        data-nav={"Writing Task 1 Academic"}
+                        style={styleOf(
+                          "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"18"}
+                            height={"18"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path
+                              d={"M4 20V10M10 20V4M16 20v-7M22 20H2"}
+                            ></path>
+                          </svg>
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: flex; flex-direction: column",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; font-size: 14.5px",
+                            )}
+                          >
+                            {"Writing Task 1 Academic"}
+                          </span>
+                          <span
+                            style={styleOf("font-size: 12.5px; color: #706473")}
+                          >
+                            {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
+                          </span>
+                        </span>
+                      </a>
+                      <a
+                        href={"PracticeLibrary.dc.html"}
+                        data-nav={"Writing Task 1 General"}
+                        style={styleOf(
+                          "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"18"}
+                            height={"18"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <rect
+                              x={"3"}
+                              y={"5"}
+                              width={"18"}
+                              height={"14"}
+                              rx={"2"}
+                            ></rect>
+                            <path d={"M3 7l9 6 9-6"}></path>
+                          </svg>
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: flex; flex-direction: column",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; font-size: 14.5px",
+                            )}
+                          >
+                            {"Writing Task 1 General"}
+                          </span>
+                          <span
+                            style={styleOf("font-size: 12.5px; color: #706473")}
+                          >
+                            {"Bài mẫu viết thư"}
+                          </span>
+                        </span>
+                      </a>
+                      <a
+                        href={"PracticeLibrary.dc.html"}
+                        data-nav={"Writing Task 2"}
+                        style={styleOf(
+                          "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"18"}
+                            height={"18"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M15 5l4 4L8 20H4v-4z"}></path>
+                          </svg>
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: flex; flex-direction: column",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; font-size: 14.5px",
+                            )}
+                          >
+                            {"Writing Task 2"}
+                          </span>
+                          <span
+                            style={styleOf("font-size: 12.5px; color: #706473")}
+                          >
+                            {"Bài mẫu bài luận"}
+                          </span>
+                        </span>
+                      </a>
+                      <a
+                        href={"SampleSpeaking.dc.html"}
+                        data-nav={"Speaking Part 1, 2, 3"}
+                        style={styleOf(
+                          "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"18"}
+                            height={"18"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <rect
+                              x={"9"}
+                              y={"3"}
+                              width={"6"}
+                              height={"11"}
+                              rx={"3"}
+                            ></rect>
+                            <path d={"M5 11a7 7 0 0 0 14 0M12 18v3"}></path>
+                          </svg>
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: flex; flex-direction: column",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; font-size: 14.5px",
+                            )}
+                          >
+                            {"Speaking Part 1, 2, 3"}
+                          </span>
+                          <span
+                            style={styleOf("font-size: 12.5px; color: #706473")}
+                          >
+                            {"Bản ghi lời nói, kèm audio mẫu"}
+                          </span>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <a
+                  href={"Vocab.dc.html"}
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                  )}
+                >
+                  {"Thư viện từ vựng"}
+                </a>
+                <a
+                  href={"Flashcard.dc.html"}
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                  )}
+                >
+                  {"Flashcard của tôi"}
+                </a>
+              </nav>
+              <div
+                style={styleOf(
+                  "margin-left: auto; display: flex; align-items: center; gap: 10px",
+                )}
+              >
+                <a
+                  href={"Notifications.dc.html"}
+                  aria-label={"Thông báo"}
+                  style={styleOf(
+                    "position: relative; width: 44px; height: 44px; box-sizing: border-box; border-radius: 50%; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; color: #352637; text-decoration: none; background: #FFFFFF",
+                  )}
+                >
+                  <svg
+                    width={"19"}
+                    height={"19"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={"currentColor"}
+                    strokeWidth={"1.8"}
+                    strokeLinecap={"round"}
+                    strokeLinejoin={"round"}
+                    aria-hidden={"true"}
+                  >
+                    <path
+                      d={"M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"}
+                    ></path>
+                    <path d={"M10.3 21a1.94 1.94 0 0 0 3.4 0"}></path>
+                  </svg>
+                  <NotificationBadge
+                    style={styleOf(
+                      "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
+                    )}
+                  />
+                </a>
+                <a
+                  href={"AvatarMenu.dc.html"}
+                  aria-label={"Tài khoản: tiến độ học tập và cài đặt"}
+                  style={styleOf(
+                    "display: flex; padding: 3px; border-radius: 50%; border: 2px solid " +
+                      v.accent +
+                      "; text-decoration: none",
+                  )}
+                >
+                  <span
+                    style={styleOf(
+                      "width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px",
+                    )}
+                  >
+                    {"MA"}
+                  </span>
+                </a>
+              </div>
+            </div>
+          </header>
+          <div style={styleOf("background: #FCFBF7; min-height: 1081px")}>
+            <main
+              style={styleOf(
+                "max-width: 1280px; margin: 0 auto; padding: 36px 24px 56px; display: flex; flex-direction: column; gap: 24px",
+              )}
+            >
+              <div
+                style={styleOf(
+                  "display: flex; justify-content: space-between; align-items: flex-end; gap: 16px",
+                )}
+              >
+                <div>
+                  <h1
+                    style={styleOf(
+                      "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                    )}
+                  >
+                    {"Bài Writing và Speaking của tôi"}
+                  </h1>
+                  <div
+                    style={styleOf(
+                      "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                    )}
+                  >
+                    {
+                      "Bài đã hoàn thành, trạng thái yêu cầu chấm và thời hạn nội dung."
+                    }
+                  </div>
+                </div>
+                <div style={styleOf("display: flex; gap: 10px")}>
+                  <a
+                    href={"PracticeWS.dc.html"}
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    )}
+                  >
+                    {"Luyện Writing, Speaking"}
+                  </a>
+                </div>
+              </div>
+              <div
+                style={styleOf(
+                  "display: flex; flex-wrap: wrap; gap: 14px; align-items: center",
+                )}
+              >
+                <div
+                  style={styleOf(
+                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                  )}
+                >
+                  <span
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                    )}
+                  >
+                    {"Tất cả"}
+                  </span>
+                  <span
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                    )}
+                  >
+                    {"Writing"}
+                  </span>
+                  <span
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                    )}
+                  >
+                    {"Speaking"}
+                  </span>
+                </div>
+                <div
+                  style={styleOf(
+                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                  )}
+                >
+                  <span
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                    )}
+                  >
+                    {"Mọi trạng thái"}
+                  </span>
+                  <span
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                    )}
+                  >
+                    {"Chưa gửi chấm"}
+                  </span>
+                  <span
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                    )}
+                  >
+                    {"Chờ phân công"}
+                  </span>
+                  <span
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                    )}
+                  >
+                    {"Chờ chấm"}
+                  </span>
+                  <span
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                    )}
+                  >
+                    {"Đã có kết quả"}
+                  </span>
+                  <span
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                    )}
+                  >
+                    {"Đã hủy"}
+                  </span>
+                </div>
+              </div>
+              <div
+                style={styleOf(
+                  "display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start",
+                )}
+              >
+                <div
+                  style={styleOf(
+                    "flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 24px",
+                  )}
+                >
+                  <div
+                    style={styleOf(
+                      "padding: 22px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
+                    )}
+                  >
+                    <div
+                      style={styleOf(
+                        "display: flex; flex-direction: column; gap: 12px; ",
+                      )}
+                    >
+                      <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                        {"Lượt hỗ trợ chấm còn hiệu lực"}
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; gap: 12px; align-items: flex-start",
+                        )}
+                      >
+                        <div
+                          style={styleOf(
+                            "flex: 1; padding: 14px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #DCEDE2",
+                          )}
+                        >
+                          <div
+                            style={styleOf(
+                              "font-size: 28px; font-weight: 700; color: #2E6A48; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                            )}
+                          >
+                            {"1"}
+                          </div>
+                          <div style={styleOf("font-weight: 600")}>
+                            {"Lượt miễn phí"}
+                          </div>
+                          <div
+                            style={styleOf("font-size: 13px; color: #4B3D4D")}
+                          >
+                            {"Hết hạn 00:00 thứ Hai 26/10"}
+                          </div>
+                        </div>
+                        <div
+                          style={styleOf(
+                            "flex: 1; padding: 14px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #E8E4FA",
+                          )}
+                        >
+                          <div
+                            style={styleOf(
+                              "font-size: 28px; font-weight: 700; color: #5543B0; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                            )}
+                          >
+                            {"1"}
+                          </div>
+                          <div style={styleOf("font-weight: 600")}>
+                            {"Lượt bonus"}
+                          </div>
+                          <div
+                            style={styleOf("font-size: 13px; color: #4B3D4D")}
+                          >
+                            {"Hết hạn hết Chủ nhật 01/11"}
+                          </div>
+                        </div>
+                      </div>
+                      <div style={styleOf("font-size: 13.5px; color: #6A5D6C")}>
+                        {
+                          "Mỗi tuần (từ 00:00 thứ Hai, giờ Việt Nam) bạn có 1 lượt miễn phí dùng chung Writing và Speaking, không cộng dồn. Bonus được hoàn khi yêu cầu bị hủy vì quá 72 giờ chưa có giáo viên hoặc giáo viên không thể hoàn thành."
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style={styleOf(
+                    "flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 24px",
+                  )}
+                >
+                  <div
+                    style={styleOf(
+                      "padding: 22px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
+                    )}
+                  >
+                    <div
+                      style={styleOf(
+                        "display: flex; flex-direction: column; gap: 2px; ",
+                      )}
+                    >
+                      <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                        {"Thời hạn lưu nội dung"}
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
+                        )}
+                      >
+                        <span style={styleOf("color: #6A5D6C")}>
+                          {"Bài chưa gửi chấm"}
+                        </span>
+                        <span
+                          style={styleOf("font-weight: 600; text-align: right")}
+                        >
+                          {"14 ngày từ lúc hoàn thành"}
+                        </span>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
+                        )}
+                      >
+                        <span style={styleOf("color: #6A5D6C")}>
+                          {"Đang chờ phân công hoặc chờ chấm"}
+                        </span>
+                        <span
+                          style={styleOf("font-weight: 600; text-align: right")}
+                        >
+                          {"Tạm giữ, không xóa"}
+                        </span>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
+                        )}
+                      >
+                        <span style={styleOf("color: #6A5D6C")}>
+                          {"Yêu cầu bị hủy"}
+                        </span>
+                        <span
+                          style={styleOf("font-weight: 600; text-align: right")}
+                        >
+                          {"Quay về hạn ban đầu"}
+                        </span>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
+                        )}
+                      >
+                        <span style={styleOf("color: #6A5D6C")}>
+                          {"Đã có kết quả"}
+                        </span>
+                        <span
+                          style={styleOf("font-weight: 600; text-align: right")}
+                        >
+                          {"14 ngày từ lúc công bố"}
+                        </span>
+                      </div>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
+                        {
+                          "Hết hạn thì bài viết, bản ghi âm bị xóa; điểm và nhận xét vẫn được giữ. Xem hay tải bài không gia hạn."
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style={styleOf(
+                  "border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden",
+                )}
+              >
+                <div
+                  style={styleOf(
+                    "padding: 18px 20px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap",
+                  )}
+                >
+                  <div>
+                    <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                      {"6 bài trong 30 ngày"}
+                    </div>
+                  </div>
+                  <span
+                    style={styleOf(
+                      "display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: #6A5D6C",
+                    )}
+                  >
+                    <span
+                      aria-label={"Chưa xem"}
+                      style={styleOf(
+                        "display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #E5604A; flex: 0 0 8px",
+                      )}
+                    ></span>
+                    {" mới có kết quả hoặc vừa bị hủy"}
+                  </span>
+                </div>
+                <div style={styleOf("overflow-x: auto")}>
+                  <table
+                    style={styleOf("width: 100%; border-collapse: collapse")}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          style={styleOf(
+                            "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                          )}
+                        >
+                          {"Bài"}
+                        </th>
+                        <th
+                          style={styleOf(
+                            "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                          )}
+                        >
+                          {"Kỹ năng"}
+                        </th>
+                        <th
+                          style={styleOf(
+                            "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                          )}
+                        >
+                          {"Trạng thái"}
+                        </th>
+                        <th
+                          style={styleOf(
+                            "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                          )}
+                        >
+                          {"Nội dung bài"}
+                        </th>
+                        <th
+                          style={styleOf(
+                            "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                          )}
+                        ></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <div>
+                            <div style={styleOf("font-weight: 600")}>
+                              {"Writing Task 2 · Public transport"}
+                            </div>
+                            <div
+                              style={styleOf(
+                                "font-size: 12.5px; color: #706473",
+                              )}
+                            >
+                              {"Hoàn thành 20/10 10:05"}
+                            </div>
+                          </div>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                            )}
+                          >
+                            {"Writing"}
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 8px",
+                            )}
+                          >
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              )}
+                            >
+                              {"Đã có kết quả · 6.5"}
+                            </span>
+                            <span
+                              aria-label={"Chưa xem"}
+                              style={styleOf(
+                                "display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #E5604A; flex: 0 0 8px",
+                              )}
+                            ></span>
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          {"Giữ đến 05/11"}
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: flex; flex-wrap: wrap; gap: 6px",
+                            )}
+                          >
+                            <a
+                              href={"ResultWS.dc.html"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              )}
+                            >
+                              {"Xem kết quả"}
+                            </a>
+                            <a
+                              href={"#"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              )}
+                            >
+                              <svg
+                                width={"18"}
+                                height={"18"}
+                                viewBox={"0 0 24 24"}
+                                fill={"none"}
+                                stroke={"currentColor"}
+                                strokeWidth={"2"}
+                                strokeLinecap={"round"}
+                                strokeLinejoin={"round"}
+                                aria-hidden={"true"}
+                              >
+                                <path
+                                  d={"M12 4v12M7 11l5 5 5-5M4 20h16"}
+                                ></path>
+                              </svg>
+                              {"Tải .docx"}
+                            </a>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <div>
+                            <div style={styleOf("font-weight: 600")}>
+                              {"Speaking Part 2 · A skill worth learning"}
+                            </div>
+                            <div
+                              style={styleOf(
+                                "font-size: 12.5px; color: #706473",
+                              )}
+                            >
+                              {"Hoàn thành 22/10 20:30"}
+                            </div>
+                          </div>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                            )}
+                          >
+                            {"Speaking"}
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 8px",
+                            )}
+                          >
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              )}
+                            >
+                              {"Chờ chấm · phân công 22/10 20:40"}
+                            </span>
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          {"Tạm giữ"}
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: flex; flex-wrap: wrap; gap: 6px",
+                            )}
+                          >
+                            <a
+                              href={"#"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              )}
+                            >
+                              <svg
+                                width={"18"}
+                                height={"18"}
+                                viewBox={"0 0 24 24"}
+                                fill={"none"}
+                                stroke={"currentColor"}
+                                strokeWidth={"2"}
+                                strokeLinecap={"round"}
+                                strokeLinejoin={"round"}
+                                aria-hidden={"true"}
+                              >
+                                <path d={"M8 5l11 7-11 7z"}></path>
+                              </svg>
+                              {"Nghe lại"}
+                            </a>
+                            <a
+                              href={"#"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              )}
+                            >
+                              <svg
+                                width={"18"}
+                                height={"18"}
+                                viewBox={"0 0 24 24"}
+                                fill={"none"}
+                                stroke={"currentColor"}
+                                strokeWidth={"2"}
+                                strokeLinecap={"round"}
+                                strokeLinejoin={"round"}
+                                aria-hidden={"true"}
+                              >
+                                <path
+                                  d={"M12 4v12M7 11l5 5 5-5M4 20h16"}
+                                ></path>
+                              </svg>
+                              {"Tải ghi âm"}
+                            </a>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <div>
+                            <div style={styleOf("font-weight: 600")}>
+                              {"Writing Task 1 Academic · Energy use"}
+                            </div>
+                            <div
+                              style={styleOf(
+                                "font-size: 12.5px; color: #706473",
+                              )}
+                            >
+                              {"Hoàn thành 21/10 08:55"}
+                            </div>
+                          </div>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                            )}
+                          >
+                            {"Writing"}
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 8px",
+                            )}
+                          >
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              )}
+                            >
+                              {"Chờ phân công · còn 21 giờ"}
+                            </span>
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          {"Tạm giữ"}
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: flex; flex-wrap: wrap; gap: 6px",
+                            )}
+                          >
+                            <a
+                              href={"#"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              )}
+                            >
+                              <svg
+                                width={"18"}
+                                height={"18"}
+                                viewBox={"0 0 24 24"}
+                                fill={"none"}
+                                stroke={"currentColor"}
+                                strokeWidth={"2"}
+                                strokeLinecap={"round"}
+                                strokeLinejoin={"round"}
+                                aria-hidden={"true"}
+                              >
+                                <path
+                                  d={"M12 4v12M7 11l5 5 5-5M4 20h16"}
+                                ></path>
+                              </svg>
+                              {"Tải .docx"}
+                            </a>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <div>
+                            <div style={styleOf("font-weight: 600")}>
+                              {"Speaking Part 3 · Technology"}
+                            </div>
+                            <div
+                              style={styleOf(
+                                "font-size: 12.5px; color: #706473",
+                              )}
+                            >
+                              {"Hoàn thành 18/10 19:40"}
+                            </div>
+                          </div>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                            )}
+                          >
+                            {"Speaking"}
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 8px",
+                            )}
+                          >
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              )}
+                            >
+                              {"Đã hủy · đã hoàn 1 bonus"}
+                            </span>
+                            <span
+                              aria-label={"Chưa xem"}
+                              style={styleOf(
+                                "display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #E5604A; flex: 0 0 8px",
+                              )}
+                            ></span>
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          {"Hạn ban đầu 01/11"}
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: flex; flex-wrap: wrap; gap: 6px",
+                            )}
+                          >
+                            <a
+                              href={"SubmitDialogs.dc.html"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              )}
+                            >
+                              {"Gửi lại yêu cầu"}
+                            </a>
+                            <a
+                              href={"#"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              )}
+                            >
+                              <svg
+                                width={"18"}
+                                height={"18"}
+                                viewBox={"0 0 24 24"}
+                                fill={"none"}
+                                stroke={"currentColor"}
+                                strokeWidth={"2"}
+                                strokeLinecap={"round"}
+                                strokeLinejoin={"round"}
+                                aria-hidden={"true"}
+                              >
+                                <path
+                                  d={"M12 4v12M7 11l5 5 5-5M4 20h16"}
+                                ></path>
+                              </svg>
+                              {"Tải ghi âm"}
+                            </a>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <div>
+                            <div style={styleOf("font-weight: 600")}>
+                              {"Writing Task 2 · Online education"}
+                            </div>
+                            <div
+                              style={styleOf(
+                                "font-size: 12.5px; color: #706473",
+                              )}
+                            >
+                              {"Hoàn thành 22/10 21:15"}
+                            </div>
+                          </div>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                            )}
+                          >
+                            {"Writing"}
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 8px",
+                            )}
+                          >
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              )}
+                            >
+                              {"Đã lưu · chưa gửi chấm"}
+                            </span>
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          {"Giữ đến 05/11"}
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: flex; flex-wrap: wrap; gap: 6px",
+                            )}
+                          >
+                            <a
+                              href={"SubmitDialogs.dc.html"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              )}
+                            >
+                              {"Gửi yêu cầu chấm"}
+                            </a>
+                            <a
+                              href={"#"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              )}
+                            >
+                              <svg
+                                width={"18"}
+                                height={"18"}
+                                viewBox={"0 0 24 24"}
+                                fill={"none"}
+                                stroke={"currentColor"}
+                                strokeWidth={"2"}
+                                strokeLinecap={"round"}
+                                strokeLinejoin={"round"}
+                                aria-hidden={"true"}
+                              >
+                                <path
+                                  d={"M12 4v12M7 11l5 5 5-5M4 20h16"}
+                                ></path>
+                              </svg>
+                              {"Tải .docx"}
+                            </a>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <div>
+                            <div style={styleOf("font-weight: 600")}>
+                              {"Writing Task 1 General · Complaint letter"}
+                            </div>
+                            <div
+                              style={styleOf(
+                                "font-size: 12.5px; color: #706473",
+                              )}
+                            >
+                              {"Hoàn thành 02/10 09:30"}
+                            </div>
+                          </div>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                            )}
+                          >
+                            {"Writing"}
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 8px",
+                            )}
+                          >
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              )}
+                            >
+                              {"Chưa có điểm"}
+                            </span>
+                          </span>
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          {"Nội dung đã hết hạn 16/10"}
+                        </td>
+                        <td
+                          style={styleOf(
+                            "padding: 13px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                          )}
+                        >
+                          <span
+                            style={styleOf("font-size: 13px; color: #706473")}
+                          >
+                            {"Không mở hoặc tải được"}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </main>
+          </div>
+          {"\n"}
+        </div>
+        {"\n"}
+      </>
+    );
+  }
 }
 
 export default MyWS;

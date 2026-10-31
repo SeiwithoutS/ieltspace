@@ -4,88 +4,1704 @@ import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar from "../../../components/navigation/AdminTopbar";
 
 class AdminExams extends React.Component {
+  componentDidMount() {
+    var me = this;
+    this._key = function (e) {
+      if (e.key === "Escape") {
+        me.setState({ create: null, del: null });
+      }
+    };
+    document.addEventListener("keydown", this._key);
+  }
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this._key);
+    clearTimeout(this._t);
+  }
+  renderVals() {
+    var me = this,
+      s = this.state || {},
+      self = this;
+    var SETS = [
+        {
+          name: "Mock Test 2026 Vol 4",
+          art: 0,
+          short: "Vol 4",
+          status: "pub",
+          updated: "27/10/2026",
+          plays: "12.480",
+          desc: "Bộ đề mô phỏng theo cấu trúc Cambridge mới nhất, đủ 4 kỹ năng. Reading và Writing có cả bản Academic và General Training.",
+          tests: [
+            {
+              name: "Test 1",
+              updated: "22/10/2026",
+              L: "pub",
+              R: { A: "pub", G: "pub" },
+              W: { A: "pub", G: "draft" },
+              S: "pub",
+            },
+            {
+              name: "Test 2",
+              updated: "24/10/2026",
+              L: "pub",
+              R: { A: "draft", G: null },
+              W: { A: "pub", G: null },
+              S: "draft",
+            },
+            {
+              name: "Test 3",
+              updated: "27/10/2026",
+              L: "draft",
+              R: { A: "draft", G: "draft" },
+              W: { A: null, G: null },
+              S: null,
+            },
+            {
+              name: "Test 4",
+              updated: "18/10/2026",
+              L: "pub",
+              R: { A: "pub", G: null },
+              W: { A: "pub", G: null },
+              S: "pub",
+            },
+            {
+              name: "Test 5",
+              updated: "15/10/2026",
+              L: "hidden",
+              R: { A: "pub", G: "hidden" },
+              W: { A: "draft", G: "draft" },
+              S: null,
+            },
+            {
+              name: "Test 6",
+              updated: "26/10/2026",
+              L: null,
+              R: { A: null, G: "draft" },
+              W: { A: null, G: null },
+              S: null,
+            },
+          ],
+        },
+        {
+          name: "General Training Pack 01",
+          art: 2,
+          short: "GT 01",
+          status: "draft",
+          updated: "15/10/2026",
+          plays: "0",
+          desc: "Bộ đề luyện riêng hình thức General Training.",
+          tests: [
+            {
+              name: "Test 1",
+              updated: "15/10/2026",
+              L: null,
+              R: { A: null, G: "draft" },
+              W: { A: null, G: "draft" },
+              S: null,
+            },
+            {
+              name: "Test 2",
+              updated: "12/10/2026",
+              L: null,
+              R: { A: null, G: "draft" },
+              W: { A: null, G: null },
+              S: null,
+            },
+            {
+              name: "Test 3",
+              updated: "10/10/2026",
+              L: null,
+              R: { A: null, G: null },
+              W: { A: null, G: "draft" },
+              S: null,
+            },
+          ],
+        },
+        {
+          name: "Actual Test Quý 3/2026",
+          art: 3,
+          short: "Q3",
+          status: "hidden",
+          updated: "25/09/2026",
+          plays: "3.105",
+          desc: "Đề thi thật quý 3/2026 (Listening, Reading).",
+          tests: [
+            {
+              name: "Test 1",
+              updated: "25/09/2026",
+              L: "hidden",
+              R: { A: "hidden", G: null },
+              W: { A: null, G: null },
+              S: null,
+            },
+            {
+              name: "Test 2",
+              updated: "25/09/2026",
+              L: "hidden",
+              R: { A: "hidden", G: null },
+              W: { A: null, G: null },
+              S: null,
+            },
+            {
+              name: "Test 3",
+              updated: "25/09/2026",
+              L: "hidden",
+              R: { A: "hidden", G: null },
+              W: { A: null, G: null },
+              S: null,
+            },
+            {
+              name: "Test 4",
+              updated: "25/09/2026",
+              L: "hidden",
+              R: { A: "hidden", G: null },
+              W: { A: null, G: null },
+              S: null,
+            },
+            {
+              name: "Test 5",
+              updated: "25/09/2026",
+              L: "hidden",
+              R: { A: "hidden", G: null },
+              W: { A: null, G: null },
+              S: null,
+            },
+            {
+              name: "Test 6",
+              updated: "25/09/2026",
+              L: "hidden",
+              R: { A: "hidden", G: null },
+              W: { A: null, G: null },
+              S: null,
+            },
+            {
+              name: "Test 7",
+              updated: "25/09/2026",
+              L: "hidden",
+              R: { A: "hidden", G: null },
+              W: { A: null, G: null },
+              S: null,
+            },
+            {
+              name: "Test 8",
+              updated: "25/09/2026",
+              L: "hidden",
+              R: { A: "hidden", G: null },
+              W: { A: null, G: null },
+              S: null,
+            },
+          ],
+        },
+        {
+          name: "Mock Test 2026 Vol 5",
+          art: 1,
+          short: "Vol 5",
+          status: "draft",
+          updated: "27/10/2026",
+          plays: "0",
+          desc: "",
+          tests: [],
+        },
+      ],
+      SK = [
+        ["L", "Listening", "#DDE8FC", "#2A55B8"],
+        ["R", "Reading", "#DCEDE2", "#2E6A48"],
+        ["W", "Writing", "#FBEDBF", "#7A5A0E"],
+        ["S", "Speaking", "#E8E4FA", "#5543B0"],
+      ],
+      SST = {
+        pub: ["Công khai", "#DCEDE2", "#2E6A48"],
+        draft: ["Bản nháp", "#FBEDBF", "#7A5A0E"],
+        hidden: ["Đã ẩn", "#F3F0EA", "#6A5D6C"],
+      },
+      TY = {
+        A: ["Academic", "#DFF1F4", "#1F6A78"],
+        G: ["General Training", "#FCE6D6", "#9A4A17"],
+      },
+      ART = [
+        [
+          "Bìa CAM Inspired",
+          "url('data:image/jpeg;base64,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') center / contain no-repeat, #322A9A",
+          false,
+        ],
+        [
+          "Biển xanh",
+          "radial-gradient(circle at 78% 22%, rgba(255,255,255,0.55) 0 14%, transparent 15%), radial-gradient(circle at 18% 88%, #A9C4F5 0 26%, transparent 27%), linear-gradient(140deg, #1F4FA0, #5B8FE0 60%, #9CC0F5)",
+          true,
+        ],
+        [
+          "Hoàng hôn",
+          "radial-gradient(circle at 70% 30%, #FFE7A3 0 18%, transparent 19%), radial-gradient(ellipse at 20% 100%, #E0663A 0 38%, transparent 39%), linear-gradient(160deg, #F7B267, #F4845F 70%)",
+          true,
+        ],
+        [
+          "Lá non",
+          "radial-gradient(circle at 25% 25%, rgba(255,255,255,0.45) 0 12%, transparent 13%), radial-gradient(ellipse at 90% 95%, #2E6A48 0 40%, transparent 41%), linear-gradient(150deg, #9BD3AE, #4E9A6E)",
+          true,
+        ],
+      ];
 
-componentDidMount() { var me = this; this._key = function (e) { if (e.key === 'Escape') { me.setState({ create: null, del: null }); } }; document.addEventListener('keydown', this._key); }
-componentWillUnmount() { document.removeEventListener('keydown', this._key); clearTimeout(this._t); }
-renderVals() {
-var me = this, s = this.state || {}, self = this;
-var SETS = [{"name": "Mock Test 2026 Vol 4", "art": 0, "short": "Vol 4", "status": "pub", "updated": "27/10/2026", "plays": "12.480", "desc": "Bộ đề mô phỏng theo cấu trúc Cambridge mới nhất, đủ 4 kỹ năng. Reading và Writing có cả bản Academic và General Training.", "tests": [{"name": "Test 1", "updated": "22/10/2026", "L": "pub", "R": {"A": "pub", "G": "pub"}, "W": {"A": "pub", "G": "draft"}, "S": "pub"}, {"name": "Test 2", "updated": "24/10/2026", "L": "pub", "R": {"A": "draft", "G": null}, "W": {"A": "pub", "G": null}, "S": "draft"}, {"name": "Test 3", "updated": "27/10/2026", "L": "draft", "R": {"A": "draft", "G": "draft"}, "W": {"A": null, "G": null}, "S": null}, {"name": "Test 4", "updated": "18/10/2026", "L": "pub", "R": {"A": "pub", "G": null}, "W": {"A": "pub", "G": null}, "S": "pub"}, {"name": "Test 5", "updated": "15/10/2026", "L": "hidden", "R": {"A": "pub", "G": "hidden"}, "W": {"A": "draft", "G": "draft"}, "S": null}, {"name": "Test 6", "updated": "26/10/2026", "L": null, "R": {"A": null, "G": "draft"}, "W": {"A": null, "G": null}, "S": null}]}, {"name": "General Training Pack 01", "art": 2, "short": "GT 01", "status": "draft", "updated": "15/10/2026", "plays": "0", "desc": "Bộ đề luyện riêng hình thức General Training.", "tests": [{"name": "Test 1", "updated": "15/10/2026", "L": null, "R": {"A": null, "G": "draft"}, "W": {"A": null, "G": "draft"}, "S": null}, {"name": "Test 2", "updated": "12/10/2026", "L": null, "R": {"A": null, "G": "draft"}, "W": {"A": null, "G": null}, "S": null}, {"name": "Test 3", "updated": "10/10/2026", "L": null, "R": {"A": null, "G": null}, "W": {"A": null, "G": "draft"}, "S": null}]}, {"name": "Actual Test Quý 3/2026", "art": 3, "short": "Q3", "status": "hidden", "updated": "25/09/2026", "plays": "3.105", "desc": "Đề thi thật quý 3/2026 (Listening, Reading).", "tests": [{"name": "Test 1", "updated": "25/09/2026", "L": "hidden", "R": {"A": "hidden", "G": null}, "W": {"A": null, "G": null}, "S": null}, {"name": "Test 2", "updated": "25/09/2026", "L": "hidden", "R": {"A": "hidden", "G": null}, "W": {"A": null, "G": null}, "S": null}, {"name": "Test 3", "updated": "25/09/2026", "L": "hidden", "R": {"A": "hidden", "G": null}, "W": {"A": null, "G": null}, "S": null}, {"name": "Test 4", "updated": "25/09/2026", "L": "hidden", "R": {"A": "hidden", "G": null}, "W": {"A": null, "G": null}, "S": null}, {"name": "Test 5", "updated": "25/09/2026", "L": "hidden", "R": {"A": "hidden", "G": null}, "W": {"A": null, "G": null}, "S": null}, {"name": "Test 6", "updated": "25/09/2026", "L": "hidden", "R": {"A": "hidden", "G": null}, "W": {"A": null, "G": null}, "S": null}, {"name": "Test 7", "updated": "25/09/2026", "L": "hidden", "R": {"A": "hidden", "G": null}, "W": {"A": null, "G": null}, "S": null}, {"name": "Test 8", "updated": "25/09/2026", "L": "hidden", "R": {"A": "hidden", "G": null}, "W": {"A": null, "G": null}, "S": null}]}, {"name": "Mock Test 2026 Vol 5", "art": 1, "short": "Vol 5", "status": "draft", "updated": "27/10/2026", "plays": "0", "desc": "", "tests": []}], SK = [["L", "Listening", "#DDE8FC", "#2A55B8"], ["R", "Reading", "#DCEDE2", "#2E6A48"], ["W", "Writing", "#FBEDBF", "#7A5A0E"], ["S", "Speaking", "#E8E4FA", "#5543B0"]], SST = {"pub": ["Công khai", "#DCEDE2", "#2E6A48"], "draft": ["Bản nháp", "#FBEDBF", "#7A5A0E"], "hidden": ["Đã ẩn", "#F3F0EA", "#6A5D6C"]}, TY = {"A": ["Academic", "#DFF1F4", "#1F6A78"], "G": ["General Training", "#FCE6D6", "#9A4A17"]}, ART = [["Bìa CAM Inspired", "url('data:image/jpeg;base64,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') center / contain no-repeat, #322A9A", false], ["Biển xanh", "radial-gradient(circle at 78% 22%, rgba(255,255,255,0.55) 0 14%, transparent 15%), radial-gradient(circle at 18% 88%, #A9C4F5 0 26%, transparent 27%), linear-gradient(140deg, #1F4FA0, #5B8FE0 60%, #9CC0F5)", true], ["Hoàng hôn", "radial-gradient(circle at 70% 30%, #FFE7A3 0 18%, transparent 19%), radial-gradient(ellipse at 20% 100%, #E0663A 0 38%, transparent 39%), linear-gradient(160deg, #F7B267, #F4845F 70%)", true], ["Lá non", "radial-gradient(circle at 25% 25%, rgba(255,255,255,0.45) 0 12%, transparent 13%), radial-gradient(ellipse at 90% 95%, #2E6A48 0 40%, transparent 41%), linear-gradient(150deg, #9BD3AE, #4E9A6E)", true]];
+    function stop(e) {
+      if (e && e.preventDefault) {
+        e.preventDefault();
+      }
+    }
+    function keep(e) {
+      if (e && e.stopPropagation) {
+        e.stopPropagation();
+      }
+    }
+    function store(k, v) {
+      try {
+        sessionStorage.setItem(k, JSON.stringify({ at: Date.now(), v: v }));
+      } catch (err) {}
+    }
+    // đọc ảnh người dùng chọn: kiểm tra loại và dung lượng, đo tỉ lệ để cảnh báo khi lệch xa 3:2
+    function readImage(e, done) {
+      var f = e && e.target && e.target.files && e.target.files[0];
+      if (!f) {
+        return;
+      }
+      if (!/^image\/(png|jpeg|webp)$/.test(f.type)) {
+        done(null, "Ảnh phải là JPG, PNG hoặc WebP.");
+        return;
+      }
+      if (f.size > 5 * 1024 * 1024) {
+        done(null, "Ảnh lớn hơn 5 MB, hãy chọn ảnh nhỏ hơn.");
+        return;
+      }
+      var r = new FileReader();
+      r.onload = function () {
+        var url = r.result,
+          im = new Image();
+        im.onload = function () {
+          var q = im.width / im.height;
+          done(
+            url,
+            Math.abs(q - 1.5) > 0.12
+              ? "Ảnh " +
+                  im.width +
+                  " × " +
+                  im.height +
+                  " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
+              : "",
+            true,
+          );
+        };
+        im.onerror = function () {
+          done(url, "");
+        };
+        im.src = url;
+      };
+      r.readAsDataURL(f);
+      try {
+        e.target.value = "";
+      } catch (err) {}
+    }
 
-function stop(e) { if (e && e.preventDefault) { e.preventDefault(); } }
-function keep(e) { if (e && e.stopPropagation) { e.stopPropagation(); } }
-function store(k, v) { try { sessionStorage.setItem(k, JSON.stringify({ at: Date.now(), v: v })); } catch (err) { } }
-// đọc ảnh người dùng chọn: kiểm tra loại và dung lượng, đo tỉ lệ để cảnh báo khi lệch xa 3:2
-function readImage(e, done) { var f = e && e.target && e.target.files && e.target.files[0]; if (!f) { return; }
-  if (!/^image\/(png|jpeg|webp)$/.test(f.type)) { done(null, 'Ảnh phải là JPG, PNG hoặc WebP.'); return; }
-  if (f.size > 5 * 1024 * 1024) { done(null, 'Ảnh lớn hơn 5 MB, hãy chọn ảnh nhỏ hơn.'); return; }
-  var r = new FileReader(); r.onload = function () { var url = r.result, im = new Image();
-    im.onload = function () { var q = im.width / im.height; done(url, Math.abs(q - 1.5) > 0.12 ? 'Ảnh ' + im.width + ' × ' + im.height + ' không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu.' : '', true); };
-    im.onerror = function () { done(url, ''); }; im.src = url; }; r.readAsDataURL(f); try { e.target.value = ''; } catch (err) { } }
+    function vals(t, k) {
+      var x = t[k];
+      return (x && typeof x === "object" ? [x.A, x.G] : [x]).filter(
+        function (y) {
+          return y;
+        },
+      );
+    }
+    function has(st, c) {
+      return st.tests.some(function (t) {
+        return (t.R && t.R[c]) || (t.W && t.W[c]);
+      });
+    }
+    function pill(bg, fg) {
+      return (
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: " +
+        bg +
+        "; color: " +
+        fg
+      );
+    }
+    function artBg(o) {
+      return o.img
+        ? "url('" + o.img + "') center / contain no-repeat, #E9E4DA"
+        : o.art == null
+          ? null
+          : ART[o.art][1];
+    }
+    function toastSet(m, extra) {
+      clearTimeout(me._t);
+      var st = { toast: m };
+      for (var k in extra || {}) {
+        st[k] = extra[k];
+      }
+      self.setState(st);
+      me._t = setTimeout(function () {
+        me.setState({ toast: "" });
+      }, 4200);
+    }
+    var sets =
+        s.sets ||
+        (function () {
+          try {
+            var o = JSON.parse(
+              localStorage.getItem("ieltspace-sets") || "null",
+            );
+            if (o && o.length) {
+              return o;
+            }
+          } catch (err) {}
+          return SETS;
+        })(),
+      q = (s.q || "").trim().toLowerCase(),
+      fT = s.fT || "all",
+      fS = s.fS || "all";
+    try {
+      if (s.sets) {
+        localStorage.setItem("ieltspace-sets", JSON.stringify(s.sets));
+      }
+    } catch (err) {}
+    var shown = sets.filter(function (st) {
+      return (
+        (!q || st.name.toLowerCase().indexOf(q) >= 0) &&
+        (fT === "all" || has(st, fT)) &&
+        (fS === "all" || st.status === fS)
+      );
+    });
+    function segItems(list, cur, key) {
+      return list.map(function (x) {
+        var on = x[0] === cur;
+        return {
+          label: x[1],
+          on: on,
+          pick: function (e) {
+            stop(e);
+            var o = {};
+            o[key] = x[0];
+            self.setState(o);
+          },
+          st:
+            "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; font-size: 13.5px; text-decoration: none; white-space: nowrap; " +
+            (on
+              ? "background: #FFFFFF; border: 1.5px solid #D6D4D0; font-weight: 600; color: #352637; box-shadow: 0 1px 2px rgba(53,38,55,.06)"
+              : "border: 1.5px solid transparent; color: #6A5D6C; font-weight: 500"),
+        };
+      });
+    }
+    var rows = shown.map(function (st) {
+      var i = sets.indexOf(st),
+        sst = SST[st.status],
+        bg = artBg(st),
+        canDel = st.status === "draft" || !st.tests.length;
+      var types = ["A", "G"]
+        .filter(function (c) {
+          return has(st, c);
+        })
+        .map(function (c) {
+          return { text: TY[c][0], st: pill(TY[c][1], TY[c][2]) };
+        });
+      var skills = SK.map(function (k) {
+        var n = 0;
+        st.tests.forEach(function (t) {
+          n += vals(t, k[0]).length;
+        });
+        return n ? { text: k[1] + " " + n, st: pill(k[2], k[3]) } : null;
+      }).filter(function (x) {
+        return x;
+      });
+      return {
+        name: st.name,
+        n: st.tests.length + " đề",
+        updated: st.updated,
+        st: sst[0],
+        stSt: pill(sst[1], sst[2]),
+        cls: s.flash === st.name ? "an-flash" : "",
+        types: types.length
+          ? types
+          : [
+              {
+                text: st.tests.length ? "Chỉ L/S" : "Chưa có đề",
+                st: pill("#F3F0EA", "#6A5D6C"),
+              },
+            ],
+        skills: skills.length ? skills : [{ text: "—", st: "color: #B3A9B5" }],
+        thumbSt:
+          "display: flex; align-items: flex-end; flex: none; width: 48px; height: 32px; border-radius: 8px; box-sizing: border-box; overflow: hidden; color: #FFFFFF; box-shadow: 0 1px 3px rgba(53, 38, 55, 0.18); " +
+          (bg
+            ? "background: " + bg
+            : "background: #F3F0EA; border: 1.5px dashed #D6D4D0"),
+        thumbText: !st.img && st.art != null && ART[st.art][2] ? st.short : "",
+        open: function () {
+          store("ieltspace-set", st);
+        },
+        canDel: canDel,
+        noDel: !canDel,
+        noDelWhy:
+          "Bộ đề " +
+          sst[0].toLowerCase() +
+          " và đã có đề: chỉ ẩn được, không xóa.",
+        del: function (e) {
+          stop(e);
+          self.setState({ del: { i: i } });
+        },
+      };
+    });
+    // ---- form tạo bộ đề
+    var c = s.create,
+      cv = c || {},
+      cName = cv.name || "",
+      cBg = artBg(cv);
+    function setC(o) {
+      var n = {};
+      for (var k in cv) {
+        n[k] = cv[k];
+      }
+      for (k in o) {
+        n[k] = o[k];
+      }
+      self.setState({ create: n });
+    }
+    var presets = ART.map(function (g, j) {
+      var on = !cv.img && cv.art === j;
+      return {
+        name: g[0],
+        pick: function (e) {
+          stop(e);
+          setC({ art: j, img: null, msg: "" });
+        },
+        st:
+          "display: block; flex: none; width: 48px; height: 32px; border-radius: 8px; box-sizing: border-box; background: " +
+          g[1] +
+          "; " +
+          (on
+            ? "outline: 3px solid #2963CC; outline-offset: 2px"
+            : "outline: 1.5px solid #D6D4D0"),
+      };
+    });
+    var picker = {
+      st:
+        "display: flex; align-items: flex-end; width: 240px; height: 160px; border-radius: 12px; box-sizing: border-box; overflow: hidden; color: " +
+        (cBg
+          ? "#FFFFFF; background: " +
+            cBg +
+            "; box-shadow: 0 2px 6px rgba(53,38,55,.12), 0 12px 28px rgba(53,38,55,.12)"
+          : "#706473; background: #FAF9F5; border: 1.5px dashed #C9C2C6"),
+      text: !!(!cv.img && cv.art != null && ART[cv.art][2]),
+      short: (cName.match(/(Vol|Test|Pack)\s*\S+$/i) || [
+        cName.split(" ").slice(-1)[0] || "",
+      ])[0],
+      none: !cBg,
+      label: cBg ? "Ảnh bìa đã chọn" : "Chưa có ảnh bìa",
+      presets: presets,
+      msg: !!cv.msg,
+      msgText: cv.msg || "",
+      msgColor: cv.msgBad ? "#C0412A" : "#7A5A0E",
+      file: function (e) {
+        readImage(e, function (url, msg) {
+          if (!url) {
+            setC({ msg: msg, msgBad: true });
+            return;
+          }
+          setC({ img: url, art: null, msg: msg, msgBad: false });
+        });
+      },
+    };
+    var dup = sets.some(function (st) {
+      return st.name.trim().toLowerCase() === cName.trim().toLowerCase();
+    });
+    var cErr = cv.tried
+      ? !cName.trim()
+        ? "Nhập tên bộ đề."
+        : dup
+          ? "Đã có bộ đề cùng tên."
+          : ""
+      : "";
+    var done = c && c.done ? c.done : null;
+    // ---- xóa
+    var d = s.del ? sets[s.del.i] : null;
+    return {
+      keep: keep,
+      rows: rows,
+      noRows: !rows.length,
+      countText:
+        shown.length === sets.length
+          ? sets.length + " bộ đề"
+          : shown.length + "/" + sets.length + " bộ đề",
+      q: s.q || "",
+      setQ: function (e) {
+        self.setState({ q: e.target.value });
+      },
+      fTypes: segItems(
+        [
+          ["all", "Tất cả"],
+          ["A", "Có Academic"],
+          ["G", "Có General Training"],
+        ],
+        fT,
+        "fT",
+      ),
+      fSts: segItems(
+        [
+          ["all", "Mọi trạng thái"],
+          ["pub", "Công khai"],
+          ["draft", "Bản nháp"],
+          ["hidden", "Đã ẩn"],
+        ],
+        fS,
+        "fS",
+      ),
+      clearFilters: function (e) {
+        stop(e);
+        self.setState({ q: "", fT: "all", fS: "all" });
+      },
+      openCreate: function (e) {
+        stop(e);
+        self.setState({ create: { name: "", desc: "", art: null, img: null } });
+      },
+      closeCreate: function (e) {
+        stop(e);
+        self.setState({ create: null });
+      },
+      createOpen: !!c,
+      cForm: !!c && !done,
+      cDone: !!done,
+      cv: picker,
+      cName: cName,
+      cCount: String(cName.length),
+      cDesc: cv.desc || "",
+      cErr: cErr,
+      cBad: !!cErr,
+      cNameSt:
+        "box-sizing: border-box; width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 15px; border: 1.5px solid " +
+        (cErr ? "#C0412A" : "#8E8392"),
+      setCName: function (e) {
+        setC({ name: e.target.value });
+      },
+      setCDesc: function (e) {
+        setC({ desc: e.target.value });
+      },
+      submitCreate: function (e) {
+        stop(e);
+        if (!cName.trim() || dup) {
+          setC({ tried: true });
+          return;
+        }
+        var ns = {
+          name: cName.trim(),
+          art: cv.art,
+          img: cv.img || null,
+          short: picker.short,
+          status: "draft",
+          updated: "27/10/2026",
+          plays: "0",
+          desc: (cv.desc || "").trim(),
+          tests: [],
+        };
+        self.setState({
+          sets: [ns].concat(sets),
+          create: { done: ns },
+          flash: ns.name,
+          q: "",
+          fT: "all",
+          fS: "all",
+        });
+      },
+      doneName: done ? done.name : "",
+      doneArtSt:
+        "width: 98px; height: 140px; border-radius: 10px; box-shadow: 0 2px 6px rgba(53,38,55,.14), 0 14px 30px rgba(53,38,55,.14); background: " +
+        ((done && artBg(done)) ||
+          "repeating-linear-gradient(135deg, #F3F0EA 0 10px, #FAF9F5 10px 20px)"),
+      openNew: function () {
+        if (done) {
+          store("ieltspace-set", done);
+        }
+      },
+      delOpen: !!d,
+      delName: d ? d.name : "",
+      delText: d
+        ? d.tests.length
+          ? "Bộ đề đang là Bản nháp với " +
+            d.tests.length +
+            " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
+          : "Bộ đề chưa có đề nào. Thao tác này không hoàn tác được."
+        : "",
+      delCancel: function (e) {
+        stop(e);
+        self.setState({ del: null });
+      },
+      delOk: function (e) {
+        stop(e);
+        var ns = sets.slice();
+        ns.splice(s.del.i, 1);
+        toastSet("Đã xóa bộ đề “" + d.name + "”.", { sets: ns, del: null });
+      },
+      toast: !!s.toast,
+      toastText: s.toast || "",
+      canUndo: false,
+      undo: stop,
+      toastLink: false,
+      toastHref: "#",
+      toastLinkText: "",
+    };
+  }
 
-function vals(t, k) { var x = t[k]; return (x && typeof x === 'object' ? [x.A, x.G] : [x]).filter(function (y) { return y; }); }
-function has(st, c) { return st.tests.some(function (t) { return (t.R && t.R[c]) || (t.W && t.W[c]); }); }
-function pill(bg, fg) { return 'display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: ' + bg + '; color: ' + fg; }
-function artBg(o) { return o.img ? "url('" + o.img + "') center / contain no-repeat, #E9E4DA" : (o.art == null ? null : ART[o.art][1]); }
-function toastSet(m, extra) { clearTimeout(me._t); var st = { toast: m }; for (var k in (extra || {})) { st[k] = extra[k]; } self.setState(st); me._t = setTimeout(function () { me.setState({ toast: '' }); }, 4200); }
-var sets = s.sets || (function () { try { var o = JSON.parse(localStorage.getItem('ieltspace-sets') || 'null'); if (o && o.length) { return o; } } catch (err) { } return SETS; })(), q = (s.q || '').trim().toLowerCase(), fT = s.fT || 'all', fS = s.fS || 'all';
-try { if (s.sets) { localStorage.setItem('ieltspace-sets', JSON.stringify(s.sets)); } } catch (err) { }
-var shown = sets.filter(function (st) { return (!q || st.name.toLowerCase().indexOf(q) >= 0) && (fT === 'all' || has(st, fT)) && (fS === 'all' || st.status === fS); });
-function segItems(list, cur, key) { return list.map(function (x) { var on = x[0] === cur; return { label: x[1], on: on,
-  pick: function (e) { stop(e); var o = {}; o[key] = x[0]; self.setState(o); },
-  st: 'display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; font-size: 13.5px; text-decoration: none; white-space: nowrap; '
-    + (on ? 'background: #FFFFFF; border: 1.5px solid #D6D4D0; font-weight: 600; color: #352637; box-shadow: 0 1px 2px rgba(53,38,55,.06)' : 'border: 1.5px solid transparent; color: #6A5D6C; font-weight: 500') }; }); }
-var rows = shown.map(function (st) { var i = sets.indexOf(st), sst = SST[st.status], bg = artBg(st), canDel = st.status === 'draft' || !st.tests.length;
-  var types = ['A', 'G'].filter(function (c) { return has(st, c); }).map(function (c) { return { text: TY[c][0], st: pill(TY[c][1], TY[c][2]) }; });
-  var skills = SK.map(function (k) { var n = 0; st.tests.forEach(function (t) { n += vals(t, k[0]).length; }); return n ? { text: k[1] + ' ' + n, st: pill(k[2], k[3]) } : null; }).filter(function (x) { return x; });
-  return { name: st.name, n: st.tests.length + ' đề', updated: st.updated, st: sst[0], stSt: pill(sst[1], sst[2]), cls: s.flash === st.name ? 'an-flash' : '',
-    types: types.length ? types : [{ text: st.tests.length ? 'Chỉ L/S' : 'Chưa có đề', st: pill('#F3F0EA', '#6A5D6C') }],
-    skills: skills.length ? skills : [{ text: '—', st: 'color: #B3A9B5' }],
-    thumbSt: 'display: flex; align-items: flex-end; flex: none; width: 48px; height: 32px; border-radius: 8px; box-sizing: border-box; overflow: hidden; color: #FFFFFF; box-shadow: 0 1px 3px rgba(53, 38, 55, 0.18); '
-      + (bg ? 'background: ' + bg : 'background: #F3F0EA; border: 1.5px dashed #D6D4D0'),
-    thumbText: !st.img && st.art != null && ART[st.art][2] ? st.short : '',
-    open: function () { store('ieltspace-set', st); },
-    canDel: canDel, noDel: !canDel, noDelWhy: 'Bộ đề ' + sst[0].toLowerCase() + ' và đã có đề: chỉ ẩn được, không xóa.',
-    del: function (e) { stop(e); self.setState({ del: { i: i } }); } }; });
-// ---- form tạo bộ đề
-var c = s.create, cv = c || {}, cName = cv.name || '', cBg = artBg(cv);
-function setC(o) { var n = {}; for (var k in cv) { n[k] = cv[k]; } for (k in o) { n[k] = o[k]; } self.setState({ create: n }); }
-var presets = ART.map(function (g, j) { var on = !cv.img && cv.art === j; return { name: g[0], pick: function (e) { stop(e); setC({ art: j, img: null, msg: '' }); },
-  st: 'display: block; flex: none; width: 48px; height: 32px; border-radius: 8px; box-sizing: border-box; background: ' + g[1] + '; ' + (on ? 'outline: 3px solid #2963CC; outline-offset: 2px' : 'outline: 1.5px solid #D6D4D0') }; });
-var picker = { st: 'display: flex; align-items: flex-end; width: 240px; height: 160px; border-radius: 12px; box-sizing: border-box; overflow: hidden; color: ' + (cBg ? '#FFFFFF; background: ' + cBg + '; box-shadow: 0 2px 6px rgba(53,38,55,.12), 0 12px 28px rgba(53,38,55,.12)' : '#706473; background: #FAF9F5; border: 1.5px dashed #C9C2C6'),
-  text: !!(!cv.img && cv.art != null && ART[cv.art][2]), short: (cName.match(/(Vol|Test|Pack)\s*\S+$/i) || [cName.split(' ').slice(-1)[0] || ''])[0], none: !cBg,
-  label: cBg ? 'Ảnh bìa đã chọn' : 'Chưa có ảnh bìa', presets: presets, msg: !!cv.msg, msgText: cv.msg || '', msgColor: cv.msgBad ? '#C0412A' : '#7A5A0E',
-  file: function (e) { readImage(e, function (url, msg) { if (!url) { setC({ msg: msg, msgBad: true }); return; } setC({ img: url, art: null, msg: msg, msgBad: false }); }); } };
-var dup = sets.some(function (st) { return st.name.trim().toLowerCase() === cName.trim().toLowerCase(); });
-var cErr = cv.tried ? (!cName.trim() ? 'Nhập tên bộ đề.' : (dup ? 'Đã có bộ đề cùng tên.' : '')) : '';
-var done = c && c.done ? c.done : null;
-// ---- xóa
-var d = s.del ? sets[s.del.i] : null;
-return { keep: keep, rows: rows, noRows: !rows.length, countText: shown.length === sets.length ? sets.length + ' bộ đề' : shown.length + '/' + sets.length + ' bộ đề',
-  q: s.q || '', setQ: function (e) { self.setState({ q: e.target.value }); },
-  fTypes: segItems([['all', 'Tất cả'], ['A', 'Có Academic'], ['G', 'Có General Training']], fT, 'fT'),
-  fSts: segItems([['all', 'Mọi trạng thái'], ['pub', 'Công khai'], ['draft', 'Bản nháp'], ['hidden', 'Đã ẩn']], fS, 'fS'),
-  clearFilters: function (e) { stop(e); self.setState({ q: '', fT: 'all', fS: 'all' }); },
-  openCreate: function (e) { stop(e); self.setState({ create: { name: '', desc: '', art: null, img: null } }); },
-  closeCreate: function (e) { stop(e); self.setState({ create: null }); },
-  createOpen: !!c, cForm: !!c && !done, cDone: !!done, cv: picker,
-  cName: cName, cCount: String(cName.length), cDesc: cv.desc || '', cErr: cErr, cBad: !!cErr,
-  cNameSt: 'box-sizing: border-box; width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 15px; border: 1.5px solid ' + (cErr ? '#C0412A' : '#8E8392'),
-  setCName: function (e) { setC({ name: e.target.value }); }, setCDesc: function (e) { setC({ desc: e.target.value }); },
-  submitCreate: function (e) { stop(e); if (!cName.trim() || dup) { setC({ tried: true }); return; }
-    var ns = { name: cName.trim(), art: cv.art, img: cv.img || null, short: picker.short, status: 'draft', updated: '27/10/2026', plays: '0', desc: (cv.desc || '').trim(), tests: [] };
-    self.setState({ sets: [ns].concat(sets), create: { done: ns }, flash: ns.name, q: '', fT: 'all', fS: 'all' }); },
-  doneName: done ? done.name : '', doneArtSt: 'width: 98px; height: 140px; border-radius: 10px; box-shadow: 0 2px 6px rgba(53,38,55,.14), 0 14px 30px rgba(53,38,55,.14); background: ' + ((done && artBg(done)) || 'repeating-linear-gradient(135deg, #F3F0EA 0 10px, #FAF9F5 10px 20px)'),
-  openNew: function () { if (done) { store('ieltspace-set', done); } },
-  delOpen: !!d, delName: d ? d.name : '',
-  delText: d ? (d.tests.length ? 'Bộ đề đang là Bản nháp với ' + d.tests.length + ' đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn.' : 'Bộ đề chưa có đề nào. Thao tác này không hoàn tác được.') : '',
-  delCancel: function (e) { stop(e); self.setState({ del: null }); },
-  delOk: function (e) { stop(e); var ns = sets.slice(); ns.splice(s.del.i, 1); toastSet('Đã xóa bộ đề “' + d.name + '”.', { sets: ns, del: null }); },
-  toast: !!s.toast, toastText: s.toast || '', canUndo: false, undo: stop, toastLink: false, toastHref: '#', toastLinkText: '' };
-}
-
-
-static defaultProps = {};
-render() { const v = this.renderVals(); return <>{"\n"}{"\n"}<style>{cssText("\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\n@keyframes isFade{from{opacity:0}to{opacity:1}}@keyframes isPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes isDrop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}@keyframes isToast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes isFlash{0%{background:#E3ECFD}100%{background:transparent}}@keyframes isSpin{to{transform:rotate(360deg)}}@keyframes isGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes isCheck{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}@keyframes isRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.an-fade{animation:isFade .2s ease-out both}.an-pop{animation:isPop .28s cubic-bezier(.2,.8,.2,1) both}.an-drop{animation:isDrop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.an-toast{animation:isToast .3s cubic-bezier(.2,.8,.2,1) both}.an-check{animation:isCheck .45s cubic-bezier(.2,.8,.2,1) both}.an-rise{animation:isRise .32s cubic-bezier(.2,.8,.2,1) both}.an-flash>td{animation:isFlash 2s ease-out}.an-spin{animation:isSpin .8s linear infinite}a,label,input,textarea,select,[role=button]{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .2s ease,transform .18s ease,opacity .16s ease,outline-color .16s ease}.lift:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(53,38,55,.05),0 12px 28px rgba(53,38,55,.10)}.press:active{transform:scale(.97)}.hov>tbody>tr{transition:background-color .15s ease}.hov>tbody>tr:hover{background:#FDFCF8}.thumb-h{transition:transform .2s ease,box-shadow .2s ease}.thumb-h:hover{transform:translateY(-3px) rotate(-1deg)}input:focus,textarea:focus,select:focus{outline:none;border-color:#2963CC !important;box-shadow:0 0 0 3px rgba(41,99,204,.16)}@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}\n")}</style>{"\n"}{"\n"}<div className="app-shell-ancestor" style={styleOf("font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; font-size: 15px; line-height: 1.6; background: #FCFBF7; min-height: 900px")}>{"\n"}<div className="app-shell" style={styleOf("display: flex; flex-wrap: wrap; align-items: stretch; min-height: 900px")}><div className="app-sidebar-slot" style={styleOf("display: flex; flex: none; align-self: stretch")}><AdminSidebar active={"exams"}></AdminSidebar></div><div className="app-content" style={styleOf("flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column")}><AdminTopbar crumb={"Quản lý / Bộ đề và đề thi"}></AdminTopbar><main style={styleOf("flex: 1; background: #FAF9F5; padding: 32px 32px 48px; display: flex; flex-direction: column; gap: 24px; min-width: 0")}><div style={styleOf("display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap")}><div ><h1 style={styleOf("margin: 0; font-size: 30px; line-height: 1.25; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em")}>{"Bộ đề và đề thi"}</h1><div style={styleOf("font-size: 15px; color: #6A5D6C; margin-top: 4px")}>{"Bấm một bộ đề để xem các đề bên trong theo từng kỹ năng. Reading và Writing có đề Academic và General Training riêng."}</div></div><div style={styleOf("display: flex; gap: 10px")}><a href={"#"} onClick={v.openCreate} className={"press"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 5v14M5 12h14"}></path></svg>{" Tạo bộ đề"}</a></div></div><div style={styleOf("display: flex; flex-wrap: wrap; gap: 14px; align-items: center")}><label style={styleOf("position: relative; display: flex; align-items: center; width: 280px; max-width: 100%")}><span style={styleOf("position: absolute; left: 14px; display: flex; color: #706473")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><circle cx={"11"} cy={"11"} r={"7"}></circle><path d={"M20 20l-4-4"}></path></svg></span><input type={"search"} value={v.q} onChange={v.setQ} placeholder={"Tìm bộ đề"} aria-label={"Tìm bộ đề"} style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; height: 44px; padding-left: 40px; border-color: #D6D4D0")} /></label><div role={"radiogroup"} style={styleOf("display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA")}>{(v.fTypes || []).map((f, index) => <React.Fragment key={index}><a href={"#"} role={"radio"} aria-checked={f.on} onClick={f.pick} style={styleOf(f.st)}>{f.label}</a></React.Fragment>)}</div><div role={"radiogroup"} style={styleOf("display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA")}>{(v.fSts || []).map((f, index) => <React.Fragment key={index}><a href={"#"} role={"radio"} aria-checked={f.on} onClick={f.pick} style={styleOf(f.st)}>{f.label}</a></React.Fragment>)}</div><span style={styleOf("font-size: 13.5px; color: #706473")}>{v.countText}</span></div><div style={styleOf("border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; overflow: hidden; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)")}><div style={styleOf("overflow-x: auto")}><table className={"hov"} style={styleOf("width: 100%; border-collapse: collapse")}><thead ><tr ><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}>{"Tên bộ đề"}</th><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}>{"Loại"}</th><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}>{"Số đề"}</th><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}>{"Đề theo kỹ năng"}</th><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}>{"Cập nhật"}</th><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}>{"Trạng thái"}</th><th style={styleOf("text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap")}></th></tr></thead><tbody >{(v.rows || []).map((r, index) => <React.Fragment key={index}><tr className={r.cls}><td style={styleOf("padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><a href={"AdminExamSet.dc.html"} onClick={r.open} style={styleOf("display: flex; align-items: center; gap: 12px; color: #352637; font-weight: 600; text-decoration: none")}><span aria-hidden={"true"} className={"thumb-h"} style={styleOf(r.thumbSt)}><span style={styleOf("padding: 0 0 3px 4px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 10px; font-weight: 600; line-height: 1.1")}>{r.thumbText}</span></span><span >{r.name}</span></a></td><td style={styleOf("padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: flex; gap: 4px; flex-wrap: wrap")}>{(r.types || []).map((y, index) => <React.Fragment key={index}><span style={styleOf(y.st)}>{y.text}</span></React.Fragment>)}</span></td><td style={styleOf("padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; white-space: nowrap")}>{r.n}</td><td style={styleOf("padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf("display: flex; gap: 4px; flex-wrap: wrap")}>{(r.skills || []).map((k, index) => <React.Fragment key={index}><span style={styleOf(k.st)}>{k.text}</span></React.Fragment>)}</span></td><td style={styleOf("padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}>{r.updated}</td><td style={styleOf("padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle")}><span style={styleOf(r.stSt)}>{r.st}</span></td><td style={styleOf("padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; text-align: right; white-space: nowrap")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px")}><a href={"AdminExamSet.dc.html"} onClick={r.open} className={"press"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; height: 34px")}>{"Mở "}<svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M9 18l6-6-6-6"}></path></svg></a>{r.canDel ? <><a href={"#"} onClick={r.del} aria-label={"Xóa bộ đề " + r.name} title={"Xóa bộ đề"} className={"press"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 999px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #4B3D4D; text-decoration: none; width: 34px; height: 34px; color: #C0412A; border-color: #F1B3A3")}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path></svg></a></> : null}{r.noDel ? <><span role={"img"} aria-label={"Không xóa được"} title={r.noDelWhy} style={styleOf("display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 999px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #4B3D4D; text-decoration: none; width: 34px; height: 34px; color: #C9C2C6; border-color: #EAE7E2; cursor: not-allowed")}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path></svg></span></> : null}</span></td></tr></React.Fragment>)}</tbody></table></div>{v.noRows ? <><div className={"an-fade"} style={styleOf("padding: 36px 20px; text-align: center; color: #6A5D6C; font-size: 14.5px")}>{"Không có bộ đề khớp bộ lọc. "}<a href={"#"} onClick={v.clearFilters} style={styleOf("font-weight: 600")}>{"Bỏ lọc"}</a></div></> : null}</div><div style={styleOf("font-size: 13px; color: #706473")}>{"Chỉ xóa được bộ đề còn là Bản nháp hoặc chưa có đề nào; bộ đề đã công khai chỉ ẩn được (bài đã làm và lượt đang làm vẫn giữ). Mỗi kỹ năng của một đề được đăng riêng khi đủ đáp án (Listening/Reading), tiêu chí (Writing/Speaking) và tệp audio/ảnh."}</div>{v.createOpen ? <><div className={"an-fade"} onClick={v.closeCreate} style={styleOf("position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.42); display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box")}><div className={"an-pop"} role={"dialog"} aria-modal={"true"} aria-label={"Tạo bộ đề"} onClick={v.keep} style={styleOf("width: 660px; max-width: 100%; max-height: calc(100vh - 48px); overflow: auto; background: #FFFFFF; border-radius: 22px; border: 1.5px solid #D6D4D0; box-shadow: 0 24px 64px rgba(53, 38, 55, 0.22); box-sizing: border-box")}>{v.cForm ? <><div style={styleOf("padding: 24px 24px 20px; display: flex; flex-direction: column; gap: 18px")}><div style={styleOf("display: flex; justify-content: space-between; align-items: flex-start; gap: 12px")}><div ><div style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em")}>{"Tạo bộ đề mới"}</div><div style={styleOf("font-size: 14px; color: #6A5D6C; margin-top: 2px")}>{"Bộ đề mới ở trạng thái Bản nháp. Thêm đề và nhập nội dung ở bước sau."}</div></div><a href={"#"} onClick={v.closeCreate} aria-label={"Đóng"} style={styleOf("display: flex; padding: 6px; border-radius: 8px; color: #6A5D6C")}><svg width={"18"} height={"18"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M6 6l12 12M18 6L6 18"}></path></svg></a></div><div style={styleOf("display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start")}><div style={styleOf("display: flex; flex-direction: column; gap: 12px; width: 240px; flex: none")}><div role={"img"} aria-label={v.cv.label} className={"thumb-h"} style={styleOf(v.cv.st)}>{v.cv.text ? <><span style={styleOf("padding: 0 0 14px 14px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 26px; font-weight: 600; line-height: 1; text-shadow: 0 1px 8px rgba(0,0,0,0.18)")}>{v.cv.short}</span></> : null}{v.cv.none ? <><span style={styleOf("margin: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px; text-align: center; font-size: 12.5px; font-weight: 600; line-height: 1.4")}><svg width={"26"} height={"26"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><rect x={"3"} y={"4"} width={"18"} height={"16"} rx={"2"}></rect><circle cx={"9"} cy={"10"} r={"1.5"}></circle><path d={"M21 16l-5-5-8 9"}></path></svg>{" Ảnh bìa ngang 3:2"}</span></> : null}</div><label style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 999px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; white-space: nowrap; position: relative; overflow: hidden; width: 100%")}><svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 16V4M7 9l5-5 5 5M4 20h16"}></path></svg>{" Tải ảnh lên"}<input type={"file"} accept={"image/png,image/jpeg,image/webp"} onChange={v.cv.file} style={styleOf("position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none")} /></label><div style={styleOf("display: flex; gap: 6px")}>{(v.cv.presets || []).map((g, index) => <React.Fragment key={index}><a href={"#"} onClick={g.pick} title={g.name} aria-label={"Chọn ảnh mẫu " + g.name} style={styleOf(g.st)}></a></React.Fragment>)}</div>{v.cv.msg ? <><div className={"an-rise"} style={styleOf("font-size: 12.5px; line-height: 1.45; color: " + v.cv.msgColor)}>{v.cv.msgText}</div></> : null}<div style={styleOf("font-size: 12px; line-height: 1.45; color: #706473")}>{"JPG, PNG hoặc WebP, tối đa 5 MB. Nên dùng ảnh 1200 × 800 px (3:2)."}</div></div><div style={styleOf("flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 14px")}><label style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13.5px; font-weight: 600; color: #352637")}>{"Tên bộ đề "}<span style={styleOf("color: #C0412A")}>{"*"}</span></span><input value={v.cName} onChange={v.setCName} placeholder={"Ví dụ: IELTS CAM Inspired Vol 20"} maxLength={"80"} aria-invalid={v.cBad} style={styleOf(v.cNameSt)} /><span style={styleOf("display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px")}><span style={styleOf("color: #C0412A")}>{v.cErr}</span><span style={styleOf("color: #706473")}>{v.cCount + "/80"}</span></span></label><label style={styleOf("display: flex; flex-direction: column; gap: 6px")}><span style={styleOf("font-size: 13.5px; font-weight: 600; color: #352637")}>{"Mô tả "}<span style={styleOf("font-weight: 500; color: #706473")}>{"(không bắt buộc)"}</span></span><textarea rows={"4"} value={v.cDesc} onChange={v.setCDesc} placeholder={"Giới thiệu ngắn hiện ở trang bộ đề của người học"} style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC; resize: vertical")}></textarea></label><div style={styleOf("display: flex; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #F3F0EA; font-size: 13px; line-height: 1.5; color: #4B3D4D")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><circle cx={"12"} cy={"12"} r={"9"}></circle><path d={"M12 11v5M12 8h.01"}></path></svg><span >{"Academic hay General Training được chọn ở từng đề Reading/Writing bên trong bộ, không chọn ở đây."}</span></div></div></div><div style={styleOf("display: flex; justify-content: flex-end; gap: 10px; padding-top: 4px")}><a href={"#"} onClick={v.closeCreate} className={"press"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A")}>{"Hủy"}</a><a href={"#"} onClick={v.submitCreate} className={"press"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M12 5v14M5 12h14"}></path></svg>{" Tạo bộ đề"}</a></div></div></> : null}{v.cDone ? <><div style={styleOf("padding: 32px 28px 24px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center")}><div style={styleOf("position: relative")}><div className={"an-pop"} style={styleOf(v.doneArtSt)}></div><span className={"an-check"} style={styleOf("position: absolute; right: -12px; bottom: -12px; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; background: #2E7D4F; color: #FFFFFF; border: 3px solid #FFFFFF")}><svg width={"20"} height={"20"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2.4"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M5 12.5l4.5 4.5L19 7"}></path></svg></span></div><div className={"an-rise"} style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 21px; font-weight: 600; margin-top: 6px")}>{"Đã tạo “" + v.doneName + "”"}</div><div className={"an-rise"} style={styleOf("font-size: 14.5px; color: #6A5D6C; max-width: 380px")}>{"Bộ đề đang là Bản nháp và chưa có đề nào. Mở trang Thông tin bộ đề để thêm đề, nhập xlsx hoặc soạn trực tiếp."}</div><div style={styleOf("display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 6px")}><a href={"#"} onClick={v.closeCreate} className={"press"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637")}>{"Đóng"}</a><a href={"AdminExamSet.dc.html"} onClick={v.openNew} className={"press"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF")}>{"Mở Thông tin bộ đề "}<svg width={"15"} height={"15"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M9 18l6-6-6-6"}></path></svg></a></div></div></> : null}</div></div></> : null}{v.delOpen ? <><div className={"an-fade"} onClick={v.delCancel} style={styleOf("position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.42); display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box")}><div className={"an-pop"} role={"dialog"} aria-modal={"true"} aria-label={"Xác nhận xóa bộ đề"} onClick={v.keep} style={styleOf("width: 440px; max-width: 100%; max-height: calc(100vh - 48px); overflow: auto; background: #FFFFFF; border-radius: 22px; border: 1.5px solid #D6D4D0; box-shadow: 0 24px 64px rgba(53, 38, 55, 0.22); box-sizing: border-box")}><div style={styleOf("padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 14px")}><span className={"an-check"} style={styleOf("display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; background: #FBDCD3; color: #C0412A")}><svg width={"20"} height={"20"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path></svg></span><div style={styleOf("font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600")}>{"Xóa bộ đề “" + v.delName + "”?"}</div><div style={styleOf("font-size: 14.5px; color: #4B3D4D; line-height: 1.55")}>{v.delText}</div><div style={styleOf("display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px")}><a href={"#"} onClick={v.delCancel} className={"press"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A")}>{"Hủy"}</a><a href={"#"} onClick={v.delOk} className={"press"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #C0412A; background: #C0412A; color: #FFFFFF")}><svg width={"16"} height={"16"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path></svg>{" Xóa bộ đề"}</a></div></div></div></div></> : null}{v.toast ? <><div role={"status"} className={"an-toast"} style={styleOf("position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; gap: 16px; padding: 10px 14px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)")}><span >{v.toastText}</span>{v.canUndo ? <><a href={"#"} onClick={v.undo} style={styleOf("color: #A9C4F5; font-weight: 600; text-decoration: none; white-space: nowrap")}>{"Hoàn tác"}</a></> : null}{v.toastLink ? <><a href={v.toastHref} style={styleOf("color: #A9C4F5; font-weight: 600; text-decoration: none; white-space: nowrap")}>{v.toastLinkText}</a></> : null}</div></> : null}</main></div></div>{"\n"}</div>{"\n"}</>; }
+  static defaultProps = {};
+  render() {
+    const v = this.renderVals();
+    return (
+      <>
+        {"\n"}
+        {"\n"}
+        <style>
+          {cssText(
+            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\n@keyframes isFade{from{opacity:0}to{opacity:1}}@keyframes isPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes isDrop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}@keyframes isToast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes isFlash{0%{background:#E3ECFD}100%{background:transparent}}@keyframes isSpin{to{transform:rotate(360deg)}}@keyframes isGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes isCheck{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}@keyframes isRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.an-fade{animation:isFade .2s ease-out both}.an-pop{animation:isPop .28s cubic-bezier(.2,.8,.2,1) both}.an-drop{animation:isDrop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.an-toast{animation:isToast .3s cubic-bezier(.2,.8,.2,1) both}.an-check{animation:isCheck .45s cubic-bezier(.2,.8,.2,1) both}.an-rise{animation:isRise .32s cubic-bezier(.2,.8,.2,1) both}.an-flash>td{animation:isFlash 2s ease-out}.an-spin{animation:isSpin .8s linear infinite}a,label,input,textarea,select,[role=button]{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .2s ease,transform .18s ease,opacity .16s ease,outline-color .16s ease}.lift:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(53,38,55,.05),0 12px 28px rgba(53,38,55,.10)}.press:active{transform:scale(.97)}.hov>tbody>tr{transition:background-color .15s ease}.hov>tbody>tr:hover{background:#FDFCF8}.thumb-h{transition:transform .2s ease,box-shadow .2s ease}.thumb-h:hover{transform:translateY(-3px) rotate(-1deg)}input:focus,textarea:focus,select:focus{outline:none;border-color:#2963CC !important;box-shadow:0 0 0 3px rgba(41,99,204,.16)}@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}\n",
+          )}
+        </style>
+        {"\n"}
+        {"\n"}
+        <div
+          className="app-shell-ancestor"
+          style={styleOf(
+            "font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; font-size: 15px; line-height: 1.6; background: #FCFBF7; min-height: 900px",
+          )}
+        >
+          {"\n"}
+          <div
+            className="app-shell"
+            style={styleOf(
+              "display: flex; flex-wrap: wrap; align-items: stretch; min-height: 900px",
+            )}
+          >
+            <div
+              className="app-sidebar-slot"
+              style={styleOf("display: flex; flex: none; align-self: stretch")}
+            >
+              <AdminSidebar active={"exams"}></AdminSidebar>
+            </div>
+            <div
+              className="app-content"
+              style={styleOf(
+                "flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column",
+              )}
+            >
+              <AdminTopbar crumb={"Quản lý / Bộ đề và đề thi"}></AdminTopbar>
+              <main
+                style={styleOf(
+                  "flex: 1; background: #FAF9F5; padding: 32px 32px 48px; display: flex; flex-direction: column; gap: 24px; min-width: 0",
+                )}
+              >
+                <div
+                  style={styleOf(
+                    "display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap",
+                  )}
+                >
+                  <div>
+                    <h1
+                      style={styleOf(
+                        "margin: 0; font-size: 30px; line-height: 1.25; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                      )}
+                    >
+                      {"Bộ đề và đề thi"}
+                    </h1>
+                    <div
+                      style={styleOf(
+                        "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                      )}
+                    >
+                      {
+                        "Bấm một bộ đề để xem các đề bên trong theo từng kỹ năng. Reading và Writing có đề Academic và General Training riêng."
+                      }
+                    </div>
+                  </div>
+                  <div style={styleOf("display: flex; gap: 10px")}>
+                    <a
+                      href={"#"}
+                      onClick={v.openCreate}
+                      className={"press"}
+                      style={styleOf(
+                        "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                      )}
+                    >
+                      <svg
+                        width={"16"}
+                        height={"16"}
+                        viewBox={"0 0 24 24"}
+                        fill={"none"}
+                        stroke={"currentColor"}
+                        strokeWidth={"2"}
+                        strokeLinecap={"round"}
+                        strokeLinejoin={"round"}
+                        aria-hidden={"true"}
+                      >
+                        <path d={"M12 5v14M5 12h14"}></path>
+                      </svg>
+                      {" Tạo bộ đề"}
+                    </a>
+                  </div>
+                </div>
+                <div
+                  style={styleOf(
+                    "display: flex; flex-wrap: wrap; gap: 14px; align-items: center",
+                  )}
+                >
+                  <label
+                    style={styleOf(
+                      "position: relative; display: flex; align-items: center; width: 280px; max-width: 100%",
+                    )}
+                  >
+                    <span
+                      style={styleOf(
+                        "position: absolute; left: 14px; display: flex; color: #706473",
+                      )}
+                    >
+                      <svg
+                        width={"16"}
+                        height={"16"}
+                        viewBox={"0 0 24 24"}
+                        fill={"none"}
+                        stroke={"currentColor"}
+                        strokeWidth={"2"}
+                        strokeLinecap={"round"}
+                        strokeLinejoin={"round"}
+                        aria-hidden={"true"}
+                      >
+                        <circle cx={"11"} cy={"11"} r={"7"}></circle>
+                        <path d={"M20 20l-4-4"}></path>
+                      </svg>
+                    </span>
+                    <input
+                      type={"search"}
+                      value={v.q}
+                      onChange={v.setQ}
+                      placeholder={"Tìm bộ đề"}
+                      aria-label={"Tìm bộ đề"}
+                      style={styleOf(
+                        "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; height: 44px; padding-left: 40px; border-color: #D6D4D0",
+                      )}
+                    />
+                  </label>
+                  <div
+                    role={"radiogroup"}
+                    style={styleOf(
+                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                    )}
+                  >
+                    {(v.fTypes || []).map((f, index) => (
+                      <React.Fragment key={index}>
+                        <a
+                          href={"#"}
+                          role={"radio"}
+                          aria-checked={f.on}
+                          onClick={f.pick}
+                          style={styleOf(f.st)}
+                        >
+                          {f.label}
+                        </a>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                  <div
+                    role={"radiogroup"}
+                    style={styleOf(
+                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                    )}
+                  >
+                    {(v.fSts || []).map((f, index) => (
+                      <React.Fragment key={index}>
+                        <a
+                          href={"#"}
+                          role={"radio"}
+                          aria-checked={f.on}
+                          onClick={f.pick}
+                          style={styleOf(f.st)}
+                        >
+                          {f.label}
+                        </a>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                  <span style={styleOf("font-size: 13.5px; color: #706473")}>
+                    {v.countText}
+                  </span>
+                </div>
+                <div
+                  style={styleOf(
+                    "border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; overflow: hidden; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                  )}
+                >
+                  <div style={styleOf("overflow-x: auto")}>
+                    <table
+                      className={"hov"}
+                      style={styleOf("width: 100%; border-collapse: collapse")}
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            style={styleOf(
+                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            )}
+                          >
+                            {"Tên bộ đề"}
+                          </th>
+                          <th
+                            style={styleOf(
+                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            )}
+                          >
+                            {"Loại"}
+                          </th>
+                          <th
+                            style={styleOf(
+                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            )}
+                          >
+                            {"Số đề"}
+                          </th>
+                          <th
+                            style={styleOf(
+                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            )}
+                          >
+                            {"Đề theo kỹ năng"}
+                          </th>
+                          <th
+                            style={styleOf(
+                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            )}
+                          >
+                            {"Cập nhật"}
+                          </th>
+                          <th
+                            style={styleOf(
+                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            )}
+                          >
+                            {"Trạng thái"}
+                          </th>
+                          <th
+                            style={styleOf(
+                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            )}
+                          ></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(v.rows || []).map((r, index) => (
+                          <React.Fragment key={index}>
+                            <tr className={r.cls}>
+                              <td
+                                style={styleOf(
+                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                                )}
+                              >
+                                <a
+                                  href={"AdminExamSet.dc.html"}
+                                  onClick={r.open}
+                                  style={styleOf(
+                                    "display: flex; align-items: center; gap: 12px; color: #352637; font-weight: 600; text-decoration: none",
+                                  )}
+                                >
+                                  <span
+                                    aria-hidden={"true"}
+                                    className={"thumb-h"}
+                                    style={styleOf(r.thumbSt)}
+                                  >
+                                    <span
+                                      style={styleOf(
+                                        "padding: 0 0 3px 4px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 10px; font-weight: 600; line-height: 1.1",
+                                      )}
+                                    >
+                                      {r.thumbText}
+                                    </span>
+                                  </span>
+                                  <span>{r.name}</span>
+                                </a>
+                              </td>
+                              <td
+                                style={styleOf(
+                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                                )}
+                              >
+                                <span
+                                  style={styleOf(
+                                    "display: flex; gap: 4px; flex-wrap: wrap",
+                                  )}
+                                >
+                                  {(r.types || []).map((y, index) => (
+                                    <React.Fragment key={index}>
+                                      <span style={styleOf(y.st)}>
+                                        {y.text}
+                                      </span>
+                                    </React.Fragment>
+                                  ))}
+                                </span>
+                              </td>
+                              <td
+                                style={styleOf(
+                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; white-space: nowrap",
+                                )}
+                              >
+                                {r.n}
+                              </td>
+                              <td
+                                style={styleOf(
+                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                                )}
+                              >
+                                <span
+                                  style={styleOf(
+                                    "display: flex; gap: 4px; flex-wrap: wrap",
+                                  )}
+                                >
+                                  {(r.skills || []).map((k, index) => (
+                                    <React.Fragment key={index}>
+                                      <span style={styleOf(k.st)}>
+                                        {k.text}
+                                      </span>
+                                    </React.Fragment>
+                                  ))}
+                                </span>
+                              </td>
+                              <td
+                                style={styleOf(
+                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                                )}
+                              >
+                                {r.updated}
+                              </td>
+                              <td
+                                style={styleOf(
+                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                                )}
+                              >
+                                <span style={styleOf(r.stSt)}>{r.st}</span>
+                              </td>
+                              <td
+                                style={styleOf(
+                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; text-align: right; white-space: nowrap",
+                                )}
+                              >
+                                <span
+                                  style={styleOf(
+                                    "display: inline-flex; align-items: center; gap: 6px",
+                                  )}
+                                >
+                                  <a
+                                    href={"AdminExamSet.dc.html"}
+                                    onClick={r.open}
+                                    className={"press"}
+                                    style={styleOf(
+                                      "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; height: 34px",
+                                    )}
+                                  >
+                                    {"Mở "}
+                                    <svg
+                                      width={"15"}
+                                      height={"15"}
+                                      viewBox={"0 0 24 24"}
+                                      fill={"none"}
+                                      stroke={"currentColor"}
+                                      strokeWidth={"2"}
+                                      strokeLinecap={"round"}
+                                      strokeLinejoin={"round"}
+                                      aria-hidden={"true"}
+                                    >
+                                      <path d={"M9 18l6-6-6-6"}></path>
+                                    </svg>
+                                  </a>
+                                  {r.canDel ? (
+                                    <>
+                                      <a
+                                        href={"#"}
+                                        onClick={r.del}
+                                        aria-label={"Xóa bộ đề " + r.name}
+                                        title={"Xóa bộ đề"}
+                                        className={"press"}
+                                        style={styleOf(
+                                          "display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 999px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #4B3D4D; text-decoration: none; width: 34px; height: 34px; color: #C0412A; border-color: #F1B3A3",
+                                        )}
+                                      >
+                                        <svg
+                                          width={"15"}
+                                          height={"15"}
+                                          viewBox={"0 0 24 24"}
+                                          fill={"none"}
+                                          stroke={"currentColor"}
+                                          strokeWidth={"2"}
+                                          strokeLinecap={"round"}
+                                          strokeLinejoin={"round"}
+                                          aria-hidden={"true"}
+                                        >
+                                          <path
+                                            d={
+                                              "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                            }
+                                          ></path>
+                                        </svg>
+                                      </a>
+                                    </>
+                                  ) : null}
+                                  {r.noDel ? (
+                                    <>
+                                      <span
+                                        role={"img"}
+                                        aria-label={"Không xóa được"}
+                                        title={r.noDelWhy}
+                                        style={styleOf(
+                                          "display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 999px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #4B3D4D; text-decoration: none; width: 34px; height: 34px; color: #C9C2C6; border-color: #EAE7E2; cursor: not-allowed",
+                                        )}
+                                      >
+                                        <svg
+                                          width={"15"}
+                                          height={"15"}
+                                          viewBox={"0 0 24 24"}
+                                          fill={"none"}
+                                          stroke={"currentColor"}
+                                          strokeWidth={"2"}
+                                          strokeLinecap={"round"}
+                                          strokeLinejoin={"round"}
+                                          aria-hidden={"true"}
+                                        >
+                                          <path
+                                            d={
+                                              "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                            }
+                                          ></path>
+                                        </svg>
+                                      </span>
+                                    </>
+                                  ) : null}
+                                </span>
+                              </td>
+                            </tr>
+                          </React.Fragment>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {v.noRows ? (
+                    <>
+                      <div
+                        className={"an-fade"}
+                        style={styleOf(
+                          "padding: 36px 20px; text-align: center; color: #6A5D6C; font-size: 14.5px",
+                        )}
+                      >
+                        {"Không có bộ đề khớp bộ lọc. "}
+                        <a
+                          href={"#"}
+                          onClick={v.clearFilters}
+                          style={styleOf("font-weight: 600")}
+                        >
+                          {"Bỏ lọc"}
+                        </a>
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+                <div style={styleOf("font-size: 13px; color: #706473")}>
+                  {
+                    "Chỉ xóa được bộ đề còn là Bản nháp hoặc chưa có đề nào; bộ đề đã công khai chỉ ẩn được (bài đã làm và lượt đang làm vẫn giữ). Mỗi kỹ năng của một đề được đăng riêng khi đủ đáp án (Listening/Reading), tiêu chí (Writing/Speaking) và tệp audio/ảnh."
+                  }
+                </div>
+                {v.createOpen ? (
+                  <>
+                    <div
+                      className={"an-fade"}
+                      onClick={v.closeCreate}
+                      style={styleOf(
+                        "position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.42); display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box",
+                      )}
+                    >
+                      <div
+                        className={"an-pop"}
+                        role={"dialog"}
+                        aria-modal={"true"}
+                        aria-label={"Tạo bộ đề"}
+                        onClick={v.keep}
+                        style={styleOf(
+                          "width: 660px; max-width: 100%; max-height: calc(100vh - 48px); overflow: auto; background: #FFFFFF; border-radius: 22px; border: 1.5px solid #D6D4D0; box-shadow: 0 24px 64px rgba(53, 38, 55, 0.22); box-sizing: border-box",
+                        )}
+                      >
+                        {v.cForm ? (
+                          <>
+                            <div
+                              style={styleOf(
+                                "padding: 24px 24px 20px; display: flex; flex-direction: column; gap: 18px",
+                              )}
+                            >
+                              <div
+                                style={styleOf(
+                                  "display: flex; justify-content: space-between; align-items: flex-start; gap: 12px",
+                                )}
+                              >
+                                <div>
+                                  <div
+                                    style={styleOf(
+                                      "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em",
+                                    )}
+                                  >
+                                    {"Tạo bộ đề mới"}
+                                  </div>
+                                  <div
+                                    style={styleOf(
+                                      "font-size: 14px; color: #6A5D6C; margin-top: 2px",
+                                    )}
+                                  >
+                                    {
+                                      "Bộ đề mới ở trạng thái Bản nháp. Thêm đề và nhập nội dung ở bước sau."
+                                    }
+                                  </div>
+                                </div>
+                                <a
+                                  href={"#"}
+                                  onClick={v.closeCreate}
+                                  aria-label={"Đóng"}
+                                  style={styleOf(
+                                    "display: flex; padding: 6px; border-radius: 8px; color: #6A5D6C",
+                                  )}
+                                >
+                                  <svg
+                                    width={"18"}
+                                    height={"18"}
+                                    viewBox={"0 0 24 24"}
+                                    fill={"none"}
+                                    stroke={"currentColor"}
+                                    strokeWidth={"2"}
+                                    strokeLinecap={"round"}
+                                    strokeLinejoin={"round"}
+                                    aria-hidden={"true"}
+                                  >
+                                    <path d={"M6 6l12 12M18 6L6 18"}></path>
+                                  </svg>
+                                </a>
+                              </div>
+                              <div
+                                style={styleOf(
+                                  "display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start",
+                                )}
+                              >
+                                <div
+                                  style={styleOf(
+                                    "display: flex; flex-direction: column; gap: 12px; width: 240px; flex: none",
+                                  )}
+                                >
+                                  <div
+                                    role={"img"}
+                                    aria-label={v.cv.label}
+                                    className={"thumb-h"}
+                                    style={styleOf(v.cv.st)}
+                                  >
+                                    {v.cv.text ? (
+                                      <>
+                                        <span
+                                          style={styleOf(
+                                            "padding: 0 0 14px 14px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 26px; font-weight: 600; line-height: 1; text-shadow: 0 1px 8px rgba(0,0,0,0.18)",
+                                          )}
+                                        >
+                                          {v.cv.short}
+                                        </span>
+                                      </>
+                                    ) : null}
+                                    {v.cv.none ? (
+                                      <>
+                                        <span
+                                          style={styleOf(
+                                            "margin: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px; text-align: center; font-size: 12.5px; font-weight: 600; line-height: 1.4",
+                                          )}
+                                        >
+                                          <svg
+                                            width={"26"}
+                                            height={"26"}
+                                            viewBox={"0 0 24 24"}
+                                            fill={"none"}
+                                            stroke={"currentColor"}
+                                            strokeWidth={"1.8"}
+                                            strokeLinecap={"round"}
+                                            strokeLinejoin={"round"}
+                                            aria-hidden={"true"}
+                                          >
+                                            <rect
+                                              x={"3"}
+                                              y={"4"}
+                                              width={"18"}
+                                              height={"16"}
+                                              rx={"2"}
+                                            ></rect>
+                                            <circle
+                                              cx={"9"}
+                                              cy={"10"}
+                                              r={"1.5"}
+                                            ></circle>
+                                            <path d={"M21 16l-5-5-8 9"}></path>
+                                          </svg>
+                                          {" Ảnh bìa ngang 3:2"}
+                                        </span>
+                                      </>
+                                    ) : null}
+                                  </div>
+                                  <label
+                                    style={styleOf(
+                                      "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 999px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; white-space: nowrap; position: relative; overflow: hidden; width: 100%",
+                                    )}
+                                  >
+                                    <svg
+                                      width={"15"}
+                                      height={"15"}
+                                      viewBox={"0 0 24 24"}
+                                      fill={"none"}
+                                      stroke={"currentColor"}
+                                      strokeWidth={"2"}
+                                      strokeLinecap={"round"}
+                                      strokeLinejoin={"round"}
+                                      aria-hidden={"true"}
+                                    >
+                                      <path
+                                        d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
+                                      ></path>
+                                    </svg>
+                                    {" Tải ảnh lên"}
+                                    <input
+                                      type={"file"}
+                                      accept={"image/png,image/jpeg,image/webp"}
+                                      onChange={v.cv.file}
+                                      style={styleOf(
+                                        "position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none",
+                                      )}
+                                    />
+                                  </label>
+                                  <div
+                                    style={styleOf("display: flex; gap: 6px")}
+                                  >
+                                    {(v.cv.presets || []).map((g, index) => (
+                                      <React.Fragment key={index}>
+                                        <a
+                                          href={"#"}
+                                          onClick={g.pick}
+                                          title={g.name}
+                                          aria-label={"Chọn ảnh mẫu " + g.name}
+                                          style={styleOf(g.st)}
+                                        ></a>
+                                      </React.Fragment>
+                                    ))}
+                                  </div>
+                                  {v.cv.msg ? (
+                                    <>
+                                      <div
+                                        className={"an-rise"}
+                                        style={styleOf(
+                                          "font-size: 12.5px; line-height: 1.45; color: " +
+                                            v.cv.msgColor,
+                                        )}
+                                      >
+                                        {v.cv.msgText}
+                                      </div>
+                                    </>
+                                  ) : null}
+                                  <div
+                                    style={styleOf(
+                                      "font-size: 12px; line-height: 1.45; color: #706473",
+                                    )}
+                                  >
+                                    {
+                                      "JPG, PNG hoặc WebP, tối đa 5 MB. Nên dùng ảnh 1200 × 800 px (3:2)."
+                                    }
+                                  </div>
+                                </div>
+                                <div
+                                  style={styleOf(
+                                    "flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 14px",
+                                  )}
+                                >
+                                  <label
+                                    style={styleOf(
+                                      "display: flex; flex-direction: column; gap: 6px",
+                                    )}
+                                  >
+                                    <span
+                                      style={styleOf(
+                                        "font-size: 13.5px; font-weight: 600; color: #352637",
+                                      )}
+                                    >
+                                      {"Tên bộ đề "}
+                                      <span style={styleOf("color: #C0412A")}>
+                                        {"*"}
+                                      </span>
+                                    </span>
+                                    <input
+                                      value={v.cName}
+                                      onChange={v.setCName}
+                                      placeholder={
+                                        "Ví dụ: IELTS CAM Inspired Vol 20"
+                                      }
+                                      maxLength={"80"}
+                                      aria-invalid={v.cBad}
+                                      style={styleOf(v.cNameSt)}
+                                    />
+                                    <span
+                                      style={styleOf(
+                                        "display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px",
+                                      )}
+                                    >
+                                      <span style={styleOf("color: #C0412A")}>
+                                        {v.cErr}
+                                      </span>
+                                      <span style={styleOf("color: #706473")}>
+                                        {v.cCount + "/80"}
+                                      </span>
+                                    </span>
+                                  </label>
+                                  <label
+                                    style={styleOf(
+                                      "display: flex; flex-direction: column; gap: 6px",
+                                    )}
+                                  >
+                                    <span
+                                      style={styleOf(
+                                        "font-size: 13.5px; font-weight: 600; color: #352637",
+                                      )}
+                                    >
+                                      {"Mô tả "}
+                                      <span
+                                        style={styleOf(
+                                          "font-weight: 500; color: #706473",
+                                        )}
+                                      >
+                                        {"(không bắt buộc)"}
+                                      </span>
+                                    </span>
+                                    <textarea
+                                      rows={"4"}
+                                      value={v.cDesc}
+                                      onChange={v.setCDesc}
+                                      placeholder={
+                                        "Giới thiệu ngắn hiện ở trang bộ đề của người học"
+                                      }
+                                      style={styleOf(
+                                        "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC; resize: vertical",
+                                      )}
+                                    ></textarea>
+                                  </label>
+                                  <div
+                                    style={styleOf(
+                                      "display: flex; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #F3F0EA; font-size: 13px; line-height: 1.5; color: #4B3D4D",
+                                    )}
+                                  >
+                                    <svg
+                                      width={"16"}
+                                      height={"16"}
+                                      viewBox={"0 0 24 24"}
+                                      fill={"none"}
+                                      stroke={"currentColor"}
+                                      strokeWidth={"2"}
+                                      strokeLinecap={"round"}
+                                      strokeLinejoin={"round"}
+                                      aria-hidden={"true"}
+                                    >
+                                      <circle
+                                        cx={"12"}
+                                        cy={"12"}
+                                        r={"9"}
+                                      ></circle>
+                                      <path d={"M12 11v5M12 8h.01"}></path>
+                                    </svg>
+                                    <span>
+                                      {
+                                        "Academic hay General Training được chọn ở từng đề Reading/Writing bên trong bộ, không chọn ở đây."
+                                      }
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                style={styleOf(
+                                  "display: flex; justify-content: flex-end; gap: 10px; padding-top: 4px",
+                                )}
+                              >
+                                <a
+                                  href={"#"}
+                                  onClick={v.closeCreate}
+                                  className={"press"}
+                                  style={styleOf(
+                                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
+                                  )}
+                                >
+                                  {"Hủy"}
+                                </a>
+                                <a
+                                  href={"#"}
+                                  onClick={v.submitCreate}
+                                  className={"press"}
+                                  style={styleOf(
+                                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                                  )}
+                                >
+                                  <svg
+                                    width={"16"}
+                                    height={"16"}
+                                    viewBox={"0 0 24 24"}
+                                    fill={"none"}
+                                    stroke={"currentColor"}
+                                    strokeWidth={"2"}
+                                    strokeLinecap={"round"}
+                                    strokeLinejoin={"round"}
+                                    aria-hidden={"true"}
+                                  >
+                                    <path d={"M12 5v14M5 12h14"}></path>
+                                  </svg>
+                                  {" Tạo bộ đề"}
+                                </a>
+                              </div>
+                            </div>
+                          </>
+                        ) : null}
+                        {v.cDone ? (
+                          <>
+                            <div
+                              style={styleOf(
+                                "padding: 32px 28px 24px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center",
+                              )}
+                            >
+                              <div style={styleOf("position: relative")}>
+                                <div
+                                  className={"an-pop"}
+                                  style={styleOf(v.doneArtSt)}
+                                ></div>
+                                <span
+                                  className={"an-check"}
+                                  style={styleOf(
+                                    "position: absolute; right: -12px; bottom: -12px; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; background: #2E7D4F; color: #FFFFFF; border: 3px solid #FFFFFF",
+                                  )}
+                                >
+                                  <svg
+                                    width={"20"}
+                                    height={"20"}
+                                    viewBox={"0 0 24 24"}
+                                    fill={"none"}
+                                    stroke={"currentColor"}
+                                    strokeWidth={"2.4"}
+                                    strokeLinecap={"round"}
+                                    strokeLinejoin={"round"}
+                                    aria-hidden={"true"}
+                                  >
+                                    <path d={"M5 12.5l4.5 4.5L19 7"}></path>
+                                  </svg>
+                                </span>
+                              </div>
+                              <div
+                                className={"an-rise"}
+                                style={styleOf(
+                                  "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 21px; font-weight: 600; margin-top: 6px",
+                                )}
+                              >
+                                {"Đã tạo “" + v.doneName + "”"}
+                              </div>
+                              <div
+                                className={"an-rise"}
+                                style={styleOf(
+                                  "font-size: 14.5px; color: #6A5D6C; max-width: 380px",
+                                )}
+                              >
+                                {
+                                  "Bộ đề đang là Bản nháp và chưa có đề nào. Mở trang Thông tin bộ đề để thêm đề, nhập xlsx hoặc soạn trực tiếp."
+                                }
+                              </div>
+                              <div
+                                style={styleOf(
+                                  "display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 6px",
+                                )}
+                              >
+                                <a
+                                  href={"#"}
+                                  onClick={v.closeCreate}
+                                  className={"press"}
+                                  style={styleOf(
+                                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
+                                  )}
+                                >
+                                  {"Đóng"}
+                                </a>
+                                <a
+                                  href={"AdminExamSet.dc.html"}
+                                  onClick={v.openNew}
+                                  className={"press"}
+                                  style={styleOf(
+                                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                                  )}
+                                >
+                                  {"Mở Thông tin bộ đề "}
+                                  <svg
+                                    width={"15"}
+                                    height={"15"}
+                                    viewBox={"0 0 24 24"}
+                                    fill={"none"}
+                                    stroke={"currentColor"}
+                                    strokeWidth={"2"}
+                                    strokeLinecap={"round"}
+                                    strokeLinejoin={"round"}
+                                    aria-hidden={"true"}
+                                  >
+                                    <path d={"M9 18l6-6-6-6"}></path>
+                                  </svg>
+                                </a>
+                              </div>
+                            </div>
+                          </>
+                        ) : null}
+                      </div>
+                    </div>
+                  </>
+                ) : null}
+                {v.delOpen ? (
+                  <>
+                    <div
+                      className={"an-fade"}
+                      onClick={v.delCancel}
+                      style={styleOf(
+                        "position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.42); display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box",
+                      )}
+                    >
+                      <div
+                        className={"an-pop"}
+                        role={"dialog"}
+                        aria-modal={"true"}
+                        aria-label={"Xác nhận xóa bộ đề"}
+                        onClick={v.keep}
+                        style={styleOf(
+                          "width: 440px; max-width: 100%; max-height: calc(100vh - 48px); overflow: auto; background: #FFFFFF; border-radius: 22px; border: 1.5px solid #D6D4D0; box-shadow: 0 24px 64px rgba(53, 38, 55, 0.22); box-sizing: border-box",
+                        )}
+                      >
+                        <div
+                          style={styleOf(
+                            "padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 14px",
+                          )}
+                        >
+                          <span
+                            className={"an-check"}
+                            style={styleOf(
+                              "display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; background: #FBDCD3; color: #C0412A",
+                            )}
+                          >
+                            <svg
+                              width={"20"}
+                              height={"20"}
+                              viewBox={"0 0 24 24"}
+                              fill={"none"}
+                              stroke={"currentColor"}
+                              strokeWidth={"2"}
+                              strokeLinecap={"round"}
+                              strokeLinejoin={"round"}
+                              aria-hidden={"true"}
+                            >
+                              <path
+                                d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}
+                              ></path>
+                            </svg>
+                          </span>
+                          <div
+                            style={styleOf(
+                              "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600",
+                            )}
+                          >
+                            {"Xóa bộ đề “" + v.delName + "”?"}
+                          </div>
+                          <div
+                            style={styleOf(
+                              "font-size: 14.5px; color: #4B3D4D; line-height: 1.55",
+                            )}
+                          >
+                            {v.delText}
+                          </div>
+                          <div
+                            style={styleOf(
+                              "display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px",
+                            )}
+                          >
+                            <a
+                              href={"#"}
+                              onClick={v.delCancel}
+                              className={"press"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
+                              )}
+                            >
+                              {"Hủy"}
+                            </a>
+                            <a
+                              href={"#"}
+                              onClick={v.delOk}
+                              className={"press"}
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #C0412A; background: #C0412A; color: #FFFFFF",
+                              )}
+                            >
+                              <svg
+                                width={"16"}
+                                height={"16"}
+                                viewBox={"0 0 24 24"}
+                                fill={"none"}
+                                stroke={"currentColor"}
+                                strokeWidth={"2"}
+                                strokeLinecap={"round"}
+                                strokeLinejoin={"round"}
+                                aria-hidden={"true"}
+                              >
+                                <path
+                                  d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}
+                                ></path>
+                              </svg>
+                              {" Xóa bộ đề"}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : null}
+                {v.toast ? (
+                  <>
+                    <div
+                      role={"status"}
+                      className={"an-toast"}
+                      style={styleOf(
+                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; gap: 16px; padding: 10px 14px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
+                      )}
+                    >
+                      <span>{v.toastText}</span>
+                      {v.canUndo ? (
+                        <>
+                          <a
+                            href={"#"}
+                            onClick={v.undo}
+                            style={styleOf(
+                              "color: #A9C4F5; font-weight: 600; text-decoration: none; white-space: nowrap",
+                            )}
+                          >
+                            {"Hoàn tác"}
+                          </a>
+                        </>
+                      ) : null}
+                      {v.toastLink ? (
+                        <>
+                          <a
+                            href={v.toastHref}
+                            style={styleOf(
+                              "color: #A9C4F5; font-weight: 600; text-decoration: none; white-space: nowrap",
+                            )}
+                          >
+                            {v.toastLinkText}
+                          </a>
+                        </>
+                      ) : null}
+                    </div>
+                  </>
+                ) : null}
+              </main>
+            </div>
+          </div>
+          {"\n"}
+        </div>
+        {"\n"}
+      </>
+    );
+  }
 }
 
 export default AdminExams;

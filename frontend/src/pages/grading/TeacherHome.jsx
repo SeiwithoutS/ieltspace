@@ -3,20 +3,641 @@ import TeacherSidebar from "../../components/navigation/TeacherSidebar";
 import React from "react";
 import { styleOf, cssText } from "../../lib/styles";
 
-
 class TeacherHome extends React.Component {
-renderVals() {
-var accent = this.props.accent ?? '#2963CC';
-var h = String(accent).replace('#', '');
-if (h.length === 3) { h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2]; }
-var n = parseInt(h, 16);
-var r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
-var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-return { accent: accent, onAccent: lum > 0.6 ? '#1A1A1A' : '#FFFFFF' };
-}
+  renderVals() {
+    var accent = this.props.accent ?? "#2963CC";
+    var h = String(accent).replace("#", "");
+    if (h.length === 3) {
+      h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    }
+    var n = parseInt(h, 16);
+    var r = (n >> 16) & 255,
+      g = (n >> 8) & 255,
+      b = n & 255;
+    var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return { accent: accent, onAccent: lum > 0.6 ? "#1A1A1A" : "#FFFFFF" };
+  }
 
-static defaultProps = {"accent": "#2963CC"};
-render() { const v = this.renderVals(); return <>{"\n"}{"\n"}<style>{cssText("\nbody{margin:0;background:#FCFBF7}\na{color:#2963CC}\n.bu-dd-menu{display:none}.bu-dd:hover .bu-dd-menu,.bu-dd:focus-within .bu-dd-menu{display:block}.bu-dd:hover > a{background:#F3F0EA}\n\n")}</style>{"\n"}{"\n"}<div className="app-shell-ancestor" style={styleOf("font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; background: #FCFBF7; font-size: 15px; line-height: 1.6; min-height: 1180px")}>{"\n"}<div className="app-shell" style={styleOf("display: flex; flex-wrap: wrap; align-items: stretch; min-height: inherit")}><TeacherSidebar /><div className="app-content" style={styleOf("flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column")}><AdminTopbar crumb="Giáo viên / Tổng quan" userName="Lan Hương" initials="LH" email="lanhuong@ieltspace.vn" role="Giáo viên" /><main style={styleOf("flex: 1; background: #FAF9F5; padding: 36px 32px 48px; display: flex; flex-direction: column; gap: 24px")}><div style={styleOf("display: flex; justify-content: space-between; align-items: flex-end; gap: 16px")}><div ><h1 style={styleOf("margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em")}>{"Chào cô Lan Hương"}</h1><div style={styleOf("font-size: 15px; color: #6A5D6C; margin-top: 4px")}>{"Các bài Writing và Speaking hệ thống đã phân công cho bạn."}</div></div><div style={styleOf("display: flex; gap: 10px")}></div></div><div style={styleOf("display: flex; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden")}><div style={styleOf("flex: 1 1 0; padding: 18px 22px; ")}><div style={styleOf("font-size: 13px; color: #706473")}>{"Chờ chấm"}</div><div style={styleOf("font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em")}>{"6"}</div><div style={styleOf("font-size: 13px; color: #6A5D6C")}>{"được phân công cho bạn"}</div></div><div style={styleOf("flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ")}><div style={styleOf("font-size: 13px; color: #706473")}>{"Có bản nháp"}</div><div style={styleOf("font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em")}>{"1"}</div><div style={styleOf("font-size: 13px; color: #6A5D6C")}>{"chưa công bố"}</div></div><div style={styleOf("flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ")}><div style={styleOf("font-size: 13px; color: #706473")}>{"Đã công bố tuần này"}</div><div style={styleOf("font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em")}>{"18"}</div><div style={styleOf("font-size: 13px; color: #6A5D6C")}>{"tuần 19/10 đến 25/10"}</div></div><div style={styleOf("flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ")}><div style={styleOf("font-size: 13px; color: #706473")}>{"Giới hạn nhận bài"}</div><div style={styleOf("font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em")}>{"7 / 10"}</div><div style={styleOf("font-size: 13px; color: #6A5D6C")}>{"bài chưa chấm / tối đa"}</div></div></div><div style={styleOf("display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start")}><div style={styleOf("flex: 1.5 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 24px")}><div style={styleOf("padding: 0px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden")}><div style={styleOf("display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 0; padding: 20px 24px 16px")}><div ><div style={styleOf("font-size: 17px; font-weight: 600")}>{"Tiếp tục công việc"}</div></div><a href={"TeacherQueue.dc.html"} style={styleOf("font-weight: 600; font-size: 14.5px; color: #352637; text-decoration: none")}>{"Xem hàng chờ"}</a></div><div style={styleOf("display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 24px; border-top: 1px solid #E6E4E0")}><span style={styleOf("width: 42px; height: 42px; flex: 0 0 42px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center")}><svg width={"20"} height={"20"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M15 5l4 4L8 20H4v-4z"}></path></svg></span><div style={styleOf("flex: 1 1 260px; min-width: 0")}><div style={styleOf("font-weight: 600")}>{"Writing Task 2 · Public transport"}</div><div style={styleOf("font-size: 13.5px; color: #706473")}>{"Nguyễn Minh Anh · phân công 22/10 14:05 · đã chờ chấm 21 giờ"}</div></div><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Writing"}</span><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap")}><svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M6 3h9l4 4v14H6z"}></path><path d={"M14 3v5h5"}></path></svg>{"Có bản nháp"}</span><a href={"TeacherGrade.dc.html"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}>{"Mở bài"}</a></div><div style={styleOf("display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 24px; border-top: 1px solid #E6E4E0")}><span style={styleOf("width: 42px; height: 42px; flex: 0 0 42px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center")}><svg width={"20"} height={"20"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><rect x={"9"} y={"3"} width={"6"} height={"11"} rx={"3"}></rect><path d={"M5 11a7 7 0 0 0 14 0M12 18v3"}></path></svg></span><div style={styleOf("flex: 1 1 260px; min-width: 0")}><div style={styleOf("font-weight: 600")}>{"Speaking Part 2 · A skill worth learning"}</div><div style={styleOf("font-size: 13.5px; color: #706473")}>{"Nguyễn Minh Anh · phân công 22/10 20:40 · đã chờ chấm 15 giờ"}</div></div><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Speaking"}</span><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Chờ chấm"}</span><a href={"TeacherGrade.dc.html"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}>{"Mở bài"}</a></div><div style={styleOf("display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 24px; border-top: 1px solid #E6E4E0")}><span style={styleOf("width: 42px; height: 42px; flex: 0 0 42px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center")}><svg width={"20"} height={"20"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"1.8"} strokeLinecap={"round"} strokeLinejoin={"round"} aria-hidden={"true"}><path d={"M15 5l4 4L8 20H4v-4z"}></path></svg></span><div style={styleOf("flex: 1 1 260px; min-width: 0")}><div style={styleOf("font-weight: 600")}>{"Writing Task 1 Academic · Energy use"}</div><div style={styleOf("font-size: 13.5px; color: #706473")}>{"Hoàng Nam · phân công 23/10 08:10 · đã chờ chấm 3 giờ"}</div></div><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Writing"}</span><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Chờ chấm"}</span><a href={"TeacherGrade.dc.html"} style={styleOf("display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap")}>{"Mở bài"}</a></div></div><div style={styleOf("padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ")}><div style={styleOf("display: flex; flex-direction: column; gap: 12px; ")}><div style={styleOf("font-size: 17px; font-weight: 600")}>{"Bài đến với bạn như thế nào"}</div><div style={styleOf("display: flex; flex-wrap: wrap; gap: 8px; align-items: center")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Người học gửi yêu cầu chấm"}</span><span style={styleOf("color: #8E8392")}>{"→"}</span><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Hệ thống tự phân công"}</span><span style={styleOf("color: #8E8392")}>{"→"}</span><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Chấm, có thể lưu nháp"}</span><span style={styleOf("color: #8E8392")}>{"→"}</span><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Công bố kết quả"}</span></div><div style={styleOf("font-size: 13.5px; color: #6A5D6C")}>{"Không có bước tự nhận hay từ chối bài. Hệ thống ưu tiên giáo viên ít bài chưa chấm nhất, rồi đến người lâu chưa nhận bài. Sau khi công bố, nội dung bài còn xem được 14 ngày."}</div></div></div></div><div style={styleOf("flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 24px")}><div style={styleOf("padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ")}><div style={styleOf("display: flex; flex-direction: column; gap: 4px; ")}><div style={styleOf("font-size: 17px; font-weight: 600")}>{"Trạng thái nhận bài"}</div><div style={styleOf("display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px")}><span style={styleOf("color: #6A5D6C")}>{"Quyền chấm Writing"}</span><span style={styleOf("font-weight: 600; text-align: right")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Đang nhận bài"}</span></span></div><div style={styleOf("display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px")}><span style={styleOf("color: #6A5D6C")}>{"Quyền chấm Speaking"}</span><span style={styleOf("font-weight: 600; text-align: right")}><span style={styleOf("display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap")}>{"Đang nhận bài"}</span></span></div><div style={styleOf("display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px")}><span style={styleOf("color: #6A5D6C")}>{"Bài chưa chấm"}</span><span style={styleOf("font-weight: 600; text-align: right")}>{"7 / 10"}</span></div><div style={styleOf("display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px")}><span style={styleOf("color: #6A5D6C")}>{"Lần nhận bài gần nhất"}</span><span style={styleOf("font-weight: 600; text-align: right")}>{"23/10/2026 08:10"}</span></div><div style={styleOf("font-size: 13px; color: #706473")}>{"Quyền chấm và giới hạn bài do Quản lý thiết lập. Khi Quản lý ngừng giao bài mới, bạn vẫn chấm nốt các bài đã được phân công."}</div></div></div><div style={styleOf("padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ")}><div style={styleOf("display: flex; flex-direction: column; gap: 2px; ")}><div style={styleOf("font-size: 17px; font-weight: 600")}>{"Bộ tiêu chí cố định"}</div><div style={styleOf("font-size: 13px; font-weight: 600; color: #7A5A0E; margin-top: 4px")}>{"Writing"}</div><div style={styleOf("font-size: 14px; padding: 4px 0")}>{"Task Achievement / Task Response"}</div><div style={styleOf("font-size: 14px; padding: 4px 0")}>{"Coherence and Cohesion"}</div><div style={styleOf("font-size: 14px; padding: 4px 0")}>{"Lexical Resource"}</div><div style={styleOf("font-size: 14px; padding: 4px 0")}>{"Grammatical Range and Accuracy"}</div><div style={styleOf("font-size: 13px; font-weight: 600; color: #5543B0; margin-top: 6px")}>{"Speaking"}</div><div style={styleOf("font-size: 14px; padding: 4px 0")}>{"Fluency and Coherence"}</div><div style={styleOf("font-size: 14px; padding: 4px 0")}>{"Lexical Resource"}</div><div style={styleOf("font-size: 14px; padding: 4px 0")}>{"Grammatical Range and Accuracy"}</div><div style={styleOf("font-size: 14px; padding: 4px 0")}>{"Pronunciation"}</div><div style={styleOf("font-size: 13px; color: #706473")}>{"Mỗi tiêu chí 0 đến 9, bước 0.5. Điểm tổng hợp do hệ thống tính theo trọng số và quy tắc làm tròn đã cấu hình."}</div></div></div></div></div></main></div></div>{"\n"}</div>{"\n"}</>; }
+  static defaultProps = { accent: "#2963CC" };
+  render() {
+    const v = this.renderVals();
+    return (
+      <>
+        {"\n"}
+        {"\n"}
+        <style>
+          {cssText(
+            "\nbody{margin:0;background:#FCFBF7}\na{color:#2963CC}\n.bu-dd-menu{display:none}.bu-dd:hover .bu-dd-menu,.bu-dd:focus-within .bu-dd-menu{display:block}.bu-dd:hover > a{background:#F3F0EA}\n\n",
+          )}
+        </style>
+        {"\n"}
+        {"\n"}
+        <div
+          className="app-shell-ancestor"
+          style={styleOf(
+            "font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; background: #FCFBF7; font-size: 15px; line-height: 1.6; min-height: 1180px",
+          )}
+        >
+          {"\n"}
+          <div
+            className="app-shell"
+            style={styleOf(
+              "display: flex; flex-wrap: wrap; align-items: stretch; min-height: inherit",
+            )}
+          >
+            <TeacherSidebar />
+            <div
+              className="app-content"
+              style={styleOf(
+                "flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column",
+              )}
+            >
+              <AdminTopbar
+                crumb="Giáo viên / Tổng quan"
+                userName="Lan Hương"
+                initials="LH"
+                email="lanhuong@ieltspace.vn"
+                role="Giáo viên"
+              />
+              <main
+                style={styleOf(
+                  "flex: 1; background: #FAF9F5; padding: 36px 32px 48px; display: flex; flex-direction: column; gap: 24px",
+                )}
+              >
+                <div
+                  style={styleOf(
+                    "display: flex; justify-content: space-between; align-items: flex-end; gap: 16px",
+                  )}
+                >
+                  <div>
+                    <h1
+                      style={styleOf(
+                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                      )}
+                    >
+                      {"Chào cô Lan Hương"}
+                    </h1>
+                    <div
+                      style={styleOf(
+                        "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                      )}
+                    >
+                      {
+                        "Các bài Writing và Speaking hệ thống đã phân công cho bạn."
+                      }
+                    </div>
+                  </div>
+                  <div style={styleOf("display: flex; gap: 10px")}></div>
+                </div>
+                <div
+                  style={styleOf(
+                    "display: flex; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden",
+                  )}
+                >
+                  <div style={styleOf("flex: 1 1 0; padding: 18px 22px; ")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
+                      {"Chờ chấm"}
+                    </div>
+                    <div
+                      style={styleOf(
+                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                      )}
+                    >
+                      {"6"}
+                    </div>
+                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                      {"được phân công cho bạn"}
+                    </div>
+                  </div>
+                  <div
+                    style={styleOf(
+                      "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
+                    )}
+                  >
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
+                      {"Có bản nháp"}
+                    </div>
+                    <div
+                      style={styleOf(
+                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                      )}
+                    >
+                      {"1"}
+                    </div>
+                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                      {"chưa công bố"}
+                    </div>
+                  </div>
+                  <div
+                    style={styleOf(
+                      "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
+                    )}
+                  >
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
+                      {"Đã công bố tuần này"}
+                    </div>
+                    <div
+                      style={styleOf(
+                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                      )}
+                    >
+                      {"18"}
+                    </div>
+                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                      {"tuần 19/10 đến 25/10"}
+                    </div>
+                  </div>
+                  <div
+                    style={styleOf(
+                      "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
+                    )}
+                  >
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
+                      {"Giới hạn nhận bài"}
+                    </div>
+                    <div
+                      style={styleOf(
+                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                      )}
+                    >
+                      {"7 / 10"}
+                    </div>
+                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                      {"bài chưa chấm / tối đa"}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style={styleOf(
+                    "display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start",
+                  )}
+                >
+                  <div
+                    style={styleOf(
+                      "flex: 1.5 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 24px",
+                    )}
+                  >
+                    <div
+                      style={styleOf(
+                        "padding: 0px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden",
+                      )}
+                    >
+                      <div
+                        style={styleOf(
+                          "display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 0; padding: 20px 24px 16px",
+                        )}
+                      >
+                        <div>
+                          <div
+                            style={styleOf("font-size: 17px; font-weight: 600")}
+                          >
+                            {"Tiếp tục công việc"}
+                          </div>
+                        </div>
+                        <a
+                          href={"TeacherQueue.dc.html"}
+                          style={styleOf(
+                            "font-weight: 600; font-size: 14.5px; color: #352637; text-decoration: none",
+                          )}
+                        >
+                          {"Xem hàng chờ"}
+                        </a>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 24px; border-top: 1px solid #E6E4E0",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 42px; height: 42px; flex: 0 0 42px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"20"}
+                            height={"20"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M15 5l4 4L8 20H4v-4z"}></path>
+                          </svg>
+                        </span>
+                        <div style={styleOf("flex: 1 1 260px; min-width: 0")}>
+                          <div style={styleOf("font-weight: 600")}>
+                            {"Writing Task 2 · Public transport"}
+                          </div>
+                          <div
+                            style={styleOf("font-size: 13.5px; color: #706473")}
+                          >
+                            {
+                              "Nguyễn Minh Anh · phân công 22/10 14:05 · đã chờ chấm 21 giờ"
+                            }
+                          </div>
+                        </div>
+                        <span
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          )}
+                        >
+                          {"Writing"}
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          )}
+                        >
+                          <svg
+                            width={"14"}
+                            height={"14"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"2"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M6 3h9l4 4v14H6z"}></path>
+                            <path d={"M14 3v5h5"}></path>
+                          </svg>
+                          {"Có bản nháp"}
+                        </span>
+                        <a
+                          href={"TeacherGrade.dc.html"}
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                          )}
+                        >
+                          {"Mở bài"}
+                        </a>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 24px; border-top: 1px solid #E6E4E0",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 42px; height: 42px; flex: 0 0 42px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"20"}
+                            height={"20"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <rect
+                              x={"9"}
+                              y={"3"}
+                              width={"6"}
+                              height={"11"}
+                              rx={"3"}
+                            ></rect>
+                            <path d={"M5 11a7 7 0 0 0 14 0M12 18v3"}></path>
+                          </svg>
+                        </span>
+                        <div style={styleOf("flex: 1 1 260px; min-width: 0")}>
+                          <div style={styleOf("font-weight: 600")}>
+                            {"Speaking Part 2 · A skill worth learning"}
+                          </div>
+                          <div
+                            style={styleOf("font-size: 13.5px; color: #706473")}
+                          >
+                            {
+                              "Nguyễn Minh Anh · phân công 22/10 20:40 · đã chờ chấm 15 giờ"
+                            }
+                          </div>
+                        </div>
+                        <span
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          )}
+                        >
+                          {"Speaking"}
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          )}
+                        >
+                          {"Chờ chấm"}
+                        </span>
+                        <a
+                          href={"TeacherGrade.dc.html"}
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                          )}
+                        >
+                          {"Mở bài"}
+                        </a>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 24px; border-top: 1px solid #E6E4E0",
+                        )}
+                      >
+                        <span
+                          style={styleOf(
+                            "width: 42px; height: 42px; flex: 0 0 42px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                          )}
+                        >
+                          <svg
+                            width={"20"}
+                            height={"20"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"1.8"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M15 5l4 4L8 20H4v-4z"}></path>
+                          </svg>
+                        </span>
+                        <div style={styleOf("flex: 1 1 260px; min-width: 0")}>
+                          <div style={styleOf("font-weight: 600")}>
+                            {"Writing Task 1 Academic · Energy use"}
+                          </div>
+                          <div
+                            style={styleOf("font-size: 13.5px; color: #706473")}
+                          >
+                            {
+                              "Hoàng Nam · phân công 23/10 08:10 · đã chờ chấm 3 giờ"
+                            }
+                          </div>
+                        </div>
+                        <span
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          )}
+                        >
+                          {"Writing"}
+                        </span>
+                        <span
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          )}
+                        >
+                          {"Chờ chấm"}
+                        </span>
+                        <a
+                          href={"TeacherGrade.dc.html"}
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                          )}
+                        >
+                          {"Mở bài"}
+                        </a>
+                      </div>
+                    </div>
+                    <div
+                      style={styleOf(
+                        "padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
+                      )}
+                    >
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-direction: column; gap: 12px; ",
+                        )}
+                      >
+                        <div
+                          style={styleOf("font-size: 17px; font-weight: 600")}
+                        >
+                          {"Bài đến với bạn như thế nào"}
+                        </div>
+                        <div
+                          style={styleOf(
+                            "display: flex; flex-wrap: wrap; gap: 8px; align-items: center",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                            )}
+                          >
+                            {"Người học gửi yêu cầu chấm"}
+                          </span>
+                          <span style={styleOf("color: #8E8392")}>{"→"}</span>
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                            )}
+                          >
+                            {"Hệ thống tự phân công"}
+                          </span>
+                          <span style={styleOf("color: #8E8392")}>{"→"}</span>
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                            )}
+                          >
+                            {"Chấm, có thể lưu nháp"}
+                          </span>
+                          <span style={styleOf("color: #8E8392")}>{"→"}</span>
+                          <span
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                            )}
+                          >
+                            {"Công bố kết quả"}
+                          </span>
+                        </div>
+                        <div
+                          style={styleOf("font-size: 13.5px; color: #6A5D6C")}
+                        >
+                          {
+                            "Không có bước tự nhận hay từ chối bài. Hệ thống ưu tiên giáo viên ít bài chưa chấm nhất, rồi đến người lâu chưa nhận bài. Sau khi công bố, nội dung bài còn xem được 14 ngày."
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={styleOf(
+                      "flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 24px",
+                    )}
+                  >
+                    <div
+                      style={styleOf(
+                        "padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
+                      )}
+                    >
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-direction: column; gap: 4px; ",
+                        )}
+                      >
+                        <div
+                          style={styleOf("font-size: 17px; font-weight: 600")}
+                        >
+                          {"Trạng thái nhận bài"}
+                        </div>
+                        <div
+                          style={styleOf(
+                            "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
+                          )}
+                        >
+                          <span style={styleOf("color: #6A5D6C")}>
+                            {"Quyền chấm Writing"}
+                          </span>
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; text-align: right",
+                            )}
+                          >
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              )}
+                            >
+                              {"Đang nhận bài"}
+                            </span>
+                          </span>
+                        </div>
+                        <div
+                          style={styleOf(
+                            "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
+                          )}
+                        >
+                          <span style={styleOf("color: #6A5D6C")}>
+                            {"Quyền chấm Speaking"}
+                          </span>
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; text-align: right",
+                            )}
+                          >
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              )}
+                            >
+                              {"Đang nhận bài"}
+                            </span>
+                          </span>
+                        </div>
+                        <div
+                          style={styleOf(
+                            "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
+                          )}
+                        >
+                          <span style={styleOf("color: #6A5D6C")}>
+                            {"Bài chưa chấm"}
+                          </span>
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; text-align: right",
+                            )}
+                          >
+                            {"7 / 10"}
+                          </span>
+                        </div>
+                        <div
+                          style={styleOf(
+                            "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
+                          )}
+                        >
+                          <span style={styleOf("color: #6A5D6C")}>
+                            {"Lần nhận bài gần nhất"}
+                          </span>
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; text-align: right",
+                            )}
+                          >
+                            {"23/10/2026 08:10"}
+                          </span>
+                        </div>
+                        <div style={styleOf("font-size: 13px; color: #706473")}>
+                          {
+                            "Quyền chấm và giới hạn bài do Quản lý thiết lập. Khi Quản lý ngừng giao bài mới, bạn vẫn chấm nốt các bài đã được phân công."
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      style={styleOf(
+                        "padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
+                      )}
+                    >
+                      <div
+                        style={styleOf(
+                          "display: flex; flex-direction: column; gap: 2px; ",
+                        )}
+                      >
+                        <div
+                          style={styleOf("font-size: 17px; font-weight: 600")}
+                        >
+                          {"Bộ tiêu chí cố định"}
+                        </div>
+                        <div
+                          style={styleOf(
+                            "font-size: 13px; font-weight: 600; color: #7A5A0E; margin-top: 4px",
+                          )}
+                        >
+                          {"Writing"}
+                        </div>
+                        <div style={styleOf("font-size: 14px; padding: 4px 0")}>
+                          {"Task Achievement / Task Response"}
+                        </div>
+                        <div style={styleOf("font-size: 14px; padding: 4px 0")}>
+                          {"Coherence and Cohesion"}
+                        </div>
+                        <div style={styleOf("font-size: 14px; padding: 4px 0")}>
+                          {"Lexical Resource"}
+                        </div>
+                        <div style={styleOf("font-size: 14px; padding: 4px 0")}>
+                          {"Grammatical Range and Accuracy"}
+                        </div>
+                        <div
+                          style={styleOf(
+                            "font-size: 13px; font-weight: 600; color: #5543B0; margin-top: 6px",
+                          )}
+                        >
+                          {"Speaking"}
+                        </div>
+                        <div style={styleOf("font-size: 14px; padding: 4px 0")}>
+                          {"Fluency and Coherence"}
+                        </div>
+                        <div style={styleOf("font-size: 14px; padding: 4px 0")}>
+                          {"Lexical Resource"}
+                        </div>
+                        <div style={styleOf("font-size: 14px; padding: 4px 0")}>
+                          {"Grammatical Range and Accuracy"}
+                        </div>
+                        <div style={styleOf("font-size: 14px; padding: 4px 0")}>
+                          {"Pronunciation"}
+                        </div>
+                        <div style={styleOf("font-size: 13px; color: #706473")}>
+                          {
+                            "Mỗi tiêu chí 0 đến 9, bước 0.5. Điểm tổng hợp do hệ thống tính theo trọng số và quy tắc làm tròn đã cấu hình."
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </main>
+            </div>
+          </div>
+          {"\n"}
+        </div>
+        {"\n"}
+      </>
+    );
+  }
 }
 
 export default TeacherHome;

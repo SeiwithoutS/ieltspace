@@ -1,86 +1,74 @@
+Ngày tạo README: 07/11/2026
+
 # IELTSpace
 
-Giao diện nền tảng luyện thi IELTS dành cho người học, giáo viên và quản trị viên.
+Ứng dụng web hỗ trợ luyện IELTS, gồm giao diện người học, giáo viên và quản lý. Hiện đã tích hợp đăng ký, đăng nhập, đăng xuất và khôi phục mật khẩu bằng Supabase Auth. Các màn hình học tập/quản trị còn chủ yếu dùng dữ liệu mẫu.
 
 ## Công nghệ
 
-- **Frontend:** React 18, Vite 5, JavaScript/JSX, TypeScript, Tailwind CSS và CSS.
-- **Backend:** khung Node.js, Express, TypeScript; cấu hình Prisma/PostgreSQL để phát triển tiếp.
-- **Hiện trạng:** frontend dùng dữ liệu mẫu và bộ nhớ trình duyệt; chưa kết nối API nghiệp vụ hoặc xác thực thật. Backend mới có API kiểm tra máy chủ.
+React 18, Vite, TypeScript/JSX; Express, TypeScript, Prisma 6; PostgreSQL và Supabase Auth.
 
 ## Cấu trúc
 
 ```text
-frontend/       Giao diện và cấu hình chạy frontend
-backend/        Khung API và module nghiệp vụ
-.gitignore      Quy định những file không đưa lên Git
-README.md       Hướng dẫn tổng quan
+backend/
+  prisma/       Ánh xạ hồ sơ người dùng đã có trong PostgreSQL
+  src/
+    config.ts   Kiểm tra biến môi trường
+    lib/        Kết nối Prisma và Supabase
+    middleware/ Xác thực, kiểm tra vai trò, xử lý lỗi
+    modules/auth/ API tài khoản và khôi phục mật khẩu
+    app.ts      Cấu hình Express
+    server.ts   Khởi động server
+  tests/        Kiểm thử và chẩn đoán chỉ đọc
+frontend/
+  src/
+    app/        Danh sách trang, điều hướng và kiểm tra phiên
+    components/ Thành phần giao diện dùng chung
+    pages/      Giao diện theo nhóm chức năng
+    lib/        API Auth, phiên đăng nhập, tài khoản và tiện ích
+    styles/     CSS và font
+    data/       Dữ liệu mẫu
+  tests/        Kiểm thử liên kết email
 ```
 
-Xem [cấu trúc frontend](frontend/src/README.md) và [hướng dẫn backend](backend/README.md).
+## Chạy ở máy cá nhân
 
-## Clone và chạy
+Cần Node.js 20 trở lên và một project Supabase có bảng `public.users`, trigger tạo hồ sơ khi Auth tạo tài khoản. Trigger tạo hồ sơ cần được cài riêng theo thiết kế tài khoản.
 
-Cần cài **Git**, **Node.js 22 LTS** (kèm npm).
+1. Sao chép `backend/.env.example` thành `backend/.env`, điền Project URL, publishable key và DATABASE_URL (Session pooler) của Supabase. Đặt FRONTEND_ORIGIN=http://localhost:3000 và AUTH_EMAIL_REDIRECT_URL=http://localhost:3000/login.
+2. Sao chép `frontend/.env.example` thành `frontend/.env`, giữ VITE_API_URL=http://localhost:3001/api.
+3. Bật Email provider/Confirm email trong Supabase. Site URL=http://localhost:3000; Redirect URLs gồm /login và /reset-password trên origin này. Email Confirm signup dùng `{{ .ConfirmationURL }}`. Liên kết Reset Password dùng `{{ .SiteURL }}/reset-password#token_hash={{ .TokenHash }}&type=recovery`.
 
-```bash
-git clone...
-cd...
-```
+Terminal backend:
 
-Thay `<URL_REPO_CUA_BAN>` bằng URL repo trên GitHub. Trong WebStorm, mở thư mục vừa clone, sau đó dùng Terminal.
-
-### Frontend
-
-Từ thư mục gốc dự án:
-
-```bash
-cd frontend
-npm ci
-npm run dev
-```
-
-Mở URL Vite hiện trong Terminal, thường là http://localhost:5173. Chỉ cần chạy frontend để xem và dùng thử giao diện hiện tại.
-
-### Backend — tùy chọn
-
-Mở Terminal thứ hai tại thư mục gốc:
-
-```bash
+```powershell
 cd backend
 npm install
-```
-
-Sao chép `.env.example` thành `.env` (chỉ làm lần đầu), rồi chạy:
-
-```bash
+npm run prisma:generate
 npm run dev
 ```
 
-Kiểm tra tại http://localhost:3001/api/health. Chưa cần database để chạy API này. Cấu hình database và thêm model trước khi chạy Prisma generate/migrate.
+Terminal frontend:
 
-### Dừng và chạy lại
-
-- Dừng: **Ctrl+C** trong Terminal đang chạy; nếu hỏi `Terminate batch job (Y/N)?`, nhập **Y** rồi Enter. Nếu chạy bằng WebStorm Run, bấm **Stop ■**.
-- Chạy lại: vào `frontend/` hoặc `backend/` rồi chạy `npm run dev`.
-- Chỉ cần cài lại thư viện khi mới clone hoặc khi dependencies thay đổi.
-
-## Build frontend
-
-Trong `frontend/`:
-
-```bash
-npm run build
-npm run preview
+```powershell
+cd frontend
+npm install
+npm run dev -- --port 3000 --strictPort
 ```
 
-`npm run build` tạo thư mục `dist/`; `npm run preview` mở bản build để kiểm tra tại URL được in ra.
+Mở http://localhost:3000/#Login. Backend chạy http://localhost:3001/api, health check ở /api/health.
 
-## File tự sinh và Git
+## Build
 
-- `node_modules/`: thư viện được tải khi chạy `npm ci` hoặc `npm install`.
-- `dist/`: kết quả đóng gói khi chạy `npm run build`.
-- `.idea/`: cấu hình WebStorm trên máy.
-- Các script chuyển đổi/kiểm tra cũ nằm ở `_local/tools/scripts/`; đây là công cụ đã viết trong quá trình dựng giao diện, không phải file npm tự sinh.
+Chạy `npm run build` trong từng thư mục backend/frontend. Backend production dùng `npm start`; frontend xuất ra `frontend/dist` để triển khai như SPA (cần fallback đường dẫn về index.html).
 
-Git bỏ qua các thư mục trên và `.env`. Giữ `package.json`, `package-lock.json` của từng ứng dụng, `.env.example`, `frontend/index.html` và mã nguồn trong repo.
+Schema Prisma hiện là ánh xạ rút gọn để đọc hồ sơ: **không chạy migrate reset, migrate dev hoặc db push bằng schema này trên database hiện có**. Không đưa `.env`, mật khẩu hoặc secret key lên GitHub. Chỉ README gốc được theo dõi; tài liệu Markdown nội bộ được bỏ qua.
+
+## Đăng nhập Google
+
+Đã tích hợp Google qua Supabase Auth bằng PKCE, giữ phiên bằng HttpOnly cookie. Bật Google provider trong Supabase và nhập Google Client ID/Secret tại đó. Google Cloud dùng callback Supabase; Supabase Redirect URLs phải có `http://localhost:3001/api/auth/google/callback`.
+
+Backend `.env`: thêm `AUTH_GOOGLE_CALLBACK_URL=http://localhost:3001/api/auth/google/callback` (mặc định local cũng dùng URL này). Không đưa Google Client Secret vào frontend. Callback Express kiểm tra hồ sơ ACTIVE, đặt refresh cookie rồi chuyển về `/auth/callback` của frontend; frontend dùng refresh chung để nhận phiên và điều hướng theo vai trò từ DB.
+
+Khi deploy, đổi callback backend và các URL môi trường tương ứng; frontend cần SPA fallback cho `/auth/callback`, `/login`, `/reset-password`. Google login mới dùng trigger hồ sơ hiện có, không cần thêm bảng. Tài khoản Google vẫn tuân thủ quyền và trạng thái khóa của ứng dụng.

@@ -8,3 +8,15 @@ datasource db {
 }
 
 // Thêm model theo thiết kế cơ sở dữ liệu trước khi generate/migrate.
+
+// Mapping đọc hồ sơ có sẵn. Không dùng schema rút gọn này để migrate database.
+model users {
+ id String @id @db.Uuid
+ auth_user_id String? @unique @db.Uuid
+ full_name String
+ display_name String?
+ email String?
+ avatar_url String?
+ role String
+ status String
+}

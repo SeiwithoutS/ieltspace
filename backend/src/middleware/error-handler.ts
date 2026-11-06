@@ -1,7 +1,11 @@
 import type { ErrorRequestHandler } from 'express';
+import { ZodError } from 'zod';
+import { HttpError } from '../utils/http.js';
 export const errorHandler: ErrorRequestHandler = (error, _req, res, next) => {
-  if (res.headersSent) { next(error); return; }
-  console.error(error);
-  const malformedJson = error instanceof SyntaxError && 'status' in error && error.status === 400;
-  res.status(malformedJson ? 400 : 500).json({ message: malformedJson ? 'JSON không hợp lệ.' : 'Lỗi máy chủ.' });
+ if (res.headersSent) { next(error); return; }
+ if (error instanceof HttpError) { res.status(error.statusCode).json({message:error.message,code:error.code}); return; }
+ if (error instanceof ZodError) { res.status(400).json({message:'Thông tin không hợp lệ. Kiểm tra email, họ tên và mật khẩu (8–128 ký tự).'}); return; }
+ const bad = error instanceof SyntaxError && 'status' in error && error.status === 400;
+ console.error('Request failed:', error instanceof Error ? error.name : 'Unknown error');
+ res.status(bad ? 400 : 500).json({message:bad ? 'JSON không hợp lệ.' : 'Lỗi máy chủ. Vui lòng thử lại.'});
 };

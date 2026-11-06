@@ -1,3 +1,5 @@
+import cookieParser from 'cookie-parser';
+import { authRouter } from './modules/auth/auth.routes.js';
 import express from 'express';
 import cors from 'cors';
 import { env } from './config/env.js';
@@ -5,8 +7,10 @@ import { routes } from './routes.js';
 import { errorHandler } from './middleware/error-handler.js';
 export const app = express();
 app.disable('x-powered-by');
-app.use(cors({ origin: env.frontendUrl }));
+app.use(cors({ origin: env.frontendUrl, credentials: true }));
 app.use(express.json({ limit: '1mb' }));
+app.use(cookieParser());
+app.use('/api/auth', authRouter);
 app.use('/api', routes);
 app.use((_req, res) => { res.status(404).json({ message: 'Không tìm thấy API.' }); });
 app.use(errorHandler);

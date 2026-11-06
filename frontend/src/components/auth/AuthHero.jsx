@@ -23,7 +23,7 @@ class AuthHero extends React.Component {
         <div
           className={"auth-hero"}
           style={styleOf(
-            "position: relative; overflow: hidden; min-height: 900px; box-sizing: border-box; padding: 48px 56px; background: linear-gradient(135deg, #E3ECFD 0%, #E6F3EC 100%); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; font-size: 15px; line-height: 1.6",
+            "position: relative; overflow: hidden; min-height: 100%; box-sizing: border-box; padding: 32px 36px; background: linear-gradient(135deg, #E3ECFD 0%, #E6F3EC 100%); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; font-size: 15px; line-height: 1.6",
           )}
         >
           {"\n"}
@@ -51,7 +51,7 @@ class AuthHero extends React.Component {
           >
             <h2
               style={styleOf(
-                "margin: 0; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 44px; font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; color: #352637",
+                "margin: 0; font-family: 'IBM Plex Serif', Georgia, serif; font-size: clamp(30px, 3.2vw, 44px); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; color: #352637",
               )}
             >
               {"Luyện IELTS mỗi ngày, band tăng từng bước."}

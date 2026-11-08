@@ -1,16 +1,16 @@
 # CLAUDE.md – IELTSpace
 
-Hướng dẫn cho Claude Code khi làm việc trong repo này. Quy tắc dùng chung của cả team nằm ở thư mục `AGENTS/` (xem `AGENTS/README.md`); file này nạp chúng vào Claude Code. Sửa quy tắc ở `AGENTS/rules/`, không sửa ở đây.
+Hướng dẫn cho Claude Code khi làm việc trong repo này. Quy tắc dùng chung của cả team nằm ở `AGENTS/rules/` (xem `AGENTS/README.md`). Claude Code nạp chúng qua `.claude/rules/`: mỗi file ở đó chỉ trỏ tới bản trong `AGENTS/rules/` và giữ `paths:` để rule chỉ nạp khi làm việc với file khớp. Sửa nội dung ở `AGENTS/rules/`, không sửa ở `.claude/rules/`.
 
-@AGENTS/rules/project-overview.md
-@AGENTS/rules/tech-stack-and-commands.md
-@AGENTS/rules/repo-workflow.md
-@AGENTS/rules/frontend-conventions.md
-@AGENTS/rules/backend-conventions.md
-@AGENTS/rules/code-format.md
-@AGENTS/rules/database.md
-@AGENTS/rules/business-rules.md
-@AGENTS/rules/ui-design.md
+| Rule | Phạm vi |
+|---|---|
+| `project-overview`, `tech-stack-and-commands`, `repo-workflow` | luôn nạp |
+| `frontend-conventions` | `frontend/**` |
+| `backend-conventions` | `backend/**` |
+| `code-format` | file code (`ts`, `tsx`, `js`, `jsx`, `mjs`, `css`, `json`) |
+| `database` | `backend/prisma/**`, `backend/src/lib/prisma.ts`, `backend/src/modules/**` |
+| `business-rules` | `backend/src/modules/**`, `frontend/src/pages/**`, `frontend/src/lib/**` |
+| `ui-design` | `frontend/src/**` |
 
 Giá trị thiết kế đang dùng trong code ghi ở `DESIGN.md`.
 

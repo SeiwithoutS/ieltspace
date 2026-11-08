@@ -6,7 +6,7 @@ Thư mục này được duy trì trên Git cho cả team. Mọi thành viên, d
 
 - Mỗi file trong `rules/` là một chủ đề. Nội dung là Markdown thường, đọc được bằng mọi công cụ.
 - Một số file có phần đầu `paths:` (frontmatter). Đó là định dạng của Claude Code để chỉ nạp rule khi làm việc với file khớp; công cụ khác bỏ qua và coi đó là chú thích phạm vi áp dụng.
-- Nếu công cụ của bạn tự đọc một file riêng ở gốc repo (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`…), hãy để file đó trỏ tới thư mục này thay vì chép lại nội dung. `CLAUDE.md` đã làm vậy.
+- Nếu công cụ của bạn tự đọc một file riêng ở gốc repo (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`…), hãy để file đó trỏ tới thư mục này thay vì chép lại nội dung. `.claude/rules/` đã làm vậy cho Claude Code.
 - Giá trị thiết kế đang dùng trong code nằm ở [`../DESIGN.md`](../DESIGN.md).
 
 ## Danh sách rule
@@ -28,5 +28,4 @@ Thư mục này được duy trì trên Git cho cả team. Mọi thành viên, d
 - Sửa quy tắc thì sửa file trong `AGENTS/rules/` và commit cùng thay đổi code liên quan.
 - Mỗi rule một chủ đề, ngắn gọn. Quy tắc mới thuộc phạm vi nào thì thêm vào file tương ứng, chỉ tạo file mới khi chủ đề chưa có.
 - Không đưa khóa, mật khẩu, nội dung `.env` hay thông tin cá nhân vào đây: thư mục này công khai.
-- Claude Code nạp thư mục này qua `CLAUDE.md` (dòng `@AGENTS/rules/…`). Thêm rule mới thì thêm một dòng import tương ứng vào `CLAUDE.md`.
-- Không đặt bản sao nội dung ở `.claude/rules/`; mọi công cụ đọc từ đây.
+- Claude Code nạp thư mục này qua `.claude/rules/`: mỗi file ở đó giữ nguyên `paths:` và chỉ có một dòng `@../../AGENTS/rules/<tên>.md`. Thêm rule mới thì tạo file cùng tên ở cả hai nơi (copy phần `paths:`), không chép nội dung vào `.claude/rules/`.

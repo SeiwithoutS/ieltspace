@@ -40,4 +40,5 @@ __pycache__/
 !/DESIGN.md
 !/CLAUDE.md
 !/AGENTS/**/*.md
+!/.claude/rules/*.md
 

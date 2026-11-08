@@ -1,0 +1,375 @@
+/* =====================================================================
+   Motion layer (dùng chung toàn app)
+   Trước đây hover/animation chỉ nằm trong <style> của vài trang
+   (AdminExams, AdminExamSet, AdminSamples, ExamDetail). Gom về đây để
+   mọi trang cùng một ngôn ngữ chuyển động.
+   Token: nhanh .16s · vừa .22s · vào/ra khung .28s · easing chuẩn bên dưới.
+   Các selector dựa vào chuỗi style inline (React ghi "prop: value") vì
+   phần lớn giao diện dùng style inline, không có class để bám.
+   ===================================================================== */
+:root {
+  --mo-fast: 0.16s;
+  --mo-med: 0.22s;
+  --mo-slow: 0.28s;
+  --mo-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --mo-hover-bg: rgba(53, 38, 55, 0.06);
+  --mo-lift-shadow:
+    0 2px 4px rgba(53, 38, 55, 0.05), 0 12px 28px rgba(53, 38, 55, 0.1);
+  interpolate-size: allow-keywords;
+}
+html.dark {
+  --mo-hover-bg: rgba(255, 255, 255, 0.08);
+  --mo-lift-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes isFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes isPop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes isDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes isSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes isToast {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 14px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+@keyframes isRise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes isCheck {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes isSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes isLabel {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.an-fade {
+  animation: isFade 0.2s ease-out both;
+}
+.an-pop {
+  animation: isPop var(--mo-slow) var(--mo-ease) both;
+}
+.an-drop {
+  animation: isDrop 0.18s var(--mo-ease) both;
+  transform-origin: top left;
+}
+.an-toast {
+  animation: isToast 0.3s var(--mo-ease) both;
+}
+.an-check {
+  animation: isCheck 0.45s var(--mo-ease) both;
+}
+.an-rise {
+  animation: isRise 0.32s var(--mo-ease) both;
+}
+.an-spin {
+  animation: isSpin 0.8s linear infinite;
+}
+
+/* ---- Hover / press cho mọi liên kết và nút ---- */
+a[href],
+button,
+summary,
+[role="button"],
+label {
+  transition:
+    background-color var(--mo-fast) ease,
+    border-color var(--mo-fast) ease,
+    color var(--mo-fast) ease,
+    box-shadow var(--mo-med) ease,
+    transform var(--mo-fast) var(--mo-ease),
+    opacity var(--mo-fast) ease,
+    filter var(--mo-fast) ease;
+}
+a[href]:hover {
+  color: #2257b8;
+}
+html.dark a[href]:hover {
+  color: #a9c4f5;
+}
+/* Có nền riêng (nút, chip, thẻ): sáng/tối nhẹ, không cần biết màu nền. */
+a[href][style*="background"]:not([style*="transparent"]):hover,
+button[style*="background"]:not([style*="transparent"]):not(:disabled):hover,
+[role="button"][style*="background"]:hover {
+  filter: brightness(0.96);
+}
+html.dark a[href][style*="background"]:not([style*="transparent"]):hover,
+html.dark
+  button[style*="background"]:not([style*="transparent"]):not(:disabled):hover,
+html.dark [role="button"][style*="background"]:hover {
+  filter: brightness(1.12);
+}
+/* Mục menu/nav không nền: nền mờ khi hover. */
+a[href][style*="display: flex"]:not([style*="background"]):hover,
+a[href][style*="display: inline-flex"]:not([style*="background"]):hover,
+button[style*="display: flex"]:not([style*="background"]):not(:disabled):hover,
+button[style*="display: inline-flex"]:not([style*="background"]):not(
+    :disabled
+  ):hover {
+  background-color: var(--mo-hover-bg);
+}
+/* Nhấn: thu nhẹ. */
+a[href][style*="border-radius"]:active,
+button:not(:disabled):active,
+[role="button"]:active {
+  transform: scale(0.97);
+}
+button:disabled,
+button[aria-disabled="true"] {
+  opacity: 0.55;
+}
+/* Thẻ bấm được (bo 14/16/22): nổi lên. */
+a[href][style*="border-radius: 22px"],
+a[href][style*="border-radius: 16px"],
+a[href][style*="border-radius: 14px"],
+.lift {
+  transition:
+    transform var(--mo-med) var(--mo-ease),
+    box-shadow var(--mo-med) ease,
+    border-color var(--mo-fast) ease,
+    background-color var(--mo-fast) ease;
+}
+a[href][style*="border-radius: 22px"]:hover,
+a[href][style*="border-radius: 16px"]:hover,
+a[href][style*="border-radius: 14px"]:hover,
+.lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--mo-lift-shadow);
+  filter: none;
+}
+.press:active {
+  transform: scale(0.97);
+}
+.thumb-h {
+  transition:
+    transform var(--mo-med) ease,
+    box-shadow var(--mo-med) ease;
+}
+.thumb-h:hover {
+  transform: translateY(-3px) rotate(-1deg);
+}
+
+/* ---- Bảng: hàng sáng lên khi hover ---- */
+tbody > tr {
+  transition: background-color var(--mo-fast) ease;
+}
+tbody > tr:hover {
+  background-color: var(--mo-hover-bg);
+}
+
+/* ---- Ô nhập: viền và vòng focus mượt ---- */
+input,
+textarea,
+select {
+  transition:
+    border-color var(--mo-fast) ease,
+    box-shadow var(--mo-med) ease,
+    background-color var(--mo-fast) ease;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 3px rgba(41, 99, 204, 0.16);
+}
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+  box-shadow: 0 0 0 3px rgba(141, 176, 247, 0.22);
+}
+
+/* ---- Dropdown tiêu đề (.bu-dd): fade + trượt, trễ 0.16s khi rời chuột ---- */
+.bu-dd .bu-dd-menu {
+  display: block !important;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transform-origin: top left;
+  transition:
+    opacity var(--mo-fast) ease,
+    transform var(--mo-fast) var(--mo-ease),
+    visibility 0s linear var(--mo-fast);
+}
+.bu-dd:hover .bu-dd-menu,
+.bu-dd:focus-within .bu-dd-menu,
+.bu-dd.is-open .bu-dd-menu {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+a[aria-haspopup] svg {
+  transition: transform var(--mo-med) var(--mo-ease);
+}
+.bu-dd:hover > a[aria-haspopup] svg,
+.bu-dd:focus-within > a[aria-haspopup] svg,
+.bu-dd.is-open > a[aria-haspopup] svg,
+a[aria-haspopup][aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* ---- Menu, hộp thoại, lớp phủ, toast, ngăn kéo: animation chạy khi mount ---- */
+[role="menu"] {
+  animation: isDrop 0.18s var(--mo-ease) both;
+  transform-origin: top right;
+}
+.bu-dd [role="menu"] {
+  animation: none;
+}
+[role="dialog"],
+[aria-modal="true"] {
+  animation: isPop var(--mo-slow) var(--mo-ease) both;
+}
+/* Hộp thoại tự căn giữa bằng transform inline: chỉ fade, kẻo animation ghi đè transform. */
+[role="dialog"][style*="translate"],
+[aria-modal="true"][style*="translate"] {
+  animation: isFade 0.2s ease-out both;
+}
+[style*="position: fixed"][style*="inset: 0"][style*="rgba("] {
+  animation: isFade 0.2s ease-out both;
+}
+[style*="position: fixed"][style*="translateX(-50%)"][style*="bottom"] {
+  animation: isToast 0.3s var(--mo-ease) both;
+}
+[style*="position: absolute"][style*="right: 0"][style*="bottom: 0"][style*="width: 480px"] {
+  animation: isSlideIn var(--mo-slow) var(--mo-ease) both;
+}
+[role="status"],
+[role="alert"] {
+  animation: isFade 0.2s ease-out both;
+}
+
+/* ---- Sidebar thu gọn / mở rộng ---- */
+.staff-sidebar {
+  transition:
+    width var(--mo-med) var(--mo-ease),
+    flex-basis var(--mo-med) var(--mo-ease),
+    padding var(--mo-med) var(--mo-ease) !important;
+}
+.staff-sidebar a > span + span,
+.staff-sidebar nav a > span,
+.staff-sidebar > div:not(:first-child) {
+  animation: isLabel var(--mo-med) var(--mo-ease) both;
+}
+.staff-sidebar nav a svg {
+  transition: transform var(--mo-fast) var(--mo-ease);
+}
+.staff-sidebar nav a:hover svg {
+  transform: scale(1.1);
+}
+
+/* ---- Accordion: <details> (FAQ) ---- */
+details::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition:
+    block-size var(--mo-slow) var(--mo-ease),
+    content-visibility var(--mo-slow) allow-discrete;
+}
+details[open]::details-content {
+  block-size: auto;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+details > summary > span:last-child {
+  transition: transform var(--mo-med) var(--mo-ease);
+}
+details[open] > summary > span:last-child {
+  transform: rotate(180deg);
+}
+details {
+  transition:
+    border-color var(--mo-fast) ease,
+    box-shadow var(--mo-med) ease;
+}
+details:hover {
+  border-color: #b3a9b5 !important;
+}
+html.dark details:hover {
+  border-color: #5a5b62 !important;
+}
+@supports not (interpolate-size: allow-keywords) {
+  details[open] > :not(summary) {
+    animation: isRise var(--mo-slow) var(--mo-ease) both;
+  }
+}
+
+/* ---- Người dùng tắt hiệu ứng ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

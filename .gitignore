@@ -37,8 +37,7 @@ __pycache__/
 # Keep only the root project introduction in Markdown
 *.[mM][dD]
 !/README.md
-
-#Claude for team
+!/DESIGN.md
 !/CLAUDE.md
-!/DESIGN.md 
-!/.claude/rules/*.md
+!/AGENTS/**/*.md
+

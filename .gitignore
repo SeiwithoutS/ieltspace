@@ -44,3 +44,4 @@ __pycache__/
 
 # Claude Code cục bộ (chỉ dùng trên máy từng người)
 /.claude/
+CLAUDE.md

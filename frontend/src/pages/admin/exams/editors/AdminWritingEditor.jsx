@@ -252,7 +252,7 @@ class AdminWritingEditor extends React.Component {
     }
     me._undo = undo;
     var CHIP =
-      "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600";
+      "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600";
     var num = function (v) {
       return /^\d+$/.test(String(v || "").trim()) ? parseInt(v, 10) : 0;
     };
@@ -412,7 +412,7 @@ class AdminWritingEditor extends React.Component {
         name: UNIT + " " + (i + 1),
         range: sub,
         on: on,
-        sub: on ? "#6A5D6C" : "#8E8392",
+        sub: on ? "#6A5D6C" : "#766A79",
         pick: function (e) {
           stop(e);
           self.setState({ t: i });
@@ -978,7 +978,7 @@ class AdminWritingEditor extends React.Component {
       impNoX: !impX,
       impCheckSt: impX
         ? "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF"
-        : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; background: #F3F0EA; border-color: #E6E4E0; color: #B3A9B5; cursor: not-allowed",
+        : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; background: #F3F0EA; border-color: #E6E4E0; color: #766A79; cursor: not-allowed",
       impCheck: function (e) {
         stop(e);
         if (!impX) {
@@ -1005,11 +1005,11 @@ class AdminWritingEditor extends React.Component {
           on = i === impP;
         return {
           text: c,
-          color: dn || on ? "#352637" : "#B3A9B5",
+          color: dn || on ? "#352637" : "#766A79",
           cls: on ? "im-spin" : "",
           icon: dn ? "✓" : "",
           iconSt:
-            "display: flex; align-items: center; justify-content: center; flex: none; width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; font-size: 12px; font-weight: 700; " +
+            "display: flex; align-items: center; justify-content: center; flex: none; width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; font-size: 13px; font-weight: 700; " +
             (dn
               ? "background: #2E7D4F; color: #FFFFFF"
               : on
@@ -1317,7 +1317,7 @@ class AdminWritingEditor extends React.Component {
         {"\n"}
         <style>
           {cssText(
-            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#9A8F9C}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #B3A9B5 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}@keyframes imFade{from{opacity:0}to{opacity:1}}@keyframes imPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes imRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes imSpin{to{transform:rotate(360deg)}}.im-fade{animation:imFade .2s ease-out both}.im-pop{animation:imPop .28s cubic-bezier(.2,.8,.2,1) both}.im-rise{animation:imRise .3s cubic-bezier(.2,.8,.2,1) both}.im-spin{animation:imSpin .8s linear infinite}@media (prefers-reduced-motion: reduce){.im-fade,.im-pop,.im-rise,.im-spin{animation:none}}\n",
+            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#766A79}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #766A79 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}@keyframes imFade{from{opacity:0}to{opacity:1}}@keyframes imPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes imRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes imSpin{to{transform:rotate(360deg)}}.im-fade{animation:imFade .2s ease-out both}.im-pop{animation:imPop .28s cubic-bezier(.2,.8,.2,1) both}.im-rise{animation:imRise .3s cubic-bezier(.2,.8,.2,1) both}.im-spin{animation:imSpin .8s linear infinite}@media (prefers-reduced-motion: reduce){.im-fade,.im-pop,.im-rise,.im-spin{animation:none}}\n",
           )}
         </style>
         {"\n"}
@@ -1443,7 +1443,7 @@ class AdminWritingEditor extends React.Component {
                           </span>
                           <span
                             style={styleOf(
-                              "font-size: 12.5px; color: " + t.sub,
+                              "font-size: 13px; color: " + t.sub,
                             )}
                           >
                             {t.range}
@@ -2070,7 +2070,7 @@ class AdminWritingEditor extends React.Component {
                                   </div>
                                   <div
                                     style={styleOf(
-                                      "font-size: 12.5px; color: #6A5D6C",
+                                      "font-size: 13px; color: #6A5D6C",
                                     )}
                                   >
                                     {
@@ -2123,7 +2123,7 @@ class AdminWritingEditor extends React.Component {
                                 />
                                 <span
                                   style={styleOf(
-                                    "display: flex; color: #8E8392",
+                                    "display: flex; color: #766A79",
                                   )}
                                 >
                                   <svg
@@ -2147,7 +2147,7 @@ class AdminWritingEditor extends React.Component {
                                 </span>
                                 <span
                                   style={styleOf(
-                                    "font-size: 12.5px; color: #706473",
+                                    "font-size: 13px; color: #706473",
                                   )}
                                 >
                                   {
@@ -2175,7 +2175,7 @@ class AdminWritingEditor extends React.Component {
                                     </span>
                                     <span
                                       style={styleOf(
-                                        "font-size: 12.5px; color: #706473",
+                                        "font-size: 13px; color: #706473",
                                       )}
                                     >
                                       {f.size}
@@ -2399,7 +2399,7 @@ class AdminWritingEditor extends React.Component {
                                 </div>
                                 <span
                                   style={styleOf(
-                                    "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBDCD3; color: #B23A24; font-size: 12.5px; font-weight: 600",
+                                    "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBDCD3; color: #B23A24; font-size: 13px; font-weight: 600",
                                   )}
                                 >
                                   {v.impErrN}
@@ -2419,28 +2419,28 @@ class AdminWritingEditor extends React.Component {
                                     <tr>
                                       <th
                                         style={styleOf(
-                                          "text-align: left; padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                          "text-align: left; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                         )}
                                       >
                                         {"Sheet"}
                                       </th>
                                       <th
                                         style={styleOf(
-                                          "text-align: left; padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                          "text-align: left; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                         )}
                                       >
                                         {"Dòng"}
                                       </th>
                                       <th
                                         style={styleOf(
-                                          "text-align: left; padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                          "text-align: left; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                         )}
                                       >
                                         {"Cột"}
                                       </th>
                                       <th
                                         style={styleOf(
-                                          "text-align: left; padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                          "text-align: left; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                         )}
                                       >
                                         {"Lỗi và cách sửa"}
@@ -2467,7 +2467,7 @@ class AdminWritingEditor extends React.Component {
                                           </td>
                                           <td
                                             style={styleOf(
-                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px",
+                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top; font-family: 'IBM Plex Mono', monospace; font-size: 13px",
                                             )}
                                           >
                                             {r.col}
@@ -2588,7 +2588,7 @@ class AdminWritingEditor extends React.Component {
                                       </div>
                                       <div
                                         style={styleOf(
-                                          "font-size: 12.5px; color: #6A5D6C",
+                                          "font-size: 13px; color: #6A5D6C",
                                         )}
                                       >
                                         {t.label}
@@ -2618,7 +2618,7 @@ class AdminWritingEditor extends React.Component {
                                       </div>
                                       <div
                                         style={styleOf(
-                                          "font-size: 12.5px; color: #706473",
+                                          "font-size: 13px; color: #706473",
                                         )}
                                       >
                                         {p.sub}
@@ -2633,7 +2633,7 @@ class AdminWritingEditor extends React.Component {
                                         <React.Fragment key={index}>
                                           <span
                                             style={styleOf(
-                                              "display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 999px; background: #FFFFFF; border: 1.5px solid #E6E4E0; font-size: 12px; font-weight: 600",
+                                              "display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 999px; background: #FFFFFF; border: 1.5px solid #E6E4E0; font-size: 13px; font-weight: 600",
                                             )}
                                           >
                                             {g}
@@ -2839,7 +2839,7 @@ class AdminWritingEditor extends React.Component {
                             v.F.promptSt,
                         )}
                       ></textarea>
-                      <span style={styleOf("font-size: 12px; color: #706473")}>
+                      <span style={styleOf("font-size: 13px; color: #706473")}>
                         {v.F.promptNote}
                       </span>
                     </label>
@@ -2885,7 +2885,7 @@ class AdminWritingEditor extends React.Component {
                                   </span>
                                   <span
                                     style={styleOf(
-                                      "font-size: 12.5px; color: #706473",
+                                      "font-size: 13px; color: #706473",
                                     )}
                                   >
                                     {v.F.imgSize}
@@ -2984,7 +2984,7 @@ class AdminWritingEditor extends React.Component {
                                 >
                                   {"Tải ảnh đề bài lên"}
                                 </span>
-                                <span style={styleOf("font-size: 12.5px")}>
+                                <span style={styleOf("font-size: 13px")}>
                                   {
                                     "JPG, PNG hoặc WebP, tối đa 5 MB. Không bắt buộc."
                                   }

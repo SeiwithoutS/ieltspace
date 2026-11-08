@@ -312,7 +312,7 @@ class AdminGrading extends React.Component {
                     </div>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                       )}
                     >
                       {"7 yêu cầu"}
@@ -326,42 +326,42 @@ class AdminGrading extends React.Component {
                         <tr>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Người học"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Bài"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Kỹ năng"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Tiếp nhận"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Còn trước hạn 72 giờ"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Trạng thái"}
@@ -381,7 +381,7 @@ class AdminGrading extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"thuha@email.com"}
@@ -402,7 +402,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Speaking"}
@@ -422,7 +422,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               <svg
@@ -449,7 +449,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ phân công"}
@@ -468,7 +468,7 @@ class AdminGrading extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"baotran@email.com"}
@@ -489,7 +489,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Speaking"}
@@ -509,7 +509,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               <svg
@@ -536,7 +536,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ phân công"}
@@ -555,7 +555,7 @@ class AdminGrading extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"quocviet@email.com"}
@@ -576,7 +576,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Writing"}
@@ -603,7 +603,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ phân công"}
@@ -644,42 +644,42 @@ class AdminGrading extends React.Component {
                         <tr>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Giáo viên"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Quyền chấm"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Bài chưa chấm / giới hạn"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Chờ chấm lâu nhất"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Nhận bài mới"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           ></th>
                         </tr>
@@ -697,7 +697,7 @@ class AdminGrading extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"lần nhận cuối 23/10 08:10"}
@@ -716,14 +716,14 @@ class AdminGrading extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                                 )}
                               >
                                 {"Writing"}
                               </span>
                               <span
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                                 )}
                               >
                                 {"Speaking"}
@@ -751,7 +751,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Đang nhận"}
@@ -775,7 +775,7 @@ class AdminGrading extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"lần nhận cuối 17/10 10:00"}
@@ -794,7 +794,7 @@ class AdminGrading extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                                 )}
                               >
                                 {"Writing"}
@@ -822,7 +822,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Ngừng nhận bài mới"}
@@ -855,7 +855,7 @@ class AdminGrading extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"lần nhận cuối 22/10 19:20"}
@@ -874,7 +874,7 @@ class AdminGrading extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                                 )}
                               >
                                 {"Writing"}
@@ -902,7 +902,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Đã đủ giới hạn"}
@@ -948,35 +948,35 @@ class AdminGrading extends React.Component {
                         <tr>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Người học"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Bài"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Hủy lúc"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Nguyên nhân"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Hoàn bonus"}
@@ -1020,7 +1020,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               <svg
@@ -1076,7 +1076,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               <svg
@@ -1133,7 +1133,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Không áp dụng"}

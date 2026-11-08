@@ -46,8 +46,8 @@ class ReadingTest extends React.Component {
                 "padding: 0 32px; height: 68px; display: flex; align-items: center; gap: 20px",
               )}
             >
-              <a
-                href={"#"}
+              <button
+                type={"button"} data-ab={""}
                 style={styleOf(
                   "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
                 )}
@@ -63,7 +63,7 @@ class ReadingTest extends React.Component {
                   {"IS"}
                 </span>
                 <span>{"IELTSpace"}</span>
-              </a>
+              </button>
               {"\n"}
               <div
                 style={styleOf(
@@ -85,7 +85,7 @@ class ReadingTest extends React.Component {
               >
                 <span
                   style={styleOf(
-                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                   )}
                 >
                   <svg
@@ -103,16 +103,16 @@ class ReadingTest extends React.Component {
                   </svg>
                   {"42:18"}
                 </span>
-                <a
-                  href={"#"}
+                <button
+                  type={"button"} data-ab={""}
                   style={styleOf(
                     "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Lưu và thoát"}
-                </a>
-                <a
-                  href={"#"}
+                </button>
+                <button
+                  type={"button"} data-ab={""}
                   style={styleOf(
                     "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
@@ -134,7 +134,7 @@ class ReadingTest extends React.Component {
                   >
                     <path d={"M5 12h14M13 6l6 6-6 6"}></path>
                   </svg>
-                </a>
+                </button>
               </div>
             </div>
           </header>
@@ -156,21 +156,21 @@ class ReadingTest extends React.Component {
               >
                 <span
                   style={styleOf(
-                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 600; white-space: nowrap",
                   )}
                 >
                   {"Phần 1"}
                 </span>
                 <span
                   style={styleOf(
-                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                   )}
                 >
                   {"Phần 2"}
                 </span>
                 <span
                   style={styleOf(
-                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                   )}
                 >
                   {"Phần 3"}

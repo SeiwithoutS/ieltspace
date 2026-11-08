@@ -82,14 +82,14 @@ class SubmitDialogs extends React.Component {
                   "display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 6px",
                 )}
               >
-                <a
-                  href={"#"}
+                <button
+                  type={"button"} data-ab={""}
                   style={styleOf(
                     "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Quay lại làm tiếp"}
-                </a>
+                </button>
                 <a
                   href={"ResultLR.dc.html"}
                   style={styleOf(
@@ -194,14 +194,14 @@ class SubmitDialogs extends React.Component {
                   "display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 6px",
                 )}
               >
-                <a
-                  href={"#"}
+                <button
+                  type={"button"} data-ab={""}
                   style={styleOf(
                     "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Ở lại"}
-                </a>
+                </button>
                 <a
                   href={"StudentLanding.dc.html"}
                   style={styleOf(
@@ -253,14 +253,14 @@ class SubmitDialogs extends React.Component {
                   "display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 6px",
                 )}
               >
-                <a
-                  href={"#"}
+                <button
+                  type={"button"} data-ab={""}
                   style={styleOf(
                     "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Quay lại bài làm"}
-                </a>
+                </button>
                 <a
                   href={"MyWS.dc.html"}
                   style={styleOf(
@@ -314,8 +314,8 @@ class SubmitDialogs extends React.Component {
                   "display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 6px",
                 )}
               >
-                <a
-                  href={"#"}
+                <button
+                  type={"button"} data-ab={""}
                   style={styleOf(
                     "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
                   )}
@@ -334,7 +334,7 @@ class SubmitDialogs extends React.Component {
                     <path d={"M12 4v12M7 11l5 5 5-5M4 20h16"}></path>
                   </svg>
                   {"Tải .docx"}
-                </a>
+                </button>
                 <a
                   href={"#gui-yeu-cau"}
                   style={styleOf(
@@ -440,14 +440,14 @@ class SubmitDialogs extends React.Component {
                   "display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 6px",
                 )}
               >
-                <a
-                  href={"#"}
+                <button
+                  type={"button"} data-ab={""}
                   style={styleOf(
                     "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #F1B3A3; box-sizing: border-box; background: #FFFFFF; color: #C0412A; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Hủy"}
-                </a>
+                </button>
                 <a
                   href={"MyWS.dc.html"}
                   style={styleOf(

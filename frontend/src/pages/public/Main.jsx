@@ -141,7 +141,7 @@ class Main extends React.Component {
                             {"IELTS Full Tests"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Đề đầy đủ, chấm band như thi thật"}
                           </span>
@@ -200,7 +200,7 @@ class Main extends React.Component {
                             {"IELTS Listening Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện từng Question Group, nghe lại được"}
                           </span>
@@ -248,7 +248,7 @@ class Main extends React.Component {
                             {"IELTS Reading Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện từng Question Group, có lời giải"}
                           </span>
@@ -293,7 +293,7 @@ class Main extends React.Component {
                             {"IELTS Writing Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện riêng Task 1 hoặc Task 2"}
                           </span>
@@ -345,7 +345,7 @@ class Main extends React.Component {
                             {"IELTS Speaking Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện riêng Part 1, 2 hoặc 3"}
                           </span>
@@ -430,7 +430,7 @@ class Main extends React.Component {
                             {"Writing Task 1 Academic"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
                           </span>
@@ -482,7 +482,7 @@ class Main extends React.Component {
                             {"Writing Task 1 General"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bài mẫu viết thư"}
                           </span>
@@ -527,7 +527,7 @@ class Main extends React.Component {
                             {"Writing Task 2"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bài mẫu bài luận"}
                           </span>
@@ -579,7 +579,7 @@ class Main extends React.Component {
                             {"Speaking Part 1, 2, 3"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bản ghi lời nói, kèm audio mẫu"}
                           </span>
@@ -640,7 +640,7 @@ class Main extends React.Component {
                 {"\n"}
                 <div
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6A5D6C",
+                    "display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6A5D6C",
                   )}
                 >
                   {"\n"}
@@ -2276,7 +2276,7 @@ class Main extends React.Component {
                 >
                   <span
                     style={styleOf(
-                      "font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #706473",
+                      "font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #706473",
                     )}
                   >
                     {"Environment"}
@@ -2346,7 +2346,7 @@ class Main extends React.Component {
                 >
                   <span
                     style={styleOf(
-                      "font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #706473",
+                      "font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #706473",
                     )}
                   >
                     {"Society"}
@@ -2418,7 +2418,7 @@ class Main extends React.Component {
                 >
                   <span
                     style={styleOf(
-                      "font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #706473",
+                      "font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #706473",
                     )}
                   >
                     {"Urban life"}
@@ -2946,7 +2946,7 @@ class Main extends React.Component {
                 {"\n"}
                 <div
                   style={styleOf(
-                    "font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
+                    "font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
                   )}
                 >
                   {"Luyện thi"}
@@ -2983,7 +2983,7 @@ class Main extends React.Component {
                 {"\n"}
                 <div
                   style={styleOf(
-                    "font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
+                    "font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
                   )}
                 >
                   {"Tài khoản"}
@@ -3014,7 +3014,7 @@ class Main extends React.Component {
                 {"\n"}
                 <div
                   style={styleOf(
-                    "font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
+                    "font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
                   )}
                 >
                   {"Hỗ trợ"}

@@ -33,6 +33,13 @@ export default function App() {
    const target = e.target instanceof Element ? e.target : null;
    const theme = target?.closest('[data-theme-toggle]');
    if (theme) { e.preventDefault(); const dark = theme.getAttribute('data-theme-toggle') === 'dark'; document.documentElement.classList.toggle('dark', dark); try { localStorage.setItem('ieltspace-app',JSON.stringify({dark})); } catch {} setRevision(v=>v+1); return; }
+   // Header dropdowns open on hover/focus; on touch there is no hover, so the first tap opens the menu instead of navigating.
+   const openDd = document.querySelector('.bu-dd.is-open');
+   const ddTrigger = target?.closest('.bu-dd > a[aria-haspopup]');
+   if (openDd && !openDd.contains(target)) { openDd.classList.remove('is-open'); openDd.querySelector(':scope > a')?.setAttribute('aria-expanded','false'); }
+   if (ddTrigger && lastPointer !== 'mouse' && lastPointer !== 'keyboard' && !ddTrigger.parentElement!.classList.contains('is-open')) {
+    e.preventDefault(); e.stopPropagation(); ddTrigger.parentElement!.classList.add('is-open'); ddTrigger.setAttribute('aria-expanded','true'); return;
+   }
    const a = target?.closest('a[href]');
    const authAnchor = a?.getAttribute('href');
    if(authAnchor === '#dang-ky' || authAnchor === '#dang-nhap') { e.preventDefault(); e.stopPropagation(); const route=authAnchor === '#dang-ky' ? 'Register' : 'Login'; history.pushState(null,'','#'+route); go(route); return; }
@@ -43,8 +50,15 @@ export default function App() {
    const match = /^([A-Za-z0-9_-]+)\.dc\.html(#.*)?$/.exec(a?.getAttribute('href') || '');
    if (match && !e.defaultPrevented) { e.preventDefault(); history.pushState(null,'','#'+resolve(match[1])); go(match[1]); if(match[2]) setTimeout(()=>document.getElementById(match[2].slice(1))?.scrollIntoView(),100); }
   };
+  let lastPointer = 'mouse';
+  const pointer = (e: PointerEvent) => { lastPointer = e.pointerType || 'mouse'; };
+  const key = (e: KeyboardEvent) => {
+   lastPointer = 'keyboard';
+   if (e.key === 'Escape') { const dd = document.querySelector('.bu-dd.is-open'); if (dd) { dd.classList.remove('is-open'); const t = dd.querySelector<HTMLElement>(':scope > a'); t?.setAttribute('aria-expanded','false'); t?.focus(); } }
+  };
   document.addEventListener('click',click,true); window.addEventListener('popstate',pop);
-  return () => {document.removeEventListener('click',click,true);window.removeEventListener('popstate',pop);};
+  document.addEventListener('pointerdown',pointer,true); document.addEventListener('keydown',key,true);
+  return () => {document.removeEventListener('click',click,true);window.removeEventListener('popstate',pop);document.removeEventListener('pointerdown',pointer,true);document.removeEventListener('keydown',key,true);};
  }, []);
  const publicPage=['Main','Login','Register','ForgotPassword','CheckEmail','ResetPassword'].includes(page);
  const denied=(!auth.user&&!publicPage)||(auth.user?.role!=='ADMIN'&&/^(Admin|Question)/.test(page))||(auth.user?.role!=='TEACHER'&&/^Teacher/.test(page));

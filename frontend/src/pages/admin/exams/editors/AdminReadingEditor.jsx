@@ -2221,7 +2221,7 @@ class AdminReadingEditor extends React.Component {
           }
         };
         var TB =
-          "display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 12.5px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
+          "display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
         var tbSt = function (on, ok) {
           return (
             TB +
@@ -2639,7 +2639,7 @@ class AdminReadingEditor extends React.Component {
           });
         };
         var CHIP =
-          "display: inline-flex; align-items: center; height: 26px; padding: 0 9px; border-radius: 999px; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
+          "display: inline-flex; align-items: center; height: 26px; padding: 0 9px; border-radius: 999px; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
         var chipSt = function (on) {
           return (
             CHIP +
@@ -3229,7 +3229,7 @@ class AdminReadingEditor extends React.Component {
               m.x +
               "%; top: " +
               m.y +
-              "%; transform: translate(-50%, -50%); z-index: 3; min-width: 28px; height: 28px; padding: 0 6px; box-sizing: border-box; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; box-shadow: " +
+              "%; transform: translate(-50%, -50%); z-index: 3; min-width: 28px; height: 28px; padding: 0 6px; box-sizing: border-box; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; box-shadow: " +
               (on ? "0 0 0 3px #2963CC" : "0 1px 3px rgba(53, 38, 55, 0.3)") +
               "; cursor: " +
               (editing ? "move" : "default") +
@@ -3274,7 +3274,7 @@ class AdminReadingEditor extends React.Component {
           ? "Bấm vào chỗ cần chú thích trên hình: mũi tên chỉ vào đó và nhãn số hiện bên cạnh. Kéo nhãn số ra chỗ trống, kéo chấm tròn để đổi điểm mũi tên."
           : "";
         var CH =
-          "display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
+          "display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
         G.drows = (cg.marks || []).map(function (m, k) {
           var ansv = (cg.ans || [])[k],
             hasA = m.length > 3;
@@ -3949,7 +3949,7 @@ class AdminReadingEditor extends React.Component {
             ? "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
             : ""),
         ansSt:
-          "flex: none; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; height: 26px; line-height: 24px; padding: 0 10px; box-sizing: border-box; border-radius: 999px; font-size: 12.5px; font-weight: 600; " +
+          "flex: none; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; height: 26px; line-height: 24px; padding: 0 10px; box-sizing: border-box; border-radius: 999px; font-size: 13px; font-weight: 600; " +
           (info.ans
             ? "background: #F1F8F3; color: #2E7D4F; border: 1px solid #BFDCC9"
             : "color: #9A8F9C; border: 1px dashed #D6D4D0"),
@@ -3957,7 +3957,7 @@ class AdminReadingEditor extends React.Component {
           ? "Đoạn " + LET[e.para] + (nk ? " · " + nk + " key" : "")
           : "Chưa gán",
         stateSt:
-          "flex: none; width: 92px; text-align: right; font-size: 12.5px; font-weight: 600; white-space: nowrap; color: " +
+          "flex: none; width: 92px; text-align: right; font-size: 13px; font-weight: 600; white-space: nowrap; color: " +
           (hasP ? (nk ? "#2E6A48" : "#2257B8") : "#9A8F9C"),
         open: function (ev) {
           stop(ev);
@@ -4469,7 +4469,7 @@ class AdminReadingEditor extends React.Component {
       impNoX: !impX,
       impCheckSt: impX
         ? "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF"
-        : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; background: #F3F0EA; border-color: #E6E4E0; color: #B3A9B5; cursor: not-allowed",
+        : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; background: #F3F0EA; border-color: #E6E4E0; color: #766A79; cursor: not-allowed",
       // tệp thật: đọc 2 byte đầu, xlsx là tệp zip nên phải bắt đầu bằng PK; không phải thì báo hỏng (UC24 E1)
       impCheck: function (e) {
         stop(e);
@@ -4497,11 +4497,11 @@ class AdminReadingEditor extends React.Component {
           on = i === impP;
         return {
           text: c,
-          color: dn || on ? "#352637" : "#B3A9B5",
+          color: dn || on ? "#352637" : "#766A79",
           cls: on ? "im-spin" : "",
           icon: dn ? "✓" : "",
           iconSt:
-            "display: flex; align-items: center; justify-content: center; flex: none; width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; font-size: 12px; font-weight: 700; " +
+            "display: flex; align-items: center; justify-content: center; flex: none; width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; font-size: 13px; font-weight: 700; " +
             (dn
               ? "background: #2E7D4F; color: #FFFFFF"
               : on
@@ -4610,7 +4610,7 @@ class AdminReadingEditor extends React.Component {
           : "color: #6A5D6C; border: 1.5px solid transparent"),
       expDone: nDone + "/" + nQ,
       expBadgeSt:
-        "font-size: 12px; font-weight: 600; padding: 0 8px; border-radius: 999px; line-height: 20px; " +
+        "font-size: 13px; font-weight: 600; padding: 0 8px; border-radius: 999px; line-height: 20px; " +
         (nQ && nDone === nQ
           ? "background: #DCEDE2; color: #2E6A48"
           : "background: #FBEDBF; color: #7A5A0E"),
@@ -4633,7 +4633,7 @@ class AdminReadingEditor extends React.Component {
           : "Bấm Tạo sẽ chuyển sang chế độ Chỉnh sửa; bấm Hủy để bỏ nếu chưa muốn lưu.",
       counter: total + "/40 câu",
       counterSt:
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; " +
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; " +
         (total === 40
           ? "background: #DCEDE2; color: #2E6A48"
           : "background: #FBEDBF; color: #7A5A0E"),
@@ -4770,12 +4770,12 @@ class AdminReadingEditor extends React.Component {
       typeText: GT[0],
       typeTitle: "Hình thức " + GT[0] + (GT[3] ? ": " + GT[3] : ""),
       typeSt:
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; background: " +
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; background: " +
         GT[1] +
         "; color: " +
         GT[2],
       modeSt:
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; " +
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; " +
         (editing
           ? "background: #E3ECFD; color: #2257B8"
           : "background: #F3F0EA; color: #6A5D6C"),
@@ -4891,7 +4891,7 @@ class AdminReadingEditor extends React.Component {
         {"\n"}
         <style>
           {cssText(
-            '\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#9A8F9C}.tgh,.tga{opacity:0;transition:opacity .15s}.tgh:hover,.tgh.on,.tgh.op,.tga:hover,.tga:focus-visible{opacity:1}.qr,.qm,.qb{display:grid;gap:6px 8px;align-items:center}.qr{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ." ". qt ."}.qm{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ."}.qb{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qa qd" ". qt ."}.qn{grid-area:qn}.qq{grid-area:qq;min-width:0}.qa{grid-area:qa;min-width:0}.qt{grid-area:qt;min-width:0}.qd{grid-area:qd}.qed{container:qed / inline-size}@container qed (min-width: 720px){.qr{grid-template-columns:30px minmax(0,1fr) 200px 240px 30px;grid-template-areas:"qn qq qa qt qd"}.qm{grid-template-columns:30px minmax(0,1fr) 180px 30px;grid-template-areas:"qn qq qa qd"}.qb{grid-template-columns:30px 240px 260px minmax(0,1fr) 30px;grid-template-areas:"qn qa qt . qd"}.qr,.qm,.qb{align-items:start}.qn,.qd{margin-top:4px}.qt{margin-top:2px}}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #B3A9B5 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}@keyframes imFade{from{opacity:0}to{opacity:1}}@keyframes imPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes imRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes imSpin{to{transform:rotate(360deg)}}.im-fade{animation:imFade .2s ease-out both}.im-pop{animation:imPop .28s cubic-bezier(.2,.8,.2,1) both}.im-rise{animation:imRise .3s cubic-bezier(.2,.8,.2,1) both}.im-spin{animation:imSpin .8s linear infinite}@media (prefers-reduced-motion: reduce){.im-fade,.im-pop,.im-rise,.im-spin{animation:none}}\n',
+            '\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#766A79}.tgh,.tga{opacity:0;transition:opacity .15s}.tgh:hover,.tgh.on,.tgh.op,.tga:hover,.tga:focus-visible{opacity:1}.qr,.qm,.qb{display:grid;gap:6px 8px;align-items:center}.qr{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ." ". qt ."}.qm{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ."}.qb{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qa qd" ". qt ."}.qn{grid-area:qn}.qq{grid-area:qq;min-width:0}.qa{grid-area:qa;min-width:0}.qt{grid-area:qt;min-width:0}.qd{grid-area:qd}.qed{container:qed / inline-size}@container qed (min-width: 720px){.qr{grid-template-columns:30px minmax(0,1fr) 200px 240px 30px;grid-template-areas:"qn qq qa qt qd"}.qm{grid-template-columns:30px minmax(0,1fr) 180px 30px;grid-template-areas:"qn qq qa qd"}.qb{grid-template-columns:30px 240px 260px minmax(0,1fr) 30px;grid-template-areas:"qn qa qt . qd"}.qr,.qm,.qb{align-items:start}.qn,.qd{margin-top:4px}.qt{margin-top:2px}}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #766A79 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}@keyframes imFade{from{opacity:0}to{opacity:1}}@keyframes imPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes imRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes imSpin{to{transform:rotate(360deg)}}.im-fade{animation:imFade .2s ease-out both}.im-pop{animation:imPop .28s cubic-bezier(.2,.8,.2,1) both}.im-rise{animation:imRise .3s cubic-bezier(.2,.8,.2,1) both}.im-spin{animation:imSpin .8s linear infinite}@media (prefers-reduced-motion: reduce){.im-fade,.im-pop,.im-rise,.im-spin{animation:none}}\n',
           )}
         </style>
         {"\n"}
@@ -5017,7 +5017,7 @@ class AdminReadingEditor extends React.Component {
                           </span>
                           <span
                             style={styleOf(
-                              "font-size: 12.5px; color: " + t.sub,
+                              "font-size: 13px; color: " + t.sub,
                             )}
                           >
                             {t.range}
@@ -5628,7 +5628,7 @@ class AdminReadingEditor extends React.Component {
                                   </div>
                                   <div
                                     style={styleOf(
-                                      "font-size: 12.5px; color: #6A5D6C",
+                                      "font-size: 13px; color: #6A5D6C",
                                     )}
                                   >
                                     {
@@ -5681,7 +5681,7 @@ class AdminReadingEditor extends React.Component {
                                 />
                                 <span
                                   style={styleOf(
-                                    "display: flex; color: #8E8392",
+                                    "display: flex; color: #766A79",
                                   )}
                                 >
                                   <svg
@@ -5705,7 +5705,7 @@ class AdminReadingEditor extends React.Component {
                                 </span>
                                 <span
                                   style={styleOf(
-                                    "font-size: 12.5px; color: #706473",
+                                    "font-size: 13px; color: #706473",
                                   )}
                                 >
                                   {
@@ -5733,7 +5733,7 @@ class AdminReadingEditor extends React.Component {
                                     </span>
                                     <span
                                       style={styleOf(
-                                        "font-size: 12.5px; color: #706473",
+                                        "font-size: 13px; color: #706473",
                                       )}
                                     >
                                       {f.size}
@@ -5958,7 +5958,7 @@ class AdminReadingEditor extends React.Component {
                                 </div>
                                 <span
                                   style={styleOf(
-                                    "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBDCD3; color: #B23A24; font-size: 12.5px; font-weight: 600",
+                                    "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBDCD3; color: #B23A24; font-size: 13px; font-weight: 600",
                                   )}
                                 >
                                   {v.impErrN}
@@ -5978,28 +5978,28 @@ class AdminReadingEditor extends React.Component {
                                     <tr>
                                       <th
                                         style={styleOf(
-                                          "text-align: left; padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                          "text-align: left; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                         )}
                                       >
                                         {"Sheet"}
                                       </th>
                                       <th
                                         style={styleOf(
-                                          "text-align: left; padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                          "text-align: left; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                         )}
                                       >
                                         {"Dòng"}
                                       </th>
                                       <th
                                         style={styleOf(
-                                          "text-align: left; padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                          "text-align: left; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                         )}
                                       >
                                         {"Cột"}
                                       </th>
                                       <th
                                         style={styleOf(
-                                          "text-align: left; padding: 10px 14px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                          "text-align: left; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                         )}
                                       >
                                         {"Lỗi và cách sửa"}
@@ -6026,7 +6026,7 @@ class AdminReadingEditor extends React.Component {
                                           </td>
                                           <td
                                             style={styleOf(
-                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px",
+                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top; font-family: 'IBM Plex Mono', monospace; font-size: 13px",
                                             )}
                                           >
                                             {r.col}
@@ -6147,7 +6147,7 @@ class AdminReadingEditor extends React.Component {
                                       </div>
                                       <div
                                         style={styleOf(
-                                          "font-size: 12.5px; color: #6A5D6C",
+                                          "font-size: 13px; color: #6A5D6C",
                                         )}
                                       >
                                         {t.label}
@@ -6177,7 +6177,7 @@ class AdminReadingEditor extends React.Component {
                                       </div>
                                       <div
                                         style={styleOf(
-                                          "font-size: 12.5px; color: #706473",
+                                          "font-size: 13px; color: #706473",
                                         )}
                                       >
                                         {p.sub}
@@ -6192,7 +6192,7 @@ class AdminReadingEditor extends React.Component {
                                         <React.Fragment key={index}>
                                           <span
                                             style={styleOf(
-                                              "display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 999px; background: #FFFFFF; border: 1.5px solid #E6E4E0; font-size: 12px; font-weight: 600",
+                                              "display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 999px; background: #FFFFFF; border: 1.5px solid #E6E4E0; font-size: 13px; font-weight: 600",
                                             )}
                                           >
                                             {g}
@@ -6763,7 +6763,7 @@ class AdminReadingEditor extends React.Component {
                                   <>
                                     <div
                                       style={styleOf(
-                                        "font-size: 12.5px; color: #706473; padding: 8px 12px; border-radius: 10px; background: #F3F0EA",
+                                        "font-size: 13px; color: #706473; padding: 8px 12px; border-radius: 10px; background: #F3F0EA",
                                       )}
                                     >
                                       {v.xHint}
@@ -6804,7 +6804,7 @@ class AdminReadingEditor extends React.Component {
                                               <>
                                                 <span
                                                   style={styleOf(
-                                                    "font-size: 12px; font-weight: 600; color: #2963CC",
+                                                    "font-size: 13px; font-weight: 600; color: #2963CC",
                                                   )}
                                                 >
                                                   {"Đáp án câu " + xp.refs}
@@ -6950,7 +6950,7 @@ class AdminReadingEditor extends React.Component {
                                     </a>
                                     <div
                                       style={styleOf(
-                                        "font-size: 12.5px; color: #706473",
+                                        "font-size: 13px; color: #706473",
                                       )}
                                     >
                                       {
@@ -7165,7 +7165,7 @@ class AdminReadingEditor extends React.Component {
                                               <>
                                                 <div
                                                   style={styleOf(
-                                                    "font-size: 12.5px; color: #706473",
+                                                    "font-size: 13px; color: #706473",
                                                   )}
                                                 >
                                                   {v.E.hint + " "}
@@ -7197,7 +7197,7 @@ class AdminReadingEditor extends React.Component {
                                             </span>
                                             <span
                                               style={styleOf(
-                                                "font-size: 12.5px; color: #706473",
+                                                "font-size: 13px; color: #706473",
                                               )}
                                             >
                                               {
@@ -7273,7 +7273,7 @@ class AdminReadingEditor extends React.Component {
                                               <>
                                                 <span
                                                   style={styleOf(
-                                                    "font-size: 12.5px; color: #B23A24",
+                                                    "font-size: 13px; color: #B23A24",
                                                   )}
                                                 >
                                                   {v.E.warn}
@@ -7513,7 +7513,7 @@ class AdminReadingEditor extends React.Component {
                                         </span>
                                         <span
                                           style={styleOf(
-                                            "font-size: 12.5px; color: #706473; white-space: nowrap",
+                                            "font-size: 13px; color: #706473; white-space: nowrap",
                                           )}
                                         >
                                           {g.form}
@@ -7713,7 +7713,7 @@ class AdminReadingEditor extends React.Component {
                                               </span>
                                               <span
                                                 style={styleOf(
-                                                  "display: flex; align-items: center; gap: 4px; font-size: 12.5px; color: #706473",
+                                                  "display: flex; align-items: center; gap: 4px; font-size: 13px; color: #706473",
                                                 )}
                                               >
                                                 {v.G.instrNote}
@@ -7937,7 +7937,7 @@ class AdminReadingEditor extends React.Component {
                                                                 </div>
                                                                 <span
                                                                   style={styleOf(
-                                                                    "font-size: 12px; color: #706473",
+                                                                    "font-size: 13px; color: #706473",
                                                                   )}
                                                                 >
                                                                   {
@@ -8159,7 +8159,7 @@ class AdminReadingEditor extends React.Component {
                                                   </div>
                                                   <span
                                                     style={styleOf(
-                                                      "font-size: 12px; color: #706473",
+                                                      "font-size: 13px; color: #706473",
                                                     )}
                                                   >
                                                     {
@@ -8235,7 +8235,7 @@ class AdminReadingEditor extends React.Component {
                                                                         >
                                                                           <span
                                                                             style={styleOf(
-                                                                              "display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 6px; box-sizing: border-box; border-radius: 12px; background: #E3ECFD; color: #2963CC; font-size: 12.5px; font-weight: 700",
+                                                                              "display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 6px; box-sizing: border-box; border-radius: 12px; background: #E3ECFD; color: #2963CC; font-size: 13px; font-weight: 700",
                                                                             )}
                                                                           >
                                                                             {
@@ -8278,7 +8278,7 @@ class AdminReadingEditor extends React.Component {
                                                       </span>
                                                       <span
                                                         style={styleOf(
-                                                          "font-size: 12.5px; color: #706473",
+                                                          "font-size: 13px; color: #706473",
                                                         )}
                                                       >
                                                         {"Bấm chữ cái để đánh dấu từ đúng (tối đa " +
@@ -8759,7 +8759,7 @@ class AdminReadingEditor extends React.Component {
                                                                       </div>
                                                                       <span
                                                                         style={styleOf(
-                                                                          "font-size: 12px; color: #706473",
+                                                                          "font-size: 13px; color: #706473",
                                                                         )}
                                                                       >
                                                                         {
@@ -8898,7 +8898,7 @@ class AdminReadingEditor extends React.Component {
                                                 </span>
                                                 <span
                                                   style={styleOf(
-                                                    "font-size: 12.5px; color: #706473",
+                                                    "font-size: 13px; color: #706473",
                                                   )}
                                                 >
                                                   {
@@ -8915,7 +8915,7 @@ class AdminReadingEditor extends React.Component {
                                                 >
                                                   <span
                                                     style={styleOf(
-                                                      "font-size: 12.5px; font-weight: 700; color: #4B3D4D; margin-right: 2px",
+                                                      "font-size: 13px; font-weight: 700; color: #4B3D4D; margin-right: 2px",
                                                     )}
                                                   >
                                                     {v.G.tSelLab}
@@ -9434,7 +9434,7 @@ class AdminReadingEditor extends React.Component {
                                                                   </div>
                                                                   <span
                                                                     style={styleOf(
-                                                                      "font-size: 12px; color: #706473",
+                                                                      "font-size: 13px; color: #706473",
                                                                     )}
                                                                   >
                                                                     {
@@ -9573,7 +9573,7 @@ class AdminReadingEditor extends React.Component {
                                                 </div>
                                                 <span
                                                   style={styleOf(
-                                                    "font-size: 12.5px; color: #706473",
+                                                    "font-size: 13px; color: #706473",
                                                   )}
                                                 >
                                                   {v.G.modeHint}
@@ -9597,7 +9597,7 @@ class AdminReadingEditor extends React.Component {
                                                 </span>
                                                 <span
                                                   style={styleOf(
-                                                    "font-size: 12.5px; color: #706473",
+                                                    "font-size: 13px; color: #706473",
                                                   )}
                                                 >
                                                   {
@@ -9778,7 +9778,7 @@ class AdminReadingEditor extends React.Component {
                                                                   >
                                                                     <span
                                                                       style={styleOf(
-                                                                        "font-size: 12px; font-weight: 700; color: #4B3D4D",
+                                                                        "font-size: 13px; font-weight: 700; color: #4B3D4D",
                                                                       )}
                                                                     >
                                                                       {nd.tag}
@@ -9864,7 +9864,7 @@ class AdminReadingEditor extends React.Component {
                                                                       >
                                                                         <span
                                                                           style={styleOf(
-                                                                            "font-size: 12px; font-weight: 700; color: #4B3D4D",
+                                                                            "font-size: 13px; font-weight: 700; color: #4B3D4D",
                                                                           )}
                                                                         >
                                                                           {
@@ -9970,7 +9970,7 @@ class AdminReadingEditor extends React.Component {
                                                                       >
                                                                         <span
                                                                           style={styleOf(
-                                                                            "font-size: 12px; font-weight: 700; color: #4B3D4D",
+                                                                            "font-size: 13px; font-weight: 700; color: #4B3D4D",
                                                                           )}
                                                                         >
                                                                           {
@@ -10247,7 +10247,7 @@ class AdminReadingEditor extends React.Component {
                                                                         >
                                                                           <span
                                                                             style={styleOf(
-                                                                              "display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E3ECFD; color: #2257B8; font-size: 11.5px; font-weight: 700",
+                                                                              "display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E3ECFD; color: #2257B8; font-size: 12px; font-weight: 700",
                                                                             )}
                                                                           >
                                                                             {
@@ -10323,7 +10323,7 @@ class AdminReadingEditor extends React.Component {
                                                                         >
                                                                           <span
                                                                             style={styleOf(
-                                                                              "display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E3ECFD; color: #2257B8; font-size: 11.5px; font-weight: 700",
+                                                                              "display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E3ECFD; color: #2257B8; font-size: 12px; font-weight: 700",
                                                                             )}
                                                                           >
                                                                             {
@@ -10537,7 +10537,7 @@ class AdminReadingEditor extends React.Component {
                                                                   </div>
                                                                   <span
                                                                     style={styleOf(
-                                                                      "font-size: 12px; color: #706473",
+                                                                      "font-size: 13px; color: #706473",
                                                                     )}
                                                                   >
                                                                     {
@@ -10677,7 +10677,7 @@ class AdminReadingEditor extends React.Component {
                                                   <>
                                                     <div
                                                       style={styleOf(
-                                                        "font-size: 12.5px; color: #706473",
+                                                        "font-size: 13px; color: #706473",
                                                       )}
                                                     >
                                                       {v.G.imgName +
@@ -11068,7 +11068,7 @@ class AdminReadingEditor extends React.Component {
                                                                 </div>
                                                                 <span
                                                                   style={styleOf(
-                                                                    "font-size: 12px; color: #706473",
+                                                                    "font-size: 13px; color: #706473",
                                                                   )}
                                                                 >
                                                                   {
@@ -11381,7 +11381,7 @@ class AdminReadingEditor extends React.Component {
                                                     <>
                                                       <div
                                                         style={styleOf(
-                                                          "font-size: 12.5px; color: #706473",
+                                                          "font-size: 13px; color: #706473",
                                                         )}
                                                       >
                                                         {
@@ -11960,7 +11960,7 @@ class AdminReadingEditor extends React.Component {
                                                 )}
                                                 <div
                                                   style={styleOf(
-                                                    "font-size: 12.5px; color: #706473",
+                                                    "font-size: 13px; color: #706473",
                                                   )}
                                                 >
                                                   {
@@ -12155,7 +12155,7 @@ class AdminReadingEditor extends React.Component {
                                                 </a>
                                                 <div
                                                   style={styleOf(
-                                                    "font-size: 12.5px; color: #706473",
+                                                    "font-size: 13px; color: #706473",
                                                   )}
                                                 >
                                                   {"Cụm này chiếm " +
@@ -12493,7 +12493,7 @@ class AdminReadingEditor extends React.Component {
                                             </span>
                                             <span
                                               style={styleOf(
-                                                "font-size: 12px; color: #706473",
+                                                "font-size: 13px; color: #706473",
                                               )}
                                             >
                                               {ty.form}

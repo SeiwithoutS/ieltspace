@@ -229,7 +229,7 @@ class AdminSamples extends React.Component {
       q = (s.q || "").trim().toLowerCase();
     function chipSt(bg, fg) {
       return (
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: " +
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: " +
         bg +
         "; color: " +
         fg
@@ -519,7 +519,7 @@ class AdminSamples extends React.Component {
         {"\n"}
         <style>
           {cssText(
-            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\n@keyframes isFade{from{opacity:0}to{opacity:1}}@keyframes isPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes isDrop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}@keyframes isToast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes isFlash{0%{background:#E3ECFD}100%{background:transparent}}@keyframes isSpin{to{transform:rotate(360deg)}}@keyframes isGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes isCheck{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}@keyframes isRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.an-fade{animation:isFade .2s ease-out both}.an-pop{animation:isPop .28s cubic-bezier(.2,.8,.2,1) both}.an-drop{animation:isDrop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.an-toast{animation:isToast .3s cubic-bezier(.2,.8,.2,1) both}.an-check{animation:isCheck .45s cubic-bezier(.2,.8,.2,1) both}.an-rise{animation:isRise .32s cubic-bezier(.2,.8,.2,1) both}.an-flash>td{animation:isFlash 2s ease-out}.an-spin{animation:isSpin .8s linear infinite}a,label,input,textarea,select,[role=button]{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .2s ease,transform .18s ease,opacity .16s ease,outline-color .16s ease}.lift:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(53,38,55,.05),0 12px 28px rgba(53,38,55,.10)}.press:active{transform:scale(.97)}.hov>tbody>tr{transition:background-color .15s ease}.hov>tbody>tr:hover{background:#FDFCF8}.thumb-h{transition:transform .2s ease,box-shadow .2s ease}.thumb-h:hover{transform:translateY(-3px) rotate(-1deg)}input:focus,textarea:focus,select:focus{outline:none;border-color:#2963CC !important;box-shadow:0 0 0 3px rgba(41,99,204,.16)}@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}input::placeholder,textarea::placeholder{color:#9A8F9C}.rowh:hover{background:#FDFCF8}\n",
+            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\n@keyframes isFade{from{opacity:0}to{opacity:1}}@keyframes isPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes isDrop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}@keyframes isToast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes isFlash{0%{background:#E3ECFD}100%{background:transparent}}@keyframes isSpin{to{transform:rotate(360deg)}}@keyframes isGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes isCheck{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}@keyframes isRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.an-fade{animation:isFade .2s ease-out both}.an-pop{animation:isPop .28s cubic-bezier(.2,.8,.2,1) both}.an-drop{animation:isDrop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.an-toast{animation:isToast .3s cubic-bezier(.2,.8,.2,1) both}.an-check{animation:isCheck .45s cubic-bezier(.2,.8,.2,1) both}.an-rise{animation:isRise .32s cubic-bezier(.2,.8,.2,1) both}.an-flash>td{animation:isFlash 2s ease-out}.an-spin{animation:isSpin .8s linear infinite}a,label,input,textarea,select,[role=button]{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .2s ease,transform .18s ease,opacity .16s ease,outline-color .16s ease}.lift:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(53,38,55,.05),0 12px 28px rgba(53,38,55,.10)}.press:active{transform:scale(.97)}.hov>tbody>tr{transition:background-color .15s ease}.hov>tbody>tr:hover{background:#FDFCF8}.thumb-h{transition:transform .2s ease,box-shadow .2s ease}.thumb-h:hover{transform:translateY(-3px) rotate(-1deg)}input:focus,textarea:focus,select:focus{outline:none;border-color:#2963CC !important;box-shadow:0 0 0 3px rgba(41,99,204,.16)}@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}input::placeholder,textarea::placeholder{color:#766A79}.rowh:hover{background:#FDFCF8}\n",
           )}
         </style>
         {"\n"}
@@ -648,7 +648,7 @@ class AdminSamples extends React.Component {
                           <React.Fragment key={index}>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: " +
+                                "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: " +
                                   c.bg +
                                   "; color: " +
                                   c.fg,
@@ -701,7 +701,7 @@ class AdminSamples extends React.Component {
                           <React.Fragment key={index}>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: " +
+                                "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: " +
                                   c.bg +
                                   "; color: " +
                                   c.fg,
@@ -754,7 +754,7 @@ class AdminSamples extends React.Component {
                           <React.Fragment key={index}>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: " +
+                                "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: " +
                                   c.bg +
                                   "; color: " +
                                   c.fg,
@@ -862,7 +862,7 @@ class AdminSamples extends React.Component {
                           <div style={styleOf("min-width: 820px")}>
                             <div
                               style={styleOf(
-                                "display: grid; grid-template-columns: minmax(200px, 2.6fr) minmax(120px, 1.2fr) 64px 90px 100px 100px 148px; gap: 12px; padding: 12px 20px; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; font-size: 12.5px; font-weight: 600; color: #706473",
+                                "display: grid; grid-template-columns: minmax(200px, 2.6fr) minmax(120px, 1.2fr) 64px 90px 100px 100px 148px; gap: 12px; padding: 12px 20px; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600; color: #706473",
                               )}
                             >
                               <span>{"Tiêu đề"}</span>
@@ -890,7 +890,7 @@ class AdminSamples extends React.Component {
                                     </span>
                                     <span
                                       style={styleOf(
-                                        "font-size: 12.5px; color: #706473",
+                                        "font-size: 13px; color: #706473",
                                       )}
                                     >
                                       {g.count}
@@ -927,7 +927,7 @@ class AdminSamples extends React.Component {
                                           </span>
                                           <span
                                             style={styleOf(
-                                              "font-size: 12.5px; color: #706473",
+                                              "font-size: 13px; color: #706473",
                                             )}
                                           >
                                             {r.topic}
@@ -1030,7 +1030,7 @@ class AdminSamples extends React.Component {
                           <div style={styleOf("min-width: 820px")}>
                             <div
                               style={styleOf(
-                                "display: grid; grid-template-columns: minmax(200px, 2.6fr) minmax(120px, 1.2fr) 64px 90px 100px 100px 148px; gap: 12px; padding: 12px 20px; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; font-size: 12.5px; font-weight: 600; color: #706473",
+                                "display: grid; grid-template-columns: minmax(200px, 2.6fr) minmax(120px, 1.2fr) 64px 90px 100px 100px 148px; gap: 12px; padding: 12px 20px; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600; color: #706473",
                               )}
                             >
                               <span>{"Tiêu đề"}</span>
@@ -1058,7 +1058,7 @@ class AdminSamples extends React.Component {
                                     </span>
                                     <span
                                       style={styleOf(
-                                        "font-size: 12.5px; color: #706473",
+                                        "font-size: 13px; color: #706473",
                                       )}
                                     >
                                       {g.count}
@@ -1095,7 +1095,7 @@ class AdminSamples extends React.Component {
                                           </span>
                                           <span
                                             style={styleOf(
-                                              "font-size: 12.5px; color: #706473",
+                                              "font-size: 13px; color: #706473",
                                             )}
                                           >
                                             {r.topic}

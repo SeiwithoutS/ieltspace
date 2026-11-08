@@ -143,7 +143,7 @@ class StudentHome extends React.Component {
                             {"IELTS Full Tests"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Đề đầy đủ, chấm band như thi thật"}
                           </span>
@@ -202,7 +202,7 @@ class StudentHome extends React.Component {
                             {"IELTS Listening Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện từng Question Group, nghe lại được"}
                           </span>
@@ -250,7 +250,7 @@ class StudentHome extends React.Component {
                             {"IELTS Reading Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện từng Question Group, có lời giải"}
                           </span>
@@ -295,7 +295,7 @@ class StudentHome extends React.Component {
                             {"IELTS Writing Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện riêng Task 1 hoặc Task 2"}
                           </span>
@@ -347,7 +347,7 @@ class StudentHome extends React.Component {
                             {"IELTS Speaking Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện riêng Part 1, 2 hoặc 3"}
                           </span>
@@ -432,7 +432,7 @@ class StudentHome extends React.Component {
                             {"Writing Task 1 Academic"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
                           </span>
@@ -484,7 +484,7 @@ class StudentHome extends React.Component {
                             {"Writing Task 1 General"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bài mẫu viết thư"}
                           </span>
@@ -529,7 +529,7 @@ class StudentHome extends React.Component {
                             {"Writing Task 2"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bài mẫu bài luận"}
                           </span>
@@ -581,7 +581,7 @@ class StudentHome extends React.Component {
                             {"Speaking Part 1, 2, 3"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bản ghi lời nói, kèm audio mẫu"}
                           </span>
@@ -637,7 +637,7 @@ class StudentHome extends React.Component {
                   </svg>
                   <NotificationBadge
                     style={styleOf(
-                      "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
+                      "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
                     )}
                   />
                 </a>
@@ -1222,7 +1222,7 @@ class StudentHome extends React.Component {
                       </div>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
                         )}
                       >
                         {"+1.0 so với lần đầu"}
@@ -1237,7 +1237,7 @@ class StudentHome extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "position: absolute; left: -36px; top: -10px; font-size: 12px; color: #8E8392",
+                              "position: absolute; left: -36px; top: -10px; font-size: 13px; color: #766A79",
                             )}
                           >
                             {"4.0"}
@@ -1250,7 +1250,7 @@ class StudentHome extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "position: absolute; left: -36px; top: -10px; font-size: 12px; color: #8E8392",
+                              "position: absolute; left: -36px; top: -10px; font-size: 13px; color: #766A79",
                             )}
                           >
                             {"5.0"}
@@ -1263,7 +1263,7 @@ class StudentHome extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "position: absolute; left: -36px; top: -10px; font-size: 12px; color: #8E8392",
+                              "position: absolute; left: -36px; top: -10px; font-size: 13px; color: #766A79",
                             )}
                           >
                             {"6.0"}
@@ -1276,7 +1276,7 @@ class StudentHome extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "position: absolute; left: -36px; top: -10px; font-size: 12px; color: #8E8392",
+                              "position: absolute; left: -36px; top: -10px; font-size: 13px; color: #766A79",
                             )}
                           >
                             {"7.0"}
@@ -1289,7 +1289,7 @@ class StudentHome extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "position: absolute; left: -36px; top: -10px; font-size: 12px; color: #8E8392",
+                              "position: absolute; left: -36px; top: -10px; font-size: 13px; color: #766A79",
                             )}
                           >
                             {"8.0"}
@@ -1303,7 +1303,7 @@ class StudentHome extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "position: absolute; right: 0; top: -24px; font-size: 12px; font-weight: 600; color: " +
+                              "position: absolute; right: 0; top: -24px; font-size: 13px; font-weight: 600; color: " +
                                 v.accent,
                             )}
                           >
@@ -1322,7 +1322,7 @@ class StudentHome extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "font-size: 12.5px; font-weight: 600",
+                                "font-size: 13px; font-weight: 600",
                               )}
                             >
                               {"5.5"}
@@ -1340,7 +1340,7 @@ class StudentHome extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "font-size: 12.5px; font-weight: 600",
+                                "font-size: 13px; font-weight: 600",
                               )}
                             >
                               {"6.0"}
@@ -1358,7 +1358,7 @@ class StudentHome extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "font-size: 12.5px; font-weight: 600",
+                                "font-size: 13px; font-weight: 600",
                               )}
                             >
                               {"5.5"}
@@ -1376,7 +1376,7 @@ class StudentHome extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "font-size: 12.5px; font-weight: 600",
+                                "font-size: 13px; font-weight: 600",
                               )}
                             >
                               {"6.5"}
@@ -1394,7 +1394,7 @@ class StudentHome extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "font-size: 12.5px; font-weight: 600",
+                                "font-size: 13px; font-weight: 600",
                               )}
                             >
                               {"6.0"}
@@ -1412,7 +1412,7 @@ class StudentHome extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "font-size: 12.5px; font-weight: 600",
+                                "font-size: 13px; font-weight: 600",
                               )}
                             >
                               {"7.0"}
@@ -1430,7 +1430,7 @@ class StudentHome extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "font-size: 12.5px; font-weight: 600",
+                                "font-size: 13px; font-weight: 600",
                               )}
                             >
                               {"6.5"}
@@ -1450,49 +1450,49 @@ class StudentHome extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "flex: 1; text-align: center; font-size: 12.5px; color: #706473",
+                            "flex: 1; text-align: center; font-size: 13px; color: #706473",
                           )}
                         >
                           {"Test 01"}
                         </span>
                         <span
                           style={styleOf(
-                            "flex: 1; text-align: center; font-size: 12.5px; color: #706473",
+                            "flex: 1; text-align: center; font-size: 13px; color: #706473",
                           )}
                         >
                           {"Test 02"}
                         </span>
                         <span
                           style={styleOf(
-                            "flex: 1; text-align: center; font-size: 12.5px; color: #706473",
+                            "flex: 1; text-align: center; font-size: 13px; color: #706473",
                           )}
                         >
                           {"Test 03"}
                         </span>
                         <span
                           style={styleOf(
-                            "flex: 1; text-align: center; font-size: 12.5px; color: #706473",
+                            "flex: 1; text-align: center; font-size: 13px; color: #706473",
                           )}
                         >
                           {"Test 04"}
                         </span>
                         <span
                           style={styleOf(
-                            "flex: 1; text-align: center; font-size: 12.5px; color: #706473",
+                            "flex: 1; text-align: center; font-size: 13px; color: #706473",
                           )}
                         >
                           {"Test 05"}
                         </span>
                         <span
                           style={styleOf(
-                            "flex: 1; text-align: center; font-size: 12.5px; color: #706473",
+                            "flex: 1; text-align: center; font-size: 13px; color: #706473",
                           )}
                         >
                           {"Test 06"}
                         </span>
                         <span
                           style={styleOf(
-                            "flex: 1; text-align: center; font-size: 12.5px; color: #706473",
+                            "flex: 1; text-align: center; font-size: 13px; color: #706473",
                           )}
                         >
                           {"Test 07"}
@@ -1609,7 +1609,7 @@ class StudentHome extends React.Component {
                           <td style={styleOf("padding: 14px 12px")}>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Writing"}
@@ -1618,7 +1618,7 @@ class StudentHome extends React.Component {
                           <td style={styleOf("padding: 14px 12px")}>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Đã có kết quả · 6.5"}
@@ -1682,7 +1682,7 @@ class StudentHome extends React.Component {
                           <td style={styleOf("padding: 14px 12px")}>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Reading"}
@@ -1752,7 +1752,7 @@ class StudentHome extends React.Component {
                           <td style={styleOf("padding: 14px 12px")}>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Reading"}
@@ -1822,7 +1822,7 @@ class StudentHome extends React.Component {
                           <td style={styleOf("padding: 14px 12px")}>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Listening"}
@@ -1968,7 +1968,7 @@ class StudentHome extends React.Component {
                           </div>
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"Đã có kết quả · 6.5"}
@@ -1995,7 +1995,7 @@ class StudentHome extends React.Component {
                           </div>
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"Chờ chấm"}
@@ -2022,7 +2022,7 @@ class StudentHome extends React.Component {
                           </div>
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"Đã lưu · chưa gửi chấm"}
@@ -2085,7 +2085,7 @@ class StudentHome extends React.Component {
                 {"\n"}
                 <div
                   style={styleOf(
-                    "font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
+                    "font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
                   )}
                 >
                   {"Luyện thi"}
@@ -2122,7 +2122,7 @@ class StudentHome extends React.Component {
                 {"\n"}
                 <div
                   style={styleOf(
-                    "font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
+                    "font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
                   )}
                 >
                   {"Tài khoản"}
@@ -2153,7 +2153,7 @@ class StudentHome extends React.Component {
                 {"\n"}
                 <div
                   style={styleOf(
-                    "font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
+                    "font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
                   )}
                 >
                   {"Hỗ trợ"}

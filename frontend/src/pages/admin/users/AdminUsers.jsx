@@ -271,7 +271,7 @@ class AdminUsers extends React.Component {
         ],
       ];
     var PILL =
-        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; box-sizing: border-box; font-size: 12.5px; font-weight: 600; white-space: nowrap; ",
+        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; box-sizing: border-box; font-size: 13px; font-weight: 600; white-space: nowrap; ",
       SEG_ON =
         "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box",
       SEG_OFF =
@@ -916,7 +916,7 @@ class AdminUsers extends React.Component {
                         <div
                           role={"columnheader"}
                           style={styleOf(
-                            "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                            "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                           )}
                         >
                           {"Người dùng"}
@@ -924,7 +924,7 @@ class AdminUsers extends React.Component {
                         <div
                           role={"columnheader"}
                           style={styleOf(
-                            "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                            "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                           )}
                         >
                           {"Vai trò"}
@@ -932,7 +932,7 @@ class AdminUsers extends React.Component {
                         <div
                           role={"columnheader"}
                           style={styleOf(
-                            "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                            "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                           )}
                         >
                           {"Quyền chấm · bài/giới hạn"}
@@ -940,7 +940,7 @@ class AdminUsers extends React.Component {
                         <div
                           role={"columnheader"}
                           style={styleOf(
-                            "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                            "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                           )}
                         >
                           {"Ngày tạo"}
@@ -948,7 +948,7 @@ class AdminUsers extends React.Component {
                         <div
                           role={"columnheader"}
                           style={styleOf(
-                            "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                            "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                           )}
                         >
                           {"Đăng nhập gần nhất"}
@@ -956,7 +956,7 @@ class AdminUsers extends React.Component {
                         <div
                           role={"columnheader"}
                           style={styleOf(
-                            "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                            "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                           )}
                         >
                           {"Trạng thái"}
@@ -964,7 +964,7 @@ class AdminUsers extends React.Component {
                         <div
                           role={"columnheader"}
                           style={styleOf(
-                            "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                            "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                           )}
                         ></div>
                       </div>
@@ -987,7 +987,7 @@ class AdminUsers extends React.Component {
                                 style={styleOf(
                                   "flex: none; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                                     u.av +
-                                    "; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12.5px",
+                                    "; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px",
                                 )}
                               >
                                 {u.ini}
@@ -998,7 +998,7 @@ class AdminUsers extends React.Component {
                                 </div>
                                 <div
                                   style={styleOf(
-                                    "font-size: 12.5px; color: #706473; overflow: hidden; text-overflow: ellipsis",
+                                    "font-size: 13px; color: #706473; overflow: hidden; text-overflow: ellipsis",
                                   )}
                                 >
                                   {u.email}
@@ -1135,7 +1135,7 @@ class AdminUsers extends React.Component {
                           <div
                             role={"columnheader"}
                             style={styleOf(
-                              "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                              "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                             )}
                           >
                             {"Đăng nhập lúc"}
@@ -1143,7 +1143,7 @@ class AdminUsers extends React.Component {
                           <div
                             role={"columnheader"}
                             style={styleOf(
-                              "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                              "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                             )}
                           >
                             {"Người dùng"}
@@ -1182,7 +1182,7 @@ class AdminUsers extends React.Component {
                                 </div>
                                 <div
                                   style={styleOf(
-                                    "max-width: 100%; color: #706473; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                    "max-width: 100%; color: #706473; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
                                   )}
                                 >
                                   {g.email}
@@ -1249,7 +1249,7 @@ class AdminUsers extends React.Component {
                           <div
                             role={"columnheader"}
                             style={styleOf(
-                              "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                              "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                             )}
                           >
                             {"Đăng nhập lúc"}
@@ -1257,7 +1257,7 @@ class AdminUsers extends React.Component {
                           <div
                             role={"columnheader"}
                             style={styleOf(
-                              "padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; white-space: nowrap",
+                              "padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; white-space: nowrap",
                             )}
                           >
                             {"Người dùng"}
@@ -1296,7 +1296,7 @@ class AdminUsers extends React.Component {
                                 </div>
                                 <div
                                   style={styleOf(
-                                    "max-width: 100%; color: #706473; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                    "max-width: 100%; color: #706473; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
                                   )}
                                 >
                                   {g.email}
@@ -1714,21 +1714,21 @@ class AdminUsers extends React.Component {
                             <tr>
                               <th
                                 style={styleOf(
-                                  "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                  "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                 )}
                               >
                                 {"Người học"}
                               </th>
                               <th
                                 style={styleOf(
-                                  "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                  "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                 )}
                               >
                                 {"Bài"}
                               </th>
                               <th
                                 style={styleOf(
-                                  "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                  "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                 )}
                               >
                                 {"Trạng thái"}
@@ -1758,7 +1758,7 @@ class AdminUsers extends React.Component {
                               >
                                 <span
                                   style={styleOf(
-                                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                                   )}
                                 >
                                   {"Chờ chấm"}
@@ -1787,7 +1787,7 @@ class AdminUsers extends React.Component {
                               >
                                 <span
                                   style={styleOf(
-                                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                                   )}
                                 >
                                   {"Chờ chấm"}
@@ -1816,7 +1816,7 @@ class AdminUsers extends React.Component {
                               >
                                 <span
                                   style={styleOf(
-                                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                                   )}
                                 >
                                   {"Chờ chấm"}
@@ -1923,7 +1923,7 @@ class AdminUsers extends React.Component {
                           <span>
                             <span
                               style={styleOf(
-                                "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px",
+                                "font-family: 'IBM Plex Mono', monospace; font-size: 13px",
                               )}
                             >
                               {g.time}

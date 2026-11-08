@@ -109,3 +109,44 @@ body:has(.app-shell) .app-shell-ancestor {
 .staff-sidebar svg {
   flex-shrink: 0;
 }
+
+/* ---- Accessibility: visible keyboard focus (overrides inline `outline: none`) ---- */
+:focus-visible {
+  outline: 2px solid #2963CC !important;
+  outline-offset: 2px !important;
+}
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline-offset: 0 !important;
+}
+html.dark :focus-visible {
+  outline-color: #8DB0F7 !important;
+}
+
+/* ---- Former `<a href="#">` actions, now real <button>s: look like the old links ---- */
+button[data-ab] {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-align: inherit;
+  text-transform: inherit;
+  color: #2963CC;
+  cursor: pointer;
+}
+html.dark button[data-ab] {
+  color: #8DB0F7;
+}
+button[data-ab]:disabled {
+  cursor: not-allowed;
+}
+
+/* ---- Header dropdown ("Thư viện đề"): tap to open on touch screens ---- */
+.bu-dd.is-open .bu-dd-menu {
+  display: block !important;
+}

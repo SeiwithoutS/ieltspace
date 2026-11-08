@@ -317,7 +317,7 @@ class ExamDetail extends React.Component {
             self.setState({ form: c });
           },
           nSt:
-            "display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 20px; padding: 0 6px; margin-left: 8px; border-radius: 999px; font-size: 12px; font-weight: 700; " +
+            "display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 20px; padding: 0 6px; margin-left: 8px; border-radius: 999px; font-size: 13px; font-weight: 700; " +
             (on
               ? "background: " + TY[c][1] + "; color: " + TY[c][2]
               : "background: #E9E4DA; color: #6A5D6C"),
@@ -476,7 +476,7 @@ class ExamDetail extends React.Component {
                             {"IELTS Full Tests"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Đề đầy đủ, chấm band như thi thật"}
                           </span>
@@ -535,7 +535,7 @@ class ExamDetail extends React.Component {
                             {"IELTS Listening Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện từng Question Group, nghe lại được"}
                           </span>
@@ -583,7 +583,7 @@ class ExamDetail extends React.Component {
                             {"IELTS Reading Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện từng Question Group, có lời giải"}
                           </span>
@@ -628,7 +628,7 @@ class ExamDetail extends React.Component {
                             {"IELTS Writing Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện riêng Task 1 hoặc Task 2"}
                           </span>
@@ -680,7 +680,7 @@ class ExamDetail extends React.Component {
                             {"IELTS Speaking Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện riêng Part 1, 2 hoặc 3"}
                           </span>
@@ -765,7 +765,7 @@ class ExamDetail extends React.Component {
                             {"Writing Task 1 Academic"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
                           </span>
@@ -817,7 +817,7 @@ class ExamDetail extends React.Component {
                             {"Writing Task 1 General"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bài mẫu viết thư"}
                           </span>
@@ -862,7 +862,7 @@ class ExamDetail extends React.Component {
                             {"Writing Task 2"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bài mẫu bài luận"}
                           </span>
@@ -914,7 +914,7 @@ class ExamDetail extends React.Component {
                             {"Speaking Part 1, 2, 3"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bản ghi lời nói, kèm audio mẫu"}
                           </span>
@@ -970,7 +970,7 @@ class ExamDetail extends React.Component {
                   </svg>
                   <NotificationBadge
                     style={styleOf(
-                      "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
+                      "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
                     )}
                   />
                 </a>
@@ -1234,42 +1234,42 @@ class ExamDetail extends React.Component {
                       <tr>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 14px 18px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 14px 18px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         >
                           {"Bài test"}
                         </th>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 14px 18px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 14px 18px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         >
                           {"Listening"}
                         </th>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 14px 18px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 14px 18px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         >
                           {"Reading"}
                         </th>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 14px 18px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 14px 18px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         >
                           {"Writing"}
                         </th>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 14px 18px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 14px 18px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         >
                           {"Speaking"}
                         </th>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 14px 18px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 14px 18px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         ></th>
                       </tr>
@@ -1292,7 +1292,7 @@ class ExamDetail extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {r.sub}
@@ -1321,7 +1321,7 @@ class ExamDetail extends React.Component {
                                         </a>
                                         <span
                                           style={styleOf(
-                                            "font-size: 12.5px; color: #706473",
+                                            "font-size: 13px; color: #706473",
                                           )}
                                         >
                                           {x.meta}
@@ -1411,7 +1411,7 @@ class ExamDetail extends React.Component {
                                 <>
                                   <span
                                     style={styleOf(
-                                      "font-size: 12.5px; color: #B3A9B5; white-space: nowrap",
+                                      "font-size: 13px; color: #766A79; white-space: nowrap",
                                     )}
                                   >
                                     {"Chưa đủ 4 kỹ năng"}
@@ -1449,7 +1449,7 @@ class ExamDetail extends React.Component {
                 >
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 999px; background: #FBF4DD; color: #8A6A12; font-weight: 600; font-size: 12px",
+                      "display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 999px; background: #FBF4DD; color: #8A6A12; font-weight: 600; font-size: 13px",
                     )}
                   >
                     <svg

@@ -231,7 +231,7 @@ class StaffProfile extends React.Component {
                                 </div>
                                 <div
                                   style={styleOf(
-                                    "font-size: 12.5px; color: #706473",
+                                    "font-size: 13px; color: #706473",
                                   )}
                                 >
                                   {"Không đổi được"}
@@ -554,7 +554,7 @@ class StaffProfile extends React.Component {
                                 </div>
                                 <div
                                   style={styleOf(
-                                    "font-size: 12.5px; color: #706473",
+                                    "font-size: 13px; color: #706473",
                                   )}
                                 >
                                   {"Không đổi được"}

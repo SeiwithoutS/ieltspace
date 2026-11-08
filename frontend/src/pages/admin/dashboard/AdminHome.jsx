@@ -371,7 +371,7 @@ class AdminHome extends React.Component {
                               <div style={styleOf(v.fromBox)}>
                                 <span
                                   style={styleOf(
-                                    "font-size: 12px; color: #706473",
+                                    "font-size: 13px; color: #706473",
                                   )}
                                 >
                                   {"Từ ngày"}
@@ -387,7 +387,7 @@ class AdminHome extends React.Component {
                               <div style={styleOf(v.toBox)}>
                                 <span
                                   style={styleOf(
-                                    "font-size: 12px; color: #706473",
+                                    "font-size: 13px; color: #706473",
                                   )}
                                 >
                                   {"Đến ngày"}
@@ -463,49 +463,49 @@ class AdminHome extends React.Component {
                             >
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 12px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T2"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 12px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T3"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 12px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T4"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 12px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T5"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 12px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T6"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 12px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T7"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 12px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"CN"}
@@ -525,7 +525,7 @@ class AdminHome extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 12.5px; color: #706473",
+                                "font-size: 13px; color: #706473",
                               )}
                             >
                               {v.hint}
@@ -793,7 +793,7 @@ class AdminHome extends React.Component {
                             )}
                           ></div>
                           <span
-                            style={styleOf("font-size: 12px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"T2"}
                           </span>
@@ -809,7 +809,7 @@ class AdminHome extends React.Component {
                             )}
                           ></div>
                           <span
-                            style={styleOf("font-size: 12px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"T3"}
                           </span>
@@ -825,7 +825,7 @@ class AdminHome extends React.Component {
                             )}
                           ></div>
                           <span
-                            style={styleOf("font-size: 12px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"T4"}
                           </span>
@@ -841,7 +841,7 @@ class AdminHome extends React.Component {
                             )}
                           ></div>
                           <span
-                            style={styleOf("font-size: 12px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"T5"}
                           </span>
@@ -857,7 +857,7 @@ class AdminHome extends React.Component {
                             )}
                           ></div>
                           <span
-                            style={styleOf("font-size: 12px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"T6"}
                           </span>
@@ -873,7 +873,7 @@ class AdminHome extends React.Component {
                             )}
                           ></div>
                           <span
-                            style={styleOf("font-size: 12px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"T7"}
                           </span>
@@ -889,7 +889,7 @@ class AdminHome extends React.Component {
                             )}
                           ></div>
                           <span
-                            style={styleOf("font-size: 12px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"CN"}
                           </span>

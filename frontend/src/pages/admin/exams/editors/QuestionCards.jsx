@@ -82,7 +82,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"SENTENCE_COMP"}
@@ -105,7 +105,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"SHORT_ANSWER"}
@@ -147,7 +147,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"SUMMARY_COMP"}
@@ -170,7 +170,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"NOTE_COMP"}
@@ -212,7 +212,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"SUMMARY_BOX"}
@@ -254,7 +254,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"TABLE_COMP"}
@@ -277,7 +277,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"FLOW_COMP"}
@@ -319,7 +319,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"DIAGRAM_COMP"}
@@ -361,7 +361,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"MATCH_HEADING"}
@@ -384,7 +384,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"MATCH_INFO"}
@@ -407,7 +407,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"MATCH_ENDING"}
@@ -430,7 +430,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"MATCH_FEATURE"}
@@ -472,7 +472,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"MCQ_SINGLE"}
@@ -495,7 +495,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"MCQ_MULTI"}
@@ -518,7 +518,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"YNNG"}
@@ -541,7 +541,7 @@ class QuestionCards extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #706473",
+                        "font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #706473",
                       )}
                     >
                       {"TFNG"}

@@ -83,7 +83,7 @@ class ListeningTest extends React.Component {
               >
                 <span
                   style={styleOf(
-                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                   )}
                 >
                   <svg
@@ -156,28 +156,28 @@ class ListeningTest extends React.Component {
                 <div style={styleOf("display:flex;gap:8px")}>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 600; white-space: nowrap",
                     )}
                   >
                     {"Phần 1"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                     )}
                   >
                     {"Phần 2"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                     )}
                   >
                     {"Phần 3"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                     )}
                   >
                     {"Phần 4"}
@@ -212,7 +212,7 @@ class ListeningTest extends React.Component {
                       </div>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; white-space: nowrap",
                         )}
                       >
                         <svg
@@ -274,7 +274,7 @@ class ListeningTest extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display:flex;justify-content:space-between;font-size:12.5px;color:#706473",
+                            "display:flex;justify-content:space-between;font-size:13px;color:#706473",
                           )}
                         >
                           <span>{"01:42"}</span>
@@ -364,7 +364,7 @@ class ListeningTest extends React.Component {
                         {" 2 "}
                         <span
                           style={styleOf(
-                            "display:inline-block;min-width:110px;border-bottom:1.5px solid #D6D4D0;padding:0 6px;color:#B3A9B5",
+                            "display:inline-block;min-width:110px;border-bottom:1.5px solid #D6D4D0;padding:0 6px;color:#766A79",
                           )}
                         >
                           {"nhập đáp án"}
@@ -573,280 +573,280 @@ class ListeningTest extends React.Component {
             <div style={styleOf("display: flex; gap: 6px; flex-wrap: wrap")}>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #DDE8FC; color: #2A55B8",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #DDE8FC; color: #2A55B8",
                 )}
               >
                 {"1"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #DDE8FC; color: #2A55B8",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #DDE8FC; color: #2A55B8",
                 )}
               >
                 {"2"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #352637; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #352637; color: #FFFFFF",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #352637; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #352637; color: #FFFFFF",
                 )}
               >
                 {"3"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #DDE8FC; color: #2A55B8",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #DDE8FC; color: #2A55B8",
                 )}
               >
                 {"4"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #DDE8FC; color: #2A55B8",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #DDE8FC; color: #2A55B8",
                 )}
               >
                 {"5"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"6"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"7"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"8"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"9"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"10"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"11"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"12"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"13"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"14"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"15"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"16"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"17"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"18"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"19"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"20"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"21"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"22"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"23"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"24"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"25"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"26"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"27"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"28"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"29"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"30"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"31"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"32"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"33"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"34"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"35"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"36"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"37"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"38"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"39"}
               </span>
               <span
                 style={styleOf(
-                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; background: #FFFFFF; color: #352637",
+                  "width: 30px; height: 30px; flex: 0 0 30px; border-radius: 8px; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #352637",
                 )}
               >
                 {"40"}

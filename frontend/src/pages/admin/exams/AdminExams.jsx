@@ -313,7 +313,7 @@ class AdminExams extends React.Component {
     }
     function pill(bg, fg) {
       return (
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: " +
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: " +
         bg +
         "; color: " +
         fg
@@ -421,7 +421,7 @@ class AdminExams extends React.Component {
                 st: pill("#F3F0EA", "#6A5D6C"),
               },
             ],
-        skills: skills.length ? skills : [{ text: "—", st: "color: #B3A9B5" }],
+        skills: skills.length ? skills : [{ text: "—", st: "color: #766A79" }],
         thumbSt:
           "display: flex; align-items: flex-end; flex: none; width: 48px; height: 32px; border-radius: 8px; box-sizing: border-box; overflow: hidden; color: #FFFFFF; box-shadow: 0 1px 3px rgba(53, 38, 55, 0.18); " +
           (bg
@@ -835,49 +835,49 @@ class AdminExams extends React.Component {
                         <tr>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Tên bộ đề"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Loại"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Số đề"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Đề theo kỹ năng"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Cập nhật"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Trạng thái"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           ></th>
                         </tr>
@@ -1204,7 +1204,7 @@ class AdminExams extends React.Component {
                                       <>
                                         <span
                                           style={styleOf(
-                                            "margin: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px; text-align: center; font-size: 12.5px; font-weight: 600; line-height: 1.4",
+                                            "margin: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px; text-align: center; font-size: 13px; font-weight: 600; line-height: 1.4",
                                           )}
                                         >
                                           <svg
@@ -1287,7 +1287,7 @@ class AdminExams extends React.Component {
                                       <div
                                         className={"an-rise"}
                                         style={styleOf(
-                                          "font-size: 12.5px; line-height: 1.45; color: " +
+                                          "font-size: 13px; line-height: 1.45; color: " +
                                             v.cv.msgColor,
                                         )}
                                       >
@@ -1297,7 +1297,7 @@ class AdminExams extends React.Component {
                                   ) : null}
                                   <div
                                     style={styleOf(
-                                      "font-size: 12px; line-height: 1.45; color: #706473",
+                                      "font-size: 13px; line-height: 1.45; color: #706473",
                                     )}
                                   >
                                     {
@@ -1337,7 +1337,7 @@ class AdminExams extends React.Component {
                                     />
                                     <span
                                       style={styleOf(
-                                        "display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px",
+                                        "display: flex; justify-content: space-between; gap: 8px; font-size: 13px",
                                       )}
                                     >
                                       <span style={styleOf("color: #C0412A")}>

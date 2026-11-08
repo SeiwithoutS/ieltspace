@@ -181,7 +181,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Đề đầy đủ, chấm band như thi thật"}
@@ -243,7 +243,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện từng Question Group, nghe lại được"}
@@ -296,7 +296,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện từng Question Group, có lời giải"}
@@ -343,7 +343,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện riêng Task 1 hoặc Task 2"}
@@ -397,7 +397,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện riêng Part 1, 2 hoặc 3"}
@@ -488,7 +488,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
@@ -543,7 +543,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bài mẫu viết thư"}
@@ -591,7 +591,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bài mẫu bài luận"}
@@ -645,7 +645,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bản ghi lời nói, kèm audio mẫu"}
@@ -702,7 +702,7 @@ class PracticeLibrary extends React.Component {
                       </svg>
                       <NotificationBadge
                         style={styleOf(
-                          "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
+                          "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
                         )}
                       />
                     </a>
@@ -2457,7 +2457,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Đề đầy đủ, chấm band như thi thật"}
@@ -2519,7 +2519,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện từng Question Group, nghe lại được"}
@@ -2572,7 +2572,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện từng Question Group, có lời giải"}
@@ -2619,7 +2619,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện riêng Task 1 hoặc Task 2"}
@@ -2673,7 +2673,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện riêng Part 1, 2 hoặc 3"}
@@ -2764,7 +2764,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
@@ -2819,7 +2819,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bài mẫu viết thư"}
@@ -2867,7 +2867,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bài mẫu bài luận"}
@@ -2921,7 +2921,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bản ghi lời nói, kèm audio mẫu"}
@@ -2978,7 +2978,7 @@ class PracticeLibrary extends React.Component {
                       </svg>
                       <NotificationBadge
                         style={styleOf(
-                          "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
+                          "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
                         )}
                       />
                     </a>
@@ -4733,7 +4733,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Đề đầy đủ, chấm band như thi thật"}
@@ -4795,7 +4795,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện từng Question Group, nghe lại được"}
@@ -4848,7 +4848,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện từng Question Group, có lời giải"}
@@ -4895,7 +4895,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện riêng Task 1 hoặc Task 2"}
@@ -4949,7 +4949,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện riêng Part 1, 2 hoặc 3"}
@@ -5040,7 +5040,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
@@ -5095,7 +5095,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bài mẫu viết thư"}
@@ -5143,7 +5143,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bài mẫu bài luận"}
@@ -5197,7 +5197,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bản ghi lời nói, kèm audio mẫu"}
@@ -5254,7 +5254,7 @@ class PracticeLibrary extends React.Component {
                       </svg>
                       <NotificationBadge
                         style={styleOf(
-                          "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
+                          "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
                         )}
                       />
                     </a>
@@ -6584,7 +6584,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Đề đầy đủ, chấm band như thi thật"}
@@ -6646,7 +6646,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện từng Question Group, nghe lại được"}
@@ -6699,7 +6699,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện từng Question Group, có lời giải"}
@@ -6746,7 +6746,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện riêng Task 1 hoặc Task 2"}
@@ -6800,7 +6800,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện riêng Part 1, 2 hoặc 3"}
@@ -6891,7 +6891,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
@@ -6946,7 +6946,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bài mẫu viết thư"}
@@ -6994,7 +6994,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bài mẫu bài luận"}
@@ -7048,7 +7048,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bản ghi lời nói, kèm audio mẫu"}
@@ -7105,7 +7105,7 @@ class PracticeLibrary extends React.Component {
                       </svg>
                       <NotificationBadge
                         style={styleOf(
-                          "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
+                          "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
                         )}
                       />
                     </a>
@@ -8442,7 +8442,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Đề đầy đủ, chấm band như thi thật"}
@@ -8504,7 +8504,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện từng Question Group, nghe lại được"}
@@ -8557,7 +8557,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện từng Question Group, có lời giải"}
@@ -8604,7 +8604,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện riêng Task 1 hoặc Task 2"}
@@ -8658,7 +8658,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Luyện riêng Part 1, 2 hoặc 3"}
@@ -8749,7 +8749,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
@@ -8804,7 +8804,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bài mẫu viết thư"}
@@ -8852,7 +8852,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bài mẫu bài luận"}
@@ -8906,7 +8906,7 @@ class PracticeLibrary extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bản ghi lời nói, kèm audio mẫu"}
@@ -8963,7 +8963,7 @@ class PracticeLibrary extends React.Component {
                       </svg>
                       <NotificationBadge
                         style={styleOf(
-                          "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
+                          "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
                         )}
                       />
                     </a>

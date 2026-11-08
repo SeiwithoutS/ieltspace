@@ -316,7 +316,7 @@ class AdminSampleWriting extends React.Component {
     }
     me._undo = undo;
     var CHIP =
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600",
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600",
       PILL =
         "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 999px; box-sizing: border-box; font-size: 13.5px; font-weight: 600; text-decoration: none; cursor: pointer; white-space: nowrap";
     function plural(n) {
@@ -755,7 +755,7 @@ class AdminSampleWriting extends React.Component {
     var fm = FORMS[ex.form];
     F.formChip = fm[0];
     F.formChipSt =
-      "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: " +
+      "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: " +
       fm[1] +
       "; color: " +
       fm[2];
@@ -796,7 +796,7 @@ class AdminSampleWriting extends React.Component {
         : ["Bản nháp", "#FBEDBF", "#7A5A0E"];
     F.statusText = ST[0];
     F.statusSt =
-      "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: " +
+      "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: " +
       ST[1] +
       "; color: " +
       ST[2];
@@ -991,7 +991,7 @@ class AdminSampleWriting extends React.Component {
         {"\n"}
         <style>
           {cssText(
-            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\n@keyframes isFade{from{opacity:0}to{opacity:1}}@keyframes isPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes isDrop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}@keyframes isToast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes isFlash{0%{background:#E3ECFD}100%{background:transparent}}@keyframes isSpin{to{transform:rotate(360deg)}}@keyframes isGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes isCheck{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}@keyframes isRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.an-fade{animation:isFade .2s ease-out both}.an-pop{animation:isPop .28s cubic-bezier(.2,.8,.2,1) both}.an-drop{animation:isDrop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.an-toast{animation:isToast .3s cubic-bezier(.2,.8,.2,1) both}.an-check{animation:isCheck .45s cubic-bezier(.2,.8,.2,1) both}.an-rise{animation:isRise .32s cubic-bezier(.2,.8,.2,1) both}.an-flash>td{animation:isFlash 2s ease-out}.an-spin{animation:isSpin .8s linear infinite}a,label,input,textarea,select,[role=button]{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .2s ease,transform .18s ease,opacity .16s ease,outline-color .16s ease}.lift:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(53,38,55,.05),0 12px 28px rgba(53,38,55,.10)}.press:active{transform:scale(.97)}.hov>tbody>tr{transition:background-color .15s ease}.hov>tbody>tr:hover{background:#FDFCF8}.thumb-h{transition:transform .2s ease,box-shadow .2s ease}.thumb-h:hover{transform:translateY(-3px) rotate(-1deg)}input:focus,textarea:focus,select:focus{outline:none;border-color:#2963CC !important;box-shadow:0 0 0 3px rgba(41,99,204,.16)}@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}input::placeholder,textarea::placeholder{color:#9A8F9C}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #B3A9B5 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}.ro .pills a,.ro select{pointer-events:none}\n",
+            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\n@keyframes isFade{from{opacity:0}to{opacity:1}}@keyframes isPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes isDrop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}@keyframes isToast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes isFlash{0%{background:#E3ECFD}100%{background:transparent}}@keyframes isSpin{to{transform:rotate(360deg)}}@keyframes isGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes isCheck{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}@keyframes isRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.an-fade{animation:isFade .2s ease-out both}.an-pop{animation:isPop .28s cubic-bezier(.2,.8,.2,1) both}.an-drop{animation:isDrop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.an-toast{animation:isToast .3s cubic-bezier(.2,.8,.2,1) both}.an-check{animation:isCheck .45s cubic-bezier(.2,.8,.2,1) both}.an-rise{animation:isRise .32s cubic-bezier(.2,.8,.2,1) both}.an-flash>td{animation:isFlash 2s ease-out}.an-spin{animation:isSpin .8s linear infinite}a,label,input,textarea,select,[role=button]{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .2s ease,transform .18s ease,opacity .16s ease,outline-color .16s ease}.lift:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(53,38,55,.05),0 12px 28px rgba(53,38,55,.10)}.press:active{transform:scale(.97)}.hov>tbody>tr{transition:background-color .15s ease}.hov>tbody>tr:hover{background:#FDFCF8}.thumb-h{transition:transform .2s ease,box-shadow .2s ease}.thumb-h:hover{transform:translateY(-3px) rotate(-1deg)}input:focus,textarea:focus,select:focus{outline:none;border-color:#2963CC !important;box-shadow:0 0 0 3px rgba(41,99,204,.16)}@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}input::placeholder,textarea::placeholder{color:#766A79}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #766A79 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}.ro .pills a,.ro select{pointer-events:none}\n",
           )}
         </style>
         {"\n"}
@@ -1680,7 +1680,7 @@ class AdminSampleWriting extends React.Component {
                           ))}
                         </select>
                         <span
-                          style={styleOf("font-size: 12px; color: #706473")}
+                          style={styleOf("font-size: 13px; color: #706473")}
                         >
                           {
                             "Hiện thành thẻ ở bản xem trước. Danh sách đổi theo hình thức và Task."
@@ -1780,7 +1780,7 @@ class AdminSampleWriting extends React.Component {
                                     </span>
                                     <span
                                       style={styleOf(
-                                        "font-size: 12.5px; color: #706473",
+                                        "font-size: 13px; color: #706473",
                                       )}
                                     >
                                       {v.F.coverSize}
@@ -1846,7 +1846,7 @@ class AdminSampleWriting extends React.Component {
                             ) : null}
                             <span
                               style={styleOf(
-                                "font-size: 12px; line-height: 1.5; color: #706473",
+                                "font-size: 13px; line-height: 1.5; color: #706473",
                               )}
                             >
                               {
@@ -1857,7 +1857,7 @@ class AdminSampleWriting extends React.Component {
                               <>
                                 <div
                                   style={styleOf(
-                                    "font-size: 12.5px; color: #7A5A0E",
+                                    "font-size: 13px; color: #7A5A0E",
                                   )}
                                 >
                                   {v.F.coverNoteText}
@@ -1906,7 +1906,7 @@ class AdminSampleWriting extends React.Component {
                             )}
                           />
                           <span
-                            style={styleOf("font-size: 12px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           ></span>
                         </label>
                         <label
@@ -1931,7 +1931,7 @@ class AdminSampleWriting extends React.Component {
                             )}
                           />
                           <span
-                            style={styleOf("font-size: 12px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           ></span>
                         </label>
                       </div>
@@ -1962,7 +1962,7 @@ class AdminSampleWriting extends React.Component {
                             )}
                           />
                           <span
-                            style={styleOf("font-size: 12px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           ></span>
                         </label>
                       </div>
@@ -2086,7 +2086,7 @@ class AdminSampleWriting extends React.Component {
                                     </span>
                                     <span
                                       style={styleOf(
-                                        "font-size: 12.5px; color: #706473",
+                                        "font-size: 13px; color: #706473",
                                       )}
                                     >
                                       {v.F.imgSize}
@@ -2185,7 +2185,7 @@ class AdminSampleWriting extends React.Component {
                                   >
                                     {"Tải ảnh đề bài lên"}
                                   </span>
-                                  <span style={styleOf("font-size: 12.5px")}>
+                                  <span style={styleOf("font-size: 13px")}>
                                     {"JPG, PNG hoặc WebP, tối đa 5 MB."}
                                   </span>
                                   <input
@@ -2344,7 +2344,7 @@ class AdminSampleWriting extends React.Component {
                           ></textarea>
                         </div>
                         <span
-                          style={styleOf("font-size: 12px; color: #706473")}
+                          style={styleOf("font-size: 13px; color: #706473")}
                         >
                           {
                             "## tiêu đề đoạn; - gạch đầu dòng; **đậm**, *nghiêng*."
@@ -2455,7 +2455,7 @@ class AdminSampleWriting extends React.Component {
                           ></textarea>
                         </div>
                         <span
-                          style={styleOf("font-size: 12px; color: #706473")}
+                          style={styleOf("font-size: 13px; color: #706473")}
                         >
                           {
                             "Dòng trống để tách đoạn. Bọc cụm quan trọng bằng **hai dấu sao** để tô đậm cho người học."
@@ -2524,7 +2524,7 @@ class AdminSampleWriting extends React.Component {
                         </span>
                         <span
                           style={styleOf(
-                            "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #F3F0EA; color: #4B3D4D",
+                            "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: #F3F0EA; color: #4B3D4D",
                           )}
                         >
                           {v.F.taskChip}
@@ -2533,7 +2533,7 @@ class AdminSampleWriting extends React.Component {
                           <>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #E8E4FA; color: #5543B0",
+                                "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: #E8E4FA; color: #5543B0",
                               )}
                             >
                               {v.F.typeChip}
@@ -2684,7 +2684,7 @@ class AdminSampleWriting extends React.Component {
                         )}
                       >
                         <div
-                          style={styleOf("font-size: 12.5px; color: #706473")}
+                          style={styleOf("font-size: 13px; color: #706473")}
                         >
                           {v.F.wcShort}
                         </div>

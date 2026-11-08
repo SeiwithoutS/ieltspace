@@ -83,7 +83,7 @@ class WritingTest extends React.Component {
               >
                 <span
                   style={styleOf(
-                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
                   )}
                 >
                   <svg
@@ -103,7 +103,7 @@ class WritingTest extends React.Component {
                 </span>
                 <span
                   style={styleOf(
-                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                    "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                   )}
                 >
                   <svg
@@ -176,14 +176,14 @@ class WritingTest extends React.Component {
                 <div style={styleOf("display: flex; gap: 8px")}>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                     )}
                   >
                     {"Task 1"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #352637; color: #FFFFFF; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 600; white-space: nowrap",
                     )}
                   >
                     {"Task 2"}
@@ -279,7 +279,7 @@ class WritingTest extends React.Component {
                     </div>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                       )}
                     >
                       {"187 từ"}

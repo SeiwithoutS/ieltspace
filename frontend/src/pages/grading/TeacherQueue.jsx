@@ -180,7 +180,7 @@ class TeacherQueue extends React.Component {
                     </div>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
                       )}
                     >
                       {"Giới hạn 7 / 10"}
@@ -194,56 +194,56 @@ class TeacherQueue extends React.Component {
                         <tr>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Người học"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Đề bài"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Kỹ năng"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Tiếp nhận"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Phân công"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Đã chờ chấm"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           >
                             {"Trạng thái"}
                           </th>
                           <th
                             style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                             )}
                           ></th>
                         </tr>
@@ -261,7 +261,7 @@ class TeacherQueue extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Writing Task 2"}
@@ -282,7 +282,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Writing"}
@@ -316,7 +316,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               <svg
@@ -363,7 +363,7 @@ class TeacherQueue extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Speaking Part 2"}
@@ -384,7 +384,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Speaking"}
@@ -418,7 +418,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ chấm"}
@@ -451,7 +451,7 @@ class TeacherQueue extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Writing Task 1 Academic"}
@@ -472,7 +472,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Writing"}
@@ -506,7 +506,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ chấm"}
@@ -539,7 +539,7 @@ class TeacherQueue extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Speaking Part 1"}
@@ -560,7 +560,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Speaking"}
@@ -594,7 +594,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ chấm"}
@@ -627,7 +627,7 @@ class TeacherQueue extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Writing Task 2"}
@@ -648,7 +648,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Writing"}
@@ -682,7 +682,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ chấm"}
@@ -715,7 +715,7 @@ class TeacherQueue extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Writing Task 1 General"}
@@ -736,7 +736,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Writing"}
@@ -770,7 +770,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ chấm"}
@@ -803,7 +803,7 @@ class TeacherQueue extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Speaking Part 3"}
@@ -824,7 +824,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Speaking"}
@@ -858,7 +858,7 @@ class TeacherQueue extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ chấm"}

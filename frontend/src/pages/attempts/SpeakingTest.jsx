@@ -97,7 +97,7 @@ class SpeakingTest extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
                       )}
                     >
                       <svg
@@ -117,7 +117,7 @@ class SpeakingTest extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                       )}
                     >
                       <svg
@@ -190,7 +190,7 @@ class SpeakingTest extends React.Component {
                     <div style={styleOf("display: flex; gap: 8px")}>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
                         )}
                       >
                         <svg
@@ -210,14 +210,14 @@ class SpeakingTest extends React.Component {
                       </span>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #352637; color: #FFFFFF; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 600; white-space: nowrap",
                         )}
                       >
                         {"Part 2"}
                       </span>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                         )}
                       >
                         {"Part 3"}
@@ -271,7 +271,7 @@ class SpeakingTest extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             <svg
@@ -292,7 +292,7 @@ class SpeakingTest extends React.Component {
                           </span>
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             <svg
@@ -585,7 +585,7 @@ class SpeakingTest extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
                       )}
                     >
                       <svg
@@ -605,7 +605,7 @@ class SpeakingTest extends React.Component {
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                       )}
                     >
                       <svg
@@ -678,7 +678,7 @@ class SpeakingTest extends React.Component {
                     <div style={styleOf("display: flex; gap: 8px")}>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
                         )}
                       >
                         <svg
@@ -698,14 +698,14 @@ class SpeakingTest extends React.Component {
                       </span>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #352637; color: #FFFFFF; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 600; white-space: nowrap",
                         )}
                       >
                         {"Part 2"}
                       </span>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; white-space: nowrap",
                         )}
                       >
                         {"Part 3"}
@@ -759,7 +759,7 @@ class SpeakingTest extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             <svg
@@ -780,7 +780,7 @@ class SpeakingTest extends React.Component {
                           </span>
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             <svg
@@ -995,8 +995,8 @@ class SpeakingTest extends React.Component {
                           "display: flex; gap: 14px; align-items: center; justify-content: center",
                         )}
                       >
-                        <a
-                          href={"#"}
+                        <button
+                          type={"button"} data-ab={""}
                           style={styleOf(
                             "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
                           )}
@@ -1015,9 +1015,9 @@ class SpeakingTest extends React.Component {
                             <path d={"M8 5l11 7-11 7z"}></path>
                           </svg>
                           {"Nghe lại"}
-                        </a>
-                        <a
-                          href={"#"}
+                        </button>
+                        <button
+                          type={"button"} data-ab={""}
                           style={styleOf(
                             "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
                           )}
@@ -1037,7 +1037,7 @@ class SpeakingTest extends React.Component {
                             <path d={"M21 3v5h-5"}></path>
                           </svg>
                           {"Ghi lại Part này"}
-                        </a>
+                        </button>
                       </div>
                       <div
                         style={styleOf(

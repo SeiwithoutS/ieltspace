@@ -2373,7 +2373,7 @@ class QuestionCard extends React.Component {
           }
         };
         var TB =
-          "display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 12.5px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
+          "display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
         var tbSt = function (on, ok) {
           return (
             TB +
@@ -2791,7 +2791,7 @@ class QuestionCard extends React.Component {
           });
         };
         var CHIP =
-          "display: inline-flex; align-items: center; height: 26px; padding: 0 9px; border-radius: 999px; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
+          "display: inline-flex; align-items: center; height: 26px; padding: 0 9px; border-radius: 999px; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
         var chipSt = function (on) {
           return (
             CHIP +
@@ -3381,7 +3381,7 @@ class QuestionCard extends React.Component {
               m.x +
               "%; top: " +
               m.y +
-              "%; transform: translate(-50%, -50%); z-index: 3; min-width: 28px; height: 28px; padding: 0 6px; box-sizing: border-box; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; box-shadow: " +
+              "%; transform: translate(-50%, -50%); z-index: 3; min-width: 28px; height: 28px; padding: 0 6px; box-sizing: border-box; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; box-shadow: " +
               (on ? "0 0 0 3px #2963CC" : "0 1px 3px rgba(53, 38, 55, 0.3)") +
               "; cursor: " +
               (editing ? "move" : "default") +
@@ -3426,7 +3426,7 @@ class QuestionCard extends React.Component {
           ? "Bấm vào chỗ cần chú thích trên hình: mũi tên chỉ vào đó và nhãn số hiện bên cạnh. Kéo nhãn số ra chỗ trống, kéo chấm tròn để đổi điểm mũi tên."
           : "";
         var CH =
-          "display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
+          "display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
         G.drows = (cg.marks || []).map(function (m, k) {
           var ansv = (cg.ans || [])[k],
             hasA = m.length > 3;
@@ -4101,7 +4101,7 @@ class QuestionCard extends React.Component {
             ? "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
             : ""),
         ansSt:
-          "flex: none; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; height: 26px; line-height: 24px; padding: 0 10px; box-sizing: border-box; border-radius: 999px; font-size: 12.5px; font-weight: 600; " +
+          "flex: none; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; height: 26px; line-height: 24px; padding: 0 10px; box-sizing: border-box; border-radius: 999px; font-size: 13px; font-weight: 600; " +
           (info.ans
             ? "background: #F1F8F3; color: #2E7D4F; border: 1px solid #BFDCC9"
             : "color: #9A8F9C; border: 1px dashed #D6D4D0"),
@@ -4109,7 +4109,7 @@ class QuestionCard extends React.Component {
           ? "Đoạn " + LET[e.para] + (nk ? " · " + nk + " key" : "")
           : "Chưa gán",
         stateSt:
-          "flex: none; width: 92px; text-align: right; font-size: 12.5px; font-weight: 600; white-space: nowrap; color: " +
+          "flex: none; width: 92px; text-align: right; font-size: 13px; font-weight: 600; white-space: nowrap; color: " +
           (hasP ? (nk ? "#2E6A48" : "#2257B8") : "#9A8F9C"),
         open: function (ev) {
           stop(ev);
@@ -4453,7 +4453,7 @@ class QuestionCard extends React.Component {
           : "color: #6A5D6C; border: 1.5px solid transparent"),
       expDone: nDone + "/" + nQ,
       expBadgeSt:
-        "font-size: 12px; font-weight: 600; padding: 0 8px; border-radius: 999px; line-height: 20px; " +
+        "font-size: 13px; font-weight: 600; padding: 0 8px; border-radius: 999px; line-height: 20px; " +
         (nQ && nDone === nQ
           ? "background: #DCEDE2; color: #2E6A48"
           : "background: #FBEDBF; color: #7A5A0E"),
@@ -4476,7 +4476,7 @@ class QuestionCard extends React.Component {
           : "Bấm Tạo sẽ chuyển sang chế độ Chỉnh sửa; bấm Hủy để bỏ nếu chưa muốn lưu.",
       counter: total + "/40 câu",
       counterSt:
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; " +
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; " +
         (total === 40
           ? "background: #DCEDE2; color: #2E6A48"
           : "background: #FBEDBF; color: #7A5A0E"),
@@ -4610,7 +4610,7 @@ class QuestionCard extends React.Component {
       modeCls: editing ? "" : "ro",
       modeText: editing ? "Đang chỉnh sửa" : "Chỉ xem",
       modeSt:
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; " +
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; " +
         (editing
           ? "background: #E3ECFD; color: #2257B8"
           : "background: #F3F0EA; color: #6A5D6C"),
@@ -4722,7 +4722,7 @@ class QuestionCard extends React.Component {
         {"\n"}
         <style>
           {cssText(
-            '\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#9A8F9C}.tgh,.tga{opacity:0;transition:opacity .15s}.tgh:hover,.tgh.on,.tgh.op,.tga:hover,.tga:focus-visible{opacity:1}.qr,.qm,.qb{display:grid;gap:6px 8px;align-items:center}.qr{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ." ". qt ."}.qm{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ."}.qb{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qa qd" ". qt ."}.qn{grid-area:qn}.qq{grid-area:qq;min-width:0}.qa{grid-area:qa;min-width:0}.qt{grid-area:qt;min-width:0}.qd{grid-area:qd}.qed{container:qed / inline-size}@container qed (min-width: 720px){.qr{grid-template-columns:30px minmax(0,1fr) 200px 240px 30px;grid-template-areas:"qn qq qa qt qd"}.qm{grid-template-columns:30px minmax(0,1fr) 180px 30px;grid-template-areas:"qn qq qa qd"}.qb{grid-template-columns:30px 240px 260px minmax(0,1fr) 30px;grid-template-areas:"qn qa qt . qd"}}\n',
+            '\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#766A79}.tgh,.tga{opacity:0;transition:opacity .15s}.tgh:hover,.tgh.on,.tgh.op,.tga:hover,.tga:focus-visible{opacity:1}.qr,.qm,.qb{display:grid;gap:6px 8px;align-items:center}.qr{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ." ". qt ."}.qm{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ."}.qb{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qa qd" ". qt ."}.qn{grid-area:qn}.qq{grid-area:qq;min-width:0}.qa{grid-area:qa;min-width:0}.qt{grid-area:qt;min-width:0}.qd{grid-area:qd}.qed{container:qed / inline-size}@container qed (min-width: 720px){.qr{grid-template-columns:30px minmax(0,1fr) 200px 240px 30px;grid-template-areas:"qn qq qa qt qd"}.qm{grid-template-columns:30px minmax(0,1fr) 180px 30px;grid-template-areas:"qn qq qa qd"}.qb{grid-template-columns:30px 240px 260px minmax(0,1fr) 30px;grid-template-areas:"qn qa qt . qd"}}\n',
           )}
         </style>
         {"\n"}
@@ -4751,9 +4751,9 @@ class QuestionCard extends React.Component {
                         "display: flex; flex-direction: column; flex: none",
                       )}
                     >
-                      <a
+                      <button
                         className={"eo"}
-                        href={"#"}
+                        type={"button"} data-ab={""}
                         onClick={g.up}
                         title={"Đưa nhóm lên"}
                         aria-label={"Đưa nhóm lên"}
@@ -4774,10 +4774,10 @@ class QuestionCard extends React.Component {
                         >
                           <path d={"M6 15l6-6 6 6"}></path>
                         </svg>
-                      </a>
-                      <a
+                      </button>
+                      <button
                         className={"eo"}
-                        href={"#"}
+                        type={"button"} data-ab={""}
                         onClick={g.down}
                         title={"Đưa nhóm xuống"}
                         aria-label={"Đưa nhóm xuống"}
@@ -4798,10 +4798,10 @@ class QuestionCard extends React.Component {
                         >
                           <path d={"M6 9l6 6 6-6"}></path>
                         </svg>
-                      </a>
+                      </button>
                     </div>
-                    <a
-                      href={"#"}
+                    <button
+                      type={"button"} data-ab={""}
                       onClick={g.open}
                       aria-expanded={g.on}
                       style={styleOf(
@@ -4824,12 +4824,12 @@ class QuestionCard extends React.Component {
                       </span>
                       <span
                         style={styleOf(
-                          "font-size: 12.5px; color: #706473; white-space: nowrap",
+                          "font-size: 13px; color: #706473; white-space: nowrap",
                         )}
                       >
                         {g.form}
                       </span>
-                    </a>
+                    </button>
                     {g.warn ? (
                       <>
                         <span
@@ -4840,9 +4840,9 @@ class QuestionCard extends React.Component {
                         ></span>
                       </>
                     ) : null}
-                    <a
+                    <button
                       className={"eo"}
-                      href={"#"}
+                      type={"button"} data-ab={""}
                       onClick={g.del}
                       title={"Xóa nhóm"}
                       aria-label={"Xóa nhóm"}
@@ -4863,9 +4863,9 @@ class QuestionCard extends React.Component {
                       >
                         <path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path>
                       </svg>
-                    </a>
-                    <a
-                      href={"#"}
+                    </button>
+                    <button
+                      type={"button"} data-ab={""}
                       onClick={g.open}
                       title={g.chevTitle}
                       aria-label={g.chevTitle}
@@ -4889,7 +4889,7 @@ class QuestionCard extends React.Component {
                           <path d={"M6 9l6 6 6-6"}></path>
                         </svg>
                       </span>
-                    </a>
+                    </button>
                   </div>
                   {g.on ? (
                     <>
@@ -4918,8 +4918,8 @@ class QuestionCard extends React.Component {
                                   "position: relative; min-width: 0; max-width: 420px",
                                 )}
                               >
-                                <a
-                                  href={"#"}
+                                <button
+                                  type={"button"} data-ab={""}
                                   role={"combobox"}
                                   aria-haspopup={"listbox"}
                                   aria-expanded={v.G.lim.open}
@@ -4957,7 +4957,7 @@ class QuestionCard extends React.Component {
                                       <path d={"M6 9l6 6 6-6"}></path>
                                     </svg>
                                   </span>
-                                </a>
+                                </button>
                                 {v.G.lim.open ? (
                                   <>
                                     <div
@@ -4974,15 +4974,15 @@ class QuestionCard extends React.Component {
                                     >
                                       {(v.G.lim.opts || []).map((lo, index) => (
                                         <React.Fragment key={index}>
-                                          <a
-                                            href={"#"}
+                                          <button
+                                            type={"button"} data-ab={""}
                                             role={"option"}
                                             aria-selected={lo.on}
                                             onClick={lo.pick}
                                             style={styleOf(lo.st)}
                                           >
                                             {lo.lab}
-                                          </a>
+                                          </button>
                                         </React.Fragment>
                                       ))}
                                     </div>
@@ -5011,22 +5011,22 @@ class QuestionCard extends React.Component {
                             </span>
                             <span
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 4px; font-size: 12.5px; color: #706473",
+                                "display: flex; align-items: center; gap: 4px; font-size: 13px; color: #706473",
                               )}
                             >
                               {v.G.instrNote}
                               {v.G.instrCustom ? (
                                 <>
-                                  <a
+                                  <button
                                     className={"eo"}
-                                    href={"#"}
+                                    type={"button"} data-ab={""}
                                     onClick={v.G.resetInstr}
                                     style={styleOf(
                                       "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
                                     )}
                                   >
                                     {"Tạo lại"}
-                                  </a>
+                                  </button>
                                 </>
                               ) : null}
                             </span>
@@ -5087,9 +5087,9 @@ class QuestionCard extends React.Component {
                                     <div className={"qt"}>
                                       {r.noAlt ? (
                                         <>
-                                          <a
+                                          <button
                                             className={"eo"}
-                                            href={"#"}
+                                            type={"button"} data-ab={""}
                                             onClick={r.addAlt}
                                             title={"Thêm cách viết khác"}
                                             style={styleOf(
@@ -5112,7 +5112,7 @@ class QuestionCard extends React.Component {
                                               ></path>
                                             </svg>
                                             {" Cách viết khác"}
-                                          </a>
+                                          </button>
                                         </>
                                       ) : null}
                                       {r.altOn ? (
@@ -5143,9 +5143,9 @@ class QuestionCard extends React.Component {
                                                   "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; height: 34px; max-width: 260px",
                                                 )}
                                               />
-                                              <a
+                                              <button
                                                 className={"eo"}
-                                                href={"#"}
+                                                type={"button"} data-ab={""}
                                                 onClick={r.rmAlt}
                                                 aria-label={
                                                   "Bỏ cách viết khác câu " +
@@ -5170,11 +5170,11 @@ class QuestionCard extends React.Component {
                                                     d={"M6 6l12 12M18 6L6 18"}
                                                   ></path>
                                                 </svg>
-                                              </a>
+                                              </button>
                                             </div>
                                             <span
                                               style={styleOf(
-                                                "font-size: 12px; color: #706473",
+                                                "font-size: 13px; color: #706473",
                                               )}
                                             >
                                               {r.altHintShort}
@@ -5183,9 +5183,9 @@ class QuestionCard extends React.Component {
                                         </>
                                       ) : null}
                                     </div>
-                                    <a
+                                    <button
                                       className={"eo qd"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={r.del}
                                       aria-label={"Xóa câu " + r.no}
                                       style={styleOf(
@@ -5209,13 +5209,13 @@ class QuestionCard extends React.Component {
                                           }
                                         ></path>
                                       </svg>
-                                    </a>
+                                    </button>
                                   </div>
                                 </React.Fragment>
                               ))}
-                              <a
+                              <button
                                 className={"eo"}
-                                href={"#"}
+                                type={"button"} data-ab={""}
                                 onClick={v.G.addItem}
                                 style={styleOf(
                                   "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
@@ -5235,7 +5235,7 @@ class QuestionCard extends React.Component {
                                   <path d={"M12 5v14M5 12h14"}></path>
                                 </svg>
                                 {" Thêm câu"}
-                              </a>
+                              </button>
                             </div>
                           </>
                         ) : null}
@@ -5271,9 +5271,9 @@ class QuestionCard extends React.Component {
                                       "display: flex; align-items: center; gap: 2px; flex-wrap: wrap; padding: 4px 6px; border-bottom: 1px solid #E6E4E0; background: #F3F0EA",
                                     )}
                                   >
-                                    <a
+                                    <button
                                       className={"eo"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={v.G.fmtB}
                                       title={"In đậm"}
                                       aria-label={"In đậm"}
@@ -5282,10 +5282,10 @@ class QuestionCard extends React.Component {
                                       )}
                                     >
                                       {"B"}
-                                    </a>
-                                    <a
+                                    </button>
+                                    <button
                                       className={"eo"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={v.G.fmtI}
                                       title={"In nghiêng"}
                                       aria-label={"In nghiêng"}
@@ -5294,15 +5294,15 @@ class QuestionCard extends React.Component {
                                       )}
                                     >
                                       {"I"}
-                                    </a>
+                                    </button>
                                     <span
                                       style={styleOf(
                                         "width: 1px; height: 18px; background: #D6D4D0; margin: 0 4px",
                                       )}
                                     ></span>
-                                    <a
+                                    <button
                                       className={"eo"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={v.G.fmtH}
                                       title={"Tiêu đề mục"}
                                       style={styleOf(
@@ -5310,10 +5310,10 @@ class QuestionCard extends React.Component {
                                       )}
                                     >
                                       {"Tiêu đề"}
-                                    </a>
-                                    <a
+                                    </button>
+                                    <button
                                       className={"eo"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={v.G.fmtL}
                                       title={"Gạch đầu dòng"}
                                       style={styleOf(
@@ -5321,15 +5321,15 @@ class QuestionCard extends React.Component {
                                       )}
                                     >
                                       {"• Gạch đầu dòng"}
-                                    </a>
+                                    </button>
                                     <span
                                       style={styleOf(
                                         "width: 1px; height: 18px; background: #D6D4D0; margin: 0 4px",
                                       )}
                                     ></span>
-                                    <a
+                                    <button
                                       className={"eo"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={v.G.insertBlank}
                                       title={"Chèn chỗ trống tại con trỏ"}
                                       style={styleOf(
@@ -5350,7 +5350,7 @@ class QuestionCard extends React.Component {
                                         <path d={"M12 5v14M5 12h14"}></path>
                                       </svg>
                                       {" Chỗ trống"}
-                                    </a>
+                                    </button>
                                   </div>
                                   <textarea
                                     id={v.G.edId}
@@ -5365,7 +5365,7 @@ class QuestionCard extends React.Component {
                                 </div>
                                 <span
                                   style={styleOf(
-                                    "font-size: 12px; color: #706473",
+                                    "font-size: 13px; color: #706473",
                                   )}
                                 >
                                   {
@@ -5423,7 +5423,7 @@ class QuestionCard extends React.Component {
                                                   >
                                                     <span
                                                       style={styleOf(
-                                                        "display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 6px; box-sizing: border-box; border-radius: 12px; background: #E3ECFD; color: #2963CC; font-size: 12.5px; font-weight: 700",
+                                                        "display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 6px; box-sizing: border-box; border-radius: 12px; background: #E3ECFD; color: #2963CC; font-size: 13px; font-weight: 700",
                                                       )}
                                                     >
                                                       {sg.no}
@@ -5460,7 +5460,7 @@ class QuestionCard extends React.Component {
                                     </span>
                                     <span
                                       style={styleOf(
-                                        "font-size: 12.5px; color: #706473",
+                                        "font-size: 13px; color: #706473",
                                       )}
                                     >
                                       {"Bấm chữ cái để đánh dấu từ đúng (tối đa " +
@@ -5474,9 +5474,9 @@ class QuestionCard extends React.Component {
                                             "display: flex; align-items: center; gap: 8px; flex-wrap: wrap",
                                           )}
                                         >
-                                          <a
+                                          <button
                                             className={"lk"}
-                                            href={"#"}
+                                            type={"button"} data-ab={""}
                                             onClick={o.pick}
                                             aria-label={
                                               "Đánh dấu " +
@@ -5487,7 +5487,7 @@ class QuestionCard extends React.Component {
                                             style={styleOf(o.st)}
                                           >
                                             {o.lab}
-                                          </a>
+                                          </button>
                                           <input
                                             aria-label={"Lựa chọn " + o.lab}
                                             value={o.text}
@@ -5503,8 +5503,8 @@ class QuestionCard extends React.Component {
                                                   "position: relative; min-width: 0; flex: 0 0 150px",
                                                 )}
                                               >
-                                                <a
-                                                  href={"#"}
+                                                <button
+                                                  type={"button"} data-ab={""}
                                                   role={"combobox"}
                                                   aria-haspopup={"listbox"}
                                                   aria-expanded={o.dd.open}
@@ -5548,7 +5548,7 @@ class QuestionCard extends React.Component {
                                                       ></path>
                                                     </svg>
                                                   </span>
-                                                </a>
+                                                </button>
                                                 {o.dd.open ? (
                                                   <>
                                                     <div
@@ -5568,8 +5568,8 @@ class QuestionCard extends React.Component {
                                                           <React.Fragment
                                                             key={index}
                                                           >
-                                                            <a
-                                                              href={"#"}
+                                                            <button
+                                                              type={"button"} data-ab={""}
                                                               role={"option"}
                                                               aria-selected={
                                                                 bo.on
@@ -5580,7 +5580,7 @@ class QuestionCard extends React.Component {
                                                               )}
                                                             >
                                                               {bo.lab}
-                                                            </a>
+                                                            </button>
                                                           </React.Fragment>
                                                         ),
                                                       )}
@@ -5590,9 +5590,9 @@ class QuestionCard extends React.Component {
                                               </div>
                                             </>
                                           ) : null}
-                                          <a
+                                          <button
                                             className={"eo"}
-                                            href={"#"}
+                                            type={"button"} data-ab={""}
                                             onClick={o.del}
                                             aria-label={"Xóa " + o.lab}
                                             style={styleOf(
@@ -5616,13 +5616,13 @@ class QuestionCard extends React.Component {
                                                 }
                                               ></path>
                                             </svg>
-                                          </a>
+                                          </button>
                                         </div>
                                       </React.Fragment>
                                     ))}
-                                    <a
+                                    <button
                                       className={"eo"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={v.G.addOpt}
                                       style={styleOf(
                                         "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
@@ -5642,7 +5642,7 @@ class QuestionCard extends React.Component {
                                         <path d={"M12 5v14M5 12h14"}></path>
                                       </svg>
                                       {" Thêm từ"}
-                                    </a>
+                                    </button>
                                   </div>
                                 </>
                               ) : null}
@@ -5683,9 +5683,9 @@ class QuestionCard extends React.Component {
                                           <div className={"qt"}>
                                             {b.noAlt ? (
                                               <>
-                                                <a
+                                                <button
                                                   className={"eo"}
-                                                  href={"#"}
+                                                  type={"button"} data-ab={""}
                                                   onClick={b.addAlt}
                                                   title={"Thêm cách viết khác"}
                                                   style={styleOf(
@@ -5708,7 +5708,7 @@ class QuestionCard extends React.Component {
                                                     ></path>
                                                   </svg>
                                                   {" Cách viết khác"}
-                                                </a>
+                                                </button>
                                               </>
                                             ) : null}
                                             {b.altOn ? (
@@ -5740,9 +5740,9 @@ class QuestionCard extends React.Component {
                                                         "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; height: 34px; max-width: 260px",
                                                       )}
                                                     />
-                                                    <a
+                                                    <button
                                                       className={"eo"}
-                                                      href={"#"}
+                                                      type={"button"} data-ab={""}
                                                       onClick={b.rmAlt}
                                                       aria-label={
                                                         "Bỏ cách viết khác câu " +
@@ -5769,11 +5769,11 @@ class QuestionCard extends React.Component {
                                                           }
                                                         ></path>
                                                       </svg>
-                                                    </a>
+                                                    </button>
                                                   </div>
                                                   <span
                                                     style={styleOf(
-                                                      "font-size: 12px; color: #706473",
+                                                      "font-size: 13px; color: #706473",
                                                     )}
                                                   >
                                                     {b.altHintShort}
@@ -5785,9 +5785,9 @@ class QuestionCard extends React.Component {
                                           <div className={"qd"}>
                                             {b.canDel ? (
                                               <>
-                                                <a
+                                                <button
                                                   className={"eo"}
-                                                  href={"#"}
+                                                  type={"button"} data-ab={""}
                                                   onClick={b.del}
                                                   aria-label={
                                                     "Xóa nhãn câu " + b.no
@@ -5813,7 +5813,7 @@ class QuestionCard extends React.Component {
                                                       }
                                                     ></path>
                                                   </svg>
-                                                </a>
+                                                </button>
                                               </>
                                             ) : null}
                                           </div>
@@ -5877,7 +5877,7 @@ class QuestionCard extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {
@@ -5894,52 +5894,52 @@ class QuestionCard extends React.Component {
                               >
                                 <span
                                   style={styleOf(
-                                    "font-size: 12.5px; font-weight: 700; color: #4B3D4D; margin-right: 2px",
+                                    "font-size: 13px; font-weight: 700; color: #4B3D4D; margin-right: 2px",
                                   )}
                                 >
                                   {v.G.tSelLab}
                                 </span>
-                                <a
-                                  href={"#"}
+                                <button
+                                  type={"button"} data-ab={""}
                                   onClick={v.G.tMerge}
                                   style={styleOf(v.G.tMergeSt)}
                                 >
                                   {"Gộp ô"}
-                                </a>
-                                <a
-                                  href={"#"}
+                                </button>
+                                <button
+                                  type={"button"} data-ab={""}
                                   onClick={v.G.tSplit}
                                   style={styleOf(v.G.tSplitSt)}
                                 >
                                   {"Tách ô"}
-                                </a>
-                                <a
-                                  href={"#"}
+                                </button>
+                                <button
+                                  type={"button"} data-ab={""}
                                   onClick={v.G.tHead}
                                   aria-pressed={v.G.tHeadOn}
                                   style={styleOf(v.G.tHeadSt)}
                                 >
                                   {"Ô tiêu đề"}
-                                </a>
+                                </button>
                                 <span
                                   style={styleOf(
                                     "width: 1px; height: 22px; background: #D6D4D0; margin: 0 2px",
                                   )}
                                 ></span>
-                                <a
-                                  href={"#"}
+                                <button
+                                  type={"button"} data-ab={""}
                                   onClick={v.G.tDelRows}
                                   style={styleOf(v.G.tDelRowsSt)}
                                 >
                                   {v.G.tDelRowsLab}
-                                </a>
-                                <a
-                                  href={"#"}
+                                </button>
+                                <button
+                                  type={"button"} data-ab={""}
                                   onClick={v.G.tDelCols}
                                   style={styleOf(v.G.tDelColsSt)}
                                 >
                                   {v.G.tDelColsLab}
-                                </a>
+                                </button>
                               </div>
                               <div
                                 style={styleOf(
@@ -5954,9 +5954,9 @@ class QuestionCard extends React.Component {
                                           className={hh.cls}
                                           style={styleOf(hh.wrap)}
                                         >
-                                          <a
+                                          <button
                                             className={"eo"}
-                                            href={"#"}
+                                            type={"button"} data-ab={""}
                                             onClick={hh.hpick}
                                             aria-label={"Chọn " + hh.lab}
                                             aria-expanded={hh.open}
@@ -5967,7 +5967,7 @@ class QuestionCard extends React.Component {
                                             <span
                                               style={styleOf(hh.pill)}
                                             ></span>
-                                          </a>
+                                          </button>
                                           {hh.open ? (
                                             <>
                                               <div
@@ -5977,15 +5977,15 @@ class QuestionCard extends React.Component {
                                                 {(hh.items || []).map(
                                                   (mi, index) => (
                                                     <React.Fragment key={index}>
-                                                      <a
+                                                      <button
                                                         className={"eo"}
-                                                        href={"#"}
+                                                        type={"button"} data-ab={""}
                                                         role={"menuitem"}
                                                         onClick={mi.tRun}
                                                         style={styleOf(mi.st)}
                                                       >
                                                         {mi.lab}
-                                                      </a>
+                                                      </button>
                                                     </React.Fragment>
                                                   ),
                                                 )}
@@ -6001,9 +6001,9 @@ class QuestionCard extends React.Component {
                                           className={hh.cls}
                                           style={styleOf(hh.wrap)}
                                         >
-                                          <a
+                                          <button
                                             className={"eo"}
-                                            href={"#"}
+                                            type={"button"} data-ab={""}
                                             onClick={hh.hpick}
                                             aria-label={"Chọn " + hh.lab}
                                             aria-expanded={hh.open}
@@ -6014,7 +6014,7 @@ class QuestionCard extends React.Component {
                                             <span
                                               style={styleOf(hh.pill)}
                                             ></span>
-                                          </a>
+                                          </button>
                                           {hh.open ? (
                                             <>
                                               <div
@@ -6024,15 +6024,15 @@ class QuestionCard extends React.Component {
                                                 {(hh.items || []).map(
                                                   (mi, index) => (
                                                     <React.Fragment key={index}>
-                                                      <a
+                                                      <button
                                                         className={"eo"}
-                                                        href={"#"}
+                                                        type={"button"} data-ab={""}
                                                         role={"menuitem"}
                                                         onClick={mi.tRun}
                                                         style={styleOf(mi.st)}
                                                       >
                                                         {mi.lab}
-                                                      </a>
+                                                      </button>
                                                     </React.Fragment>
                                                   ),
                                                 )}
@@ -6060,8 +6060,8 @@ class QuestionCard extends React.Component {
                                       </React.Fragment>
                                     ))}
                                   </div>
-                                  <a
-                                    href={"#"}
+                                  <button
+                                    type={"button"} data-ab={""}
                                     className={"eo tga"}
                                     onClick={v.G.tAddCol}
                                     aria-label={"Thêm cột"}
@@ -6081,9 +6081,9 @@ class QuestionCard extends React.Component {
                                     >
                                       <path d={"M12 5v14M5 12h14"}></path>
                                     </svg>
-                                  </a>
-                                  <a
-                                    href={"#"}
+                                  </button>
+                                  <button
+                                    type={"button"} data-ab={""}
                                     className={"eo tga"}
                                     onClick={v.G.tAddRow}
                                     aria-label={"Thêm hàng"}
@@ -6103,7 +6103,7 @@ class QuestionCard extends React.Component {
                                     >
                                       <path d={"M12 5v14M5 12h14"}></path>
                                     </svg>
-                                  </a>
+                                  </button>
                                 </div>
                               </div>
                               <div
@@ -6141,9 +6141,9 @@ class QuestionCard extends React.Component {
                                       <div className={"qt"}>
                                         {b.noAlt ? (
                                           <>
-                                            <a
+                                            <button
                                               className={"eo"}
-                                              href={"#"}
+                                              type={"button"} data-ab={""}
                                               onClick={b.addAlt}
                                               title={"Thêm cách viết khác"}
                                               style={styleOf(
@@ -6166,7 +6166,7 @@ class QuestionCard extends React.Component {
                                                 ></path>
                                               </svg>
                                               {" Cách viết khác"}
-                                            </a>
+                                            </button>
                                           </>
                                         ) : null}
                                         {b.altOn ? (
@@ -6197,9 +6197,9 @@ class QuestionCard extends React.Component {
                                                     "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; height: 34px; max-width: 260px",
                                                   )}
                                                 />
-                                                <a
+                                                <button
                                                   className={"eo"}
-                                                  href={"#"}
+                                                  type={"button"} data-ab={""}
                                                   onClick={b.rmAlt}
                                                   aria-label={
                                                     "Bỏ cách viết khác câu " +
@@ -6224,11 +6224,11 @@ class QuestionCard extends React.Component {
                                                       d={"M6 6l12 12M18 6L6 18"}
                                                     ></path>
                                                   </svg>
-                                                </a>
+                                                </button>
                                               </div>
                                               <span
                                                 style={styleOf(
-                                                  "font-size: 12px; color: #706473",
+                                                  "font-size: 13px; color: #706473",
                                                 )}
                                               >
                                                 {b.altHintShort}
@@ -6240,9 +6240,9 @@ class QuestionCard extends React.Component {
                                       <div className={"qd"}>
                                         {b.canDel ? (
                                           <>
-                                            <a
+                                            <button
                                               className={"eo"}
-                                              href={"#"}
+                                              type={"button"} data-ab={""}
                                               onClick={b.del}
                                               aria-label={
                                                 "Xóa nhãn câu " + b.no
@@ -6268,7 +6268,7 @@ class QuestionCard extends React.Component {
                                                   }
                                                 ></path>
                                               </svg>
-                                            </a>
+                                            </button>
                                           </>
                                         ) : null}
                                       </div>
@@ -6311,9 +6311,9 @@ class QuestionCard extends React.Component {
                                   "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA; align-self: flex-start",
                                 )}
                               >
-                                <a
+                                <button
                                   className={"lk"}
-                                  href={"#"}
+                                  type={"button"} data-ab={""}
                                   role={"radio"}
                                   aria-checked={v.G.isFlow}
                                   onClick={v.G.setLevels}
@@ -6323,10 +6323,10 @@ class QuestionCard extends React.Component {
                                   )}
                                 >
                                   {"Theo tầng"}
-                                </a>
-                                <a
+                                </button>
+                                <button
                                   className={"lk"}
-                                  href={"#"}
+                                  type={"button"} data-ab={""}
                                   role={"radio"}
                                   aria-checked={v.G.flowImg}
                                   onClick={v.G.setImage}
@@ -6336,11 +6336,11 @@ class QuestionCard extends React.Component {
                                   )}
                                 >
                                   {"Hình có nhãn"}
-                                </a>
+                                </button>
                               </div>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {v.G.modeHint}
@@ -6364,7 +6364,7 @@ class QuestionCard extends React.Component {
                               </span>
                               <span
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {
@@ -6395,9 +6395,9 @@ class QuestionCard extends React.Component {
                                           "display: flex; align-items: center; gap: 6px; flex-wrap: wrap",
                                         )}
                                       >
-                                        <a
+                                        <button
                                           className={"eo"}
-                                          href={"#"}
+                                          type={"button"} data-ab={""}
                                           onClick={fr.toggleFrame}
                                           role={"switch"}
                                           aria-checked={fr.hasFrame}
@@ -6411,12 +6411,12 @@ class QuestionCard extends React.Component {
                                             ></span>
                                           </span>
                                           {"Khung nhóm"}
-                                        </a>
+                                        </button>
                                         {fr.canAdd ? (
                                           <>
-                                            <a
+                                            <button
                                               className={"eo"}
-                                              href={"#"}
+                                              type={"button"} data-ab={""}
                                               onClick={fr.addNode}
                                               style={styleOf(
                                                 "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
@@ -6438,12 +6438,12 @@ class QuestionCard extends React.Component {
                                                 ></path>
                                               </svg>
                                               {" Ô song song"}
-                                            </a>
+                                            </button>
                                           </>
                                         ) : null}
-                                        <a
+                                        <button
                                           className={"eo"}
-                                          href={"#"}
+                                          type={"button"} data-ab={""}
                                           onClick={fr.delRow}
                                           aria-label={"Xóa " + fr.label}
                                           title={"Xóa tầng"}
@@ -6468,7 +6468,7 @@ class QuestionCard extends React.Component {
                                               }
                                             ></path>
                                           </svg>
-                                        </a>
+                                        </button>
                                       </div>
                                     </div>
                                     <div
@@ -6486,14 +6486,14 @@ class QuestionCard extends React.Component {
                                             >
                                               <span
                                                 style={styleOf(
-                                                  "font-size: 12px; font-weight: 700; color: #4B3D4D",
+                                                  "font-size: 13px; font-weight: 700; color: #4B3D4D",
                                                 )}
                                               >
                                                 {nd.tag}
                                               </span>
-                                              <a
+                                              <button
                                                 className={"eo"}
-                                                href={"#"}
+                                                type={"button"} data-ab={""}
                                                 onClick={nd.del}
                                                 aria-label={"Xóa ô " + nd.tag}
                                                 style={styleOf(
@@ -6517,7 +6517,7 @@ class QuestionCard extends React.Component {
                                                     }
                                                   ></path>
                                                 </svg>
-                                              </a>
+                                              </button>
                                             </div>
                                             <textarea
                                               rows={"2"}
@@ -6542,7 +6542,7 @@ class QuestionCard extends React.Component {
                                                 >
                                                   <span
                                                     style={styleOf(
-                                                      "font-size: 12px; font-weight: 700; color: #4B3D4D",
+                                                      "font-size: 13px; font-weight: 700; color: #4B3D4D",
                                                     )}
                                                   >
                                                     {"Nối từ"}
@@ -6557,9 +6557,9 @@ class QuestionCard extends React.Component {
                                                         <React.Fragment
                                                           key={index}
                                                         >
-                                                          <a
+                                                          <button
                                                             className={"lk"}
-                                                            href={"#"}
+                                                            type={"button"} data-ab={""}
                                                             onClick={pp.pick}
                                                             aria-pressed={pp.on}
                                                             style={styleOf(
@@ -6567,7 +6567,7 @@ class QuestionCard extends React.Component {
                                                             )}
                                                           >
                                                             {pp.lab}
-                                                          </a>
+                                                          </button>
                                                         </React.Fragment>
                                                       ),
                                                     )}
@@ -6580,24 +6580,24 @@ class QuestionCard extends React.Component {
                                                 "display: flex; flex-wrap: wrap; gap: 4px",
                                               )}
                                             >
-                                              <a
+                                              <button
                                                 className={"eo"}
-                                                href={"#"}
+                                                type={"button"} data-ab={""}
                                                 onClick={nd.togOval}
                                                 aria-pressed={nd.oval}
                                                 style={styleOf(nd.ovalSt)}
                                               >
                                                 {"Bầu dục"}
-                                              </a>
-                                              <a
+                                              </button>
+                                              <button
                                                 className={"eo"}
-                                                href={"#"}
+                                                type={"button"} data-ab={""}
                                                 onClick={nd.togSide}
                                                 aria-pressed={nd.side}
                                                 style={styleOf(nd.sideSt)}
                                               >
                                                 {"Đặt bên cạnh"}
-                                              </a>
+                                              </button>
                                             </div>
                                             {nd.hasBack ? (
                                               <>
@@ -6608,7 +6608,7 @@ class QuestionCard extends React.Component {
                                                 >
                                                   <span
                                                     style={styleOf(
-                                                      "font-size: 12px; font-weight: 700; color: #4B3D4D",
+                                                      "font-size: 13px; font-weight: 700; color: #4B3D4D",
                                                     )}
                                                   >
                                                     {"Mũi tên quay lại"}
@@ -6618,8 +6618,8 @@ class QuestionCard extends React.Component {
                                                       "position: relative; min-width: 0; width: 100%",
                                                     )}
                                                   >
-                                                    <a
-                                                      href={"#"}
+                                                    <button
+                                                      type={"button"} data-ab={""}
                                                       role={"combobox"}
                                                       aria-haspopup={"listbox"}
                                                       aria-expanded={nd.bd.open}
@@ -6668,7 +6668,7 @@ class QuestionCard extends React.Component {
                                                           ></path>
                                                         </svg>
                                                       </span>
-                                                    </a>
+                                                    </button>
                                                     {nd.bd.open ? (
                                                       <>
                                                         <div
@@ -6690,8 +6690,8 @@ class QuestionCard extends React.Component {
                                                               <React.Fragment
                                                                 key={index}
                                                               >
-                                                                <a
-                                                                  href={"#"}
+                                                                <button
+                                                                  type={"button"} data-ab={""}
                                                                   role={
                                                                     "option"
                                                                   }
@@ -6706,7 +6706,7 @@ class QuestionCard extends React.Component {
                                                                   )}
                                                                 >
                                                                   {bo2.lab}
-                                                                </a>
+                                                                </button>
                                                               </React.Fragment>
                                                             ),
                                                           )}
@@ -6741,9 +6741,9 @@ class QuestionCard extends React.Component {
                                   </div>
                                 </React.Fragment>
                               ))}
-                              <a
+                              <button
                                 className={"eo"}
-                                href={"#"}
+                                type={"button"} data-ab={""}
                                 onClick={v.G.addRow}
                                 style={styleOf(
                                   "display: flex; align-items: center; justify-content: center; gap: 6px; height: 42px; border-radius: 12px; border: 1.5px dashed #D6D4D0; color: #6A5D6C; font-weight: 600; font-size: 14px; text-decoration: none",
@@ -6763,7 +6763,7 @@ class QuestionCard extends React.Component {
                                   <path d={"M12 5v14M5 12h14"}></path>
                                 </svg>
                                 {" Thêm tầng"}
-                              </a>
+                              </button>
                               <span
                                 style={styleOf(
                                   "font-size: 13px; font-weight: 700; color: #352637; margin-top: 4px",
@@ -6803,7 +6803,7 @@ class QuestionCard extends React.Component {
                                                   >
                                                     <span
                                                       style={styleOf(
-                                                        "display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E3ECFD; color: #2257B8; font-size: 11.5px; font-weight: 700",
+                                                        "display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E3ECFD; color: #2257B8; font-size: 12px; font-weight: 700",
                                                       )}
                                                     >
                                                       {sg.no}
@@ -6849,7 +6849,7 @@ class QuestionCard extends React.Component {
                                                   >
                                                     <span
                                                       style={styleOf(
-                                                        "display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E3ECFD; color: #2257B8; font-size: 11.5px; font-weight: 700",
+                                                        "display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E3ECFD; color: #2257B8; font-size: 12px; font-weight: 700",
                                                       )}
                                                     >
                                                       {sg.no}
@@ -6905,9 +6905,9 @@ class QuestionCard extends React.Component {
                                       <div className={"qt"}>
                                         {b.noAlt ? (
                                           <>
-                                            <a
+                                            <button
                                               className={"eo"}
-                                              href={"#"}
+                                              type={"button"} data-ab={""}
                                               onClick={b.addAlt}
                                               title={"Thêm cách viết khác"}
                                               style={styleOf(
@@ -6930,7 +6930,7 @@ class QuestionCard extends React.Component {
                                                 ></path>
                                               </svg>
                                               {" Cách viết khác"}
-                                            </a>
+                                            </button>
                                           </>
                                         ) : null}
                                         {b.altOn ? (
@@ -6961,9 +6961,9 @@ class QuestionCard extends React.Component {
                                                     "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; height: 34px; max-width: 260px",
                                                   )}
                                                 />
-                                                <a
+                                                <button
                                                   className={"eo"}
-                                                  href={"#"}
+                                                  type={"button"} data-ab={""}
                                                   onClick={b.rmAlt}
                                                   aria-label={
                                                     "Bỏ cách viết khác câu " +
@@ -6988,11 +6988,11 @@ class QuestionCard extends React.Component {
                                                       d={"M6 6l12 12M18 6L6 18"}
                                                     ></path>
                                                   </svg>
-                                                </a>
+                                                </button>
                                               </div>
                                               <span
                                                 style={styleOf(
-                                                  "font-size: 12px; color: #706473",
+                                                  "font-size: 13px; color: #706473",
                                                 )}
                                               >
                                                 {b.altHintShort}
@@ -7004,9 +7004,9 @@ class QuestionCard extends React.Component {
                                       <div className={"qd"}>
                                         {b.canDel ? (
                                           <>
-                                            <a
+                                            <button
                                               className={"eo"}
-                                              href={"#"}
+                                              type={"button"} data-ab={""}
                                               onClick={b.del}
                                               aria-label={
                                                 "Xóa nhãn câu " + b.no
@@ -7032,7 +7032,7 @@ class QuestionCard extends React.Component {
                                                   }
                                                 ></path>
                                               </svg>
-                                            </a>
+                                            </button>
                                           </>
                                         ) : null}
                                       </div>
@@ -7073,9 +7073,9 @@ class QuestionCard extends React.Component {
                                 >
                                   {"Hình sơ đồ"}
                                 </span>
-                                <a
+                                <button
                                   className={"eo"}
-                                  href={"#"}
+                                  type={"button"} data-ab={""}
                                   onClick={v.G.upload}
                                   style={styleOf(
                                     "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
@@ -7097,13 +7097,13 @@ class QuestionCard extends React.Component {
                                     ></path>
                                   </svg>
                                   {" " + v.G.imgLabel}
-                                </a>
+                                </button>
                               </div>
                               {v.G.hasImg ? (
                                 <>
                                   <div
                                     style={styleOf(
-                                      "font-size: 12.5px; color: #706473",
+                                      "font-size: 13px; color: #706473",
                                     )}
                                   >
                                     {v.G.imgName + " · " + v.G.dHint}
@@ -7299,9 +7299,9 @@ class QuestionCard extends React.Component {
                                     <div className={"qt"}>
                                       {dr.noAlt ? (
                                         <>
-                                          <a
+                                          <button
                                             className={"eo"}
-                                            href={"#"}
+                                            type={"button"} data-ab={""}
                                             onClick={dr.addAlt}
                                             title={"Thêm cách viết khác"}
                                             style={styleOf(
@@ -7324,7 +7324,7 @@ class QuestionCard extends React.Component {
                                               ></path>
                                             </svg>
                                             {" Cách viết khác"}
-                                          </a>
+                                          </button>
                                         </>
                                       ) : null}
                                       {dr.altOn ? (
@@ -7355,9 +7355,9 @@ class QuestionCard extends React.Component {
                                                   "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; height: 34px; max-width: 260px",
                                                 )}
                                               />
-                                              <a
+                                              <button
                                                 className={"eo"}
-                                                href={"#"}
+                                                type={"button"} data-ab={""}
                                                 onClick={dr.rmAlt}
                                                 aria-label={
                                                   "Bỏ cách viết khác câu " +
@@ -7382,11 +7382,11 @@ class QuestionCard extends React.Component {
                                                     d={"M6 6l12 12M18 6L6 18"}
                                                   ></path>
                                                 </svg>
-                                              </a>
+                                              </button>
                                             </div>
                                             <span
                                               style={styleOf(
-                                                "font-size: 12px; color: #706473",
+                                                "font-size: 13px; color: #706473",
                                               )}
                                             >
                                               {dr.altHintShort}
@@ -7401,9 +7401,9 @@ class QuestionCard extends React.Component {
                                         "display: flex; flex-direction: column; gap: 4px; align-items: center",
                                       )}
                                     >
-                                      <a
+                                      <button
                                         className={"eo"}
-                                        href={"#"}
+                                        type={"button"} data-ab={""}
                                         onClick={dr.del}
                                         aria-label={"Xóa nhãn câu " + dr.no}
                                         style={styleOf(
@@ -7427,10 +7427,10 @@ class QuestionCard extends React.Component {
                                             }
                                           ></path>
                                         </svg>
-                                      </a>
-                                      <a
+                                      </button>
+                                      <button
                                         className={"eo"}
-                                        href={"#"}
+                                        type={"button"} data-ab={""}
                                         onClick={dr.togArrow}
                                         aria-pressed={dr.arrowOn}
                                         title={"Bật/tắt mũi tên của nhãn"}
@@ -7454,7 +7454,7 @@ class QuestionCard extends React.Component {
                                             d={"M5 12h14M13 6l6 6-6 6"}
                                           ></path>
                                         </svg>
-                                      </a>
+                                      </button>
                                     </div>
                                   </div>
                                 </React.Fragment>
@@ -7516,9 +7516,9 @@ class QuestionCard extends React.Component {
                                               "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; flex: 1",
                                             )}
                                           />
-                                          <a
+                                          <button
                                             className={"eo"}
-                                            href={"#"}
+                                            type={"button"} data-ab={""}
                                             onClick={o.del}
                                             aria-label={"Xóa " + o.lab}
                                             style={styleOf(
@@ -7542,13 +7542,13 @@ class QuestionCard extends React.Component {
                                                 }
                                               ></path>
                                             </svg>
-                                          </a>
+                                          </button>
                                         </div>
                                       </React.Fragment>
                                     ))}
-                                    <a
+                                    <button
                                       className={"eo"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={v.G.addOpt}
                                       style={styleOf(
                                         "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
@@ -7568,7 +7568,7 @@ class QuestionCard extends React.Component {
                                         <path d={"M12 5v14M5 12h14"}></path>
                                       </svg>
                                       {" Thêm lựa chọn"}
-                                    </a>
+                                    </button>
                                   </div>
                                 </>
                               ) : null}
@@ -7587,9 +7587,9 @@ class QuestionCard extends React.Component {
                               ) : null}
                               {v.G.showOne ? (
                                 <>
-                                  <a
+                                  <button
                                     className={"lk"}
-                                    href={"#"}
+                                    type={"button"} data-ab={""}
                                     onClick={v.G.toggleOne}
                                     role={"switch"}
                                     aria-checked={v.G.oneUse}
@@ -7601,7 +7601,7 @@ class QuestionCard extends React.Component {
                                       <span style={styleOf(v.G.knobSt)}></span>
                                     </span>
                                     {"Mỗi lựa chọn chỉ dùng một lần"}
-                                  </a>
+                                  </button>
                                 </>
                               ) : null}
                               <div
@@ -7620,7 +7620,7 @@ class QuestionCard extends React.Component {
                                   <>
                                     <div
                                       style={styleOf(
-                                        "font-size: 12.5px; color: #706473",
+                                        "font-size: 13px; color: #706473",
                                       )}
                                     >
                                       {
@@ -7665,8 +7665,8 @@ class QuestionCard extends React.Component {
                                                 "position: relative; min-width: 0; max-width: 180px",
                                               )}
                                             >
-                                              <a
-                                                href={"#"}
+                                              <button
+                                                type={"button"} data-ab={""}
                                                 role={"combobox"}
                                                 aria-haspopup={"listbox"}
                                                 aria-expanded={hi.dd.open}
@@ -7708,7 +7708,7 @@ class QuestionCard extends React.Component {
                                                     ></path>
                                                   </svg>
                                                 </span>
-                                              </a>
+                                              </button>
                                               {hi.dd.open ? (
                                                 <>
                                                   <div
@@ -7728,8 +7728,8 @@ class QuestionCard extends React.Component {
                                                         <React.Fragment
                                                           key={index}
                                                         >
-                                                          <a
-                                                            href={"#"}
+                                                          <button
+                                                            type={"button"} data-ab={""}
                                                             role={"option"}
                                                             aria-selected={
                                                               ho.on
@@ -7740,7 +7740,7 @@ class QuestionCard extends React.Component {
                                                             )}
                                                           >
                                                             {ho.lab}
-                                                          </a>
+                                                          </button>
                                                         </React.Fragment>
                                                       ),
                                                     )}
@@ -7780,8 +7780,8 @@ class QuestionCard extends React.Component {
                                             "position: relative; min-width: 0; max-width: 180px",
                                           )}
                                         >
-                                          <a
-                                            href={"#"}
+                                          <button
+                                            type={"button"} data-ab={""}
                                             role={"combobox"}
                                             aria-haspopup={"listbox"}
                                             aria-expanded={mi.dd.open}
@@ -7819,7 +7819,7 @@ class QuestionCard extends React.Component {
                                                 <path d={"M6 9l6 6 6-6"}></path>
                                               </svg>
                                             </span>
-                                          </a>
+                                          </button>
                                           {mi.dd.open ? (
                                             <>
                                               <div
@@ -7837,15 +7837,15 @@ class QuestionCard extends React.Component {
                                                 {(mi.dd.opts || []).map(
                                                   (mo, index) => (
                                                     <React.Fragment key={index}>
-                                                      <a
-                                                        href={"#"}
+                                                      <button
+                                                        type={"button"} data-ab={""}
                                                         role={"option"}
                                                         aria-selected={mo.on}
                                                         onClick={mo.pick}
                                                         style={styleOf(mo.st)}
                                                       >
                                                         {mo.lab}
-                                                      </a>
+                                                      </button>
                                                     </React.Fragment>
                                                   ),
                                                 )}
@@ -7854,9 +7854,9 @@ class QuestionCard extends React.Component {
                                           ) : null}
                                         </div>
                                       </div>
-                                      <a
+                                      <button
                                         className={"eo qd"}
-                                        href={"#"}
+                                        type={"button"} data-ab={""}
                                         onClick={mi.del}
                                         aria-label={"Xóa câu " + mi.no}
                                         style={styleOf(
@@ -7880,15 +7880,15 @@ class QuestionCard extends React.Component {
                                             }
                                           ></path>
                                         </svg>
-                                      </a>
+                                      </button>
                                     </div>
                                   </React.Fragment>
                                 ))}
                                 {v.G.canAdd ? (
                                   <>
-                                    <a
+                                    <button
                                       className={"eo"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={v.G.addItem}
                                       style={styleOf(
                                         "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
@@ -7908,7 +7908,7 @@ class QuestionCard extends React.Component {
                                         <path d={"M12 5v14M5 12h14"}></path>
                                       </svg>
                                       {" Thêm câu"}
-                                    </a>
+                                    </button>
                                   </>
                                 ) : null}
                               </div>
@@ -7949,9 +7949,9 @@ class QuestionCard extends React.Component {
                                           "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; flex: 1",
                                         )}
                                       />
-                                      <a
+                                      <button
                                         className={"eo"}
-                                        href={"#"}
+                                        type={"button"} data-ab={""}
                                         onClick={q.del}
                                         aria-label={"Xóa câu " + q.no}
                                         style={styleOf(
@@ -7975,7 +7975,7 @@ class QuestionCard extends React.Component {
                                             }
                                           ></path>
                                         </svg>
-                                      </a>
+                                      </button>
                                     </div>
                                     {(q.opts || []).map((o, index) => (
                                       <React.Fragment key={index}>
@@ -7984,9 +7984,9 @@ class QuestionCard extends React.Component {
                                             "display: flex; align-items: center; gap: 8px; padding-left: 38px",
                                           )}
                                         >
-                                          <a
+                                          <button
                                             className={"lk"}
-                                            href={"#"}
+                                            type={"button"} data-ab={""}
                                             onClick={o.pick}
                                             aria-label={
                                               "Chọn " +
@@ -7996,7 +7996,7 @@ class QuestionCard extends React.Component {
                                             style={styleOf(o.st)}
                                           >
                                             {o.lab}
-                                          </a>
+                                          </button>
                                           <input
                                             aria-label={"Lựa chọn " + o.lab}
                                             value={o.text}
@@ -8011,14 +8011,14 @@ class QuestionCard extends React.Component {
                               ))}
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Bấm chữ cái để đánh dấu đáp án đúng."}
                               </div>
-                              <a
+                              <button
                                 className={"eo"}
-                                href={"#"}
+                                type={"button"} data-ab={""}
                                 onClick={v.G.addItem}
                                 style={styleOf(
                                   "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
@@ -8038,7 +8038,7 @@ class QuestionCard extends React.Component {
                                   <path d={"M12 5v14M5 12h14"}></path>
                                 </svg>
                                 {" Thêm câu"}
-                              </a>
+                              </button>
                             </div>
                           </>
                         ) : null}
@@ -8108,24 +8108,24 @@ class QuestionCard extends React.Component {
                                       "display: flex; align-items: center; gap: 8px",
                                     )}
                                   >
-                                    <a
+                                    <button
                                       className={"lk"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={o.pick}
                                       aria-label={"Đánh dấu " + o.lab + " đúng"}
                                       style={styleOf(o.st)}
                                     >
                                       {o.lab}
-                                    </a>
+                                    </button>
                                     <input
                                       aria-label={"Lựa chọn " + o.lab}
                                       value={o.text}
                                       onChange={o.set}
                                       style={styleOf(o.inSt)}
                                     />
-                                    <a
+                                    <button
                                       className={"eo"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={o.del}
                                       aria-label={"Xóa " + o.lab}
                                       style={styleOf(
@@ -8149,13 +8149,13 @@ class QuestionCard extends React.Component {
                                           }
                                         ></path>
                                       </svg>
-                                    </a>
+                                    </button>
                                   </div>
                                 </React.Fragment>
                               ))}
-                              <a
+                              <button
                                 className={"eo"}
-                                href={"#"}
+                                type={"button"} data-ab={""}
                                 onClick={v.G.addOpt}
                                 style={styleOf(
                                   "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
@@ -8175,10 +8175,10 @@ class QuestionCard extends React.Component {
                                   <path d={"M12 5v14M5 12h14"}></path>
                                 </svg>
                                 {" Thêm lựa chọn"}
-                              </a>
+                              </button>
                               <div
                                 style={styleOf(
-                                  "font-size: 12.5px; color: #706473",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {"Cụm này chiếm " +
@@ -8223,8 +8223,8 @@ class QuestionCard extends React.Component {
                                           "position: relative; min-width: 0; max-width: 180px",
                                         )}
                                       >
-                                        <a
-                                          href={"#"}
+                                        <button
+                                          type={"button"} data-ab={""}
                                           role={"combobox"}
                                           aria-haspopup={"listbox"}
                                           aria-expanded={j.dd.open}
@@ -8262,7 +8262,7 @@ class QuestionCard extends React.Component {
                                               <path d={"M6 9l6 6 6-6"}></path>
                                             </svg>
                                           </span>
-                                        </a>
+                                        </button>
                                         {j.dd.open ? (
                                           <>
                                             <div
@@ -8280,15 +8280,15 @@ class QuestionCard extends React.Component {
                                               {(j.dd.opts || []).map(
                                                 (jo, index) => (
                                                   <React.Fragment key={index}>
-                                                    <a
-                                                      href={"#"}
+                                                    <button
+                                                      type={"button"} data-ab={""}
                                                       role={"option"}
                                                       aria-selected={jo.on}
                                                       onClick={jo.pick}
                                                       style={styleOf(jo.st)}
                                                     >
                                                       {jo.lab}
-                                                    </a>
+                                                    </button>
                                                   </React.Fragment>
                                                 ),
                                               )}
@@ -8297,9 +8297,9 @@ class QuestionCard extends React.Component {
                                         ) : null}
                                       </div>
                                     </div>
-                                    <a
+                                    <button
                                       className={"eo qd"}
-                                      href={"#"}
+                                      type={"button"} data-ab={""}
                                       onClick={j.del}
                                       aria-label={"Xóa câu " + j.no}
                                       style={styleOf(
@@ -8323,13 +8323,13 @@ class QuestionCard extends React.Component {
                                           }
                                         ></path>
                                       </svg>
-                                    </a>
+                                    </button>
                                   </div>
                                 </React.Fragment>
                               ))}
-                              <a
+                              <button
                                 className={"eo"}
-                                href={"#"}
+                                type={"button"} data-ab={""}
                                 onClick={v.G.addItem}
                                 style={styleOf(
                                   "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
@@ -8349,7 +8349,7 @@ class QuestionCard extends React.Component {
                                   <path d={"M12 5v14M5 12h14"}></path>
                                 </svg>
                                 {" Thêm nhận định"}
-                              </a>
+                              </button>
                             </div>
                           </>
                         ) : null}
@@ -8367,13 +8367,13 @@ class QuestionCard extends React.Component {
                   )}
                 >
                   {"Đã xóa thẻ. "}
-                  <a
-                    href={"#"}
+                  <button
+                    type={"button"} data-ab={""}
                     onClick={v.undo}
                     style={styleOf("font-weight: 600")}
                   >
                     {"Hoàn tác"}
-                  </a>
+                  </button>
                 </div>
               </>
             ) : null}
@@ -8408,24 +8408,24 @@ class QuestionCard extends React.Component {
                         "display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px",
                       )}
                     >
-                      <a
-                        href={"#"}
+                      <button
+                        type={"button"} data-ab={""}
                         onClick={v.confirmCancel}
                         style={styleOf(
                           "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
                         )}
                       >
                         {"Hủy"}
-                      </a>
-                      <a
-                        href={"#"}
+                      </button>
+                      <button
+                        type={"button"} data-ab={""}
                         onClick={v.confirmOk}
                         style={styleOf(
                           "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; background: #C0412A; border-color: #C0412A; color: #FFFFFF",
                         )}
                       >
                         {"Xóa"}
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -8440,17 +8440,17 @@ class QuestionCard extends React.Component {
                   )}
                 >
                   <span>{v.snack}</span>
-                  <a
-                    href={"#"}
+                  <button
+                    type={"button"} data-ab={""}
                     onClick={v.undo}
                     style={styleOf(
                       "color: #A9C4F5; font-weight: 600; text-decoration: none",
                     )}
                   >
                     {"Hoàn tác"}
-                  </a>
-                  <a
-                    href={"#"}
+                  </button>
+                  <button
+                    type={"button"} data-ab={""}
                     onClick={v.hideSnack}
                     aria-label={"Đóng"}
                     style={styleOf("display: flex; color: #FFFFFF")}
@@ -8468,7 +8468,7 @@ class QuestionCard extends React.Component {
                     >
                       <path d={"M6 6l12 12M18 6L6 18"}></path>
                     </svg>
-                  </a>
+                  </button>
                 </div>
               </>
             ) : null}

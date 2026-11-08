@@ -141,7 +141,7 @@ class MyWS extends React.Component {
                             {"IELTS Full Tests"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Đề đầy đủ, chấm band như thi thật"}
                           </span>
@@ -200,7 +200,7 @@ class MyWS extends React.Component {
                             {"IELTS Listening Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện từng Question Group, nghe lại được"}
                           </span>
@@ -248,7 +248,7 @@ class MyWS extends React.Component {
                             {"IELTS Reading Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện từng Question Group, có lời giải"}
                           </span>
@@ -293,7 +293,7 @@ class MyWS extends React.Component {
                             {"IELTS Writing Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện riêng Task 1 hoặc Task 2"}
                           </span>
@@ -345,7 +345,7 @@ class MyWS extends React.Component {
                             {"IELTS Speaking Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện riêng Part 1, 2 hoặc 3"}
                           </span>
@@ -430,7 +430,7 @@ class MyWS extends React.Component {
                             {"Writing Task 1 Academic"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
                           </span>
@@ -482,7 +482,7 @@ class MyWS extends React.Component {
                             {"Writing Task 1 General"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bài mẫu viết thư"}
                           </span>
@@ -527,7 +527,7 @@ class MyWS extends React.Component {
                             {"Writing Task 2"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bài mẫu bài luận"}
                           </span>
@@ -579,7 +579,7 @@ class MyWS extends React.Component {
                             {"Speaking Part 1, 2, 3"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bản ghi lời nói, kèm audio mẫu"}
                           </span>
@@ -635,7 +635,7 @@ class MyWS extends React.Component {
                   </svg>
                   <NotificationBadge
                     style={styleOf(
-                      "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
+                      "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
                     )}
                   />
                 </a>
@@ -979,35 +979,35 @@ class MyWS extends React.Component {
                       <tr>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         >
                           {"Bài"}
                         </th>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         >
                           {"Kỹ năng"}
                         </th>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         >
                           {"Trạng thái"}
                         </th>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         >
                           {"Nội dung bài"}
                         </th>
                         <th
                           style={styleOf(
-                            "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                           )}
                         ></th>
                       </tr>
@@ -1025,7 +1025,7 @@ class MyWS extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 12.5px; color: #706473",
+                                "font-size: 13px; color: #706473",
                               )}
                             >
                               {"Hoàn thành 20/10 10:05"}
@@ -1039,7 +1039,7 @@ class MyWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"Writing"}
@@ -1057,7 +1057,7 @@ class MyWS extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Đã có kết quả · 6.5"}
@@ -1133,7 +1133,7 @@ class MyWS extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 12.5px; color: #706473",
+                                "font-size: 13px; color: #706473",
                               )}
                             >
                               {"Hoàn thành 22/10 20:30"}
@@ -1147,7 +1147,7 @@ class MyWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"Speaking"}
@@ -1165,7 +1165,7 @@ class MyWS extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ chấm · phân công 22/10 20:40"}
@@ -1248,7 +1248,7 @@ class MyWS extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 12.5px; color: #706473",
+                                "font-size: 13px; color: #706473",
                               )}
                             >
                               {"Hoàn thành 21/10 08:55"}
@@ -1262,7 +1262,7 @@ class MyWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"Writing"}
@@ -1280,7 +1280,7 @@ class MyWS extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chờ phân công · còn 21 giờ"}
@@ -1342,7 +1342,7 @@ class MyWS extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 12.5px; color: #706473",
+                                "font-size: 13px; color: #706473",
                               )}
                             >
                               {"Hoàn thành 18/10 19:40"}
@@ -1356,7 +1356,7 @@ class MyWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"Speaking"}
@@ -1374,7 +1374,7 @@ class MyWS extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Đã hủy · đã hoàn 1 bonus"}
@@ -1450,7 +1450,7 @@ class MyWS extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 12.5px; color: #706473",
+                                "font-size: 13px; color: #706473",
                               )}
                             >
                               {"Hoàn thành 22/10 21:15"}
@@ -1464,7 +1464,7 @@ class MyWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"Writing"}
@@ -1482,7 +1482,7 @@ class MyWS extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Đã lưu · chưa gửi chấm"}
@@ -1552,7 +1552,7 @@ class MyWS extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 12.5px; color: #706473",
+                                "font-size: 13px; color: #706473",
                               )}
                             >
                               {"Hoàn thành 02/10 09:30"}
@@ -1566,7 +1566,7 @@ class MyWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 0 solid transparent; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"Writing"}
@@ -1584,7 +1584,7 @@ class MyWS extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 12.5px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Chưa có điểm"}

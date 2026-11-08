@@ -285,7 +285,7 @@ class SampleWriting extends React.Component {
       taskChip: "Task " + ex.task,
       formChip: fm[0],
       formSt:
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: " +
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: " +
         fm[1] +
         "; color: " +
         fm[2],
@@ -477,7 +477,7 @@ class SampleWriting extends React.Component {
                             {"IELTS Full Tests"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Đề đầy đủ, chấm band như thi thật"}
                           </span>
@@ -536,7 +536,7 @@ class SampleWriting extends React.Component {
                             {"IELTS Listening Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện từng Question Group, nghe lại được"}
                           </span>
@@ -584,7 +584,7 @@ class SampleWriting extends React.Component {
                             {"IELTS Reading Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện từng Question Group, có lời giải"}
                           </span>
@@ -629,7 +629,7 @@ class SampleWriting extends React.Component {
                             {"IELTS Writing Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện riêng Task 1 hoặc Task 2"}
                           </span>
@@ -681,7 +681,7 @@ class SampleWriting extends React.Component {
                             {"IELTS Speaking Practice"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Luyện riêng Part 1, 2 hoặc 3"}
                           </span>
@@ -766,7 +766,7 @@ class SampleWriting extends React.Component {
                             {"Writing Task 1 Academic"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Mô tả biểu đồ, bảng, bản đồ, quy trình"}
                           </span>
@@ -818,7 +818,7 @@ class SampleWriting extends React.Component {
                             {"Writing Task 1 General"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bài mẫu viết thư"}
                           </span>
@@ -863,7 +863,7 @@ class SampleWriting extends React.Component {
                             {"Writing Task 2"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bài mẫu bài luận"}
                           </span>
@@ -915,7 +915,7 @@ class SampleWriting extends React.Component {
                             {"Speaking Part 1, 2, 3"}
                           </span>
                           <span
-                            style={styleOf("font-size: 12.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {"Bản ghi lời nói, kèm audio mẫu"}
                           </span>
@@ -971,7 +971,7 @@ class SampleWriting extends React.Component {
                   </svg>
                   <NotificationBadge
                     style={styleOf(
-                      "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
+                      "position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E5604A; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF",
                     )}
                   />
                 </a>
@@ -1018,7 +1018,7 @@ class SampleWriting extends React.Component {
                           <>
                             <span
                               aria-hidden={"true"}
-                              style={styleOf("display: flex; color: #B3A9B5")}
+                              style={styleOf("display: flex; color: #766A79")}
                             >
                               <svg
                                 width={"14"}
@@ -1087,14 +1087,14 @@ class SampleWriting extends React.Component {
                     >
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #FBEDBF; color: #7A5A0E",
+                          "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: #FBEDBF; color: #7A5A0E",
                         )}
                       >
                         {"Writing"}
                       </span>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
+                          "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
                         )}
                       >
                         {v.taskChip}
@@ -1102,7 +1102,7 @@ class SampleWriting extends React.Component {
                       <span style={styleOf(v.formSt)}>{v.formChip}</span>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #E8E4FA; color: #5543B0",
+                          "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: #E8E4FA; color: #5543B0",
                         )}
                       >
                         {v.typeChip}
@@ -1269,7 +1269,7 @@ class SampleWriting extends React.Component {
                     >
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: #DCEDE2; color: #2E6A48",
+                          "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: #DCEDE2; color: #2E6A48",
                         )}
                       >
                         {v.bandChip}
@@ -1358,7 +1358,7 @@ class SampleWriting extends React.Component {
                   >
                     <div
                       style={styleOf(
-                        "font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; padding: 0 10px 6px",
+                        "font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #706473; padding: 0 10px 6px",
                       )}
                     >
                       {"Trong trang này"}
@@ -1385,7 +1385,7 @@ class SampleWriting extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "font-size: 12px; color: #706473; padding: 4px 10px 0",
+                        "font-size: 13px; color: #706473; padding: 4px 10px 0",
                       )}
                     >
                       {"Đã đọc " + v.pct + "%"}
@@ -1412,7 +1412,7 @@ class SampleWriting extends React.Component {
                     >
                       {v.practiceBtn}
                     </a>
-                    <div style={styleOf("font-size: 12.5px; color: #706473")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {
                         "Bài mẫu xem công khai, không cần đăng nhập. Muốn luyện và lưu bài thì cần đăng nhập."
                       }

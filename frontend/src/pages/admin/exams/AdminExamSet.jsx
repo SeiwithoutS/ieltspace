@@ -415,7 +415,7 @@ class AdminExamSet extends React.Component {
       return (
         "display: inline-flex; align-items: center; height: " +
         (h || 22) +
-        "px; padding: 0 8px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: " +
+        "px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: " +
         TY[c][1] +
         "; color: " +
         TY[c][2]
@@ -459,7 +459,7 @@ class AdminExamSet extends React.Component {
         : [
             {
               text: "Dùng chung cho cả 2 hình thức",
-              st: "font-size: 12.5px; color: #706473",
+              st: "font-size: 13px; color: #706473",
             },
           ];
       return {
@@ -508,7 +508,7 @@ class AdminExamSet extends React.Component {
         (grp ? "center" : "left") +
         "; padding: " +
         (subRow ? "6px 12px 10px" : "12px 16px") +
-        "; font-size: 12.5px; font-weight: 600; white-space: nowrap; vertical-align: bottom; transition: background-color .2s, color .2s; " +
+        "; font-size: 13px; font-weight: 600; white-space: nowrap; vertical-align: bottom; transition: background-color .2s, color .2s; " +
         (grp && !subRow
           ? "border-bottom: 1px solid #E6E4E0; "
           : "border-bottom: 1.5px solid #D6D4D0; ") +
@@ -603,7 +603,7 @@ class AdminExamSet extends React.Component {
               label: "Đăng trong editor khi soạn xong",
               st:
                 MI +
-                "color: #8E8392; font-weight: 500; font-size: 13px; cursor: default",
+                "color: #766A79; font-weight: 500; font-size: 13px; cursor: default",
               href: "#",
               act: stop,
             });
@@ -629,7 +629,7 @@ class AdminExamSet extends React.Component {
               (c || i === 3 ? "border-left: 1px solid #E6E4E0; " : "") +
               (col === i ? "background: " + k[2] + "55" : ""),
             st:
-              "display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 8px 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; cursor: pointer; background: " +
+              "display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 8px 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; cursor: pointer; background: " +
               (stx ? stx[1] + "; color: " + stx[2] : "#FFFFFF") +
               (open
                 ? "; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px " +
@@ -784,12 +784,12 @@ class AdminExamSet extends React.Component {
       setTypes: used.map(function (c) {
         return {
           text: TY[c][0],
-          st: pill(c, 26) + "; font-size: 12.5px; padding: 0 10px",
+          st: pill(c, 26) + "; font-size: 13px; padding: 0 10px",
         };
       }),
       setStatus: sst[0],
       setStatusSt:
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; transition: background-color .3s, color .3s; background: " +
+        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; transition: background-color .3s, color .3s; background: " +
         sst[1] +
         "; color: " +
         sst[2],
@@ -1065,7 +1065,7 @@ class AdminExamSet extends React.Component {
                                   <>
                                     <span
                                       style={styleOf(
-                                        "margin: auto; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 600",
+                                        "margin: auto; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 13px; font-weight: 600",
                                       )}
                                     >
                                       <svg
@@ -1159,7 +1159,7 @@ class AdminExamSet extends React.Component {
                                   </div>
                                   <div
                                     style={styleOf(
-                                      "font-size: 12.5px; color: #706473",
+                                      "font-size: 13px; color: #706473",
                                     )}
                                   >
                                     {
@@ -1170,7 +1170,7 @@ class AdminExamSet extends React.Component {
                                     <>
                                       <div
                                         style={styleOf(
-                                          "font-size: 12.5px; color: " +
+                                          "font-size: 13px; color: " +
                                             v.artMsgColor,
                                         )}
                                       >
@@ -1460,7 +1460,7 @@ class AdminExamSet extends React.Component {
                                       }
                                       className={"press"}
                                       style={styleOf(
-                                        "margin-left: auto; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 12.5px; font-weight: 600; text-decoration: none; white-space: nowrap",
+                                        "margin-left: auto; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap",
                                       )}
                                     >
                                       <svg
@@ -1512,7 +1512,7 @@ class AdminExamSet extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 12.5px; color: #706473",
+                                  "display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 13px; color: #706473",
                                 )}
                               >
                                 {(t.kinds || []).map((q, index) => (
@@ -1547,28 +1547,28 @@ class AdminExamSet extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #DCEDE2; color: #2E6A48",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #DCEDE2; color: #2E6A48",
                               )}
                             >
                               {"Đã đăng"}
                             </span>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #FBEDBF; color: #7A5A0E",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #FBEDBF; color: #7A5A0E",
                               )}
                             >
                               {"Đang soạn"}
                             </span>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #F3F0EA; color: #6A5D6C",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #F3F0EA; color: #6A5D6C",
                               )}
                             >
                               {"Đã ẩn"}
                             </span>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #FFFFFF; color: #706473; border: 1.5px dashed #D6D4D0",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #FFFFFF; color: #706473; border: 1.5px dashed #D6D4D0",
                               )}
                             >
                               <svg
@@ -1604,7 +1604,7 @@ class AdminExamSet extends React.Component {
                                 <th
                                   rowSpan={"2"}
                                   style={styleOf(
-                                    "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; width: 20%; vertical-align: bottom",
+                                    "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; width: 20%; vertical-align: bottom",
                                   )}
                                 >
                                   {"Đề"}
@@ -1624,7 +1624,7 @@ class AdminExamSet extends React.Component {
                                 <th
                                   rowSpan={"2"}
                                   style={styleOf(
-                                    "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; vertical-align: bottom",
+                                    "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; vertical-align: bottom",
                                   )}
                                 >
                                   {"Cập nhật"}
@@ -1632,7 +1632,7 @@ class AdminExamSet extends React.Component {
                                 <th
                                   rowSpan={"2"}
                                   style={styleOf(
-                                    "text-align: left; padding: 12px 16px; font-size: 12.5px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                                    "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                   )}
                                 ></th>
                               </tr>
@@ -1640,7 +1640,7 @@ class AdminExamSet extends React.Component {
                                 <th style={styleOf(v.s1)}>
                                   <span
                                     style={styleOf(
-                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #DFF1F4; color: #1F6A78",
+                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #DFF1F4; color: #1F6A78",
                                     )}
                                   >
                                     {"Academic"}
@@ -1649,7 +1649,7 @@ class AdminExamSet extends React.Component {
                                 <th style={styleOf(v.s1)}>
                                   <span
                                     style={styleOf(
-                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #FCE6D6; color: #9A4A17",
+                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #FCE6D6; color: #9A4A17",
                                     )}
                                   >
                                     {"General Training"}
@@ -1658,7 +1658,7 @@ class AdminExamSet extends React.Component {
                                 <th style={styleOf(v.s2)}>
                                   <span
                                     style={styleOf(
-                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #DFF1F4; color: #1F6A78",
+                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #DFF1F4; color: #1F6A78",
                                     )}
                                   >
                                     {"Academic"}
@@ -1667,7 +1667,7 @@ class AdminExamSet extends React.Component {
                                 <th style={styleOf(v.s2)}>
                                   <span
                                     style={styleOf(
-                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #FCE6D6; color: #9A4A17",
+                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #FCE6D6; color: #9A4A17",
                                     )}
                                   >
                                     {"General Training"}
@@ -1689,7 +1689,7 @@ class AdminExamSet extends React.Component {
                                       </div>
                                       <div
                                         style={styleOf(
-                                          "font-size: 12.5px; color: #706473",
+                                          "font-size: 13px; color: #706473",
                                         )}
                                       >
                                         {r.sub}
@@ -1774,7 +1774,7 @@ class AdminExamSet extends React.Component {
                                                 >
                                                   <div
                                                     style={styleOf(
-                                                      "padding: 6px 10px 4px; font-size: 12px; color: #706473; white-space: nowrap",
+                                                      "padding: 6px 10px 4px; font-size: 13px; color: #706473; white-space: nowrap",
                                                     )}
                                                   >
                                                     {x.menuHead}

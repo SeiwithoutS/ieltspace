@@ -170,7 +170,7 @@ class AdminSidebar extends React.Component {
             <>
               <div
                 style={styleOf(
-                  "padding: 0 8px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; white-space: nowrap",
+                  "padding: 0 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; white-space: nowrap",
                 )}
               >
                 {v.teacher ? "Không gian chấm bài" : "Quản lý hệ thống"}

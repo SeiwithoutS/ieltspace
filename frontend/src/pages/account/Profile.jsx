@@ -52,12 +52,12 @@ class Profile extends React.Component {
               <a
                 href={"StudentLanding.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -72,7 +72,7 @@ class Profile extends React.Component {
                   <a
                     href={"FullTests.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -112,7 +112,7 @@ class Profile extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -137,7 +137,7 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Full Tests"}
@@ -158,7 +158,7 @@ class Profile extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -196,7 +196,7 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Listening Practice"}
@@ -217,7 +217,7 @@ class Profile extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -244,7 +244,7 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Reading Practice"}
@@ -265,7 +265,7 @@ class Profile extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -289,7 +289,7 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Writing Practice"}
@@ -310,7 +310,7 @@ class Profile extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -341,7 +341,7 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Speaking Practice"}
@@ -360,7 +360,7 @@ class Profile extends React.Component {
                   <a
                     href={"SampleLibrary.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -400,7 +400,7 @@ class Profile extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -426,7 +426,7 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 Academic"}
@@ -447,7 +447,7 @@ class Profile extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -478,7 +478,7 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 General"}
@@ -499,7 +499,7 @@ class Profile extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -523,7 +523,7 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 2"}
@@ -544,7 +544,7 @@ class Profile extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -575,7 +575,7 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Speaking Part 1, 2, 3"}
@@ -593,7 +593,7 @@ class Profile extends React.Component {
                 <a
                   href={"Vocab.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Thư viện từ vựng"}
@@ -601,7 +601,7 @@ class Profile extends React.Component {
                 <a
                   href={"Flashcard.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Flashcard của tôi"}
@@ -675,14 +675,14 @@ class Profile extends React.Component {
                 <div>
                   <h1
                     style={styleOf(
-                      "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                      "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                     )}
                   >
                     {"Hồ sơ và cài đặt"}
                   </h1>
                   <div
                     style={styleOf(
-                      "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                      "font-size: 15px; color: #706473; margin-top: 4px",
                     )}
                   >
                     {"Nguyễn Minh Anh · Người học"}
@@ -706,10 +706,10 @@ class Profile extends React.Component {
                     )}
                   >
                     <div>
-                      <div style={styleOf("font-size: 19px; font-weight: 700")}>
+                      <div style={styleOf("font-size: 18px; font-weight: 700")}>
                         {"Thông tin cá nhân"}
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {
                           "Tên hiển thị, ảnh đại diện, email đăng nhập và mật khẩu."
                         }
@@ -745,7 +745,7 @@ class Profile extends React.Component {
                         <a
                           href={"#"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 38px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 38px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           <svg
@@ -777,7 +777,7 @@ class Profile extends React.Component {
                           "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                         )}
                       >
-                        <span style={styleOf("color: #6A5D6C")}>
+                        <span style={styleOf("color: #706473")}>
                           {"Tên hiển thị"}
                         </span>
                         <span
@@ -787,7 +787,7 @@ class Profile extends React.Component {
                           <a
                             href={"#"}
                             style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                             )}
                           >
                             {"Chỉnh sửa"}
@@ -799,7 +799,7 @@ class Profile extends React.Component {
                           "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                         )}
                       >
-                        <span style={styleOf("color: #6A5D6C")}>{"Email"}</span>
+                        <span style={styleOf("color: #706473")}>{"Email"}</span>
                         <span
                           style={styleOf("font-weight: 600; text-align: right")}
                         >
@@ -811,7 +811,7 @@ class Profile extends React.Component {
                           "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                         )}
                       >
-                        <span style={styleOf("color: #6A5D6C")}>
+                        <span style={styleOf("color: #706473")}>
                           {"Mật khẩu"}
                         </span>
                         <span
@@ -821,7 +821,7 @@ class Profile extends React.Component {
                           <a
                             href={"#"}
                             style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                             )}
                           >
                             {"Đổi mật khẩu"}
@@ -842,10 +842,10 @@ class Profile extends React.Component {
                     )}
                   >
                     <div>
-                      <div style={styleOf("font-size: 19px; font-weight: 700")}>
+                      <div style={styleOf("font-size: 18px; font-weight: 700")}>
                         {"Mục tiêu học tập"}
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {
                           "Band 0 đến 9, bước 0.5. Mục tiêu tổng nhập riêng, không tự lấy trung bình các kỹ năng."
                         }
@@ -868,14 +868,14 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-size: 13.5px; font-weight: 600",
+                              "font-size: 13px; font-weight: 600",
                             )}
                           >
                             {"Band mục tiêu tổng"}
                           </span>
                           <div
                             style={styleOf(
-                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
                             )}
                           >
                             <span>{"7.0"}</span>
@@ -889,14 +889,14 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-size: 13.5px; font-weight: 600",
+                              "font-size: 13px; font-weight: 600",
                             )}
                           >
                             {"Số phiên học mỗi ngày"}
                           </span>
                           <div
                             style={styleOf(
-                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
                             )}
                           >
                             <span>{"2"}</span>
@@ -905,7 +905,7 @@ class Profile extends React.Component {
                         </label>
                       </div>
                       <div
-                        style={styleOf("font-size: 13.5px; font-weight: 600")}
+                        style={styleOf("font-size: 13px; font-weight: 600")}
                       >
                         {"Band mục tiêu theo kỹ năng (tùy chọn)"}
                       </div>
@@ -921,14 +921,14 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-size: 13.5px; font-weight: 600",
+                              "font-size: 13px; font-weight: 600",
                             )}
                           >
                             {"Listening"}
                           </span>
                           <div
                             style={styleOf(
-                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
                             )}
                           >
                             <span>{"7.5"}</span>
@@ -942,14 +942,14 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-size: 13.5px; font-weight: 600",
+                              "font-size: 13px; font-weight: 600",
                             )}
                           >
                             {"Reading"}
                           </span>
                           <div
                             style={styleOf(
-                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
                             )}
                           >
                             <span>{"7.0"}</span>
@@ -963,14 +963,14 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-size: 13.5px; font-weight: 600",
+                              "font-size: 13px; font-weight: 600",
                             )}
                           >
                             {"Writing"}
                           </span>
                           <div
                             style={styleOf(
-                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
                             )}
                           >
                             <span>{"6.5"}</span>
@@ -984,14 +984,14 @@ class Profile extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-size: 13.5px; font-weight: 600",
+                              "font-size: 13px; font-weight: 600",
                             )}
                           >
                             {"Speaking"}
                           </span>
                           <div
                             style={styleOf(
-                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                              "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
                             )}
                           >
                             <span>{"6.5"}</span>
@@ -1012,7 +1012,7 @@ class Profile extends React.Component {
                         <a
                           href={"#"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #F1B3A3; box-sizing: border-box; background: #FFFFFF; color: #C0412A; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #F1B3A3; box-sizing: border-box; background: #FFFFFF; color: #C0412A; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           {"Hủy"}
@@ -1020,7 +1020,7 @@ class Profile extends React.Component {
                         <a
                           href={"#"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           {"Lưu mục tiêu"}
@@ -1040,10 +1040,10 @@ class Profile extends React.Component {
                     )}
                   >
                     <div>
-                      <div style={styleOf("font-size: 19px; font-weight: 700")}>
+                      <div style={styleOf("font-size: 18px; font-weight: 700")}>
                         {"Giao diện"}
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {"Chế độ sáng hoặc tối, lưu trên trình duyệt này."}
                       </div>
                     </div>
@@ -1051,14 +1051,14 @@ class Profile extends React.Component {
                       role={"group"}
                       aria-label={"Chế độ giao diện"}
                       style={styleOf(
-                        "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                        "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                       )}
                     >
                       <button
                         type={"button"}
                         data-theme-toggle={"light"}
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-family: inherit; font-size: 13.5px; font-weight: 600; color: #352637; cursor: pointer",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-family: inherit; font-size: 13px; font-weight: 600; color: #352637; cursor: pointer",
                         )}
                       >
                         <svg
@@ -1085,7 +1085,7 @@ class Profile extends React.Component {
                         type={"button"}
                         data-theme-toggle={"dark"}
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: transparent; border: 1.5px solid transparent; font-family: inherit; font-size: 13.5px; font-weight: 500; color: #6A5D6C; cursor: pointer",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: transparent; border: 1.5px solid transparent; font-family: inherit; font-size: 13px; font-weight: 500; color: #706473; cursor: pointer",
                         )}
                       >
                         <svg

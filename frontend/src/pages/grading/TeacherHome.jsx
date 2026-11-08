@@ -72,14 +72,14 @@ class TeacherHome extends React.Component {
                   <div>
                     <h1
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Chào cô Lan Hương"}
                     </h1>
                     <div
                       style={styleOf(
-                        "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                        "font-size: 15px; color: #706473; margin-top: 4px",
                       )}
                     >
                       {
@@ -105,7 +105,7 @@ class TeacherHome extends React.Component {
                     >
                       {"6"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"được phân công cho bạn"}
                     </div>
                   </div>
@@ -124,7 +124,7 @@ class TeacherHome extends React.Component {
                     >
                       {"1"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"chưa công bố"}
                     </div>
                   </div>
@@ -143,7 +143,7 @@ class TeacherHome extends React.Component {
                     >
                       {"18"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"tuần 19/10 đến 25/10"}
                     </div>
                   </div>
@@ -162,7 +162,7 @@ class TeacherHome extends React.Component {
                     >
                       {"7 / 10"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"bài chưa chấm / tối đa"}
                     </div>
                   </div>
@@ -189,7 +189,7 @@ class TeacherHome extends React.Component {
                       >
                         <div>
                           <div
-                            style={styleOf("font-size: 17px; font-weight: 600")}
+                            style={styleOf("font-size: 18px; font-weight: 600")}
                           >
                             {"Tiếp tục công việc"}
                           </div>
@@ -197,7 +197,7 @@ class TeacherHome extends React.Component {
                         <a
                           href={"TeacherQueue.dc.html"}
                           style={styleOf(
-                            "font-weight: 600; font-size: 14.5px; color: #352637; text-decoration: none",
+                            "font-weight: 600; font-size: 14px; color: #352637; text-decoration: none",
                           )}
                         >
                           {"Xem hàng chờ"}
@@ -232,7 +232,7 @@ class TeacherHome extends React.Component {
                             {"Writing Task 2 · Public transport"}
                           </div>
                           <div
-                            style={styleOf("font-size: 13.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {
                               "Nguyễn Minh Anh · phân công 22/10 14:05 · đã chờ chấm 21 giờ"
@@ -270,7 +270,7 @@ class TeacherHome extends React.Component {
                         <a
                           href={"TeacherGrade.dc.html"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           {"Mở bài"}
@@ -312,7 +312,7 @@ class TeacherHome extends React.Component {
                             {"Speaking Part 2 · A skill worth learning"}
                           </div>
                           <div
-                            style={styleOf("font-size: 13.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {
                               "Nguyễn Minh Anh · phân công 22/10 20:40 · đã chờ chấm 15 giờ"
@@ -336,7 +336,7 @@ class TeacherHome extends React.Component {
                         <a
                           href={"TeacherGrade.dc.html"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           {"Mở bài"}
@@ -371,7 +371,7 @@ class TeacherHome extends React.Component {
                             {"Writing Task 1 Academic · Energy use"}
                           </div>
                           <div
-                            style={styleOf("font-size: 13.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {
                               "Hoàng Nam · phân công 23/10 08:10 · đã chờ chấm 3 giờ"
@@ -395,7 +395,7 @@ class TeacherHome extends React.Component {
                         <a
                           href={"TeacherGrade.dc.html"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           {"Mở bài"}
@@ -413,7 +413,7 @@ class TeacherHome extends React.Component {
                         )}
                       >
                         <div
-                          style={styleOf("font-size: 17px; font-weight: 600")}
+                          style={styleOf("font-size: 18px; font-weight: 600")}
                         >
                           {"Bài đến với bạn như thế nào"}
                         </div>
@@ -424,12 +424,12 @@ class TeacherHome extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #706473; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"Người học gửi yêu cầu chấm"}
                           </span>
-                          <span style={styleOf("color: #766A79")}>{"→"}</span>
+                          <span style={styleOf("color: #706473")}>{"→"}</span>
                           <span
                             style={styleOf(
                               "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; white-space: nowrap",
@@ -437,7 +437,7 @@ class TeacherHome extends React.Component {
                           >
                             {"Hệ thống tự phân công"}
                           </span>
-                          <span style={styleOf("color: #766A79")}>{"→"}</span>
+                          <span style={styleOf("color: #706473")}>{"→"}</span>
                           <span
                             style={styleOf(
                               "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; white-space: nowrap",
@@ -445,7 +445,7 @@ class TeacherHome extends React.Component {
                           >
                             {"Chấm, có thể lưu nháp"}
                           </span>
-                          <span style={styleOf("color: #766A79")}>{"→"}</span>
+                          <span style={styleOf("color: #706473")}>{"→"}</span>
                           <span
                             style={styleOf(
                               "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
@@ -455,7 +455,7 @@ class TeacherHome extends React.Component {
                           </span>
                         </div>
                         <div
-                          style={styleOf("font-size: 13.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 13px; color: #706473")}
                         >
                           {
                             "Không có bước tự nhận hay từ chối bài. Hệ thống ưu tiên giáo viên ít bài chưa chấm nhất, rồi đến người lâu chưa nhận bài. Sau khi công bố, nội dung bài còn xem được 14 ngày."
@@ -480,7 +480,7 @@ class TeacherHome extends React.Component {
                         )}
                       >
                         <div
-                          style={styleOf("font-size: 17px; font-weight: 600")}
+                          style={styleOf("font-size: 18px; font-weight: 600")}
                         >
                           {"Trạng thái nhận bài"}
                         </div>
@@ -489,7 +489,7 @@ class TeacherHome extends React.Component {
                             "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                           )}
                         >
-                          <span style={styleOf("color: #6A5D6C")}>
+                          <span style={styleOf("color: #706473")}>
                             {"Quyền chấm Writing"}
                           </span>
                           <span
@@ -511,7 +511,7 @@ class TeacherHome extends React.Component {
                             "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                           )}
                         >
-                          <span style={styleOf("color: #6A5D6C")}>
+                          <span style={styleOf("color: #706473")}>
                             {"Quyền chấm Speaking"}
                           </span>
                           <span
@@ -533,7 +533,7 @@ class TeacherHome extends React.Component {
                             "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                           )}
                         >
-                          <span style={styleOf("color: #6A5D6C")}>
+                          <span style={styleOf("color: #706473")}>
                             {"Bài chưa chấm"}
                           </span>
                           <span
@@ -549,7 +549,7 @@ class TeacherHome extends React.Component {
                             "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                           )}
                         >
-                          <span style={styleOf("color: #6A5D6C")}>
+                          <span style={styleOf("color: #706473")}>
                             {"Lần nhận bài gần nhất"}
                           </span>
                           <span
@@ -578,7 +578,7 @@ class TeacherHome extends React.Component {
                         )}
                       >
                         <div
-                          style={styleOf("font-size: 17px; font-weight: 600")}
+                          style={styleOf("font-size: 18px; font-weight: 600")}
                         >
                           {"Bộ tiêu chí cố định"}
                         </div>

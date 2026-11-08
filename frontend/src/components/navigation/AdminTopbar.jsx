@@ -32,9 +32,9 @@ class AdminTopbar extends React.Component {
       }
     }
     var on =
-        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box",
+        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box",
       off =
-        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box";
+        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box";
     return {
       crumb: P.crumb || "Quản lý / Tổng quan",
       name: account.name,
@@ -145,7 +145,7 @@ class AdminTopbar extends React.Component {
                 >
                   <span
                     style={styleOf(
-                      "width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #C5CEF5; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13.5px; color: #352637",
+                      "width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #C5CEF5; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #352637",
                     )}
                   >
                     {v.initials}

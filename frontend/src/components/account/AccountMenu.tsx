@@ -17,12 +17,12 @@ export default function AccountMenu({ onClose }: { onClose: () => void }) {
   const top = anchor ? anchor.bottom - 44 : 24;
   const dark = document.documentElement.classList.contains("dark");
   const base =
-    "display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 12px;border-radius:8px;font-size:13.5px;text-decoration:none;cursor:pointer;box-sizing:border-box;";
+    "display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 12px;border-radius:8px;font-size:13px;text-decoration:none;cursor:pointer;box-sizing:border-box;";
   const on =
     base +
     "background:#FFFFFF;border:1.5px solid #D6D4D0;color:#352637;font-weight:600";
   const off =
-    base + "border:1.5px solid transparent;color:#6A5D6C;font-weight:500";
+    base + "border:1.5px solid transparent;color:#706473;font-weight:500";
   const v = {
     name: account.name,
     initials: account.initials,

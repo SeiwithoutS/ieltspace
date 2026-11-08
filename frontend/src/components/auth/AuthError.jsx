@@ -30,7 +30,7 @@ class AuthError extends React.Component {
         <div
           role={"alert"}
           style={styleOf(
-            "display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #FBDCD3; border: 1px solid #F1B3A3; color: #B23A24; font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.5",
+            "display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #FBDCD3; border: 1px solid #F1B3A3; color: #C0412A; font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.5",
           )}
         >
           {"\n"}
@@ -64,7 +64,7 @@ class AuthError extends React.Component {
                 <a
                   href={"CheckEmail.dc.html"}
                   style={styleOf(
-                    "color: #B23A24; font-weight: 600; text-decoration: underline",
+                    "color: #C0412A; font-weight: 600; text-decoration: underline",
                   )}
                 >
                   {"gửi lại email xác minh"}

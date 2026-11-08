@@ -1238,7 +1238,7 @@ class QuestionCard extends React.Component {
         on: a === pi,
         sub: a === pi ? "#4B3D4D" : "#706473",
         st:
-          "display: flex; flex-direction: column; align-items: flex-start; padding: 6px 14px; border-radius: 9px; text-decoration: none; color: " +
+          "display: flex; flex-direction: column; align-items: flex-start; padding: 6px 14px; border-radius: 10px; text-decoration: none; color: " +
           (p ? "#352637" : "#706473") +
           "; font-size: 14px; line-height: 1.3; box-sizing: border-box; " +
           (a === pi
@@ -1746,12 +1746,12 @@ class QuestionCard extends React.Component {
         flowImg: cg.mode === "image",
         segLv:
           cg.mode === "image"
-            ? "color: #6A5D6C; border: 1.5px solid transparent"
+            ? "color: #706473; border: 1.5px solid transparent"
             : "background: #FFFFFF; color: #352637; border: 1.5px solid #D6D4D0",
         segImg:
           cg.mode === "image"
             ? "background: #FFFFFF; color: #352637; border: 1.5px solid #D6D4D0"
-            : "color: #6A5D6C; border: 1.5px solid transparent",
+            : "color: #706473; border: 1.5px solid transparent",
         modeHint:
           cg.mode === "image"
             ? "Tải hình sơ đồ gốc rồi bấm lên hình để đặt nhãn số kèm mũi tên; nội dung từng câu nhập ở danh sách bên dưới. Dùng khi sơ đồ quá đặc biệt; người học sẽ thấy đúng hình này."
@@ -2027,7 +2027,7 @@ class QuestionCard extends React.Component {
               st:
                 "display: flex; gap: 4px; " +
                 (kind === "h"
-                  ? "font-weight: 700; font-size: 15.5px; margin-top: 6px"
+                  ? "font-weight: 700; font-size: 15px; margin-top: 6px"
                   : kind === "li"
                     ? "padding-left: 4px"
                     : ""),
@@ -2436,8 +2436,8 @@ class QuestionCard extends React.Component {
           okDc = !!ts && nDc < NC;
         G.tDelRowsLab = "Xóa " + (nDr > 1 ? nDr + " hàng" : "hàng");
         G.tDelColsLab = "Xóa " + (nDc > 1 ? nDc + " cột" : "cột");
-        G.tDelRowsSt = tbSt(false, okDr) + "; color: #C2412D";
-        G.tDelColsSt = tbSt(false, okDc) + "; color: #C2412D";
+        G.tDelRowsSt = tbSt(false, okDr) + "; color: #C0412A";
+        G.tDelColsSt = tbSt(false, okDc) + "; color: #C0412A";
         G.tDelRows = tact(
           okDr,
           function (g) {
@@ -2493,9 +2493,9 @@ class QuestionCard extends React.Component {
           (18 + NC * 120) +
           "px";
         G.tAddColSt =
-          "grid-row: 1; grid-column: 2; align-self: stretch; margin-top: 18px; display: flex; align-items: center; justify-content: center; width: 26px; border-radius: 8px; border: 1px solid #D6D4D0; color: #706473; background: #FFFFFF; text-decoration: none";
+          "grid-row: 1; grid-column: 2; align-self: stretch; margin-top: 18px; display: flex; align-items: center; justify-content: center; width: 26px; border-radius: 8px; border: 1.5px solid #D6D4D0; color: #706473; background: #FFFFFF; text-decoration: none";
         G.tAddRowSt =
-          "grid-row: 2; grid-column: 1; margin-left: 18px; display: flex; align-items: center; justify-content: center; height: 26px; border-radius: 8px; border: 1px solid #D6D4D0; color: #706473; background: #FFFFFF; text-decoration: none";
+          "grid-row: 2; grid-column: 1; margin-left: 18px; display: flex; align-items: center; justify-content: center; height: 26px; border-radius: 8px; border: 1.5px solid #D6D4D0; color: #706473; background: #FFFFFF; text-decoration: none";
         // tay nắm: bấm để chọn cả hàng/cột và mở menu
         var MI =
           "display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 10px; border-radius: 8px; font-size: 13px; color: #352637; text-decoration: none; white-space: nowrap";
@@ -2555,7 +2555,7 @@ class QuestionCard extends React.Component {
               lab: isCol ? "Xóa cột" : "Xóa hàng",
               st:
                 MI +
-                "; color: #C2412D" +
+                "; color: #C0412A" +
                 ((isCol ? NC : NR) > 1
                   ? ""
                   : "; opacity: 0.4; pointer-events: none"),
@@ -2575,7 +2575,7 @@ class QuestionCard extends React.Component {
           ];
         };
         var MENU =
-          "position: absolute; z-index: 30; display: flex; flex-direction: column; padding: 4px; min-width: 190px; border-radius: 12px; border: 1px solid #E4E1DB; background: #FFFFFF; box-shadow: 0 10px 30px rgba(53, 38, 55, 0.16); ";
+          "position: absolute; z-index: 30; display: flex; flex-direction: column; padding: 4px; min-width: 190px; border-radius: 12px; border: 1.5px solid #E4E1DB; background: #FFFFFF; box-shadow: 0 10px 30px rgba(53, 38, 55, 0.16); ";
         var handle = function (isCol, i) {
           var open = !!tm && tm[2] === (isCol ? "c" : "r") && tm[3] === i,
             on = LN === (isCol ? "c" : "r") && (isCol ? ac : ar) === i;
@@ -2709,7 +2709,7 @@ class QuestionCard extends React.Component {
                     ? "; box-shadow: inset 0 0 0 1px #9DB8EA"
                     : ""),
               ta:
-                "flex: 1; width: 100%; min-width: 0; min-height: 44px; box-sizing: border-box; resize: none; border: none; background: transparent; padding: 10px 12px; font: inherit; font-size: 13.5px; line-height: 1.4; color: #352637; outline: none; " +
+                "flex: 1; width: 100%; min-width: 0; min-height: 44px; box-sizing: border-box; resize: none; border: none; background: transparent; padding: 10px 12px; font: inherit; font-size: 13px; line-height: 1.4; color: #352637; outline: none; " +
                 (h ? "font-weight: 700; " : "") +
                 (bl ? "color: #2257B8; " : "") +
                 (q[1] > 1 && h ? "text-align: center" : ""),
@@ -3391,7 +3391,7 @@ class QuestionCard extends React.Component {
               m.tx +
               "%; top: " +
               m.ty +
-              "%; transform: translate(-50%, -50%); z-index: 3; width: 14px; height: 14px; box-sizing: border-box; border-radius: 7px; background: " +
+              "%; transform: translate(-50%, -50%); z-index: 3; width: 14px; height: 14px; box-sizing: border-box; border-radius: 8px; background: " +
               (on ? "#2963CC" : "#FFFFFF") +
               "; border: 2px solid #2963CC; cursor: move; opacity: " +
               (on ? 1 : 0.55),
@@ -3530,7 +3530,7 @@ class QuestionCard extends React.Component {
             : cg.oneUse;
         G.oneUse = oneUse;
         G.switchSt =
-          "position: relative; width: 38px; height: 22px; border-radius: 11px; background: " +
+          "position: relative; width: 38px; height: 22px; border-radius: 10px; background: " +
           (oneUse ? "#2963CC" : "#D6D4D0") +
           "; flex: none";
         G.knobSt =
@@ -4146,7 +4146,7 @@ class QuestionCard extends React.Component {
       );
     };
     var NAVB =
-      "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
+      "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
     var E = {
       kid:
         me._kid || (me._kid = "kp-" + Math.random().toString(36).slice(2, 8)),
@@ -4204,10 +4204,10 @@ class QuestionCard extends React.Component {
               LET[ce.para] +
               ", người học sẽ không thấy tô sáng",
           st:
-            "display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 4px 0 12px; box-sizing: border-box; border-radius: 999px; font-size: 13.5px; font-weight: 600; " +
+            "display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 4px 0 12px; box-sizing: border-box; border-radius: 999px; font-size: 13px; font-weight: 600; " +
             (found
               ? "background: #FCE7A1; color: #5C4407; border: 1.5px solid #F0D27A"
-              : "background: #FFFFFF; color: #B23A24; border: 1.5px dashed #E5604A"),
+              : "background: #FFFFFF; color: #C0412A; border: 1.5px dashed #E5604A"),
           rm: function (ev) {
             stop(ev);
             setE(function (e) {
@@ -4330,7 +4330,7 @@ class QuestionCard extends React.Component {
       };
     });
     var TABST =
-      "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 8px; box-sizing: border-box; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
+      "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
     // trạng thái trống
     var nextIdx = NP,
       blocked = missing && pi > NP,
@@ -4444,13 +4444,13 @@ class QuestionCard extends React.Component {
       tabQSt:
         TABST +
         (isExp
-          ? "color: #6A5D6C; border: 1.5px solid transparent"
+          ? "color: #706473; border: 1.5px solid transparent"
           : "background: #FFFFFF; color: #352637; border: 1.5px solid #D6D4D0"),
       tabESt:
         TABST +
         (isExp
           ? "background: #FFFFFF; color: #352637; border: 1.5px solid #D6D4D0"
-          : "color: #6A5D6C; border: 1.5px solid transparent"),
+          : "color: #706473; border: 1.5px solid transparent"),
       expDone: nDone + "/" + nQ,
       expBadgeSt:
         "font-size: 13px; font-weight: 600; padding: 0 8px; border-radius: 999px; line-height: 20px; " +
@@ -4512,7 +4512,7 @@ class QuestionCard extends React.Component {
       undo: undo,
       noUndo: !(s.hist || []).length,
       undoSt:
-        "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; " +
+        "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; " +
         ((s.hist || []).length
           ? "color: #352637; cursor: pointer"
           : "color: #B5ADB7; cursor: default; pointer-events: none"),
@@ -4613,7 +4613,7 @@ class QuestionCard extends React.Component {
         "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; " +
         (editing
           ? "background: #E3ECFD; color: #2257B8"
-          : "background: #F3F0EA; color: #6A5D6C"),
+          : "background: #F3F0EA; color: #706473"),
       dirtyText: dirty
         ? "Chưa lưu · " + Math.max(nChange, 1) + " thay đổi"
         : "Chưa có thay đổi",
@@ -4722,7 +4722,7 @@ class QuestionCard extends React.Component {
         {"\n"}
         <style>
           {cssText(
-            '\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#766A79}.tgh,.tga{opacity:0;transition:opacity .15s}.tgh:hover,.tgh.on,.tgh.op,.tga:hover,.tga:focus-visible{opacity:1}.qr,.qm,.qb{display:grid;gap:6px 8px;align-items:center}.qr{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ." ". qt ."}.qm{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ."}.qb{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qa qd" ". qt ."}.qn{grid-area:qn}.qq{grid-area:qq;min-width:0}.qa{grid-area:qa;min-width:0}.qt{grid-area:qt;min-width:0}.qd{grid-area:qd}.qed{container:qed / inline-size}@container qed (min-width: 720px){.qr{grid-template-columns:30px minmax(0,1fr) 200px 240px 30px;grid-template-areas:"qn qq qa qt qd"}.qm{grid-template-columns:30px minmax(0,1fr) 180px 30px;grid-template-areas:"qn qq qa qd"}.qb{grid-template-columns:30px 240px 260px minmax(0,1fr) 30px;grid-template-areas:"qn qa qt . qd"}}\n',
+            '\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#706473}.tgh,.tga{opacity:0;transition:opacity .15s}.tgh:hover,.tgh.on,.tgh.op,.tga:hover,.tga:focus-visible{opacity:1}.qr,.qm,.qb{display:grid;gap:6px 8px;align-items:center}.qr{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ." ". qt ."}.qm{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ."}.qb{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qa qd" ". qt ."}.qn{grid-area:qn}.qq{grid-area:qq;min-width:0}.qa{grid-area:qa;min-width:0}.qt{grid-area:qt;min-width:0}.qd{grid-area:qd}.qed{container:qed / inline-size}@container qed (min-width: 720px){.qr{grid-template-columns:30px minmax(0,1fr) 200px 240px 30px;grid-template-areas:"qn qq qa qt qd"}.qm{grid-template-columns:30px minmax(0,1fr) 180px 30px;grid-template-areas:"qn qq qa qd"}.qb{grid-template-columns:30px 240px 260px minmax(0,1fr) 30px;grid-template-areas:"qn qa qt . qd"}}\n',
           )}
         </style>
         {"\n"}
@@ -5022,7 +5022,7 @@ class QuestionCard extends React.Component {
                                     type={"button"} data-ab={""}
                                     onClick={v.G.resetInstr}
                                     style={styleOf(
-                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
                                     )}
                                   >
                                     {"Tạo lại"}
@@ -5093,7 +5093,7 @@ class QuestionCard extends React.Component {
                                             onClick={r.addAlt}
                                             title={"Thêm cách viết khác"}
                                             style={styleOf(
-                                              "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                              "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
                                             )}
                                           >
                                             <svg
@@ -5218,7 +5218,7 @@ class QuestionCard extends React.Component {
                                 type={"button"} data-ab={""}
                                 onClick={v.G.addItem}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                 )}
                               >
                                 <svg
@@ -5278,7 +5278,7 @@ class QuestionCard extends React.Component {
                                       title={"In đậm"}
                                       aria-label={"In đậm"}
                                       style={styleOf(
-                                        "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-weight: 800",
+                                        "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-weight: 800",
                                       )}
                                     >
                                       {"B"}
@@ -5290,7 +5290,7 @@ class QuestionCard extends React.Component {
                                       title={"In nghiêng"}
                                       aria-label={"In nghiêng"}
                                       style={styleOf(
-                                        "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-style: italic; font-family: Georgia, serif",
+                                        "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-style: italic; font-family: Georgia, serif",
                                       )}
                                     >
                                       {"I"}
@@ -5306,7 +5306,7 @@ class QuestionCard extends React.Component {
                                       onClick={v.G.fmtH}
                                       title={"Tiêu đề mục"}
                                       style={styleOf(
-                                        "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                        "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
                                       )}
                                     >
                                       {"Tiêu đề"}
@@ -5317,7 +5317,7 @@ class QuestionCard extends React.Component {
                                       onClick={v.G.fmtL}
                                       title={"Gạch đầu dòng"}
                                       style={styleOf(
-                                        "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                        "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
                                       )}
                                     >
                                       {"• Gạch đầu dòng"}
@@ -5333,7 +5333,7 @@ class QuestionCard extends React.Component {
                                       onClick={v.G.insertBlank}
                                       title={"Chèn chỗ trống tại con trỏ"}
                                       style={styleOf(
-                                        "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; color: #2963CC",
+                                        "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; color: #2963CC",
                                       )}
                                     >
                                       <svg
@@ -5387,7 +5387,7 @@ class QuestionCard extends React.Component {
                                 </span>
                                 <div
                                   style={styleOf(
-                                    "padding: 14px 16px; border-radius: 12px; background: #FAF9F5; border: 1px solid #E6E4E0; display: flex; flex-direction: column; gap: 4px; font-size: 14.5px; line-height: 1.7",
+                                    "padding: 14px 16px; border-radius: 12px; background: #FAF9F5; border: 1.5px solid #E6E4E0; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.7",
                                   )}
                                 >
                                   {(v.G.pv || []).map((ln, index) => (
@@ -5625,7 +5625,7 @@ class QuestionCard extends React.Component {
                                       type={"button"} data-ab={""}
                                       onClick={v.G.addOpt}
                                       style={styleOf(
-                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                       )}
                                     >
                                       <svg
@@ -5689,7 +5689,7 @@ class QuestionCard extends React.Component {
                                                   onClick={b.addAlt}
                                                   title={"Thêm cách viết khác"}
                                                   style={styleOf(
-                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
                                                   )}
                                                 >
                                                   <svg
@@ -6147,7 +6147,7 @@ class QuestionCard extends React.Component {
                                               onClick={b.addAlt}
                                               title={"Thêm cách viết khác"}
                                               style={styleOf(
-                                                "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                                "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
                                               )}
                                             >
                                               <svg
@@ -6308,7 +6308,7 @@ class QuestionCard extends React.Component {
                                 role={"radiogroup"}
                                 aria-label={"Cách nhập sơ đồ"}
                                 style={styleOf(
-                                  "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA; align-self: flex-start",
+                                  "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA; align-self: flex-start",
                                 )}
                               >
                                 <button
@@ -6419,7 +6419,7 @@ class QuestionCard extends React.Component {
                                               type={"button"} data-ab={""}
                                               onClick={fr.addNode}
                                               style={styleOf(
-                                                "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                                "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
                                               )}
                                             >
                                               <svg
@@ -6530,7 +6530,7 @@ class QuestionCard extends React.Component {
                                                 "Nội dung ô, ___ là chỗ trống"
                                               }
                                               style={styleOf(
-                                                "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC; padding: 8px 10px; font-size: 13.5px",
+                                                "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC; padding: 8px 10px; font-size: 13px",
                                               )}
                                             ></textarea>
                                             {nd.hasParents ? (
@@ -6746,7 +6746,7 @@ class QuestionCard extends React.Component {
                                 type={"button"} data-ab={""}
                                 onClick={v.G.addRow}
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; gap: 6px; height: 42px; border-radius: 12px; border: 1.5px dashed #D6D4D0; color: #6A5D6C; font-weight: 600; font-size: 14px; text-decoration: none",
+                                  "display: flex; align-items: center; justify-content: center; gap: 6px; height: 42px; border-radius: 12px; border: 1.5px dashed #D6D4D0; color: #706473; font-weight: 600; font-size: 14px; text-decoration: none",
                                 )}
                               >
                                 <svg
@@ -6773,7 +6773,7 @@ class QuestionCard extends React.Component {
                               </span>
                               <div
                                 style={styleOf(
-                                  "overflow-x: auto; padding: 12px; border-radius: 12px; border: 1px solid #E6E4E0; background: #FFFFFF",
+                                  "overflow-x: auto; padding: 12px; border-radius: 12px; border: 1.5px solid #E6E4E0; background: #FFFFFF",
                                 )}
                               >
                                 <div
@@ -6911,7 +6911,7 @@ class QuestionCard extends React.Component {
                                               onClick={b.addAlt}
                                               title={"Thêm cách viết khác"}
                                               style={styleOf(
-                                                "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                                "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
                                               )}
                                             >
                                               <svg
@@ -7078,7 +7078,7 @@ class QuestionCard extends React.Component {
                                   type={"button"} data-ab={""}
                                   onClick={v.G.upload}
                                   style={styleOf(
-                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
                                   )}
                                 >
                                   <svg
@@ -7180,7 +7180,7 @@ class QuestionCard extends React.Component {
                                         x={"64"}
                                         y={"20"}
                                         fontSize={"12"}
-                                        fill={"#6A5D6C"}
+                                        fill={"#706473"}
                                         fontFamily={"Inter, sans-serif"}
                                       >
                                         {"sand, soda, lime"}
@@ -7305,7 +7305,7 @@ class QuestionCard extends React.Component {
                                             onClick={dr.addAlt}
                                             title={"Thêm cách viết khác"}
                                             style={styleOf(
-                                              "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                              "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
                                             )}
                                           >
                                             <svg
@@ -7551,7 +7551,7 @@ class QuestionCard extends React.Component {
                                       type={"button"} data-ab={""}
                                       onClick={v.G.addOpt}
                                       style={styleOf(
-                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                       )}
                                     >
                                       <svg
@@ -7576,7 +7576,7 @@ class QuestionCard extends React.Component {
                                 <>
                                   <div
                                     style={styleOf(
-                                      "font-size: 13px; color: #6A5D6C; padding: 10px 12px; border-radius: 10px; background: #F3F0EA",
+                                      "font-size: 13px; color: #706473; padding: 10px 12px; border-radius: 10px; background: #F3F0EA",
                                     )}
                                   >
                                     {"Lựa chọn là các đoạn của bài đọc: " +
@@ -7891,7 +7891,7 @@ class QuestionCard extends React.Component {
                                       type={"button"} data-ab={""}
                                       onClick={v.G.addItem}
                                       style={styleOf(
-                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                       )}
                                     >
                                       <svg
@@ -7926,7 +7926,7 @@ class QuestionCard extends React.Component {
                                 <React.Fragment key={index}>
                                   <div
                                     style={styleOf(
-                                      "display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 12px; border: 1px solid #E6E4E0",
+                                      "display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 12px; border: 1.5px solid #E6E4E0",
                                     )}
                                   >
                                     <div
@@ -8021,7 +8021,7 @@ class QuestionCard extends React.Component {
                                 type={"button"} data-ab={""}
                                 onClick={v.G.addItem}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                 )}
                               >
                                 <svg
@@ -8158,7 +8158,7 @@ class QuestionCard extends React.Component {
                                 type={"button"} data-ab={""}
                                 onClick={v.G.addOpt}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                 )}
                               >
                                 <svg
@@ -8332,7 +8332,7 @@ class QuestionCard extends React.Component {
                                 type={"button"} data-ab={""}
                                 onClick={v.G.addItem}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                 )}
                               >
                                 <svg
@@ -8363,7 +8363,7 @@ class QuestionCard extends React.Component {
               <>
                 <div
                   style={styleOf(
-                    "padding: 20px; text-align: center; color: #6A5D6C; border-radius: 14px; border: 1.5px dashed #D6D4D0",
+                    "padding: 20px; text-align: center; color: #706473; border-radius: 14px; border: 1.5px dashed #D6D4D0",
                   )}
                 >
                   {"Đã xóa thẻ. "}
@@ -8400,7 +8400,7 @@ class QuestionCard extends React.Component {
                     >
                       {v.confirmTitle}
                     </div>
-                    <div style={styleOf("font-size: 14.5px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 14px; color: #706473")}>
                       {v.confirmSub}
                     </div>
                     <div

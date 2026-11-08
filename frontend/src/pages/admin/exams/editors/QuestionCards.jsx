@@ -35,14 +35,14 @@ class QuestionCards extends React.Component {
             <div>
               <div
                 style={styleOf(
-                  "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.015em",
+                  "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.015em",
                 )}
               >
                 {"Thẻ câu hỏi Reading · 16 dạng"}
               </div>
               <div
                 style={styleOf(
-                  "font-size: 15px; color: #6A5D6C; max-width: 860px",
+                  "font-size: 15px; color: #706473; max-width: 860px",
                 )}
               >
                 {

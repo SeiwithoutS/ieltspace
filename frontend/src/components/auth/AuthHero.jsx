@@ -31,12 +31,12 @@ class AuthHero extends React.Component {
             <a
               href={"Main.dc.html"}
               style={styleOf(
-                "display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                "display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
               )}
             >
               <span
                 style={styleOf(
-                  "width: 32px; height: 32px; border-radius: 9px; background: #2963CC; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: #FFFFFF",
+                  "width: 32px; height: 32px; border-radius: 10px; background: #2963CC; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: #FFFFFF",
                 )}
               >
                 {"IS"}
@@ -58,7 +58,7 @@ class AuthHero extends React.Component {
             </h2>
             <p
               style={styleOf(
-                "margin: 0; font-size: 16.5px; line-height: 1.65; color: #4B3D4D",
+                "margin: 0; font-size: 16px; line-height: 1.65; color: #4B3D4D",
               )}
             >
               {

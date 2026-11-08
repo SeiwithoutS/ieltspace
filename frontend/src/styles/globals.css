@@ -20,7 +20,7 @@ html:not(.dark) [data-theme-toggle="light"] {
 html:not(.dark) [data-theme-toggle="dark"] {
   background: transparent !important;
   border-color: transparent !important;
-  color: #6a5d6c !important;
+  color: #706473 !important;
   font-weight: 500 !important;
 }
 html.dark [data-theme-toggle="dark"] {

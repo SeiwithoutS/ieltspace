@@ -96,7 +96,7 @@ class StaffProfile extends React.Component {
                       <div>
                         <h1
                           style={styleOf(
-                            "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                            "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                           )}
                         >
                           {"Hồ sơ cá nhân"}
@@ -126,7 +126,7 @@ class StaffProfile extends React.Component {
                           >
                             <div
                               style={styleOf(
-                                "font-size: 17px; font-weight: 600",
+                                "font-size: 18px; font-weight: 600",
                               )}
                             >
                               {"Thông tin cá nhân"}
@@ -158,7 +158,7 @@ class StaffProfile extends React.Component {
                               <a
                                 href={"#"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 38px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 38px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                                 )}
                               >
                                 <svg
@@ -197,14 +197,14 @@ class StaffProfile extends React.Component {
                               >
                                 <span
                                   style={styleOf(
-                                    "font-size: 13.5px; font-weight: 600",
+                                    "font-size: 13px; font-weight: 600",
                                   )}
                                 >
                                   {"Tên hiển thị"}
                                 </span>
                                 <div
                                   style={styleOf(
-                                    "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                                    "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
                                   )}
                                 >
                                   <span>{"Cô Lan Hương"}</span>
@@ -217,14 +217,14 @@ class StaffProfile extends React.Component {
                               >
                                 <span
                                   style={styleOf(
-                                    "font-size: 13.5px; font-weight: 600",
+                                    "font-size: 13px; font-weight: 600",
                                   )}
                                 >
                                   {"Email"}
                                 </span>
                                 <div
                                   style={styleOf(
-                                    "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                                    "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
                                   )}
                                 >
                                   <span>{"lanhuong@ieltspace.vn"}</span>
@@ -246,7 +246,7 @@ class StaffProfile extends React.Component {
                               <a
                                 href={"#"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                                 )}
                               >
                                 <svg
@@ -274,7 +274,7 @@ class StaffProfile extends React.Component {
                               <a
                                 href={"#"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                                 )}
                               >
                                 {"Lưu thay đổi"}
@@ -307,13 +307,13 @@ class StaffProfile extends React.Component {
                           >
                             <div
                               style={styleOf(
-                                "font-size: 17px; font-weight: 600",
+                                "font-size: 18px; font-weight: 600",
                               )}
                             >
                               {"Giao diện"}
                             </div>
                             <div
-                              style={styleOf("font-size: 14px; color: #6A5D6C")}
+                              style={styleOf("font-size: 14px; color: #706473")}
                             >
                               {
                                 "Chọn chế độ sáng hoặc tối. Tùy chọn lưu trên trình duyệt này."
@@ -323,14 +323,14 @@ class StaffProfile extends React.Component {
                               role={"group"}
                               aria-label={"Chế độ giao diện"}
                               style={styleOf(
-                                "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                                "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                               )}
                             >
                               <button
                                 type={"button"}
                                 data-theme-toggle={"light"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-family: inherit; font-size: 13.5px; font-weight: 600; color: #352637; cursor: pointer",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-family: inherit; font-size: 13px; font-weight: 600; color: #352637; cursor: pointer",
                                 )}
                               >
                                 <svg
@@ -357,7 +357,7 @@ class StaffProfile extends React.Component {
                                 type={"button"}
                                 data-theme-toggle={"dark"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: transparent; border: 1.5px solid transparent; font-family: inherit; font-size: 13.5px; font-weight: 500; color: #6A5D6C; cursor: pointer",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: transparent; border: 1.5px solid transparent; font-family: inherit; font-size: 13px; font-weight: 500; color: #706473; cursor: pointer",
                                 )}
                               >
                                 <svg
@@ -419,7 +419,7 @@ class StaffProfile extends React.Component {
                       <div>
                         <h1
                           style={styleOf(
-                            "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                            "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                           )}
                         >
                           {"Hồ sơ cá nhân"}
@@ -449,7 +449,7 @@ class StaffProfile extends React.Component {
                           >
                             <div
                               style={styleOf(
-                                "font-size: 17px; font-weight: 600",
+                                "font-size: 18px; font-weight: 600",
                               )}
                             >
                               {"Thông tin cá nhân"}
@@ -481,7 +481,7 @@ class StaffProfile extends React.Component {
                               <a
                                 href={"#"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 38px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 38px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                                 )}
                               >
                                 <svg
@@ -520,14 +520,14 @@ class StaffProfile extends React.Component {
                               >
                                 <span
                                   style={styleOf(
-                                    "font-size: 13.5px; font-weight: 600",
+                                    "font-size: 13px; font-weight: 600",
                                   )}
                                 >
                                   {"Tên hiển thị"}
                                 </span>
                                 <div
                                   style={styleOf(
-                                    "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                                    "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
                                   )}
                                 >
                                   <span>{"Trần Quản Lý"}</span>
@@ -540,14 +540,14 @@ class StaffProfile extends React.Component {
                               >
                                 <span
                                   style={styleOf(
-                                    "font-size: 13.5px; font-weight: 600",
+                                    "font-size: 13px; font-weight: 600",
                                   )}
                                 >
                                   {"Email"}
                                 </span>
                                 <div
                                   style={styleOf(
-                                    "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
+                                    "min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px",
                                   )}
                                 >
                                   <span>{"admin@ieltspace.vn"}</span>
@@ -569,7 +569,7 @@ class StaffProfile extends React.Component {
                               <a
                                 href={"#"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                                 )}
                               >
                                 <svg
@@ -597,7 +597,7 @@ class StaffProfile extends React.Component {
                               <a
                                 href={"#"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                                 )}
                               >
                                 {"Lưu thay đổi"}
@@ -630,13 +630,13 @@ class StaffProfile extends React.Component {
                           >
                             <div
                               style={styleOf(
-                                "font-size: 17px; font-weight: 600",
+                                "font-size: 18px; font-weight: 600",
                               )}
                             >
                               {"Giao diện"}
                             </div>
                             <div
-                              style={styleOf("font-size: 14px; color: #6A5D6C")}
+                              style={styleOf("font-size: 14px; color: #706473")}
                             >
                               {
                                 "Chọn chế độ sáng hoặc tối. Tùy chọn lưu trên trình duyệt này."
@@ -646,14 +646,14 @@ class StaffProfile extends React.Component {
                               role={"group"}
                               aria-label={"Chế độ giao diện"}
                               style={styleOf(
-                                "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                                "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                               )}
                             >
                               <button
                                 type={"button"}
                                 data-theme-toggle={"light"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-family: inherit; font-size: 13.5px; font-weight: 600; color: #352637; cursor: pointer",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-family: inherit; font-size: 13px; font-weight: 600; color: #352637; cursor: pointer",
                                 )}
                               >
                                 <svg
@@ -680,7 +680,7 @@ class StaffProfile extends React.Component {
                                 type={"button"}
                                 data-theme-toggle={"dark"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: transparent; border: 1.5px solid transparent; font-family: inherit; font-size: 13.5px; font-weight: 500; color: #6A5D6C; cursor: pointer",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: transparent; border: 1.5px solid transparent; font-family: inherit; font-size: 13px; font-weight: 500; color: #706473; cursor: pointer",
                                 )}
                               >
                                 <svg

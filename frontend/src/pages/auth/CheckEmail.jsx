@@ -68,12 +68,12 @@ class CheckEmail extends React.Component {
             <a
               href={"Main.dc.html"}
               style={styleOf(
-                "display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                "display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
               )}
             >
               <span
                 style={styleOf(
-                  "width: 32px; height: 32px; border-radius: 9px; background: #2963CC; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: #FFFFFF",
+                  "width: 32px; height: 32px; border-radius: 10px; background: #2963CC; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: #FFFFFF",
                 )}
               >
                 {"IS"}
@@ -120,7 +120,7 @@ class CheckEmail extends React.Component {
               </h1>
               <p
                 style={styleOf(
-                  "margin: 0; font-size: 15px; line-height: 1.6; color: #6A5D6C; ",
+                  "margin: 0; font-size: 15px; line-height: 1.6; color: #706473; ",
                 )}
               >
                 {"Chúng tôi đã gửi liên kết xác minh đến "}
@@ -169,7 +169,7 @@ class CheckEmail extends React.Component {
               ) : null}
               {v.waitMsg ? (
                 <>
-                  <div style={styleOf("font-size: 14px; color: #6A5D6C")}>
+                  <div style={styleOf("font-size: 14px; color: #706473")}>
                     {"Vui lòng chờ hết thời gian đếm ngược."}
                   </div>
                 </>

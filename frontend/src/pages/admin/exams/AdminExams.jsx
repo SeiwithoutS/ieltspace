@@ -211,7 +211,7 @@ class AdminExams extends React.Component {
       SST = {
         pub: ["Công khai", "#DCEDE2", "#2E6A48"],
         draft: ["Bản nháp", "#FBEDBF", "#7A5A0E"],
-        hidden: ["Đã ẩn", "#F3F0EA", "#6A5D6C"],
+        hidden: ["Đã ẩn", "#F3F0EA", "#706473"],
       },
       TY = {
         A: ["Academic", "#DFF1F4", "#1F6A78"],
@@ -378,10 +378,10 @@ class AdminExams extends React.Component {
             self.setState(o);
           },
           st:
-            "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; font-size: 13.5px; text-decoration: none; white-space: nowrap; " +
+            "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; font-size: 13px; text-decoration: none; white-space: nowrap; " +
             (on
               ? "background: #FFFFFF; border: 1.5px solid #D6D4D0; font-weight: 600; color: #352637; box-shadow: 0 1px 2px rgba(53,38,55,.06)"
-              : "border: 1.5px solid transparent; color: #6A5D6C; font-weight: 500"),
+              : "border: 1.5px solid transparent; color: #706473; font-weight: 500"),
         };
       });
     }
@@ -418,10 +418,10 @@ class AdminExams extends React.Component {
           : [
               {
                 text: st.tests.length ? "Chỉ L/S" : "Chưa có đề",
-                st: pill("#F3F0EA", "#6A5D6C"),
+                st: pill("#F3F0EA", "#706473"),
               },
             ],
-        skills: skills.length ? skills : [{ text: "—", st: "color: #766A79" }],
+        skills: skills.length ? skills : [{ text: "—", st: "color: #706473" }],
         thumbSt:
           "display: flex; align-items: flex-end; flex: none; width: 48px; height: 32px; border-radius: 8px; box-sizing: border-box; overflow: hidden; color: #FFFFFF; box-shadow: 0 1px 3px rgba(53, 38, 55, 0.18); " +
           (bg
@@ -695,14 +695,14 @@ class AdminExams extends React.Component {
                   <div>
                     <h1
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Bộ đề và đề thi"}
                     </h1>
                     <div
                       style={styleOf(
-                        "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                        "font-size: 15px; color: #706473; margin-top: 4px",
                       )}
                     >
                       {
@@ -780,7 +780,7 @@ class AdminExams extends React.Component {
                   <div
                     role={"radiogroup"}
                     style={styleOf(
-                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                     )}
                   >
                     {(v.fTypes || []).map((f, index) => (
@@ -800,7 +800,7 @@ class AdminExams extends React.Component {
                   <div
                     role={"radiogroup"}
                     style={styleOf(
-                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                     )}
                   >
                     {(v.fSts || []).map((f, index) => (
@@ -817,7 +817,7 @@ class AdminExams extends React.Component {
                       </React.Fragment>
                     ))}
                   </div>
-                  <span style={styleOf("font-size: 13.5px; color: #706473")}>
+                  <span style={styleOf("font-size: 13px; color: #706473")}>
                     {v.countText}
                   </span>
                 </div>
@@ -905,7 +905,7 @@ class AdminExams extends React.Component {
                                   >
                                     <span
                                       style={styleOf(
-                                        "padding: 0 0 3px 4px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 10px; font-weight: 600; line-height: 1.1",
+                                        "padding: 0 0 3px 4px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 11px; font-weight: 600; line-height: 1.1",
                                       )}
                                     >
                                       {r.thumbText}
@@ -1081,7 +1081,7 @@ class AdminExams extends React.Component {
                       <div
                         className={"an-fade"}
                         style={styleOf(
-                          "padding: 36px 20px; text-align: center; color: #6A5D6C; font-size: 14.5px",
+                          "padding: 36px 20px; text-align: center; color: #706473; font-size: 14px",
                         )}
                       >
                         {"Không có bộ đề khớp bộ lọc. "}
@@ -1142,7 +1142,7 @@ class AdminExams extends React.Component {
                                   </div>
                                   <div
                                     style={styleOf(
-                                      "font-size: 14px; color: #6A5D6C; margin-top: 2px",
+                                      "font-size: 14px; color: #706473; margin-top: 2px",
                                     )}
                                   >
                                     {
@@ -1155,7 +1155,7 @@ class AdminExams extends React.Component {
                                   onClick={v.closeCreate}
                                   aria-label={"Đóng"}
                                   style={styleOf(
-                                    "display: flex; padding: 6px; border-radius: 8px; color: #6A5D6C",
+                                    "display: flex; padding: 6px; border-radius: 8px; color: #706473",
                                   )}
                                 >
                                   <svg
@@ -1193,7 +1193,7 @@ class AdminExams extends React.Component {
                                       <>
                                         <span
                                           style={styleOf(
-                                            "padding: 0 0 14px 14px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 26px; font-weight: 600; line-height: 1; text-shadow: 0 1px 8px rgba(0,0,0,0.18)",
+                                            "padding: 0 0 14px 14px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 28px; font-weight: 600; line-height: 1; text-shadow: 0 1px 8px rgba(0,0,0,0.18)",
                                           )}
                                         >
                                           {v.cv.short}
@@ -1317,7 +1317,7 @@ class AdminExams extends React.Component {
                                   >
                                     <span
                                       style={styleOf(
-                                        "font-size: 13.5px; font-weight: 600; color: #352637",
+                                        "font-size: 13px; font-weight: 600; color: #352637",
                                       )}
                                     >
                                       {"Tên bộ đề "}
@@ -1355,7 +1355,7 @@ class AdminExams extends React.Component {
                                   >
                                     <span
                                       style={styleOf(
-                                        "font-size: 13.5px; font-weight: 600; color: #352637",
+                                        "font-size: 13px; font-weight: 600; color: #352637",
                                       )}
                                     >
                                       {"Mô tả "}
@@ -1488,7 +1488,7 @@ class AdminExams extends React.Component {
                               <div
                                 className={"an-rise"}
                                 style={styleOf(
-                                  "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 21px; font-weight: 600; margin-top: 6px",
+                                  "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600; margin-top: 6px",
                                 )}
                               >
                                 {"Đã tạo “" + v.doneName + "”"}
@@ -1496,7 +1496,7 @@ class AdminExams extends React.Component {
                               <div
                                 className={"an-rise"}
                                 style={styleOf(
-                                  "font-size: 14.5px; color: #6A5D6C; max-width: 380px",
+                                  "font-size: 14px; color: #706473; max-width: 380px",
                                 )}
                               >
                                 {
@@ -1604,7 +1604,7 @@ class AdminExams extends React.Component {
                           </div>
                           <div
                             style={styleOf(
-                              "font-size: 14.5px; color: #4B3D4D; line-height: 1.55",
+                              "font-size: 14px; color: #4B3D4D; line-height: 1.55",
                             )}
                           >
                             {v.delText}

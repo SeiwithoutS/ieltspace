@@ -49,12 +49,12 @@ class ReadingTest extends React.Component {
               <button
                 type={"button"} data-ab={""}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -454,7 +454,7 @@ class ReadingTest extends React.Component {
             <div style={styleOf("display: flex; gap: 6px; flex-wrap: wrap")}>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D6D4D0; background: " +
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D6D4D0; background: " +
                     v.accent +
                     "; color: " +
                     v.onAccent,
@@ -464,7 +464,7 @@ class ReadingTest extends React.Component {
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D6D4D0; background: " +
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D6D4D0; background: " +
                     v.accent +
                     "; color: " +
                     v.onAccent,
@@ -474,77 +474,77 @@ class ReadingTest extends React.Component {
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D6D4D0; background: #FFFFFF",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D6D4D0; background: #FFFFFF",
                 )}
               >
                 {"3"}
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #6A5D6C",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #706473",
                 )}
               >
                 {"4"}
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #6A5D6C",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #706473",
                 )}
               >
                 {"5"}
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #6A5D6C",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #706473",
                 )}
               >
                 {"6"}
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #6A5D6C",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #706473",
                 )}
               >
                 {"7"}
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #6A5D6C",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #706473",
                 )}
               >
                 {"8"}
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #6A5D6C",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #706473",
                 )}
               >
                 {"9"}
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #6A5D6C",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #706473",
                 )}
               >
                 {"10"}
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #6A5D6C",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #706473",
                 )}
               >
                 {"11"}
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #6A5D6C",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #706473",
                 )}
               >
                 {"12"}
               </span>
               <span
                 style={styleOf(
-                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #6A5D6C",
+                  "width: 34px; height: 34px; border-radius: 8px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border: 1.5px solid #D9D7D3; color: #706473",
                 )}
               >
                 {"13"}
@@ -553,7 +553,7 @@ class ReadingTest extends React.Component {
             {"\n"}
             <span
               style={styleOf(
-                "margin-left: auto; font-size: 14px; color: #6A5D6C; white-space: nowrap",
+                "margin-left: auto; font-size: 14px; color: #706473; white-space: nowrap",
               )}
             >
               {"Đã trả lời 2/13"}

@@ -50,12 +50,12 @@ class SampleLibrary extends React.Component {
               <a
                 href={"StudentLanding.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -70,7 +70,7 @@ class SampleLibrary extends React.Component {
                   <a
                     href={"FullTests.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -110,7 +110,7 @@ class SampleLibrary extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -135,7 +135,7 @@ class SampleLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Full Tests"}
@@ -156,7 +156,7 @@ class SampleLibrary extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -194,7 +194,7 @@ class SampleLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Listening Practice"}
@@ -215,7 +215,7 @@ class SampleLibrary extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -242,7 +242,7 @@ class SampleLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Reading Practice"}
@@ -263,7 +263,7 @@ class SampleLibrary extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -287,7 +287,7 @@ class SampleLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Writing Practice"}
@@ -308,7 +308,7 @@ class SampleLibrary extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -339,7 +339,7 @@ class SampleLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Speaking Practice"}
@@ -358,7 +358,7 @@ class SampleLibrary extends React.Component {
                   <a
                     href={"SampleLibrary.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -398,7 +398,7 @@ class SampleLibrary extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -424,7 +424,7 @@ class SampleLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 Academic"}
@@ -445,7 +445,7 @@ class SampleLibrary extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -476,7 +476,7 @@ class SampleLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 General"}
@@ -497,7 +497,7 @@ class SampleLibrary extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -521,7 +521,7 @@ class SampleLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 2"}
@@ -542,7 +542,7 @@ class SampleLibrary extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -573,7 +573,7 @@ class SampleLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Speaking Part 1, 2, 3"}
@@ -591,7 +591,7 @@ class SampleLibrary extends React.Component {
                 <a
                   href={"Vocab.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Thư viện từ vựng"}
@@ -599,7 +599,7 @@ class SampleLibrary extends React.Component {
                 <a
                   href={"Flashcard.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Flashcard của tôi"}
@@ -673,7 +673,7 @@ class SampleLibrary extends React.Component {
                 <nav aria-label={"Breadcrumb"}>
                   <ol
                     style={styleOf(
-                      "list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 13.5px; color: #706473",
+                      "list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 13px; color: #706473",
                     )}
                   >
                     <li
@@ -698,7 +698,7 @@ class SampleLibrary extends React.Component {
                     >
                       <span
                         aria-hidden={"true"}
-                        style={styleOf("display: flex; color: #766A79")}
+                        style={styleOf("display: flex; color: #706473")}
                       >
                         <svg
                           width={"14"}
@@ -823,26 +823,26 @@ class SampleLibrary extends React.Component {
               >
                 <div
                   style={styleOf(
-                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                   )}
                 >
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
                     )}
                   >
                     {"Tất cả"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                     )}
                   >
                     {"Writing"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                     )}
                   >
                     {"Speaking"}
@@ -850,7 +850,7 @@ class SampleLibrary extends React.Component {
                 </div>
                 <div
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; width: 300px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 10px; background: #FFFFFF; color: #706473; font-size: 14.5px",
+                    "display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; width: 300px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 10px; background: #FFFFFF; color: #706473; font-size: 14px",
                   )}
                 >
                   <svg
@@ -890,7 +890,7 @@ class SampleLibrary extends React.Component {
                     </h2>
                     <p
                       style={styleOf(
-                        "margin: 4px 0 0; color: #6A5D6C; font-size: 14.5px",
+                        "margin: 4px 0 0; color: #706473; font-size: 14px",
                       )}
                     >
                       {"Bài mẫu viết thư theo từng loại thư thường gặp."}
@@ -956,7 +956,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Application Letter"}
@@ -965,7 +965,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 8.0"}</span>
@@ -1024,7 +1024,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #A8432C; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Complaint Letter"}
@@ -1033,7 +1033,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 7.5"}</span>
@@ -1092,7 +1092,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Request Letter"}
@@ -1101,7 +1101,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 8.0"}</span>
@@ -1160,7 +1160,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #FCE6D6; color: #9A4A17; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #FCE6D6; color: #9A4A17; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Thank Letter"}
@@ -1169,7 +1169,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 7.5"}</span>
@@ -1225,7 +1225,7 @@ class SampleLibrary extends React.Component {
                     </h2>
                     <p
                       style={styleOf(
-                        "margin: 4px 0 0; color: #6A5D6C; font-size: 14.5px",
+                        "margin: 4px 0 0; color: #706473; font-size: 14px",
                       )}
                     >
                       {"Bài mẫu mô tả biểu đồ, bảng, bản đồ và quy trình."}
@@ -1283,7 +1283,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Line graph"}
@@ -1292,7 +1292,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 8.0"}</span>
@@ -1351,7 +1351,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Bar chart"}
@@ -1360,7 +1360,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 7.5"}</span>
@@ -1419,7 +1419,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Map"}
@@ -1428,7 +1428,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 8.0"}</span>
@@ -1487,7 +1487,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Process"}
@@ -1496,7 +1496,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 7.5"}</span>
@@ -1552,7 +1552,7 @@ class SampleLibrary extends React.Component {
                     </h2>
                     <p
                       style={styleOf(
-                        "margin: 4px 0 0; color: #6A5D6C; font-size: 14.5px",
+                        "margin: 4px 0 0; color: #706473; font-size: 14px",
                       )}
                     >
                       {
@@ -1612,7 +1612,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #A8432C; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Agree/Disagree"}
@@ -1621,7 +1621,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 8.0"}</span>
@@ -1680,7 +1680,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Two-Part Questions"}
@@ -1689,7 +1689,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 7.5"}</span>
@@ -1748,7 +1748,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Discuss Both Views"}
@@ -1757,7 +1757,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 8.0"}</span>
@@ -1816,7 +1816,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Advantages/Disadvantages"}
@@ -1825,7 +1825,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 7.5"}</span>
@@ -1882,7 +1882,7 @@ class SampleLibrary extends React.Component {
                     </h2>
                     <p
                       style={styleOf(
-                        "margin: 4px 0 0; color: #6A5D6C; font-size: 14.5px",
+                        "margin: 4px 0 0; color: #706473; font-size: 14px",
                       )}
                     >
                       {
@@ -1942,7 +1942,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Part 1"}
@@ -1951,7 +1951,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 8.0"}</span>
@@ -2010,7 +2010,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Part 2"}
@@ -2019,7 +2019,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 8.0"}</span>
@@ -2078,7 +2078,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Part 3"}
@@ -2087,7 +2087,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 7.5"}</span>
@@ -2146,7 +2146,7 @@ class SampleLibrary extends React.Component {
                       <div style={styleOf("display: flex")}>
                         <span
                           style={styleOf(
-                            "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                            "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                           )}
                         >
                           {"Part 1"}
@@ -2155,7 +2155,7 @@ class SampleLibrary extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"Band 7.5"}</span>

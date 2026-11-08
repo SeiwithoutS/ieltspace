@@ -50,12 +50,12 @@ class Flashcard extends React.Component {
               <a
                 href={"StudentLanding.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -70,7 +70,7 @@ class Flashcard extends React.Component {
                   <a
                     href={"FullTests.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -110,7 +110,7 @@ class Flashcard extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -135,7 +135,7 @@ class Flashcard extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Full Tests"}
@@ -156,7 +156,7 @@ class Flashcard extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -194,7 +194,7 @@ class Flashcard extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Listening Practice"}
@@ -215,7 +215,7 @@ class Flashcard extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -242,7 +242,7 @@ class Flashcard extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Reading Practice"}
@@ -263,7 +263,7 @@ class Flashcard extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -287,7 +287,7 @@ class Flashcard extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Writing Practice"}
@@ -308,7 +308,7 @@ class Flashcard extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -339,7 +339,7 @@ class Flashcard extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Speaking Practice"}
@@ -358,7 +358,7 @@ class Flashcard extends React.Component {
                   <a
                     href={"SampleLibrary.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -398,7 +398,7 @@ class Flashcard extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -424,7 +424,7 @@ class Flashcard extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 Academic"}
@@ -445,7 +445,7 @@ class Flashcard extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -476,7 +476,7 @@ class Flashcard extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 General"}
@@ -497,7 +497,7 @@ class Flashcard extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -521,7 +521,7 @@ class Flashcard extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 2"}
@@ -542,7 +542,7 @@ class Flashcard extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -573,7 +573,7 @@ class Flashcard extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Speaking Part 1, 2, 3"}
@@ -591,7 +591,7 @@ class Flashcard extends React.Component {
                 <a
                   href={"Vocab.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Thư viện từ vựng"}
@@ -599,7 +599,7 @@ class Flashcard extends React.Component {
                 <a
                   href={"Flashcard.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                   )}
                 >
                   {"Flashcard của tôi"}
@@ -673,14 +673,14 @@ class Flashcard extends React.Component {
                 <div>
                   <h1
                     style={styleOf(
-                      "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                      "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                     )}
                   >
                     {"Flashcard của tôi"}
                   </h1>
                   <div
                     style={styleOf(
-                      "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                      "font-size: 15px; color: #706473; margin-top: 4px",
                     )}
                   >
                     {
@@ -692,7 +692,7 @@ class Flashcard extends React.Component {
                   <a
                     href={"#"}
                     style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                     )}
                   >
                     {"Kết thúc phiên"}
@@ -728,7 +728,7 @@ class Flashcard extends React.Component {
                     >
                       <div
                         style={styleOf(
-                          "font-size: 44px; font-weight: 700; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                          "font-size: 40px; font-weight: 700; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                         )}
                       >
                         {"mitigate"}
@@ -739,7 +739,7 @@ class Flashcard extends React.Component {
                       <button
                         type={"button"}
                         style={styleOf(
-                          "margin-top: 6px; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-weight: 600; font-family: inherit; font-size: 14.5px",
+                          "margin-top: 6px; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-weight: 600; font-family: inherit; font-size: 14px",
                         )}
                       >
                         {"Lật thẻ"}
@@ -755,7 +755,7 @@ class Flashcard extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 14px; color: #6A5D6C; font-style: italic",
+                          "font-size: 14px; color: #706473; font-style: italic",
                         )}
                       >
                         {"Trees help mitigate the effects of heat."}
@@ -763,7 +763,7 @@ class Flashcard extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "font-size: 13.5px; color: #6A5D6C; text-align: center",
+                        "font-size: 13px; color: #706473; text-align: center",
                       )}
                     >
                       {"Bạn nhớ từ này đến đâu?"}
@@ -776,7 +776,7 @@ class Flashcard extends React.Component {
                       <a
                         href={"#"}
                         style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                         )}
                       >
                         {"Chưa nhớ"}
@@ -784,7 +784,7 @@ class Flashcard extends React.Component {
                       <a
                         href={"#"}
                         style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                         )}
                       >
                         {"Còn phân vân"}
@@ -792,7 +792,7 @@ class Flashcard extends React.Component {
                       <a
                         href={"#"}
                         style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                         )}
                       >
                         <svg
@@ -830,38 +830,38 @@ class Flashcard extends React.Component {
                         )}
                       >
                         <div
-                          style={styleOf("font-size: 17px; font-weight: 600")}
+                          style={styleOf("font-size: 18px; font-weight: 600")}
                         >
                           {"Chọn tập thẻ"}
                         </div>
                         <div
                           style={styleOf(
-                            "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                            "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                           )}
                         >
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                              "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                             )}
                           >
                             {"Chủ đề"}
                           </span>
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                              "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
                             )}
                           >
                             {"Từ yêu thích"}
                           </span>
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                              "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                             )}
                           >
                             {"Theo nhãn"}
                           </span>
                         </div>
-                        <div style={styleOf("font-size: 14px; color: #6A5D6C")}>
+                        <div style={styleOf("font-size: 14px; color: #706473")}>
                           {"12 từ yêu thích"}
                         </div>
                       </div>
@@ -877,7 +877,7 @@ class Flashcard extends React.Component {
                         )}
                       >
                         <div
-                          style={styleOf("font-size: 17px; font-weight: 600")}
+                          style={styleOf("font-size: 18px; font-weight: 600")}
                         >
                           {"Phiên ôn hiện tại"}
                         </div>
@@ -901,7 +901,7 @@ class Flashcard extends React.Component {
                           <div style={styleOf("flex: 1")}>
                             <div
                               style={styleOf(
-                                "font-size: 26px; font-weight: 700; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                                "font-size: 28px; font-weight: 700; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
                               )}
                             >
                               {"3/12"}
@@ -915,7 +915,7 @@ class Flashcard extends React.Component {
                           <div style={styleOf("flex: 1")}>
                             <div
                               style={styleOf(
-                                "font-size: 26px; font-weight: 700; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                                "font-size: 28px; font-weight: 700; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
                               )}
                             >
                               {"2"}
@@ -929,7 +929,7 @@ class Flashcard extends React.Component {
                           <div style={styleOf("flex: 1")}>
                             <div
                               style={styleOf(
-                                "font-size: 26px; font-weight: 700; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                                "font-size: 28px; font-weight: 700; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
                               )}
                             >
                               {"1"}
@@ -959,7 +959,7 @@ class Flashcard extends React.Component {
                         )}
                       >
                         <div
-                          style={styleOf("font-size: 17px; font-weight: 600")}
+                          style={styleOf("font-size: 18px; font-weight: 600")}
                         >
                           {"Mục tiêu hôm nay"}
                         </div>
@@ -995,7 +995,7 @@ class Flashcard extends React.Component {
                           <a
                             href={"Profile.dc.html"}
                             style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                             )}
                           >
                             {"Đổi mục tiêu"}

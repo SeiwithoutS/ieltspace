@@ -72,14 +72,14 @@ class TeacherHistory extends React.Component {
                   <div>
                     <h1
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Lịch sử chấm"}
                     </h1>
                     <div
                       style={styleOf(
-                        "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                        "font-size: 15px; color: #706473; margin-top: 4px",
                       )}
                     >
                       {"Các kết quả bạn đã công bố. Chỉ xem lại, không sửa."}
@@ -103,7 +103,7 @@ class TeacherHistory extends React.Component {
                     >
                       {"18"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"bài đã công bố"}
                     </div>
                   </div>
@@ -122,7 +122,7 @@ class TeacherHistory extends React.Component {
                     >
                       {"64"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"bài đã công bố"}
                     </div>
                   </div>
@@ -141,7 +141,7 @@ class TeacherHistory extends React.Component {
                     >
                       {"41 / 23"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"trong tháng 10"}
                     </div>
                   </div>
@@ -153,26 +153,26 @@ class TeacherHistory extends React.Component {
                 >
                   <div
                     style={styleOf(
-                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
                       )}
                     >
                       {"Tất cả"}
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                       )}
                     >
                       {"Writing"}
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                       )}
                     >
                       {"Speaking"}
@@ -180,26 +180,26 @@ class TeacherHistory extends React.Component {
                   </div>
                   <div
                     style={styleOf(
-                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                       )}
                     >
                       {"7 ngày"}
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
                       )}
                     >
                       {"30 ngày"}
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                       )}
                     >
                       {"Tùy chọn"}
@@ -207,7 +207,7 @@ class TeacherHistory extends React.Component {
                   </div>
                   <div
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; width: 240px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 10px; background: #FFFFFF; color: #706473; font-size: 14.5px",
+                      "display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; width: 240px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 10px; background: #FFFFFF; color: #706473; font-size: 14px",
                     )}
                   >
                     <svg
@@ -362,7 +362,7 @@ class TeacherHistory extends React.Component {
                             <a
                               href={"TeacherGrade.dc.html"}
                               style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                               )}
                             >
                               {"Xem"}
@@ -443,7 +443,7 @@ class TeacherHistory extends React.Component {
                             <a
                               href={"TeacherGrade.dc.html"}
                               style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                               )}
                             >
                               {"Xem"}
@@ -524,7 +524,7 @@ class TeacherHistory extends React.Component {
                             <a
                               href={"TeacherGrade.dc.html"}
                               style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                               )}
                             >
                               {"Xem"}
@@ -591,7 +591,7 @@ class TeacherHistory extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #706473; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Nội dung đã hết hạn"}
@@ -605,7 +605,7 @@ class TeacherHistory extends React.Component {
                             <a
                               href={"#"}
                               style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                               )}
                             >
                               {"Xem điểm"}

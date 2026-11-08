@@ -84,12 +84,12 @@ class PracticeLibrary extends React.Component {
                   <a
                     href={"StudentLanding.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                        "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                           v.accent +
                           "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                           v.onAccent,
@@ -109,7 +109,7 @@ class PracticeLibrary extends React.Component {
                       <a
                         href={"FullTests.dc.html"}
                         style={styleOf(
-                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                         )}
                         aria-haspopup={"true"}
                       >
@@ -149,7 +149,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -174,7 +174,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Full Tests"}
@@ -198,7 +198,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -236,7 +236,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Listening Practice"}
@@ -260,7 +260,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -289,7 +289,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Reading Practice"}
@@ -312,7 +312,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -336,7 +336,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Writing Practice"}
@@ -359,7 +359,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -390,7 +390,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Speaking Practice"}
@@ -414,7 +414,7 @@ class PracticeLibrary extends React.Component {
                       <a
                         href={"SampleLibrary.dc.html"}
                         style={styleOf(
-                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                         )}
                         aria-haspopup={"true"}
                       >
@@ -455,7 +455,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -481,7 +481,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 1 Academic"}
@@ -505,7 +505,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -536,7 +536,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 1 General"}
@@ -560,7 +560,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -584,7 +584,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 2"}
@@ -607,7 +607,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -638,7 +638,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Speaking Part 1, 2, 3"}
@@ -658,7 +658,7 @@ class PracticeLibrary extends React.Component {
                     <a
                       href={"Vocab.dc.html"}
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                       )}
                     >
                       {"Thư viện từ vựng"}
@@ -666,7 +666,7 @@ class PracticeLibrary extends React.Component {
                     <a
                       href={"Flashcard.dc.html"}
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                       )}
                     >
                       {"Flashcard của tôi"}
@@ -737,12 +737,12 @@ class PracticeLibrary extends React.Component {
                       "display: flex; flex-direction: column; gap: 6px",
                     )}
                   >
-                    <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"Thư viện đề / IELTS Listening Practice"}
                     </div>
                     <p
                       style={styleOf(
-                        "margin: 0; max-width: 760px; color: #6A5D6C; font-size: 15px",
+                        "margin: 0; max-width: 760px; color: #706473; font-size: 15px",
                       )}
                     >
                       {
@@ -757,7 +757,7 @@ class PracticeLibrary extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Gợi ý cho bạn"}
@@ -796,7 +796,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"196 lượt làm"}</span>
@@ -868,7 +868,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"214 lượt làm"}</span>
@@ -940,7 +940,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"149 lượt làm"}</span>
@@ -1012,7 +1012,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"139 lượt làm"}</span>
@@ -1064,7 +1064,7 @@ class PracticeLibrary extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Kho Listening Practice"}
@@ -1082,7 +1082,7 @@ class PracticeLibrary extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -1094,7 +1094,7 @@ class PracticeLibrary extends React.Component {
                           </div>
                           <div
                             style={styleOf(
-                              "display: flex; height: 42px; border-radius: 10px; overflow: hidden; border: 1px solid #E6E4E0; background: #F6F4EF",
+                              "display: flex; height: 42px; border-radius: 10px; overflow: hidden; border: 1.5px solid #E6E4E0; background: #F6F4EF",
                             )}
                           >
                             <input
@@ -1102,7 +1102,7 @@ class PracticeLibrary extends React.Component {
                               aria-label={"Tìm kiếm"}
                               placeholder={"Tìm bài"}
                               style={styleOf(
-                                "flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 12px; font: inherit; font-size: 14.5px; color: #352637; outline: none",
+                                "flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 12px; font: inherit; font-size: 14px; color: #352637; outline: none",
                               )}
                             />
                             <a
@@ -1131,7 +1131,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -1273,7 +1273,7 @@ class PracticeLibrary extends React.Component {
                             <a
                               href={"#"}
                               style={styleOf(
-                                "display: inline-block; margin-top: 4px; font-size: 13.5px; font-weight: 600; color: #2963CC; text-decoration: none",
+                                "display: inline-block; margin-top: 4px; font-size: 13px; font-weight: 600; color: #2963CC; text-decoration: none",
                               )}
                             >
                               {"Xem tất cả"}
@@ -1398,7 +1398,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"11K lượt làm"}</span>
@@ -1490,7 +1490,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"14K lượt làm"}</span>
@@ -1562,7 +1562,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"6K lượt làm"}</span>
@@ -1634,7 +1634,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"7K lượt làm"}</span>
@@ -1706,7 +1706,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"6K lượt làm"}</span>
@@ -1798,7 +1798,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"5K lượt làm"}</span>
@@ -1870,7 +1870,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"3K lượt làm"}</span>
@@ -1942,7 +1942,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"6K lượt làm"}</span>
@@ -2014,7 +2014,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"4K lượt làm"}</span>
@@ -2086,7 +2086,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"5K lượt làm"}</span>
@@ -2158,7 +2158,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"3K lượt làm"}</span>
@@ -2230,7 +2230,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"4K lượt làm"}</span>
@@ -2360,12 +2360,12 @@ class PracticeLibrary extends React.Component {
                   <a
                     href={"StudentLanding.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                        "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                           v.accent +
                           "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                           v.onAccent,
@@ -2385,7 +2385,7 @@ class PracticeLibrary extends React.Component {
                       <a
                         href={"FullTests.dc.html"}
                         style={styleOf(
-                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                         )}
                         aria-haspopup={"true"}
                       >
@@ -2425,7 +2425,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -2450,7 +2450,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Full Tests"}
@@ -2474,7 +2474,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -2512,7 +2512,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Listening Practice"}
@@ -2536,7 +2536,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -2565,7 +2565,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Reading Practice"}
@@ -2588,7 +2588,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -2612,7 +2612,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Writing Practice"}
@@ -2635,7 +2635,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -2666,7 +2666,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Speaking Practice"}
@@ -2690,7 +2690,7 @@ class PracticeLibrary extends React.Component {
                       <a
                         href={"SampleLibrary.dc.html"}
                         style={styleOf(
-                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                         )}
                         aria-haspopup={"true"}
                       >
@@ -2731,7 +2731,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -2757,7 +2757,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 1 Academic"}
@@ -2781,7 +2781,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -2812,7 +2812,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 1 General"}
@@ -2836,7 +2836,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -2860,7 +2860,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 2"}
@@ -2883,7 +2883,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -2914,7 +2914,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Speaking Part 1, 2, 3"}
@@ -2934,7 +2934,7 @@ class PracticeLibrary extends React.Component {
                     <a
                       href={"Vocab.dc.html"}
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                       )}
                     >
                       {"Thư viện từ vựng"}
@@ -2942,7 +2942,7 @@ class PracticeLibrary extends React.Component {
                     <a
                       href={"Flashcard.dc.html"}
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                       )}
                     >
                       {"Flashcard của tôi"}
@@ -3013,12 +3013,12 @@ class PracticeLibrary extends React.Component {
                       "display: flex; flex-direction: column; gap: 6px",
                     )}
                   >
-                    <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"Thư viện đề / IELTS Reading Practice"}
                     </div>
                     <p
                       style={styleOf(
-                        "margin: 0; max-width: 760px; color: #6A5D6C; font-size: 15px",
+                        "margin: 0; max-width: 760px; color: #706473; font-size: 15px",
                       )}
                     >
                       {
@@ -3033,7 +3033,7 @@ class PracticeLibrary extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Gợi ý cho bạn"}
@@ -3072,7 +3072,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"312 lượt làm"}</span>
@@ -3144,7 +3144,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"256 lượt làm"}</span>
@@ -3216,7 +3216,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"198 lượt làm"}</span>
@@ -3288,7 +3288,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"174 lượt làm"}</span>
@@ -3340,7 +3340,7 @@ class PracticeLibrary extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Kho Reading Practice"}
@@ -3358,7 +3358,7 @@ class PracticeLibrary extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -3370,7 +3370,7 @@ class PracticeLibrary extends React.Component {
                           </div>
                           <div
                             style={styleOf(
-                              "display: flex; height: 42px; border-radius: 10px; overflow: hidden; border: 1px solid #E6E4E0; background: #F6F4EF",
+                              "display: flex; height: 42px; border-radius: 10px; overflow: hidden; border: 1.5px solid #E6E4E0; background: #F6F4EF",
                             )}
                           >
                             <input
@@ -3378,7 +3378,7 @@ class PracticeLibrary extends React.Component {
                               aria-label={"Tìm kiếm"}
                               placeholder={"Tìm bài"}
                               style={styleOf(
-                                "flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 12px; font: inherit; font-size: 14.5px; color: #352637; outline: none",
+                                "flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 12px; font: inherit; font-size: 14px; color: #352637; outline: none",
                               )}
                             />
                             <a
@@ -3407,7 +3407,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -3549,7 +3549,7 @@ class PracticeLibrary extends React.Component {
                             <a
                               href={"#"}
                               style={styleOf(
-                                "display: inline-block; margin-top: 4px; font-size: 13.5px; font-weight: 600; color: #2963CC; text-decoration: none",
+                                "display: inline-block; margin-top: 4px; font-size: 13px; font-weight: 600; color: #2963CC; text-decoration: none",
                               )}
                             >
                               {"Xem tất cả"}
@@ -3674,7 +3674,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"12K lượt làm"}</span>
@@ -3766,7 +3766,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"9K lượt làm"}</span>
@@ -3838,7 +3838,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"8K lượt làm"}</span>
@@ -3910,7 +3910,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"7K lượt làm"}</span>
@@ -3982,7 +3982,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"10K lượt làm"}</span>
@@ -4074,7 +4074,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"6K lượt làm"}</span>
@@ -4146,7 +4146,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"5K lượt làm"}</span>
@@ -4218,7 +4218,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"9K lượt làm"}</span>
@@ -4290,7 +4290,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"4K lượt làm"}</span>
@@ -4362,7 +4362,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"5K lượt làm"}</span>
@@ -4434,7 +4434,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"4K lượt làm"}</span>
@@ -4506,7 +4506,7 @@ class PracticeLibrary extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                                "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
                               <span>{"6K lượt làm"}</span>
@@ -4636,12 +4636,12 @@ class PracticeLibrary extends React.Component {
                   <a
                     href={"StudentLanding.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                        "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                           v.accent +
                           "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                           v.onAccent,
@@ -4661,7 +4661,7 @@ class PracticeLibrary extends React.Component {
                       <a
                         href={"FullTests.dc.html"}
                         style={styleOf(
-                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                         )}
                         aria-haspopup={"true"}
                       >
@@ -4701,7 +4701,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -4726,7 +4726,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Full Tests"}
@@ -4750,7 +4750,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -4788,7 +4788,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Listening Practice"}
@@ -4812,7 +4812,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -4841,7 +4841,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Reading Practice"}
@@ -4864,7 +4864,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -4888,7 +4888,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Writing Practice"}
@@ -4911,7 +4911,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -4942,7 +4942,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Speaking Practice"}
@@ -4966,7 +4966,7 @@ class PracticeLibrary extends React.Component {
                       <a
                         href={"SampleLibrary.dc.html"}
                         style={styleOf(
-                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                         )}
                         aria-haspopup={"true"}
                       >
@@ -5007,7 +5007,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -5033,7 +5033,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 1 Academic"}
@@ -5057,7 +5057,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -5088,7 +5088,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 1 General"}
@@ -5112,7 +5112,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -5136,7 +5136,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 2"}
@@ -5159,7 +5159,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -5190,7 +5190,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Speaking Part 1, 2, 3"}
@@ -5210,7 +5210,7 @@ class PracticeLibrary extends React.Component {
                     <a
                       href={"Vocab.dc.html"}
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                       )}
                     >
                       {"Thư viện từ vựng"}
@@ -5218,7 +5218,7 @@ class PracticeLibrary extends React.Component {
                     <a
                       href={"Flashcard.dc.html"}
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                       )}
                     >
                       {"Flashcard của tôi"}
@@ -5289,12 +5289,12 @@ class PracticeLibrary extends React.Component {
                       "display: flex; flex-direction: column; gap: 6px",
                     )}
                   >
-                    <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"Thư viện bài mẫu / Writing Task 1 General"}
                     </div>
                     <p
                       style={styleOf(
-                        "margin: 0; max-width: 760px; color: #6A5D6C; font-size: 15px",
+                        "margin: 0; max-width: 760px; color: #706473; font-size: 15px",
                       )}
                     >
                       {
@@ -5309,7 +5309,7 @@ class PracticeLibrary extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Bài mẫu mới nhất"}
@@ -5352,7 +5352,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Application Letter"}
@@ -5361,7 +5361,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -5421,7 +5421,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #A8432C; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Complaint Letter"}
@@ -5430,7 +5430,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -5490,7 +5490,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Request Letter"}
@@ -5499,7 +5499,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -5559,7 +5559,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #FCE6D6; color: #9A4A17; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #FCE6D6; color: #9A4A17; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Thank Letter"}
@@ -5568,7 +5568,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -5604,7 +5604,7 @@ class PracticeLibrary extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Kho bài mẫu Writing Task 1 General"}
@@ -5622,7 +5622,7 @@ class PracticeLibrary extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -5634,7 +5634,7 @@ class PracticeLibrary extends React.Component {
                           </div>
                           <div
                             style={styleOf(
-                              "display: flex; height: 42px; border-radius: 10px; overflow: hidden; border: 1px solid #E6E4E0; background: #F6F4EF",
+                              "display: flex; height: 42px; border-radius: 10px; overflow: hidden; border: 1.5px solid #E6E4E0; background: #F6F4EF",
                             )}
                           >
                             <input
@@ -5642,7 +5642,7 @@ class PracticeLibrary extends React.Component {
                               aria-label={"Tìm kiếm"}
                               placeholder={"Tìm chủ đề"}
                               style={styleOf(
-                                "flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 12px; font: inherit; font-size: 14.5px; color: #352637; outline: none",
+                                "flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 12px; font: inherit; font-size: 14px; color: #352637; outline: none",
                               )}
                             />
                             <a
@@ -5671,7 +5671,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -5839,7 +5839,7 @@ class PracticeLibrary extends React.Component {
                             <a
                               href={"#"}
                               style={styleOf(
-                                "display: inline-block; margin-top: 4px; font-size: 13.5px; font-weight: 600; color: #2963CC; text-decoration: none",
+                                "display: inline-block; margin-top: 4px; font-size: 13px; font-weight: 600; color: #2963CC; text-decoration: none",
                               )}
                             >
                               {"Xem tất cả"}
@@ -5929,7 +5929,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Application Letter"}
@@ -5937,7 +5937,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 3 2026"}</span>
@@ -5951,7 +5951,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -6012,7 +6012,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #A8432C; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Complaint Letter"}
@@ -6020,7 +6020,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 3 2026"}</span>
@@ -6034,7 +6034,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -6097,7 +6097,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Request Letter"}
@@ -6105,7 +6105,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 2 2026"}</span>
@@ -6119,7 +6119,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -6180,7 +6180,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Advice Seeking Letter"}
@@ -6188,7 +6188,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 2 2026"}</span>
@@ -6202,7 +6202,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -6265,7 +6265,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #FCE6D6; color: #9A4A17; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #FCE6D6; color: #9A4A17; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Thank Letter"}
@@ -6273,7 +6273,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 1 2026"}</span>
@@ -6287,7 +6287,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -6348,7 +6348,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #A8432C; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Complaint Letter"}
@@ -6356,7 +6356,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 1 2026"}</span>
@@ -6370,7 +6370,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -6487,12 +6487,12 @@ class PracticeLibrary extends React.Component {
                   <a
                     href={"StudentLanding.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                        "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                           v.accent +
                           "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                           v.onAccent,
@@ -6512,7 +6512,7 @@ class PracticeLibrary extends React.Component {
                       <a
                         href={"FullTests.dc.html"}
                         style={styleOf(
-                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                         )}
                         aria-haspopup={"true"}
                       >
@@ -6552,7 +6552,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -6577,7 +6577,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Full Tests"}
@@ -6601,7 +6601,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -6639,7 +6639,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Listening Practice"}
@@ -6663,7 +6663,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -6692,7 +6692,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Reading Practice"}
@@ -6715,7 +6715,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -6739,7 +6739,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Writing Practice"}
@@ -6762,7 +6762,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -6793,7 +6793,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Speaking Practice"}
@@ -6817,7 +6817,7 @@ class PracticeLibrary extends React.Component {
                       <a
                         href={"SampleLibrary.dc.html"}
                         style={styleOf(
-                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                         )}
                         aria-haspopup={"true"}
                       >
@@ -6858,7 +6858,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -6884,7 +6884,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 1 Academic"}
@@ -6908,7 +6908,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -6939,7 +6939,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 1 General"}
@@ -6963,7 +6963,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -6987,7 +6987,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 2"}
@@ -7010,7 +7010,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -7041,7 +7041,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Speaking Part 1, 2, 3"}
@@ -7061,7 +7061,7 @@ class PracticeLibrary extends React.Component {
                     <a
                       href={"Vocab.dc.html"}
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                       )}
                     >
                       {"Thư viện từ vựng"}
@@ -7069,7 +7069,7 @@ class PracticeLibrary extends React.Component {
                     <a
                       href={"Flashcard.dc.html"}
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                       )}
                     >
                       {"Flashcard của tôi"}
@@ -7140,12 +7140,12 @@ class PracticeLibrary extends React.Component {
                       "display: flex; flex-direction: column; gap: 6px",
                     )}
                   >
-                    <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"Thư viện bài mẫu / Writing Task 1 Academic"}
                     </div>
                     <p
                       style={styleOf(
-                        "margin: 0; max-width: 760px; color: #6A5D6C; font-size: 15px",
+                        "margin: 0; max-width: 760px; color: #706473; font-size: 15px",
                       )}
                     >
                       {
@@ -7160,7 +7160,7 @@ class PracticeLibrary extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Bài mẫu mới nhất"}
@@ -7203,7 +7203,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Bar chart"}
@@ -7212,7 +7212,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -7272,7 +7272,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Line graph"}
@@ -7281,7 +7281,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -7341,7 +7341,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Process"}
@@ -7350,7 +7350,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -7410,7 +7410,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Map"}
@@ -7419,7 +7419,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -7455,7 +7455,7 @@ class PracticeLibrary extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Kho bài mẫu Writing Task 1 Academic"}
@@ -7473,7 +7473,7 @@ class PracticeLibrary extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -7485,7 +7485,7 @@ class PracticeLibrary extends React.Component {
                           </div>
                           <div
                             style={styleOf(
-                              "display: flex; height: 42px; border-radius: 10px; overflow: hidden; border: 1px solid #E6E4E0; background: #F6F4EF",
+                              "display: flex; height: 42px; border-radius: 10px; overflow: hidden; border: 1.5px solid #E6E4E0; background: #F6F4EF",
                             )}
                           >
                             <input
@@ -7493,7 +7493,7 @@ class PracticeLibrary extends React.Component {
                               aria-label={"Tìm kiếm"}
                               placeholder={"Tìm chủ đề"}
                               style={styleOf(
-                                "flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 12px; font: inherit; font-size: 14.5px; color: #352637; outline: none",
+                                "flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 12px; font: inherit; font-size: 14px; color: #352637; outline: none",
                               )}
                             />
                             <a
@@ -7522,7 +7522,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -7703,7 +7703,7 @@ class PracticeLibrary extends React.Component {
                             <a
                               href={"#"}
                               style={styleOf(
-                                "display: inline-block; margin-top: 4px; font-size: 13.5px; font-weight: 600; color: #2963CC; text-decoration: none",
+                                "display: inline-block; margin-top: 4px; font-size: 13px; font-weight: 600; color: #2963CC; text-decoration: none",
                               )}
                             >
                               {"Xem tất cả"}
@@ -7791,7 +7791,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Line graph"}
@@ -7799,7 +7799,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 3 2026"}</span>
@@ -7813,7 +7813,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -7874,7 +7874,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Bar chart"}
@@ -7882,7 +7882,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 3 2026"}</span>
@@ -7896,7 +7896,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -7957,7 +7957,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #FCE6D6; color: #9A4A17; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #FCE6D6; color: #9A4A17; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Pie chart"}
@@ -7965,7 +7965,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 2 2026"}</span>
@@ -7979,7 +7979,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -8040,7 +8040,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Map"}
@@ -8048,7 +8048,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 2 2026"}</span>
@@ -8062,7 +8062,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -8123,7 +8123,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Process"}
@@ -8131,7 +8131,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 1 2026"}</span>
@@ -8145,7 +8145,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -8206,7 +8206,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #DFF1F4; color: #1F6A78; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #DFF1F4; color: #1F6A78; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Table"}
@@ -8214,7 +8214,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 1 2026"}</span>
@@ -8228,7 +8228,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -8345,12 +8345,12 @@ class PracticeLibrary extends React.Component {
                   <a
                     href={"StudentLanding.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                        "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                           v.accent +
                           "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                           v.onAccent,
@@ -8370,7 +8370,7 @@ class PracticeLibrary extends React.Component {
                       <a
                         href={"FullTests.dc.html"}
                         style={styleOf(
-                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                         )}
                         aria-haspopup={"true"}
                       >
@@ -8410,7 +8410,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -8435,7 +8435,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Full Tests"}
@@ -8459,7 +8459,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -8497,7 +8497,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Listening Practice"}
@@ -8521,7 +8521,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -8550,7 +8550,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Reading Practice"}
@@ -8573,7 +8573,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -8597,7 +8597,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Writing Practice"}
@@ -8620,7 +8620,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -8651,7 +8651,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"IELTS Speaking Practice"}
@@ -8675,7 +8675,7 @@ class PracticeLibrary extends React.Component {
                       <a
                         href={"SampleLibrary.dc.html"}
                         style={styleOf(
-                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                          "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                         )}
                         aria-haspopup={"true"}
                       >
@@ -8716,7 +8716,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -8742,7 +8742,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 1 Academic"}
@@ -8766,7 +8766,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -8797,7 +8797,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 1 General"}
@@ -8821,7 +8821,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -8845,7 +8845,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Writing Task 2"}
@@ -8868,7 +8868,7 @@ class PracticeLibrary extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                                "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                               )}
                             >
                               <svg
@@ -8899,7 +8899,7 @@ class PracticeLibrary extends React.Component {
                             >
                               <span
                                 style={styleOf(
-                                  "font-weight: 600; font-size: 14.5px",
+                                  "font-weight: 600; font-size: 14px",
                                 )}
                               >
                                 {"Speaking Part 1, 2, 3"}
@@ -8919,7 +8919,7 @@ class PracticeLibrary extends React.Component {
                     <a
                       href={"Vocab.dc.html"}
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                       )}
                     >
                       {"Thư viện từ vựng"}
@@ -8927,7 +8927,7 @@ class PracticeLibrary extends React.Component {
                     <a
                       href={"Flashcard.dc.html"}
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                        "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                       )}
                     >
                       {"Flashcard của tôi"}
@@ -8998,12 +8998,12 @@ class PracticeLibrary extends React.Component {
                       "display: flex; flex-direction: column; gap: 6px",
                     )}
                   >
-                    <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"Thư viện bài mẫu / Writing Task 2"}
                     </div>
                     <p
                       style={styleOf(
-                        "margin: 0; max-width: 760px; color: #6A5D6C; font-size: 15px",
+                        "margin: 0; max-width: 760px; color: #706473; font-size: 15px",
                       )}
                     >
                       {
@@ -9018,7 +9018,7 @@ class PracticeLibrary extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Bài mẫu mới nhất"}
@@ -9061,7 +9061,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #A8432C; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Agree/Disagree"}
@@ -9070,7 +9070,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -9130,7 +9130,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Discuss Both Views"}
@@ -9139,7 +9139,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -9199,7 +9199,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Two-Part Questions"}
@@ -9208,7 +9208,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -9268,7 +9268,7 @@ class PracticeLibrary extends React.Component {
                           <div style={styleOf("display: flex")}>
                             <span
                               style={styleOf(
-                                "padding: 4px 12px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                "padding: 4px 12px; border-radius: 999px; background: #FBEDBF; color: #7A5A0E; font-size: 13px; font-weight: 600; line-height: 1.4",
                               )}
                             >
                               {"Problem/Causes/Solutions"}
@@ -9277,7 +9277,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{"Quý 4 2026"}</span>
@@ -9313,7 +9313,7 @@ class PracticeLibrary extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Kho bài mẫu Writing Task 2"}
@@ -9331,7 +9331,7 @@ class PracticeLibrary extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -9343,7 +9343,7 @@ class PracticeLibrary extends React.Component {
                           </div>
                           <div
                             style={styleOf(
-                              "display: flex; height: 42px; border-radius: 10px; overflow: hidden; border: 1px solid #E6E4E0; background: #F6F4EF",
+                              "display: flex; height: 42px; border-radius: 10px; overflow: hidden; border: 1.5px solid #E6E4E0; background: #F6F4EF",
                             )}
                           >
                             <input
@@ -9351,7 +9351,7 @@ class PracticeLibrary extends React.Component {
                               aria-label={"Tìm kiếm"}
                               placeholder={"Tìm chủ đề"}
                               style={styleOf(
-                                "flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 12px; font: inherit; font-size: 14.5px; color: #352637; outline: none",
+                                "flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 12px; font: inherit; font-size: 14px; color: #352637; outline: none",
                               )}
                             />
                             <a
@@ -9380,7 +9380,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -9548,7 +9548,7 @@ class PracticeLibrary extends React.Component {
                             <a
                               href={"#"}
                               style={styleOf(
-                                "display: inline-block; margin-top: 4px; font-size: 13.5px; font-weight: 600; color: #2963CC; text-decoration: none",
+                                "display: inline-block; margin-top: 4px; font-size: 13px; font-weight: 600; color: #2963CC; text-decoration: none",
                               )}
                             >
                               {"Xem tất cả"}
@@ -9636,7 +9636,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #A8432C; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Agree/Disagree"}
@@ -9644,7 +9644,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 3 2026"}</span>
@@ -9658,7 +9658,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -9719,7 +9719,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #A8432C; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Agree/Disagree"}
@@ -9727,7 +9727,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 3 2026"}</span>
@@ -9741,7 +9741,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -9802,7 +9802,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Two-Part Questions"}
@@ -9810,7 +9810,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 2 2026"}</span>
@@ -9824,7 +9824,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -9887,7 +9887,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Two-Part Questions"}
@@ -9895,7 +9895,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 2 2026"}</span>
@@ -9909,7 +9909,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -9972,7 +9972,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Discuss Both Views"}
@@ -9980,7 +9980,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 1 2026"}</span>
@@ -9994,7 +9994,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {
@@ -10055,7 +10055,7 @@ class PracticeLibrary extends React.Component {
                               <div style={styleOf("display: flex")}>
                                 <span
                                   style={styleOf(
-                                    "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13.5px; font-weight: 600; line-height: 1.4",
+                                    "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; line-height: 1.4",
                                   )}
                                 >
                                   {"Advantages/Disadvantages"}
@@ -10063,7 +10063,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6A5D6C",
+                                  "display: flex; align-items: center; gap: 8px; font-size: 14px; color: #706473",
                                 )}
                               >
                                 <span>{"Quý 1 2026"}</span>
@@ -10077,7 +10077,7 @@ class PracticeLibrary extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; line-height: 1.5; color: #6A5D6C",
+                                  "font-size: 14px; line-height: 1.5; color: #706473",
                                 )}
                               >
                                 {

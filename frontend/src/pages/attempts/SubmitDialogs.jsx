@@ -72,7 +72,7 @@ class SubmitDialogs extends React.Component {
               >
                 {"Nộp bài Reading?"}
               </div>
-              <div style={styleOf("color: #6A5D6C")}>
+              <div style={styleOf("color: #706473")}>
                 {
                   "Bạn đã trả lời 36 trên 40 câu. Còn 4 câu chưa làm: 12, 19, 27, 33. Câu bỏ trống được tính là không đúng."
                 }
@@ -85,7 +85,7 @@ class SubmitDialogs extends React.Component {
                 <button
                   type={"button"} data-ab={""}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Quay lại làm tiếp"}
@@ -93,7 +93,7 @@ class SubmitDialogs extends React.Component {
                 <a
                   href={"ResultLR.dc.html"}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Nộp bài"}
@@ -132,7 +132,7 @@ class SubmitDialogs extends React.Component {
               >
                 {"Đã hết giờ"}
               </div>
-              <div style={styleOf("color: #6A5D6C")}>
+              <div style={styleOf("color: #706473")}>
                 {
                   "Hệ thống đã tự hoàn thành lượt làm với các câu trả lời đã được lưu. Bạn có thể xem kết quả ngay."
                 }
@@ -145,7 +145,7 @@ class SubmitDialogs extends React.Component {
                 <a
                   href={"ResultLR.dc.html"}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Xem kết quả"}
@@ -184,7 +184,7 @@ class SubmitDialogs extends React.Component {
               >
                 {"Lưu và thoát?"}
               </div>
-              <div style={styleOf("color: #6A5D6C")}>
+              <div style={styleOf("color: #706473")}>
                 {
                   "Câu trả lời được lưu tự động lên máy chủ. Bạn có thể mở lại lượt làm dở để làm tiếp trong thời gian còn lại; hết thời gian, hệ thống hoàn thành lượt làm với phần đã lưu."
                 }
@@ -197,7 +197,7 @@ class SubmitDialogs extends React.Component {
                 <button
                   type={"button"} data-ab={""}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Ở lại"}
@@ -205,7 +205,7 @@ class SubmitDialogs extends React.Component {
                 <a
                   href={"StudentLanding.dc.html"}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Lưu và thoát"}
@@ -243,7 +243,7 @@ class SubmitDialogs extends React.Component {
               >
                 {"Hoàn thành bài Writing?"}
               </div>
-              <div style={styleOf("color: #6A5D6C")}>
+              <div style={styleOf("color: #706473")}>
                 {
                   "Bài viết được lưu với thời hạn 14 ngày. Hoàn thành không tự gửi chấm và không dùng lượt hỗ trợ. Sau khi hoàn thành, bài không sửa được nữa."
                 }
@@ -256,7 +256,7 @@ class SubmitDialogs extends React.Component {
                 <button
                   type={"button"} data-ab={""}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Quay lại bài làm"}
@@ -264,7 +264,7 @@ class SubmitDialogs extends React.Component {
                 <a
                   href={"MyWS.dc.html"}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Hoàn thành"}
@@ -302,7 +302,7 @@ class SubmitDialogs extends React.Component {
               >
                 {"Đã lưu bài Writing Task 2"}
               </div>
-              <div style={styleOf("color: #6A5D6C")}>
+              <div style={styleOf("color: #706473")}>
                 {"Nội dung được giữ đến "}
                 <b>{"05/11/2026"}</b>
                 {
@@ -317,7 +317,7 @@ class SubmitDialogs extends React.Component {
                 <button
                   type={"button"} data-ab={""}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   <svg
@@ -338,7 +338,7 @@ class SubmitDialogs extends React.Component {
                 <a
                   href={"#gui-yeu-cau"}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Gửi yêu cầu chấm"}
@@ -377,7 +377,7 @@ class SubmitDialogs extends React.Component {
               >
                 {"Gửi yêu cầu hỗ trợ chấm?"}
               </div>
-              <div style={styleOf("color: #6A5D6C")}>
+              <div style={styleOf("color: #706473")}>
                 {"Writing Task 2 · Online education"}
                 <div
                   style={styleOf(
@@ -389,7 +389,7 @@ class SubmitDialogs extends React.Component {
                       "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                     )}
                   >
-                    <span style={styleOf("color: #6A5D6C")}>
+                    <span style={styleOf("color: #706473")}>
                       {"Lượt miễn phí tuần này"}
                     </span>
                     <span
@@ -403,7 +403,7 @@ class SubmitDialogs extends React.Component {
                       "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                     )}
                   >
-                    <span style={styleOf("color: #6A5D6C")}>
+                    <span style={styleOf("color: #706473")}>
                       {"Lượt bonus"}
                     </span>
                     <span
@@ -417,7 +417,7 @@ class SubmitDialogs extends React.Component {
                       "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                     )}
                   >
-                    <span style={styleOf("color: #6A5D6C")}>{"Sẽ dùng"}</span>
+                    <span style={styleOf("color: #706473")}>{"Sẽ dùng"}</span>
                     <span
                       style={styleOf("font-weight: 600; text-align: right")}
                     >
@@ -443,7 +443,7 @@ class SubmitDialogs extends React.Component {
                 <button
                   type={"button"} data-ab={""}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #F1B3A3; box-sizing: border-box; background: #FFFFFF; color: #C0412A; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #F1B3A3; box-sizing: border-box; background: #FFFFFF; color: #C0412A; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Hủy"}
@@ -451,7 +451,7 @@ class SubmitDialogs extends React.Component {
                 <a
                   href={"MyWS.dc.html"}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Xác nhận gửi"}
@@ -490,7 +490,7 @@ class SubmitDialogs extends React.Component {
               >
                 {"Chưa gửi được yêu cầu"}
               </div>
-              <div style={styleOf("color: #6A5D6C")}>
+              <div style={styleOf("color: #706473")}>
                 {
                   "Bạn không còn lượt hợp lệ. Lượt miễn phí mới được cấp lúc 00:00 thứ Hai. Bài vẫn giữ đến hạn 05/11/2026 nên bạn có thể gửi lại khi có lượt."
                 }
@@ -512,7 +512,7 @@ class SubmitDialogs extends React.Component {
                 <a
                   href={"MyWS.dc.html"}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Đã hiểu"}

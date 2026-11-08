@@ -73,14 +73,14 @@ class AdminGrading extends React.Component {
                   <div>
                     <h1
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Theo dõi hỗ trợ chấm"}
                     </h1>
                     <div
                       style={styleOf(
-                        "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                        "font-size: 15px; color: #706473; margin-top: 4px",
                       )}
                     >
                       {
@@ -133,7 +133,7 @@ class AdminGrading extends React.Component {
                     >
                       {"7"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"2 yêu cầu còn dưới 12 giờ"}
                     </div>
                   </div>
@@ -152,7 +152,7 @@ class AdminGrading extends React.Component {
                     >
                       {"23"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"chờ lâu nhất 6 ngày"}
                     </div>
                   </div>
@@ -171,7 +171,7 @@ class AdminGrading extends React.Component {
                     >
                       {"291"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"30 ngày qua"}
                     </div>
                   </div>
@@ -190,7 +190,7 @@ class AdminGrading extends React.Component {
                     >
                       {"21"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"17 quá hạn · 4 GV không thể hoàn thành"}
                     </div>
                   </div>
@@ -202,26 +202,26 @@ class AdminGrading extends React.Component {
                 >
                   <div
                     style={styleOf(
-                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
                       )}
                     >
                       {"Mọi kỹ năng"}
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                       )}
                     >
                       {"Writing"}
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                       )}
                     >
                       {"Speaking"}
@@ -229,40 +229,40 @@ class AdminGrading extends React.Component {
                   </div>
                   <div
                     style={styleOf(
-                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
                       )}
                     >
                       {"Mọi trạng thái"}
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                       )}
                     >
                       {"Chờ phân công"}
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                       )}
                     >
                       {"Chờ chấm"}
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                       )}
                     >
                       {"Đã có kết quả"}
                     </span>
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                       )}
                     >
                       {"Đã hủy"}
@@ -270,7 +270,7 @@ class AdminGrading extends React.Component {
                   </div>
                   <div
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; width: 220px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 10px; background: #FFFFFF; color: #706473; font-size: 14.5px",
+                      "display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; width: 220px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 10px; background: #FFFFFF; color: #706473; font-size: 14px",
                     )}
                   >
                     <svg
@@ -301,10 +301,10 @@ class AdminGrading extends React.Component {
                     )}
                   >
                     <div>
-                      <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                      <div style={styleOf("font-size: 18px; font-weight: 600")}>
                         {"Chờ phân công"}
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {
                           "Thời gian chờ phân công tính từ lúc tiếp nhận; quá 72 giờ hệ thống tự hủy và hoàn 1 bonus."
                         }
@@ -422,7 +422,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; font-size: 13px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               <svg
@@ -625,10 +625,10 @@ class AdminGrading extends React.Component {
                     )}
                   >
                     <div>
-                      <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                      <div style={styleOf("font-size: 18px; font-weight: 600")}>
                         {"Tải công việc giáo viên"}
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {
                           "Thời gian chờ chấm tính từ lúc phân công; không có hạn chấm và không tự hoàn lượt."
                         }
@@ -836,7 +836,7 @@ class AdminGrading extends React.Component {
                             <a
                               href={"AdminUsers.dc.html"}
                               style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                               )}
                             >
                               {"Đến người dùng"}
@@ -902,7 +902,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #706473; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Đã đủ giới hạn"}
@@ -929,10 +929,10 @@ class AdminGrading extends React.Component {
                     )}
                   >
                     <div>
-                      <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                      <div style={styleOf("font-size: 18px; font-weight: 600")}>
                         {"Yêu cầu đã hủy"}
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {
                           "Giao dịch hoàn đang lỗi hiển thị là Chờ xử lý, không tính là đã hoàn."
                         }
@@ -1133,7 +1133,7 @@ class AdminGrading extends React.Component {
                           >
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #706473; font-size: 13px; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Không áp dụng"}

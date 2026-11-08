@@ -50,12 +50,12 @@ class FullTests extends React.Component {
               <a
                 href={"StudentLanding.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -70,7 +70,7 @@ class FullTests extends React.Component {
                   <a
                     href={"FullTests.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -110,7 +110,7 @@ class FullTests extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -135,7 +135,7 @@ class FullTests extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Full Tests"}
@@ -156,7 +156,7 @@ class FullTests extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -194,7 +194,7 @@ class FullTests extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Listening Practice"}
@@ -215,7 +215,7 @@ class FullTests extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -242,7 +242,7 @@ class FullTests extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Reading Practice"}
@@ -263,7 +263,7 @@ class FullTests extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -287,7 +287,7 @@ class FullTests extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Writing Practice"}
@@ -308,7 +308,7 @@ class FullTests extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -339,7 +339,7 @@ class FullTests extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Speaking Practice"}
@@ -358,7 +358,7 @@ class FullTests extends React.Component {
                   <a
                     href={"SampleLibrary.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -398,7 +398,7 @@ class FullTests extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -424,7 +424,7 @@ class FullTests extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 Academic"}
@@ -445,7 +445,7 @@ class FullTests extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -476,7 +476,7 @@ class FullTests extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 General"}
@@ -497,7 +497,7 @@ class FullTests extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -521,7 +521,7 @@ class FullTests extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 2"}
@@ -542,7 +542,7 @@ class FullTests extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -573,7 +573,7 @@ class FullTests extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Speaking Part 1, 2, 3"}
@@ -591,7 +591,7 @@ class FullTests extends React.Component {
                 <a
                   href={"Vocab.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Thư viện từ vựng"}
@@ -599,7 +599,7 @@ class FullTests extends React.Component {
                 <a
                   href={"Flashcard.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Flashcard của tôi"}
@@ -670,7 +670,7 @@ class FullTests extends React.Component {
                   "max-width: 1200px; margin: 0 auto; padding: 36px 24px 32px; display: flex; flex-direction: column; gap: 12px",
                 )}
               >
-                <div style={styleOf("font-size: 13.5px; color: #6A5D6C")}>
+                <div style={styleOf("font-size: 13px; color: #706473")}>
                   {"Thư viện đề / IELTS Full Tests"}
                 </div>
                 <h1
@@ -771,26 +771,26 @@ class FullTests extends React.Component {
               >
                 <div
                   style={styleOf(
-                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                   )}
                 >
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
                     )}
                   >
                     {"Tất cả"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                     )}
                   >
                     {"Academic"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                     )}
                   >
                     {"General Training"}
@@ -798,7 +798,7 @@ class FullTests extends React.Component {
                 </div>
                 <div
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; width: 300px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 10px; background: #FFFFFF; color: #706473; font-size: 14.5px",
+                    "display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; width: 300px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 10px; background: #FFFFFF; color: #706473; font-size: 14px",
                   )}
                 >
                   <svg
@@ -838,7 +838,7 @@ class FullTests extends React.Component {
                     </h2>
                     <p
                       style={styleOf(
-                        "margin: 4px 0 0; color: #6A5D6C; font-size: 14.5px",
+                        "margin: 4px 0 0; color: #706473; font-size: 14px",
                       )}
                     >
                       {"Đề mô phỏng mới nhất, cập nhật theo quý."}
@@ -900,7 +900,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"8 bài test"}</span>
@@ -955,7 +955,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"8 bài test"}</span>
@@ -1010,7 +1010,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"8 bài test"}</span>
@@ -1065,7 +1065,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"8 bài test"}</span>
@@ -1121,7 +1121,7 @@ class FullTests extends React.Component {
                     </h2>
                     <p
                       style={styleOf(
-                        "margin: 4px 0 0; color: #6A5D6C; font-size: 14.5px",
+                        "margin: 4px 0 0; color: #706473; font-size: 14px",
                       )}
                     >
                       {"Đề luyện kèm lời giải và danh sách từ vựng."}
@@ -1175,7 +1175,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"10 bài test"}</span>
@@ -1230,7 +1230,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"12 bài test"}</span>
@@ -1285,7 +1285,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"14 bài test"}</span>
@@ -1340,7 +1340,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"10 bài test"}</span>
@@ -1396,7 +1396,7 @@ class FullTests extends React.Component {
                     </h2>
                     <p
                       style={styleOf(
-                        "margin: 4px 0 0; color: #6A5D6C; font-size: 14.5px",
+                        "margin: 4px 0 0; color: #706473; font-size: 14px",
                       )}
                     >
                       {"Tổng hợp từ các kỳ thi gần đây."}
@@ -1450,7 +1450,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"13 bài test"}</span>
@@ -1505,7 +1505,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"6 bài test"}</span>
@@ -1560,7 +1560,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"10 bài test"}</span>
@@ -1615,7 +1615,7 @@ class FullTests extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                        "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
                       <span>{"12 bài test"}</span>

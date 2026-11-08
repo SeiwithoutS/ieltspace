@@ -50,12 +50,12 @@ class Vocab extends React.Component {
               <a
                 href={"StudentLanding.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -70,7 +70,7 @@ class Vocab extends React.Component {
                   <a
                     href={"FullTests.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -110,7 +110,7 @@ class Vocab extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -135,7 +135,7 @@ class Vocab extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Full Tests"}
@@ -156,7 +156,7 @@ class Vocab extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -194,7 +194,7 @@ class Vocab extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Listening Practice"}
@@ -215,7 +215,7 @@ class Vocab extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -242,7 +242,7 @@ class Vocab extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Reading Practice"}
@@ -263,7 +263,7 @@ class Vocab extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -287,7 +287,7 @@ class Vocab extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Writing Practice"}
@@ -308,7 +308,7 @@ class Vocab extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -339,7 +339,7 @@ class Vocab extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Speaking Practice"}
@@ -358,7 +358,7 @@ class Vocab extends React.Component {
                   <a
                     href={"SampleLibrary.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -398,7 +398,7 @@ class Vocab extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -424,7 +424,7 @@ class Vocab extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 Academic"}
@@ -445,7 +445,7 @@ class Vocab extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -476,7 +476,7 @@ class Vocab extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 General"}
@@ -497,7 +497,7 @@ class Vocab extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -521,7 +521,7 @@ class Vocab extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 2"}
@@ -542,7 +542,7 @@ class Vocab extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -573,7 +573,7 @@ class Vocab extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Speaking Part 1, 2, 3"}
@@ -591,7 +591,7 @@ class Vocab extends React.Component {
                 <a
                   href={"Vocab.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                   )}
                 >
                   {"Thư viện từ vựng"}
@@ -599,7 +599,7 @@ class Vocab extends React.Component {
                 <a
                   href={"Flashcard.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Flashcard của tôi"}
@@ -673,14 +673,14 @@ class Vocab extends React.Component {
                 <div>
                   <h1
                     style={styleOf(
-                      "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                      "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                     )}
                   >
                     {"Thư viện từ vựng"}
                   </h1>
                   <div
                     style={styleOf(
-                      "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                      "font-size: 15px; color: #706473; margin-top: 4px",
                     )}
                   >
                     {
@@ -692,7 +692,7 @@ class Vocab extends React.Component {
                   <a
                     href={"Flashcard.dc.html"}
                     style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                     )}
                   >
                     <svg
@@ -726,7 +726,7 @@ class Vocab extends React.Component {
               >
                 <div
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; width: 260px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 10px; background: #FFFFFF; color: #706473; font-size: 14.5px",
+                    "display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; width: 260px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 10px; background: #FFFFFF; color: #706473; font-size: 14px",
                   )}
                 >
                   <svg
@@ -747,33 +747,33 @@ class Vocab extends React.Component {
                 </div>
                 <div
                   style={styleOf(
-                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                   )}
                 >
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
                     )}
                   >
                     {"Tất cả"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                     )}
                   >
                     {"Môi trường"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                     )}
                   >
                     {"Giao thông"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                     )}
                   >
                     {"Giáo dục"}
@@ -781,26 +781,26 @@ class Vocab extends React.Component {
                 </div>
                 <div
                   style={styleOf(
-                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                   )}
                 >
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
                     )}
                   >
                     {"Mọi từ"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                     )}
                   >
                     {"Yêu thích"}
                   </span>
                   <span
                     style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                     )}
                   >
                     {"Theo nhãn"}
@@ -841,7 +841,7 @@ class Vocab extends React.Component {
                           type={"button"}
                           aria-label={"Bỏ yêu thích"}
                           style={styleOf(
-                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; display: flex; align-items: center; justify-content: center; cursor: pointer",
+                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #C0412A; display: flex; align-items: center; justify-content: center; cursor: pointer",
                           )}
                         >
                           <svg
@@ -876,7 +876,7 @@ class Vocab extends React.Component {
                           {"sustainable"}
                         </div>
                         <span
-                          style={styleOf("color: #6A5D6C")}
+                          style={styleOf("color: #706473")}
                           aria-label={"Phát âm"}
                         >
                           <svg
@@ -895,7 +895,7 @@ class Vocab extends React.Component {
                           </svg>
                         </span>
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {"/səˈsteɪnəbl/ · adj"}
                       </div>
                       <div
@@ -905,7 +905,7 @@ class Vocab extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 14px; color: #6A5D6C; font-style: italic",
+                          "font-size: 14px; color: #706473; font-style: italic",
                         )}
                       >
                         {"Sustainable development protects resources."}
@@ -961,7 +961,7 @@ class Vocab extends React.Component {
                           type={"button"}
                           aria-label={"Bỏ yêu thích"}
                           style={styleOf(
-                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; display: flex; align-items: center; justify-content: center; cursor: pointer",
+                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #C0412A; display: flex; align-items: center; justify-content: center; cursor: pointer",
                           )}
                         >
                           <svg
@@ -996,7 +996,7 @@ class Vocab extends React.Component {
                           {"mitigate"}
                         </div>
                         <span
-                          style={styleOf("color: #6A5D6C")}
+                          style={styleOf("color: #706473")}
                           aria-label={"Phát âm"}
                         >
                           <svg
@@ -1015,7 +1015,7 @@ class Vocab extends React.Component {
                           </svg>
                         </span>
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {"/ˈmɪtɪɡeɪt/ · v"}
                       </div>
                       <div
@@ -1025,7 +1025,7 @@ class Vocab extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 14px; color: #6A5D6C; font-style: italic",
+                          "font-size: 14px; color: #706473; font-style: italic",
                         )}
                       >
                         {"Trees help mitigate the effects of heat."}
@@ -1081,7 +1081,7 @@ class Vocab extends React.Component {
                           type={"button"}
                           aria-label={"Thêm yêu thích"}
                           style={styleOf(
-                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #6A5D6C; display: flex; align-items: center; justify-content: center; cursor: pointer",
+                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #706473; display: flex; align-items: center; justify-content: center; cursor: pointer",
                           )}
                         >
                           <svg
@@ -1116,7 +1116,7 @@ class Vocab extends React.Component {
                           {"infrastructure"}
                         </div>
                         <span
-                          style={styleOf("color: #6A5D6C")}
+                          style={styleOf("color: #706473")}
                           aria-label={"Phát âm"}
                         >
                           <svg
@@ -1135,7 +1135,7 @@ class Vocab extends React.Component {
                           </svg>
                         </span>
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {"/ˈɪnfrəstrʌktʃə/ · n"}
                       </div>
                       <div
@@ -1145,7 +1145,7 @@ class Vocab extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 14px; color: #6A5D6C; font-style: italic",
+                          "font-size: 14px; color: #706473; font-style: italic",
                         )}
                       >
                         {"The city invests in public infrastructure."}
@@ -1175,7 +1175,7 @@ class Vocab extends React.Component {
                           type={"button"}
                           aria-label={"Thêm yêu thích"}
                           style={styleOf(
-                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #6A5D6C; display: flex; align-items: center; justify-content: center; cursor: pointer",
+                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #706473; display: flex; align-items: center; justify-content: center; cursor: pointer",
                           )}
                         >
                           <svg
@@ -1210,7 +1210,7 @@ class Vocab extends React.Component {
                           {"commute"}
                         </div>
                         <span
-                          style={styleOf("color: #6A5D6C")}
+                          style={styleOf("color: #706473")}
                           aria-label={"Phát âm"}
                         >
                           <svg
@@ -1229,7 +1229,7 @@ class Vocab extends React.Component {
                           </svg>
                         </span>
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {"/kəˈmjuːt/ · v"}
                       </div>
                       <div
@@ -1239,7 +1239,7 @@ class Vocab extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 14px; color: #6A5D6C; font-style: italic",
+                          "font-size: 14px; color: #706473; font-style: italic",
                         )}
                       >
                         {"Many people commute by train."}
@@ -1295,7 +1295,7 @@ class Vocab extends React.Component {
                           type={"button"}
                           aria-label={"Thêm yêu thích"}
                           style={styleOf(
-                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #6A5D6C; display: flex; align-items: center; justify-content: center; cursor: pointer",
+                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #706473; display: flex; align-items: center; justify-content: center; cursor: pointer",
                           )}
                         >
                           <svg
@@ -1330,7 +1330,7 @@ class Vocab extends React.Component {
                           {"curriculum"}
                         </div>
                         <span
-                          style={styleOf("color: #6A5D6C")}
+                          style={styleOf("color: #706473")}
                           aria-label={"Phát âm"}
                         >
                           <svg
@@ -1349,7 +1349,7 @@ class Vocab extends React.Component {
                           </svg>
                         </span>
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {"/kəˈrɪkjələm/ · n"}
                       </div>
                       <div
@@ -1359,7 +1359,7 @@ class Vocab extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 14px; color: #6A5D6C; font-style: italic",
+                          "font-size: 14px; color: #706473; font-style: italic",
                         )}
                       >
                         {"The curriculum includes practical skills."}
@@ -1389,7 +1389,7 @@ class Vocab extends React.Component {
                           type={"button"}
                           aria-label={"Bỏ yêu thích"}
                           style={styleOf(
-                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; display: flex; align-items: center; justify-content: center; cursor: pointer",
+                            "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #C0412A; display: flex; align-items: center; justify-content: center; cursor: pointer",
                           )}
                         >
                           <svg
@@ -1424,7 +1424,7 @@ class Vocab extends React.Component {
                           {"literacy"}
                         </div>
                         <span
-                          style={styleOf("color: #6A5D6C")}
+                          style={styleOf("color: #706473")}
                           aria-label={"Phát âm"}
                         >
                           <svg
@@ -1443,7 +1443,7 @@ class Vocab extends React.Component {
                           </svg>
                         </span>
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {"/ˈlɪtərəsi/ · n"}
                       </div>
                       <div
@@ -1453,7 +1453,7 @@ class Vocab extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 14px; color: #6A5D6C; font-style: italic",
+                          "font-size: 14px; color: #706473; font-style: italic",
                         )}
                       >
                         {"Adult literacy has improved."}
@@ -1502,7 +1502,7 @@ class Vocab extends React.Component {
                         </div>
                         <span
                           style={styleOf(
-                            "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; font-size: 13px; font-weight: 600; white-space: nowrap",
+                            "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; white-space: nowrap",
                           )}
                         >
                           <svg
@@ -1530,7 +1530,7 @@ class Vocab extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "min-height: 84px; padding: 12px 14px; border-radius: 10px; border: 1.5px solid #D6D4D0; font-size: 14.5px",
+                          "min-height: 84px; padding: 12px 14px; border-radius: 10px; border: 1.5px solid #D6D4D0; font-size: 14px",
                         )}
                       >
                         {
@@ -1619,7 +1619,7 @@ class Vocab extends React.Component {
                         <a
                           href={"#"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #B23A24; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #C0412A; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           {"Xóa ghi chú"}
@@ -1627,7 +1627,7 @@ class Vocab extends React.Component {
                         <a
                           href={"#"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           {"Lưu"}

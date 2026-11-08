@@ -50,12 +50,12 @@ class ResultWS extends React.Component {
               <a
                 href={"StudentLanding.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -70,7 +70,7 @@ class ResultWS extends React.Component {
                   <a
                     href={"FullTests.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -110,7 +110,7 @@ class ResultWS extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -135,7 +135,7 @@ class ResultWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Full Tests"}
@@ -156,7 +156,7 @@ class ResultWS extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -194,7 +194,7 @@ class ResultWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Listening Practice"}
@@ -215,7 +215,7 @@ class ResultWS extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -242,7 +242,7 @@ class ResultWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Reading Practice"}
@@ -263,7 +263,7 @@ class ResultWS extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -287,7 +287,7 @@ class ResultWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Writing Practice"}
@@ -308,7 +308,7 @@ class ResultWS extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -339,7 +339,7 @@ class ResultWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Speaking Practice"}
@@ -358,7 +358,7 @@ class ResultWS extends React.Component {
                   <a
                     href={"SampleLibrary.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -398,7 +398,7 @@ class ResultWS extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -424,7 +424,7 @@ class ResultWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 Academic"}
@@ -445,7 +445,7 @@ class ResultWS extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -476,7 +476,7 @@ class ResultWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 General"}
@@ -497,7 +497,7 @@ class ResultWS extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -521,7 +521,7 @@ class ResultWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 2"}
@@ -542,7 +542,7 @@ class ResultWS extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -573,7 +573,7 @@ class ResultWS extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Speaking Part 1, 2, 3"}
@@ -591,7 +591,7 @@ class ResultWS extends React.Component {
                 <a
                   href={"Vocab.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Thư viện từ vựng"}
@@ -599,7 +599,7 @@ class ResultWS extends React.Component {
                 <a
                   href={"Flashcard.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Flashcard của tôi"}
@@ -665,7 +665,7 @@ class ResultWS extends React.Component {
                 "max-width: 1200px; margin: 0 auto; padding: 36px 24px 56px; display: flex; flex-direction: column; gap: 24px",
               )}
             >
-              <div style={styleOf("font-size: 13.5px; color: #706473")}>
+              <div style={styleOf("font-size: 13px; color: #706473")}>
                 <a
                   href={"MyWS.dc.html"}
                   style={styleOf("color: #706473; text-decoration: none")}
@@ -682,14 +682,14 @@ class ResultWS extends React.Component {
                 <div>
                   <h1
                     style={styleOf(
-                      "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                      "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                     )}
                   >
                     {"Kết quả Writing Task 2"}
                   </h1>
                   <div
                     style={styleOf(
-                      "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                      "font-size: 15px; color: #706473; margin-top: 4px",
                     )}
                   >
                     {"Public transport and traffic"}
@@ -719,7 +719,7 @@ class ResultWS extends React.Component {
                   <a
                     href={"#"}
                     style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                     )}
                   >
                     <svg
@@ -755,7 +755,7 @@ class ResultWS extends React.Component {
                   >
                     {"6.5"}
                   </div>
-                  <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                  <div style={styleOf("font-size: 13px; color: #706473")}>
                     {"đánh giá cho Task 2, không phải band toàn kỹ năng"}
                   </div>
                 </div>
@@ -774,7 +774,7 @@ class ResultWS extends React.Component {
                   >
                     {"271"}
                   </div>
-                  <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                  <div style={styleOf("font-size: 13px; color: #706473")}>
                     {"yêu cầu từ 250"}
                   </div>
                 </div>
@@ -793,7 +793,7 @@ class ResultWS extends React.Component {
                   >
                     {"22/10/2026"}
                   </div>
-                  <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                  <div style={styleOf("font-size: 13px; color: #706473")}>
                     {"yêu cầu đã dùng 1 lượt miễn phí"}
                   </div>
                 </div>
@@ -812,7 +812,7 @@ class ResultWS extends React.Component {
                   >
                     {"đến 05/11"}
                   </div>
-                  <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                  <div style={styleOf("font-size: 13px; color: #706473")}>
                     {"sau đó chỉ còn điểm và nhận xét"}
                   </div>
                 </div>
@@ -837,12 +837,12 @@ class ResultWS extends React.Component {
                         "display: flex; flex-direction: column; gap: 14px; ",
                       )}
                     >
-                      <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                      <div style={styleOf("font-size: 18px; font-weight: 600")}>
                         {"Bài làm kèm nhận xét"}
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 15.5px; line-height: 1.85; color: #352637",
+                          "font-size: 15px; line-height: 1.85; color: #352637",
                         )}
                       >
                         {
@@ -888,7 +888,7 @@ class ResultWS extends React.Component {
                   >
                     <div
                       style={styleOf(
-                        "font-size: 17px; font-weight: 600; margin-bottom: 6px",
+                        "font-size: 18px; font-weight: 600; margin-bottom: 6px",
                       )}
                     >
                       {"Điểm theo tiêu chí"}
@@ -944,7 +944,7 @@ class ResultWS extends React.Component {
                         "display: flex; flex-direction: column; gap: 12px; ",
                       )}
                     >
-                      <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                      <div style={styleOf("font-size: 18px; font-weight: 600")}>
                         {"Nhận xét của giáo viên"}
                       </div>
                       <div
@@ -970,7 +970,7 @@ class ResultWS extends React.Component {
                           </div>
                         </div>
                       </div>
-                      <div style={styleOf("font-size: 14.5px; color: #4B3D4D")}>
+                      <div style={styleOf("font-size: 14px; color: #4B3D4D")}>
                         {
                           "Bài có lập trường rõ ràng và ví dụ phù hợp. Em cần mở rộng ý ở đoạn thân bài 2 và chú ý hòa hợp chủ ngữ và động từ. Gợi ý: luyện viết câu phức với mệnh đề quan hệ."
                         }
@@ -987,7 +987,7 @@ class ResultWS extends React.Component {
                         "display: flex; flex-direction: column; gap: 10px; ",
                       )}
                     >
-                      <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                      <div style={styleOf("font-size: 18px; font-weight: 600")}>
                         {"Các mốc của yêu cầu"}
                       </div>
                       <div

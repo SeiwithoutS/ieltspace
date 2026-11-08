@@ -49,12 +49,12 @@ class ListeningTest extends React.Component {
               <a
                 href={"StudentHome.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -105,7 +105,7 @@ class ListeningTest extends React.Component {
                 <a
                   href={"ExamDetail.dc.html"}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Lưu và thoát"}
@@ -117,7 +117,7 @@ class ListeningTest extends React.Component {
                       v.accent +
                       "; color: " +
                       v.onAccent +
-                      "; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                      "; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                   )}
                 >
                   {"Nộp bài"}
@@ -283,7 +283,7 @@ class ListeningTest extends React.Component {
                       </div>
                       <span
                         style={styleOf(
-                          "display:flex;align-items:center;gap:8px;color:#6A5D6C",
+                          "display:flex;align-items:center;gap:8px;color:#706473",
                         )}
                       >
                         <svg
@@ -334,7 +334,7 @@ class ListeningTest extends React.Component {
                     >
                       {"Questions 1 to 6"}
                     </div>
-                    <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                    <div style={styleOf("font-size: 18px; font-weight: 600")}>
                       {
                         "Complete the form below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER."
                       }
@@ -364,7 +364,7 @@ class ListeningTest extends React.Component {
                         {" 2 "}
                         <span
                           style={styleOf(
-                            "display:inline-block;min-width:110px;border-bottom:1.5px solid #D6D4D0;padding:0 6px;color:#766A79",
+                            "display:inline-block;min-width:110px;border-bottom:1.5px solid #D6D4D0;padding:0 6px;color:#706473",
                           )}
                         >
                           {"nhập đáp án"}
@@ -409,7 +409,7 @@ class ListeningTest extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #E3ECFD; font-size: 14.5px",
+                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #E3ECFD; font-size: 14px",
                           )}
                         >
                           <span
@@ -421,7 +421,7 @@ class ListeningTest extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14.5px",
+                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14px",
                           )}
                         >
                           <span
@@ -433,7 +433,7 @@ class ListeningTest extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14.5px",
+                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14px",
                           )}
                         >
                           <span
@@ -463,7 +463,7 @@ class ListeningTest extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14.5px",
+                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14px",
                           )}
                         >
                           <span
@@ -475,7 +475,7 @@ class ListeningTest extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #E3ECFD; font-size: 14.5px",
+                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #E3ECFD; font-size: 14px",
                           )}
                         >
                           <span
@@ -487,7 +487,7 @@ class ListeningTest extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14.5px",
+                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14px",
                           )}
                         >
                           <span
@@ -517,7 +517,7 @@ class ListeningTest extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14.5px",
+                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14px",
                           )}
                         >
                           <span
@@ -529,7 +529,7 @@ class ListeningTest extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14.5px",
+                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14px",
                           )}
                         >
                           <span
@@ -541,7 +541,7 @@ class ListeningTest extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14.5px",
+                            "display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #DDDBD7; background: #FFFFFF; font-size: 14px",
                           )}
                         >
                           <span

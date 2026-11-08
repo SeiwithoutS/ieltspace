@@ -32,7 +32,7 @@ class AdminSidebar extends React.Component {
     var active = P.active || "home";
     var teacher = !!P.teacher;
     var base =
-      "position: relative; display: flex; align-items: center; gap: 12px; height: 44px; border-radius: 10px; box-sizing: border-box; font-size: 14.5px; text-decoration: none; ";
+      "position: relative; display: flex; align-items: center; gap: 12px; height: 44px; border-radius: 10px; box-sizing: border-box; font-size: 14px; text-decoration: none; ";
     var pad = closed
       ? "padding: 0; justify-content: center; width: 44px; margin: 0 auto; "
       : "padding: 0 14px; ";
@@ -74,7 +74,7 @@ class AdminSidebar extends React.Component {
         : "justify-content: space-between",
       toggleLabel: closed ? "Mở rộng thanh bên" : "Thu gọn thanh bên",
       toggleStyle:
-        "flex: none; width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; color: #6A5D6C; background: #FFFFFF; cursor: pointer",
+        "flex: none; width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; color: #706473; background: #FFFFFF; cursor: pointer",
       toggle: function (e) {
         if (e) {
           e.preventDefault();
@@ -117,12 +117,12 @@ class AdminSidebar extends React.Component {
               href={v.teacher ? "TeacherHome.dc.html" : "AdminHome.dc.html"}
               title={"IELTSpace"}
               style={styleOf(
-                "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
               )}
             >
               <span
                 style={styleOf(
-                  "flex: none; width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                  "flex: none; width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                     v.accent +
                     "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                     v.onAccent,

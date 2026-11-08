@@ -66,7 +66,7 @@ html.dark .support-panel {
 .support-intro {
   color: var(--support-muted);
   margin: 14px 0 28px;
-  font-size: 14.5px;
+  font-size: 14px;
 }
 .support-stats {
   display: grid;
@@ -83,7 +83,7 @@ html.dark .support-panel {
 }
 .support-stat {
   color: var(--support-muted);
-  font-size: 13.5px;
+  font-size: 13px;
 }
 .support-stat h2 {
   font-family: "IBM Plex Serif", Georgia, serif;

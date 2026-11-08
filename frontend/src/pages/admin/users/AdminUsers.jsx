@@ -273,9 +273,9 @@ class AdminUsers extends React.Component {
     var PILL =
         "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; box-sizing: border-box; font-size: 13px; font-weight: 600; white-space: nowrap; ",
       SEG_ON =
-        "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box",
+        "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box",
       SEG_OFF =
-        "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box";
+        "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box";
     var over = s.over || {},
       added = s.added || [];
     var ROLE = {
@@ -286,20 +286,20 @@ class AdminUsers extends React.Component {
     var STAT = {
       active: ["Hoạt động", "#DCEDE2", "#2E6A48"],
       stopping: ["Ngừng nhận bài mới", "#FBEDBF", "#7A5A0E"],
-      locked: ["Bị khóa", "#FBDCD3", "#B23A24"],
-      unverified: ["Chưa xác minh email", "#F3F0EA", "#6A5D6C"],
-      deleted: ["Đã xóa", "#F3F0EA", "#6A5D6C"],
+      locked: ["Bị khóa", "#FBDCD3", "#C0412A"],
+      unverified: ["Chưa xác minh email", "#F3F0EA", "#706473"],
+      deleted: ["Đã xóa", "#F3F0EA", "#706473"],
       invited: ["Chờ kích hoạt", "#E8E4FA", "#5543B0"],
     };
     var PERM = {
       on: ["Đang chấm", "#DCEDE2", "#2E6A48"],
       stopping: ["Ngừng nhận bài mới", "#FBEDBF", "#7A5A0E"],
-      revoked: ["Đã thu hồi", "#F3F0EA", "#6A5D6C"],
-      off: ["Chưa cấp", "#F3F0EA", "#6A5D6C"],
+      revoked: ["Đã thu hồi", "#F3F0EA", "#706473"],
+      off: ["Chưa cấp", "#F3F0EA", "#706473"],
     };
     var RES = {
       ok: ["", "#DCEDE2", "#2E6A48"],
-      fail: ["", "#FBDCD3", "#B23A24"],
+      fail: ["", "#FBDCD3", "#C0412A"],
       warn: ["", "#FBEDBF", "#7A5A0E"],
       info: ["", "#F3F0EA", "#4B3D4D"],
       band: ["", "#E3ECFD", "#2A55B8"],
@@ -691,14 +691,14 @@ class AdminUsers extends React.Component {
                   <div>
                     <h1
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.015em; font-family: 'IBM Plex Serif', Georgia, serif",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.015em; font-family: 'IBM Plex Serif', Georgia, serif",
                       )}
                     >
                       {"Người dùng"}
                     </h1>
                     <div
                       style={styleOf(
-                        "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                        "font-size: 15px; color: #706473; margin-top: 4px",
                       )}
                     >
                       {
@@ -711,7 +711,7 @@ class AdminUsers extends React.Component {
                     onClick={v.openCreate}
                     aria-haspopup={"dialog"}
                     style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
                     )}
                   >
                     <svg
@@ -738,7 +738,7 @@ class AdminUsers extends React.Component {
                   <div
                     role={"group"}
                     style={styleOf(
-                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                     )}
                   >
                     <a
@@ -800,14 +800,14 @@ class AdminUsers extends React.Component {
                       placeholder={"Tìm tên hoặc email"}
                       aria-label={"Tìm tên hoặc email"}
                       style={styleOf(
-                        "flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 14.5px; color: #352637",
+                        "flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 14px; color: #352637",
                       )}
                     />
                   </label>
                   <div
                     role={"group"}
                     style={styleOf(
-                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                      "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                     )}
                   >
                     <a
@@ -845,7 +845,7 @@ class AdminUsers extends React.Component {
                   </div>
                   <span
                     style={styleOf(
-                      "margin-left: auto; font-size: 13.5px; color: #706473",
+                      "margin-left: auto; font-size: 13px; color: #706473",
                     )}
                   >
                     {v.countText}
@@ -1076,7 +1076,7 @@ class AdminUsers extends React.Component {
                         <>
                           <div
                             style={styleOf(
-                              "padding: 32px 16px; text-align: center; color: #6A5D6C; border-top: 1px solid #E6E4E0",
+                              "padding: 32px 16px; text-align: center; color: #706473; border-top: 1px solid #E6E4E0",
                             )}
                           >
                             {"Không có tài khoản phù hợp với bộ lọc."}
@@ -1113,7 +1113,7 @@ class AdminUsers extends React.Component {
                         </h2>
                         <div
                           style={styleOf(
-                            "font-size: 14px; color: #6A5D6C; margin-top: 2px",
+                            "font-size: 14px; color: #706473; margin-top: 2px",
                           )}
                         >
                           {"Người học đã đăng nhập trong các ngày qua."}
@@ -1195,7 +1195,7 @@ class AdminUsers extends React.Component {
                           <>
                             <div
                               style={styleOf(
-                                "padding: 24px 16px; text-align: center; color: #6A5D6C; border-top: 1px solid #E6E4E0",
+                                "padding: 24px 16px; text-align: center; color: #706473; border-top: 1px solid #E6E4E0",
                               )}
                             >
                               {"Chưa có lượt đăng nhập nào."}
@@ -1227,7 +1227,7 @@ class AdminUsers extends React.Component {
                         </h2>
                         <div
                           style={styleOf(
-                            "font-size: 14px; color: #6A5D6C; margin-top: 2px",
+                            "font-size: 14px; color: #706473; margin-top: 2px",
                           )}
                         >
                           {"Giáo viên đã đăng nhập trong các ngày qua."}
@@ -1309,7 +1309,7 @@ class AdminUsers extends React.Component {
                           <>
                             <div
                               style={styleOf(
-                                "padding: 24px 16px; text-align: center; color: #6A5D6C; border-top: 1px solid #E6E4E0",
+                                "padding: 24px 16px; text-align: center; color: #706473; border-top: 1px solid #E6E4E0",
                               )}
                             >
                               {"Chưa có lượt đăng nhập nào."}
@@ -1439,13 +1439,13 @@ class AdminUsers extends React.Component {
                       <div>
                         <div
                           style={styleOf(
-                            "font-weight: 600; font-size: 19px; font-family: 'IBM Plex Serif', Georgia, serif",
+                            "font-weight: 600; font-size: 18px; font-family: 'IBM Plex Serif', Georgia, serif",
                           )}
                         >
                           {v.sel.name}
                         </div>
                         <div
-                          style={styleOf("font-size: 13.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 13px; color: #706473")}
                         >
                           {v.sel.email}
                         </div>
@@ -1477,7 +1477,7 @@ class AdminUsers extends React.Component {
                         "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                       )}
                     >
-                      <span style={styleOf("color: #6A5D6C")}>
+                      <span style={styleOf("color: #706473")}>
                         {"Ngày tạo"}
                       </span>
                       <span
@@ -1491,7 +1491,7 @@ class AdminUsers extends React.Component {
                         "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                       )}
                     >
-                      <span style={styleOf("color: #6A5D6C")}>
+                      <span style={styleOf("color: #706473")}>
                         {"Tạo bằng"}
                       </span>
                       <span
@@ -1505,7 +1505,7 @@ class AdminUsers extends React.Component {
                         "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                       )}
                     >
-                      <span style={styleOf("color: #6A5D6C")}>
+                      <span style={styleOf("color: #706473")}>
                         {"Xác minh email"}
                       </span>
                       <span
@@ -1519,7 +1519,7 @@ class AdminUsers extends React.Component {
                         "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                       )}
                     >
-                      <span style={styleOf("color: #6A5D6C")}>
+                      <span style={styleOf("color: #706473")}>
                         {"Đăng nhập gần nhất"}
                       </span>
                       <span
@@ -1544,7 +1544,7 @@ class AdminUsers extends React.Component {
                             "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                           )}
                         >
-                          <span style={styleOf("color: #6A5D6C")}>
+                          <span style={styleOf("color: #706473")}>
                             {"Bài đã hoàn thành"}
                           </span>
                           <span
@@ -1560,7 +1560,7 @@ class AdminUsers extends React.Component {
                             "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                           )}
                         >
-                          <span style={styleOf("color: #6A5D6C")}>
+                          <span style={styleOf("color: #706473")}>
                             {"Bonus chấm còn lại"}
                           </span>
                           <span
@@ -1576,7 +1576,7 @@ class AdminUsers extends React.Component {
                             "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                           )}
                         >
-                          <span style={styleOf("color: #6A5D6C")}>
+                          <span style={styleOf("color: #706473")}>
                             {"Yêu cầu chấm chưa có kết quả"}
                           </span>
                           <span
@@ -1605,7 +1605,7 @@ class AdminUsers extends React.Component {
                             "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                           )}
                         >
-                          <span style={styleOf("color: #6A5D6C")}>
+                          <span style={styleOf("color: #706473")}>
                             {"Writing"}
                           </span>
                           <span
@@ -1623,7 +1623,7 @@ class AdminUsers extends React.Component {
                             "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                           )}
                         >
-                          <span style={styleOf("color: #6A5D6C")}>
+                          <span style={styleOf("color: #706473")}>
                             {"Speaking"}
                           </span>
                           <span
@@ -1641,7 +1641,7 @@ class AdminUsers extends React.Component {
                             "display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #E6E4E0; font-size: 14px",
                           )}
                         >
-                          <span style={styleOf("color: #6A5D6C")}>
+                          <span style={styleOf("color: #706473")}>
                             {"Bài chưa chấm / giới hạn"}
                           </span>
                           <span
@@ -1699,7 +1699,7 @@ class AdminUsers extends React.Component {
                           {"Giáo viên không thể hoàn thành"}
                         </div>
                         <div
-                          style={styleOf("font-size: 13.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 13px; color: #706473")}
                         >
                           {
                             "Chọn quyền cần ngừng, xem các bài bị ảnh hưởng và nhập lý do. Hệ thống hủy các yêu cầu chưa có kết quả, hoàn 1 bonus cho mỗi yêu cầu, không phân công lại và thông báo cho người học."
@@ -1832,14 +1832,14 @@ class AdminUsers extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-size: 13.5px; font-weight: 600",
+                              "font-size: 13px; font-weight: 600",
                             )}
                           >
                             {"Lý do hủy (bắt buộc)"}
                           </span>
                           <div
                             style={styleOf(
-                              "min-height: 110px; padding: 12px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; line-height: 1.6",
+                              "min-height: 110px; padding: 12px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; line-height: 1.6",
                             )}
                           >
                             {"Giáo viên nghỉ phép dài hạn từ 24/10"}
@@ -1853,7 +1853,7 @@ class AdminUsers extends React.Component {
                           <a
                             href={"#"}
                             style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #F1B3A3; box-sizing: border-box; background: #FFFFFF; color: #C0412A; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #F1B3A3; box-sizing: border-box; background: #FFFFFF; color: #C0412A; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                             )}
                           >
                             {"Hủy thao tác"}
@@ -1861,7 +1861,7 @@ class AdminUsers extends React.Component {
                           <a
                             href={"#"}
                             style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                             )}
                           >
                             {"Xác nhận hủy 3 yêu cầu"}
@@ -1917,7 +1917,7 @@ class AdminUsers extends React.Component {
                       <React.Fragment key={index}>
                         <div
                           style={styleOf(
-                            "display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid #E6E4E0; font-size: 13.5px",
+                            "display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid #E6E4E0; font-size: 13px",
                           )}
                         >
                           <span>
@@ -1936,7 +1936,7 @@ class AdminUsers extends React.Component {
                       <>
                         <div
                           style={styleOf(
-                            "padding: 8px 0; border-top: 1px solid #E6E4E0; font-size: 13.5px; color: #706473",
+                            "padding: 8px 0; border-top: 1px solid #E6E4E0; font-size: 13px; color: #706473",
                           )}
                         >
                           {"Chưa có lượt đăng nhập nào."}
@@ -1956,7 +1956,7 @@ class AdminUsers extends React.Component {
                         href={"#"}
                         onClick={v.sel.lockToggle}
                         style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; flex: 1",
+                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; flex: 1",
                         )}
                       >
                         {v.sel.lockLabel}
@@ -1965,7 +1965,7 @@ class AdminUsers extends React.Component {
                         href={"#"}
                         onClick={v.sel.remove}
                         style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A; flex: 1; color: #C0412A; border-color: #F1B3A3",
+                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A; flex: 1; color: #C0412A; border-color: #F1B3A3",
                         )}
                       >
                         {"Xóa tài khoản"}
@@ -2008,7 +2008,7 @@ class AdminUsers extends React.Component {
                     </h2>
                     <div
                       style={styleOf(
-                        "font-size: 14px; color: #6A5D6C; margin-top: 4px",
+                        "font-size: 14px; color: #706473; margin-top: 4px",
                       )}
                     >
                       {
@@ -2046,7 +2046,7 @@ class AdminUsers extends React.Component {
                     )}
                   >
                     <span
-                      style={styleOf("font-size: 13.5px; font-weight: 600")}
+                      style={styleOf("font-size: 13px; font-weight: 600")}
                     >
                       {"Họ và tên"}
                     </span>
@@ -2057,7 +2057,7 @@ class AdminUsers extends React.Component {
                       onChange={v.setNfName}
                       placeholder={"Phạm Thị Mai"}
                       style={styleOf(
-                        "height: 44px; padding: 0 14px; box-sizing: border-box; width: 100%; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14.5px; outline-color: #2963CC",
+                        "height: 44px; padding: 0 14px; box-sizing: border-box; width: 100%; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
                       )}
                     />
                   </label>
@@ -2067,7 +2067,7 @@ class AdminUsers extends React.Component {
                     )}
                   >
                     <span
-                      style={styleOf("font-size: 13.5px; font-weight: 600")}
+                      style={styleOf("font-size: 13px; font-weight: 600")}
                     >
                       {"Email"}
                     </span>
@@ -2078,7 +2078,7 @@ class AdminUsers extends React.Component {
                       onChange={v.setNfEmail}
                       placeholder={"mai@ieltspace.vn"}
                       style={styleOf(
-                        "height: 44px; padding: 0 14px; box-sizing: border-box; width: 100%; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14.5px; outline-color: #2963CC",
+                        "height: 44px; padding: 0 14px; box-sizing: border-box; width: 100%; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
                       )}
                     />
                   </label>
@@ -2090,7 +2090,7 @@ class AdminUsers extends React.Component {
                     )}
                   >
                     <span
-                      style={styleOf("font-size: 13.5px; font-weight: 600")}
+                      style={styleOf("font-size: 13px; font-weight: 600")}
                     >
                       {"Vai trò"}
                     </span>
@@ -2098,7 +2098,7 @@ class AdminUsers extends React.Component {
                       value={v.nfRole}
                       onChange={v.setNfRole}
                       style={styleOf(
-                        "height: 44px; padding: 0 14px; box-sizing: border-box; width: 100%; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14.5px; outline-color: #2963CC; cursor: pointer",
+                        "height: 44px; padding: 0 14px; box-sizing: border-box; width: 100%; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; cursor: pointer",
                       )}
                     >
                       <option value={"teacher"}>{"Giáo viên"}</option>
@@ -2113,7 +2113,7 @@ class AdminUsers extends React.Component {
                         )}
                       >
                         <span
-                          style={styleOf("font-size: 13.5px; font-weight: 600")}
+                          style={styleOf("font-size: 13px; font-weight: 600")}
                         >
                           {"Giới hạn bài chưa chấm"}
                         </span>
@@ -2124,7 +2124,7 @@ class AdminUsers extends React.Component {
                           value={v.nfLimit}
                           onChange={v.setNfLimit}
                           style={styleOf(
-                            "height: 44px; padding: 0 14px; box-sizing: border-box; width: 100%; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14.5px; outline-color: #2963CC",
+                            "height: 44px; padding: 0 14px; box-sizing: border-box; width: 100%; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
                           )}
                         />
                       </label>
@@ -2139,7 +2139,7 @@ class AdminUsers extends React.Component {
                       )}
                     >
                       <span
-                        style={styleOf("font-size: 13.5px; font-weight: 600")}
+                        style={styleOf("font-size: 13px; font-weight: 600")}
                       >
                         {"Quyền chấm"}
                       </span>
@@ -2183,7 +2183,7 @@ class AdminUsers extends React.Component {
                     <div
                       role={"alert"}
                       style={styleOf(
-                        "padding: 10px 14px; border-radius: 12px; background: #FBDCD3; border: 1.5px solid #F1B3A3; color: #B23A24; font-size: 14px",
+                        "padding: 10px 14px; border-radius: 12px; background: #FBDCD3; border: 1.5px solid #F1B3A3; color: #C0412A; font-size: 14px",
                       )}
                     >
                       {v.nfErr}
@@ -2204,7 +2204,7 @@ class AdminUsers extends React.Component {
                     href={"#"}
                     onClick={v.closeCreate}
                     style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
+                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
                     )}
                   >
                     {"Hủy"}
@@ -2213,7 +2213,7 @@ class AdminUsers extends React.Component {
                     href={"#"}
                     onClick={v.submitCreate}
                     style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
                     )}
                   >
                     {"Tạo và gửi email mời"}

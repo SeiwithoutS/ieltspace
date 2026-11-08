@@ -64,7 +64,7 @@ class TeacherGrade extends React.Component {
                   "flex: 1; background: #FAF9F5; padding: 36px 32px 48px; display: flex; flex-direction: column; gap: 24px",
                 )}
               >
-                <div style={styleOf("font-size: 13.5px; color: #706473")}>
+                <div style={styleOf("font-size: 13px; color: #706473")}>
                   <a
                     href={"TeacherQueue.dc.html"}
                     style={styleOf("color: #706473; text-decoration: none")}
@@ -114,7 +114,7 @@ class TeacherGrade extends React.Component {
                           </span>
                           <span
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #706473; font-size: 13px; font-weight: 600; white-space: nowrap",
                             )}
                           >
                             {"271 từ"}
@@ -128,7 +128,7 @@ class TeacherGrade extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 14px 16px; border-radius: 12px; background: #FAF9F5; border: 1px solid #DDDBD7; font-size: 14.5px",
+                            "padding: 14px 16px; border-radius: 12px; background: #FAF9F5; border: 1px solid #DDDBD7; font-size: 14px",
                           )}
                         >
                           <b>{"Đề bài:"}</b>
@@ -200,7 +200,7 @@ class TeacherGrade extends React.Component {
                         >
                           <div
                             style={styleOf(
-                              "flex: 1; font-size: 17px; font-weight: 600",
+                              "flex: 1; font-size: 18px; font-weight: 600",
                             )}
                           >
                             {"Chấm theo tiêu chí"}
@@ -235,7 +235,7 @@ class TeacherGrade extends React.Component {
                           >
                             <div
                               style={styleOf(
-                                "flex: 1; font-weight: 500; font-size: 14.5px",
+                                "flex: 1; font-weight: 500; font-size: 14px",
                               )}
                             >
                               {"Task Achievement / Task Response"}
@@ -258,7 +258,7 @@ class TeacherGrade extends React.Component {
                           >
                             <div
                               style={styleOf(
-                                "flex: 1; font-weight: 500; font-size: 14.5px",
+                                "flex: 1; font-weight: 500; font-size: 14px",
                               )}
                             >
                               {"Coherence and Cohesion"}
@@ -281,7 +281,7 @@ class TeacherGrade extends React.Component {
                           >
                             <div
                               style={styleOf(
-                                "flex: 1; font-weight: 500; font-size: 14.5px",
+                                "flex: 1; font-weight: 500; font-size: 14px",
                               )}
                             >
                               {"Lexical Resource"}
@@ -304,7 +304,7 @@ class TeacherGrade extends React.Component {
                           >
                             <div
                               style={styleOf(
-                                "flex: 1; font-weight: 500; font-size: 14.5px",
+                                "flex: 1; font-weight: 500; font-size: 14px",
                               )}
                             >
                               {"Grammatical Range and Accuracy"}
@@ -344,7 +344,7 @@ class TeacherGrade extends React.Component {
                           </div>
                           <div
                             style={styleOf(
-                              "font-size: 30px; font-weight: 700; color: #7A5A0E; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                              "font-size: 28px; font-weight: 700; color: #7A5A0E; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
                             )}
                           >
                             {"6.5"}
@@ -357,14 +357,14 @@ class TeacherGrade extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-size: 13.5px; font-weight: 600",
+                              "font-size: 13px; font-weight: 600",
                             )}
                           >
                             {"Nhận xét gửi người học"}
                           </span>
                           <div
                             style={styleOf(
-                              "min-height: 110px; padding: 12px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14.5px; line-height: 1.6",
+                              "min-height: 110px; padding: 12px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font-size: 14px; line-height: 1.6",
                             )}
                           >
                             {
@@ -380,7 +380,7 @@ class TeacherGrade extends React.Component {
                           <a
                             href={"TeacherQueue.dc.html"}
                             style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                             )}
                           >
                             {"Lưu nháp"}
@@ -388,7 +388,7 @@ class TeacherGrade extends React.Component {
                           <a
                             href={"TeacherHome.dc.html"}
                             style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                             )}
                           >
                             {"Công bố kết quả"}

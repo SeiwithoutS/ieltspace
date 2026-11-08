@@ -255,12 +255,12 @@ class AdminExamSet extends React.Component {
       ST = {
         pub: ["Đã đăng", "#DCEDE2", "#2E6A48"],
         draft: ["Đang soạn", "#FBEDBF", "#7A5A0E"],
-        hidden: ["Đã ẩn", "#F3F0EA", "#6A5D6C"],
+        hidden: ["Đã ẩn", "#F3F0EA", "#706473"],
       },
       SST = {
         pub: ["Công khai", "#DCEDE2", "#2E6A48"],
         draft: ["Bản nháp", "#FBEDBF", "#7A5A0E"],
-        hidden: ["Đã ẩn", "#F3F0EA", "#6A5D6C"],
+        hidden: ["Đã ẩn", "#F3F0EA", "#706473"],
       },
       TY = {
         A: ["Academic", "#DFF1F4", "#1F6A78"],
@@ -519,7 +519,7 @@ class AdminExamSet extends React.Component {
       );
     }
     var MI =
-      "display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 9px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
+      "display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
     var rows = tests.map(function (t, r) {
       var n = SK.filter(function (k) {
         return vals(t, k[0]).length;
@@ -603,7 +603,7 @@ class AdminExamSet extends React.Component {
               label: "Đăng trong editor khi soạn xong",
               st:
                 MI +
-                "color: #766A79; font-weight: 500; font-size: 13px; cursor: default",
+                "color: #706473; font-weight: 500; font-size: 13px; cursor: default",
               href: "#",
               act: stop,
             });
@@ -738,7 +738,7 @@ class AdminExamSet extends React.Component {
         goText: "Ẩn bộ đề",
         goSt: "BTN_DARK",
         icon: "–",
-        tone: ["#F3F0EA", "#6A5D6C"],
+        tone: ["#F3F0EA", "#706473"],
       };
     }
     if (s.cf === "del") {
@@ -1005,7 +1005,7 @@ class AdminExamSet extends React.Component {
                 <a
                   href={"AdminExams.dc.html"}
                   style={styleOf(
-                    "display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #6A5D6C; text-decoration: none; align-self: flex-start",
+                    "display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #706473; text-decoration: none; align-self: flex-start",
                   )}
                 >
                   <svg
@@ -1137,7 +1137,7 @@ class AdminExamSet extends React.Component {
                                 >
                                   <div
                                     style={styleOf(
-                                      "font-size: 13px; font-weight: 600; color: #6A5D6C",
+                                      "font-size: 13px; font-weight: 600; color: #706473",
                                     )}
                                   >
                                     {"Ảnh bìa bộ đề"}
@@ -1245,7 +1245,7 @@ class AdminExamSet extends React.Component {
                           <div style={styleOf("flex: 1 1 320px; min-width: 0")}>
                             <h1
                               style={styleOf(
-                                "margin: 0; font-size: 30px; line-height: 1.25; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                                "margin: 0; font-size: 28px; line-height: 1.25; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                               )}
                             >
                               {v.setName}
@@ -1266,7 +1266,7 @@ class AdminExamSet extends React.Component {
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 14.5px; color: #6A5D6C; margin-top: 6px",
+                                "font-size: 14px; color: #706473; margin-top: 6px",
                               )}
                             >
                               {v.setSub}
@@ -1490,14 +1490,14 @@ class AdminExamSet extends React.Component {
                               >
                                 <span
                                   style={styleOf(
-                                    "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 34px; font-weight: 600; line-height: 1.1",
+                                    "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 32px; font-weight: 600; line-height: 1.1",
                                   )}
                                 >
                                   {t.n}
                                 </span>
                                 <span
                                   style={styleOf(
-                                    "font-size: 14px; color: #6A5D6C",
+                                    "font-size: 14px; color: #706473",
                                   )}
                                 >
                                   {"đề"}
@@ -1505,7 +1505,7 @@ class AdminExamSet extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 13px; color: #6A5D6C",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {t.sub}
@@ -1536,7 +1536,7 @@ class AdminExamSet extends React.Component {
                           )}
                         >
                           <span
-                            style={styleOf("font-size: 17px; font-weight: 600")}
+                            style={styleOf("font-size: 18px; font-weight: 600")}
                           >
                             {"Các đề trong bộ"}
                           </span>
@@ -1561,7 +1561,7 @@ class AdminExamSet extends React.Component {
                             </span>
                             <span
                               style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #F3F0EA; color: #6A5D6C",
+                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #F3F0EA; color: #706473",
                               )}
                             >
                               {"Đã ẩn"}
@@ -1741,7 +1741,7 @@ class AdminExamSet extends React.Component {
                                                   title={x.title}
                                                   className={"press"}
                                                   style={styleOf(
-                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; border: 1.5px dashed #D6D4D0; height: 28px",
+                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; border: 1.5px dashed #D6D4D0; height: 28px",
                                                   )}
                                                 >
                                                   <svg
@@ -1804,7 +1804,7 @@ class AdminExamSet extends React.Component {
                                     ))}
                                     <td
                                       style={styleOf(
-                                        "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; color: #6A5D6C",
+                                        "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; color: #706473",
                                       )}
                                     >
                                       {r.updated}
@@ -1866,7 +1866,7 @@ class AdminExamSet extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 14px; color: #6A5D6C; max-width: 460px",
+                                  "font-size: 14px; color: #706473; max-width: 460px",
                                 )}
                               >
                                 {
@@ -1943,7 +1943,7 @@ class AdminExamSet extends React.Component {
                       >
                         {"Đã xóa bộ đề “" + v.setName + "”"}
                       </div>
-                      <div style={styleOf("font-size: 14.5px; color: #6A5D6C")}>
+                      <div style={styleOf("font-size: 14px; color: #706473")}>
                         {"Bộ đề và các đề đang soạn bên trong đã bị xóa."}
                       </div>
                       <a
@@ -2018,7 +2018,7 @@ class AdminExamSet extends React.Component {
                           </div>
                           <div
                             style={styleOf(
-                              "font-size: 14.5px; color: #4B3D4D; line-height: 1.55",
+                              "font-size: 14px; color: #4B3D4D; line-height: 1.55",
                             )}
                           >
                             {v.cf.text}

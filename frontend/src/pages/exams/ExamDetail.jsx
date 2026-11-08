@@ -320,12 +320,12 @@ class ExamDetail extends React.Component {
             "display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 20px; padding: 0 6px; margin-left: 8px; border-radius: 999px; font-size: 13px; font-weight: 700; " +
             (on
               ? "background: " + TY[c][1] + "; color: " + TY[c][2]
-              : "background: #E9E4DA; color: #6A5D6C"),
+              : "background: #E9E4DA; color: #706473"),
           st:
-            "display: inline-flex; align-items: center; height: 38px; padding: 0 14px; border-radius: 9px; font-size: 14px; text-decoration: none; white-space: nowrap; " +
+            "display: inline-flex; align-items: center; height: 38px; padding: 0 14px; border-radius: 10px; font-size: 14px; text-decoration: none; white-space: nowrap; " +
             (on
               ? "background: #FFFFFF; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600; box-shadow: 0 1px 2px rgba(53,38,55,.06)"
-              : "border: 1.5px solid transparent; color: #6A5D6C; font-weight: 500"),
+              : "border: 1.5px solid transparent; color: #706473; font-weight: 500"),
         };
       }),
       rows: rows,
@@ -385,12 +385,12 @@ class ExamDetail extends React.Component {
               <a
                 href={"StudentLanding.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -405,7 +405,7 @@ class ExamDetail extends React.Component {
                   <a
                     href={"FullTests.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -445,7 +445,7 @@ class ExamDetail extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -470,7 +470,7 @@ class ExamDetail extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Full Tests"}
@@ -491,7 +491,7 @@ class ExamDetail extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -529,7 +529,7 @@ class ExamDetail extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Listening Practice"}
@@ -550,7 +550,7 @@ class ExamDetail extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -577,7 +577,7 @@ class ExamDetail extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Reading Practice"}
@@ -598,7 +598,7 @@ class ExamDetail extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -622,7 +622,7 @@ class ExamDetail extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Writing Practice"}
@@ -643,7 +643,7 @@ class ExamDetail extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -674,7 +674,7 @@ class ExamDetail extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Speaking Practice"}
@@ -693,7 +693,7 @@ class ExamDetail extends React.Component {
                   <a
                     href={"SampleLibrary.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -733,7 +733,7 @@ class ExamDetail extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -759,7 +759,7 @@ class ExamDetail extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 Academic"}
@@ -780,7 +780,7 @@ class ExamDetail extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -811,7 +811,7 @@ class ExamDetail extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 General"}
@@ -832,7 +832,7 @@ class ExamDetail extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -856,7 +856,7 @@ class ExamDetail extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 2"}
@@ -877,7 +877,7 @@ class ExamDetail extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -908,7 +908,7 @@ class ExamDetail extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Speaking Part 1, 2, 3"}
@@ -926,7 +926,7 @@ class ExamDetail extends React.Component {
                 <a
                   href={"Vocab.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Thư viện từ vựng"}
@@ -934,7 +934,7 @@ class ExamDetail extends React.Component {
                 <a
                   href={"Flashcard.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Flashcard của tôi"}
@@ -1005,17 +1005,17 @@ class ExamDetail extends React.Component {
                   "max-width: 1200px; margin: 0 auto; padding: 28px 24px 36px; display: flex; flex-direction: column; gap: 18px",
                 )}
               >
-                <div style={styleOf("font-size: 13.5px; color: #6A5D6C")}>
+                <div style={styleOf("font-size: 13px; color: #706473")}>
                   <a
                     href={"FullTests.dc.html"}
-                    style={styleOf("color: #6A5D6C; text-decoration: none")}
+                    style={styleOf("color: #706473; text-decoration: none")}
                   >
                     {"Thư viện đề"}
                   </a>
                   {" / "}
                   <a
                     href={"FullTests.dc.html"}
-                    style={styleOf("color: #6A5D6C; text-decoration: none")}
+                    style={styleOf("color: #706473; text-decoration: none")}
                   >
                     {"IELTS Full Tests"}
                   </a>
@@ -1037,7 +1037,7 @@ class ExamDetail extends React.Component {
                       <>
                         <span
                           style={styleOf(
-                            "padding: 0 0 16px 16px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 34px; font-weight: 600; line-height: 1; text-shadow: 0 1px 8px rgba(0,0,0,0.18)",
+                            "padding: 0 0 16px 16px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 32px; font-weight: 600; line-height: 1; text-shadow: 0 1px 8px rgba(0,0,0,0.18)",
                           )}
                         >
                           {v.short}
@@ -1053,7 +1053,7 @@ class ExamDetail extends React.Component {
                   >
                     <h1
                       style={styleOf(
-                        "margin: 0; font-size: 38px; line-height: 1.15; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.02em",
+                        "margin: 0; font-size: 36px; line-height: 1.15; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.02em",
                       )}
                     >
                       {v.name}
@@ -1100,7 +1100,7 @@ class ExamDetail extends React.Component {
                       <>
                         <p
                           style={styleOf(
-                            "margin: 0; max-width: 680px; font-size: 15.5px; color: #4B3D4D",
+                            "margin: 0; max-width: 680px; font-size: 15px; color: #4B3D4D",
                           )}
                         >
                           {v.desc}
@@ -1186,7 +1186,7 @@ class ExamDetail extends React.Component {
                   </h2>
                   <p
                     style={styleOf(
-                      "margin: 4px 0 0; color: #6A5D6C; font-size: 14.5px",
+                      "margin: 4px 0 0; color: #706473; font-size: 14px",
                     )}
                   >
                     {
@@ -1411,7 +1411,7 @@ class ExamDetail extends React.Component {
                                 <>
                                   <span
                                     style={styleOf(
-                                      "font-size: 13px; color: #766A79; white-space: nowrap",
+                                      "font-size: 13px; color: #706473; white-space: nowrap",
                                     )}
                                   >
                                     {"Chưa đủ 4 kỹ năng"}
@@ -1429,7 +1429,7 @@ class ExamDetail extends React.Component {
                   <>
                     <div
                       style={styleOf(
-                        "padding: 32px; text-align: center; color: #6A5D6C",
+                        "padding: 32px; text-align: center; color: #706473",
                       )}
                     >
                       {"Chưa có bài test " + v.formName + " nào trong bộ này."}
@@ -1439,7 +1439,7 @@ class ExamDetail extends React.Component {
               </div>
               <div
                 style={styleOf(
-                  "display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: #6A5D6C",
+                  "display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: #706473",
                 )}
               >
                 <span
@@ -1528,7 +1528,7 @@ class ExamDetail extends React.Component {
                         <span style={styleOf(c.st)}>
                           <span
                             style={styleOf(
-                              "padding: 0 0 16px 16px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 34px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.05; text-shadow: 0 1px 8px rgba(0,0,0,0.18)",
+                              "padding: 0 0 16px 16px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 32px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.05; text-shadow: 0 1px 8px rgba(0,0,0,0.18)",
                             )}
                           >
                             {c.short}
@@ -1543,7 +1543,7 @@ class ExamDetail extends React.Component {
                         </span>
                         <span
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #6A5D6C",
+                            "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
                           <span>{c.n}</span>

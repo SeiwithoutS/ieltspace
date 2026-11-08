@@ -304,7 +304,7 @@ class AdminSampleSpeaking extends React.Component {
     var CHIP =
         "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600",
       PILL =
-        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 999px; box-sizing: border-box; font-size: 13.5px; font-weight: 600; text-decoration: none; cursor: pointer; white-space: nowrap";
+        "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 999px; box-sizing: border-box; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; white-space: nowrap";
     function plural(n) {
       return n;
     }
@@ -349,7 +349,7 @@ class AdminSampleSpeaking extends React.Component {
           st:
             "display: flex; gap: 4px; " +
             (kind === "h"
-              ? "font-weight: 700; font-size: 15.5px"
+              ? "font-weight: 700; font-size: 15px"
               : kind === "li"
                 ? "padding-left: 4px"
                 : ""),
@@ -523,7 +523,7 @@ class AdminSampleSpeaking extends React.Component {
     };
     var n2 = words(it0.a);
     F.wc2 = n2 + " từ";
-    F.wc2St = "color: #6A5D6C";
+    F.wc2St = "color: #706473";
     F.items = items.map(function (it, i) {
       return {
         label: "Câu " + (i + 1),
@@ -822,14 +822,14 @@ class AdminSampleSpeaking extends React.Component {
         "; " +
         (editing
           ? "background: #E3ECFD; color: #2257B8"
-          : "background: #F3F0EA; color: #6A5D6C"),
+          : "background: #F3F0EA; color: #706473"),
       dirtyText: dirty
         ? "Chưa lưu · " + Math.max(nChange, 1) + " thay đổi"
         : "Chưa có thay đổi",
       dirtyColor: dirty ? "#7A5A0E" : "#706473",
       undo: undo,
       undoSt:
-        "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; " +
+        "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; " +
         ((s.hist || []).length
           ? "color: #352637; cursor: pointer"
           : "color: #B5ADB7; cursor: default; pointer-events: none"),
@@ -974,7 +974,7 @@ class AdminSampleSpeaking extends React.Component {
         {"\n"}
         <style>
           {cssText(
-            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\n@keyframes isFade{from{opacity:0}to{opacity:1}}@keyframes isPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes isDrop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}@keyframes isToast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes isFlash{0%{background:#E3ECFD}100%{background:transparent}}@keyframes isSpin{to{transform:rotate(360deg)}}@keyframes isGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes isCheck{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}@keyframes isRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.an-fade{animation:isFade .2s ease-out both}.an-pop{animation:isPop .28s cubic-bezier(.2,.8,.2,1) both}.an-drop{animation:isDrop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.an-toast{animation:isToast .3s cubic-bezier(.2,.8,.2,1) both}.an-check{animation:isCheck .45s cubic-bezier(.2,.8,.2,1) both}.an-rise{animation:isRise .32s cubic-bezier(.2,.8,.2,1) both}.an-flash>td{animation:isFlash 2s ease-out}.an-spin{animation:isSpin .8s linear infinite}a,label,input,textarea,select,[role=button]{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .2s ease,transform .18s ease,opacity .16s ease,outline-color .16s ease}.lift:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(53,38,55,.05),0 12px 28px rgba(53,38,55,.10)}.press:active{transform:scale(.97)}.hov>tbody>tr{transition:background-color .15s ease}.hov>tbody>tr:hover{background:#FDFCF8}.thumb-h{transition:transform .2s ease,box-shadow .2s ease}.thumb-h:hover{transform:translateY(-3px) rotate(-1deg)}input:focus,textarea:focus,select:focus{outline:none;border-color:#2963CC !important;box-shadow:0 0 0 3px rgba(41,99,204,.16)}@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}input::placeholder,textarea::placeholder{color:#766A79}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #766A79 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}.ro .pills a,.ro select{pointer-events:none}\n",
+            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\n@keyframes isFade{from{opacity:0}to{opacity:1}}@keyframes isPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes isDrop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}@keyframes isToast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes isFlash{0%{background:#E3ECFD}100%{background:transparent}}@keyframes isSpin{to{transform:rotate(360deg)}}@keyframes isGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes isCheck{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}@keyframes isRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.an-fade{animation:isFade .2s ease-out both}.an-pop{animation:isPop .28s cubic-bezier(.2,.8,.2,1) both}.an-drop{animation:isDrop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.an-toast{animation:isToast .3s cubic-bezier(.2,.8,.2,1) both}.an-check{animation:isCheck .45s cubic-bezier(.2,.8,.2,1) both}.an-rise{animation:isRise .32s cubic-bezier(.2,.8,.2,1) both}.an-flash>td{animation:isFlash 2s ease-out}.an-spin{animation:isSpin .8s linear infinite}a,label,input,textarea,select,[role=button]{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .2s ease,transform .18s ease,opacity .16s ease,outline-color .16s ease}.lift:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(53,38,55,.05),0 12px 28px rgba(53,38,55,.10)}.press:active{transform:scale(.97)}.hov>tbody>tr{transition:background-color .15s ease}.hov>tbody>tr:hover{background:#FDFCF8}.thumb-h{transition:transform .2s ease,box-shadow .2s ease}.thumb-h:hover{transform:translateY(-3px) rotate(-1deg)}input:focus,textarea:focus,select:focus{outline:none;border-color:#2963CC !important;box-shadow:0 0 0 3px rgba(41,99,204,.16)}@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}input::placeholder,textarea::placeholder{color:#706473}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #706473 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}.ro .pills a,.ro select{pointer-events:none}\n",
           )}
         </style>
         {"\n"}
@@ -1202,7 +1202,7 @@ class AdminSampleSpeaking extends React.Component {
                     role={"note"}
                     data-ro-bar={"1"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; padding: 9px 24px; background: #E3ECFD; border-bottom: 1.5px solid #D6D4D0; font-size: 13.5px; line-height: 1.5; color: #352637",
+                      "display: flex; align-items: center; gap: 10px; padding: 9px 24px; background: #E3ECFD; border-bottom: 1.5px solid #D6D4D0; font-size: 13px; line-height: 1.5; color: #352637",
                     )}
                   >
                     <span
@@ -1257,7 +1257,7 @@ class AdminSampleSpeaking extends React.Component {
                         )}
                       >
                         <div
-                          style={styleOf("font-weight: 700; color: #A8321E")}
+                          style={styleOf("font-weight: 700; color: #C0412A")}
                         >
                           {v.issueHead}
                         </div>
@@ -1265,7 +1265,7 @@ class AdminSampleSpeaking extends React.Component {
                           href={"#"}
                           onClick={v.closeIssues}
                           aria-label={"Đóng"}
-                          style={styleOf("display: flex; color: #A8321E")}
+                          style={styleOf("display: flex; color: #C0412A")}
                         >
                           <svg
                             width={"16"}
@@ -1318,7 +1318,7 @@ class AdminSampleSpeaking extends React.Component {
                           {v.confirmTitle}
                         </div>
                         <div
-                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 14px; color: #706473")}
                         >
                           {v.confirmSub}
                         </div>
@@ -1374,7 +1374,7 @@ class AdminSampleSpeaking extends React.Component {
                           {"Lưu thay đổi trước khi thoát?"}
                         </div>
                         <div
-                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 14px; color: #706473")}
                         >
                           {v.leaveSub}
                         </div>
@@ -1387,7 +1387,7 @@ class AdminSampleSpeaking extends React.Component {
                             href={"#"}
                             onClick={v.stayEdit}
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; margin-right: auto",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; margin-right: auto",
                             )}
                           >
                             {"Tiếp tục sửa"}
@@ -1439,7 +1439,7 @@ class AdminSampleSpeaking extends React.Component {
                           {v.pubTitle}
                         </div>
                         <div
-                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 14px; color: #706473")}
                         >
                           {v.pubSub}
                         </div>
@@ -1567,7 +1567,7 @@ class AdminSampleSpeaking extends React.Component {
                         >
                           {"Thông tin chung"}
                         </div>
-                        <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                        <div style={styleOf("font-size: 13px; color: #706473")}>
                           {
                             "Dùng để phân loại bài mẫu trong thư viện. Một editor cho cả Part 1, 2 và 3."
                           }
@@ -1691,7 +1691,7 @@ class AdminSampleSpeaking extends React.Component {
                                   >
                                     <span
                                       style={styleOf(
-                                        "font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                        "font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
                                       )}
                                     >
                                       {v.F.coverName}
@@ -1787,7 +1787,7 @@ class AdminSampleSpeaking extends React.Component {
                                 <div
                                   role={"alert"}
                                   style={styleOf(
-                                    "font-size: 13px; color: #A8321E",
+                                    "font-size: 13px; color: #C0412A",
                                   )}
                                 >
                                   {v.F.coverErrText}
@@ -1930,7 +1930,7 @@ class AdminSampleSpeaking extends React.Component {
                         >
                           {"Đề bài và bài mẫu"}
                         </div>
-                        <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                        <div style={styleOf("font-size: 13px; color: #706473")}>
                           {v.F.qSub}
                         </div>
                       </div>
@@ -2050,7 +2050,7 @@ class AdminSampleSpeaking extends React.Component {
                                     >
                                       <span
                                         style={styleOf(
-                                          "font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                          "font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
                                         )}
                                       >
                                         {v.F.au2.audioName}
@@ -2130,7 +2130,7 @@ class AdminSampleSpeaking extends React.Component {
                                   <label
                                     className={"eo"}
                                     style={styleOf(
-                                      "display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #6A5D6C; cursor: pointer",
+                                      "display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #706473; cursor: pointer",
                                     )}
                                   >
                                     <span
@@ -2184,7 +2184,7 @@ class AdminSampleSpeaking extends React.Component {
                                   <div
                                     role={"alert"}
                                     style={styleOf(
-                                      "font-size: 13px; color: #A8321E",
+                                      "font-size: 13px; color: #C0412A",
                                     )}
                                   >
                                     {v.F.au2.audioErrText}
@@ -2361,7 +2361,7 @@ class AdminSampleSpeaking extends React.Component {
                                           >
                                             <span
                                               style={styleOf(
-                                                "font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                                "font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
                                               )}
                                             >
                                               {it.audioName}
@@ -2443,7 +2443,7 @@ class AdminSampleSpeaking extends React.Component {
                                         <label
                                           className={"eo"}
                                           style={styleOf(
-                                            "display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #6A5D6C; cursor: pointer",
+                                            "display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #706473; cursor: pointer",
                                           )}
                                         >
                                           <span
@@ -2503,7 +2503,7 @@ class AdminSampleSpeaking extends React.Component {
                                         <div
                                           role={"alert"}
                                           style={styleOf(
-                                            "font-size: 13px; color: #A8321E",
+                                            "font-size: 13px; color: #C0412A",
                                           )}
                                         >
                                           {it.audioErrText}
@@ -2554,7 +2554,7 @@ class AdminSampleSpeaking extends React.Component {
                         >
                           {"Dàn ý"}
                         </div>
-                        <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                        <div style={styleOf("font-size: 13px; color: #706473")}>
                           {
                             "Không bắt buộc. Thường dùng cho Part 2; người học thấy dàn ý trước bài mẫu."
                           }
@@ -2616,7 +2616,7 @@ class AdminSampleSpeaking extends React.Component {
                               title={"In đậm"}
                               aria-label={"In đậm"}
                               style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-weight: 800",
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-weight: 800",
                               )}
                             >
                               {"B"}
@@ -2627,7 +2627,7 @@ class AdminSampleSpeaking extends React.Component {
                               title={"In nghiêng"}
                               aria-label={"In nghiêng"}
                               style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-style: italic; font-family: Georgia, serif",
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-style: italic; font-family: Georgia, serif",
                               )}
                             >
                               {"I"}
@@ -2642,7 +2642,7 @@ class AdminSampleSpeaking extends React.Component {
                               onClick={v.F.ol.h}
                               title={"Tiêu đề mục"}
                               style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
                               )}
                             >
                               {"Tiêu đề"}
@@ -2652,7 +2652,7 @@ class AdminSampleSpeaking extends React.Component {
                               onClick={v.F.ol.l}
                               title={"Gạch đầu dòng"}
                               style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
                               )}
                             >
                               {"• Gạch đầu dòng"}
@@ -2723,12 +2723,12 @@ class AdminSampleSpeaking extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25",
+                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25",
                         )}
                       >
                         {v.F.titleShow}
                       </div>
-                      <div style={styleOf("font-size: 13.5px; color: #6A5D6C")}>
+                      <div style={styleOf("font-size: 13px; color: #706473")}>
                         {v.F.metaLine}
                       </div>
                     </div>
@@ -2739,7 +2739,7 @@ class AdminSampleSpeaking extends React.Component {
                     >
                       <h2
                         style={styleOf(
-                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637",
+                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637",
                         )}
                       >
                         {"Đề bài"}
@@ -2748,7 +2748,7 @@ class AdminSampleSpeaking extends React.Component {
                         <>
                           <div
                             style={styleOf(
-                              "display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16.5px; line-height: 1.7; color: #352637",
+                              "display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16px; line-height: 1.7; color: #352637",
                             )}
                           >
                             <div
@@ -2797,7 +2797,7 @@ class AdminSampleSpeaking extends React.Component {
                         <>
                           <div
                             style={styleOf(
-                              "display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16.5px; line-height: 1.7; color: #352637",
+                              "display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16px; line-height: 1.7; color: #352637",
                             )}
                           >
                             {(v.F.pvQs || []).map((qq, index) => (
@@ -2829,7 +2829,7 @@ class AdminSampleSpeaking extends React.Component {
                         >
                           <h2
                             style={styleOf(
-                              "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637",
+                              "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637",
                             )}
                           >
                             {"Dàn ý"}
@@ -2838,7 +2838,7 @@ class AdminSampleSpeaking extends React.Component {
                             <>
                               <p
                                 style={styleOf(
-                                  "margin: 0; font-size: 16.5px; line-height: 1.75; color: #352637",
+                                  "margin: 0; font-size: 16px; line-height: 1.75; color: #352637",
                                 )}
                               >
                                 {v.F.introText}
@@ -2897,7 +2897,7 @@ class AdminSampleSpeaking extends React.Component {
                     >
                       <h2
                         style={styleOf(
-                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637",
+                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; color: #352637",
                         )}
                       >
                         {"Bài mẫu"}
@@ -2968,7 +2968,7 @@ class AdminSampleSpeaking extends React.Component {
                                         ></div>
                                         <span
                                           style={styleOf(
-                                            "font-size: 13px; color: #6A5D6C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                            "font-size: 13px; color: #706473; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
                                           )}
                                         >
                                           {pv.audioName}
@@ -3029,7 +3029,7 @@ class AdminSampleSpeaking extends React.Component {
                         ))}
                       </div>
                     </section>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"Từ vựng và bài tập chưa có trong bản này."}
                     </div>
                   </div>

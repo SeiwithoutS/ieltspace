@@ -50,12 +50,12 @@ class ResultLR extends React.Component {
               <a
                 href={"StudentLanding.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -70,7 +70,7 @@ class ResultLR extends React.Component {
                   <a
                     href={"FullTests.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -110,7 +110,7 @@ class ResultLR extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -135,7 +135,7 @@ class ResultLR extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Full Tests"}
@@ -156,7 +156,7 @@ class ResultLR extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -194,7 +194,7 @@ class ResultLR extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Listening Practice"}
@@ -215,7 +215,7 @@ class ResultLR extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -242,7 +242,7 @@ class ResultLR extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Reading Practice"}
@@ -263,7 +263,7 @@ class ResultLR extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -287,7 +287,7 @@ class ResultLR extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Writing Practice"}
@@ -308,7 +308,7 @@ class ResultLR extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -339,7 +339,7 @@ class ResultLR extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Speaking Practice"}
@@ -358,7 +358,7 @@ class ResultLR extends React.Component {
                   <a
                     href={"SampleLibrary.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -398,7 +398,7 @@ class ResultLR extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -424,7 +424,7 @@ class ResultLR extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 Academic"}
@@ -445,7 +445,7 @@ class ResultLR extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -476,7 +476,7 @@ class ResultLR extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 General"}
@@ -497,7 +497,7 @@ class ResultLR extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -521,7 +521,7 @@ class ResultLR extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 2"}
@@ -542,7 +542,7 @@ class ResultLR extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -573,7 +573,7 @@ class ResultLR extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Speaking Part 1, 2, 3"}
@@ -591,7 +591,7 @@ class ResultLR extends React.Component {
                 <a
                   href={"Vocab.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Thư viện từ vựng"}
@@ -599,7 +599,7 @@ class ResultLR extends React.Component {
                 <a
                   href={"Flashcard.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Flashcard của tôi"}
@@ -665,7 +665,7 @@ class ResultLR extends React.Component {
                 "max-width: 1200px; margin: 0 auto; padding: 36px 24px 56px; display: flex; flex-direction: column; gap: 24px",
               )}
             >
-              <div style={styleOf("font-size:13.5px;color:#706473")}>
+              <div style={styleOf("font-size:13px;color:#706473")}>
                 {"Kết quả / Practice Test 01 / Reading"}
               </div>
               <div
@@ -676,14 +676,14 @@ class ResultLR extends React.Component {
                 <div>
                   <h1
                     style={styleOf(
-                      "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                      "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                     )}
                   >
                     {"Kết quả Reading"}
                   </h1>
                   <div
                     style={styleOf(
-                      "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                      "font-size: 15px; color: #706473; margin-top: 4px",
                     )}
                   >
                     {"Nộp lúc 09:42, 07/10/2026"}
@@ -693,7 +693,7 @@ class ResultLR extends React.Component {
                   <a
                     href={"ReadingTest.dc.html"}
                     style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                     )}
                   >
                     {"Làm lại"}
@@ -701,7 +701,7 @@ class ResultLR extends React.Component {
                   <a
                     href={"ResultsHistory.dc.html"}
                     style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                     )}
                   >
                     {"Về lịch sử"}
@@ -724,7 +724,7 @@ class ResultLR extends React.Component {
                   >
                     {"6.5"}
                   </div>
-                  <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                  <div style={styleOf("font-size: 13px; color: #706473")}>
                     {"Reading"}
                   </div>
                 </div>
@@ -743,7 +743,7 @@ class ResultLR extends React.Component {
                   >
                     {"29/40"}
                   </div>
-                  <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                  <div style={styleOf("font-size: 13px; color: #706473")}>
                     {"72%"}
                   </div>
                 </div>
@@ -762,7 +762,7 @@ class ResultLR extends React.Component {
                   >
                     {"52:10"}
                   </div>
-                  <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                  <div style={styleOf("font-size: 13px; color: #706473")}>
                     {"trên 60 phút"}
                   </div>
                 </div>
@@ -781,7 +781,7 @@ class ResultLR extends React.Component {
                   >
                     {"2"}
                   </div>
-                  <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                  <div style={styleOf("font-size: 13px; color: #706473")}>
                     {"điểm tăng 0.5"}
                   </div>
                 </div>
@@ -797,7 +797,7 @@ class ResultLR extends React.Component {
                   >
                     <div
                       style={styleOf(
-                        "padding:18px 24px 14px;font-size:17px;font-weight:600",
+                        "padding:18px 24px 14px;font-size:18px;font-weight:600",
                       )}
                     >
                       {"Lời giải từng câu"}
@@ -815,11 +815,11 @@ class ResultLR extends React.Component {
                           "flex:1;display:flex;flex-direction:column;gap:4px",
                         )}
                       >
-                        <div style={styleOf("font-size:14.5px")}>
+                        <div style={styleOf("font-size:14px")}>
                           <b>{"Bạn chọn:"}</b>
                           {" B"}
                         </div>
-                        <div style={styleOf("font-size:13.5px;color:#6A5D6C")}>
+                        <div style={styleOf("font-size:13px;color:#706473")}>
                           {
                             "Đoạn 1 nói công viên giúp giảm căng thẳng, trùng với phương án B."
                           }
@@ -859,15 +859,15 @@ class ResultLR extends React.Component {
                           "flex:1;display:flex;flex-direction:column;gap:4px",
                         )}
                       >
-                        <div style={styleOf("font-size:14.5px")}>
+                        <div style={styleOf("font-size:14px")}>
                           <b>{"Bạn chọn:"}</b>
                           {" False"}
                         </div>
-                        <div style={styleOf("font-size:13.5px")}>
+                        <div style={styleOf("font-size:13px")}>
                           <b>{"Đáp án đúng:"}</b>
                           {" Not Given"}
                         </div>
-                        <div style={styleOf("font-size:13.5px;color:#6A5D6C")}>
+                        <div style={styleOf("font-size:13px;color:#706473")}>
                           {
                             "Bài đọc không nhắc đến chi phí bảo trì cụ thể, nên đáp án là Not Given."
                           }
@@ -875,7 +875,7 @@ class ResultLR extends React.Component {
                       </div>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; font-size: 13px; font-weight: 600; white-space: nowrap",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; white-space: nowrap",
                         )}
                       >
                         <svg
@@ -907,11 +907,11 @@ class ResultLR extends React.Component {
                           "flex:1;display:flex;flex-direction:column;gap:4px",
                         )}
                       >
-                        <div style={styleOf("font-size:14.5px")}>
+                        <div style={styleOf("font-size:14px")}>
                           <b>{"Bạn chọn:"}</b>
                           {" volunteers"}
                         </div>
-                        <div style={styleOf("font-size:13.5px;color:#6A5D6C")}>
+                        <div style={styleOf("font-size:13px;color:#706473")}>
                           {"Dự án do tình nguyện viên quản lý (đoạn 2)."}
                         </div>
                       </div>
@@ -949,15 +949,15 @@ class ResultLR extends React.Component {
                           "flex:1;display:flex;flex-direction:column;gap:4px",
                         )}
                       >
-                        <div style={styleOf("font-size:14.5px")}>
+                        <div style={styleOf("font-size:14px")}>
                           <b>{"Bạn chọn:"}</b>
                           {" C"}
                         </div>
-                        <div style={styleOf("font-size:13.5px")}>
+                        <div style={styleOf("font-size:13px")}>
                           <b>{"Đáp án đúng:"}</b>
                           {" A"}
                         </div>
-                        <div style={styleOf("font-size:13.5px;color:#6A5D6C")}>
+                        <div style={styleOf("font-size:13px;color:#706473")}>
                           {
                             'Từ khóa "benefits to public health" nằm ở đoạn cuối, khớp phương án A.'
                           }
@@ -965,7 +965,7 @@ class ResultLR extends React.Component {
                       </div>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #B23A24; font-size: 13px; font-weight: 600; white-space: nowrap",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600; white-space: nowrap",
                         )}
                       >
                         <svg
@@ -997,7 +997,7 @@ class ResultLR extends React.Component {
                         "display: flex; flex-direction: column; gap: 12px; ",
                       )}
                     >
-                      <div style={styleOf("font-size:17px;font-weight:600")}>
+                      <div style={styleOf("font-size:18px;font-weight:600")}>
                         {"Theo dạng câu hỏi"}
                       </div>
                       <div
@@ -1119,7 +1119,7 @@ class ResultLR extends React.Component {
                       <a
                         href={"QTPractice.dc.html"}
                         style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                         )}
                       >
                         {"Luyện thêm dạng yếu"}

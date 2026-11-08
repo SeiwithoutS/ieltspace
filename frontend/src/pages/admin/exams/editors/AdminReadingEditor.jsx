@@ -1062,7 +1062,7 @@ class AdminReadingEditor extends React.Component {
         on: a === pi,
         sub: a === pi ? "#4B3D4D" : "#706473",
         st:
-          "display: flex; flex-direction: column; align-items: flex-start; padding: 6px 14px; border-radius: 9px; text-decoration: none; color: " +
+          "display: flex; flex-direction: column; align-items: flex-start; padding: 6px 14px; border-radius: 10px; text-decoration: none; color: " +
           (p ? "#352637" : "#706473") +
           "; font-size: 14px; line-height: 1.3; box-sizing: border-box; " +
           (a === pi
@@ -1581,12 +1581,12 @@ class AdminReadingEditor extends React.Component {
         flowImg: cg.mode === "image",
         segLv:
           cg.mode === "image"
-            ? "color: #6A5D6C; border: 1.5px solid transparent"
+            ? "color: #706473; border: 1.5px solid transparent"
             : "background: #FFFFFF; color: #352637; border: 1.5px solid #D6D4D0",
         segImg:
           cg.mode === "image"
             ? "background: #FFFFFF; color: #352637; border: 1.5px solid #D6D4D0"
-            : "color: #6A5D6C; border: 1.5px solid transparent",
+            : "color: #706473; border: 1.5px solid transparent",
         modeHint:
           cg.mode === "image"
             ? "Tải hình sơ đồ gốc rồi bấm lên hình để đặt nhãn số kèm mũi tên; nội dung từng câu nhập ở danh sách bên dưới. Dùng khi sơ đồ quá đặc biệt; người học sẽ thấy đúng hình này."
@@ -1875,7 +1875,7 @@ class AdminReadingEditor extends React.Component {
               st:
                 "display: flex; gap: 4px; " +
                 (kind === "h"
-                  ? "font-weight: 700; font-size: 15.5px; margin-top: 6px"
+                  ? "font-weight: 700; font-size: 15px; margin-top: 6px"
                   : kind === "li"
                     ? "padding-left: 4px"
                     : ""),
@@ -2284,8 +2284,8 @@ class AdminReadingEditor extends React.Component {
           okDc = !!ts && nDc < NC;
         G.tDelRowsLab = "Xóa " + (nDr > 1 ? nDr + " hàng" : "hàng");
         G.tDelColsLab = "Xóa " + (nDc > 1 ? nDc + " cột" : "cột");
-        G.tDelRowsSt = tbSt(false, okDr) + "; color: #C2412D";
-        G.tDelColsSt = tbSt(false, okDc) + "; color: #C2412D";
+        G.tDelRowsSt = tbSt(false, okDr) + "; color: #C0412A";
+        G.tDelColsSt = tbSt(false, okDc) + "; color: #C0412A";
         G.tDelRows = tact(
           okDr,
           function (g) {
@@ -2341,9 +2341,9 @@ class AdminReadingEditor extends React.Component {
           (18 + NC * 120) +
           "px";
         G.tAddColSt =
-          "grid-row: 1; grid-column: 2; align-self: stretch; margin-top: 18px; display: flex; align-items: center; justify-content: center; width: 26px; border-radius: 8px; border: 1px solid #D6D4D0; color: #706473; background: #FFFFFF; text-decoration: none";
+          "grid-row: 1; grid-column: 2; align-self: stretch; margin-top: 18px; display: flex; align-items: center; justify-content: center; width: 26px; border-radius: 8px; border: 1.5px solid #D6D4D0; color: #706473; background: #FFFFFF; text-decoration: none";
         G.tAddRowSt =
-          "grid-row: 2; grid-column: 1; margin-left: 18px; display: flex; align-items: center; justify-content: center; height: 26px; border-radius: 8px; border: 1px solid #D6D4D0; color: #706473; background: #FFFFFF; text-decoration: none";
+          "grid-row: 2; grid-column: 1; margin-left: 18px; display: flex; align-items: center; justify-content: center; height: 26px; border-radius: 8px; border: 1.5px solid #D6D4D0; color: #706473; background: #FFFFFF; text-decoration: none";
         // tay nắm: bấm để chọn cả hàng/cột và mở menu
         var MI =
           "display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 10px; border-radius: 8px; font-size: 13px; color: #352637; text-decoration: none; white-space: nowrap";
@@ -2403,7 +2403,7 @@ class AdminReadingEditor extends React.Component {
               lab: isCol ? "Xóa cột" : "Xóa hàng",
               st:
                 MI +
-                "; color: #C2412D" +
+                "; color: #C0412A" +
                 ((isCol ? NC : NR) > 1
                   ? ""
                   : "; opacity: 0.4; pointer-events: none"),
@@ -2423,7 +2423,7 @@ class AdminReadingEditor extends React.Component {
           ];
         };
         var MENU =
-          "position: absolute; z-index: 30; display: flex; flex-direction: column; padding: 4px; min-width: 190px; border-radius: 12px; border: 1px solid #E4E1DB; background: #FFFFFF; box-shadow: 0 10px 30px rgba(53, 38, 55, 0.16); ";
+          "position: absolute; z-index: 30; display: flex; flex-direction: column; padding: 4px; min-width: 190px; border-radius: 12px; border: 1.5px solid #E4E1DB; background: #FFFFFF; box-shadow: 0 10px 30px rgba(53, 38, 55, 0.16); ";
         var handle = function (isCol, i) {
           var open = !!tm && tm[2] === (isCol ? "c" : "r") && tm[3] === i,
             on = LN === (isCol ? "c" : "r") && (isCol ? ac : ar) === i;
@@ -2557,7 +2557,7 @@ class AdminReadingEditor extends React.Component {
                     ? "; box-shadow: inset 0 0 0 1px #9DB8EA"
                     : ""),
               ta:
-                "flex: 1; width: 100%; min-width: 0; min-height: 44px; box-sizing: border-box; resize: none; border: none; background: transparent; padding: 10px 12px; font: inherit; font-size: 13.5px; line-height: 1.4; color: #352637; outline: none; " +
+                "flex: 1; width: 100%; min-width: 0; min-height: 44px; box-sizing: border-box; resize: none; border: none; background: transparent; padding: 10px 12px; font: inherit; font-size: 13px; line-height: 1.4; color: #352637; outline: none; " +
                 (h ? "font-weight: 700; " : "") +
                 (bl ? "color: #2257B8; " : "") +
                 (q[1] > 1 && h ? "text-align: center" : ""),
@@ -3239,7 +3239,7 @@ class AdminReadingEditor extends React.Component {
               m.tx +
               "%; top: " +
               m.ty +
-              "%; transform: translate(-50%, -50%); z-index: 3; width: 14px; height: 14px; box-sizing: border-box; border-radius: 7px; background: " +
+              "%; transform: translate(-50%, -50%); z-index: 3; width: 14px; height: 14px; box-sizing: border-box; border-radius: 8px; background: " +
               (on ? "#2963CC" : "#FFFFFF") +
               "; border: 2px solid #2963CC; cursor: move; opacity: " +
               (on ? 1 : 0.55),
@@ -3378,7 +3378,7 @@ class AdminReadingEditor extends React.Component {
             : cg.oneUse;
         G.oneUse = oneUse;
         G.switchSt =
-          "position: relative; width: 38px; height: 22px; border-radius: 11px; background: " +
+          "position: relative; width: 38px; height: 22px; border-radius: 10px; background: " +
           (oneUse ? "#2963CC" : "#D6D4D0") +
           "; flex: none";
         G.knobSt =
@@ -3994,7 +3994,7 @@ class AdminReadingEditor extends React.Component {
       );
     };
     var NAVB =
-      "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
+      "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
     var E = {
       kid:
         me._kid || (me._kid = "kp-" + Math.random().toString(36).slice(2, 8)),
@@ -4052,10 +4052,10 @@ class AdminReadingEditor extends React.Component {
               LET[ce.para] +
               ", người học sẽ không thấy tô sáng",
           st:
-            "display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 4px 0 12px; box-sizing: border-box; border-radius: 999px; font-size: 13.5px; font-weight: 600; " +
+            "display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 4px 0 12px; box-sizing: border-box; border-radius: 999px; font-size: 13px; font-weight: 600; " +
             (found
               ? "background: #FCE7A1; color: #5C4407; border: 1.5px solid #F0D27A"
-              : "background: #FFFFFF; color: #B23A24; border: 1.5px dashed #E5604A"),
+              : "background: #FFFFFF; color: #C0412A; border: 1.5px dashed #E5604A"),
           rm: function (ev) {
             stop(ev);
             setE(function (e) {
@@ -4178,7 +4178,7 @@ class AdminReadingEditor extends React.Component {
       };
     });
     var TABST =
-      "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 8px; box-sizing: border-box; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
+      "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
     // trạng thái trống
     var nextIdx = NP,
       blocked = missing && pi > NP,
@@ -4442,7 +4442,7 @@ class AdminReadingEditor extends React.Component {
           size: kbs(f[1]),
           icon: f[2] === "xlsx" ? "XLSX" : "IMG",
           iconSt:
-            "display: flex; align-items: center; justify-content: center; flex: none; width: 40px; height: 26px; border-radius: 7px; font-size: 10.5px; font-weight: 700; " +
+            "display: flex; align-items: center; justify-content: center; flex: none; width: 40px; height: 26px; border-radius: 8px; font-size: 11px; font-weight: 700; " +
             (f[2] === "xlsx"
               ? "background: #DCEDE2; color: #2E6A48"
               : "background: #FBEDBF; color: #7A5A0E"),
@@ -4469,7 +4469,7 @@ class AdminReadingEditor extends React.Component {
       impNoX: !impX,
       impCheckSt: impX
         ? "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF"
-        : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; background: #F3F0EA; border-color: #E6E4E0; color: #766A79; cursor: not-allowed",
+        : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; background: #F3F0EA; border-color: #E6E4E0; color: #706473; cursor: not-allowed",
       // tệp thật: đọc 2 byte đầu, xlsx là tệp zip nên phải bắt đầu bằng PK; không phải thì báo hỏng (UC24 E1)
       impCheck: function (e) {
         stop(e);
@@ -4497,7 +4497,7 @@ class AdminReadingEditor extends React.Component {
           on = i === impP;
         return {
           text: c,
-          color: dn || on ? "#352637" : "#766A79",
+          color: dn || on ? "#352637" : "#706473",
           cls: on ? "im-spin" : "",
           icon: dn ? "✓" : "",
           iconSt:
@@ -4601,13 +4601,13 @@ class AdminReadingEditor extends React.Component {
       tabQSt:
         TABST +
         (isExp
-          ? "color: #6A5D6C; border: 1.5px solid transparent"
+          ? "color: #706473; border: 1.5px solid transparent"
           : "background: #FFFFFF; color: #352637; border: 1.5px solid #D6D4D0"),
       tabESt:
         TABST +
         (isExp
           ? "background: #FFFFFF; color: #352637; border: 1.5px solid #D6D4D0"
-          : "color: #6A5D6C; border: 1.5px solid transparent"),
+          : "color: #706473; border: 1.5px solid transparent"),
       expDone: nDone + "/" + nQ,
       expBadgeSt:
         "font-size: 13px; font-weight: 600; padding: 0 8px; border-radius: 999px; line-height: 20px; " +
@@ -4669,7 +4669,7 @@ class AdminReadingEditor extends React.Component {
       undo: undo,
       noUndo: !(s.hist || []).length,
       undoSt:
-        "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; " +
+        "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; " +
         ((s.hist || []).length
           ? "color: #352637; cursor: pointer"
           : "color: #B5ADB7; cursor: default; pointer-events: none"),
@@ -4778,7 +4778,7 @@ class AdminReadingEditor extends React.Component {
         "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; " +
         (editing
           ? "background: #E3ECFD; color: #2257B8"
-          : "background: #F3F0EA; color: #6A5D6C"),
+          : "background: #F3F0EA; color: #706473"),
       dirtyText: dirty
         ? "Chưa lưu · " + Math.max(nChange, 1) + " thay đổi"
         : "Chưa có thay đổi",
@@ -4891,7 +4891,7 @@ class AdminReadingEditor extends React.Component {
         {"\n"}
         <style>
           {cssText(
-            '\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#766A79}.tgh,.tga{opacity:0;transition:opacity .15s}.tgh:hover,.tgh.on,.tgh.op,.tga:hover,.tga:focus-visible{opacity:1}.qr,.qm,.qb{display:grid;gap:6px 8px;align-items:center}.qr{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ." ". qt ."}.qm{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ."}.qb{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qa qd" ". qt ."}.qn{grid-area:qn}.qq{grid-area:qq;min-width:0}.qa{grid-area:qa;min-width:0}.qt{grid-area:qt;min-width:0}.qd{grid-area:qd}.qed{container:qed / inline-size}@container qed (min-width: 720px){.qr{grid-template-columns:30px minmax(0,1fr) 200px 240px 30px;grid-template-areas:"qn qq qa qt qd"}.qm{grid-template-columns:30px minmax(0,1fr) 180px 30px;grid-template-areas:"qn qq qa qd"}.qb{grid-template-columns:30px 240px 260px minmax(0,1fr) 30px;grid-template-areas:"qn qa qt . qd"}.qr,.qm,.qb{align-items:start}.qn,.qd{margin-top:4px}.qt{margin-top:2px}}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #766A79 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}@keyframes imFade{from{opacity:0}to{opacity:1}}@keyframes imPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes imRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes imSpin{to{transform:rotate(360deg)}}.im-fade{animation:imFade .2s ease-out both}.im-pop{animation:imPop .28s cubic-bezier(.2,.8,.2,1) both}.im-rise{animation:imRise .3s cubic-bezier(.2,.8,.2,1) both}.im-spin{animation:imSpin .8s linear infinite}@media (prefers-reduced-motion: reduce){.im-fade,.im-pop,.im-rise,.im-spin{animation:none}}\n',
+            '\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#706473}.tgh,.tga{opacity:0;transition:opacity .15s}.tgh:hover,.tgh.on,.tgh.op,.tga:hover,.tga:focus-visible{opacity:1}.qr,.qm,.qb{display:grid;gap:6px 8px;align-items:center}.qr{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ." ". qt ."}.qm{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qq qd" ". qa ."}.qb{grid-template-columns:30px minmax(0,1fr) 30px;grid-template-areas:"qn qa qd" ". qt ."}.qn{grid-area:qn}.qq{grid-area:qq;min-width:0}.qa{grid-area:qa;min-width:0}.qt{grid-area:qt;min-width:0}.qd{grid-area:qd}.qed{container:qed / inline-size}@container qed (min-width: 720px){.qr{grid-template-columns:30px minmax(0,1fr) 200px 240px 30px;grid-template-areas:"qn qq qa qt qd"}.qm{grid-template-columns:30px minmax(0,1fr) 180px 30px;grid-template-areas:"qn qq qa qd"}.qb{grid-template-columns:30px 240px 260px minmax(0,1fr) 30px;grid-template-areas:"qn qa qt . qd"}.qr,.qm,.qb{align-items:start}.qn,.qd{margin-top:4px}.qt{margin-top:2px}}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #706473 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}@keyframes imFade{from{opacity:0}to{opacity:1}}@keyframes imPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes imRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes imSpin{to{transform:rotate(360deg)}}.im-fade{animation:imFade .2s ease-out both}.im-pop{animation:imPop .28s cubic-bezier(.2,.8,.2,1) both}.im-rise{animation:imRise .3s cubic-bezier(.2,.8,.2,1) both}.im-spin{animation:imSpin .8s linear infinite}@media (prefers-reduced-motion: reduce){.im-fade,.im-pop,.im-rise,.im-spin{animation:none}}\n',
           )}
         </style>
         {"\n"}
@@ -5163,7 +5163,7 @@ class AdminReadingEditor extends React.Component {
                     role={"note"}
                     data-ro-bar={"1"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; padding: 9px 24px; background: #E3ECFD; border-bottom: 1.5px solid #D6D4D0; font-size: 13.5px; line-height: 1.5; color: #352637",
+                      "display: flex; align-items: center; gap: 10px; padding: 9px 24px; background: #E3ECFD; border-bottom: 1.5px solid #D6D4D0; font-size: 13px; line-height: 1.5; color: #352637",
                     )}
                   >
                     <span
@@ -5209,7 +5209,7 @@ class AdminReadingEditor extends React.Component {
                     <div
                       role={"alert"}
                       style={styleOf(
-                        "margin: 16px 24px 0; padding: 14px 16px; border-radius: 14px; background: #FBDCD3; border: 1.5px solid #F1B3A3; color: #B23A24; display: flex; flex-direction: column; gap: 6px; font-size: 14px",
+                        "margin: 16px 24px 0; padding: 14px 16px; border-radius: 14px; background: #FBDCD3; border: 1.5px solid #F1B3A3; color: #C0412A; display: flex; flex-direction: column; gap: 6px; font-size: 14px",
                       )}
                     >
                       <div
@@ -5222,7 +5222,7 @@ class AdminReadingEditor extends React.Component {
                           href={"#"}
                           onClick={v.closeIssues}
                           aria-label={"Đóng"}
-                          style={styleOf("color: #B23A24; display: flex")}
+                          style={styleOf("color: #C0412A; display: flex")}
                         >
                           <svg
                             width={"16"}
@@ -5251,7 +5251,7 @@ class AdminReadingEditor extends React.Component {
                               href={"#"}
                               onClick={i.go}
                               style={styleOf(
-                                "color: #B23A24; font-weight: 600; white-space: nowrap",
+                                "color: #C0412A; font-weight: 600; white-space: nowrap",
                               )}
                             >
                               {"Đi tới"}
@@ -5318,7 +5318,7 @@ class AdminReadingEditor extends React.Component {
                           {v.confirmTitle}
                         </div>
                         <div
-                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 14px; color: #706473")}
                         >
                           {v.confirmSub}
                         </div>
@@ -5415,7 +5415,7 @@ class AdminReadingEditor extends React.Component {
                           {"Lưu thay đổi trước khi thoát?"}
                         </div>
                         <div
-                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 14px; color: #706473")}
                         >
                           {v.leaveSub}
                         </div>
@@ -5428,7 +5428,7 @@ class AdminReadingEditor extends React.Component {
                             href={"#"}
                             onClick={v.stayEdit}
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; margin-right: auto",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; margin-right: auto",
                             )}
                           >
                             {"Tiếp tục sửa"}
@@ -5480,7 +5480,7 @@ class AdminReadingEditor extends React.Component {
                           {"Đăng đề này?"}
                         </div>
                         <div
-                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 14px; color: #706473")}
                         >
                           {v.pubSub}
                         </div>
@@ -5540,14 +5540,14 @@ class AdminReadingEditor extends React.Component {
                             <div
                               id={"nhap-tieu-de"}
                               style={styleOf(
-                                "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 21px; font-weight: 600",
+                                "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600",
                               )}
                             >
                               {"Nhập đề Reading từ xlsx"}
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 13.5px; color: #6A5D6C",
+                                "font-size: 13px; color: #706473",
                               )}
                             >
                               {v.impSub}
@@ -5558,7 +5558,7 @@ class AdminReadingEditor extends React.Component {
                             onClick={v.impClose}
                             aria-label={"Đóng"}
                             style={styleOf(
-                              "display: flex; padding: 6px; border-radius: 10px; color: #6A5D6C",
+                              "display: flex; padding: 6px; border-radius: 10px; color: #706473",
                             )}
                           >
                             <svg
@@ -5621,14 +5621,14 @@ class AdminReadingEditor extends React.Component {
                                 >
                                   <div
                                     style={styleOf(
-                                      "font-weight: 600; font-size: 14.5px",
+                                      "font-weight: 600; font-size: 14px",
                                     )}
                                   >
                                     {"Tệp mẫu một đề Reading"}
                                   </div>
                                   <div
                                     style={styleOf(
-                                      "font-size: 13px; color: #6A5D6C",
+                                      "font-size: 13px; color: #706473",
                                     )}
                                   >
                                     {
@@ -5681,7 +5681,7 @@ class AdminReadingEditor extends React.Component {
                                 />
                                 <span
                                   style={styleOf(
-                                    "display: flex; color: #766A79",
+                                    "display: flex; color: #706473",
                                   )}
                                 >
                                   <svg
@@ -5744,7 +5744,7 @@ class AdminReadingEditor extends React.Component {
                                       onClick={f.rm}
                                       aria-label={"Bỏ tệp " + f.name}
                                       style={styleOf(
-                                        "display: flex; padding: 4px; color: #6A5D6C",
+                                        "display: flex; padding: 4px; color: #706473",
                                       )}
                                     >
                                       <svg
@@ -5859,7 +5859,7 @@ class AdminReadingEditor extends React.Component {
                                 <React.Fragment key={index}>
                                   <div
                                     style={styleOf(
-                                      "display: flex; align-items: center; gap: 12px; font-size: 14.5px; color: " +
+                                      "display: flex; align-items: center; gap: 12px; font-size: 14px; color: " +
                                         c.color,
                                     )}
                                   >
@@ -5958,7 +5958,7 @@ class AdminReadingEditor extends React.Component {
                                 </div>
                                 <span
                                   style={styleOf(
-                                    "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBDCD3; color: #B23A24; font-size: 13px; font-weight: 600",
+                                    "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600",
                                   )}
                                 >
                                   {v.impErrN}
@@ -6012,28 +6012,28 @@ class AdminReadingEditor extends React.Component {
                                         <tr>
                                           <td
                                             style={styleOf(
-                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top",
+                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13px; vertical-align: top",
                                             )}
                                           >
                                             {r.sheet}
                                           </td>
                                           <td
                                             style={styleOf(
-                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top",
+                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13px; vertical-align: top",
                                             )}
                                           >
                                             {r.row}
                                           </td>
                                           <td
                                             style={styleOf(
-                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top; font-family: 'IBM Plex Mono', monospace; font-size: 13px",
+                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13px; vertical-align: top; font-family: 'IBM Plex Mono', monospace; font-size: 13px",
                                             )}
                                           >
                                             {r.col}
                                           </td>
                                           <td
                                             style={styleOf(
-                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top",
+                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13px; vertical-align: top",
                                             )}
                                           >
                                             {r.text}
@@ -6046,7 +6046,7 @@ class AdminReadingEditor extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 13px; color: #6A5D6C",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {
@@ -6147,7 +6147,7 @@ class AdminReadingEditor extends React.Component {
                                       </div>
                                       <div
                                         style={styleOf(
-                                          "font-size: 13px; color: #6A5D6C",
+                                          "font-size: 13px; color: #706473",
                                         )}
                                       >
                                         {t.label}
@@ -6221,7 +6221,7 @@ class AdminReadingEditor extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 13px; color: #6A5D6C",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {v.impReplaceNote}
@@ -6300,7 +6300,7 @@ class AdminReadingEditor extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "font-size: 15px; color: #6A5D6C; max-width: 520px",
+                            "font-size: 15px; color: #706473; max-width: 520px",
                           )}
                         >
                           {v.emptySub}
@@ -6320,7 +6320,7 @@ class AdminReadingEditor extends React.Component {
                               >
                                 <span
                                   style={styleOf(
-                                    "font-weight: 600; font-size: 14.5px",
+                                    "font-weight: 600; font-size: 14px",
                                   )}
                                 >
                                   {o.name}
@@ -6487,7 +6487,7 @@ class AdminReadingEditor extends React.Component {
                                 aria-label={"Thu gọn cột bài đọc"}
                                 aria-expanded={"true"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
                                 )}
                               >
                                 <svg
@@ -6584,7 +6584,7 @@ class AdminReadingEditor extends React.Component {
                                       >
                                         <span
                                           style={styleOf(
-                                            "font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                            "font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
                                           )}
                                         >
                                           {im.name}
@@ -6638,7 +6638,7 @@ class AdminReadingEditor extends React.Component {
                                   href={"#"}
                                   onClick={v.addImg}
                                   style={styleOf(
-                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                   )}
                                 >
                                   <svg
@@ -6681,7 +6681,7 @@ class AdminReadingEditor extends React.Component {
                                     href={"#"}
                                     onClick={v.togglePaste}
                                     style={styleOf(
-                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
                                     )}
                                   >
                                     <svg
@@ -6710,7 +6710,7 @@ class AdminReadingEditor extends React.Component {
                                     >
                                       <span
                                         style={styleOf(
-                                          "font-size: 13px; color: #6A5D6C",
+                                          "font-size: 13px; color: #706473",
                                         )}
                                       >
                                         {
@@ -6785,7 +6785,7 @@ class AdminReadingEditor extends React.Component {
                                           >
                                             <div
                                               style={styleOf(
-                                                "font-size: 14.5px; line-height: 1.7; cursor: text",
+                                                "font-size: 14px; line-height: 1.7; cursor: text",
                                               )}
                                             >
                                               {(xp.segs || []).map(
@@ -6930,7 +6930,7 @@ class AdminReadingEditor extends React.Component {
                                       href={"#"}
                                       onClick={v.addPara}
                                       style={styleOf(
-                                        "display: flex; align-items: center; justify-content: center; gap: 6px; height: 44px; flex-shrink: 0; border-radius: 14px; border: 1.5px dashed #D6D4D0; color: #6A5D6C; font-weight: 600; font-size: 14px; text-decoration: none",
+                                        "display: flex; align-items: center; justify-content: center; gap: 6px; height: 44px; flex-shrink: 0; border-radius: 14px; border: 1.5px dashed #D6D4D0; color: #706473; font-weight: 600; font-size: 14px; text-decoration: none",
                                       )}
                                     >
                                       <svg
@@ -6991,7 +6991,7 @@ class AdminReadingEditor extends React.Component {
                               role={"tablist"}
                               aria-label={"Phần soạn"}
                               style={styleOf(
-                                "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                                "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                               )}
                             >
                               <a
@@ -7070,7 +7070,7 @@ class AdminReadingEditor extends React.Component {
                             <>
                               <div
                                 style={styleOf(
-                                  "font-size: 13px; color: #6A5D6C",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {v.E.head}
@@ -7273,7 +7273,7 @@ class AdminReadingEditor extends React.Component {
                                               <>
                                                 <span
                                                   style={styleOf(
-                                                    "font-size: 13px; color: #B23A24",
+                                                    "font-size: 13px; color: #C0412A",
                                                   )}
                                                 >
                                                   {v.E.warn}
@@ -7290,7 +7290,7 @@ class AdminReadingEditor extends React.Component {
                                                 >
                                                   <span
                                                     style={styleOf(
-                                                      "flex: 1 1 200px; min-width: 0; font-size: 13.5px",
+                                                      "flex: 1 1 200px; min-width: 0; font-size: 13px",
                                                     )}
                                                   >
                                                     {"Đang bôi đen ở " +
@@ -7724,7 +7724,7 @@ class AdminReadingEditor extends React.Component {
                                                       href={"#"}
                                                       onClick={v.G.resetInstr}
                                                       style={styleOf(
-                                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
                                                       )}
                                                     >
                                                       {"Tạo lại"}
@@ -7811,7 +7811,7 @@ class AdminReadingEditor extends React.Component {
                                                                   "Thêm cách viết khác"
                                                                 }
                                                                 style={styleOf(
-                                                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
                                                                 )}
                                                               >
                                                                 <svg
@@ -7994,7 +7994,7 @@ class AdminReadingEditor extends React.Component {
                                                   href={"#"}
                                                   onClick={v.G.addItem}
                                                   style={styleOf(
-                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                                   )}
                                                 >
                                                   <svg
@@ -8056,7 +8056,7 @@ class AdminReadingEditor extends React.Component {
                                                         title={"In đậm"}
                                                         aria-label={"In đậm"}
                                                         style={styleOf(
-                                                          "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-weight: 800",
+                                                          "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-weight: 800",
                                                         )}
                                                       >
                                                         {"B"}
@@ -8070,7 +8070,7 @@ class AdminReadingEditor extends React.Component {
                                                           "In nghiêng"
                                                         }
                                                         style={styleOf(
-                                                          "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-style: italic; font-family: Georgia, serif",
+                                                          "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-style: italic; font-family: Georgia, serif",
                                                         )}
                                                       >
                                                         {"I"}
@@ -8086,7 +8086,7 @@ class AdminReadingEditor extends React.Component {
                                                         onClick={v.G.fmtH}
                                                         title={"Tiêu đề mục"}
                                                         style={styleOf(
-                                                          "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                                          "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
                                                         )}
                                                       >
                                                         {"Tiêu đề"}
@@ -8097,7 +8097,7 @@ class AdminReadingEditor extends React.Component {
                                                         onClick={v.G.fmtL}
                                                         title={"Gạch đầu dòng"}
                                                         style={styleOf(
-                                                          "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                                          "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
                                                         )}
                                                       >
                                                         {"• Gạch đầu dòng"}
@@ -8117,7 +8117,7 @@ class AdminReadingEditor extends React.Component {
                                                           "Chèn chỗ trống tại con trỏ"
                                                         }
                                                         style={styleOf(
-                                                          "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; color: #2963CC",
+                                                          "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; color: #2963CC",
                                                         )}
                                                       >
                                                         <svg
@@ -8183,7 +8183,7 @@ class AdminReadingEditor extends React.Component {
                                                   </span>
                                                   <div
                                                     style={styleOf(
-                                                      "padding: 14px 16px; border-radius: 12px; background: #FAF9F5; border: 1px solid #E6E4E0; display: flex; flex-direction: column; gap: 4px; font-size: 14.5px; line-height: 1.7",
+                                                      "padding: 14px 16px; border-radius: 12px; background: #FAF9F5; border: 1.5px solid #E6E4E0; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.7",
                                                     )}
                                                   >
                                                     {(v.G.pv || []).map(
@@ -8527,7 +8527,7 @@ class AdminReadingEditor extends React.Component {
                                                         href={"#"}
                                                         onClick={v.G.addOpt}
                                                         style={styleOf(
-                                                          "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                          "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                                         )}
                                                       >
                                                         <svg
@@ -8625,7 +8625,7 @@ class AdminReadingEditor extends React.Component {
                                                                         "Thêm cách viết khác"
                                                                       }
                                                                       style={styleOf(
-                                                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
                                                                       )}
                                                                     >
                                                                       <svg
@@ -9304,7 +9304,7 @@ class AdminReadingEditor extends React.Component {
                                                                     "Thêm cách viết khác"
                                                                   }
                                                                   style={styleOf(
-                                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
                                                                   )}
                                                                 >
                                                                   <svg
@@ -9541,7 +9541,7 @@ class AdminReadingEditor extends React.Component {
                                                   role={"radiogroup"}
                                                   aria-label={"Cách nhập sơ đồ"}
                                                   style={styleOf(
-                                                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA; align-self: flex-start",
+                                                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA; align-self: flex-start",
                                                   )}
                                                 >
                                                   <a
@@ -9667,7 +9667,7 @@ class AdminReadingEditor extends React.Component {
                                                                     fr.addNode
                                                                   }
                                                                   style={styleOf(
-                                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
                                                                   )}
                                                                 >
                                                                   <svg
@@ -9852,7 +9852,7 @@ class AdminReadingEditor extends React.Component {
                                                                       "Nội dung ô, ___ là chỗ trống"
                                                                     }
                                                                     style={styleOf(
-                                                                      "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC; padding: 8px 10px; font-size: 13.5px",
+                                                                      "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC; padding: 8px 10px; font-size: 13px",
                                                                     )}
                                                                   ></textarea>
                                                                   {nd.hasParents ? (
@@ -10170,7 +10170,7 @@ class AdminReadingEditor extends React.Component {
                                                   href={"#"}
                                                   onClick={v.G.addRow}
                                                   style={styleOf(
-                                                    "display: flex; align-items: center; justify-content: center; gap: 6px; height: 42px; border-radius: 12px; border: 1.5px dashed #D6D4D0; color: #6A5D6C; font-weight: 600; font-size: 14px; text-decoration: none",
+                                                    "display: flex; align-items: center; justify-content: center; gap: 6px; height: 42px; border-radius: 12px; border: 1.5px dashed #D6D4D0; color: #706473; font-weight: 600; font-size: 14px; text-decoration: none",
                                                   )}
                                                 >
                                                   <svg
@@ -10199,7 +10199,7 @@ class AdminReadingEditor extends React.Component {
                                                 </span>
                                                 <div
                                                   style={styleOf(
-                                                    "overflow-x: auto; padding: 12px; border-radius: 12px; border: 1px solid #E6E4E0; background: #FFFFFF",
+                                                    "overflow-x: auto; padding: 12px; border-radius: 12px; border: 1.5px solid #E6E4E0; background: #FFFFFF",
                                                   )}
                                                 >
                                                   <div
@@ -10407,7 +10407,7 @@ class AdminReadingEditor extends React.Component {
                                                                     "Thêm cách viết khác"
                                                                   }
                                                                   style={styleOf(
-                                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
                                                                   )}
                                                                 >
                                                                   <svg
@@ -10650,7 +10650,7 @@ class AdminReadingEditor extends React.Component {
                                                     href={"#"}
                                                     onClick={v.G.upload}
                                                     style={styleOf(
-                                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
                                                     )}
                                                   >
                                                     <svg
@@ -10768,7 +10768,7 @@ class AdminReadingEditor extends React.Component {
                                                           x={"64"}
                                                           y={"20"}
                                                           fontSize={"12"}
-                                                          fill={"#6A5D6C"}
+                                                          fill={"#706473"}
                                                           fontFamily={
                                                             "Inter, sans-serif"
                                                           }
@@ -10942,7 +10942,7 @@ class AdminReadingEditor extends React.Component {
                                                                   "Thêm cách viết khác"
                                                                 }
                                                                 style={styleOf(
-                                                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
                                                                 )}
                                                               >
                                                                 <svg
@@ -11292,7 +11292,7 @@ class AdminReadingEditor extends React.Component {
                                                         href={"#"}
                                                         onClick={v.G.addOpt}
                                                         style={styleOf(
-                                                          "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                          "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                                         )}
                                                       >
                                                         <svg
@@ -11327,7 +11327,7 @@ class AdminReadingEditor extends React.Component {
                                                   <>
                                                     <div
                                                       style={styleOf(
-                                                        "font-size: 13px; color: #6A5D6C; padding: 10px 12px; border-radius: 10px; background: #F3F0EA",
+                                                        "font-size: 13px; color: #706473; padding: 10px 12px; border-radius: 10px; background: #F3F0EA",
                                                       )}
                                                     >
                                                       {"Lựa chọn là các đoạn của bài đọc: " +
@@ -11797,7 +11797,7 @@ class AdminReadingEditor extends React.Component {
                                                         href={"#"}
                                                         onClick={v.G.addItem}
                                                         style={styleOf(
-                                                          "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                          "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                                         )}
                                                       >
                                                         <svg
@@ -11843,7 +11843,7 @@ class AdminReadingEditor extends React.Component {
                                                     <React.Fragment key={index}>
                                                       <div
                                                         style={styleOf(
-                                                          "display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 12px; border: 1px solid #E6E4E0",
+                                                          "display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 12px; border: 1.5px solid #E6E4E0",
                                                         )}
                                                       >
                                                         <div
@@ -11972,7 +11972,7 @@ class AdminReadingEditor extends React.Component {
                                                   href={"#"}
                                                   onClick={v.G.addItem}
                                                   style={styleOf(
-                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                                   )}
                                                 >
                                                   <svg
@@ -12133,7 +12133,7 @@ class AdminReadingEditor extends React.Component {
                                                   href={"#"}
                                                   onClick={v.G.addOpt}
                                                   style={styleOf(
-                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                                   )}
                                                 >
                                                   <svg
@@ -12374,7 +12374,7 @@ class AdminReadingEditor extends React.Component {
                                                   href={"#"}
                                                   onClick={v.G.addItem}
                                                   style={styleOf(
-                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
                                                   )}
                                                 >
                                                   <svg
@@ -12422,7 +12422,7 @@ class AdminReadingEditor extends React.Component {
                                 onClick={v.togglePicker}
                                 aria-expanded={v.pickerOpen}
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; gap: 6px; height: 46px; flex-shrink: 0; border-radius: 14px; border: 1.5px dashed #D6D4D0; color: #6A5D6C; font-weight: 600; font-size: 14px; text-decoration: none",
+                                  "display: flex; align-items: center; justify-content: center; gap: 6px; height: 46px; flex-shrink: 0; border-radius: 14px; border: 1.5px dashed #D6D4D0; color: #706473; font-weight: 600; font-size: 14px; text-decoration: none",
                                 )}
                               >
                                 <svg
@@ -12481,7 +12481,7 @@ class AdminReadingEditor extends React.Component {
                                             href={"#"}
                                             onClick={ty.pick}
                                             style={styleOf(
-                                              "display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-radius: 10px; border: 1px solid #E6E4E0; color: #352637; text-decoration: none",
+                                              "display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-radius: 10px; border: 1.5px solid #E6E4E0; color: #352637; text-decoration: none",
                                             )}
                                           >
                                             <span

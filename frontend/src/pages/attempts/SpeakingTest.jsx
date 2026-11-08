@@ -63,12 +63,12 @@ class SpeakingTest extends React.Component {
                   <a
                     href={"StudentLanding.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                        "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                           v.accent +
                           "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                           v.onAccent,
@@ -97,7 +97,7 @@ class SpeakingTest extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
+                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #706473; font-size: 13px; font-weight: 600; white-space: nowrap",
                       )}
                     >
                       <svg
@@ -139,7 +139,7 @@ class SpeakingTest extends React.Component {
                     <a
                       href={"SubmitDialogs.dc.html"}
                       style={styleOf(
-                        "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                        "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                       )}
                     >
                       {"Lưu và thoát"}
@@ -151,7 +151,7 @@ class SpeakingTest extends React.Component {
                           v.accent +
                           "; color: " +
                           v.onAccent +
-                          "; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                          "; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                       )}
                     >
                       {"Hoàn thành"}
@@ -551,12 +551,12 @@ class SpeakingTest extends React.Component {
                   <a
                     href={"StudentLanding.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                      "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                     )}
                   >
                     <span
                       style={styleOf(
-                        "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                        "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                           v.accent +
                           "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                           v.onAccent,
@@ -585,7 +585,7 @@ class SpeakingTest extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #6A5D6C; font-size: 13px; font-weight: 600; white-space: nowrap",
+                        "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #DDDBD7; background: #F3F0EA; color: #706473; font-size: 13px; font-weight: 600; white-space: nowrap",
                       )}
                     >
                       <svg
@@ -627,7 +627,7 @@ class SpeakingTest extends React.Component {
                     <a
                       href={"SubmitDialogs.dc.html"}
                       style={styleOf(
-                        "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                        "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                       )}
                     >
                       {"Lưu và thoát"}
@@ -639,7 +639,7 @@ class SpeakingTest extends React.Component {
                           v.accent +
                           "; color: " +
                           v.onAccent +
-                          "; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                          "; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                       )}
                     >
                       {"Hoàn thành"}
@@ -998,7 +998,7 @@ class SpeakingTest extends React.Component {
                         <button
                           type={"button"} data-ab={""}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           <svg
@@ -1019,7 +1019,7 @@ class SpeakingTest extends React.Component {
                         <button
                           type={"button"} data-ab={""}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           <svg

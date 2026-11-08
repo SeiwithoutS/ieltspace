@@ -44,15 +44,15 @@ class AdminHome extends React.Component {
       }
     }
     var on =
-        "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box",
+        "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box",
       off =
-        "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box";
+        "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap; box-sizing: border-box";
     var first = Date.UTC(vy, vm, 1),
       lead = (new Date(first).getUTCDay() + 6) % 7,
       dim = new Date(Date.UTC(vy, vm + 1, 0)).getUTCDate();
     var days = [];
     var cellBase =
-      "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; text-decoration: none; box-sizing: border-box; ";
+      "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13px; text-decoration: none; box-sizing: border-box; ";
     for (var i = 0; i < lead; i++) {
       days.push({
         label: "",
@@ -169,7 +169,7 @@ class AdminHome extends React.Component {
             ".",
       cantApply: !canApply,
       applyStyle:
-        "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; height: 40px" +
+        "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; height: 40px" +
         (canApply ? "" : "; opacity: 0.4; cursor: default"),
       pick7: function (e) {
         stop(e);
@@ -274,14 +274,14 @@ class AdminHome extends React.Component {
                   <div>
                     <h1
                       style={styleOf(
-                        "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                       )}
                     >
                       {"Tổng quan hệ thống"}
                     </h1>
                     <div
                       style={styleOf(
-                        "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                        "font-size: 15px; color: #706473; margin-top: 4px",
                       )}
                     >
                       {v.summary}
@@ -295,7 +295,7 @@ class AdminHome extends React.Component {
                         role={"group"}
                         aria-label={"Khoảng thời gian"}
                         style={styleOf(
-                          "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                          "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                         )}
                       >
                         <a
@@ -463,49 +463,49 @@ class AdminHome extends React.Component {
                             >
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T2"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T3"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T4"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T5"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T6"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"T7"}
                               </div>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13.5px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
+                                  "display: flex; align-items: center; justify-content: center; height: 38px; font-size: 13px; height: 30px; font-size: 13px; font-weight: 600; color: #706473",
                                 )}
                               >
                                 {"CN"}
@@ -539,7 +539,7 @@ class AdminHome extends React.Component {
                                 href={"#"}
                                 onClick={v.closePicker}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A; height: 40px",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; font-family: inherit; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A; height: 40px",
                                 )}
                               >
                                 {"Hủy"}
@@ -559,26 +559,26 @@ class AdminHome extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                        "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                       )}
                     >
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13.5px; font-weight: 600",
+                          "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
                         )}
                       >
                         {"Mọi kỹ năng"}
                       </span>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                          "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                         )}
                       >
                         {"Writing"}
                       </span>
                       <span
                         style={styleOf(
-                          "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #6A5D6C; font-size: 13.5px; font-weight: 500",
+                          "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
                         )}
                       >
                         {"Speaking"}
@@ -602,7 +602,7 @@ class AdminHome extends React.Component {
                     >
                       {"1.284"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"1.262 người học · 18 giáo viên · 4 quản lý"}
                     </div>
                   </div>
@@ -621,7 +621,7 @@ class AdminHome extends React.Component {
                     >
                       {"2.316"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {v.rangeIn}
                     </div>
                   </div>
@@ -640,7 +640,7 @@ class AdminHome extends React.Component {
                     >
                       {"342"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {v.rangeIn}
                     </div>
                   </div>
@@ -659,7 +659,7 @@ class AdminHome extends React.Component {
                     >
                       {"19"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"2 giao dịch chờ xử lý"}
                     </div>
                   </div>
@@ -680,7 +680,7 @@ class AdminHome extends React.Component {
                     >
                       {"7"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"2 yêu cầu còn dưới 12 giờ"}
                     </div>
                   </div>
@@ -699,7 +699,7 @@ class AdminHome extends React.Component {
                     >
                       {"23"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"18 giáo viên đang nhận bài"}
                     </div>
                   </div>
@@ -718,7 +718,7 @@ class AdminHome extends React.Component {
                     >
                       {"291"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {v.rangeIn}
                     </div>
                   </div>
@@ -737,7 +737,7 @@ class AdminHome extends React.Component {
                     >
                       {"21"}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {"17 quá hạn 72 giờ · 4 giáo viên không thể hoàn thành"}
                     </div>
                   </div>
@@ -764,12 +764,12 @@ class AdminHome extends React.Component {
                       >
                         <div>
                           <div
-                            style={styleOf("font-size: 17px; font-weight: 600")}
+                            style={styleOf("font-size: 18px; font-weight: 600")}
                           >
                             {"Bài hoàn thành 7 ngày qua"}
                           </div>
                           <div
-                            style={styleOf("font-size: 13.5px; color: #706473")}
+                            style={styleOf("font-size: 13px; color: #706473")}
                           >
                             {
                               "L/R chấm tự động và W/S đã lưu, tính theo ngày hoàn thành"
@@ -908,7 +908,7 @@ class AdminHome extends React.Component {
                       >
                         <div>
                           <div
-                            style={styleOf("font-size: 17px; font-weight: 600")}
+                            style={styleOf("font-size: 18px; font-weight: 600")}
                           >
                             {"Việc cần xem"}
                           </div>
@@ -919,7 +919,7 @@ class AdminHome extends React.Component {
                           "display: flex; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid #E6E4E0",
                         )}
                       >
-                        <span style={styleOf("flex: 1; font-size: 14.5px")}>
+                        <span style={styleOf("flex: 1; font-size: 14px")}>
                           {
                             "2 yêu cầu sắp quá hạn 72 giờ chờ phân công (Speaking)"
                           }
@@ -927,7 +927,7 @@ class AdminHome extends React.Component {
                         <a
                           href={"AdminGrading.dc.html"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           {"Theo dõi"}
@@ -938,7 +938,7 @@ class AdminHome extends React.Component {
                           "display: flex; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid #E6E4E0",
                         )}
                       >
-                        <span style={styleOf("flex: 1; font-size: 14.5px")}>
+                        <span style={styleOf("flex: 1; font-size: 14px")}>
                           {
                             "Thầy Quốc Bảo báo không thể hoàn thành 3 bài, cần xác nhận hủy"
                           }
@@ -946,7 +946,7 @@ class AdminHome extends React.Component {
                         <a
                           href={"AdminUsers.dc.html"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           {"Xử lý"}
@@ -957,7 +957,7 @@ class AdminHome extends React.Component {
                           "display: flex; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid #E6E4E0",
                         )}
                       >
-                        <span style={styleOf("flex: 1; font-size: 14.5px")}>
+                        <span style={styleOf("flex: 1; font-size: 14px")}>
                           {
                             "Lô nhập đề exam_reading_04.xlsx có 3 lỗi, chưa lưu gì"
                           }
@@ -965,7 +965,7 @@ class AdminHome extends React.Component {
                         <a
                           href={"AdminReadingEditor.dc.html"}
                           style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14.5px; text-decoration: none; white-space: nowrap",
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
                           )}
                         >
                           {"Xem"}
@@ -996,14 +996,14 @@ class AdminHome extends React.Component {
                           <div>
                             <div
                               style={styleOf(
-                                "font-size: 17px; font-weight: 600",
+                                "font-size: 18px; font-weight: 600",
                               )}
                             >
                               {"Yêu cầu bị hủy theo nguyên nhân"}
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 13.5px; color: #706473",
+                                "font-size: 13px; color: #706473",
                               )}
                             >
                               {v.rangePast + ", mỗi yêu cầu chỉ tính một lần"}

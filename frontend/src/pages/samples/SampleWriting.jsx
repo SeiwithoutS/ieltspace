@@ -214,7 +214,7 @@ class SampleWriting extends React.Component {
           st:
             "display: flex; gap: 4px; " +
             (kind === "h"
-              ? "font-weight: 700; font-size: 16.5px; margin-top: 6px"
+              ? "font-weight: 700; font-size: 16px; margin-top: 6px"
               : kind === "li"
                 ? "padding-left: 4px"
                 : ""),
@@ -333,7 +333,7 @@ class SampleWriting extends React.Component {
             setTimeout(self._sp, 1000);
           },
           st:
-            "display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; text-decoration: none; font-size: 14.5px; transition: background .15s; " +
+            "display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; text-decoration: none; font-size: 14px; transition: background .15s; " +
             (on
               ? "background: #E3ECFD; color: #2257B8; font-weight: 600"
               : "color: #4B3D4D; font-weight: 500"),
@@ -386,12 +386,12 @@ class SampleWriting extends React.Component {
               <a
                 href={"StudentLanding.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -406,7 +406,7 @@ class SampleWriting extends React.Component {
                   <a
                     href={"FullTests.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -446,7 +446,7 @@ class SampleWriting extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -471,7 +471,7 @@ class SampleWriting extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Full Tests"}
@@ -492,7 +492,7 @@ class SampleWriting extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -530,7 +530,7 @@ class SampleWriting extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Listening Practice"}
@@ -551,7 +551,7 @@ class SampleWriting extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -578,7 +578,7 @@ class SampleWriting extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Reading Practice"}
@@ -599,7 +599,7 @@ class SampleWriting extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -623,7 +623,7 @@ class SampleWriting extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Writing Practice"}
@@ -644,7 +644,7 @@ class SampleWriting extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -675,7 +675,7 @@ class SampleWriting extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Speaking Practice"}
@@ -694,7 +694,7 @@ class SampleWriting extends React.Component {
                   <a
                     href={"SampleLibrary.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; background: #E3ECFD; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -734,7 +734,7 @@ class SampleWriting extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -760,7 +760,7 @@ class SampleWriting extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 Academic"}
@@ -781,7 +781,7 @@ class SampleWriting extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -812,7 +812,7 @@ class SampleWriting extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 General"}
@@ -833,7 +833,7 @@ class SampleWriting extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -857,7 +857,7 @@ class SampleWriting extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 2"}
@@ -878,7 +878,7 @@ class SampleWriting extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -909,7 +909,7 @@ class SampleWriting extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Speaking Part 1, 2, 3"}
@@ -927,7 +927,7 @@ class SampleWriting extends React.Component {
                 <a
                   href={"Vocab.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Thư viện từ vựng"}
@@ -935,7 +935,7 @@ class SampleWriting extends React.Component {
                 <a
                   href={"Flashcard.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Flashcard của tôi"}
@@ -1004,7 +1004,7 @@ class SampleWriting extends React.Component {
               <nav aria-label={"Breadcrumb"}>
                 <ol
                   style={styleOf(
-                    "list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 13.5px; color: #6A5D6C",
+                    "list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 13px; color: #706473",
                   )}
                 >
                   {(v.crumbs || []).map((c, index) => (
@@ -1018,7 +1018,7 @@ class SampleWriting extends React.Component {
                           <>
                             <span
                               aria-hidden={"true"}
-                              style={styleOf("display: flex; color: #766A79")}
+                              style={styleOf("display: flex; color: #706473")}
                             >
                               <svg
                                 width={"14"}
@@ -1041,7 +1041,7 @@ class SampleWriting extends React.Component {
                               className={"crumb"}
                               href={c.href}
                               style={styleOf(
-                                "color: #6A5D6C; text-decoration: none; border-radius: 6px; padding: 2px 4px",
+                                "color: #706473; text-decoration: none; border-radius: 6px; padding: 2px 4px",
                               )}
                             >
                               {c.text}
@@ -1115,7 +1115,7 @@ class SampleWriting extends React.Component {
                     >
                       {v.title}
                     </h1>
-                    <div style={styleOf("font-size: 14px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 14px; color: #706473")}>
                       {v.metaLine}
                     </div>
                   </div>
@@ -1127,14 +1127,14 @@ class SampleWriting extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; scroll-margin-top: 24px; color: #352637",
+                        "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; scroll-margin-top: 24px; color: #352637",
                       )}
                     >
                       {"Đề bài"}
                     </h2>
                     <div
                       style={styleOf(
-                        "display: flex; flex-direction: column; gap: 14px; padding: 20px 24px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16.5px; line-height: 1.7; color: #352637",
+                        "display: flex; flex-direction: column; gap: 14px; padding: 20px 24px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16px; line-height: 1.7; color: #352637",
                       )}
                     >
                       <div
@@ -1188,7 +1188,7 @@ class SampleWriting extends React.Component {
                       >
                         <h2
                           style={styleOf(
-                            "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; scroll-margin-top: 24px; color: #352637",
+                            "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; scroll-margin-top: 24px; color: #352637",
                           )}
                         >
                           {"Dàn ý"}
@@ -1197,7 +1197,7 @@ class SampleWriting extends React.Component {
                           <>
                             <p
                               style={styleOf(
-                                "margin: 0; font-size: 16.5px; line-height: 1.8; color: #352637",
+                                "margin: 0; font-size: 16px; line-height: 1.8; color: #352637",
                               )}
                             >
                               {v.introText}
@@ -1208,7 +1208,7 @@ class SampleWriting extends React.Component {
                           <>
                             <div
                               style={styleOf(
-                                "padding: 22px 26px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.05); font-size: 15.5px; line-height: 1.7",
+                                "padding: 22px 26px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.05); font-size: 15px; line-height: 1.7",
                               )}
                             >
                               <div
@@ -1257,7 +1257,7 @@ class SampleWriting extends React.Component {
                   >
                     <h2
                       style={styleOf(
-                        "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; scroll-margin-top: 24px; color: #352637",
+                        "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; scroll-margin-top: 24px; color: #352637",
                       )}
                     >
                       {"Bài mẫu"}
@@ -1312,7 +1312,7 @@ class SampleWriting extends React.Component {
                       >
                         <h2
                           style={styleOf(
-                            "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; scroll-margin-top: 24px; color: #352637",
+                            "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin: 0; scroll-margin-top: 24px; color: #352637",
                           )}
                         >
                           {"Phần dịch"}
@@ -1396,10 +1396,10 @@ class SampleWriting extends React.Component {
                       "padding: 22px 26px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.05); display: flex; flex-direction: column; gap: 10px",
                     )}
                   >
-                    <div style={styleOf("font-size: 17px; font-weight: 600")}>
+                    <div style={styleOf("font-size: 18px; font-weight: 600")}>
                       {v.practiceBtn}
                     </div>
-                    <div style={styleOf("font-size: 14px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 14px; color: #706473")}>
                       {"Tự viết rồi nhờ giáo viên chấm, so với bài mẫu band " +
                         v.band +
                         "+."}
@@ -1407,7 +1407,7 @@ class SampleWriting extends React.Component {
                     <a
                       href={"PracticeWS.dc.html"}
                       style={styleOf(
-                        "display: inline-flex; align-items: center; justify-content: center; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14.5px; text-decoration: none",
+                        "display: inline-flex; align-items: center; justify-content: center; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none",
                       )}
                     >
                       {v.practiceBtn}

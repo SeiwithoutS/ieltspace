@@ -383,7 +383,7 @@ class AdminSpeakingEditor extends React.Component {
           st:
             "display: flex; gap: 4px; " +
             (kind === "h"
-              ? "font-weight: 700; font-size: 15.5px"
+              ? "font-weight: 700; font-size: 15px"
               : kind === "li"
                 ? "padding-left: 4px"
                 : ""),
@@ -458,7 +458,7 @@ class AdminSpeakingEditor extends React.Component {
         name: UNIT + " " + (i + 1),
         range: sub,
         on: on,
-        sub: on ? "#6A5D6C" : "#766A79",
+        sub: on ? "#706473" : "#706473",
         pick: function (e) {
           stop(e);
           self.setState({ t: i });
@@ -997,7 +997,7 @@ class AdminSpeakingEditor extends React.Component {
           size: kbs(f[1]),
           icon: f[2] === "xlsx" ? "XLSX" : "IMG",
           iconSt:
-            "display: flex; align-items: center; justify-content: center; flex: none; width: 40px; height: 26px; border-radius: 7px; font-size: 10.5px; font-weight: 700; " +
+            "display: flex; align-items: center; justify-content: center; flex: none; width: 40px; height: 26px; border-radius: 8px; font-size: 11px; font-weight: 700; " +
             (f[2] === "xlsx"
               ? "background: #DCEDE2; color: #2E6A48"
               : "background: #FBEDBF; color: #7A5A0E"),
@@ -1024,7 +1024,7 @@ class AdminSpeakingEditor extends React.Component {
       impNoX: !impX,
       impCheckSt: impX
         ? "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF"
-        : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; background: #F3F0EA; border-color: #E6E4E0; color: #766A79; cursor: not-allowed",
+        : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; background: #F3F0EA; border-color: #E6E4E0; color: #706473; cursor: not-allowed",
       impCheck: function (e) {
         stop(e);
         if (!impX) {
@@ -1051,7 +1051,7 @@ class AdminSpeakingEditor extends React.Component {
           on = i === impP;
         return {
           text: c,
-          color: dn || on ? "#352637" : "#766A79",
+          color: dn || on ? "#352637" : "#706473",
           cls: on ? "im-spin" : "",
           icon: dn ? "✓" : "",
           iconSt:
@@ -1199,7 +1199,7 @@ class AdminSpeakingEditor extends React.Component {
         "; " +
         (editing
           ? "background: #E3ECFD; color: #2257B8"
-          : "background: #F3F0EA; color: #6A5D6C"),
+          : "background: #F3F0EA; color: #706473"),
       counter: done + "/" + NI + " " + UNIT.toLowerCase(),
       counterSt: done === NI ? CHIP_OK : CHIP_WARN,
       viewing: !editing,
@@ -1213,7 +1213,7 @@ class AdminSpeakingEditor extends React.Component {
       dirtyColor: dirty ? "#7A5A0E" : "#706473",
       undo: undo,
       undoSt:
-        "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; " +
+        "display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; " +
         ((s.hist || []).length
           ? "color: #352637; cursor: pointer"
           : "color: #B5ADB7; cursor: default; pointer-events: none"),
@@ -1363,7 +1363,7 @@ class AdminSpeakingEditor extends React.Component {
         {"\n"}
         <style>
           {cssText(
-            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#766A79}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #766A79 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}@keyframes imFade{from{opacity:0}to{opacity:1}}@keyframes imPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes imRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes imSpin{to{transform:rotate(360deg)}}.im-fade{animation:imFade .2s ease-out both}.im-pop{animation:imPop .28s cubic-bezier(.2,.8,.2,1) both}.im-rise{animation:imRise .3s cubic-bezier(.2,.8,.2,1) both}.im-spin{animation:imSpin .8s linear infinite}@media (prefers-reduced-motion: reduce){.im-fade,.im-pop,.im-rise,.im-spin{animation:none}}\n",
+            "\nbody{margin:0}\na{color:#2963CC}a:hover{color:#2257B8}\ninput::placeholder,textarea::placeholder{color:#706473}.ro input:not([type=file]):not([type=checkbox]):not([type=radio]),.ro textarea,.ro select{border-color:transparent !important;background: #F6F4EF !important;box-shadow:none !important;resize:none !important;cursor:default !important;-webkit-appearance:none;appearance:none}.ro input::placeholder,.ro textarea::placeholder{color: #706473 !important}.ro [contenteditable]{cursor:default}.ro .eo{display:none !important}.ro .lk,.ro a[role=combobox],.ro input,.ro textarea{pointer-events:none}.ro input,.ro textarea{caret-color:transparent}@keyframes imFade{from{opacity:0}to{opacity:1}}@keyframes imPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}@keyframes imRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes imSpin{to{transform:rotate(360deg)}}.im-fade{animation:imFade .2s ease-out both}.im-pop{animation:imPop .28s cubic-bezier(.2,.8,.2,1) both}.im-rise{animation:imRise .3s cubic-bezier(.2,.8,.2,1) both}.im-spin{animation:imSpin .8s linear infinite}@media (prefers-reduced-motion: reduce){.im-fade,.im-pop,.im-rise,.im-spin{animation:none}}\n",
           )}
         </style>
         {"\n"}
@@ -1654,7 +1654,7 @@ class AdminSpeakingEditor extends React.Component {
                     role={"note"}
                     data-ro-bar={"1"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 10px; padding: 9px 24px; background: #E3ECFD; border-bottom: 1.5px solid #D6D4D0; font-size: 13.5px; line-height: 1.5; color: #352637",
+                      "display: flex; align-items: center; gap: 10px; padding: 9px 24px; background: #E3ECFD; border-bottom: 1.5px solid #D6D4D0; font-size: 13px; line-height: 1.5; color: #352637",
                     )}
                   >
                     <span
@@ -1709,7 +1709,7 @@ class AdminSpeakingEditor extends React.Component {
                         )}
                       >
                         <div
-                          style={styleOf("font-weight: 700; color: #A8321E")}
+                          style={styleOf("font-weight: 700; color: #C0412A")}
                         >
                           {v.issueHead}
                         </div>
@@ -1717,7 +1717,7 @@ class AdminSpeakingEditor extends React.Component {
                           href={"#"}
                           onClick={v.closeIssues}
                           aria-label={"Đóng"}
-                          style={styleOf("display: flex; color: #A8321E")}
+                          style={styleOf("display: flex; color: #C0412A")}
                         >
                           <svg
                             width={"16"}
@@ -1774,7 +1774,7 @@ class AdminSpeakingEditor extends React.Component {
                           {v.confirmTitle}
                         </div>
                         <div
-                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 14px; color: #706473")}
                         >
                           {v.confirmSub}
                         </div>
@@ -1830,7 +1830,7 @@ class AdminSpeakingEditor extends React.Component {
                           {"Lưu thay đổi trước khi thoát?"}
                         </div>
                         <div
-                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 14px; color: #706473")}
                         >
                           {v.leaveSub}
                         </div>
@@ -1843,7 +1843,7 @@ class AdminSpeakingEditor extends React.Component {
                             href={"#"}
                             onClick={v.stayEdit}
                             style={styleOf(
-                              "display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #6A5D6C; text-decoration: none; cursor: pointer; white-space: nowrap; margin-right: auto",
+                              "display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; margin-right: auto",
                             )}
                           >
                             {"Tiếp tục sửa"}
@@ -1895,7 +1895,7 @@ class AdminSpeakingEditor extends React.Component {
                           {"Đăng đề này?"}
                         </div>
                         <div
-                          style={styleOf("font-size: 14.5px; color: #6A5D6C")}
+                          style={styleOf("font-size: 14px; color: #706473")}
                         >
                           {v.pubSub}
                         </div>
@@ -2028,14 +2028,14 @@ class AdminSpeakingEditor extends React.Component {
                             <div
                               id={"nhap-tieu-de"}
                               style={styleOf(
-                                "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 21px; font-weight: 600",
+                                "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600",
                               )}
                             >
                               {"Nhập đề Speaking từ xlsx"}
                             </div>
                             <div
                               style={styleOf(
-                                "font-size: 13.5px; color: #6A5D6C",
+                                "font-size: 13px; color: #706473",
                               )}
                             >
                               {v.impSub}
@@ -2046,7 +2046,7 @@ class AdminSpeakingEditor extends React.Component {
                             onClick={v.impClose}
                             aria-label={"Đóng"}
                             style={styleOf(
-                              "display: flex; padding: 6px; border-radius: 10px; color: #6A5D6C",
+                              "display: flex; padding: 6px; border-radius: 10px; color: #706473",
                             )}
                           >
                             <svg
@@ -2109,14 +2109,14 @@ class AdminSpeakingEditor extends React.Component {
                                 >
                                   <div
                                     style={styleOf(
-                                      "font-weight: 600; font-size: 14.5px",
+                                      "font-weight: 600; font-size: 14px",
                                     )}
                                   >
                                     {"Tệp mẫu một đề Speaking"}
                                   </div>
                                   <div
                                     style={styleOf(
-                                      "font-size: 13px; color: #6A5D6C",
+                                      "font-size: 13px; color: #706473",
                                     )}
                                   >
                                     {
@@ -2169,7 +2169,7 @@ class AdminSpeakingEditor extends React.Component {
                                 />
                                 <span
                                   style={styleOf(
-                                    "display: flex; color: #766A79",
+                                    "display: flex; color: #706473",
                                   )}
                                 >
                                   <svg
@@ -2229,7 +2229,7 @@ class AdminSpeakingEditor extends React.Component {
                                       onClick={f.rm}
                                       aria-label={"Bỏ tệp " + f.name}
                                       style={styleOf(
-                                        "display: flex; padding: 4px; color: #6A5D6C",
+                                        "display: flex; padding: 4px; color: #706473",
                                       )}
                                     >
                                       <svg
@@ -2344,7 +2344,7 @@ class AdminSpeakingEditor extends React.Component {
                                 <React.Fragment key={index}>
                                   <div
                                     style={styleOf(
-                                      "display: flex; align-items: center; gap: 12px; font-size: 14.5px; color: " +
+                                      "display: flex; align-items: center; gap: 12px; font-size: 14px; color: " +
                                         c.color,
                                     )}
                                   >
@@ -2443,7 +2443,7 @@ class AdminSpeakingEditor extends React.Component {
                                 </div>
                                 <span
                                   style={styleOf(
-                                    "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBDCD3; color: #B23A24; font-size: 13px; font-weight: 600",
+                                    "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBDCD3; color: #C0412A; font-size: 13px; font-weight: 600",
                                   )}
                                 >
                                   {v.impErrN}
@@ -2497,28 +2497,28 @@ class AdminSpeakingEditor extends React.Component {
                                         <tr>
                                           <td
                                             style={styleOf(
-                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top",
+                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13px; vertical-align: top",
                                             )}
                                           >
                                             {r.sheet}
                                           </td>
                                           <td
                                             style={styleOf(
-                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top",
+                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13px; vertical-align: top",
                                             )}
                                           >
                                             {r.row}
                                           </td>
                                           <td
                                             style={styleOf(
-                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top; font-family: 'IBM Plex Mono', monospace; font-size: 13px",
+                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13px; vertical-align: top; font-family: 'IBM Plex Mono', monospace; font-size: 13px",
                                             )}
                                           >
                                             {r.col}
                                           </td>
                                           <td
                                             style={styleOf(
-                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13.5px; vertical-align: top",
+                                              "padding: 10px 14px; border-top: 1px solid #E6E4E0; font-size: 13px; vertical-align: top",
                                             )}
                                           >
                                             {r.text}
@@ -2531,7 +2531,7 @@ class AdminSpeakingEditor extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 13px; color: #6A5D6C",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {
@@ -2632,7 +2632,7 @@ class AdminSpeakingEditor extends React.Component {
                                       </div>
                                       <div
                                         style={styleOf(
-                                          "font-size: 13px; color: #6A5D6C",
+                                          "font-size: 13px; color: #706473",
                                         )}
                                       >
                                         {t.label}
@@ -2706,7 +2706,7 @@ class AdminSpeakingEditor extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "font-size: 13px; color: #6A5D6C",
+                                  "font-size: 13px; color: #706473",
                                 )}
                               >
                                 {v.impReplaceNote}
@@ -2792,7 +2792,7 @@ class AdminSpeakingEditor extends React.Component {
                       <>
                         <div
                           style={styleOf(
-                            "padding: 28px 24px; text-align: center; border-radius: 14px; border: 1.5px dashed #D6D4D0; color: #6A5D6C; display: flex; flex-direction: column; align-items: center; gap: 12px",
+                            "padding: 28px 24px; text-align: center; border-radius: 14px; border: 1.5px dashed #D6D4D0; color: #706473; display: flex; flex-direction: column; align-items: center; gap: 12px",
                           )}
                         >
                           <div style={styleOf("font-size: 15px")}>
@@ -3074,7 +3074,7 @@ class AdminSpeakingEditor extends React.Component {
                                 title={"In đậm"}
                                 aria-label={"In đậm"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-weight: 800",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-weight: 800",
                                 )}
                               >
                                 {"B"}
@@ -3085,7 +3085,7 @@ class AdminSpeakingEditor extends React.Component {
                                 title={"In nghiêng"}
                                 aria-label={"In nghiêng"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-style: italic; font-family: Georgia, serif",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap; font-style: italic; font-family: Georgia, serif",
                                 )}
                               >
                                 {"I"}
@@ -3100,7 +3100,7 @@ class AdminSpeakingEditor extends React.Component {
                                 onClick={v.F.fmtH}
                                 title={"Tiêu đề mục"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
                                 )}
                               >
                                 {"Tiêu đề"}
@@ -3110,7 +3110,7 @@ class AdminSpeakingEditor extends React.Component {
                                 onClick={v.F.fmtL}
                                 title={"Gạch đầu dòng"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                  "display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-weight: 600; color: #352637; text-decoration: none; cursor: pointer; white-space: nowrap",
                                 )}
                               >
                                 {"• Gạch đầu dòng"}
@@ -3151,12 +3151,12 @@ class AdminSpeakingEditor extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "padding: 18px 20px; border-radius: 6px; background: #FFFFFF; border: 1.5px solid #D98B7E; display: flex; flex-direction: column; gap: 12px; font-size: 14.5px; line-height: 1.7",
+                        "padding: 18px 20px; border-radius: 6px; background: #FFFFFF; border: 1.5px solid #D98B7E; display: flex; flex-direction: column; gap: 12px; font-size: 14px; line-height: 1.7",
                       )}
                     >
                       <div
                         style={styleOf(
-                          "text-align: center; font-size: 13.5px; font-weight: 700; color: #706473",
+                          "text-align: center; font-size: 13px; font-weight: 700; color: #706473",
                         )}
                       >
                         {v.F.headLine}
@@ -3208,7 +3208,7 @@ class AdminSpeakingEditor extends React.Component {
                             </span>
                             <span
                               style={styleOf(
-                                "flex: none; font-size: 13px; color: #766A79",
+                                "flex: none; font-size: 13px; color: #706473",
                               )}
                             >
                               {"● Ghi âm"}
@@ -3228,7 +3228,7 @@ class AdminSpeakingEditor extends React.Component {
                         </>
                       ) : null}
                     </div>
-                    <div style={styleOf("font-size: 13px; color: #6A5D6C")}>
+                    <div style={styleOf("font-size: 13px; color: #706473")}>
                       {v.F.countNote}
                     </div>
                   </div>

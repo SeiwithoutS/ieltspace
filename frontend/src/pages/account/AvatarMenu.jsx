@@ -50,12 +50,12 @@ class AvatarMenu extends React.Component {
               <a
                 href={"StudentLanding.dc.html"}
                 style={styleOf(
-                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 19px",
+                  "display: flex; align-items: center; gap: 10px; text-decoration: none; color: #352637; font-weight: 700; font-size: 18px",
                 )}
               >
                 <span
                   style={styleOf(
-                    "width: 32px; height: 32px; border-radius: 9px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
                       v.accent +
                       "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
                       v.onAccent,
@@ -70,7 +70,7 @@ class AvatarMenu extends React.Component {
                   <a
                     href={"FullTests.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -110,7 +110,7 @@ class AvatarMenu extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -135,7 +135,7 @@ class AvatarMenu extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Full Tests"}
@@ -156,7 +156,7 @@ class AvatarMenu extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -194,7 +194,7 @@ class AvatarMenu extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Listening Practice"}
@@ -215,7 +215,7 @@ class AvatarMenu extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -242,7 +242,7 @@ class AvatarMenu extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Reading Practice"}
@@ -263,7 +263,7 @@ class AvatarMenu extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -287,7 +287,7 @@ class AvatarMenu extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Writing Practice"}
@@ -308,7 +308,7 @@ class AvatarMenu extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -339,7 +339,7 @@ class AvatarMenu extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"IELTS Speaking Practice"}
@@ -358,7 +358,7 @@ class AvatarMenu extends React.Component {
                   <a
                     href={"SampleLibrary.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                      "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                     )}
                     aria-haspopup={"true"}
                   >
@@ -398,7 +398,7 @@ class AvatarMenu extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -424,7 +424,7 @@ class AvatarMenu extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 Academic"}
@@ -445,7 +445,7 @@ class AvatarMenu extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -476,7 +476,7 @@ class AvatarMenu extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 1 General"}
@@ -497,7 +497,7 @@ class AvatarMenu extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -521,7 +521,7 @@ class AvatarMenu extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Writing Task 2"}
@@ -542,7 +542,7 @@ class AvatarMenu extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                            "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                           )}
                         >
                           <svg
@@ -573,7 +573,7 @@ class AvatarMenu extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "font-weight: 600; font-size: 14.5px",
+                              "font-weight: 600; font-size: 14px",
                             )}
                           >
                             {"Speaking Part 1, 2, 3"}
@@ -591,7 +591,7 @@ class AvatarMenu extends React.Component {
                 <a
                   href={"Vocab.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Thư viện từ vựng"}
@@ -599,7 +599,7 @@ class AvatarMenu extends React.Component {
                 <a
                   href={"Flashcard.dc.html"}
                   style={styleOf(
-                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14.5px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
+                    "display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; box-sizing: border-box; text-decoration: none; font-size: 14px; border: 1.5px solid transparent; color: #4B3D4D; font-weight: 500",
                   )}
                 >
                   {"Flashcard của tôi"}
@@ -672,14 +672,14 @@ class AvatarMenu extends React.Component {
               <div>
                 <h1
                   style={styleOf(
-                    "margin: 0; font-size: 30px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                    "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
                   )}
                 >
                   {"Menu điều hướng"}
                 </h1>
                 <div
                   style={styleOf(
-                    "font-size: 15px; color: #6A5D6C; margin-top: 4px",
+                    "font-size: 15px; color: #706473; margin-top: 4px",
                   )}
                 >
                   {
@@ -721,7 +721,7 @@ class AvatarMenu extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
+                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E3ECFD; color: #2963CC; display: flex; align-items: center; justify-content: center",
                       )}
                     >
                       <svg
@@ -743,7 +743,7 @@ class AvatarMenu extends React.Component {
                       style={styleOf("display: flex; flex-direction: column")}
                     >
                       <span
-                        style={styleOf("font-weight: 600; font-size: 14.5px")}
+                        style={styleOf("font-weight: 600; font-size: 14px")}
                       >
                         {"IELTS Full Tests"}
                       </span>
@@ -763,7 +763,7 @@ class AvatarMenu extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
+                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center",
                       )}
                     >
                       <svg
@@ -798,7 +798,7 @@ class AvatarMenu extends React.Component {
                       style={styleOf("display: flex; flex-direction: column")}
                     >
                       <span
-                        style={styleOf("font-weight: 600; font-size: 14.5px")}
+                        style={styleOf("font-weight: 600; font-size: 14px")}
                       >
                         {"IELTS Listening Practice"}
                       </span>
@@ -818,7 +818,7 @@ class AvatarMenu extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
+                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center",
                       )}
                     >
                       <svg
@@ -842,7 +842,7 @@ class AvatarMenu extends React.Component {
                       style={styleOf("display: flex; flex-direction: column")}
                     >
                       <span
-                        style={styleOf("font-weight: 600; font-size: 14.5px")}
+                        style={styleOf("font-weight: 600; font-size: 14px")}
                       >
                         {"IELTS Reading Practice"}
                       </span>
@@ -862,7 +862,7 @@ class AvatarMenu extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                       )}
                     >
                       <svg
@@ -883,7 +883,7 @@ class AvatarMenu extends React.Component {
                       style={styleOf("display: flex; flex-direction: column")}
                     >
                       <span
-                        style={styleOf("font-weight: 600; font-size: 14.5px")}
+                        style={styleOf("font-weight: 600; font-size: 14px")}
                       >
                         {"IELTS Writing Practice"}
                       </span>
@@ -903,7 +903,7 @@ class AvatarMenu extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                       )}
                     >
                       <svg
@@ -931,7 +931,7 @@ class AvatarMenu extends React.Component {
                       style={styleOf("display: flex; flex-direction: column")}
                     >
                       <span
-                        style={styleOf("font-weight: 600; font-size: 14.5px")}
+                        style={styleOf("font-weight: 600; font-size: 14px")}
                       >
                         {"IELTS Speaking Practice"}
                       </span>
@@ -971,7 +971,7 @@ class AvatarMenu extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                       )}
                     >
                       <svg
@@ -992,7 +992,7 @@ class AvatarMenu extends React.Component {
                       style={styleOf("display: flex; flex-direction: column")}
                     >
                       <span
-                        style={styleOf("font-weight: 600; font-size: 14.5px")}
+                        style={styleOf("font-weight: 600; font-size: 14px")}
                       >
                         {"Writing Task 1 Academic"}
                       </span>
@@ -1012,7 +1012,7 @@ class AvatarMenu extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                       )}
                     >
                       <svg
@@ -1040,7 +1040,7 @@ class AvatarMenu extends React.Component {
                       style={styleOf("display: flex; flex-direction: column")}
                     >
                       <span
-                        style={styleOf("font-weight: 600; font-size: 14.5px")}
+                        style={styleOf("font-weight: 600; font-size: 14px")}
                       >
                         {"Writing Task 1 General"}
                       </span>
@@ -1060,7 +1060,7 @@ class AvatarMenu extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
+                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center",
                       )}
                     >
                       <svg
@@ -1081,7 +1081,7 @@ class AvatarMenu extends React.Component {
                       style={styleOf("display: flex; flex-direction: column")}
                     >
                       <span
-                        style={styleOf("font-weight: 600; font-size: 14.5px")}
+                        style={styleOf("font-weight: 600; font-size: 14px")}
                       >
                         {"Writing Task 2"}
                       </span>
@@ -1101,7 +1101,7 @@ class AvatarMenu extends React.Component {
                   >
                     <span
                       style={styleOf(
-                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
+                        "width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center",
                       )}
                     >
                       <svg
@@ -1129,7 +1129,7 @@ class AvatarMenu extends React.Component {
                       style={styleOf("display: flex; flex-direction: column")}
                     >
                       <span
-                        style={styleOf("font-weight: 600; font-size: 14.5px")}
+                        style={styleOf("font-weight: 600; font-size: 14px")}
                       >
                         {"Speaking Part 1, 2, 3"}
                       </span>
@@ -1184,7 +1184,7 @@ class AvatarMenu extends React.Component {
                   <a
                     href={"StudentHome.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #352637; font-size: 14.5px; font-weight: 500",
+                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #352637; font-size: 14px; font-weight: 500",
                     )}
                   >
                     <svg
@@ -1207,7 +1207,7 @@ class AvatarMenu extends React.Component {
                   <a
                     href={"MyWS.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #352637; font-size: 14.5px; font-weight: 500",
+                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #352637; font-size: 14px; font-weight: 500",
                     )}
                   >
                     <svg
@@ -1236,7 +1236,7 @@ class AvatarMenu extends React.Component {
                   <a
                     href={"Notifications.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #352637; font-size: 14.5px; font-weight: 500",
+                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #352637; font-size: 14px; font-weight: 500",
                     )}
                   >
                     <svg
@@ -1265,7 +1265,7 @@ class AvatarMenu extends React.Component {
                   <a
                     href={"Vocab.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #352637; font-size: 14.5px; font-weight: 500",
+                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #352637; font-size: 14px; font-weight: 500",
                     )}
                   >
                     <svg
@@ -1290,7 +1290,7 @@ class AvatarMenu extends React.Component {
                   <a
                     href={"Profile.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #352637; font-size: 14.5px; font-weight: 500",
+                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #352637; font-size: 14px; font-weight: 500",
                     )}
                   >
                     <svg
@@ -1321,14 +1321,14 @@ class AvatarMenu extends React.Component {
                       role={"group"}
                       aria-label={"Chế độ giao diện"}
                       style={styleOf(
-                        "display: inline-flex; gap: 2px; padding: 3px; border-radius: 11px; background: #F3F0EA",
+                        "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
                       )}
                     >
                       <button
                         type={"button"}
                         data-theme-toggle={"light"}
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-family: inherit; font-size: 13.5px; font-weight: 600; color: #352637; cursor: pointer",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-family: inherit; font-size: 13px; font-weight: 600; color: #352637; cursor: pointer",
                         )}
                       >
                         <svg
@@ -1355,7 +1355,7 @@ class AvatarMenu extends React.Component {
                         type={"button"}
                         data-theme-toggle={"dark"}
                         style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 8px; background: transparent; border: 1.5px solid transparent; font-family: inherit; font-size: 13.5px; font-weight: 500; color: #6A5D6C; cursor: pointer",
+                          "display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 8px; background: transparent; border: 1.5px solid transparent; font-family: inherit; font-size: 13px; font-weight: 500; color: #706473; cursor: pointer",
                         )}
                       >
                         <svg
@@ -1380,7 +1380,7 @@ class AvatarMenu extends React.Component {
                   <a
                     href={"Main.dc.html"}
                     style={styleOf(
-                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #C0412A; font-size: 14.5px; font-weight: 500",
+                      "display: flex; align-items: center; gap: 12px; height: 42px; padding: 0 12px; border-radius: 10px; text-decoration: none; color: #C0412A; font-size: 14px; font-weight: 500",
                     )}
                   >
                     <svg

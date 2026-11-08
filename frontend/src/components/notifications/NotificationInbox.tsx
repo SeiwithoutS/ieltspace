@@ -29,12 +29,12 @@ export default function NotificationInbox({ role }: { role: Role }) {
           gap: 10,
         }}
       >
-        <div style={{ flex: 1, fontSize: 17, fontWeight: 600 }}>Thông báo</div>
+        <div style={{ flex: 1, fontSize: 18, fontWeight: 600 }}>Thông báo</div>
         <div
           role="group"
           aria-label="Lọc thông báo"
           style={styleOf(
-            "display:inline-flex;gap:2px;padding:3px;border-radius:11px;background:#F3F0EA",
+            "display:inline-flex;gap:2px;padding:3px;border-radius:10px;background:#F3F0EA",
           )}
         >
           {[
@@ -49,7 +49,7 @@ export default function NotificationInbox({ role }: { role: Role }) {
                 "height:34px;padding:0 14px;border-radius:8px;font:inherit;cursor:pointer;" +
                   (filter === value
                     ? "background:#FFFFFF;border:1.5px solid #D6D4D0;color:#352637;font-weight:600"
-                    : "background:transparent;border:1.5px solid transparent;color:#6A5D6C"),
+                    : "background:transparent;border:1.5px solid transparent;color:#706473"),
               )}
             >
               {label}
@@ -60,7 +60,7 @@ export default function NotificationInbox({ role }: { role: Role }) {
           disabled={!unread}
           onClick={() => update(markAll)}
           style={styleOf(
-            "height:36px;padding:0 20px;border-radius:999px;border:1.5px solid #D6D4D0;background:#FFFFFF;color:#352637;font:inherit;font-size:14.5px;font-weight:600;cursor:pointer",
+            "height:36px;padding:0 20px;border-radius:999px;border:1.5px solid #D6D4D0;background:#FFFFFF;color:#352637;font:inherit;font-size:14px;font-weight:600;cursor:pointer",
           )}
         >
           Đánh dấu tất cả đã đọc
@@ -92,7 +92,7 @@ export default function NotificationInbox({ role }: { role: Role }) {
             />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div
-                style={{ fontWeight: item.unread ? 700 : 500, fontSize: 14.5 }}
+                style={{ fontWeight: item.unread ? 700 : 500, fontSize: 14 }}
               >
                 {item.title}
               </div>

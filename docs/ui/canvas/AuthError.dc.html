@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>IELTSpace · Thông báo lỗi đăng nhập</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=IBM+Plex+Serif:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@500;600&amp;family=Be+Vietnam+Pro:wght@400;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2963CC}a:hover{color:#2257B8}
+
+</style>
+</helmet>
+<div role="alert" style="display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #FBDCD3; border: 1px solid #F1B3A3; color: #C0412A; font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.5">
+<sc-if value="{{isUnverified}}" hint-placeholder-val="{{ false }}"><span style="flex: none; margin-top: 1px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg></span><span><b>Email chưa được xác minh.</b> Mở liên kết trong email để kích hoạt tài khoản, hoặc <a href="CheckEmail.dc.html" style="color: #C0412A; font-weight: 600; text-decoration: underline">gửi lại email xác minh</a>.</span></sc-if><sc-if value="{{isLocked}}" hint-placeholder-val="{{ false }}"><span style="flex: none; margin-top: 1px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></span><span><b>Tài khoản đang bị khóa.</b> Liên hệ Quản lý hệ thống để được mở khóa.</span></sc-if><sc-if value="{{isWrong}}" hint-placeholder-val="{{ true }}"><span style="flex: none; margin-top: 1px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18h.01"></path></svg></span><span><b>Email hoặc mật khẩu không đúng.</b> Kiểm tra lại rồi thử lần nữa.</span></sc-if><sc-if value="{{isCustom}}" hint-placeholder-val="{{ false }}"><span style="flex: none; margin-top: 1px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18h.01"></path></svg></span><span>{{message}}</span></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;kind&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;locked&quot;,&quot;options&quot;:[&quot;wrong&quot;,&quot;unverified&quot;,&quot;locked&quot;,&quot;custom&quot;]},&quot;message&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;&quot;},&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:90}}">
+class Component extends DCLogic {
+renderVals() {
+var k = this.props.kind || 'wrong';
+return { isWrong: k === 'wrong', isUnverified: k === 'unverified', isLocked: k === 'locked', isCustom: k === 'custom', message: this.props.message || '' };
+}
+}
+</script>
+</body>
+</html>

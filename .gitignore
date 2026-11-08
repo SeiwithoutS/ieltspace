@@ -40,5 +40,7 @@ __pycache__/
 !/DESIGN.md
 !/CLAUDE.md
 !/AGENTS/**/*.md
-!/.claude/rules/*.md
 
+
+# Claude Code cục bộ (chỉ dùng trên máy từng người)
+/.claude/

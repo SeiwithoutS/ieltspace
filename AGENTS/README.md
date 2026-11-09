@@ -7,7 +7,7 @@ Thư mục này được duy trì trên Git cho cả team. Mọi thành viên, d
 - Mỗi file trong `rules/` là một chủ đề. Nội dung là Markdown thường, đọc được bằng mọi công cụ.
 - Một số file có phần đầu `paths:` (frontmatter). Đó là định dạng của Claude Code để chỉ nạp rule khi làm việc với file khớp; công cụ khác bỏ qua và coi đó là chú thích phạm vi áp dụng.
 - Nếu công cụ của bạn tự đọc một file riêng ở gốc repo (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`…), hãy để file đó trỏ tới thư mục này thay vì chép lại nội dung. `.claude/rules/` đã làm vậy cho Claude Code.
-- Giá trị thiết kế đang dùng trong code nằm ở [`../DESIGN.md`](../DESIGN.md).
+- Thiết kế giao diện (nguồn duy nhất) nằm ở [`../DESIGN.md`](../DESIGN.md).
 
 ## Danh sách rule
 

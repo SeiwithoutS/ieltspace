@@ -5,8 +5,8 @@ paths:
 
 # Giao diện: luôn bám UI design gốc
 
-- Nguồn chuẩn: canvas "IELTSpace · Giao diện" https://claude.ai/artifact/BbGeNht7gcmTF2YWJcEF2V (mỗi màn là một `.dc.html`, tên màn trùng tên trang trong `pages.ts`) và `ui/design.md` của project (**mục A và mục 0 thắng các mục cũ**). Không tự chế giao diện khác; màn nào chưa có trên canvas thì hỏi trước.
-- Giá trị đang dùng trong code (cỡ chữ, màu, bo góc, viền, chuyển động) ghi ở [`DESIGN.md`](../../DESIGN.md) ở thư mục gốc repo.
+- Nguồn chuẩn: canvas "IELTSpace · Giao diện" https://claude.ai/artifact/BbGeNht7gcmTF2YWJcEF2V (mỗi màn là một `.dc.html`, tên màn trùng tên trang trong `pages.ts`) và [`DESIGN.md`](../../DESIGN.md) (nguồn thiết kế duy nhất, đã gộp `ui/design.md`). Không tự chế giao diện khác; màn nào chưa có trên canvas thì hỏi trước.
+- Cỡ chữ, màu, bo góc, viền, chuyển động đều lấy từ `DESIGN.md`; không dùng các mục cũ của `docs/ui/design.md`.
 
 ## Màu (hệ màu v3)
 

@@ -434,7 +434,7 @@ class SampleWriting extends React.Component {
                     <div
                       role={"menu"}
                       style={styleOf(
-                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                       )}
                     >
                       <a
@@ -722,7 +722,7 @@ class SampleWriting extends React.Component {
                     <div
                       role={"menu"}
                       style={styleOf(
-                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                       )}
                     >
                       <a
@@ -1134,7 +1134,7 @@ class SampleWriting extends React.Component {
                     </h2>
                     <div
                       style={styleOf(
-                        "display: flex; flex-direction: column; gap: 14px; padding: 20px 24px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16px; line-height: 1.7; color: #352637",
+                        "display: flex; flex-direction: column; gap: 14px; padding: 20px 24px; border-radius: 12px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16px; line-height: 1.7; color: #352637",
                       )}
                     >
                       <div

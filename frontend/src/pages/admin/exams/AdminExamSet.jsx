@@ -475,7 +475,7 @@ class AdminExamSet extends React.Component {
           "; color: " +
           k[3],
         st:
-          "display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; border-radius: 18px; background: #FFFFFF; text-decoration: none; color: #352637; box-sizing: border-box; cursor: pointer; " +
+          "display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; text-decoration: none; color: #352637; box-sizing: border-box; cursor: pointer; " +
           (on
             ? "border: 2px solid " +
               k[3] +
@@ -1527,7 +1527,7 @@ class AdminExamSet extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; overflow: visible; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                          "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; overflow: visible; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
                         )}
                       >
                         <div
@@ -1769,7 +1769,7 @@ class AdminExamSet extends React.Component {
                                                   role={"menu"}
                                                   className={"an-drop"}
                                                   style={styleOf(
-                                                    "position: absolute; left: 0; top: calc(100% + 6px); z-index: 40; min-width: 220px; padding: 6px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                                                    "position: absolute; left: 0; top: calc(100% + 6px); z-index: 40; min-width: 220px; padding: 6px; border-radius: 12px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
                                                   )}
                                                 >
                                                   <div
@@ -1913,7 +1913,7 @@ class AdminExamSet extends React.Component {
                     <div
                       className={"an-pop"}
                       style={styleOf(
-                        "border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center",
+                        "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center",
                       )}
                     >
                       <span
@@ -2027,7 +2027,7 @@ class AdminExamSet extends React.Component {
                             <>
                               <div
                                 style={styleOf(
-                                  "display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 14px; background: #F3F0EA",
+                                  "display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 12px; background: #F3F0EA",
                                 )}
                               >
                                 {(v.cf.list || []).map((li, index) => (
@@ -2102,7 +2102,7 @@ class AdminExamSet extends React.Component {
                       role={"status"}
                       className={"an-toast"}
                       style={styleOf(
-                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; gap: 16px; padding: 10px 14px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
+                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; gap: 16px; padding: 10px 14px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
                       )}
                     >
                       <span>{v.toastText}</span>

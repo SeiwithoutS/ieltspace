@@ -357,7 +357,7 @@ class AdminHome extends React.Component {
                             role={"dialog"}
                             aria-label={"Chọn khoảng thời gian"}
                             style={styleOf(
-                              "position: absolute; right: 0; top: 48px; z-index: 50; width: 352px; box-sizing: border-box; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 18px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 18px; display: flex; flex-direction: column; gap: 14px",
+                              "position: absolute; right: 0; top: 48px; z-index: 50; width: 352px; box-sizing: border-box; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 16px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 18px; display: flex; flex-direction: column; gap: 14px",
                             )}
                           >
                             <div

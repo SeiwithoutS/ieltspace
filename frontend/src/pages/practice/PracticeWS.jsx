@@ -98,7 +98,7 @@ class PracticeWS extends React.Component {
                     <div
                       role={"menu"}
                       style={styleOf(
-                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                       )}
                     >
                       <a
@@ -386,7 +386,7 @@ class PracticeWS extends React.Component {
                     <div
                       role={"menu"}
                       style={styleOf(
-                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                       )}
                     >
                       <a

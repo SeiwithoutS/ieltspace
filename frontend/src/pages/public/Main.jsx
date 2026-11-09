@@ -98,7 +98,7 @@ class Main extends React.Component {
                     <div
                       role={"menu"}
                       style={styleOf(
-                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                       )}
                     >
                       <a
@@ -386,7 +386,7 @@ class Main extends React.Component {
                     <div
                       role={"menu"}
                       style={styleOf(
-                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                        "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                       )}
                     >
                       <a
@@ -724,7 +724,7 @@ class Main extends React.Component {
                 <a
                   href={"#bo-de"}
                   style={styleOf(
-                    "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 14px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                    "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 12px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                   )}
                 >
                   {"\n"}
@@ -785,7 +785,7 @@ class Main extends React.Component {
                 <a
                   href={"#bo-de"}
                   style={styleOf(
-                    "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 14px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                    "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 12px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                   )}
                 >
                   {"\n"}
@@ -837,7 +837,7 @@ class Main extends React.Component {
                 <a
                   href={"#bo-de"}
                   style={styleOf(
-                    "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 14px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                    "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 12px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                   )}
                 >
                   {"\n"}
@@ -885,7 +885,7 @@ class Main extends React.Component {
                 <a
                   href={"#bo-de"}
                   style={styleOf(
-                    "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 14px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                    "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 12px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                   )}
                 >
                   {"\n"}
@@ -954,7 +954,7 @@ class Main extends React.Component {
             {"\n"}
             <div
               style={styleOf(
-                "flex: 1 1 300px; display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                "flex: 1 1 300px; display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
               )}
             >
               {"\n"}
@@ -979,7 +979,7 @@ class Main extends React.Component {
             {"\n"}
             <div
               style={styleOf(
-                "flex: 1 1 300px; display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                "flex: 1 1 300px; display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
               )}
             >
               {"\n"}
@@ -1006,7 +1006,7 @@ class Main extends React.Component {
             {"\n"}
             <div
               style={styleOf(
-                "flex: 1 1 300px; display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                "flex: 1 1 300px; display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
               )}
             >
               {"\n"}

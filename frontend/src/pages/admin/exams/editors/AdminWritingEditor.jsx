@@ -1654,7 +1654,7 @@ class AdminWritingEditor extends React.Component {
                     <div
                       role={"alert"}
                       style={styleOf(
-                        "margin: 16px 24px 0; padding: 14px 16px; border-radius: 14px; background: #FDECE8; border: 1.5px solid #F1B3A3; display: flex; flex-direction: column; gap: 8px",
+                        "margin: 16px 24px 0; padding: 14px 16px; border-radius: 12px; background: #FDECE8; border: 1.5px solid #F1B3A3; display: flex; flex-direction: column; gap: 8px",
                       )}
                     >
                       <div
@@ -1716,7 +1716,7 @@ class AdminWritingEditor extends React.Component {
                         aria-modal={"true"}
                         aria-labelledby={"xoa-tieu-de"}
                         style={styleOf(
-                          "width: 440px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                          "width: 440px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
                         )}
                       >
                         <div
@@ -1772,7 +1772,7 @@ class AdminWritingEditor extends React.Component {
                         aria-modal={"true"}
                         aria-labelledby={"luu-tieu-de"}
                         style={styleOf(
-                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
                         )}
                       >
                         <div
@@ -1837,7 +1837,7 @@ class AdminWritingEditor extends React.Component {
                         aria-modal={"true"}
                         aria-labelledby={"dang-tieu-de"}
                         style={styleOf(
-                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
                         )}
                       >
                         <div
@@ -1886,7 +1886,7 @@ class AdminWritingEditor extends React.Component {
                     <div
                       role={"status"}
                       style={styleOf(
-                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
                       )}
                     >
                       <span>{v.snack}</span>
@@ -1927,7 +1927,7 @@ class AdminWritingEditor extends React.Component {
                     <div
                       role={"status"}
                       style={styleOf(
-                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
+                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
                       )}
                     >
                       <span>{v.toastText}</span>
@@ -2027,7 +2027,7 @@ class AdminWritingEditor extends React.Component {
                             <>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 16px; border-radius: 14px; background: #EEF6F0; border: 1.5px solid #CFE5D7",
+                                  "display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 16px; border-radius: 12px; background: #EEF6F0; border: 1.5px solid #CFE5D7",
                                 )}
                               >
                                 <span
@@ -2407,7 +2407,7 @@ class AdminWritingEditor extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "border: 1.5px solid #E6E4E0; border-radius: 14px; overflow: hidden",
+                                  "border: 1.5px solid #E6E4E0; border-radius: 12px; overflow: hidden",
                                 )}
                               >
                                 <table
@@ -2748,7 +2748,7 @@ class AdminWritingEditor extends React.Component {
                       <>
                         <div
                           style={styleOf(
-                            "padding: 28px 24px; text-align: center; border-radius: 14px; border: 1.5px dashed #D6D4D0; color: #706473; display: flex; flex-direction: column; align-items: center; gap: 12px",
+                            "padding: 28px 24px; text-align: center; border-radius: 12px; border: 1.5px dashed #D6D4D0; color: #706473; display: flex; flex-direction: column; align-items: center; gap: 12px",
                           )}
                         >
                           <div style={styleOf("font-size: 15px")}>

@@ -99,13 +99,13 @@ Chỉ dùng số nguyên, không dùng cỡ lẻ nửa pixel.
 ## 4. Khoảng cách, bo góc, viền
 
 - Lưới **4px**: mọi khoảng cách và kích thước chia hết cho 4 (ngoại lệ lịch sử xem mục 8).
-- Bo góc: 8 (chip nhỏ, ô nhỏ) · 10 (nav, menu, nút, ô nhập, ô logo) · 12 (bìa, nút lớn) · 14·16·18·20 (thẻ vừa, menu, khối CTA) · 22 (thẻ) · 26 (khung lớn) · 999 (viên thuốc, chip, badge). Đã gộp 9, 11 → 10 và 7 → 8.
-- Viền chuẩn 1.5px. Không đổ bóng đậm.
+- **Thang bo góc chốt 09/11/2026:** 8 (chip nhỏ, ô nhỏ) · 10 (nav, menu, nút, ô nhập, ô logo) · 12 (bìa, nút lớn, thẻ nhỏ) · 16 (thẻ vừa, menu, khối) · 22 (thẻ chuẩn, CTA, FAQ) · 26 (khung lớn) · 999 (viên thuốc, chip, badge) · 50% (tròn). Đã gộp 9, 11 → 10; 7 → 8; 14 → 12; 18 → 16; 20 → 22. Không dùng giá trị khác khi viết mới.
+- **Viền:** khung (thẻ, chip, nút, ô nhập, nút phân trang) luôn 1.5px; vạch kẻ phân cách luôn 1px (xem ngoại lệ bên dưới). Không đổ bóng đậm.
 - Sidebar Quản lý rộng 248, thu gọn 76, nhớ ở `localStorage 'ieltspace-admin-nav'`. Mục nav cao 44, icon 19.
 
 ### Ngoại lệ có chủ đích về viền
 
-- Đường kẻ phân cách (`border-top/bottom` 1px `#E6E4E0`, `#F3F0EA`): 1px.
+- Đường kẻ phân cách (`border-top/bottom` 1px `#E6E4E0`, `#F3F0EA`): 1px. Chỉ là vạch chia trong bảng hoặc thẻ, không phải khung.
 - Thanh tiến độ cao 8px (`border: 1px solid #DDDBD7`): 1px.
 - Viền trắng 2px quanh chấm đỏ, huy hiệu số, avatar: 2px.
 - Viền 2px accent `#2963CC` cho trạng thái được chọn hoặc vùng thả tệp: 2px.
@@ -121,7 +121,7 @@ Chỉ dùng số nguyên, không dùng cỡ lẻ nửa pixel.
 | `--mo-slow` | .28s | Hộp thoại, accordion, ngăn kéo |
 | `--mo-ease` | `cubic-bezier(.2,.8,.2,1)` | Mọi chuyển động vào/ra |
 
-Hành vi: link và nút sáng/tối nhẹ khi hover, co 3% khi nhấn; thẻ bo 14/16/22 nổi lên 2px; hàng bảng sáng khi hover; dropdown `.bu-dd` mờ dần và trượt; hộp thoại, menu, toast, ngăn kéo tự có animation vào; `<details>` mở mượt. Class dùng thủ công: `an-fade`, `an-pop`, `an-drop`, `an-toast`, `an-check`, `an-rise`, `an-spin`, `lift`, `press`, `thumb-h`. `prefers-reduced-motion` tắt tất cả. Animation vào dùng `transform`, nên phần tử tự căn giữa bằng `transform` inline chỉ được fade.
+Hành vi: link và nút sáng/tối nhẹ khi hover, co 3% khi nhấn; thẻ là link (`a[href]`) bo 16/22 nổi lên 2px; hàng bảng sáng khi hover; dropdown `.bu-dd` mờ dần và trượt; hộp thoại, menu, toast, ngăn kéo tự có animation vào; `<details>` mở mượt. Class dùng thủ công: `an-fade`, `an-pop`, `an-drop`, `an-toast`, `an-check`, `an-rise`, `an-spin`, `lift`, `press`, `thumb-h`. `prefers-reduced-motion` tắt tất cả. Animation vào dùng `transform`, nên phần tử tự căn giữa bằng `transform` inline chỉ được fade.
 
 ## 6. Thành phần dùng chung
 
@@ -201,8 +201,7 @@ Giải thích từng trang và liên kết: `docs/ui/trang-va-lien-ket.md`.
 
 | Hạng mục | Hiện trạng | Chuẩn |
 |---|---|---|
-| Bo góc | Còn 14, 16, 18, 20 nằm giữa 12 và 22 (khoảng 215 chỗ) | Chưa chốt có gộp không |
-| Viền 1px và bo 2–6px trong canvas | Chưa đồng bộ với file này | Chưa chốt ngoại lệ |
+| Bo 2–6px (2, 3, 4, 6) trong code và canvas | Dùng cho thanh tiến độ, cột biểu đồ, chấm nhỏ | Giữ là ngoại lệ; canvas còn bo cũ 14/18/20 cần cập nhật theo thang mới |
 | Chế độ tối cho màn mới (thẻ, editor bài mẫu) | Chưa làm hết | Cần có trong `dark-palette.json` |
 | Sidebar Giáo viên | Chưa theo khuôn AdminSidebar | Theo AdminSidebar |
 | Ảnh thật thay khối màu; "Xem thêm" và dữ liệu thật cho SampleLibrary; từ vựng và bài tập cho bài mẫu | Chưa làm | |

@@ -823,7 +823,7 @@ class AdminExams extends React.Component {
                 </div>
                 <div
                   style={styleOf(
-                    "border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; overflow: hidden; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                    "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; overflow: hidden; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
                   )}
                 >
                   <div style={styleOf("overflow-x: auto")}>
@@ -1661,7 +1661,7 @@ class AdminExams extends React.Component {
                       role={"status"}
                       className={"an-toast"}
                       style={styleOf(
-                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; gap: 16px; padding: 10px 14px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
+                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; gap: 16px; padding: 10px 14px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
                       )}
                     >
                       <span>{v.toastText}</span>

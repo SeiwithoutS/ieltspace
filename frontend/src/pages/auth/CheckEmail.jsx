@@ -129,7 +129,7 @@ class CheckEmail extends React.Component {
               </p>
               <div
                 style={styleOf(
-                  "display: flex; align-items: flex-start; gap: 10px; background: #E3ECFD; border-radius: 14px; padding: 12px 14px; font-size: 14px; color: #4B3D4D",
+                  "display: flex; align-items: flex-start; gap: 10px; background: #E3ECFD; border-radius: 12px; padding: 12px 14px; font-size: 14px; color: #4B3D4D",
                 )}
               >
                 <span

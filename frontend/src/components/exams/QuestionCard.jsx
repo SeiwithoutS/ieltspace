@@ -1273,7 +1273,7 @@ class QuestionCard extends React.Component {
             return { name: im.name };
           }),
         st:
-          "display: flex; gap: 10px; padding: 10px 12px 10px 10px; border-radius: 14px; background: " +
+          "display: flex; gap: 10px; padding: 10px 12px 10px 10px; border-radius: 12px; background: " +
           (on ? "#E3ECFD" : "#FFFFFF") +
           "; border: 1.5px solid " +
           (on ? "#2963CC" : "#D6D4D0"),
@@ -3381,7 +3381,7 @@ class QuestionCard extends React.Component {
               m.x +
               "%; top: " +
               m.y +
-              "%; transform: translate(-50%, -50%); z-index: 3; min-width: 28px; height: 28px; padding: 0 6px; box-sizing: border-box; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; box-shadow: " +
+              "%; transform: translate(-50%, -50%); z-index: 3; min-width: 28px; height: 28px; padding: 0 6px; box-sizing: border-box; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; box-shadow: " +
               (on ? "0 0 0 3px #2963CC" : "0 1px 3px rgba(53, 38, 55, 0.3)") +
               "; cursor: " +
               (editing ? "move" : "default") +
@@ -4095,7 +4095,7 @@ class QuestionCard extends React.Component {
         ans: info.ans || "chưa có đáp án",
         on: on,
         st:
-          "flex-shrink: 0; border-radius: 14px; background: #FFFFFF; border: 1.5px solid " +
+          "flex-shrink: 0; border-radius: 12px; background: #FFFFFF; border: 1.5px solid " +
           (on ? "#2963CC" : "#D6D4D0") +
           (on
             ? "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
@@ -4304,7 +4304,7 @@ class QuestionCard extends React.Component {
         refs: refs.join(", "),
         hasRefs: refs.length > 0,
         st:
-          "display: flex; gap: 10px; padding: 12px 14px 12px 10px; border-radius: 14px; cursor: pointer; background: " +
+          "display: flex; gap: 10px; padding: 12px 14px 12px 10px; border-radius: 12px; cursor: pointer; background: " +
           (isP ? "#F4F8FF" : "#FFFFFF") +
           "; border: 1.5px solid " +
           (isP ? "#2963CC" : "#D6D4D0"),
@@ -4358,7 +4358,7 @@ class QuestionCard extends React.Component {
           self.setState({ p: a, g: 0, picker: false, paste: false });
         },
         st:
-          "display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; border-radius: 14px; text-decoration: none; color: #352637; text-align: left; box-sizing: border-box; " +
+          "display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; border-radius: 12px; text-decoration: none; color: #352637; text-align: left; box-sizing: border-box; " +
           (here
             ? "background: #FFFFFF; border: 2px solid #2963CC"
             : p
@@ -6375,7 +6375,7 @@ class QuestionCard extends React.Component {
                                 <React.Fragment key={index}>
                                   <div
                                     style={styleOf(
-                                      "display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 14px; border: 1.5px solid #D6D4D0; background: #FCFBF7",
+                                      "display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FCFBF7",
                                     )}
                                   >
                                     <div
@@ -7114,7 +7114,7 @@ class QuestionCard extends React.Component {
                                 data-stage={"1"}
                                 onClick={v.G.placeLabel}
                                 style={styleOf(
-                                  "position: relative; width: 100%; max-width: 560px; aspect-ratio: 560 / 300; align-self: center; box-sizing: border-box; border-radius: 14px; border: 1.5px dashed #D6D4D0; background: " +
+                                  "position: relative; width: 100%; max-width: 560px; aspect-ratio: 560 / 300; align-self: center; box-sizing: border-box; border-radius: 12px; border: 1.5px dashed #D6D4D0; background: " +
                                     v.G.imgBg +
                                     "; cursor: " +
                                     v.G.cursor +
@@ -8363,7 +8363,7 @@ class QuestionCard extends React.Component {
               <>
                 <div
                   style={styleOf(
-                    "padding: 20px; text-align: center; color: #706473; border-radius: 14px; border: 1.5px dashed #D6D4D0",
+                    "padding: 20px; text-align: center; color: #706473; border-radius: 12px; border: 1.5px dashed #D6D4D0",
                   )}
                 >
                   {"Đã xóa thẻ. "}
@@ -8389,7 +8389,7 @@ class QuestionCard extends React.Component {
                     aria-modal={"true"}
                     aria-labelledby={"xoa-tieu-de"}
                     style={styleOf(
-                      "width: 420px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                      "width: 420px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
                     )}
                   >
                     <div
@@ -8436,7 +8436,7 @@ class QuestionCard extends React.Component {
                 <div
                   role={"status"}
                   style={styleOf(
-                    "position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                    "position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
                   )}
                 >
                   <span>{v.snack}</span>

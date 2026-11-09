@@ -137,7 +137,7 @@ class PracticeLibrary extends React.Component {
                         <div
                           role={"menu"}
                           style={styleOf(
-                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                           )}
                         >
                           <a
@@ -442,7 +442,7 @@ class PracticeLibrary extends React.Component {
                         <div
                           role={"menu"}
                           style={styleOf(
-                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                           )}
                         >
                           <a
@@ -1082,7 +1082,7 @@ class PracticeLibrary extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -1131,7 +1131,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -2282,7 +2282,7 @@ class PracticeLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "min-width: 38px; height: 38px; padding: 0 8px; box-sizing: border-box; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; background: #352637; color: #FFFFFF; border: 1px solid #352637",
+                              "min-width: 38px; height: 38px; padding: 0 8px; box-sizing: border-box; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; background: #352637; color: #FFFFFF; border: 1.5px solid #352637",
                             )}
                           >
                             {"1"}
@@ -2413,7 +2413,7 @@ class PracticeLibrary extends React.Component {
                         <div
                           role={"menu"}
                           style={styleOf(
-                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                           )}
                         >
                           <a
@@ -2718,7 +2718,7 @@ class PracticeLibrary extends React.Component {
                         <div
                           role={"menu"}
                           style={styleOf(
-                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                           )}
                         >
                           <a
@@ -3358,7 +3358,7 @@ class PracticeLibrary extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -3407,7 +3407,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -4558,7 +4558,7 @@ class PracticeLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "min-width: 38px; height: 38px; padding: 0 8px; box-sizing: border-box; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; background: #352637; color: #FFFFFF; border: 1px solid #352637",
+                              "min-width: 38px; height: 38px; padding: 0 8px; box-sizing: border-box; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; background: #352637; color: #FFFFFF; border: 1.5px solid #352637",
                             )}
                           >
                             {"1"}
@@ -4689,7 +4689,7 @@ class PracticeLibrary extends React.Component {
                         <div
                           role={"menu"}
                           style={styleOf(
-                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                           )}
                         >
                           <a
@@ -4994,7 +4994,7 @@ class PracticeLibrary extends React.Component {
                         <div
                           role={"menu"}
                           style={styleOf(
-                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                           )}
                         >
                           <a
@@ -5622,7 +5622,7 @@ class PracticeLibrary extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -5671,7 +5671,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -6409,7 +6409,7 @@ class PracticeLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "min-width: 38px; height: 38px; padding: 0 8px; box-sizing: border-box; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; background: #352637; color: #FFFFFF; border: 1px solid #352637",
+                              "min-width: 38px; height: 38px; padding: 0 8px; box-sizing: border-box; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; background: #352637; color: #FFFFFF; border: 1.5px solid #352637",
                             )}
                           >
                             {"1"}
@@ -6540,7 +6540,7 @@ class PracticeLibrary extends React.Component {
                         <div
                           role={"menu"}
                           style={styleOf(
-                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                           )}
                         >
                           <a
@@ -6845,7 +6845,7 @@ class PracticeLibrary extends React.Component {
                         <div
                           role={"menu"}
                           style={styleOf(
-                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                           )}
                         >
                           <a
@@ -7473,7 +7473,7 @@ class PracticeLibrary extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -7522,7 +7522,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -8267,7 +8267,7 @@ class PracticeLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "min-width: 38px; height: 38px; padding: 0 8px; box-sizing: border-box; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; background: #352637; color: #FFFFFF; border: 1px solid #352637",
+                              "min-width: 38px; height: 38px; padding: 0 8px; box-sizing: border-box; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; background: #352637; color: #FFFFFF; border: 1.5px solid #352637",
                             )}
                           >
                             {"1"}
@@ -8398,7 +8398,7 @@ class PracticeLibrary extends React.Component {
                         <div
                           role={"menu"}
                           style={styleOf(
-                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                           )}
                         >
                           <a
@@ -8703,7 +8703,7 @@ class PracticeLibrary extends React.Component {
                         <div
                           role={"menu"}
                           style={styleOf(
-                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                            "width: 320px; padding: 6px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                           )}
                         >
                           <a
@@ -9331,7 +9331,7 @@ class PracticeLibrary extends React.Component {
                       >
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -9380,7 +9380,7 @@ class PracticeLibrary extends React.Component {
                         </div>
                         <div
                           style={styleOf(
-                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 18px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
+                            "padding: 20px 20px 22px; border: 1.5px solid #E6E4E0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04)",
                           )}
                         >
                           <div
@@ -10116,7 +10116,7 @@ class PracticeLibrary extends React.Component {
                         >
                           <span
                             style={styleOf(
-                              "min-width: 38px; height: 38px; padding: 0 8px; box-sizing: border-box; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; background: #352637; color: #FFFFFF; border: 1px solid #352637",
+                              "min-width: 38px; height: 38px; padding: 0 8px; box-sizing: border-box; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; background: #352637; color: #FFFFFF; border: 1.5px solid #352637",
                             )}
                           >
                             {"1"}

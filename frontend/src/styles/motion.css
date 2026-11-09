@@ -184,10 +184,9 @@ button:disabled,
 button[aria-disabled="true"] {
   opacity: 0.55;
 }
-/* Thẻ bấm được (bo 14/16/22): nổi lên. */
+/* Thẻ bấm được (bo 16/22): nổi lên. */
 a[href][style*="border-radius: 22px"],
 a[href][style*="border-radius: 16px"],
-a[href][style*="border-radius: 14px"],
 .lift {
   transition:
     transform var(--mo-med) var(--mo-ease),
@@ -197,7 +196,6 @@ a[href][style*="border-radius: 14px"],
 }
 a[href][style*="border-radius: 22px"]:hover,
 a[href][style*="border-radius: 16px"]:hover,
-a[href][style*="border-radius: 14px"]:hover,
 .lift:hover {
   transform: translateY(-2px);
   box-shadow: var(--mo-lift-shadow);

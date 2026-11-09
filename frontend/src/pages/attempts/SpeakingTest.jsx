@@ -371,7 +371,7 @@ class SpeakingTest extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "display: flex; align-items: center; justify-content: center; gap: 4px; height: 120px; border-radius: 18px; background: #E8E4FA; border: 1.5px solid #D6D4D0",
+                          "display: flex; align-items: center; justify-content: center; gap: 4px; height: 120px; border-radius: 16px; background: #E8E4FA; border: 1.5px solid #D6D4D0",
                         )}
                       >
                         <span
@@ -859,7 +859,7 @@ class SpeakingTest extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "display: flex; align-items: center; justify-content: center; gap: 4px; height: 120px; border-radius: 18px; background: #E8E4FA; border: 1.5px solid #D6D4D0",
+                          "display: flex; align-items: center; justify-content: center; gap: 4px; height: 120px; border-radius: 16px; background: #E8E4FA; border: 1.5px solid #D6D4D0",
                         )}
                       >
                         <span

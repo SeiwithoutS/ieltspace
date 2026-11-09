@@ -395,7 +395,7 @@ class ListeningTest extends React.Component {
               >
                 <div
                   style={styleOf(
-                    "padding: 18px 20px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF",
+                    "padding: 18px 20px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF",
                   )}
                 >
                   <div style={styleOf("display: flex; gap: 12px")}>
@@ -449,7 +449,7 @@ class ListeningTest extends React.Component {
                 </div>
                 <div
                   style={styleOf(
-                    "padding: 18px 20px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF",
+                    "padding: 18px 20px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF",
                   )}
                 >
                   <div style={styleOf("display: flex; gap: 12px")}>
@@ -503,7 +503,7 @@ class ListeningTest extends React.Component {
                 </div>
                 <div
                   style={styleOf(
-                    "padding: 18px 20px; border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF",
+                    "padding: 18px 20px; border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF",
                   )}
                 >
                   <div style={styleOf("display: flex; gap: 12px")}>

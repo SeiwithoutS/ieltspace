@@ -1097,7 +1097,7 @@ class AdminReadingEditor extends React.Component {
             return { name: im.name };
           }),
         st:
-          "display: flex; gap: 10px; padding: 10px 12px 10px 10px; border-radius: 14px; background: " +
+          "display: flex; gap: 10px; padding: 10px 12px 10px 10px; border-radius: 12px; background: " +
           (on ? "#E3ECFD" : "#FFFFFF") +
           "; border: 1.5px solid " +
           (on ? "#2963CC" : "#D6D4D0"),
@@ -3229,7 +3229,7 @@ class AdminReadingEditor extends React.Component {
               m.x +
               "%; top: " +
               m.y +
-              "%; transform: translate(-50%, -50%); z-index: 3; min-width: 28px; height: 28px; padding: 0 6px; box-sizing: border-box; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; box-shadow: " +
+              "%; transform: translate(-50%, -50%); z-index: 3; min-width: 28px; height: 28px; padding: 0 6px; box-sizing: border-box; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; box-shadow: " +
               (on ? "0 0 0 3px #2963CC" : "0 1px 3px rgba(53, 38, 55, 0.3)") +
               "; cursor: " +
               (editing ? "move" : "default") +
@@ -3943,7 +3943,7 @@ class AdminReadingEditor extends React.Component {
         ans: info.ans || "chưa có đáp án",
         on: on,
         st:
-          "flex-shrink: 0; border-radius: 14px; background: #FFFFFF; border: 1.5px solid " +
+          "flex-shrink: 0; border-radius: 12px; background: #FFFFFF; border: 1.5px solid " +
           (on ? "#2963CC" : "#D6D4D0") +
           (on
             ? "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
@@ -4152,7 +4152,7 @@ class AdminReadingEditor extends React.Component {
         refs: refs.join(", "),
         hasRefs: refs.length > 0,
         st:
-          "display: flex; gap: 10px; padding: 12px 14px 12px 10px; border-radius: 14px; cursor: pointer; background: " +
+          "display: flex; gap: 10px; padding: 12px 14px 12px 10px; border-radius: 12px; cursor: pointer; background: " +
           (isP ? "#F4F8FF" : "#FFFFFF") +
           "; border: 1.5px solid " +
           (isP ? "#2963CC" : "#D6D4D0"),
@@ -4206,7 +4206,7 @@ class AdminReadingEditor extends React.Component {
           self.setState({ p: a, g: 0, picker: false, paste: false });
         },
         st:
-          "display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; border-radius: 14px; text-decoration: none; color: #352637; text-align: left; box-sizing: border-box; " +
+          "display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; border-radius: 12px; text-decoration: none; color: #352637; text-align: left; box-sizing: border-box; " +
           (here
             ? "background: #FFFFFF; border: 2px solid #2963CC"
             : p
@@ -5209,7 +5209,7 @@ class AdminReadingEditor extends React.Component {
                     <div
                       role={"alert"}
                       style={styleOf(
-                        "margin: 16px 24px 0; padding: 14px 16px; border-radius: 14px; background: #FBDCD3; border: 1.5px solid #F1B3A3; color: #C0412A; display: flex; flex-direction: column; gap: 6px; font-size: 14px",
+                        "margin: 16px 24px 0; padding: 14px 16px; border-radius: 12px; background: #FBDCD3; border: 1.5px solid #F1B3A3; color: #C0412A; display: flex; flex-direction: column; gap: 6px; font-size: 14px",
                       )}
                     >
                       <div
@@ -5267,7 +5267,7 @@ class AdminReadingEditor extends React.Component {
                     <div
                       role={"status"}
                       style={styleOf(
-                        "margin: 16px 24px 0; padding: 12px 16px; border-radius: 14px; background: #DCEDE2; border: 1.5px solid #D6D4D0; color: #2E6A48; font-size: 14px; display: flex; justify-content: space-between; gap: 12px",
+                        "margin: 16px 24px 0; padding: 12px 16px; border-radius: 12px; background: #DCEDE2; border: 1.5px solid #D6D4D0; color: #2E6A48; font-size: 14px; display: flex; justify-content: space-between; gap: 12px",
                       )}
                     >
                       <span>{v.toastText}</span>
@@ -5306,7 +5306,7 @@ class AdminReadingEditor extends React.Component {
                         aria-modal={"true"}
                         aria-labelledby={"xoa-tieu-de"}
                         style={styleOf(
-                          "width: 420px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                          "width: 420px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
                         )}
                       >
                         <div
@@ -5355,7 +5355,7 @@ class AdminReadingEditor extends React.Component {
                     <div
                       role={"status"}
                       style={styleOf(
-                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
                       )}
                     >
                       <span>{v.snack}</span>
@@ -5403,7 +5403,7 @@ class AdminReadingEditor extends React.Component {
                         aria-modal={"true"}
                         aria-labelledby={"luu-tieu-de"}
                         style={styleOf(
-                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
                         )}
                       >
                         <div
@@ -5468,7 +5468,7 @@ class AdminReadingEditor extends React.Component {
                         aria-modal={"true"}
                         aria-labelledby={"dang-tieu-de"}
                         style={styleOf(
-                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
                         )}
                       >
                         <div
@@ -5585,7 +5585,7 @@ class AdminReadingEditor extends React.Component {
                             <>
                               <div
                                 style={styleOf(
-                                  "display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 16px; border-radius: 14px; background: #EEF6F0; border: 1.5px solid #CFE5D7",
+                                  "display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 16px; border-radius: 12px; background: #EEF6F0; border: 1.5px solid #CFE5D7",
                                 )}
                               >
                                 <span
@@ -5966,7 +5966,7 @@ class AdminReadingEditor extends React.Component {
                               </div>
                               <div
                                 style={styleOf(
-                                  "border: 1.5px solid #E6E4E0; border-radius: 14px; overflow: hidden",
+                                  "border: 1.5px solid #E6E4E0; border-radius: 12px; overflow: hidden",
                                 )}
                               >
                                 <table
@@ -6271,7 +6271,7 @@ class AdminReadingEditor extends React.Component {
                       >
                         <span
                           style={styleOf(
-                            "display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 18px; background: #E3ECFD; color: #2257B8",
+                            "display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 16px; background: #E3ECFD; color: #2257B8",
                           )}
                         >
                           <svg
@@ -6930,7 +6930,7 @@ class AdminReadingEditor extends React.Component {
                                       href={"#"}
                                       onClick={v.addPara}
                                       style={styleOf(
-                                        "display: flex; align-items: center; justify-content: center; gap: 6px; height: 44px; flex-shrink: 0; border-radius: 14px; border: 1.5px dashed #D6D4D0; color: #706473; font-weight: 600; font-size: 14px; text-decoration: none",
+                                        "display: flex; align-items: center; justify-content: center; gap: 6px; height: 44px; flex-shrink: 0; border-radius: 12px; border: 1.5px dashed #D6D4D0; color: #706473; font-weight: 600; font-size: 14px; text-decoration: none",
                                       )}
                                     >
                                       <svg
@@ -9609,7 +9609,7 @@ class AdminReadingEditor extends React.Component {
                                                     <React.Fragment key={index}>
                                                       <div
                                                         style={styleOf(
-                                                          "display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 14px; border: 1.5px solid #D6D4D0; background: #FCFBF7",
+                                                          "display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FCFBF7",
                                                         )}
                                                       >
                                                         <div
@@ -10690,7 +10690,7 @@ class AdminReadingEditor extends React.Component {
                                                   data-stage={"1"}
                                                   onClick={v.G.placeLabel}
                                                   style={styleOf(
-                                                    "position: relative; width: 100%; max-width: 560px; aspect-ratio: 560 / 300; align-self: center; box-sizing: border-box; border-radius: 14px; border: 1.5px dashed #D6D4D0; background: " +
+                                                    "position: relative; width: 100%; max-width: 560px; aspect-ratio: 560 / 300; align-self: center; box-sizing: border-box; border-radius: 12px; border: 1.5px dashed #D6D4D0; background: " +
                                                       v.G.imgBg +
                                                       "; cursor: " +
                                                       v.G.cursor +
@@ -12407,7 +12407,7 @@ class AdminReadingEditor extends React.Component {
                                 <>
                                   <div
                                     style={styleOf(
-                                      "padding: 24px; text-align: center; color: #706473; border-radius: 14px; border: 1.5px dashed #D6D4D0",
+                                      "padding: 24px; text-align: center; color: #706473; border-radius: 12px; border: 1.5px dashed #D6D4D0",
                                     )}
                                   >
                                     {
@@ -12422,7 +12422,7 @@ class AdminReadingEditor extends React.Component {
                                 onClick={v.togglePicker}
                                 aria-expanded={v.pickerOpen}
                                 style={styleOf(
-                                  "display: flex; align-items: center; justify-content: center; gap: 6px; height: 46px; flex-shrink: 0; border-radius: 14px; border: 1.5px dashed #D6D4D0; color: #706473; font-weight: 600; font-size: 14px; text-decoration: none",
+                                  "display: flex; align-items: center; justify-content: center; gap: 6px; height: 46px; flex-shrink: 0; border-radius: 12px; border: 1.5px dashed #D6D4D0; color: #706473; font-weight: 600; font-size: 14px; text-decoration: none",
                                 )}
                               >
                                 <svg
@@ -12444,7 +12444,7 @@ class AdminReadingEditor extends React.Component {
                                 <>
                                   <div
                                     style={styleOf(
-                                      "border: 1.5px solid #D6D4D0; border-radius: 18px; background: #FFFFFF; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                                      "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
                                     )}
                                   >
                                     <div

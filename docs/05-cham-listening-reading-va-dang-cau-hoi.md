@@ -7,7 +7,8 @@ Cập nhật 09/11/2026. Spec đầy đủ 20 mã dạng câu hỏi và widget: 
 - Tự động, đối chiếu đáp án chuẩn.
 - **Đề đầy đủ**: quy đổi band theo bảng cấu hình (seed), chỉ tham khảo.
 - **Luyện theo Question Group**: số đúng / tổng, tỷ lệ chính xác = đúng / tổng câu (tính cả câu bỏ trống). Không quy đổi band. Không trung bình lẫn band với tỷ lệ chính xác.
-- Câu bỏ trống là sai. Hết giờ thì hệ thống hoàn thành lượt làm với phần đã lưu.
+- **Practice theo Part/Section** (chốt 09/11): chỉ hiện số câu đúng, không band; band chỉ có ở Real Test. Xem [15-flow-lam-bai.md](15-flow-lam-bai.md).
+- Câu bỏ trống là sai. Hết giờ (Real Test, khi đang làm) thì hệ thống hoàn thành lượt làm với phần đã lưu. Thoát hoặc mất kết nối thì đồng hồ dừng, làm tiếp chạy từ thời gian còn lại (chốt 09/11).
 - Listening đề đầy đủ nghe 1 lần; chế độ luyện được nghe lại.
 
 ### Quy tắc so đáp án dạng điền

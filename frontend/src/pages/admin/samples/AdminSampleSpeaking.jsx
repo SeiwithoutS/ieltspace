@@ -1248,7 +1248,7 @@ class AdminSampleSpeaking extends React.Component {
                     <div
                       role={"alert"}
                       style={styleOf(
-                        "margin: 16px 24px 0; padding: 14px 16px; border-radius: 14px; background: #FDECE8; border: 1.5px solid #F1B3A3; display: flex; flex-direction: column; gap: 8px",
+                        "margin: 16px 24px 0; padding: 14px 16px; border-radius: 12px; background: #FDECE8; border: 1.5px solid #F1B3A3; display: flex; flex-direction: column; gap: 8px",
                       )}
                     >
                       <div
@@ -1306,7 +1306,7 @@ class AdminSampleSpeaking extends React.Component {
                         aria-modal={"true"}
                         aria-labelledby={"xoa-bm"}
                         style={styleOf(
-                          "width: 440px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                          "width: 440px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
                         )}
                       >
                         <div
@@ -1362,7 +1362,7 @@ class AdminSampleSpeaking extends React.Component {
                         aria-modal={"true"}
                         aria-labelledby={"luu-bm"}
                         style={styleOf(
-                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
                         )}
                       >
                         <div
@@ -1427,7 +1427,7 @@ class AdminSampleSpeaking extends React.Component {
                         aria-modal={"true"}
                         aria-labelledby={"dang-bm"}
                         style={styleOf(
-                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 20px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                          "width: 460px; max-width: 100%; box-sizing: border-box; padding: 24px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
                         )}
                       >
                         <div
@@ -1476,7 +1476,7 @@ class AdminSampleSpeaking extends React.Component {
                     <div
                       role={"status"}
                       style={styleOf(
-                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
                       )}
                     >
                       <span>{v.snack}</span>
@@ -1517,7 +1517,7 @@ class AdminSampleSpeaking extends React.Component {
                     <div
                       role={"status"}
                       style={styleOf(
-                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 14px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
+                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
                       )}
                     >
                       <span>{v.toastText}</span>
@@ -2206,7 +2206,7 @@ class AdminSampleSpeaking extends React.Component {
                               <React.Fragment key={index}>
                                 <div
                                   style={styleOf(
-                                    "display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 14px; border: 1.5px solid #D6D4D0; background: #FCFBF7",
+                                    "display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FCFBF7",
                                   )}
                                 >
                                   <div
@@ -2748,7 +2748,7 @@ class AdminSampleSpeaking extends React.Component {
                         <>
                           <div
                             style={styleOf(
-                              "display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16px; line-height: 1.7; color: #352637",
+                              "display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 12px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16px; line-height: 1.7; color: #352637",
                             )}
                           >
                             <div
@@ -2797,7 +2797,7 @@ class AdminSampleSpeaking extends React.Component {
                         <>
                           <div
                             style={styleOf(
-                              "display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 14px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16px; line-height: 1.7; color: #352637",
+                              "display: flex; flex-direction: column; gap: 12px; padding: 18px 22px; border-radius: 12px; background: #E8F0FE; border: 1.5px solid #C5D6F7; border-left: 5px solid #2963CC; font-size: 16px; line-height: 1.7; color: #352637",
                             )}
                           >
                             {(v.F.pvQs || []).map((qq, index) => (
@@ -2849,7 +2849,7 @@ class AdminSampleSpeaking extends React.Component {
                             <>
                               <div
                                 style={styleOf(
-                                  "padding: 18px 22px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 15px; line-height: 1.7",
+                                  "padding: 18px 22px; border-radius: 12px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 15px; line-height: 1.7",
                                 )}
                               >
                                 <div
@@ -2927,7 +2927,7 @@ class AdminSampleSpeaking extends React.Component {
                               ) : null}
                               <div
                                 style={styleOf(
-                                  "padding: 18px 22px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 15px; line-height: 1.75; display: flex; flex-direction: column; gap: 12px",
+                                  "padding: 18px 22px; border-radius: 12px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 15px; line-height: 1.75; display: flex; flex-direction: column; gap: 12px",
                                 )}
                               >
                                 {pv.hasAudio ? (

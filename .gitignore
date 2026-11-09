@@ -39,6 +39,7 @@ __pycache__/
 !/README.md
 !/DESIGN.md
 !/AGENTS/**/*.md
+!/docs/**/*.md
 
 
 # Claude Code cục bộ (chỉ dùng trên máy từng người)

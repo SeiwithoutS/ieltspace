@@ -2,6 +2,8 @@ Ngày tạo README: 07/11/2026
 
 # IELTSpace
 
+[Báo cáo bàn giao dự án ngày 07/11/2026](docs/BAO_CAO_BAN_GIAO.md) · [Trạng thái tại ngày bàn giao](docs/PROGRESS/2026-11-07-trang-thai-du-an.md)
+
 Ứng dụng web hỗ trợ luyện IELTS, gồm giao diện người học, giáo viên và quản lý. Hiện đã tích hợp đăng ký, đăng nhập, đăng xuất và khôi phục mật khẩu bằng Supabase Auth. Các màn hình học tập/quản trị còn chủ yếu dùng dữ liệu mẫu.
 
 ## Công nghệ

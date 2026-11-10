@@ -22,7 +22,7 @@ paths:
 ## Khoảng cách, bo góc, viền
 
 - Lưới 4px. Bìa bộ đề/bài mẫu tỉ lệ 3:2.
-- Bo góc: 8, 10 (chuẩn cho nav, menu, nút, ô nhập), 12 (bìa, nút lớn), 14, 16, 18, 20, 22 (thẻ), 26 (khung lớn), 999 (viên thuốc, chip). Không dùng 7, 9, 11.
+- Bo góc (thang chốt 09/11): 8, 10 (nav, menu, nút, ô nhập), 12 (bìa, nút lớn), 16, 22 (thẻ chuẩn), 26 (khung lớn), 999 (viên thuốc, chip), 50% (tròn). Không dùng 7, 9, 11, 14, 18, 20.
 - Viền khung 1.5px. Ngoại lệ: đường kẻ phân cách và thanh tiến độ cao 8px dùng 1px; viền trắng quanh chấm đỏ, huy hiệu, avatar dùng 2px.
 
 ## Màn Quản lý

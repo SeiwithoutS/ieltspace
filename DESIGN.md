@@ -1,6 +1,6 @@
 # DESIGN.md – IELTSpace
 
-**Nguồn duy nhất để theo dõi thiết kế giao diện.** Gộp từ `DESIGN.md` cũ (giá trị thực tế trong code), `docs/ui/design.md` (quy chuẩn gốc, mục A và mục 0) và `docs/11-quy-chuan-giao-dien.md`. Cập nhật 09/11/2026.
+**Nguồn duy nhất để theo dõi thiết kế giao diện.** Gộp từ `DESIGN.md` cũ (giá trị thực tế trong code), `docs/ui/design.md` (quy chuẩn gốc, mục A và mục 0) và `docs/11-quy-chuan-giao-dien.md`. Cập nhật 10/11/2026 (thêm mục "Màn làm bài").
 
 - Nguồn mẫu hình ảnh vẫn là canvas "IELTSpace · Giao diện" (https://claude.ai/artifact/BbGeNht7gcmTF2YWJcEF2V; bản chép ở `docs/ui/canvas/`). Tên màn trùng tên trang trong `frontend/src/app/pages.ts`.
 - Khi file này mâu thuẫn với các mục cũ (v1, v2) của `docs/ui/design.md`, **file này thắng**. `docs/ui/design.md` chỉ còn để tra lịch sử.
@@ -190,6 +190,17 @@ Giải thích từng trang và liên kết: `docs/ui/trang-va-lien-ket.md`.
 - Bài mẫu: một editor cho mỗi kỹ năng; Writing một editor cho Task 1 và 2; **Speaking một editor cho cả Part 1, 2, 3**, mỗi mục có câu hỏi, câu trả lời mẫu, audio riêng. Ảnh bìa chỉ hiện ở thẻ, không nằm trong nội dung bài mẫu.
 - **Luôn mở ở chế độ Chỉ xem** (ngoại lệ: "Thêm bài mẫu" vào thẳng Chỉnh sửa). Chỉ xem: chip "Chỉ xem", dải sky-soft có icon khóa, ô nhập thành khối nền surface-2 không viền, nút thêm/xóa nhỏ ẩn (lớp `.eo`); thanh trên có Nhập từ xlsx, **Chỉnh sửa**, Đăng. Chỉnh sửa: chip "Đang chỉnh sửa", thanh trên có trạng thái thay đổi, Hoàn tác, **Hủy** (destructive), **Lưu**. Hủy khi còn thay đổi hỏi Tiếp tục sửa / Không lưu / Lưu.
 - Trang bài mẫu của Người học: breadcrumbs, mục lục scrollspy bên trái, nội dung bên phải; Speaking chia mục theo Part, mỗi câu hỏi một thẻ có audio.
+
+### Màn làm bài (chốt 09/11/2026)
+Màn: StartTestDialog, ReadingTest, ListeningTest, WritingTest, SpeakingTest (chờ draft), SubmitDialogs. Chưa có trong `pages.ts`/code, canvas bản 237 là mẫu.
+
+- **Lối vào:** đề theo kỹ năng (ví dụ "Test 1 · Listening") là thẻ ở Landing và tab kỹ năng của Thư viện đề, bấm là làm luôn. StartTestDialog chỉ chọn chế độ (Practice / Real Test) và phần. Practice chọn Part/Section; Question Group là bài tập nhỏ riêng trong PracticeLibrary, vào thẳng màn làm bài.
+- **Chế độ:** Practice đếm lên, chỉ hiện số câu đúng; Real Test đếm ngược, mới có band. Writing Practice = 1 Task đếm lên; Real Test = 2 Task, 60 phút đếm ngược.
+- **TestTopbar** (một thanh trên duy nhất, đã gộp toolbar): đồng hồ, nút Aa (cỡ chữ 90–150%, gốc 15px, làm tròn 14–22px, ngoại lệ thang chữ), Sáng/Tối. Ở Reading có thêm cụm cố định Highlight / Ghi chú / Xóa highlight. Sáng/Tối chỉ đổi trong lúc làm bài, dùng bảng tối ở mục 2, khóa riêng `ieltspace-test-theme`, không ghi `ieltspace-app`. **TestProgressBar** tính theo Passage/Section; ô số câu có cờ "Xem lại", hộp nộp bài liệt kê câu gắn cờ và câu thiếu.
+- **Reading:** mặc định chia đôi. Công cụ Con trỏ (mặc định) / Highlight (bôi là tô ngay). Mỗi highlight có một ghi chú tùy chọn; cột Highlight bên phải (chip "Highlight n", thẻ đoạn trích + ghi chú, bấm thì cuộn tới vị trí, trạng thái trống có 2 bước hướng dẫn). Lưu cùng "Làm tiếp". 5 màu (nền sáng / nền tối / vạch): Vàng mặc định `#FCE8A6`/`#5C4A14`/`#E0B323`, Xanh lá `#CDEBD5`/`#234A33`/`#3E9A63`, Xanh dương `#D3E2FB`/`#24395E`/`#3B6FD8`, Hồng `#F9D5DE`/`#5A2735`/`#D2577A`, Tím `#E2DAF8`/`#3B3166`/`#7A63D1`.
+- **Listening:** Real Test tự phát, nghe một lần; Practice có phát/dừng, tốc độ, xem transcript sau khi nộp.
+- **Writing:** giấy kẻ dòng, đếm từ (không đổi màu), Notes ngay dưới đề bài của từng Task; Notes chỉ lưu cùng bài và không gửi cho Giáo viên.
+- **Thoát / mất mạng:** đồng hồ dừng ở cả hai chế độ; hộp "Lưu và thoát?" trong SubmitDialogs; ConnectionBanner báo mất mạng; tạm lưu và "Làm tiếp" ở Landing. Chưa đăng nhập thì chuyển Login rồi quay về đề.
 
 ## 8. Cách viết style trong code
 

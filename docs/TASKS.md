@@ -28,5 +28,20 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | NOTIF-01 | Lưu và đọc thông báo theo sự kiện | GRADE-02, GRADE-03 | Retry không tạo trùng. Chỉ người nhận đọc/đánh dấu đã xem. |
 | SAMPLE-01 | Nối quản trị và thư viện bài mẫu | DB-01 | Quản lý lưu bài nháp, khách chỉ xem được bài công khai. |
 | GOAL-01 | Lưu lịch sử mục tiêu và hiển thị tiến độ ngày | STAT-01 | Đổi mục tiêu sinh mốc hiệu lực mới. Mở thông điệp hằng ngày không tăng streak. |
+| QLBD-00 | Nâng cấp CSDL và tạo bảng danh mục bộ đề (04, 05) | DB-01 | Đã chạy 04 (D08) và 05_danh_muc_bo_de.sql trên PostgreSQL; exam_set_categories có 5 danh mục ban đầu, updated_at và UNIQUE(name). |
+| QLBD-01 | Đồng bộ Prisma schema (exam_set_categories, updated_at, quan hệ) | QLBD-00 | schema.prisma khớp cấu hình DB đích, npm run prisma:generate thành công, tsc biên dịch không lỗi. |
+| QLBD-02 | Viết unit rules và tests pure logic (exam-rules.ts) | QLBD-01 | 8/8 unit tests node:test chạy đạt, bao phủ slotKey, buildSlots, slotUi, canDeleteSet, canDeleteExam, canPublishSet, validateSkillReady. |
+| QLBD-03 | Cập nhật HttpError, audit logger và Supabase Storage | QLBD-01 | HttpError hỗ trợ payload linh hoạt, audit ghi vào public.audit_logs an toàn transaction, bucket exam-covers sẵn sàng. |
+| QLBD-04 | Dịch vụ danh mục và upload ảnh bìa bộ đề | QLBD-01, QLBD-03 | List/create category tự sinh slug, upload/delete ảnh bìa dọn Storage khi thay thế/xóa. |
+| QLBD-05 | Dịch vụ quản lý bộ đề (exam-sets.service.ts) | QLBD-02, QLBD-04 | CRUD bộ đề, publish/hide/delete đảm bảo điều kiện biên, lockExamSet chống race condition, tính max(updated_at). |
+| QLBD-06 | Dịch vụ quản lý Test trong bộ (exam-tests.service.ts) | QLBD-05 | Thêm Test tự sinh order_no, sửa Test, xóa Test re-index số thứ tự liên tục. |
+| QLBD-07 | Dịch vụ quản lý kỹ năng (exam-skills.service.ts) | QLBD-02, QLBD-06 | Tạo nháp v1, publish nháp kèm kiểm tra điều kiện sẵn sàng, ẩn, hiển thị lại, nhân bản nháp mới tăng version_number. |
+| QLBD-08 | Controller và Router Admin (A1–A16) | QLBD-05, QLBD-06, QLBD-07 | 16 endpoints quản trị tại /admin/exam-sets, /admin/exams, /admin/exam-skills, /admin/categories kiểm tra Zod và RBAC ADMIN. |
+| QLBD-09 | Controller và Router Public (P1: GET /exam-sets/:id) | QLBD-05 | Trả chi tiết bộ đề công khai, chỉ hiển thị skills PUBLISHED (theo O4), kèm tối đa 5 bộ đề cùng danh mục. |
+| QLBD-10 | Thư viện API Frontend (api.ts, exam-admin.ts) | QLBD-08, QLBD-09 | apiFetch tự chèn token/refresh, exam-admin cung cấp hàm gọi A1–A16 & P1 và các hàm chuyển đổi toUiSet, toLearnerSet, slotUi. |
+| QLBD-11 | Nối backend cho AdminExams.jsx (Danh sách bộ đề) | QLBD-10 | Danh sách tải từ DB, Combobox danh mục có tạo mới inline, upload ảnh bìa xem trước, tạo/xóa bộ đề thời gian thực. |
+| QLBD-12 | Nối backend cho AdminExamSet.jsx (Chi tiết bộ đề) | QLBD-10 | Hiển thị thông tin thực tế, thêm/xóa Test, menu kỹ năng cố định viewport, công khai/ẩn bộ đề, xóa an toàn. |
+| QLBD-13 | Nối backend cho ExamDetail.jsx (Học viên) | QLBD-10 | Đọc ID từ URL, hiển thị dữ liệu thực tế từ P1, gợi ý bộ đề cùng loại, xử lý trạng thái không tìm thấy hoặc chưa công khai. |
+| QLBD-14 | Kiểm thử tổng thể và hoàn thiện tài liệu | QLBD-00..13 | Unit tests và typecheck/build cả frontend và backend đều đạt 100%, tài liệu API, CSDL, Business Rules đồng bộ. |
 
 Khi nhận một dòng liên quan nhiều kỹ năng, thực hiện và kiểm tra từng kỹ năng bằng fixture riêng. Với API mới, cập nhật [hợp đồng](API.md) cùng thay đổi phía gọi và phía phục vụ.

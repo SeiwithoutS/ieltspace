@@ -203,7 +203,7 @@ class StudentLanding extends React.Component {
                           <span
                             style={styleOf("font-size: 13px; color: #706473")}
                           >
-                            {"Luyện từng Question Group, nghe lại được"}
+                            {"Đề Listening theo Test, chọn được Section"}
                           </span>
                         </span>
                       </a>
@@ -251,7 +251,7 @@ class StudentLanding extends React.Component {
                           <span
                             style={styleOf("font-size: 13px; color: #706473")}
                           >
-                            {"Luyện từng Question Group, có lời giải"}
+                            {"Đề Reading theo Test, chọn được Passage"}
                           </span>
                         </span>
                       </a>
@@ -1256,7 +1256,7 @@ class StudentLanding extends React.Component {
                     "margin-top: 4px; font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                   )}
                 >
-                  {"Mock Test Vol 21 · Listening Test 1"}
+                  {"Mock Test 2026 Vol 4 · Test 2 · Listening"}
                 </div>
                 <div
                   style={styleOf(
@@ -1335,7 +1335,7 @@ class StudentLanding extends React.Component {
                     "margin-top: 4px; font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                   )}
                 >
-                  {"Mock Test Vol 21 · Reading Test 1"}
+                  {"Mock Test 2026 Vol 4 · Test 4 · Reading Academic"}
                 </div>
                 <div
                   style={styleOf(
@@ -1536,7 +1536,7 @@ class StudentLanding extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Mock Test 2026 Vol 4 · Full 4 kỹ năng"}
+                  {"Mock Test 2026 Vol 4"}
                 </div>
                 {"\n"}
                 <div
@@ -1603,7 +1603,7 @@ class StudentLanding extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Đề thi thật Quý 3/2026 · Full 4 kỹ năng"}
+                  {"Actual Test Quý 2/2026"}
                 </div>
                 {"\n"}
                 <div
@@ -1625,7 +1625,7 @@ class StudentLanding extends React.Component {
                     "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
                   )}
                 >
-                  {"Tổng hợp từ các kỳ thi tháng 7 đến tháng 9/2026"}
+                  {"Tổng hợp từ các kỳ thi tháng 4 đến tháng 6/2026"}
                 </div>
                 {"\n"}
                 <a
@@ -1811,7 +1811,7 @@ class StudentLanding extends React.Component {
                 {"\n"}
                 <p style={styleOf("margin: 4px 0 0; color: #706473")}>
                   {
-                    "Từng passage riêng lẻ, chấm điểm và giải thích đáp án ngay khi nộp."
+                    "Mỗi đề là trọn kỹ năng Reading: chọn Practice từng Passage hoặc Real Test 60 phút."
                   }
                 </p>
                 {"\n"}
@@ -1862,7 +1862,7 @@ class StudentLanding extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"13 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -1871,7 +1871,7 @@ class StudentLanding extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"The Rise and Fall of Urban Beekeeping"}
+                  {"Mock Test 2026 Vol 4 · Test 1 · Reading"}
                 </div>
                 {"\n"}
                 <div
@@ -1879,7 +1879,7 @@ class StudentLanding extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"3.2K lượt làm"}
+                  {"Academic · 3.2K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1940,7 +1940,7 @@ class StudentLanding extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"13 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -1949,7 +1949,7 @@ class StudentLanding extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Glass: From Sand to Smartphone Screens"}
+                  {"Mock Test 2026 Vol 4 · Test 4 · Reading"}
                 </div>
                 {"\n"}
                 <div
@@ -1957,7 +1957,7 @@ class StudentLanding extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"5.6K lượt làm"}
+                  {"Academic · 5.6K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -2018,7 +2018,7 @@ class StudentLanding extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"14 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -2027,7 +2027,7 @@ class StudentLanding extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Restoring the Great Barrier Reef"}
+                  {"Mock Test 2026 Vol 4 · Test 5 · Reading"}
                 </div>
                 {"\n"}
                 <div
@@ -2035,7 +2035,7 @@ class StudentLanding extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"4.1K lượt làm"}
+                  {"Academic · 4.1K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -2096,7 +2096,7 @@ class StudentLanding extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"13 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -2105,7 +2105,7 @@ class StudentLanding extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Why Cities Are Getting Hotter"}
+                  {"IELTS CAM Inspired 19 · Test 1 · Reading"}
                 </div>
                 {"\n"}
                 <div
@@ -2113,7 +2113,7 @@ class StudentLanding extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"2.7K lượt làm"}
+                  {"General Training · 2.7K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -2188,7 +2188,7 @@ class StudentLanding extends React.Component {
                 {"\n"}
                 <p style={styleOf("margin: 4px 0 0; color: #706473")}>
                   {
-                    "Từng phần với audio thật. Khi luyện tập bạn được nghe lại; bài thi đầy đủ chỉ phát một lần."
+                    "Mỗi đề là trọn kỹ năng Listening: chọn Practice từng Section hoặc Real Test, audio phát một lần."
                   }
                 </p>
                 {"\n"}
@@ -2239,7 +2239,7 @@ class StudentLanding extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"10 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -2248,7 +2248,7 @@ class StudentLanding extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Section 1 · Community Garden Booking"}
+                  {"Mock Test 2026 Vol 4 · Test 1 · Listening"}
                 </div>
                 {"\n"}
                 <div
@@ -2317,7 +2317,7 @@ class StudentLanding extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"10 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -2326,7 +2326,7 @@ class StudentLanding extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Section 2 · Museum Audio Tour"}
+                  {"Mock Test 2026 Vol 4 · Test 2 · Listening"}
                 </div>
                 {"\n"}
                 <div
@@ -2395,7 +2395,7 @@ class StudentLanding extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"10 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -2404,7 +2404,7 @@ class StudentLanding extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Section 3 · Planning a Marine Biology Field Trip"}
+                  {"Mock Test 2026 Vol 4 · Test 4 · Listening"}
                 </div>
                 {"\n"}
                 <div
@@ -2473,7 +2473,7 @@ class StudentLanding extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"10 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -2482,7 +2482,7 @@ class StudentLanding extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Section 4 · The History of Paper Money"}
+                  {"IELTS CAM Inspired 19 · Test 1 · Listening"}
                 </div>
                 {"\n"}
                 <div

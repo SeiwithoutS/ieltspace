@@ -202,7 +202,7 @@ class FullTests extends React.Component {
                           <span
                             style={styleOf("font-size: 13px; color: #706473")}
                           >
-                            {"Luyện từng Question Group, nghe lại được"}
+                            {"Đề Listening theo Test, chọn được Section"}
                           </span>
                         </span>
                       </a>
@@ -250,7 +250,7 @@ class FullTests extends React.Component {
                           <span
                             style={styleOf("font-size: 13px; color: #706473")}
                           >
-                            {"Luyện từng Question Group, có lời giải"}
+                            {"Đề Reading theo Test, chọn được Passage"}
                           </span>
                         </span>
                       </a>
@@ -895,7 +895,7 @@ class FullTests extends React.Component {
                           "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                         )}
                       >
-                        {"IELTS Mock Test Vol 20"}
+                        {"Mock Test 2026 Vol 4"}
                       </div>
                     </div>
                     <div
@@ -903,14 +903,14 @@ class FullTests extends React.Component {
                         "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
-                      <span>{"8 bài test"}</span>
+                      <span>{"6 bài test"}</span>
                       <span
                         aria-hidden={"true"}
                         style={styleOf(
                           "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
                         )}
                       ></span>
-                      <span>{"408K lượt làm"}</span>
+                      <span>{"12K lượt làm"}</span>
                     </div>
                     <a
                       href={"ExamDetail.dc.html"}
@@ -950,7 +950,7 @@ class FullTests extends React.Component {
                           "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                         )}
                       >
-                        {"IELTS Mock Test Vol 19"}
+                        {"Mock Test 2026 Vol 3"}
                       </div>
                     </div>
                     <div
@@ -958,14 +958,14 @@ class FullTests extends React.Component {
                         "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
-                      <span>{"8 bài test"}</span>
+                      <span>{"6 bài test"}</span>
                       <span
                         aria-hidden={"true"}
                         style={styleOf(
                           "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
                         )}
                       ></span>
-                      <span>{"211K lượt làm"}</span>
+                      <span>{"9,8K lượt làm"}</span>
                     </div>
                     <a
                       href={"ExamDetail.dc.html"}
@@ -1005,7 +1005,7 @@ class FullTests extends React.Component {
                           "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                         )}
                       >
-                        {"IELTS Mock Test Vol 18"}
+                        {"Mock Test 2026 Vol 2"}
                       </div>
                     </div>
                     <div
@@ -1013,14 +1013,14 @@ class FullTests extends React.Component {
                         "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
-                      <span>{"8 bài test"}</span>
+                      <span>{"6 bài test"}</span>
                       <span
                         aria-hidden={"true"}
                         style={styleOf(
                           "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
                         )}
                       ></span>
-                      <span>{"228K lượt làm"}</span>
+                      <span>{"15K lượt làm"}</span>
                     </div>
                     <a
                       href={"ExamDetail.dc.html"}
@@ -1060,7 +1060,7 @@ class FullTests extends React.Component {
                           "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                         )}
                       >
-                        {"IELTS Mock Test Vol 17"}
+                        {"Mock Test 2026 Vol 1"}
                       </div>
                     </div>
                     <div
@@ -1068,14 +1068,14 @@ class FullTests extends React.Component {
                         "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
-                      <span>{"8 bài test"}</span>
+                      <span>{"6 bài test"}</span>
                       <span
                         aria-hidden={"true"}
                         style={styleOf(
                           "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
                         )}
                       ></span>
-                      <span>{"196K lượt làm"}</span>
+                      <span>{"30K lượt làm"}</span>
                     </div>
                     <a
                       href={"ExamDetail.dc.html"}
@@ -1445,7 +1445,7 @@ class FullTests extends React.Component {
                           "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                         )}
                       >
-                        {"IELTS Actual Test Test 1"}
+                        {"Actual Test Quý 2/2026"}
                       </div>
                     </div>
                     <div
@@ -1453,14 +1453,14 @@ class FullTests extends React.Component {
                         "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
-                      <span>{"13 bài test"}</span>
+                      <span>{"8 bài test"}</span>
                       <span
                         aria-hidden={"true"}
                         style={styleOf(
                           "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
                         )}
                       ></span>
-                      <span>{"83K lượt làm"}</span>
+                      <span>{"21K lượt làm"}</span>
                     </div>
                     <a
                       href={"ExamDetail.dc.html"}
@@ -1500,7 +1500,7 @@ class FullTests extends React.Component {
                           "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                         )}
                       >
-                        {"IELTS Actual Test Test 2"}
+                        {"Actual Test Quý 1/2026"}
                       </div>
                     </div>
                     <div
@@ -1508,7 +1508,7 @@ class FullTests extends React.Component {
                         "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
-                      <span>{"6 bài test"}</span>
+                      <span>{"8 bài test"}</span>
                       <span
                         aria-hidden={"true"}
                         style={styleOf(
@@ -1555,7 +1555,7 @@ class FullTests extends React.Component {
                           "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                         )}
                       >
-                        {"IELTS Actual Test Test 3"}
+                        {"Actual Test Quý 4/2025"}
                       </div>
                     </div>
                     <div
@@ -1563,7 +1563,7 @@ class FullTests extends React.Component {
                         "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
-                      <span>{"10 bài test"}</span>
+                      <span>{"8 bài test"}</span>
                       <span
                         aria-hidden={"true"}
                         style={styleOf(
@@ -1610,7 +1610,7 @@ class FullTests extends React.Component {
                           "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                         )}
                       >
-                        {"IELTS Actual Test Test 4"}
+                        {"Actual Test Quý 3/2025"}
                       </div>
                     </div>
                     <div
@@ -1618,7 +1618,7 @@ class FullTests extends React.Component {
                         "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                       )}
                     >
-                      <span>{"12 bài test"}</span>
+                      <span>{"8 bài test"}</span>
                       <span
                         aria-hidden={"true"}
                         style={styleOf(

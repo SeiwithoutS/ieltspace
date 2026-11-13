@@ -1,6 +1,6 @@
 # Từ điển cơ sở dữ liệu IELTSpace
 
-40 bảng nghiệp vụ, chia theo tám nhóm của bản Word. Mỗi bảng có danh sách trường và một dòng mô tả. PostgreSQL tự sinh thêm cột kỹ thuật `exam_sections.section_skill` để kiểm tra loại phần thi với bảng cha.
+40 bảng nghiệp vụ (bổ sung exam_set_categories theo QLBD-00, bỏ exam_versions theo D08 ngày 13/11), chia theo tám nhóm của bản Word. PostgreSQL tự sinh thêm cột kỹ thuật `exam_sections.section_skill` để kiểm tra loại phần thi với bảng cha.
 
 ## 1. Người dùng
 
@@ -14,11 +14,11 @@
 
 | Bảng | Các trường dữ liệu chính | Thông tin cần lưu |
 |---|---|---|
-| Bộ đề · `exam_sets` | `id`, `name`, `description`, `cover_url`, `status`, `created_by`, `created_at`, `updated_at` | Tên bộ đề, ảnh bìa 3:2 và trạng thái công khai. |
-| Đề thi · `exams` | `id`, `exam_set_id`, `title`, `order_no`, `description`, `status`, `created_by`, `created_at`, `updated_at` | Tên Test, thứ tự trong bộ và trạng thái hiển thị. |
-| Phiên bản đề thi · `exam_versions` | `id`, `exam_id`, `version_number`, `status`, `created_by`, `created_at`, `published_at` | Lịch sử phiên bản nháp và đã công bố. |
-| Kỹ năng trong đề · `exam_skills` | `id`, `exam_version_id`, `skill`, `duration_minutes`, `band_scale_id`, `grading_rule_id`, `order_no`, `is_hidden` | Kỹ năng, thời lượng, quy tắc chấm và trạng thái ẩn. |
-| Phần thi · `exam_sections` | `id`, `exam_skill_id`, `title`, `section_type`, `form`, `instruction`, `content`, `audio_path`, `image_path`, `transcript`, `config`, `order_no` | Nội dung theo Passage, Section, Task hoặc Part, form và tệp liên quan. |
+| Danh mục bộ đề · `exam_set_categories` | `id`, `name`, `slug`, `description`, `order_no`, `created_at`, `updated_at` | Danh mục phân loại bộ đề (IELTS Cambridge, Actual Tests, v.v.), hỗ trợ tạo động. |
+| Bộ đề · `exam_sets` | `id`, `name`, `description`, `cover_url`, `category_id`, `status`, `published_at`, `created_by`, `created_at`, `updated_at` | Tên bộ đề (UNIQUE), ảnh bìa 3:2 (preset hoặc upload), liên kết category_id, trạng thái DRAFT/PUBLISHED/HIDDEN. |
+| Đề thi · `exams` | `id`, `exam_set_id`, `title`, `order_no`, `description`, `created_by`, `created_at`, `updated_at` | Tên Test và thứ tự trong bộ. Trạng thái của Test suy từ các kỹ năng. |
+| Kỹ năng trong đề · `exam_skills` | `id`, `exam_id`, `skill`, `form`, `version_number`, `status`, `duration_minutes`, `band_scale_id`, `grading_rule_id`, `created_by`, `created_at`, `published_at` | Đơn vị đăng và phiên bản: một kỹ năng của một Test, Reading/Writing tách Academic/General. Trạng thái DRAFT, PUBLISHED, HIDDEN, ARCHIVED. |
+| Phần thi · `exam_sections` | `id`, `exam_skill_id`, `title`, `section_type`, `instruction`, `content`, `audio_path`, `image_path`, `transcript`, `config`, `order_no` | Nội dung theo Passage, Section, Task hoặc Part và tệp liên quan. Form lấy từ kỹ năng cha. |
 | Nhóm câu hỏi · `question_groups` | `id`, `section_id`, `title`, `question_type`, `instruction`, `content`, `audio_path`, `image_path`, `question_from`, `question_to`, `config`, `order_no` | Dạng bài, dải số câu và cấu hình dùng chung cho nhóm. |
 | Câu hỏi · `questions` | `id`, `question_group_id`, `content`, `question_type`, `number_from`, `number_to`, `answer_count`, `max_score`, `explanation`, `order_no` | Nội dung câu, dải số hiển thị, số đáp án và điểm tối đa. |
 | Lựa chọn trả lời · `question_options` | `id`, `question_id`, `label`, `content`, `order_no` | Các phương án lựa chọn riêng của một câu. |
@@ -28,7 +28,7 @@
 
 | Bảng | Các trường dữ liệu chính | Thông tin cần lưu |
 |---|---|---|
-| Bảng quy đổi band · `band_scales` | `id`, `name`, `skill`, `exam_type`, `version`, `conversion_rules` | Thang chuyển số câu đúng sang band theo kỹ năng và loại đề. |
+| Bảng quy đổi band · `band_scales` | `id`, `name`, `skill`, `form`, `version`, `conversion_rules` | Thang chuyển số câu đúng sang band theo kỹ năng; Reading có form, Listening để trống. |
 | Bộ quy tắc chấm · `grading_rules` | `id`, `name`, `skill`, `assessment_scope`, `version`, `aggregation_rules`, `rounding_rules` | Phạm vi chấm, cách tính điểm và làm tròn theo phiên bản. |
 | Tiêu chí chấm · `rubric_criteria` | `id`, `grading_rule_id`, `name`, `description`, `weight`, `min_score`, `max_score`, `score_step`, `order_no` | Trọng số, khoảng điểm và bước điểm của từng tiêu chí. |
 
@@ -36,7 +36,7 @@
 
 | Bảng | Các trường dữ liệu chính | Thông tin cần lưu |
 |---|---|---|
-| Lượt làm bài · `attempts` | `id`, `user_id`, `exam_version_id`, `attempt_type`, `selected_scope`, `status`, `started_at`, `completed_at` | Người làm, phiên bản đề, phạm vi và thời gian làm bài. |
+| Lượt làm bài · `attempts` | `id`, `user_id`, `exam_id`, `attempt_type`, `selected_scope`, `status`, `started_at`, `completed_at` | Người làm, Test, phạm vi và thời gian làm bài. Bản kỹ năng đã làm ghi ở skill_attempts. |
 | Bài làm theo kỹ năng · `skill_attempts` | `id`, `attempt_id`, `exam_skill_id`, `section_id`, `question_group_id`, `status`, `started_at`, `deadline_at`, `completed_at`, `duration_seconds`, `correct_count`, `total_questions`, `accuracy`, `band_score`, `band_scale_id`, `grading_rule_id`, `initial_expires_at`, `content_expires_at`, `content_status`, `content_deleted_at` | Kết quả từng kỹ năng, hạn làm, hạn lưu và trạng thái nội dung. |
 | Câu trả lời · `attempt_answers` | `id`, `skill_attempt_id`, `question_id`, `answer_data`, `earned_score`, `correct_count`, `updated_at` | Đáp án đã nhập và điểm từng câu của người học. |
 | Nội dung Writing/Speaking · `submission_contents` | `id`, `skill_attempt_id`, `section_id`, `text_content`, `audio_path`, `file_type`, `file_size`, `audio_duration`, `recording_status`, `updated_at` | Văn bản hoặc tệp ghi âm đã nộp theo Task/Part. |
@@ -76,7 +76,7 @@
 | Bảng | Các trường dữ liệu chính | Thông tin cần lưu |
 |---|---|---|
 | Thông báo · `notifications` | `id`, `recipient_id`, `event_key`, `type`, `title`, `content`, `reference_type`, `reference_id`, `created_at`, `read_at` | Người nhận, sự kiện, nội dung và thời điểm đã đọc. |
-| Lô nhập dữ liệu · `import_batches` | `id`, `request_key`, `import_type`, `exam_id`, `skill`, `file_name`, `temporary_path`, `status`, `total_records`, `valid_records`, `error_records`, `created_by`, `created_at`, `completed_at` | Loại dữ liệu, đích nhập, khóa chống trùng và kết quả kiểm tra. |
+| Lô nhập dữ liệu · `import_batches` | `id`, `request_key`, `import_type`, `exam_id`, `skill`, `form`, `file_name`, `temporary_path`, `status`, `total_records`, `valid_records`, `error_records`, `created_by`, `created_at`, `completed_at` | Loại dữ liệu, đích nhập, khóa chống trùng và kết quả kiểm tra. |
 | Tệp đính kèm lô nhập · `import_assets` | `id`, `batch_id`, `file_name`, `storage_path`, `file_type`, `file_size`, `status` | Tên tệp đính kèm, đường dẫn lưu và trạng thái xử lý. |
 | Lỗi nhập dữ liệu · `import_errors` | `id`, `batch_id`, `sheet_name`, `row_number`, `field_name`, `severity`, `message` | Vị trí và lý do lỗi theo sheet, dòng và trường. |
 | Nhật ký hệ thống · `audit_logs` | `id`, `actor_id`, `actor_type`, `action`, `entity_type`, `entity_id`, `change_data`, `reason`, `created_at` | Chủ thể, thao tác, đối tượng và lý do thay đổi. |
@@ -84,7 +84,7 @@
 
 ## Quan hệ và ràng buộc chính
 
-Bộ đề → Test → phiên bản → kỹ năng → phần → nhóm → câu. Một Test có tối đa một nháp. Phần Reading/Writing chọn ACADEMIC hoặc GENERAL. Bảng quy đổi vẫn giữ `band_scales.exam_type` với mã GENERAL_TRAINING để tương thích dữ liệu cũ.
+Bộ đề → Test → kỹ năng (theo phiên bản) → phần → nhóm → câu. Mỗi kỹ năng + form của một Test có tối đa một bản nháp và một bản đang hiển thị (PUBLISHED hoặc HIDDEN); bản cũ chuyển ARCHIVED và vẫn giữ cho bài đã làm. Reading/Writing bắt buộc ACADEMIC hoặc GENERAL, Listening/Speaking để trống. Reading phải dùng thang band đúng form (khóa ngoại ghép). Bộ đề chỉ có published_at khi đã rời trạng thái DRAFT.
 
 Người học → lượt làm → bài theo kỹ năng → câu trả lời hoặc nội dung nộp. Lượt hỗ trợ → yêu cầu chấm → phiếu → điểm tiêu chí. Một bài có tối đa một yêu cầu đang hoạt động. Một lượt chỉ dùng một lần. Mỗi yêu cầu hủy đủ điều kiện chỉ hoàn một bonus.
 

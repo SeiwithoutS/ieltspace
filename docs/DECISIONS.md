@@ -9,12 +9,14 @@
 | D05 | CSDL và rà soát 10/11 ghi rõ bỏ nhãn từ vựng. CSDL quy định tự đánh giá flashcard hai mức. | UC30 giữ phần ghi chú. Dùng “Chưa nhớ” và “Đã nhớ”. |
 | D06 | UC13 BR9 và rà soát 10/11 tính hoạt động học theo lượt làm. | Mỗi attempt hoàn thành sinh tối đa một hoạt động, kể cả khi có nhiều kỹ năng. Phiên flashcard hợp lệ có nguồn riêng. |
 | D07 | Rà soát 10/11 chuyển thông điệp hằng ngày sang dữ liệu khởi tạo/tệp tài nguyên. | UC32 vẫn hiển thị thông điệp, bỏ bảng daily_motivations. |
+| D08 | Trọng Phúc chốt 13/11 (rà luồng đăng đề, PROGRESS/2026-11-13). Thay phần “form ở phần thi” của D02. | Đơn vị đăng và phiên bản là exam_skills theo Test + kỹ năng + form. Bỏ exam_versions và exams.status. attempts trỏ exams, skill_attempts trỏ bản kỹ năng đã làm. band_scales.exam_type đổi thành form. |
+| D09 | Trọng Phúc chốt 13/11. Giữ chốt 09/11. | Thẻ luyện ở Landing và thư viện theo kỹ năng là một kỹ năng của một Test (ví dụ “Vol 4 · Test 1 · Reading · 40 câu”), lấy từ exam_skills PUBLISHED. Chọn Passage/Section/Task/Part trong hộp Bắt đầu. Không có bảng bài luyện riêng. |
+| D10 | Trọng Phúc chốt 13/11. | exam_sets thêm category và published_at. FullTests nhóm theo category, “Bộ đề cùng loại” lọc theo category, “Mới” dựa trên published_at. |
 
 ## Điểm mở trước khi triển khai
 
 | Vấn đề | Bằng chứng | Quyết định cần có |
 |---|---|---|
-| Tên cột bảng quy đổi Reading | CSDL đang ghi band_scales.exam_type và đặt câu hỏi đổi thành form. | Chốt tên, cách chọn đúng thang khi cùng đề có cả hai form và cách chuyển dữ liệu. |
 | Nơi lưu tham số | Bản rà soát và phần bảng CSDL nêu system_settings, cuối CSDL vẫn đặt câu hỏi. | Bản SQL ngày 11/11 dùng bảng theo thiết kế Word, seed 72/14/10. Nhóm còn cần chốt tải mặc định của giáo viên và cách thay đổi cấu hình lúc vận hành. |
 | Nhật ký đăng nhập | Bản rà soát ghi bổ sung nếu cần cho trang Người dùng. | Chốt nhu cầu hiển thị, dữ liệu tối thiểu và thời gian giữ. |
 | Ngữ pháp | Chương 1 §1.3.2 có nêu, danh sách UC Chương 3 không có luồng tương ứng. | Chưa giao task triển khai. Cần xác nhận phạm vi nếu bổ sung. |

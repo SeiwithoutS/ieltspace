@@ -1,9 +1,42 @@
 import NotificationBadge from "../../components/notifications/NotificationBadge";
 import React from "react";
 import { styleOf, cssText } from "../../lib/styles";
+import { getPublicSet, toLearnerSet } from "../../lib/exam-admin";
+import { navigate } from "../../lib/auth";
 
 class ExamDetail extends React.Component {
+  loadData(id) {
+    if (!id) return;
+    this.setState({ loading: true, notFound: false });
+    getPublicSet(id)
+      .then((data) => {
+        this.setState({
+          ext: toLearnerSet(data),
+          related: data.related || [],
+          loading: false,
+          notFound: false,
+        });
+      })
+      .catch(() => {
+        this.setState({
+          loading: false,
+          notFound: true,
+        });
+      });
+  }
+
   componentDidMount() {
+    var hash = window.location.hash || "";
+    var query = hash.includes("?")
+      ? hash.slice(hash.indexOf("?") + 1)
+      : window.location.search.slice(1);
+    var params = new URLSearchParams(query);
+    var id = params.get("id");
+    if (id) {
+      this.loadData(id);
+      return;
+    }
+
     var got = (function () {
       try {
         var o = JSON.parse(
@@ -119,10 +152,10 @@ class ExamDetail extends React.Component {
         ],
       ],
       PAGES = {
-        L: ["ListeningTest.dc.html", "40 câu · 30 phút"],
-        R: ["ReadingTest.dc.html", "40 câu · 60 phút"],
-        W: ["WritingTest.dc.html", "2 task · 60 phút"],
-        S: ["SpeakingTest.dc.html", "3 phần · 11-14 phút"],
+        L: ["ListeningTest", "40 câu · 30 phút"],
+        R: ["ReadingTest", "40 câu · 60 phút"],
+        W: ["WritingTest", "2 task · 60 phút"],
+        S: ["SpeakingTest", "3 phần · 11-14 phút"],
       },
       REL = [
         ["IELTS CAM Inspired 19", 0, "8 bài test", "126K lượt làm", ""],
@@ -226,10 +259,18 @@ class ExamDetail extends React.Component {
       if (!start) {
         var fi = vs.indexOf("pub");
         if (fi >= 0) {
-          start = { t: t.name, href: PAGES[SK[fi][0]][0] };
+          var startPage = PAGES[SK[fi][0]][0];
+          start = {
+            t: t.name,
+            pick: function (e) {
+              stop(e);
+              navigate(startPage + (t.id ? "?examId=" + t.id : ""));
+            },
+          };
         }
       }
       rows.push({
+        id: t.id,
         name: t.name,
         sub:
           nPub +
@@ -237,13 +278,17 @@ class ExamDetail extends React.Component {
           (vs.indexOf("draft") >= 0 ? " · còn kỹ năng đang cập nhật" : ""),
         full: nPub === 4,
         notFull: nPub < 4,
+        pickFull: function (e) {
+          stop(e);
+          navigate("ListeningTest" + (t.id ? "?examId=" + t.id : ""));
+        },
         cells: SK.map(function (k, i) {
           var v = vs[i];
+          var pageName = PAGES[k[0]][0];
           return {
             go: v === "pub",
             soon: v === "draft",
             none: !visible(v),
-            href: PAGES[k[0]][0],
             meta: PAGES[k[0]][1],
             btnSt:
               "display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 18px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; border: 1.5px solid " +
@@ -251,7 +296,12 @@ class ExamDetail extends React.Component {
               "33; background: " +
               k[2] +
               "; color: " +
-              k[3],
+              k[3] +
+              "; cursor: pointer",
+            pick: function (e) {
+              stop(e);
+              navigate(pageName + (t.id ? "?examId=" + t.id : ""));
+            },
           };
         }),
       });
@@ -292,8 +342,10 @@ class ExamDetail extends React.Component {
         bg +
         "; box-shadow: 0 2px 6px rgba(53,38,55,.12), 0 18px 40px rgba(53,38,55,.18)",
       hasStart: !!start,
-      startHref: start ? start.href : "#",
+      startPick: start ? start.pick : stop,
       startText: start ? "Bắt đầu " + start.t : "",
+      loading: !!s.loading,
+      notFound: !!s.notFound,
       share: function (e) {
         stop(e);
         try {
@@ -331,17 +383,55 @@ class ExamDetail extends React.Component {
       rows: rows,
       noRows: !rows.length,
       formName: TY[form][0],
-      related: REL.map(function (r) {
-        return {
-          name: r[0],
-          n: r[2],
-          plays: r[3],
-          short: r[4],
-          st:
-            "display: flex; align-items: flex-end; width: 100%; aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden; color: #FFFFFF; background: " +
-            ART[r[1]][1],
-        };
-      }),
+      related: (s.related && s.related.length > 0)
+        ? s.related.map(function (r) {
+            var art = null;
+            var img = null;
+            if (r.coverUrl) {
+              if (r.coverUrl.indexOf("preset:") === 0) {
+                var p = parseInt(r.coverUrl.slice(7), 10);
+                art = isNaN(p) ? null : p;
+              } else {
+                img = r.coverUrl;
+              }
+            }
+            var short = (r.name.match(/(Vol|Test|Pack)\s*\S+$/i) || [r.name.split(" ").slice(-1)[0]])[0];
+            var bgSt = img
+              ? "url('" + img + "') center / contain no-repeat, #E9E4DA"
+              : art != null && ART[art]
+                ? ART[art][1]
+                : "repeating-linear-gradient(135deg, #F3F0EA 0 10px, #FAF9F5 10px 20px)";
+            return {
+              id: r.id,
+              name: r.name,
+              n: (r.testCount || 0) + " bài test",
+              plays: (r.attemptCount || 0).toLocaleString("vi-VN") + " lượt làm",
+              short: short,
+              st:
+                "display: flex; align-items: flex-end; width: 100%; aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden; color: #FFFFFF; background: " +
+                bgSt,
+              pick: function (e) {
+                stop(e);
+                navigate("ExamDetail?id=" + r.id);
+                me.loadData(r.id);
+              },
+            };
+          })
+        : REL.map(function (r) {
+            return {
+              id: "",
+              name: r[0],
+              n: r[2],
+              plays: r[3],
+              short: r[4],
+              st:
+                "display: flex; align-items: flex-end; width: 100%; aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden; color: #FFFFFF; background: " +
+                ART[r[1]][1],
+              pick: function (e) {
+                stop(e);
+              },
+            };
+          }),
       toast: !!s.toast,
       toastText: s.toast || "",
       canUndo: false,
@@ -537,7 +627,7 @@ class ExamDetail extends React.Component {
                           <span
                             style={styleOf("font-size: 13px; color: #706473")}
                           >
-                            {"Luyện từng Question Group, nghe lại được"}
+                            {"Đề Listening theo Test, chọn được Section"}
                           </span>
                         </span>
                       </a>
@@ -585,7 +675,7 @@ class ExamDetail extends React.Component {
                           <span
                             style={styleOf("font-size: 13px; color: #706473")}
                           >
-                            {"Luyện từng Question Group, có lời giải"}
+                            {"Đề Reading theo Test, chọn được Passage"}
                           </span>
                         </span>
                       </a>
@@ -995,6 +1085,42 @@ class ExamDetail extends React.Component {
             </div>
           </header>
           <div style={styleOf("background: #FCFBF7")}>
+            {v.loading ? (
+              <div style={{ maxWidth: 800, margin: "120px auto", textAlign: "center", padding: "0 24px", color: "#706473" }}>
+                <div style={{ fontSize: 18, fontWeight: 600 }}>Đang tải thông tin bộ đề…</div>
+              </div>
+            ) : v.notFound ? (
+              <div style={{ maxWidth: 800, margin: "80px auto", textAlign: "center", padding: "0 24px" }}>
+                <div style={{ fontSize: 56, marginBottom: 16 }}>🔍</div>
+                <h1 style={{ fontSize: 26, fontFamily: "'IBM Plex Serif', Georgia, serif", marginBottom: 12, color: "#352637" }}>
+                  Bộ đề không tồn tại hoặc chưa công khai
+                </h1>
+                <p style={{ color: "#706473", fontSize: 15, marginBottom: 28, lineHeight: 1.6 }}>
+                  Bộ đề bạn đang tìm có thể đã bị ẩn hoặc chưa sẵn sàng. Bạn có thể quay lại thư viện đề để khám phá các bộ đề khác.
+                </p>
+                <a
+                  href={"#"}
+                  onClick={(e) => { e.preventDefault(); navigate("FullTests"); }}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: 44,
+                    padding: "0 24px",
+                    borderRadius: 999,
+                    background: "#2963CC",
+                    color: "#FFFFFF",
+                    fontWeight: 600,
+                    fontSize: 14,
+                    textDecoration: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Khám phá thư viện đề
+                </a>
+              </div>
+            ) : (
+            <>
             <section
               style={styleOf(
                 "background: linear-gradient(135deg, #E3ECFD 0%, #E6F3EC 100%); border-bottom: 1.5px solid #D6D4D0",
@@ -1115,7 +1241,8 @@ class ExamDetail extends React.Component {
                       {v.hasStart ? (
                         <>
                           <a
-                            href={v.startHref}
+                            href={"#"}
+                            onClick={v.startPick}
                             className={"press lift"}
                             style={styleOf(
                               "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; height: 44px; padding: 0 22px",
@@ -1313,7 +1440,8 @@ class ExamDetail extends React.Component {
                                         )}
                                       >
                                         <a
-                                          href={x.href}
+                                          href={"#"}
+                                          onClick={x.pick}
                                           className={"press"}
                                           style={styleOf(x.btnSt)}
                                         >
@@ -1384,7 +1512,8 @@ class ExamDetail extends React.Component {
                               {r.full ? (
                                 <>
                                   <a
-                                    href={"ListeningTest.dc.html"}
+                                    href={"#"}
+                                    onClick={r.pickFull}
                                     className={"press"}
                                     style={styleOf(
                                       "display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 14px; color: #2963CC; text-decoration: none; white-space: nowrap",
@@ -1519,7 +1648,8 @@ class ExamDetail extends React.Component {
                   {(v.related || []).map((c, index) => (
                     <React.Fragment key={index}>
                       <a
-                        href={"ExamDetail.dc.html"}
+                        href={"#"}
+                        onClick={c.pick}
                         className={"lift"}
                         style={styleOf(
                           "flex: 1 0 240px; max-width: 288px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-sizing: border-box; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
@@ -1581,6 +1711,8 @@ class ExamDetail extends React.Component {
                 </div>
               </section>
             </div>
+            </>
+            )}
           </div>
           {v.toast ? (
             <>

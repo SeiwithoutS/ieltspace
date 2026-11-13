@@ -1,6 +1,6 @@
 # Chạy cấu trúc CSDL IELTSpace
 
-**Database đã chạy 01 cũ:** dùng [04_nang_cap_tu_01.sql](04_nang_cap_tu_01.sql). **Project Supabase mới với schema public trống:** chạy một lần [01_tao_cau_truc_moi.sql](01_tao_cau_truc_moi.sql). Ngày 13/11, 01 đã theo [D08–D10](../DECISIONS.md) (39 bảng: bỏ exam_versions, kỹ năng có trạng thái và phiên bản, thêm danh mục bộ đề). 04 cũng đã viết lại theo D08 cùng ngày: chạy trên 01 cũ cho ra đúng cấu trúc của 01 mới (đã đối chiếu cột, ràng buộc, chỉ mục, trigger và RLS trên PostgreSQL 16). Bộ 01/02/03 cũ tại `_local/supabase-huong-dan/` được giữ để đối chiếu. Seed 02 cũ dùng exams.exam_type nên chỉ dùng với 01 cũ, trước nâng cấp.
+**Database đã chạy 01 cũ:** dùng [04_nang_cap_tu_01.sql](04_nang_cap_tu_01.sql) và [05_danh_muc_bo_de.sql](05_danh_muc_bo_de.sql). **Project Supabase mới với schema public trống:** chạy một lần [01_tao_cau_truc_moi.sql](01_tao_cau_truc_moi.sql). Ngày 13/11, cấu trúc đã theo [D08–D10](../DECISIONS.md) và thiết kế Quản lý bộ đề (40 bảng: bổ sung bảng `exam_set_categories`, bỏ exam_versions, kỹ năng có trạng thái và phiên bản, trigger updated_at cho exam_sets và exams, ràng buộc UNIQUE tên bộ đề). Tệp 05 tách riêng bảng danh mục động, thêm 5 danh mục mặc định và chuyển đổi dữ liệu an toàn.
 
 ## Database đang dùng
 

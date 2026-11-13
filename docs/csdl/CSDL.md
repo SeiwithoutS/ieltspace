@@ -1,6 +1,6 @@
 # Từ điển cơ sở dữ liệu IELTSpace
 
-39 bảng nghiệp vụ (bỏ exam_versions theo D08 ngày 13/11), chia theo tám nhóm của bản Word. Mỗi bảng có danh sách trường và một dòng mô tả. PostgreSQL tự sinh thêm cột kỹ thuật `exam_sections.section_skill` để kiểm tra loại phần thi với bảng cha.
+40 bảng nghiệp vụ (bổ sung exam_set_categories theo QLBD-00, bỏ exam_versions theo D08 ngày 13/11), chia theo tám nhóm của bản Word. PostgreSQL tự sinh thêm cột kỹ thuật `exam_sections.section_skill` để kiểm tra loại phần thi với bảng cha.
 
 ## 1. Người dùng
 
@@ -14,7 +14,8 @@
 
 | Bảng | Các trường dữ liệu chính | Thông tin cần lưu |
 |---|---|---|
-| Bộ đề · `exam_sets` | `id`, `name`, `description`, `cover_url`, `category`, `status`, `published_at`, `created_by`, `created_at`, `updated_at` | Tên bộ đề, ảnh bìa 3:2, danh mục (MOCK_TEST, ACTUAL_TEST, PRACTICE_TEST, FORECAST, OTHER), trạng thái công khai và ngày đăng lần đầu. |
+| Danh mục bộ đề · `exam_set_categories` | `id`, `name`, `slug`, `description`, `order_no`, `created_at`, `updated_at` | Danh mục phân loại bộ đề (IELTS Cambridge, Actual Tests, v.v.), hỗ trợ tạo động. |
+| Bộ đề · `exam_sets` | `id`, `name`, `description`, `cover_url`, `category_id`, `status`, `published_at`, `created_by`, `created_at`, `updated_at` | Tên bộ đề (UNIQUE), ảnh bìa 3:2 (preset hoặc upload), liên kết category_id, trạng thái DRAFT/PUBLISHED/HIDDEN. |
 | Đề thi · `exams` | `id`, `exam_set_id`, `title`, `order_no`, `description`, `created_by`, `created_at`, `updated_at` | Tên Test và thứ tự trong bộ. Trạng thái của Test suy từ các kỹ năng. |
 | Kỹ năng trong đề · `exam_skills` | `id`, `exam_id`, `skill`, `form`, `version_number`, `status`, `duration_minutes`, `band_scale_id`, `grading_rule_id`, `created_by`, `created_at`, `published_at` | Đơn vị đăng và phiên bản: một kỹ năng của một Test, Reading/Writing tách Academic/General. Trạng thái DRAFT, PUBLISHED, HIDDEN, ARCHIVED. |
 | Phần thi · `exam_sections` | `id`, `exam_skill_id`, `title`, `section_type`, `instruction`, `content`, `audio_path`, `image_path`, `transcript`, `config`, `order_no` | Nội dung theo Passage, Section, Task hoặc Part và tệp liên quan. Form lấy từ kỹ năng cha. |

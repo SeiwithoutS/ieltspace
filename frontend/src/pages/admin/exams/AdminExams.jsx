@@ -2,8 +2,43 @@ import React from "react";
 import { styleOf, cssText } from "../../../lib/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar from "../../../components/navigation/AdminTopbar";
+import { navigate } from "../../../lib/auth";
+import {
+  listCategories,
+  listSets,
+  createSet,
+  uploadCover,
+  deleteSet,
+  toUiSet,
+} from "../../../lib/exam-admin";
 
 class AdminExams extends React.Component {
+  state = {
+    loading: true,
+    loadError: null,
+    cats: [],
+    apiSets: [],
+    q: "",
+    fT: "all",
+    fS: "all",
+    create: null,
+    del: null,
+    toast: "",
+  };
+
+  loadData = async () => {
+    this.setState({ loading: true, loadError: null });
+    try {
+      const [cats, sets] = await Promise.all([listCategories(), listSets()]);
+      this.setState({ cats: cats || [], apiSets: sets || [], loading: false });
+    } catch (err) {
+      this.setState({
+        loading: false,
+        loadError: err?.message || "Không thể tải danh sách bộ đề.",
+      });
+    }
+  };
+
   componentDidMount() {
     var me = this;
     this._key = function (e) {
@@ -12,6 +47,7 @@ class AdminExams extends React.Component {
       }
     };
     document.addEventListener("keydown", this._key);
+    this.loadData();
   }
   componentWillUnmount() {
     document.removeEventListener("keydown", this._key);
@@ -21,196 +57,23 @@ class AdminExams extends React.Component {
     var me = this,
       s = this.state || {},
       self = this;
-    var CATS = [["MOCK", "Mock Test"], ["ACTUAL", "Actual Test"], ["PRACTICE", "Practice Test"], ["FORECAST", "Forecast"], ["OTHER", "Khác"]],
+    var sCats = s.cats || [];
+    var CATS = sCats.length
+      ? sCats.map(function (c) {
+          return [c.id, c.name];
+        })
+      : [
+          ["MOCK", "Mock Test"],
+          ["ACTUAL", "Actual Test"],
+          ["PRACTICE", "Practice Test"],
+          ["FORECAST", "Forecast"],
+          ["OTHER", "Khác"],
+        ],
       CATN = {};
     CATS.forEach(function (x) {
       CATN[x[0]] = x[1];
     });
-    var SETS = [
-        {
-          name: "Mock Test 2026 Vol 4",
-          cat: "MOCK",
-          art: 0,
-          short: "Vol 4",
-          status: "pub",
-          updated: "27/10/2026",
-          plays: "12.480",
-          desc: "Bộ đề mô phỏng theo cấu trúc Cambridge mới nhất, đủ 4 kỹ năng. Reading và Writing có cả bản Academic và General Training.",
-          tests: [
-            {
-              name: "Test 1",
-              updated: "22/10/2026",
-              L: "pub",
-              R: { A: "pub", G: "pub" },
-              W: { A: "pub", G: "draft" },
-              S: "pub",
-            },
-            {
-              name: "Test 2",
-              updated: "24/10/2026",
-              L: "pub",
-              R: { A: "draft", G: null },
-              W: { A: "pub", G: null },
-              S: "draft",
-            },
-            {
-              name: "Test 3",
-              updated: "27/10/2026",
-              L: "draft",
-              R: { A: "draft", G: "draft" },
-              W: { A: null, G: null },
-              S: null,
-            },
-            {
-              name: "Test 4",
-              updated: "18/10/2026",
-              L: "pub",
-              R: { A: "pub", G: null },
-              W: { A: "pub", G: null },
-              S: "pub",
-            },
-            {
-              name: "Test 5",
-              updated: "15/10/2026",
-              L: "hidden",
-              R: { A: "pub", G: "hidden" },
-              W: { A: "draft", G: "draft" },
-              S: null,
-            },
-            {
-              name: "Test 6",
-              updated: "26/10/2026",
-              L: null,
-              R: { A: null, G: "draft" },
-              W: { A: null, G: null },
-              S: null,
-            },
-          ],
-        },
-        {
-          name: "General Training Pack 01",
-          cat: "PRACTICE",
-          art: 2,
-          short: "GT 01",
-          status: "draft",
-          updated: "15/10/2026",
-          plays: "0",
-          desc: "Bộ đề luyện riêng hình thức General Training.",
-          tests: [
-            {
-              name: "Test 1",
-              updated: "15/10/2026",
-              L: null,
-              R: { A: null, G: "draft" },
-              W: { A: null, G: "draft" },
-              S: null,
-            },
-            {
-              name: "Test 2",
-              updated: "12/10/2026",
-              L: null,
-              R: { A: null, G: "draft" },
-              W: { A: null, G: null },
-              S: null,
-            },
-            {
-              name: "Test 3",
-              updated: "10/10/2026",
-              L: null,
-              R: { A: null, G: null },
-              W: { A: null, G: "draft" },
-              S: null,
-            },
-          ],
-        },
-        {
-          name: "Actual Test Quý 3/2026",
-          cat: "ACTUAL",
-          art: 3,
-          short: "Q3",
-          status: "hidden",
-          updated: "25/09/2026",
-          plays: "3.105",
-          desc: "Đề thi thật quý 3/2026 (Listening, Reading).",
-          tests: [
-            {
-              name: "Test 1",
-              updated: "25/09/2026",
-              L: "hidden",
-              R: { A: "hidden", G: null },
-              W: { A: null, G: null },
-              S: null,
-            },
-            {
-              name: "Test 2",
-              updated: "25/09/2026",
-              L: "hidden",
-              R: { A: "hidden", G: null },
-              W: { A: null, G: null },
-              S: null,
-            },
-            {
-              name: "Test 3",
-              updated: "25/09/2026",
-              L: "hidden",
-              R: { A: "hidden", G: null },
-              W: { A: null, G: null },
-              S: null,
-            },
-            {
-              name: "Test 4",
-              updated: "25/09/2026",
-              L: "hidden",
-              R: { A: "hidden", G: null },
-              W: { A: null, G: null },
-              S: null,
-            },
-            {
-              name: "Test 5",
-              updated: "25/09/2026",
-              L: "hidden",
-              R: { A: "hidden", G: null },
-              W: { A: null, G: null },
-              S: null,
-            },
-            {
-              name: "Test 6",
-              updated: "25/09/2026",
-              L: "hidden",
-              R: { A: "hidden", G: null },
-              W: { A: null, G: null },
-              S: null,
-            },
-            {
-              name: "Test 7",
-              updated: "25/09/2026",
-              L: "hidden",
-              R: { A: "hidden", G: null },
-              W: { A: null, G: null },
-              S: null,
-            },
-            {
-              name: "Test 8",
-              updated: "25/09/2026",
-              L: "hidden",
-              R: { A: "hidden", G: null },
-              W: { A: null, G: null },
-              S: null,
-            },
-          ],
-        },
-        {
-          name: "Mock Test 2026 Vol 5",
-          cat: "MOCK",
-          art: 1,
-          short: "Vol 5",
-          status: "draft",
-          updated: "27/10/2026",
-          plays: "0",
-          desc: "",
-          tests: [],
-        },
-      ],
+    var SETS = (s.apiSets || []).map(toUiSet),
       SK = [
         ["L", "Listening", "#DDE8FC", "#2A55B8"],
         ["R", "Reading", "#DCEDE2", "#2E6A48"],
@@ -271,11 +134,11 @@ class AdminExams extends React.Component {
         return;
       }
       if (!/^image\/(png|jpeg|webp)$/.test(f.type)) {
-        done(null, "Ảnh phải là JPG, PNG hoặc WebP.");
+        done(null, null, "Ảnh phải là JPG, PNG hoặc WebP.");
         return;
       }
       if (f.size > 5 * 1024 * 1024) {
-        done(null, "Ảnh lớn hơn 5 MB, hãy chọn ảnh nhỏ hơn.");
+        done(null, null, "Ảnh lớn hơn 5 MB, hãy chọn ảnh nhỏ hơn.");
         return;
       }
       var r = new FileReader();
@@ -285,6 +148,7 @@ class AdminExams extends React.Component {
         im.onload = function () {
           var q = im.width / im.height;
           done(
+            f,
             url,
             Math.abs(q - 1.5) > 0.12
               ? "Ảnh " +
@@ -297,7 +161,7 @@ class AdminExams extends React.Component {
           );
         };
         im.onerror = function () {
-          done(url, "");
+          done(f, url, "");
         };
         im.src = url;
       };
@@ -346,27 +210,10 @@ class AdminExams extends React.Component {
         me.setState({ toast: "" });
       }, 4200);
     }
-    var sets =
-        s.sets ||
-        (function () {
-          try {
-            var o = JSON.parse(
-              localStorage.getItem("ieltspace-sets") || "null",
-            );
-            if (o && o.length) {
-              return o;
-            }
-          } catch (err) {}
-          return SETS;
-        })(),
+    var sets = SETS,
       q = (s.q || "").trim().toLowerCase(),
       fT = s.fT || "all",
       fS = s.fS || "all";
-    try {
-      if (s.sets) {
-        localStorage.setItem("ieltspace-sets", JSON.stringify(s.sets));
-      }
-    } catch (err) {}
     var shown = sets.filter(function (st) {
       return (
         (!q || st.name.toLowerCase().indexOf(q) >= 0) &&
@@ -395,10 +242,9 @@ class AdminExams extends React.Component {
       });
     }
     var rows = shown.map(function (st) {
-      var i = sets.indexOf(st),
-        sst = SST[st.status],
+      var sst = SST[st.status],
         bg = artBg(st),
-        canDel = st.status === "draft" || !st.tests.length;
+        canDel = st.canDelete !== undefined ? st.canDelete : (st.status === "draft" || !st.tests.length);
       var types = ["A", "G"]
         .filter(function (c) {
           return has(st, c);
@@ -417,7 +263,7 @@ class AdminExams extends React.Component {
       });
       return {
         name: st.name,
-        cat: CATN[st.cat || "OTHER"],
+        cat: st.catName || CATN[st.cat] || "Khác",
         n: st.tests.length + " đề",
         updated: st.updated,
         st: sst[0],
@@ -438,8 +284,9 @@ class AdminExams extends React.Component {
             ? "background: " + bg
             : "background: #F3F0EA; border: 1.5px dashed #D6D4D0"),
         thumbText: !st.img && st.art != null && ART[st.art][2] ? st.short : "",
-        open: function () {
-          store("ieltspace-set", st);
+        open: function (e) {
+          stop(e);
+          navigate("AdminExamSet?id=" + st.id);
         },
         canDel: canDel,
         noDel: !canDel,
@@ -449,7 +296,7 @@ class AdminExams extends React.Component {
           " và đã có đề: chỉ ẩn được, không xóa.",
         del: function (e) {
           stop(e);
-          self.setState({ del: { i: i } });
+          self.setState({ del: st });
         },
       };
     });
@@ -474,7 +321,7 @@ class AdminExams extends React.Component {
         name: g[0],
         pick: function (e) {
           stop(e);
-          setC({ art: j, img: null, msg: "" });
+          setC({ art: j, img: null, fileObj: null, msg: "" });
         },
         st:
           "display: block; flex: none; width: 48px; height: 32px; border-radius: 8px; box-sizing: border-box; background: " +
@@ -504,34 +351,45 @@ class AdminExams extends React.Component {
       msgText: cv.msg || "",
       msgColor: cv.msgBad ? "#C0412A" : "#7A5A0E",
       file: function (e) {
-        readImage(e, function (url, msg) {
+        readImage(e, function (fileObj, url, msg) {
           if (!url) {
             setC({ msg: msg, msgBad: true });
             return;
           }
-          setC({ img: url, art: null, msg: msg, msgBad: false });
+          setC({ img: url, art: null, fileObj: fileObj, msg: msg, msgBad: false });
         });
       },
     };
     var dup = sets.some(function (st) {
       return st.name.trim().toLowerCase() === cName.trim().toLowerCase();
     });
+    var isNewCat = cv.cat === "__new";
+    var newCatLbl = (cv.newCat || "").trim();
     var cErr = cv.tried
       ? !cName.trim()
         ? "Nhập tên bộ đề."
         : dup
           ? "Đã có bộ đề cùng tên."
-          : ""
-      : "";
+          : isNewCat && !newCatLbl
+            ? "Nhập tên danh mục mới."
+            : cv.serverErr || ""
+      : cv.serverErr || "";
     var done = c && c.done ? c.done : null;
     // ---- xóa
-    var d = s.del ? sets[s.del.i] : null;
+    var d = s.del || null;
     return {
       keep: keep,
       rows: rows,
       noRows: !rows.length,
-      countText:
-        shown.length === sets.length
+      loading: !!s.loading,
+      loadError: s.loadError || null,
+      retry: function (e) {
+        stop(e);
+        me.loadData();
+      },
+      countText: s.loading
+        ? "Đang tải…"
+        : shown.length === sets.length
           ? sets.length + " bộ đề"
           : shown.length + "/" + sets.length + " bộ đề",
       q: s.q || "",
@@ -563,28 +421,90 @@ class AdminExams extends React.Component {
       },
       openCreate: function (e) {
         stop(e);
-        self.setState({ create: { name: "", desc: "", cat: "MOCK", art: null, img: null } });
+        self.setState({
+          create: {
+            name: "",
+            desc: "",
+            cat: sCats[0] ? sCats[0].id : "MOCK",
+            art: null,
+            img: null,
+            fileObj: null,
+          },
+        });
       },
+      catOpen: !!cv.catOpen,
+      catInput: cv.catOpen
+        ? cv.catQ || ""
+        : cv.cat === "__new"
+          ? cv.newCat || ""
+          : CATN[cv.cat || (sCats[0] && sCats[0].id) || "MOCK"] || "",
+      catFocus: function () {
+        if (!cv.catOpen) {
+          setC({ catOpen: true, catQ: "" });
+        }
+      },
+      catType: function (e) {
+        setC({ catOpen: true, catQ: e.target.value });
+      },
+      catClose: function (e) {
+        stop(e);
+        setC({ catOpen: false, catQ: "" });
+      },
+      catOpts: (function () {
+        var q = (cv.catQ || "").trim(),
+          ql = q.toLowerCase(),
+          cur = cv.cat || (sCats[0] && sCats[0].id) || "MOCK";
+        var base =
+          "display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; padding: 0 12px; border-radius: 8px; box-sizing: border-box; font-size: 14px; text-decoration: none; color: #352637; ";
+        var list = CATS.filter(function (x) {
+          return !ql || x[1].toLowerCase().indexOf(ql) >= 0;
+        }).map(function (x) {
+          var on = cur === x[0];
+          return {
+            label: x[1],
+            on: on,
+            st:
+              base +
+              (on
+                ? "background: #E3ECFD; font-weight: 600"
+                : "font-weight: 500"),
+            pick: function (e) {
+              stop(e);
+              setC({ cat: x[0], newCat: "", catOpen: false, catQ: "" });
+            },
+          };
+        });
+        if (
+          q &&
+          !CATS.some(function (x) {
+            return x[1].toLowerCase() === ql;
+          })
+        ) {
+          list.push({
+            label: "Tạo danh mục “" + q + "”",
+            on: cur === "__new" && (cv.newCat || "") === q,
+            st: base + "font-weight: 600; color: #2963CC",
+            pick: function (e) {
+              stop(e);
+              setC({ cat: "__new", newCat: q, catOpen: false, catQ: "" });
+            },
+          });
+        }
+        return list.length
+          ? list
+          : [
+              {
+                label: "Không có danh mục khớp",
+                on: false,
+                st: base + "color: #706473",
+                pick: stop,
+              },
+            ];
+      })(),
       closeCreate: function (e) {
         stop(e);
         self.setState({ create: null });
       },
-      cCats: CATS.map(function (x) {
-        var on = (cv.cat || "MOCK") === x[0];
-        return {
-          label: x[1],
-          on: on,
-          pick: function (e) {
-            stop(e);
-            setC({ cat: x[0] });
-          },
-          st:
-            "display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 999px; box-sizing: border-box; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; border: 1.5px solid " +
-            (on
-              ? "#352637; background: #352637; color: #FFFFFF"
-              : "#D6D4D0; background: #FFFFFF; color: #352637"),
-        };
-      }),
       createOpen: !!c,
       cForm: !!c && !done,
       cDone: !!done,
@@ -603,47 +523,80 @@ class AdminExams extends React.Component {
       setCDesc: function (e) {
         setC({ desc: e.target.value });
       },
-      submitCreate: function (e) {
+      submitCreate: async function (e) {
         stop(e);
-        if (!cName.trim() || dup) {
+        var isNew = cv.cat === "__new";
+        var newLbl = (cv.newCat || "").trim();
+        if (!cName.trim() || dup || (isNew && !newLbl)) {
           setC({ tried: true });
           return;
         }
-        var ns = {
-          name: cName.trim(),
-          art: cv.art,
-          img: cv.img || null,
-          short: picker.short,
-          cat: cv.cat || "MOCK",
-          status: "draft",
-          updated: "27/10/2026",
-          plays: "0",
-          desc: (cv.desc || "").trim(),
-          tests: [],
-        };
-        self.setState({
-          sets: [ns].concat(sets),
-          create: { done: ns },
-          flash: ns.name,
-          q: "",
-          fT: "all",
-          fS: "all",
-        });
+        if (cv.submitting) return;
+        setC({ submitting: true, serverErr: "" });
+        try {
+          var defaultCatId = sCats.length ? sCats[0].id : undefined;
+          var payload = {
+            name: cName.trim(),
+            description: (cv.desc || "").trim() || null,
+            coverUrl: cv.art != null ? "preset:" + cv.art : null,
+          };
+          if (isNew) {
+            payload.newCategoryName = newLbl;
+          } else {
+            payload.categoryId = cv.cat || defaultCatId;
+          }
+          var created = await createSet(payload);
+          if (cv.fileObj) {
+            try {
+              var coverRes = await uploadCover(created.id, cv.fileObj);
+              created.coverUrl = coverRes.coverUrl;
+            } catch (covErr) {
+              console.warn("Cover upload failed", covErr);
+            }
+          }
+          var uiCreated = toUiSet(created);
+          var updatedApiSets = [created].concat(s.apiSets || []);
+          var updatedCats = s.cats;
+          if (isNew) {
+            try {
+              updatedCats = await listCategories();
+            } catch (err) {}
+          }
+          self.setState({
+            apiSets: updatedApiSets,
+            cats: updatedCats,
+            create: { done: uiCreated },
+            flash: uiCreated.name,
+            q: "",
+            fT: "all",
+            fS: "all",
+          });
+        } catch (err) {
+          setC({
+            submitting: false,
+            serverErr:
+              err?.code === "EXAM_SET_NAME_EXISTS"
+                ? "Đã có bộ đề cùng tên."
+                : err?.message || "Không thể tạo bộ đề.",
+            tried: true,
+          });
+        }
       },
       doneName: done ? done.name : "",
       doneArtSt:
         "width: 98px; height: 140px; border-radius: 10px; box-shadow: 0 2px 6px rgba(53,38,55,.14), 0 14px 30px rgba(53,38,55,.14); background: " +
         ((done && artBg(done)) ||
           "repeating-linear-gradient(135deg, #F3F0EA 0 10px, #FAF9F5 10px 20px)"),
-      openNew: function () {
-        if (done) {
-          store("ieltspace-set", done);
+      openNew: function (e) {
+        stop(e);
+        if (done && done.id) {
+          navigate("AdminExamSet?id=" + done.id);
         }
       },
       delOpen: !!d,
       delName: d ? d.name : "",
       delText: d
-        ? d.tests.length
+        ? (d.tests && d.tests.length)
           ? "Bộ đề đang là Bản nháp với " +
             d.tests.length +
             " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
@@ -653,11 +606,21 @@ class AdminExams extends React.Component {
         stop(e);
         self.setState({ del: null });
       },
-      delOk: function (e) {
+      delOk: async function (e) {
         stop(e);
-        var ns = sets.slice();
-        ns.splice(s.del.i, 1);
-        toastSet("Đã xóa bộ đề “" + d.name + "”.", { sets: ns, del: null });
+        if (!d) return;
+        try {
+          await deleteSet(d.id);
+          var newApiSets = (s.apiSets || []).filter(function (x) {
+            return x.id !== d.id;
+          });
+          toastSet("Đã xóa bộ đề “" + d.name + "”.", {
+            apiSets: newApiSets,
+            del: null,
+          });
+        } catch (err) {
+          toastSet(err?.message || "Không thể xóa bộ đề.", { del: null });
+        }
       },
       toast: !!s.toast,
       toastText: s.toast || "",
@@ -919,7 +882,7 @@ class AdminExams extends React.Component {
                                 )}
                               >
                                 <a
-                                  href={"AdminExamSet.dc.html"}
+                                  href={"#"}
                                   onClick={r.open}
                                   style={styleOf(
                                     "display: flex; align-items: center; gap: 12px; color: #352637; font-weight: 600; text-decoration: none",
@@ -1024,7 +987,7 @@ class AdminExams extends React.Component {
                                   )}
                                 >
                                   <a
-                                    href={"AdminExamSet.dc.html"}
+                                    href={"#"}
                                     onClick={r.open}
                                     className={"press"}
                                     style={styleOf(
@@ -1116,24 +1079,47 @@ class AdminExams extends React.Component {
                       </tbody>
                     </table>
                   </div>
-                  {v.noRows ? (
-                    <>
-                      <div
-                        className={"an-fade"}
-                        style={styleOf(
-                          "padding: 36px 20px; text-align: center; color: #706473; font-size: 14px",
-                        )}
+                  {v.loading ? (
+                    <div
+                      className={"an-fade"}
+                      style={styleOf(
+                        "padding: 36px 20px; text-align: center; color: #706473; font-size: 14px",
+                      )}
+                    >
+                      {"Đang tải danh sách bộ đề…"}
+                    </div>
+                  ) : v.loadError ? (
+                    <div
+                      className={"an-fade"}
+                      style={styleOf(
+                        "padding: 36px 20px; text-align: center; color: #C0412A; font-size: 14px",
+                      )}
+                    >
+                      <span>{v.loadError}{" "}</span>
+                      <a
+                        href={"#"}
+                        onClick={v.retry}
+                        style={styleOf("font-weight: 600; color: #2963CC")}
                       >
-                        {"Không có bộ đề khớp bộ lọc. "}
-                        <a
-                          href={"#"}
-                          onClick={v.clearFilters}
-                          style={styleOf("font-weight: 600")}
-                        >
-                          {"Bỏ lọc"}
-                        </a>
-                      </div>
-                    </>
+                        {"Thử lại"}
+                      </a>
+                    </div>
+                  ) : v.noRows ? (
+                    <div
+                      className={"an-fade"}
+                      style={styleOf(
+                        "padding: 36px 20px; text-align: center; color: #706473; font-size: 14px",
+                      )}
+                    >
+                      {"Không có bộ đề khớp bộ lọc. "}
+                      <a
+                        href={"#"}
+                        onClick={v.clearFilters}
+                        style={styleOf("font-weight: 600")}
+                      >
+                        {"Bỏ lọc"}
+                      </a>
+                    </div>
                   ) : null}
                 </div>
                 <div style={styleOf("font-size: 13px; color: #706473")}>
@@ -1401,26 +1387,109 @@ class AdminExams extends React.Component {
                                     >
                                       {"Danh mục"}
                                     </span>
-                                    <div
-                                      role="radiogroup"
-                                      aria-labelledby="cat-label"
-                                      style={styleOf(
-                                        "display: flex; flex-wrap: wrap; gap: 8px",
-                                      )}
-                                    >
-                                      {(v.cCats || []).map((k, ki) => (
-                                        <a
-                                          key={ki}
-                                          href="#"
-                                          role="radio"
-                                          aria-checked={k.on}
-                                          onClick={k.pick}
-                                          className="press"
-                                          style={styleOf(k.st)}
+                                    <div style={styleOf("position: relative")}>
+                                      {v.catOpen ? (
+                                        <div
+                                          aria-hidden="true"
+                                          onClick={v.catClose}
+                                          style={styleOf(
+                                            "position: fixed; inset: 0; z-index: 4",
+                                          )}
+                                        ></div>
+                                      ) : null}
+                                      <div
+                                        style={styleOf(
+                                          "position: relative; z-index: 5",
+                                        )}
+                                      >
+                                        <input
+                                          id="cat-input"
+                                          role="combobox"
+                                          aria-expanded={v.catOpen}
+                                          aria-controls="cat-list"
+                                          aria-autocomplete="list"
+                                          aria-labelledby="cat-label"
+                                          autoComplete="off"
+                                          value={v.catInput}
+                                          placeholder="Chọn hoặc gõ để tìm danh mục"
+                                          onFocus={v.catFocus}
+                                          onChange={v.catType}
+                                          style={styleOf(
+                                            "display: block; width: 100%; height: 44px; box-sizing: border-box; padding: 0 40px 0 12px; border-radius: 10px; border: 1.5px solid #8E8392; background: #FFFFFF; color: #352637; font: inherit; font-size: 15px",
+                                          )}
+                                        />
+                                        <span
+                                          aria-hidden="true"
+                                          style={styleOf(
+                                            "position: absolute; right: 14px; top: 14px; display: flex; color: #706473; pointer-events: none",
+                                          )}
                                         >
-                                          {k.label}
-                                        </a>
-                                      ))}
+                                          <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            aria-hidden="true"
+                                          >
+                                            <path d="M6 9l6 6 6-6"></path>
+                                          </svg>
+                                        </span>
+                                        {v.catOpen ? (
+                                          <ul
+                                            id="cat-list"
+                                            role="listbox"
+                                            aria-label="Danh mục"
+                                            style={styleOf(
+                                              "list-style: none; margin: 6px 0 0; padding: 6px; position: absolute; left: 0; right: 0; top: 100%; max-height: 240px; overflow-y: auto; box-sizing: border-box; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 12px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 12px 28px rgba(53, 38, 55, 0.16)",
+                                            )}
+                                          >
+                                            {(v.catOpts || []).map(
+                                              (o, cidx) => (
+                                                <li
+                                                  key={cidx}
+                                                  role="option"
+                                                  aria-selected={o.on}
+                                                  style={styleOf("margin: 0")}
+                                                >
+                                                  <a
+                                                    href="#"
+                                                    onClick={o.pick}
+                                                    className="press"
+                                                    style={styleOf(o.st)}
+                                                  >
+                                                    <span>{o.label}</span>
+                                                    {o.on ? (
+                                                      <span
+                                                        style={styleOf(
+                                                          "display: flex; color: #2963CC",
+                                                        )}
+                                                      >
+                                                        <svg
+                                                          width="16"
+                                                          height="16"
+                                                          viewBox="0 0 24 24"
+                                                          fill="none"
+                                                          stroke="currentColor"
+                                                          strokeWidth="2.2"
+                                                          strokeLinecap="round"
+                                                          strokeLinejoin="round"
+                                                          aria-hidden="true"
+                                                        >
+                                                          <path d="M5 12l5 5 9-10"></path>
+                                                        </svg>
+                                                      </span>
+                                                    ) : null}
+                                                  </a>
+                                                </li>
+                                              ),
+                                            )}
+                                          </ul>
+                                        ) : null}
+                                      </div>
                                     </div>
                                     <span
                                       style={styleOf(
@@ -1428,7 +1497,7 @@ class AdminExams extends React.Component {
                                       )}
                                     >
                                       {
-                                        "Dùng để nhóm bộ đề ở Thư viện Full Tests và mục Bộ đề cùng loại."
+                                        "Chọn danh mục có sẵn; gõ tên chưa có thì chọn \"Tạo danh mục\" để thêm. Dùng để nhóm bộ đề ở Thư viện Full Tests và mục Bộ đề cùng loại."
                                       }
                                     </span>
                                   </div>
@@ -1603,7 +1672,7 @@ class AdminExams extends React.Component {
                                   {"Đóng"}
                                 </a>
                                 <a
-                                  href={"AdminExamSet.dc.html"}
+                                  href={"#"}
                                   onClick={v.openNew}
                                   className={"press"}
                                   style={styleOf(

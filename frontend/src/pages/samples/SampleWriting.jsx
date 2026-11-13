@@ -538,7 +538,7 @@ class SampleWriting extends React.Component {
                           <span
                             style={styleOf("font-size: 13px; color: #706473")}
                           >
-                            {"Luyện từng Question Group, nghe lại được"}
+                            {"Đề Listening theo Test, chọn được Section"}
                           </span>
                         </span>
                       </a>
@@ -586,7 +586,7 @@ class SampleWriting extends React.Component {
                           <span
                             style={styleOf("font-size: 13px; color: #706473")}
                           >
-                            {"Luyện từng Question Group, có lời giải"}
+                            {"Đề Reading theo Test, chọn được Passage"}
                           </span>
                         </span>
                       </a>

@@ -541,6 +541,19 @@ class AdminExamSet extends React.Component {
         cls: s.flash === t.name ? "an-flash" : "",
         del: function (e) {
           stop(e);
+          // BR-EXAM-001: đề đã từng đăng (còn kỹ năng Đã đăng hoặc Đã ẩn) có thể đã có lượt làm, chỉ được ẩn, không xóa
+          var used = SK.some(function (k) {
+            return vals(t, k[0]).some(function (x) {
+              return x === "pub" || x === "hidden";
+            });
+          });
+          if (used) {
+            toastSet(
+              t.name +
+                " đã đăng nên không xóa được, để giữ bài làm của người học. Hãy ẩn từng kỹ năng nếu không muốn người học thấy.",
+            );
+            return;
+          }
           var nt = tests.slice();
           nt.splice(r, 1);
           setT(nt, "Đã xóa " + t.name + ".");

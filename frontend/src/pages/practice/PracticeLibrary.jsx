@@ -246,7 +246,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 13px; color: #706473",
                                 )}
                               >
-                                {"Luyện từng Question Group, nghe lại được"}
+                                {"Đề Listening theo Test, chọn được Section"}
                               </span>
                             </span>
                           </a>
@@ -299,7 +299,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 13px; color: #706473",
                                 )}
                               >
-                                {"Luyện từng Question Group, có lời giải"}
+                                {"Đề Reading theo Test, chọn được Passage"}
                               </span>
                             </span>
                           </a>
@@ -782,7 +782,7 @@ class PracticeLibrary extends React.Component {
                               "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                             )}
                           >
-                            {"10 câu"}
+                            {"40 câu"}
                           </span>
                         </div>
                         <div style={styleOf("padding: 4px 8px 0")}>
@@ -791,7 +791,7 @@ class PracticeLibrary extends React.Component {
                               "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                             )}
                           >
-                            {"Booking a city walking tour"}
+                            {"Mock Test 2026 Vol 4 · Test 1"}
                           </div>
                         </div>
                         <div
@@ -799,7 +799,7 @@ class PracticeLibrary extends React.Component {
                             "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
-                          <span>{"196 lượt làm"}</span>
+                          <span>{"Listening · 30 phút · 196 lượt làm"}</span>
                         </div>
                         <div
                           style={styleOf(
@@ -854,7 +854,7 @@ class PracticeLibrary extends React.Component {
                               "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                             )}
                           >
-                            {"10 câu"}
+                            {"40 câu"}
                           </span>
                         </div>
                         <div style={styleOf("padding: 4px 8px 0")}>
@@ -863,7 +863,7 @@ class PracticeLibrary extends React.Component {
                               "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                             )}
                           >
-                            {"A volunteer day at the museum"}
+                            {"Mock Test 2026 Vol 4 · Test 2"}
                           </div>
                         </div>
                         <div
@@ -871,7 +871,7 @@ class PracticeLibrary extends React.Component {
                             "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
-                          <span>{"214 lượt làm"}</span>
+                          <span>{"Listening · 30 phút · 214 lượt làm"}</span>
                         </div>
                         <div
                           style={styleOf(
@@ -926,7 +926,7 @@ class PracticeLibrary extends React.Component {
                               "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                             )}
                           >
-                            {"10 câu"}
+                            {"40 câu"}
                           </span>
                         </div>
                         <div style={styleOf("padding: 4px 8px 0")}>
@@ -935,7 +935,7 @@ class PracticeLibrary extends React.Component {
                               "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                             )}
                           >
-                            {"Planning a marine biology project"}
+                            {"Mock Test 2026 Vol 4 · Test 3"}
                           </div>
                         </div>
                         <div
@@ -943,7 +943,7 @@ class PracticeLibrary extends React.Component {
                             "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
-                          <span>{"149 lượt làm"}</span>
+                          <span>{"Listening · 30 phút · 149 lượt làm"}</span>
                         </div>
                         <div
                           style={styleOf(
@@ -998,7 +998,7 @@ class PracticeLibrary extends React.Component {
                               "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                             )}
                           >
-                            {"10 câu"}
+                            {"40 câu"}
                           </span>
                         </div>
                         <div style={styleOf("padding: 4px 8px 0")}>
@@ -1007,7 +1007,7 @@ class PracticeLibrary extends React.Component {
                               "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                             )}
                           >
-                            {"Renting a holiday cottage"}
+                            {"Mock Test 2026 Vol 4 · Test 4"}
                           </div>
                         </div>
                         <div
@@ -1015,7 +1015,7 @@ class PracticeLibrary extends React.Component {
                             "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
-                          <span>{"139 lượt làm"}</span>
+                          <span>{"Listening · 30 phút · 139 lượt làm"}</span>
                         </div>
                         <div
                           style={styleOf(
@@ -1384,7 +1384,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -1393,7 +1393,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"The history of urban parks"}
+                                {"IELTS CAM Inspired 19 · Test 1"}
                               </div>
                             </div>
                             <div
@@ -1401,7 +1401,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"11K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 11K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -1456,7 +1456,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                               <span
                                 style={styleOf(
@@ -1485,7 +1485,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Orientation day at the library"}
+                                {"Mock Test 2026 Vol 4 · Test 2"}
                               </div>
                             </div>
                             <div
@@ -1493,7 +1493,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"14K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 14K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -1548,7 +1548,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -1557,7 +1557,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Discussing a group assignment"}
+                                {"IELTS CAM Inspired 19 · Test 2"}
                               </div>
                             </div>
                             <div
@@ -1565,7 +1565,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"6K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 6K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -1620,7 +1620,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -1629,7 +1629,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Sleep and memory research"}
+                                {"IELTS CAM Inspired 19 · Test 3"}
                               </div>
                             </div>
                             <div
@@ -1637,7 +1637,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"7K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 7K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -1692,7 +1692,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -1701,7 +1701,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Joining a sports centre"}
+                                {"IELTS CAM Inspired 19 · Test 4"}
                               </div>
                             </div>
                             <div
@@ -1709,7 +1709,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"6K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 6K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -1764,7 +1764,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                               <span
                                 style={styleOf(
@@ -1793,7 +1793,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"A guided farm visit"}
+                                {"Mock Test 2026 Vol 2 · Test 3"}
                               </div>
                             </div>
                             <div
@@ -1801,7 +1801,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"5K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 5K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -1856,7 +1856,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -1865,7 +1865,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Changes to the bus network"}
+                                {"Mock Test 2026 Vol 3 · Test 1"}
                               </div>
                             </div>
                             <div
@@ -1873,7 +1873,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"3K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 3K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -1928,7 +1928,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -1937,7 +1937,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Recycling at the student halls"}
+                                {"Mock Test 2026 Vol 3 · Test 2"}
                               </div>
                             </div>
                             <div
@@ -1945,7 +1945,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"6K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 6K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -2000,7 +2000,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -2009,7 +2009,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Birds of the wetlands"}
+                                {"Mock Test 2026 Vol 3 · Test 3"}
                               </div>
                             </div>
                             <div
@@ -2017,7 +2017,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"4K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 4K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -2072,7 +2072,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -2081,7 +2081,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Setting up a community garden"}
+                                {"Mock Test 2026 Vol 3 · Test 4"}
                               </div>
                             </div>
                             <div
@@ -2089,7 +2089,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"5K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 5K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -2144,7 +2144,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -2153,7 +2153,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"The science of colour"}
+                                {"Actual Test Quý 2/2026 · Test 1"}
                               </div>
                             </div>
                             <div
@@ -2161,7 +2161,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"3K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 3K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -2216,7 +2216,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"10 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -2225,7 +2225,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Lost property enquiry"}
+                                {"Actual Test Quý 2/2026 · Test 2"}
                               </div>
                             </div>
                             <div
@@ -2233,7 +2233,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"4K lượt làm"}</span>
+                              <span>{"Listening · 30 phút · 4K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -2522,7 +2522,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 13px; color: #706473",
                                 )}
                               >
-                                {"Luyện từng Question Group, nghe lại được"}
+                                {"Đề Listening theo Test, chọn được Section"}
                               </span>
                             </span>
                           </a>
@@ -2575,7 +2575,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 13px; color: #706473",
                                 )}
                               >
-                                {"Luyện từng Question Group, có lời giải"}
+                                {"Đề Reading theo Test, chọn được Passage"}
                               </span>
                             </span>
                           </a>
@@ -3058,7 +3058,7 @@ class PracticeLibrary extends React.Component {
                               "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                             )}
                           >
-                            {"13 câu"}
+                            {"40 câu"}
                           </span>
                         </div>
                         <div style={styleOf("padding: 4px 8px 0")}>
@@ -3067,7 +3067,7 @@ class PracticeLibrary extends React.Component {
                               "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                             )}
                           >
-                            {"The rise of urban beekeeping"}
+                            {"Mock Test 2026 Vol 4 · Test 1"}
                           </div>
                         </div>
                         <div
@@ -3075,7 +3075,7 @@ class PracticeLibrary extends React.Component {
                             "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
-                          <span>{"312 lượt làm"}</span>
+                          <span>{"Reading General · 60 phút · 312 lượt làm"}</span>
                         </div>
                         <div
                           style={styleOf(
@@ -3130,7 +3130,7 @@ class PracticeLibrary extends React.Component {
                               "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                             )}
                           >
-                            {"13 câu"}
+                            {"40 câu"}
                           </span>
                         </div>
                         <div style={styleOf("padding: 4px 8px 0")}>
@@ -3139,7 +3139,7 @@ class PracticeLibrary extends React.Component {
                               "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                             )}
                           >
-                            {"How deserts are formed"}
+                            {"Mock Test 2026 Vol 4 · Test 2"}
                           </div>
                         </div>
                         <div
@@ -3147,7 +3147,7 @@ class PracticeLibrary extends React.Component {
                             "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
-                          <span>{"256 lượt làm"}</span>
+                          <span>{"Reading Academic · 60 phút · 256 lượt làm"}</span>
                         </div>
                         <div
                           style={styleOf(
@@ -3202,7 +3202,7 @@ class PracticeLibrary extends React.Component {
                               "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                             )}
                           >
-                            {"13 câu"}
+                            {"40 câu"}
                           </span>
                         </div>
                         <div style={styleOf("padding: 4px 8px 0")}>
@@ -3211,7 +3211,7 @@ class PracticeLibrary extends React.Component {
                               "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                             )}
                           >
-                            {"The psychology of habit"}
+                            {"Mock Test 2026 Vol 4 · Test 3"}
                           </div>
                         </div>
                         <div
@@ -3219,7 +3219,7 @@ class PracticeLibrary extends React.Component {
                             "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
-                          <span>{"198 lượt làm"}</span>
+                          <span>{"Reading Academic · 60 phút · 198 lượt làm"}</span>
                         </div>
                         <div
                           style={styleOf(
@@ -3274,7 +3274,7 @@ class PracticeLibrary extends React.Component {
                               "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                             )}
                           >
-                            {"13 câu"}
+                            {"40 câu"}
                           </span>
                         </div>
                         <div style={styleOf("padding: 4px 8px 0")}>
@@ -3283,7 +3283,7 @@ class PracticeLibrary extends React.Component {
                               "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                             )}
                           >
-                            {"A short history of the bicycle"}
+                            {"Mock Test 2026 Vol 4 · Test 4"}
                           </div>
                         </div>
                         <div
@@ -3291,7 +3291,7 @@ class PracticeLibrary extends React.Component {
                             "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                           )}
                         >
-                          <span>{"174 lượt làm"}</span>
+                          <span>{"Reading General · 60 phút · 174 lượt làm"}</span>
                         </div>
                         <div
                           style={styleOf(
@@ -3660,7 +3660,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -3669,7 +3669,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Coral reefs under pressure"}
+                                {"IELTS CAM Inspired 19 · Test 1"}
                               </div>
                             </div>
                             <div
@@ -3677,7 +3677,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"12K lượt làm"}</span>
+                              <span>{"Reading Academic · 60 phút · 12K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -3732,7 +3732,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                               <span
                                 style={styleOf(
@@ -3761,7 +3761,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Language and thought"}
+                                {"Mock Test 2026 Vol 4 · Test 1"}
                               </div>
                             </div>
                             <div
@@ -3769,7 +3769,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"9K lượt làm"}</span>
+                              <span>{"Reading Academic · 60 phút · 9K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -3824,7 +3824,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -3833,7 +3833,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"The invention of paper money"}
+                                {"IELTS CAM Inspired 19 · Test 2"}
                               </div>
                             </div>
                             <div
@@ -3841,7 +3841,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"8K lượt làm"}</span>
+                              <span>{"Reading Academic · 60 phút · 8K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -3896,7 +3896,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -3905,7 +3905,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Night skies and light pollution"}
+                                {"IELTS CAM Inspired 19 · Test 3"}
                               </div>
                             </div>
                             <div
@@ -3913,7 +3913,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"7K lượt làm"}</span>
+                              <span>{"Reading General · 60 phút · 7K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -3968,7 +3968,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -3977,7 +3977,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Can machines be creative?"}
+                                {"IELTS CAM Inspired 19 · Test 4"}
                               </div>
                             </div>
                             <div
@@ -3985,7 +3985,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"10K lượt làm"}</span>
+                              <span>{"Reading Academic · 60 phút · 10K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -4040,7 +4040,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                               <span
                                 style={styleOf(
@@ -4069,7 +4069,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"The secret life of ants"}
+                                {"Mock Test 2026 Vol 1 · Test 2"}
                               </div>
                             </div>
                             <div
@@ -4077,7 +4077,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"6K lượt làm"}</span>
+                              <span>{"Reading Academic · 60 phút · 6K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -4132,7 +4132,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -4141,7 +4141,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Ancient roads of Rome"}
+                                {"Mock Test 2026 Vol 3 · Test 1"}
                               </div>
                             </div>
                             <div
@@ -4149,7 +4149,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"5K lượt làm"}</span>
+                              <span>{"Reading Academic · 60 phút · 5K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -4204,7 +4204,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -4213,7 +4213,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Why we procrastinate"}
+                                {"Mock Test 2026 Vol 3 · Test 2"}
                               </div>
                             </div>
                             <div
@@ -4221,7 +4221,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"9K lượt làm"}</span>
+                              <span>{"Reading General · 60 phút · 9K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -4276,7 +4276,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -4285,7 +4285,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Glass: a material story"}
+                                {"Mock Test 2026 Vol 3 · Test 3"}
                               </div>
                             </div>
                             <div
@@ -4293,7 +4293,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"4K lượt làm"}</span>
+                              <span>{"Reading Academic · 60 phút · 4K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -4348,7 +4348,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -4357,7 +4357,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Tea and the trade routes"}
+                                {"Mock Test 2026 Vol 3 · Test 4"}
                               </div>
                             </div>
                             <div
@@ -4365,7 +4365,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"5K lượt làm"}</span>
+                              <span>{"Reading Academic · 60 phút · 5K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -4420,7 +4420,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -4429,7 +4429,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"Mapping the ocean floor"}
+                                {"Actual Test Quý 2/2026 · Test 1"}
                               </div>
                             </div>
                             <div
@@ -4437,7 +4437,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"4K lượt làm"}</span>
+                              <span>{"Reading General · 60 phút · 4K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -4492,7 +4492,7 @@ class PracticeLibrary extends React.Component {
                                   "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                                 )}
                               >
-                                {"13 câu"}
+                                {"40 câu"}
                               </span>
                             </div>
                             <div style={styleOf("padding: 4px 8px 0")}>
@@ -4501,7 +4501,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
                                 )}
                               >
-                                {"The future of farming"}
+                                {"Actual Test Quý 2/2026 · Test 2"}
                               </div>
                             </div>
                             <div
@@ -4509,7 +4509,7 @@ class PracticeLibrary extends React.Component {
                                 "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
                               )}
                             >
-                              <span>{"6K lượt làm"}</span>
+                              <span>{"Reading Academic · 60 phút · 6K lượt làm"}</span>
                             </div>
                             <div
                               style={styleOf(
@@ -4798,7 +4798,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 13px; color: #706473",
                                 )}
                               >
-                                {"Luyện từng Question Group, nghe lại được"}
+                                {"Đề Listening theo Test, chọn được Section"}
                               </span>
                             </span>
                           </a>
@@ -4851,7 +4851,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 13px; color: #706473",
                                 )}
                               >
-                                {"Luyện từng Question Group, có lời giải"}
+                                {"Đề Reading theo Test, chọn được Passage"}
                               </span>
                             </span>
                           </a>
@@ -6649,7 +6649,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 13px; color: #706473",
                                 )}
                               >
-                                {"Luyện từng Question Group, nghe lại được"}
+                                {"Đề Listening theo Test, chọn được Section"}
                               </span>
                             </span>
                           </a>
@@ -6702,7 +6702,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 13px; color: #706473",
                                 )}
                               >
-                                {"Luyện từng Question Group, có lời giải"}
+                                {"Đề Reading theo Test, chọn được Passage"}
                               </span>
                             </span>
                           </a>
@@ -8507,7 +8507,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 13px; color: #706473",
                                 )}
                               >
-                                {"Luyện từng Question Group, nghe lại được"}
+                                {"Đề Listening theo Test, chọn được Section"}
                               </span>
                             </span>
                           </a>
@@ -8560,7 +8560,7 @@ class PracticeLibrary extends React.Component {
                                   "font-size: 13px; color: #706473",
                                 )}
                               >
-                                {"Luyện từng Question Group, có lời giải"}
+                                {"Đề Reading theo Test, chọn được Passage"}
                               </span>
                             </span>
                           </a>

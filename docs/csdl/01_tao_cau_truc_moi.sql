@@ -38,28 +38,23 @@ create table public.study_goals (
 );
 create table public.exam_sets (
  id uuid primary key default gen_random_uuid(), name text not null, description text, cover_url text,
+ category text not null default 'OTHER' check(category in ('MOCK_TEST','ACTUAL_TEST','PRACTICE_TEST','FORECAST','OTHER')),
  status text not null default 'DRAFT' check(status in ('DRAFT','PUBLISHED','HIDDEN')),
+ published_at timestamptz, check(status='DRAFT' or published_at is not null),
  created_by uuid references public.users(id), created_at timestamptz not null default now(), updated_at timestamptz not null default now()
 );
 create table public.exams (
  id uuid primary key default gen_random_uuid(), exam_set_id uuid not null references public.exam_sets(id),
  title text not null, order_no integer,
- description text, status text not null default 'DRAFT' check(status in ('DRAFT','PUBLISHED','HIDDEN')),
+ description text,
  created_by uuid references public.users(id), created_at timestamptz not null default now(), updated_at timestamptz not null default now()
-);
-create table public.exam_versions (
- id uuid primary key default gen_random_uuid(), exam_id uuid not null references public.exams(id),
- version_number integer not null check(version_number>0),
- status text not null default 'DRAFT' check(status in ('DRAFT','PUBLISHED')),
- created_by uuid references public.users(id), created_at timestamptz not null default now(), published_at timestamptz,
- unique(exam_id,version_number), check((status='PUBLISHED')=(published_at is not null))
 );
 create table public.band_scales (
  id uuid primary key default gen_random_uuid(), name text not null,
  skill text not null check(skill in ('LISTENING','READING')),
- exam_type text not null check(exam_type in ('ACADEMIC','GENERAL_TRAINING')),
+ form text check(form in ('ACADEMIC','GENERAL')), check((skill='READING')=(form is not null)),
  version integer not null check(version>0), conversion_rules jsonb not null,
- unique(name,skill,exam_type,version)
+ unique(name,skill,form,version)
 );
 create table public.grading_rules (
  id uuid primary key default gen_random_uuid(), name text not null,
@@ -75,16 +70,22 @@ create table public.rubric_criteria (
  score_step numeric not null default 0.5 check(score_step>0), order_no integer not null check(order_no>0),
  check(max_score>=min_score), unique(grading_rule_id,order_no)
 );
+-- Đơn vị đăng và phiên bản: một kỹ năng của một Test, Reading/Writing tách theo form (D08).
 create table public.exam_skills (
- id uuid primary key default gen_random_uuid(), exam_version_id uuid not null references public.exam_versions(id),
+ id uuid primary key default gen_random_uuid(), exam_id uuid not null references public.exams(id),
  skill text not null check(skill in ('LISTENING','READING','WRITING','SPEAKING')),
+ form text check(form in ('ACADEMIC','GENERAL')),
+ version_number integer not null check(version_number>0),
+ status text not null default 'DRAFT' check(status in ('DRAFT','PUBLISHED','HIDDEN','ARCHIVED')),
  duration_minutes integer not null check(duration_minutes>0),
- is_hidden boolean not null default false, band_scale_id uuid references public.band_scales(id), grading_rule_id uuid references public.grading_rules(id),
- order_no integer not null check(order_no>0), unique(exam_version_id,skill), unique(exam_version_id,order_no)
+ band_scale_id uuid references public.band_scales(id), grading_rule_id uuid references public.grading_rules(id),
+ created_by uuid references public.users(id), created_at timestamptz not null default now(), published_at timestamptz,
+ check((skill in ('READING','WRITING'))=(form is not null)),
+ check((status='DRAFT')=(published_at is null))
 );
 create table public.exam_sections (
  id uuid primary key default gen_random_uuid(), exam_skill_id uuid not null references public.exam_skills(id),
- title text not null, section_type text not null, form text, config jsonb not null default '{}'::jsonb, instruction text,
+ title text not null, section_type text not null, config jsonb not null default '{}'::jsonb, instruction text,
  content jsonb not null default '{}'::jsonb, transcript jsonb not null default '[]'::jsonb,
  audio_path text, image_path text, order_no integer not null check(order_no>0)
 );
@@ -110,7 +111,7 @@ create table public.question_answers (
 );
 create table public.attempts (
  id uuid primary key default gen_random_uuid(), user_id uuid not null references public.users(id),
- exam_version_id uuid not null references public.exam_versions(id),
+ exam_id uuid not null references public.exams(id),
  attempt_type text not null check(attempt_type in ('FULL_EXAM','FULL_SKILL','SECTION','QUESTION_GROUP')),
  selected_scope jsonb not null default '{}'::jsonb,
  status text not null default 'IN_PROGRESS' check(status in ('IN_PROGRESS','COMPLETED','ABANDONED')),
@@ -263,7 +264,7 @@ create table public.notifications (
 );
 create table public.import_batches (
  id uuid primary key default gen_random_uuid(), request_key uuid not null unique, import_type text not null,
- exam_id uuid references public.exams(id), skill text,
+ exam_id uuid references public.exams(id), skill text, form text,
  file_name text not null, temporary_path text,
  status text not null default 'PENDING' check(status in ('PENDING','VALIDATED','COMPLETED','FAILED','CANCELLED')),
  total_records integer not null default 0 check(total_records>=0), valid_records integer not null default 0 check(valid_records>=0),
@@ -286,27 +287,30 @@ create table public.audit_logs (
  entity_type text not null, entity_id uuid, change_data jsonb, reason text, created_at timestamptz not null default now()
 );
 
-create unique index one_draft_per_exam on public.exam_versions(exam_id) where status='DRAFT';
+-- Mỗi kỹ năng + form của một Test: một bản nháp, một bản đang hiển thị (Công khai hoặc Đã ẩn).
+create unique index skill_version_no on public.exam_skills(exam_id,skill,coalesce(form,''),version_number);
+create unique index one_draft_per_skill on public.exam_skills(exam_id,skill,coalesce(form,'')) where status='DRAFT';
+create unique index one_live_per_skill on public.exam_skills(exam_id,skill,coalesce(form,'')) where status in ('PUBLISHED','HIDDEN');
+create index exam_sets_library on public.exam_sets(category,published_at desc) where status='PUBLISHED';
 
 alter table public.exams alter column order_no set not null,
  add check(order_no > 0), add unique(exam_set_id,order_no);
 
+alter table public.band_scales add unique(id,skill,form);
+-- Reading phải dùng thang đúng kỹ năng và form; Listening (form NULL) do service kiểm tra.
 alter table public.exam_skills add unique(id,skill),
+ add foreign key(band_scale_id,skill,form) references public.band_scales(id,skill,form),
  add constraint exam_skill_scoring check (
  (skill in ('READING','LISTENING') and grading_rule_id is null) or
  (skill in ('WRITING','SPEAKING') and band_scale_id is null));
 
--- Derived key ties section type and form to the actual parent skill.
+-- Derived key ties section type to the actual parent skill; form lấy từ exam_skills.
 alter table public.exam_sections
  add column section_skill text generated always as (case section_type
    when 'PASSAGE' then 'READING' when 'SECTION' then 'LISTENING'
    when 'TASK' then 'WRITING' when 'PART' then 'SPEAKING' end) stored not null,
  add foreign key(exam_skill_id,section_skill) references public.exam_skills(id,skill),
- add constraint section_form_valid check (
-   (section_type in ('PASSAGE','TASK') and form is not null and form in ('ACADEMIC','GENERAL')) or
-   (section_type in ('SECTION','PART') and form is null));
-create unique index section_order_per_form on public.exam_sections(exam_skill_id,form,order_no) where form is not null;
-create unique index section_order_without_form on public.exam_sections(exam_skill_id,order_no) where form is null;
+ add unique(exam_skill_id,order_no);
 
 alter table public.questions add constraint question_numbers_valid check (
  (number_from is null and number_to is null) or
@@ -316,8 +320,9 @@ alter table public.question_groups add constraint group_numbers_valid check (
  (question_from is not null and question_to is not null and question_from > 0 and question_to >= question_from));
 
 alter table public.import_batches add constraint import_target_valid check (
- (import_type in ('SAMPLE','VOCABULARY') and exam_id is null and skill is null) or
- (exam_id is not null and skill is not null and skill in ('READING','LISTENING','WRITING','SPEAKING') and import_type='EXAM_' || skill));
+ (import_type in ('SAMPLE','VOCABULARY') and exam_id is null and skill is null and form is null) or
+ (exam_id is not null and skill is not null and skill in ('READING','LISTENING','WRITING','SPEAKING') and import_type='EXAM_' || skill
+  and (skill in ('READING','WRITING'))=(form is not null) and (form is null or form in ('ACADEMIC','GENERAL'))));
 
 alter table public.flashcard_sessions add constraint flashcard_source_valid check (
  (source_type='SET' and set_id is not null) or (source_type='FAVORITES' and set_id is null));

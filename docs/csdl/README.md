@@ -1,6 +1,6 @@
 # Chạy cấu trúc CSDL IELTSpace
 
-**Database đã chạy 01 cũ:** dùng [04_nang_cap_tu_01.sql](04_nang_cap_tu_01.sql). **Project Supabase mới với schema public trống:** chạy một lần [01_tao_cau_truc_moi.sql](01_tao_cau_truc_moi.sql). Hai tệp là hai đường đi đến cùng 40 bảng nghiệp vụ. Bộ 01/02/03 cũ tại `_local/supabase-huong-dan/` được giữ để đối chiếu. Seed 02 cũ dùng exams.exam_type nên chỉ dùng với 01 cũ, trước nâng cấp.
+**Database đã chạy 01 cũ:** dùng [04_nang_cap_tu_01.sql](04_nang_cap_tu_01.sql). **Project Supabase mới với schema public trống:** chạy một lần [01_tao_cau_truc_moi.sql](01_tao_cau_truc_moi.sql). Ngày 13/11, 01 đã theo [D08–D10](../DECISIONS.md) (39 bảng: bỏ exam_versions, kỹ năng có trạng thái và phiên bản, thêm danh mục bộ đề). **04 chưa cập nhật theo D08** nên hiện vẫn ra cấu trúc 40 bảng cũ; chưa dùng 04 cho đến khi được viết lại. Bộ 01/02/03 cũ tại `_local/supabase-huong-dan/` được giữ để đối chiếu. Seed 02 cũ dùng exams.exam_type nên chỉ dùng với 01 cũ, trước nâng cấp.
 
 ## Database đang dùng
 
@@ -61,6 +61,6 @@ select to_regclass('public.vocabulary_tags') as nhan_trong_nghiep_vu,
 select count(*) from pg_tables where schemaname='public';
 ```
 
-So số dòng với trước nâng cấp. Với DB chỉ chứa bảng IELTSpace, public có 40 bảng. Nếu có thêm bảng riêng, tổng số sẽ khác. Trên đường nâng cấp, nhan_trong_nghiep_vu là NULL và nhan_luu_tru có giá trị. Chạy lại kiểm tra RLS/quyền ở 03 cũ, thử đăng nhập bằng tài khoản đã có, mở đề mẫu và kiểm tra dữ liệu thật trước khi bật ghi trở lại.
+So số dòng với trước nâng cấp. Với DB chỉ chứa bảng IELTSpace, public có 39 bảng (01 sau D08). Nếu có thêm bảng riêng, tổng số sẽ khác. Trên đường nâng cấp, nhan_trong_nghiep_vu là NULL và nhan_luu_tru có giá trị. Chạy lại kiểm tra RLS/quyền ở 03 cũ, thử đăng nhập bằng tài khoản đã có, mở đề mẫu và kiểm tra dữ liệu thật trước khi bật ghi trở lại.
 
 [Từ điển bảng](CSDL.md).

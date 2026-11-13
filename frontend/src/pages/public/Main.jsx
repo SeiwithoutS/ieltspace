@@ -202,7 +202,7 @@ class Main extends React.Component {
                           <span
                             style={styleOf("font-size: 13px; color: #706473")}
                           >
-                            {"Luyện từng Question Group, nghe lại được"}
+                            {"Đề Listening theo Test, chọn được Section"}
                           </span>
                         </span>
                       </a>
@@ -250,7 +250,7 @@ class Main extends React.Component {
                           <span
                             style={styleOf("font-size: 13px; color: #706473")}
                           >
-                            {"Luyện từng Question Group, có lời giải"}
+                            {"Đề Reading theo Test, chọn được Passage"}
                           </span>
                         </span>
                       </a>
@@ -1201,7 +1201,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Mock Test 2026 Vol 4 · Full 4 kỹ năng"}
+                  {"Mock Test 2026 Vol 4"}
                 </div>
                 {"\n"}
                 <div
@@ -1268,7 +1268,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Đề thi thật Quý 3/2026 · Full 4 kỹ năng"}
+                  {"Actual Test Quý 2/2026"}
                 </div>
                 {"\n"}
                 <div
@@ -1290,7 +1290,7 @@ class Main extends React.Component {
                     "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
                   )}
                 >
-                  {"Tổng hợp từ các kỳ thi tháng 7 đến tháng 9/2026"}
+                  {"Tổng hợp từ các kỳ thi tháng 4 đến tháng 6/2026"}
                 </div>
                 {"\n"}
                 <a
@@ -1527,7 +1527,7 @@ class Main extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"13 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -1536,7 +1536,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"The Rise and Fall of Urban Beekeeping"}
+                  {"Mock Test 2026 Vol 4 · Test 1"}
                 </div>
                 {"\n"}
                 <div
@@ -1544,7 +1544,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"3.2K lượt làm"}
+                  {"Reading Academic · 60 phút · 3.2K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1605,7 +1605,7 @@ class Main extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"13 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -1614,7 +1614,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Glass: From Sand to Smartphone Screens"}
+                  {"Mock Test 2026 Vol 4 · Test 1"}
                 </div>
                 {"\n"}
                 <div
@@ -1622,7 +1622,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"5.6K lượt làm"}
+                  {"Reading General · 60 phút · 5.6K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1683,7 +1683,7 @@ class Main extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"14 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -1692,7 +1692,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Restoring the Great Barrier Reef"}
+                  {"Mock Test 2026 Vol 4 · Test 4"}
                 </div>
                 {"\n"}
                 <div
@@ -1700,7 +1700,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"4.1K lượt làm"}
+                  {"Reading Academic · 60 phút · 4.1K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1761,7 +1761,7 @@ class Main extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"13 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -1770,7 +1770,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Why Cities Are Getting Hotter"}
+                  {"Mock Test 2026 Vol 4 · Test 5"}
                 </div>
                 {"\n"}
                 <div
@@ -1778,7 +1778,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"2.7K lượt làm"}
+                  {"Reading Academic · 60 phút · 2.7K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1904,7 +1904,7 @@ class Main extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"10 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -1913,7 +1913,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Section 1 · Community Garden Booking"}
+                  {"Mock Test 2026 Vol 4 · Test 1"}
                 </div>
                 {"\n"}
                 <div
@@ -1921,7 +1921,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"2.8K lượt làm"}
+                  {"Listening · 30 phút · 2.8K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1982,7 +1982,7 @@ class Main extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"10 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -1991,7 +1991,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Section 2 · Museum Audio Tour"}
+                  {"Mock Test 2026 Vol 4 · Test 2"}
                 </div>
                 {"\n"}
                 <div
@@ -1999,7 +1999,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"2.1K lượt làm"}
+                  {"Listening · 30 phút · 2.1K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -2060,7 +2060,7 @@ class Main extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"10 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -2069,7 +2069,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Section 3 · Planning a Marine Biology Field Trip"}
+                  {"Mock Test 2026 Vol 4 · Test 4"}
                 </div>
                 {"\n"}
                 <div
@@ -2077,7 +2077,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"3.7K lượt làm"}
+                  {"Listening · 30 phút · 3.7K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -2138,7 +2138,7 @@ class Main extends React.Component {
                       "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
                     )}
                   >
-                    {"10 câu"}
+                    {"40 câu"}
                   </span>
                 </div>
                 {"\n"}
@@ -2147,7 +2147,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Section 4 · The History of Paper Money"}
+                  {"IELTS CAM Inspired 19 · Test 1"}
                 </div>
                 {"\n"}
                 <div
@@ -2155,7 +2155,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"1.9K lượt làm"}
+                  {"Listening · 30 phút · 1.9K lượt làm"}
                 </div>
                 {"\n"}
                 <div

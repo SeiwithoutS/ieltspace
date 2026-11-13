@@ -1,6 +1,6 @@
 # Chạy cấu trúc CSDL IELTSpace
 
-**Database đã chạy 01 cũ:** dùng [04_nang_cap_tu_01.sql](04_nang_cap_tu_01.sql). **Project Supabase mới với schema public trống:** chạy một lần [01_tao_cau_truc_moi.sql](01_tao_cau_truc_moi.sql). Ngày 13/11, 01 đã theo [D08–D10](../DECISIONS.md) (39 bảng: bỏ exam_versions, kỹ năng có trạng thái và phiên bản, thêm danh mục bộ đề). **04 chưa cập nhật theo D08** nên hiện vẫn ra cấu trúc 40 bảng cũ; chưa dùng 04 cho đến khi được viết lại. Bộ 01/02/03 cũ tại `_local/supabase-huong-dan/` được giữ để đối chiếu. Seed 02 cũ dùng exams.exam_type nên chỉ dùng với 01 cũ, trước nâng cấp.
+**Database đã chạy 01 cũ:** dùng [04_nang_cap_tu_01.sql](04_nang_cap_tu_01.sql). **Project Supabase mới với schema public trống:** chạy một lần [01_tao_cau_truc_moi.sql](01_tao_cau_truc_moi.sql). Ngày 13/11, 01 đã theo [D08–D10](../DECISIONS.md) (39 bảng: bỏ exam_versions, kỹ năng có trạng thái và phiên bản, thêm danh mục bộ đề). 04 cũng đã viết lại theo D08 cùng ngày: chạy trên 01 cũ cho ra đúng cấu trúc của 01 mới (đã đối chiếu cột, ràng buộc, chỉ mục, trigger và RLS trên PostgreSQL 16). Bộ 01/02/03 cũ tại `_local/supabase-huong-dan/` được giữ để đối chiếu. Seed 02 cũ dùng exams.exam_type nên chỉ dùng với 01 cũ, trước nâng cấp.
 
 ## Database đang dùng
 
@@ -15,6 +15,11 @@
 ```sql
 select exam_id, count(*) from public.exam_versions
 where status='DRAFT' group by exam_id having count(*)>1;
+
+select k.id, k.skill, b.skill as thang_skill, b.exam_type, e.exam_type as loai_de
+from public.exam_skills k join public.exam_versions v on v.id=k.exam_version_id
+join public.exams e on e.id=v.exam_id join public.band_scales b on b.id=k.band_scale_id
+where k.skill='READING' and (b.skill<>'READING' or b.exam_type<>e.exam_type);
 
 select s.id, k.skill, s.section_type from public.exam_sections s
 join public.exam_skills k on k.id=s.exam_skill_id
@@ -37,22 +42,27 @@ Các giá trị tự đánh giá được nhận là NULL, REMEMBERED, NOT_REMEM
 
 | Vùng | Xử lý khi nâng cấp |
 |---|---|
-| Bộ đề và Test | Đổi tên cover_path thành cover_url, giữ giá trị đường dẫn. Gán order_no ban đầu theo created_at, rồi id trong mỗi bộ. Kiểm tra lại thứ tự mong muốn của Quản lý. |
-| Phiên bản, kỹ năng và phần | Thêm khóa một bản nháp/đề và cờ is_hidden mặc định false. Chuyển exam_type sang form cho Reading/Writing với GENERAL_TRAINING → GENERAL. Thêm config, giữ transcript hiện có. Cột sinh section_skill và khóa ngoại ghép bảo vệ quan hệ với kỹ năng cha. |
-| Nhóm câu và câu hỏi | Dải số L/R được suy từ thứ tự phần, nhóm, câu và answer_count, tính riêng theo kỹ năng/form. Kiểm lại với đề gốc nếu số hiển thị cũ có khoảng trống hoặc bắt đầu khác 1. Nhóm trống và W/S có thể để dải số NULL. |
+| Bộ đề và Test | Đổi tên cover_path thành cover_url, giữ giá trị đường dẫn. Thêm category, mọi bộ cũ nhận OTHER: Quản lý cần chọn lại danh mục. Bộ đề không còn Bản nháp nhận published_at là ngày đăng sớm nhất của các Test bên trong, không có thì lấy updated_at. Gán order_no ban đầu theo created_at, rồi id trong mỗi bộ. Kiểm tra lại thứ tự mong muốn của Quản lý. Bỏ exams.status và exams.exam_type sau khi đã chuyển sang kỹ năng. |
+| Phiên bản và kỹ năng (D08) | Mỗi dòng exam_skills giữ nguyên id, nhận exam_id, version_number, created_at, published_at từ phiên bản cũ. Reading/Writing nhận form từ exam_type của Test (GENERAL_TRAINING → GENERAL). Trạng thái: phiên bản nháp → DRAFT; phiên bản đã đăng mới nhất của Test → PUBLISHED nếu Test cũ Công khai, còn lại HIDDEN; phiên bản đã đăng cũ hơn → ARCHIVED. Bỏ exam_versions và exam_skills.order_no (bản sao ở ielts_archive_01). attempts.exam_version_id thành exam_id; bài làm cũ vẫn trỏ đúng kỹ năng đã làm qua skill_attempts.exam_skill_id. Tệp dừng nếu một Test có nhiều bản nháp hoặc Reading dùng thang khác loại đề. |
+| Thang band | exam_type thành form, chỉ Reading có form. Hai thang Listening chỉ khác exam_type sẽ thành hai dòng giống nhau: giữ một và gán lại kỹ năng dùng dòng kia nếu muốn gọn. |
+| Phần thi | Thêm config, giữ transcript hiện có. Không có cột form (lấy từ kỹ năng). Cột sinh section_skill và khóa ngoại ghép bảo vệ quan hệ với kỹ năng cha. Giữ thứ tự duy nhất trong mỗi kỹ năng. |
+| Nhóm câu và câu hỏi | Dải số L/R được suy từ thứ tự phần, nhóm, câu và answer_count, tính riêng theo từng kỹ năng. Kiểm lại với đề gốc nếu số hiển thị cũ có khoảng trống hoặc bắt đầu khác 1. Nhóm trống và W/S có thể để dải số NULL. |
 | JSON cũ | Passage chỉ có khóa paragraphs được bóc thành mảng. Nếu có khóa bổ sung, giữ nguyên object để đối chiếu. Sao chép các trường bằng chứng nhận diện được từ explanation sang evidence và giữ lời giải gốc. Kiểm tra các cấu trúc JSON riêng của dữ liệu thật. |
 | Từ vựng | Giữ thẻ và tiến độ ôn. Chuyển hai bảng nhãn cũ sang schema riêng ielts_archive_01, lưu liên kết phiên–nhãn trước khi bỏ tag_id trong bảng nghiệp vụ. Không mở schema này qua Supabase Data API. |
-| Lô nhập | Giữ id, request_key, asset và lỗi. Gắn đích nhập bằng bảng ánh xạ. Ràng buộc kiểm tra skill khớp EXAM_*, còn SAMPLE/VOCABULARY để đích đề trống. |
+| Lô nhập | Giữ id, request_key, asset và lỗi. Gắn đích nhập bằng bảng ánh xạ (Test, kỹ năng và form cho Reading/Writing). Ràng buộc kiểm tra skill khớp EXAM_* và form có đúng khi cần, còn SAMPLE/VOCABULARY để đích đề trống. |
 | Cấu hình | Thêm system_settings theo bảng trong bản Word, khởi tạo 72 giờ, 14 ngày và 10 thẻ. Giá trị mặc định tải giáo viên trong 01 là 5; chưa thêm khóa teacher_default_max_pending vì bản Word chờ nhóm chốt. Giới hạn 72 giờ trong CHECK cũ vẫn áp dụng. Việc cho sửa tham số vận hành cần đồng bộ backend và ràng buộc. |
 
-Các bảng users, attempts, skill_attempts, attempt_section_states, support_credits, grading_requests, credit_refunds, learning_activities, notifications cùng các khóa đã đúng được giữ nguyên. Các trigger liên kết Supabase Auth hiện có nằm ngoài phạm vi sửa của 04. Khởi tạo project mới cần thiết lập trigger hồ sơ riêng theo [hướng dẫn Auth](../PROGRESS/2026-11-07-trang-thai-du-an.md#cấu-hình-auth).
+Các bảng users, skill_attempts, attempt_section_states, support_credits, grading_requests, credit_refunds, learning_activities, notifications cùng các khóa đã đúng được giữ nguyên. Các trigger liên kết Supabase Auth hiện có nằm ngoài phạm vi sửa của 04. Khởi tạo project mới cần thiết lập trigger hồ sơ riêng theo [hướng dẫn Auth](../PROGRESS/2026-11-07-trang-thai-du-an.md#cấu-hình-auth).
 
 ### Kiểm tra sau khi chạy
 
 ```sql
 select key,value from public.system_settings order by key;
-select s.id,s.section_type,k.skill,s.form,s.order_no from public.exam_sections s
-join public.exam_skills k on k.id=s.exam_skill_id order by k.id,s.form,s.order_no;
+select e.title,k.skill,k.form,k.version_number,k.status,k.published_at from public.exam_skills k
+join public.exams e on e.id=k.exam_id order by e.exam_set_id,e.order_no,k.skill,k.form,k.version_number;
+select s.id,s.section_type,k.skill,k.form,s.order_no from public.exam_sections s
+join public.exam_skills k on k.id=s.exam_skill_id order by k.id,s.order_no;
+select name,category,status,published_at from public.exam_sets order by name;
 select g.id,g.question_from,g.question_to,q.order_no,q.number_from,q.number_to
 from public.question_groups g join public.questions q on q.question_group_id=g.id
 order by g.id,q.order_no;

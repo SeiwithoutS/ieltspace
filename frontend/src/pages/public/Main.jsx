@@ -1476,7 +1476,7 @@ class Main extends React.Component {
                 {"\n"}
                 <p style={styleOf("margin: 4px 0 0; color: #706473")}>
                   {
-                    "Từng passage riêng lẻ, chấm điểm và giải thích đáp án ngay khi nộp."
+                    "Mỗi đề là trọn kỹ năng Reading: chọn Practice từng Passage hoặc Real Test 60 phút."
                   }
                 </p>
                 {"\n"}
@@ -1536,7 +1536,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Mock Test 2026 Vol 4 · Test 1"}
+                  {"Mock Test 2026 Vol 4 · Test 1 · Reading"}
                 </div>
                 {"\n"}
                 <div
@@ -1544,7 +1544,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"Reading Academic · 60 phút · 3.2K lượt làm"}
+                  {"Academic · 3.2K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1614,7 +1614,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Mock Test 2026 Vol 4 · Test 1"}
+                  {"Mock Test 2026 Vol 4 · Test 4 · Reading"}
                 </div>
                 {"\n"}
                 <div
@@ -1622,7 +1622,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"Reading General · 60 phút · 5.6K lượt làm"}
+                  {"Academic · 5.6K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1692,7 +1692,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Mock Test 2026 Vol 4 · Test 4"}
+                  {"Mock Test 2026 Vol 4 · Test 5 · Reading"}
                 </div>
                 {"\n"}
                 <div
@@ -1700,7 +1700,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"Reading Academic · 60 phút · 4.1K lượt làm"}
+                  {"Academic · 4.1K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1770,7 +1770,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Mock Test 2026 Vol 4 · Test 5"}
+                  {"IELTS CAM Inspired 19 · Test 1 · Reading"}
                 </div>
                 {"\n"}
                 <div
@@ -1778,7 +1778,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"Reading Academic · 60 phút · 2.7K lượt làm"}
+                  {"General Training · 2.7K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1853,7 +1853,7 @@ class Main extends React.Component {
                 {"\n"}
                 <p style={styleOf("margin: 4px 0 0; color: #706473")}>
                   {
-                    "Từng phần với audio thật. Khi luyện tập bạn được nghe lại; bài thi đầy đủ chỉ phát một lần."
+                    "Mỗi đề là trọn kỹ năng Listening: chọn Practice từng Section hoặc Real Test, audio phát một lần."
                   }
                 </p>
                 {"\n"}
@@ -1913,7 +1913,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Mock Test 2026 Vol 4 · Test 1"}
+                  {"Mock Test 2026 Vol 4 · Test 1 · Listening"}
                 </div>
                 {"\n"}
                 <div
@@ -1921,7 +1921,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"Listening · 30 phút · 2.8K lượt làm"}
+                  {"2.8K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -1991,7 +1991,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Mock Test 2026 Vol 4 · Test 2"}
+                  {"Mock Test 2026 Vol 4 · Test 2 · Listening"}
                 </div>
                 {"\n"}
                 <div
@@ -1999,7 +1999,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"Listening · 30 phút · 2.1K lượt làm"}
+                  {"2.1K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -2069,7 +2069,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"Mock Test 2026 Vol 4 · Test 4"}
+                  {"Mock Test 2026 Vol 4 · Test 4 · Listening"}
                 </div>
                 {"\n"}
                 <div
@@ -2077,7 +2077,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"Listening · 30 phút · 3.7K lượt làm"}
+                  {"3.7K lượt làm"}
                 </div>
                 {"\n"}
                 <div
@@ -2147,7 +2147,7 @@ class Main extends React.Component {
                     "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
                   )}
                 >
-                  {"IELTS CAM Inspired 19 · Test 1"}
+                  {"IELTS CAM Inspired 19 · Test 1 · Listening"}
                 </div>
                 {"\n"}
                 <div
@@ -2155,7 +2155,7 @@ class Main extends React.Component {
                     "font-size: 14px; color: #706473; padding: 0 6px",
                   )}
                 >
-                  {"Listening · 30 phút · 1.9K lượt làm"}
+                  {"1.9K lượt làm"}
                 </div>
                 {"\n"}
                 <div

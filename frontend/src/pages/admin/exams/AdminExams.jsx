@@ -21,9 +21,15 @@ class AdminExams extends React.Component {
     var me = this,
       s = this.state || {},
       self = this;
+    var CATS = [["MOCK", "Mock Test"], ["ACTUAL", "Actual Test"], ["PRACTICE", "Practice Test"], ["FORECAST", "Forecast"], ["OTHER", "Khác"]],
+      CATN = {};
+    CATS.forEach(function (x) {
+      CATN[x[0]] = x[1];
+    });
     var SETS = [
         {
           name: "Mock Test 2026 Vol 4",
+          cat: "MOCK",
           art: 0,
           short: "Vol 4",
           status: "pub",
@@ -83,6 +89,7 @@ class AdminExams extends React.Component {
         },
         {
           name: "General Training Pack 01",
+          cat: "PRACTICE",
           art: 2,
           short: "GT 01",
           status: "draft",
@@ -118,6 +125,7 @@ class AdminExams extends React.Component {
         },
         {
           name: "Actual Test Quý 3/2026",
+          cat: "ACTUAL",
           art: 3,
           short: "Q3",
           status: "hidden",
@@ -193,6 +201,7 @@ class AdminExams extends React.Component {
         },
         {
           name: "Mock Test 2026 Vol 5",
+          cat: "MOCK",
           art: 1,
           short: "Vol 5",
           status: "draft",
@@ -408,6 +417,7 @@ class AdminExams extends React.Component {
       });
       return {
         name: st.name,
+        cat: CATN[st.cat || "OTHER"],
         n: st.tests.length + " đề",
         updated: st.updated,
         st: sst[0],
@@ -553,12 +563,28 @@ class AdminExams extends React.Component {
       },
       openCreate: function (e) {
         stop(e);
-        self.setState({ create: { name: "", desc: "", art: null, img: null } });
+        self.setState({ create: { name: "", desc: "", cat: "MOCK", art: null, img: null } });
       },
       closeCreate: function (e) {
         stop(e);
         self.setState({ create: null });
       },
+      cCats: CATS.map(function (x) {
+        var on = (cv.cat || "MOCK") === x[0];
+        return {
+          label: x[1],
+          on: on,
+          pick: function (e) {
+            stop(e);
+            setC({ cat: x[0] });
+          },
+          st:
+            "display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 999px; box-sizing: border-box; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; border: 1.5px solid " +
+            (on
+              ? "#352637; background: #352637; color: #FFFFFF"
+              : "#D6D4D0; background: #FFFFFF; color: #352637"),
+        };
+      }),
       createOpen: !!c,
       cForm: !!c && !done,
       cDone: !!done,
@@ -588,6 +614,7 @@ class AdminExams extends React.Component {
           art: cv.art,
           img: cv.img || null,
           short: picker.short,
+          cat: cv.cat || "MOCK",
           status: "draft",
           updated: "27/10/2026",
           plays: "0",
@@ -911,7 +938,20 @@ class AdminExams extends React.Component {
                                       {r.thumbText}
                                     </span>
                                   </span>
-                                  <span>{r.name}</span>
+                                  <span
+                                    style={styleOf(
+                                      "display: flex; flex-direction: column; gap: 2px",
+                                    )}
+                                  >
+                                    <span>{r.name}</span>
+                                    <span
+                                      style={styleOf(
+                                        "font-size: 13px; font-weight: 500; color: #706473",
+                                      )}
+                                    >
+                                      {r.cat}
+                                    </span>
+                                  </span>
                                 </a>
                               </td>
                               <td
@@ -1348,6 +1388,50 @@ class AdminExams extends React.Component {
                                       </span>
                                     </span>
                                   </label>
+                                  <div
+                                    style={styleOf(
+                                      "display: flex; flex-direction: column; gap: 6px",
+                                    )}
+                                  >
+                                    <span
+                                      id="cat-label"
+                                      style={styleOf(
+                                        "font-size: 13px; font-weight: 600; color: #352637",
+                                      )}
+                                    >
+                                      {"Danh mục"}
+                                    </span>
+                                    <div
+                                      role="radiogroup"
+                                      aria-labelledby="cat-label"
+                                      style={styleOf(
+                                        "display: flex; flex-wrap: wrap; gap: 8px",
+                                      )}
+                                    >
+                                      {(v.cCats || []).map((k, ki) => (
+                                        <a
+                                          key={ki}
+                                          href="#"
+                                          role="radio"
+                                          aria-checked={k.on}
+                                          onClick={k.pick}
+                                          className="press"
+                                          style={styleOf(k.st)}
+                                        >
+                                          {k.label}
+                                        </a>
+                                      ))}
+                                    </div>
+                                    <span
+                                      style={styleOf(
+                                        "font-size: 13px; color: #706473",
+                                      )}
+                                    >
+                                      {
+                                        "Dùng để nhóm bộ đề ở Thư viện Full Tests và mục Bộ đề cùng loại."
+                                      }
+                                    </span>
+                                  </div>
                                   <label
                                     style={styleOf(
                                       "display: flex; flex-direction: column; gap: 6px",

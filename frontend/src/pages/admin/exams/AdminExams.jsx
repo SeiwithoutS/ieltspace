@@ -60,15 +60,15 @@ class AdminExams extends React.Component {
     var sCats = s.cats || [];
     var CATS = sCats.length
       ? sCats.map(function (c) {
-          return [c.id, c.name];
-        })
+        return [c.id, c.name];
+      })
       : [
-          ["MOCK", "Mock Test"],
-          ["ACTUAL", "Actual Test"],
-          ["PRACTICE", "Practice Test"],
-          ["FORECAST", "Forecast"],
-          ["OTHER", "Khác"],
-        ],
+        ["MOCK", "Mock Test"],
+        ["ACTUAL", "Actual Test"],
+        ["PRACTICE", "Practice Test"],
+        ["FORECAST", "Forecast"],
+        ["OTHER", "Khác"],
+      ],
       CATN = {};
     CATS.forEach(function (x) {
       CATN[x[0]] = x[1];
@@ -125,7 +125,7 @@ class AdminExams extends React.Component {
     function store(k, v) {
       try {
         sessionStorage.setItem(k, JSON.stringify({ at: Date.now(), v: v }));
-      } catch (err) {}
+      } catch (err) { }
     }
     // đọc ảnh người dùng chọn: kiểm tra loại và dung lượng, đo tỉ lệ để cảnh báo khi lệch xa 3:2
     function readImage(e, done) {
@@ -152,10 +152,10 @@ class AdminExams extends React.Component {
             url,
             Math.abs(q - 1.5) > 0.12
               ? "Ảnh " +
-                  im.width +
-                  " × " +
-                  im.height +
-                  " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
+              im.width +
+              " × " +
+              im.height +
+              " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
               : "",
             true,
           );
@@ -168,7 +168,7 @@ class AdminExams extends React.Component {
       r.readAsDataURL(f);
       try {
         e.target.value = "";
-      } catch (err) {}
+      } catch (err) { }
     }
 
     function vals(t, k) {
@@ -272,11 +272,11 @@ class AdminExams extends React.Component {
         types: types.length
           ? types
           : [
-              {
-                text: st.tests.length ? "Chỉ L/S" : "Chưa có đề",
-                st: pill("#F3F0EA", "#706473"),
-              },
-            ],
+            {
+              text: st.tests.length ? "Chỉ L/S" : "Chưa có đề",
+              st: pill("#F3F0EA", "#706473"),
+            },
+          ],
         skills: skills.length ? skills : [{ text: "—", st: "color: #706473" }],
         thumbSt:
           "display: flex; align-items: flex-end; flex: none; width: 48px; height: 32px; border-radius: 8px; box-sizing: border-box; overflow: hidden; color: #FFFFFF; box-shadow: 0 1px 3px rgba(53, 38, 55, 0.18); " +
@@ -337,8 +337,8 @@ class AdminExams extends React.Component {
         "display: flex; align-items: flex-end; width: 240px; height: 160px; border-radius: 12px; box-sizing: border-box; overflow: hidden; color: " +
         (cBg
           ? "#FFFFFF; background: " +
-            cBg +
-            "; box-shadow: 0 2px 6px rgba(53,38,55,.12), 0 12px 28px rgba(53,38,55,.12)"
+          cBg +
+          "; box-shadow: 0 2px 6px rgba(53,38,55,.12), 0 12px 28px rgba(53,38,55,.12)"
           : "#706473; background: #FAF9F5; border: 1.5px dashed #C9C2C6"),
       text: !!(!cv.img && cv.art != null && ART[cv.art][2]),
       short: (cName.match(/(Vol|Test|Pack)\s*\S+$/i) || [
@@ -493,13 +493,13 @@ class AdminExams extends React.Component {
         return list.length
           ? list
           : [
-              {
-                label: "Không có danh mục khớp",
-                on: false,
-                st: base + "color: #706473",
-                pick: stop,
-              },
-            ];
+            {
+              label: "Không có danh mục khớp",
+              on: false,
+              st: base + "color: #706473",
+              pick: stop,
+            },
+          ];
       })(),
       closeCreate: function (e) {
         stop(e);
@@ -560,7 +560,7 @@ class AdminExams extends React.Component {
           if (isNew) {
             try {
               updatedCats = await listCategories();
-            } catch (err) {}
+            } catch (err) { }
           }
           self.setState({
             apiSets: updatedApiSets,
@@ -598,8 +598,8 @@ class AdminExams extends React.Component {
       delText: d
         ? (d.tests && d.tests.length)
           ? "Bộ đề đang là Bản nháp với " +
-            d.tests.length +
-            " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
+          d.tests.length +
+          " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
           : "Bộ đề chưa có đề nào. Thao tác này không hoàn tác được."
         : "",
       delCancel: function (e) {
@@ -1314,7 +1314,7 @@ class AdminExams extends React.Component {
                                         className={"an-rise"}
                                         style={styleOf(
                                           "font-size: 13px; line-height: 1.45; color: " +
-                                            v.cv.msgColor,
+                                          v.cv.msgColor,
                                         )}
                                       >
                                         {v.cv.msgText}
@@ -1491,15 +1491,6 @@ class AdminExams extends React.Component {
                                         ) : null}
                                       </div>
                                     </div>
-                                    <span
-                                      style={styleOf(
-                                        "font-size: 13px; color: #706473",
-                                      )}
-                                    >
-                                      {
-                                        "Chọn danh mục có sẵn; gõ tên chưa có thì chọn \"Tạo danh mục\" để thêm. Dùng để nhóm bộ đề ở Thư viện Full Tests và mục Bộ đề cùng loại."
-                                      }
-                                    </span>
                                   </div>
                                   <label
                                     style={styleOf(

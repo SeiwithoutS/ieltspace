@@ -50,10 +50,14 @@
 |---|---|---|
 | Chạy 04 và 05 SQL trên PostgreSQL | Local PostgreSQL (port 5432) | Đạt. 40 bảng hoạt động đúng thiết kế D08, `select count(*) from public.exam_set_categories` = 5. |
 | `npm run prisma:generate` | Local Node.js v20 | Đạt. Prisma Client tạo thành công với toàn bộ 40 models. |
-| `node --test tests/exam-rules.test.mjs` | Local Node.js v20 | Đạt. 8/8 tests pass (142ms). |
+| `node --test tests/exam-rules.test.mjs` | Local Node.js v20 | Đạt. 8/8 tests pass (82ms). |
+| `node --test tests/exams-services.test.mjs` | Local Node.js v20 + PostgreSQL | Đạt. 3/3 suites pass (bao phủ QB-01 đến QB-12: danh mục, bộ đề, đề thi, kỹ năng, khóa, audit logs, điều kiện xóa/đăng). |
 | `cd backend; npm run typecheck` | Local Node.js v20 | Đạt. 0 lỗi typecheck TypeScript (NodeNext). |
 | `cd backend; npm run build` | Local Node.js v20 | Đạt. Biên dịch toàn bộ tsc sang thư mục `dist/` thành công. |
 | `cd frontend; npm run build` | Local Node.js v20 | Đạt. `tsc --noEmit && vite build` hoàn tất không có lỗi, tạo bundle `dist/` hoàn chỉnh. |
+| Kiểm tra menu thao tác kỹ năng (`AdminExamSet.jsx`) | Trình duyệt Chrome / Vite dev | Đạt. Menu hành động kỹ năng (`x.menuSt`) hiển thị nổi bằng tọa độ `position: fixed` bên ngoài bảng, không bị lọt/cắt trong container cuộn của bảng, tự lật lên/xuống và đóng khi cuộn. |
+| Padding và giao diện menu kỹ năng | Trình duyệt Chrome / Vite dev | Đạt. Menu dùng `width: max-content` với `min-width: 240px`, padding 12px cân đối, không còn tràn mép phải; dòng "Đăng trong editor..." được render dạng thẻ tĩnh vô hiệu hóa không có hiệu ứng hover. |
+| Kiểm tra tạo kỹ năng Listening & Speaking | Local API + Vite dev | Đạt. Khắc phục lỗi truyền nhầm `form: "ACADEMIC"` khi `c = null`. Listening và Speaking được gửi đúng `form: null`, tạo kỹ năng (Đang soạn) thành công không bị từ chối nghiệp vụ. |
 
 ## Phần còn mở
 

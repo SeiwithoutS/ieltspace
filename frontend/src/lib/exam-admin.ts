@@ -152,30 +152,54 @@ export async function addTest(id: string, title?: string): Promise<ExamSetAdmin>
 }
 export const createTest = addTest;
 
-export async function deleteTest(examId: string): Promise<ExamSetAdmin> {
+export async function deleteTest(
+  examIdOrSetId: string,
+  maybeExamId?: string
+): Promise<ExamSetAdmin> {
+  const examId = maybeExamId || examIdOrSetId;
   return apiFetch<ExamSetAdmin>(`/admin/exams/${examId}`, {
     method: 'DELETE',
   });
 }
 
 export async function createSkill(
-  examId: string,
-  skill: string,
-  form?: string | null
+  examIdOrSetId: string,
+  skillOrExamId: string,
+  formOrObj?: string | null | { skill: string; form?: string | null }
 ): Promise<ExamSetAdmin> {
+  let examId = examIdOrSetId;
+  let skill = skillOrExamId;
+  let form: string | null | undefined = undefined;
+
+  if (typeof formOrObj === 'object' && formOrObj !== null) {
+    examId = skillOrExamId;
+    skill = formOrObj.skill;
+    form = formOrObj.form;
+  } else if (typeof formOrObj === 'string' || formOrObj === null) {
+    form = formOrObj;
+  }
+
   return apiFetch<ExamSetAdmin>(`/admin/exams/${examId}/skills`, {
     method: 'POST',
     json: { skill, form },
   });
 }
 
-export async function hideSkill(skillId: string): Promise<ExamSetAdmin> {
+export async function hideSkill(
+  skillIdOrSetId: string,
+  maybeSkillId?: string
+): Promise<ExamSetAdmin> {
+  const skillId = maybeSkillId || skillIdOrSetId;
   return apiFetch<ExamSetAdmin>(`/admin/exam-skills/${skillId}/hide`, {
     method: 'POST',
   });
 }
 
-export async function showSkill(skillId: string): Promise<ExamSetAdmin> {
+export async function showSkill(
+  skillIdOrSetId: string,
+  maybeSkillId?: string
+): Promise<ExamSetAdmin> {
+  const skillId = maybeSkillId || skillIdOrSetId;
   return apiFetch<ExamSetAdmin>(`/admin/exam-skills/${skillId}/show`, {
     method: 'POST',
   });

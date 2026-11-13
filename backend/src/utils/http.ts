@@ -14,6 +14,10 @@ export class HttpError extends Error {
   ) {
     super(message);
   }
+
+  get status(): number {
+    return this.statusCode;
+  }
 }
 
 export function asyncHandler(

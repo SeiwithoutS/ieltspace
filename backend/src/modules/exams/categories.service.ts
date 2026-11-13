@@ -12,10 +12,24 @@ export async function listCategories(): Promise<exam_set_categories[]> {
 }
 
 export async function findOrCreateCategory(
-  tx: Prisma.TransactionClient,
-  name: string,
-  actorId?: string | null
+  txOrName: Prisma.TransactionClient | string,
+  nameOrActorId?: string | null,
+  maybeActorId?: string | null
 ): Promise<exam_set_categories> {
+  let tx: Prisma.TransactionClient;
+  let name: string;
+  let actorId: string | null | undefined;
+
+  if (typeof txOrName === 'string') {
+    tx = prisma;
+    name = txOrName;
+    actorId = nameOrActorId;
+  } else {
+    tx = txOrName;
+    name = nameOrActorId as string;
+    actorId = maybeActorId;
+  }
+
   const trimmed = name.trim();
 
   // Tìm danh mục trùng tên không phân biệt hoa thường

@@ -82,12 +82,12 @@ class AdminExamSet extends React.Component {
         me.setState({ menu: null });
       }
     };
-    window.addEventListener("scroll", this._scr, { passive: true });
+    window.addEventListener("scroll", this._scr, { passive: true, capture: true });
   }
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this._key);
-    window.removeEventListener("scroll", this._scr);
+    window.removeEventListener("scroll", this._scr, { capture: true });
     clearTimeout(this._t);
   }
 
@@ -131,10 +131,10 @@ class AdminExamSet extends React.Component {
             url,
             Math.abs(q - 1.5) > 0.12
               ? "Ảnh " +
-                  im.width +
-                  " × " +
-                  im.height +
-                  " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
+              im.width +
+              " × " +
+              im.height +
+              " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
               : "",
             true,
           );
@@ -147,15 +147,15 @@ class AdminExamSet extends React.Component {
       r.readAsDataURL(f);
       try {
         e.target.value = "";
-      } catch (err) {}
+      } catch (err) { }
     }
 
     var SK = [
-        ["L", "Listening", "#DDE8FC", "#2A55B8"],
-        ["R", "Reading", "#DCEDE2", "#2E6A48"],
-        ["W", "Writing", "#FBEDBF", "#7A5A0E"],
-        ["S", "Speaking", "#E8E4FA", "#5543B0"],
-      ],
+      ["L", "Listening", "#DDE8FC", "#2A55B8"],
+      ["R", "Reading", "#DCEDE2", "#2E6A48"],
+      ["W", "Writing", "#FBEDBF", "#7A5A0E"],
+      ["S", "Speaking", "#E8E4FA", "#5543B0"],
+    ],
       ST = {
         pub: ["Đã đăng", "#DCEDE2", "#2E6A48"],
         draft: ["Đang soạn", "#FBEDBF", "#7A5A0E"],
@@ -196,18 +196,18 @@ class AdminExamSet extends React.Component {
     var SET = s.apiSet
       ? toUiSet(s.apiSet)
       : {
-          id: s.id,
-          name: s.loading ? "Đang tải…" : s.gone ? "Đã xóa" : "",
-          art: null,
-          img: null,
-          short: "",
-          status: "draft",
-          updated: "",
-          plays: "0",
-          desc: "",
-          tests: [],
-          canDelete: true,
-        };
+        id: s.id,
+        name: s.loading ? "Đang tải…" : s.gone ? "Đã xóa" : "",
+        art: null,
+        img: null,
+        short: "",
+        status: "draft",
+        updated: "",
+        plays: "0",
+        desc: "",
+        tests: [],
+        canDelete: true,
+      };
 
     var tests = SET.tests,
       col = s.col == null ? -1 : s.col,
@@ -267,29 +267,29 @@ class AdminExamSet extends React.Component {
         all = all.concat(vals(t, k[0]));
       });
       var pub = all.filter(function (x) {
-          return x === "pub";
-        }).length,
+        return x === "pub";
+      }).length,
         dr = all.filter(function (x) {
           return x === "draft";
         }).length,
         hid = all.length - pub - dr;
       var sub = [pub + " đã đăng", dr + " đang soạn"]
-          .concat(hid ? [hid + " đã ẩn"] : [])
-          .join(" · "),
+        .concat(hid ? [hid + " đã ẩn"] : [])
+        .join(" · "),
         rw = k[0] === "R" || k[0] === "W";
       var kinds = rw
         ? ["A", "G"].map(function (c) {
-            var n = tests.filter(function (t) {
-              return val(t, k[0], c);
-            }).length;
-            return { text: TY[c][0] + " " + n, st: pill(c) };
-          })
+          var n = tests.filter(function (t) {
+            return val(t, k[0], c);
+          }).length;
+          return { text: TY[c][0] + " " + n, st: pill(c) };
+        })
         : [
-            {
-              text: "Dùng chung cho cả 2 hình thức",
-              st: "font-size: 13px; color: #706473",
-            },
-          ];
+          {
+            text: "Dùng chung cho cả 2 hình thức",
+            st: "font-size: 13px; color: #706473",
+          },
+        ];
       return {
         label: k[1],
         n: String(all.length),
@@ -306,8 +306,8 @@ class AdminExamSet extends React.Component {
           "display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; text-decoration: none; color: #352637; box-sizing: border-box; cursor: pointer; " +
           (on
             ? "border: 2px solid " +
-              k[3] +
-              "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
+            k[3] +
+            "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
             : "border: 1.5px solid #D6D4D0"),
         canImp: true,
         impHref: "#",
@@ -346,7 +346,7 @@ class AdminExamSet extends React.Component {
       );
     }
     var MI =
-      "display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; ";
+      "display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
     var rows = tests.map(function (t, r) {
       var n = SK.filter(function (k) {
         return vals(t, k[0]).length;
@@ -371,7 +371,7 @@ class AdminExamSet extends React.Component {
           if (t.everPublished) {
             toastSet(
               t.name +
-                " đã đăng nên không xóa được, để giữ bài làm của người học. Hãy ẩn từng kỹ năng nếu không muốn người học thấy.",
+              " đã đăng nên không xóa được, để giữ bài làm của người học. Hãy ẩn từng kỹ năng nếu không muốn người học thấy.",
             );
             return;
           }
@@ -417,10 +417,10 @@ class AdminExamSet extends React.Component {
                   self.setState({ apiSet: res, menu: null });
                   toastSet(
                     "Đã ẩn " +
-                      nm +
-                      " của " +
-                      t.name +
-                      ". Người học không thấy kỹ năng này nữa.",
+                    nm +
+                    " của " +
+                    t.name +
+                    ". Người học không thấy kỹ năng này nữa.",
                     {},
                     true,
                     {
@@ -483,9 +483,8 @@ class AdminExamSet extends React.Component {
           if (v === "draft") {
             items.push({
               label: "Đăng trong editor khi soạn xong",
-              st:
-                MI +
-                "color: #706473; font-weight: 500; font-size: 13px; cursor: default",
+              disabled: true,
+              st: "display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #706473; cursor: default; user-select: none; pointer-events: none; box-sizing: border-box",
               href: "#",
               act: stop,
             });
@@ -503,7 +502,7 @@ class AdminExamSet extends React.Component {
               nm +
               (stx ? " · " + stx[0] : " · chưa có, bấm để tạo"),
             menuSt:
-              "position: fixed; z-index: 50; width: 220px; padding: 6px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); box-sizing: border-box; left: " +
+              "position: fixed; z-index: 50; min-width: 240px; width: max-content; max-width: 300px; padding: 6px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); box-sizing: border-box; left: " +
               (s.menuPos ? s.menuPos.l : 0) +
               "px; " +
               (s.menuPos && s.menuPos.up
@@ -519,7 +518,7 @@ class AdminExamSet extends React.Component {
                   vh = window.innerHeight,
                   up = vh - r0.bottom < 190 && r0.top > 190;
                 pos = {
-                  l: Math.max(8, Math.min(r0.left, vw - 236)),
+                  l: Math.max(8, Math.min(r0.left, vw - 296)),
                   t: r0.bottom + 6,
                   b: vh - r0.top + 6,
                   up: up,
@@ -536,8 +535,8 @@ class AdminExamSet extends React.Component {
               (stx ? stx[1] + "; color: " + stx[2] : "#FFFFFF") +
               (open
                 ? "; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px " +
-                  (stx ? stx[2] : "#2963CC") +
-                  "55"
+                (stx ? stx[2] : "#2963CC") +
+                "55"
                 : ""),
             create: async function (e) {
               stop(e);
@@ -547,12 +546,9 @@ class AdminExamSet extends React.Component {
                 2: "WRITING",
                 3: "SPEAKING",
               }[i];
-              var formEnum = c === "G" ? "GENERAL" : "ACADEMIC";
+              var formEnum = c ? (c === "G" ? "GENERAL" : "ACADEMIC") : null;
               try {
-                var res = await createSkill(s.id, t.id, {
-                  skill: skillEnum,
-                  form: formEnum,
-                });
+                var res = await createSkill(t.id, skillEnum, formEnum);
                 self.setState({ apiSet: res, menu: null });
                 toastSet("Đã tạo " + nm + " cho " + t.name + " (Đang soạn).");
               } catch (err) {
@@ -568,10 +564,10 @@ class AdminExamSet extends React.Component {
       img = SET.img || null,
       AR = img
         ? [
-            "Ảnh đã tải lên",
-            "url('" + img + "') center / contain no-repeat, #E9E4DA",
-            false,
-          ]
+          "Ảnh đã tải lên",
+          "url('" + img + "') center / contain no-repeat, #E9E4DA",
+          false,
+        ]
         : ai == null
           ? null
           : ART[ai];
@@ -593,9 +589,9 @@ class AdminExamSet extends React.Component {
       }
     });
     var canDel =
-        SET.canDelete !== undefined
-          ? SET.canDelete
-          : status === "draft" || !tests.length,
+      SET.canDelete !== undefined
+        ? SET.canDelete
+        : status === "draft" || !tests.length,
       cf = null;
     function dot(c) {
       return (
@@ -606,47 +602,47 @@ class AdminExamSet extends React.Component {
     if (s.cf === "pub") {
       cf = cnt.pub
         ? {
-            title:
-              (status === "hidden" ? "Đăng lại" : "Đăng") +
-              " bộ đề “" +
-              SET.name +
-              "”?",
-            text: "Bộ đề sẽ hiện trong Thư viện đề của người học. Từng đề hiện theo các kỹ năng đã có:",
-            hasList: true,
-            list: [
-              {
-                n: cnt.pub,
-                text:
-                  "kỹ năng đã đăng trong " +
-                  live +
-                  " đề: người học bấm Làm bài được ngay",
-                dot: dot("#2E7D4F"),
-              },
-              {
-                n: cnt.draft,
-                text: "kỹ năng đang soạn: chưa hiện, thấy “—”",
-                dot: dot("#C9A227"),
-              },
-              {
-                n: cnt.hidden,
-                text: "kỹ năng đã ẩn: không hiện",
-                dot: dot("#B3A9B5"),
-              },
-            ],
-            goText: "Đăng bộ đề",
-            goSt: "BTN_DARK",
-            icon: "↑",
-            tone: ["#DCEDE2", "#2E6A48"],
-          }
+          title:
+            (status === "hidden" ? "Đăng lại" : "Đăng") +
+            " bộ đề “" +
+            SET.name +
+            "”?",
+          text: "Bộ đề sẽ hiện trong Thư viện đề của người học. Từng đề hiện theo các kỹ năng đã có:",
+          hasList: true,
+          list: [
+            {
+              n: cnt.pub,
+              text:
+                "kỹ năng đã đăng trong " +
+                live +
+                " đề: người học bấm Làm bài được ngay",
+              dot: dot("#2E7D4F"),
+            },
+            {
+              n: cnt.draft,
+              text: "kỹ năng đang soạn: chưa hiện, thấy “—”",
+              dot: dot("#C9A227"),
+            },
+            {
+              n: cnt.hidden,
+              text: "kỹ năng đã ẩn: không hiện",
+              dot: dot("#B3A9B5"),
+            },
+          ],
+          goText: "Đăng bộ đề",
+          goSt: "BTN_DARK",
+          icon: "↑",
+          tone: ["#DCEDE2", "#2E6A48"],
+        }
         : {
-            title: "Chưa đăng được bộ đề",
-            text: "Bộ đề chưa có kỹ năng nào ở trạng thái Đã đăng. Soạn xong và đăng ít nhất một kỹ năng của một đề trong editor (đủ đáp án, tiêu chí và tệp audio/ảnh) rồi mới đăng cả bộ.",
-            hasList: false,
-            list: [],
-            noGo: true,
-            icon: "!",
-            tone: ["#FBEDBF", "#7A5A0E"],
-          };
+          title: "Chưa đăng được bộ đề",
+          text: "Bộ đề chưa có kỹ năng nào ở trạng thái Đã đăng. Soạn xong và đăng ít nhất một kỹ năng của một đề trong editor (đủ đáp án, tiêu chí và tệp audio/ảnh) rồi mới đăng cả bộ.",
+          hasList: false,
+          list: [],
+          noGo: true,
+          icon: "!",
+          tone: ["#FBEDBF", "#7A5A0E"],
+        };
     }
     if (s.cf === "hide") {
       cf = {
@@ -665,8 +661,8 @@ class AdminExamSet extends React.Component {
         title: "Xóa bộ đề “" + SET.name + "”?",
         text: tests.length
           ? "Bộ đề đang là Bản nháp với " +
-            tests.length +
-            " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
+          tests.length +
+          " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
           : "Bộ đề chưa có đề nào. Thao tác này không hoàn tác được.",
         hasList: false,
         list: [],
@@ -906,8 +902,8 @@ class AdminExamSet extends React.Component {
           });
           toastSet(
             "Đã thêm " +
-              (newTest ? newTest.title : "đề mới") +
-              ". Bấm “Tạo” ở từng kỹ năng để soạn.",
+            (newTest ? newTest.title : "đề mới") +
+            ". Bấm “Tạo” ở từng kỹ năng để soạn.",
           );
         } catch (err) {
           toastSet(err?.message || "Không thể thêm đề thi.");
@@ -944,7 +940,7 @@ class AdminExamSet extends React.Component {
       },
     };
   }
-render() {
+  render() {
     const v = this.renderVals();
     return (
       <>
@@ -1186,7 +1182,7 @@ render() {
                                       <div
                                         style={styleOf(
                                           "font-size: 13px; color: " +
-                                            v.artMsgColor,
+                                          v.artMsgColor,
                                         )}
                                       >
                                         {v.artMsgText}
@@ -1810,13 +1806,11 @@ render() {
                                                 <div
                                                   role={"menu"}
                                                   className={"an-drop"}
-                                                  style={styleOf(
-                                                    "position: absolute; left: 0; top: calc(100% + 6px); z-index: 40; min-width: 220px; padding: 6px; border-radius: 12px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
-                                                  )}
+                                                  style={styleOf(x.menuSt)}
                                                 >
                                                   <div
                                                     style={styleOf(
-                                                      "padding: 6px 10px 4px; font-size: 13px; color: #706473; white-space: nowrap",
+                                                      "padding: 6px 12px 6px; font-size: 12px; font-weight: 600; color: #706473; white-space: nowrap",
                                                     )}
                                                   >
                                                     {x.menuHead}
@@ -1826,14 +1820,24 @@ render() {
                                                       <React.Fragment
                                                         key={index}
                                                       >
-                                                        <a
-                                                          href={it.href}
-                                                          role={"menuitem"}
-                                                          onClick={it.act}
-                                                          style={styleOf(it.st)}
-                                                        >
-                                                          {it.label}
-                                                        </a>
+                                                        {it.disabled ? (
+                                                          <div
+                                                            role={"menuitem"}
+                                                            aria-disabled={"true"}
+                                                            style={styleOf(it.st)}
+                                                          >
+                                                            {it.label}
+                                                          </div>
+                                                        ) : (
+                                                          <a
+                                                            href={it.href}
+                                                            role={"menuitem"}
+                                                            onClick={it.act}
+                                                            style={styleOf(it.st)}
+                                                          >
+                                                            {it.label}
+                                                          </a>
+                                                        )}
                                                       </React.Fragment>
                                                     ),
                                                   )}

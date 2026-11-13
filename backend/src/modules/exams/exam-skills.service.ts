@@ -332,3 +332,4 @@ export async function publishSkill(
     return loadExamSetAdmin(tx, skill.exam.exam_set_id);
   });
 }
+

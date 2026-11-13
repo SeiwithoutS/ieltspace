@@ -291,3 +291,4 @@ adminExamsRouter.post(
     res.json(set);
   })
 );
+

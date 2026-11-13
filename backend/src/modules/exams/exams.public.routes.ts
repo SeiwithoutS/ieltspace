@@ -95,3 +95,4 @@ publicExamsRouter.get(
     res.json(publicDto);
   })
 );
+

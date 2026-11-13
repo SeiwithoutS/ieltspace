@@ -110,3 +110,4 @@ export async function removeObject(urlOrPath: string): Promise<void> {
     console.warn('Storage removeObject warning:', err instanceof Error ? err.message : err);
   }
 }
+

@@ -204,3 +204,4 @@ test('validateSkillReady: reports correct reasons in Vietnamese', () => {
   assert.equal(rReady.ready, true);
   assert.equal(rReady.reasons.length, 0);
 });
+

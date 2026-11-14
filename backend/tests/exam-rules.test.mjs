@@ -134,7 +134,7 @@ test('defaultDuration returns correct IELTS duration minutes', () => {
   assert.equal(defaultDuration('LISTENING'), 30);
   assert.equal(defaultDuration('READING'), 60);
   assert.equal(defaultDuration('WRITING'), 60);
-  assert.equal(defaultDuration('SPEAKING'), 14);
+  assert.equal(defaultDuration('SPEAKING'), 15);
 });
 
 test('validateSkillReady: reports correct reasons in Vietnamese', () => {

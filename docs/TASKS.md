@@ -43,5 +43,15 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | QLBD-12 | Nối backend cho AdminExamSet.tsx (Chi tiết bộ đề) | QLBD-10 | Hiển thị thông tin thực tế, thêm/xóa Test, menu kỹ năng cố định viewport, công khai/ẩn bộ đề, xóa an toàn. |
 | QLBD-13 | Nối backend cho ExamDetail.tsx (Học viên) | QLBD-10 | Đọc ID từ URL, hiển thị dữ liệu thực tế từ P1, gợi ý bộ đề cùng loại, xử lý trạng thái không tìm thấy hoặc chưa công khai. |
 | QLBD-14 | Kiểm thử tổng thể và hoàn thiện tài liệu | QLBD-00..13 | Unit tests và typecheck/build cả frontend và backend đều đạt 100%, tài liệu API, CSDL, Business Rules đồng bộ. |
+| WSE-00 | Nâng cấp CSDL quy tắc chấm W/S (06) và đồng bộ Prisma | DB-01, QLBD-01 | Đã chạy 06_quy_tac_cham_ws.sql có 4 quy tắc và 16 tiêu chí; schema.prisma có rubric_criteria và quy tắc JSON, prisma generate và typecheck đạt. |
+| WSE-01 | Quy tắc biên tập và chuyển đổi nội dung W/S (pure logic) | WSE-00 | 15/15 unit tests node:test đạt; validateSkillReady bao phủ W/S, mapper DB ↔ DTO không mất dữ liệu, canDeleteSkill và speakingDuration chính xác. |
+| WSE-02 | Cấu hình Supabase Storage cho tài nguyên đề thi (exam-assets) | QLBD-03 | Bucket exam-assets cấu hình trong config, upload/delete/publicUrl ảnh đề kiểm tra byte type và dọn Storage an toàn. |
+| WSE-03 | Dịch vụ biên tập kỹ năng Writing/Speaking (exam-editor.service.ts) | WSE-01, WSE-02 | Hoàn thành E1-E3, E5, E6; lưu có baseUpdatedAt chống ghi đè, tạo bản sửa tăng version, dọn Storage sau transaction, sửa publishSkill lọc FULL_SKILL. |
+| WSE-04 | Endpoints quản trị biên tập đề (E1–E6) và kiểm thử tích hợp | WSE-03 | Các route E1–E6 trong exams.admin.routes.ts kiểm tra Zod và RBAC ADMIN; audit logs đầy đủ; 16/16 integration tests đạt 100%. |
+| WSE-05 | Thư viện API Frontend biên tập đề thi (exam-editor.ts, exam-admin.ts) | WSE-04 | exam-editor.ts chuyển đổi state hai chiều toEditorState/fromEditorState, gọi E1–E6; deleteSkill bổ sung vào exam-admin.ts; tsc không lỗi. |
+| WSE-06 | Chuyển đổi và kết nối AdminWritingEditor sang TSX | WSE-05 | AdminWritingEditor.tsx tuân thủ RULES không any; nạp đề theo skillId, chuyển Chỉnh sửa tự tạo bản sửa, lưu/đăng/xóa/upload ảnh nối API thật, giữ nguyên giao diện canvas. |
+| WSE-07 | Chuyển đổi và kết nối AdminSpeakingEditor sang TSX | WSE-05 | AdminSpeakingEditor.tsx tuân thủ RULES không any; nạp 3 Part từ DB, tính thời lượng Speaking 15p chuẩn, lưu/đăng/xóa nối API thật, giữ nguyên giao diện canvas. |
+| WSE-08 | Xóa kỹ năng, bỏ bản sửa và hoàn tác trên AdminExamSet | WSE-05 | Menu ô có Xóa/Bỏ bản sửa theo ngữ cảnh, confirm dialog BTN_RED, toast Tạo kèm nút Hoàn tác gỡ ngay bản nháp vừa tạo, build đạt. |
+| WSE-09 | Cập nhật tài liệu kỹ thuật và biên bản bàn giao W/S | WSE-00..08 | Hoàn thiện API.md (E1-E6), BUSINESS_RULES.md (BR-EXAM-007, BR-EXAM-010), CSDL.md (Section 9), csdl/README.md, TASKS.md và biên bản tiến độ PROGRESS. |
 
 Khi nhận một dòng liên quan nhiều kỹ năng, thực hiện và kiểm tra từng kỹ năng bằng fixture riêng. Với API mới, cập nhật [hợp đồng](API.md) cùng thay đổi phía gọi và phía phục vụ.

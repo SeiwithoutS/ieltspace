@@ -8,6 +8,7 @@ import {
   createTest,
   deleteTest,
   createSkill,
+  deleteSkill,
   hideSkill,
   showSkill,
   publishSet,
@@ -29,14 +30,21 @@ type Ev = React.SyntheticEvent | null | undefined;
 type SkillKey = "L" | "R" | "W" | "S";
 type FormKey = "A" | "G";
 type Palette = [label: string, background: string, color: string];
-type ConfirmKind = "pub" | "hide" | "del";
-// Việc hoàn tác sau khi ẩn hoặc hiện lại một kỹ năng.
-type UndoAction = {
-  action: "show" | "hide";
-  liveId: string;
-  nm: string;
-  tName: string;
-};
+type ConfirmKind = "pub" | "hide" | "del" | "delSkill";
+// Việc hoàn tác sau khi ẩn hoặc hiện lại một kỹ năng, hoặc hoàn tác tạo kỹ năng.
+type UndoAction =
+  | {
+      action: "show" | "hide";
+      liveId: string;
+      nm: string;
+      tName: string;
+    }
+  | {
+      action: "deleteSkill";
+      draftId: string;
+      nm: string;
+      tName: string;
+    };
 type MenuPos = { l: number; t: number; b: number; up: boolean };
 type MenuItem = {
   label: string;
@@ -59,6 +67,13 @@ type ConfirmBase = {
 };
 type Confirm = ConfirmBase & { canGo: boolean; noGo: boolean; iconSt: string };
 
+type DelSkillTarget = {
+  skillId: string;
+  nm: string;
+  testName: string;
+  isDiscard: boolean;
+};
+
 type State = {
   id: string | null;
   loading: boolean;
@@ -76,6 +91,7 @@ type State = {
   flash: string;
   undoAction: UndoAction | null;
   toastLink: string | null;
+  delSkillTarget: DelSkillTarget | null;
 };
 
 const SLOT_KEYS: Record<string, SlotKey> = {
@@ -128,6 +144,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
     flash: "",
     undoAction: null,
     toastLink: null,
+    delSkillTarget: null,
   };
   _key?: (e: KeyboardEvent) => void;
   _scr?: () => void;
@@ -571,13 +588,63 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
               navigate(edName + (skillId ? "?skillId=" + skillId : ""));
             },
           });
-          if (v === "draft") {
+          if (slot && slot.liveId && slot.draftId) {
+            items.push({
+              label: "Có bản sửa chưa đăng",
+              disabled: true,
+              st: "display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; color: #B25E00; background: #FFF7ED; cursor: default; user-select: none; pointer-events: none; box-sizing: border-box",
+              href: "#",
+              act: stop,
+            });
+          }
+          if (v === "draft" && !(slot && slot.liveId && slot.draftId)) {
             items.push({
               label: "Đăng trong editor khi soạn xong",
               disabled: true,
               st: "display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #706473; cursor: default; user-select: none; pointer-events: none; box-sizing: border-box",
               href: "#",
               act: stop,
+            });
+          }
+          if (slot && slot.draftId && !slot.liveId) {
+            const draftId = slot.draftId;
+            items.push({
+              label: "Xóa " + nm,
+              st: MI + "color: #C0412A",
+              href: "#",
+              act: function (e: Ev) {
+                stop(e);
+                self.setState({
+                  menu: null,
+                  cf: "delSkill",
+                  delSkillTarget: {
+                    skillId: draftId,
+                    nm: nm,
+                    testName: t.name,
+                    isDiscard: false,
+                  },
+                });
+              },
+            });
+          } else if (slot && slot.liveId && slot.draftId) {
+            const draftId = slot.draftId;
+            items.push({
+              label: "Bỏ bản sửa chưa đăng",
+              st: MI + "color: #C0412A",
+              href: "#",
+              act: function (e: Ev) {
+                stop(e);
+                self.setState({
+                  menu: null,
+                  cf: "delSkill",
+                  delSkillTarget: {
+                    skillId: draftId,
+                    nm: nm,
+                    testName: t.name,
+                    isDiscard: true,
+                  },
+                });
+              },
             });
           }
           return {
@@ -641,7 +708,27 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
               try {
                 var res = await createSkill(t.id, skillEnum, formEnum);
                 self.setState({ apiSet: res, menu: null });
-                toastSet("Đã tạo " + nm + " cho " + t.name + " (Đang soạn).");
+                var uiRes = toUiSet(res);
+                var updatedTest = uiRes.tests.find(function (x) {
+                  return x.id === t.id;
+                });
+                var updatedSlot = updatedTest ? updatedTest._slots[slotKey] : null;
+                var newDraftId = updatedSlot ? updatedSlot.draftId : null;
+                if (newDraftId) {
+                  toastSet(
+                    "Đã tạo bản soạn " + nm + " của " + t.name + ".",
+                    {},
+                    true,
+                    {
+                      action: "deleteSkill",
+                      draftId: newDraftId,
+                      nm: nm,
+                      tName: t.name,
+                    },
+                  );
+                } else {
+                  toastSet("Đã tạo " + nm + " cho " + t.name + " (Đang soạn).");
+                }
               } catch (err) {
                 toastSet(errorInfo(err).message || "Không thể tạo kỹ năng.");
               }
@@ -770,6 +857,23 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         tone: ["#FBDCD3", "#C0412A"],
       };
     }
+    if (s.cf === "delSkill" && s.delSkillTarget) {
+      var tgt = s.delSkillTarget;
+      cfBase = {
+        title: tgt.isDiscard
+          ? "Bỏ bản sửa " + tgt.nm + " của " + tgt.testName + "?"
+          : "Xóa " + tgt.nm + " của " + tgt.testName + "?",
+        text: tgt.isDiscard
+          ? "Bản đang hiển thị với người học giữ nguyên. Các thay đổi đã lưu trong bản sửa sẽ bị xóa vĩnh viễn."
+          : "Kỹ năng đang soạn, chưa đăng lần nào. Nội dung đã soạn sẽ bị xóa vĩnh viễn, ô trở về trống để tạo lại.",
+        hasList: false,
+        list: [],
+        goText: tgt.isDiscard ? "Bỏ bản sửa" : "Xóa kỹ năng",
+        goSt: "BTN_RED",
+        icon: "×",
+        tone: ["#FBDCD3", "#C0412A"],
+      };
+    }
     var cf: Confirm | null = null;
     if (cfBase) {
       cf = {
@@ -856,11 +960,29 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       cf: cf || EMPTY_CONFIRM,
       cfClose: function (e: Ev) {
         stop(e);
-        self.setState({ cf: null });
+        self.setState({ cf: null, delSkillTarget: null });
       },
       cfGo: async function (e: Ev) {
         stop(e);
         var w = s.cf;
+        if (w === "delSkill" && s.delSkillTarget) {
+          var tgt = s.delSkillTarget;
+          try {
+            await deleteSkill(tgt.skillId);
+            await me.loadData();
+            toastSet(
+              tgt.isDiscard
+                ? "Đã bỏ bản sửa " + tgt.nm + " của " + tgt.testName + "."
+                : "Đã xóa " + tgt.nm + " của " + tgt.testName + ".",
+              { cf: null, delSkillTarget: null },
+            );
+          } catch (err) {
+            toastSet(errorInfo(err).message || "Không thể xóa kỹ năng.", {
+              cf: null,
+              delSkillTarget: null,
+            });
+          }
+        }
         if (w === "pub") {
           try {
             var res = await publishSet(sid);
@@ -1035,11 +1157,16 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           if (u.action === "show") {
             res = await showSkill(sid, u.liveId);
             toastSet("Đã hiện lại " + u.nm + " của " + u.tName + ".");
-          } else {
+            self.setState({ apiSet: res });
+          } else if (u.action === "hide") {
             res = await hideSkill(sid, u.liveId);
             toastSet("Đã ẩn " + u.nm + " của " + u.tName + ".");
+            self.setState({ apiSet: res });
+          } else if (u.action === "deleteSkill") {
+            await deleteSkill(u.draftId);
+            await me.loadData();
+            toastSet("Đã hoàn tác tạo kỹ năng.");
           }
-          self.setState({ apiSet: res });
         } catch (err) {
           toastSet(errorInfo(err).message || "Không thể hoàn tác.");
         }

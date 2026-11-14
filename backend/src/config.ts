@@ -16,6 +16,7 @@ const envSchema = z.object({
   SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   STORAGE_BUCKET_COVERS: z.string().default("exam-covers"),
+  STORAGE_BUCKET_EXAM_ASSETS: z.string().default("exam-assets"),
 
   DATABASE_URL: z.string().min(1),
 

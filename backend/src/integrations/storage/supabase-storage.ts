@@ -20,7 +20,11 @@ export function getStorageClient() {
   });
 }
 
-export function detectImageExtension(buffer: Buffer, declaredContentType: string): string {
+export function detectImageExtension(
+  buffer: Buffer,
+  declaredContentType: string,
+  errorType: string = 'COVER_TYPE'
+): string {
   const isJpeg =
     buffer.length >= 3 &&
     buffer[0] === 0xff &&
@@ -45,7 +49,7 @@ export function detectImageExtension(buffer: Buffer, declaredContentType: string
 
   throw new HttpError(
     415,
-    'COVER_TYPE',
+    errorType,
     'Định dạng ảnh không hợp lệ. Chỉ chấp nhận ảnh JPG, PNG hoặc WebP.'
   );
 }
@@ -59,7 +63,7 @@ export async function uploadCover(
     throw new HttpError(413, 'COVER_TOO_LARGE', 'Kích thước ảnh tối đa là 5 MB.');
   }
 
-  const ext = detectImageExtension(buffer, contentType);
+  const ext = detectImageExtension(buffer, contentType, 'COVER_TYPE');
   const fileId = crypto.randomUUID();
   const filePath = `exam-sets/${setId}/${fileId}.${ext}`;
 
@@ -87,6 +91,61 @@ export async function uploadCover(
   return publicUrlData.publicUrl;
 }
 
+export async function uploadSkillImage(
+  skillId: string,
+  buffer: Buffer,
+  contentType: string
+): Promise<{ path: string; url: string }> {
+  if (buffer.length > 5 * 1024 * 1024) {
+    throw new HttpError(413, 'IMAGE_TOO_LARGE', 'Kích thước ảnh tối đa là 5 MB.');
+  }
+
+  const ext = detectImageExtension(buffer, contentType, 'IMAGE_TYPE');
+  const fileId = crypto.randomUUID();
+  const filePath = `exam-skills/${skillId}/${fileId}.${ext}`;
+
+  const client = getStorageClient();
+  const bucket = env.STORAGE_BUCKET_EXAM_ASSETS;
+  const { error } = await client.storage
+    .from(bucket)
+    .upload(filePath, buffer, {
+      contentType,
+      upsert: false,
+    });
+
+  if (error) {
+    console.error('Storage uploadSkillImage error:', error.message);
+    throw new HttpError(
+      503,
+      'STORAGE_UNAVAILABLE',
+      'Chưa tải được ảnh đề. Vui lòng thử lại sau.'
+    );
+  }
+
+  const { data: publicUrlData } = client.storage
+    .from(bucket)
+    .getPublicUrl(filePath);
+
+  return {
+    path: filePath,
+    url: publicUrlData.publicUrl,
+  };
+}
+
+export function publicUrl(path: string): string {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  try {
+    const client = getStorageClient();
+    const { data } = client.storage
+      .from(env.STORAGE_BUCKET_EXAM_ASSETS)
+      .getPublicUrl(path);
+    return data.publicUrl;
+  } catch {
+    return '';
+  }
+}
+
 export async function removeObject(urlOrPath: string): Promise<void> {
   if (!env.SUPABASE_SERVICE_ROLE_KEY || !urlOrPath) return;
 
@@ -111,3 +170,25 @@ export async function removeObject(urlOrPath: string): Promise<void> {
   }
 }
 
+export async function removeObjects(
+  paths: string[],
+  bucketName: string = env.STORAGE_BUCKET_EXAM_ASSETS
+): Promise<void> {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY || !paths || paths.length === 0) return;
+
+  try {
+    const cleanPaths = paths.map((p) => {
+      const marker = `/${bucketName}/`;
+      const idx = p.indexOf(marker);
+      return idx !== -1 ? p.slice(idx + marker.length) : p;
+    });
+
+    const client = getStorageClient();
+    const { error } = await client.storage.from(bucketName).remove(cleanPaths);
+    if (error) {
+      console.warn('Storage removeObjects warning:', error.message);
+    }
+  } catch (err) {
+    console.warn('Storage removeObjects warning:', err instanceof Error ? err.message : err);
+  }
+}

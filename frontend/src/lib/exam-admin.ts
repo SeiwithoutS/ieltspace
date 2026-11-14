@@ -267,6 +267,26 @@ export async function showSkill(
   });
 }
 
+export async function publishSkill(
+  skillIdOrSetId: string,
+  maybeSkillId?: string
+): Promise<ExamSetAdmin> {
+  const skillId = maybeSkillId || skillIdOrSetId;
+  return apiFetch<ExamSetAdmin>(`/admin/exam-skills/${skillId}/publish`, {
+    method: 'POST',
+  });
+}
+
+export async function deleteSkill(
+  skillIdOrSetId: string,
+  maybeSkillId?: string
+): Promise<ExamSetAdmin> {
+  const skillId = maybeSkillId || skillIdOrSetId;
+  return apiFetch<ExamSetAdmin>(`/admin/exam-skills/${skillId}`, {
+    method: 'DELETE',
+  });
+}
+
 export async function getPublicSet(id: string): Promise<ExamSetPublic> {
   return apiFetch<ExamSetPublic>(`/exam-sets/${id}`);
 }

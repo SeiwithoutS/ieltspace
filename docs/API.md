@@ -61,6 +61,19 @@ Các route `/admin/*` yêu cầu quyền ADMIN (`requireRole(['ADMIN'])`). Route
 | A15 | POST /admin/exam-skills/:id/show | Admin, param: `id` (kỹ năng đang HIDDEN) | 200, `ExamSetAdminDto` trạng thái PUBLISHED | 401, 403, 404, 409 |
 | A16 | POST /admin/exam-skills/:id/draft | Admin, param: `id` (nhân bản từ PUBLISHED/HIDDEN/ARCHIVED) | 201, `ExamSetAdminDto` với bản DRAFT mới tăng version_number | 401, 403, 404, 409 DRAFT_ALREADY_EXISTS |
 
+### Soạn đề Writing & Speaking (Exam Editor API)
+
+Các endpoint dưới đây phục vụ màn hình soạn đề Writing và Speaking (`AdminWritingEditor`, `AdminSpeakingEditor`) và thao tác xóa kỹ năng từ `AdminExamSet`:
+
+| Mã | Method và đường dẫn | Người gọi và đầu vào | Thành công | Lỗi cần xử lý |
+|---|---|---|---|---|
+| E1 | GET /admin/exam-skills/:skillId | Admin, param: `skillId` (UUID) | 200, `EditorSkillDto` gồm thông tin kỹ năng, thời lượng, quy tắc chấm, nội dung Writing/Speaking, bộ đề, đề thi và slot | 401, 403, 404 SKILL_NOT_FOUND |
+| E2 | PUT /admin/exam-skills/:skillId/content | Admin, param: `skillId`, body: `{ baseUpdatedAt, writing? | speaking? }` | 200, `EditorSkillDto` sau khi lưu | 400, 401, 403, 404, 409 NOT_A_DRAFT / SKILL_CHANGED (xung đột cập nhật) |
+| E3 | POST /admin/exam-skills/:skillId/draft | Admin, param: `skillId` (tạo bản nháp mới từ PUBLISHED/HIDDEN/ARCHIVED) | 201, `EditorSkillDto` của bản nháp mới (v+1) | 401, 403, 404, 409 DRAFT_ALREADY_EXISTS |
+| E4 | POST /admin/exam-skills/:id/publish | Admin, param: `id` (skillId) | 200, `ExamSetAdminDto` sau khi kiểm tra đủ điều kiện BR-EXAM-007 và gán quy tắc chấm `FULL_SKILL` | 401, 403, 404, 409, 422 SKILL_NOT_READY (kèm reasons) |
+| E5 | PUT /admin/exam-skills/:skillId/images | Admin, param: `skillId`, binary body: `image/jpeg, image/png, image/webp` (≤ 5MB) | 200, `{ url, path }` từ Storage `exam-assets` | 400, 401, 403, 404, 409 NOT_A_DRAFT / NOT_WRITING, 413, 415 |
+| E6 | DELETE /admin/exam-skills/:skillId | Admin, param: `skillId` | 204 No Content (xóa bản nháp DRAFT, ô kỹ năng trở về trống hoặc giữ nguyên bản đang hiển thị) | 401, 403, 404, 409 CANNOT_DELETE_SKILL / CANNOT_DELETE_PUBLISHED_SKILL / CANNOT_DELETE_WITH_ATTEMPTS |
+
 ### Bộ đề phía Học viên (Public Learner API)
 
 | Mã | Method và đường dẫn | Người gọi và đầu vào | Thành công | Lỗi cần xử lý |

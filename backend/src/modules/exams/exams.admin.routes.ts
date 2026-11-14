@@ -10,6 +10,7 @@ import {
   patchSetSchema,
   addTestSchema,
   createSkillSchema,
+  saveSkillContentSchema,
   formatZodError,
 } from './exams.schemas.js';
 import { listCategories, findOrCreateCategory } from './categories.service.js';
@@ -30,6 +31,13 @@ import {
   showSkill,
   publishSkill,
 } from './exam-skills.service.js';
+import {
+  getEditorSkill,
+  saveSkillContent,
+  createRevisionDraft,
+  uploadSkillImage,
+  deleteSkill,
+} from './exam-editor.service.js';
 import { toCategoryDto } from './exams.mapper.js';
 import { prisma } from '../../lib/prisma.js';
 
@@ -291,4 +299,121 @@ adminExamsRouter.post(
     res.json(set);
   })
 );
+
+// E1: GET /admin/exam-skills/:skillId
+adminExamsRouter.get(
+  '/exam-skills/:skillId',
+  asyncHandler(async (req, res) => {
+    const pParam = skillIdParamSchema.safeParse(req.params);
+    if (!pParam.success) {
+      throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
+    }
+
+    const skill = await getEditorSkill(pParam.data.skillId);
+    res.json(skill);
+  })
+);
+
+// E2: PUT /admin/exam-skills/:skillId/content
+adminExamsRouter.put(
+  '/exam-skills/:skillId/content',
+  asyncHandler(async (req, res) => {
+    const pParam = skillIdParamSchema.safeParse(req.params);
+    if (!pParam.success) {
+      throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
+    }
+
+    const parsed = saveSkillContentSchema.safeParse(req.body);
+    if (!parsed.success) {
+      const errs = formatZodError(parsed.error);
+      throw new HttpError(
+        400,
+        'VALIDATION_ERROR',
+        errs[0]?.message || 'Nội dung kỹ năng không hợp lệ.',
+        errs
+      );
+    }
+
+    const skill = await saveSkillContent(
+      pParam.data.skillId,
+      parsed.data,
+      req.appUser?.id
+    );
+    res.json(skill);
+  })
+);
+
+// E3: POST /admin/exam-skills/:skillId/draft
+adminExamsRouter.post(
+  '/exam-skills/:skillId/draft',
+  asyncHandler(async (req, res) => {
+    const pParam = skillIdParamSchema.safeParse(req.params);
+    if (!pParam.success) {
+      throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
+    }
+
+    const result = await createRevisionDraft(
+      pParam.data.skillId,
+      req.appUser?.id
+    );
+    res.status(result.isExisting ? 200 : 201).json(result.skill);
+  })
+);
+
+// E5: PUT /admin/exam-skills/:skillId/images
+adminExamsRouter.put(
+  '/exam-skills/:skillId/images',
+  (req, res, next) => {
+    express.raw({
+      type: ['image/jpeg', 'image/png', 'image/webp'],
+      limit: '5mb',
+    })(req, res, (err) => {
+      if (err) {
+        if (
+          (err as { type?: string; status?: number }).type === 'entity.too.large' ||
+          (err as { type?: string; status?: number }).status === 413
+        ) {
+          return next(
+            new HttpError(413, 'IMAGE_TOO_LARGE', 'Kích thước ảnh tối đa là 5 MB.')
+          );
+        }
+        return next(err);
+      }
+      next();
+    });
+  },
+  asyncHandler(async (req, res) => {
+    const pParam = skillIdParamSchema.safeParse(req.params);
+    if (!pParam.success) {
+      throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
+    }
+
+    if (!Buffer.isBuffer(req.body) || req.body.length === 0) {
+      throw new HttpError(400, 'VALIDATION_ERROR', 'Tệp ảnh không hợp lệ.');
+    }
+
+    const contentType = req.headers['content-type'] || 'image/jpeg';
+    const uploaded = await uploadSkillImage(
+      pParam.data.skillId,
+      req.body,
+      contentType
+    );
+    res.status(201).json(uploaded);
+  })
+);
+
+// E6: DELETE /admin/exam-skills/:skillId
+adminExamsRouter.delete(
+  '/exam-skills/:skillId',
+  asyncHandler(async (req, res) => {
+    const pParam = skillIdParamSchema.safeParse(req.params);
+    if (!pParam.success) {
+      throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
+    }
+
+    const set = await deleteSkill(pParam.data.skillId, req.appUser?.id);
+    res.json(set);
+  })
+);
+
 

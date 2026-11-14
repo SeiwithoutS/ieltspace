@@ -2,7 +2,7 @@
 
 ## Phạm vi và trạng thái
 
-- **Mã task:** QLBD-00 đến QLBD-14 (thuộc phạm vi [Kế hoạch Quản lý bộ đề](../PLAN_QUAN_LY_BO_DE.md)).
+- **Mã task:** QLBD-00 đến QLBD-14 (kế hoạch triển khai `PLAN_QUAN_LY_BO_DE.md` đã xóa khỏi repo ngày 14/11 sau khi kiểm tra xong; quy tắc nằm ở BUSINESS_RULES BR-EXAM-001..009, route ở API.md và `exams.admin.routes.ts`).
 - **Mục tiêu:** Xây dựng trọn vẹn luồng Quản lý bộ đề từ Cơ sở dữ liệu, API Backend (A1–A16, P1) đến Giao diện Frontend (`AdminExams.tsx`, `AdminExamSet.tsx`, `ExamDetail.tsx`).
 - **Trạng thái:** **HOÀN THÀNH TOÀN BỘ (100%)**. Đã kiểm thử unit test, kiểm tra kiểu dữ liệu (TypeScript) và build thành công ở cả Backend và Frontend.
 
@@ -70,7 +70,6 @@
 
 ## Tài liệu và cách tái hiện
 
-- Kế hoạch triển khai chi tiết: [docs/PLAN_QUAN_LY_BO_DE.md](../PLAN_QUAN_LY_BO_DE.md)
 - Danh mục API: [docs/API.md](../API.md)
 - Từ điển CSDL: [docs/csdl/CSDL.md](../csdl/CSDL.md)
 - Quy tắc nghiệp vụ: [docs/BUSINESS_RULES.md](../BUSINESS_RULES.md)
@@ -80,3 +79,13 @@
 - AdminExams, AdminExamSet, ExamDetail đổi từ .jsx sang .tsx, gõ kiểu thật cho state, sự kiện, dữ liệu API (không dùng `any`), giữ nguyên giao diện, URL và API.
 - `lib/exam-admin.ts` xuất thêm kiểu `Cell`, `FormCells`, `UiTest`, `UiSet`, `UiLearnerTest`, `UiLearnerSet` và hàm `errorInfo`.
 - Kiểm tra: `tsc --noEmit` và `npm run build` đạt. Các trang .jsx khác chưa chuyển, sẽ chuyển theo từng luồng.
+
+## 14/11/2026: kiểm tra theo kế hoạch (Claude)
+
+- Bản sạch commit `51a31d5`, PostgreSQL 16 chạy 01 mới rồi 05: backend `typecheck`, `build` đạt; frontend `npm run build` đạt; test `exam-rules` + `exams-services` 11/11, `auth` 2/2. Route Quản lý không token trả 401; `/api/exam-sets/<id lạ>` trả 404.
+- Chưa kiểm tra: bấm thử trên trình duyệt, gọi API Quản lý bằng token thật, tải ảnh lên bucket `exam-covers` (cần Supabase thật).
+- Còn lệch, chưa sửa:
+  1. `exams-services.test.mjs` ca 3 lỗi `SKILL_NOT_READY` khi DB chưa có thang band Reading Academic; test không tự tạo thang.
+  2. `ExamDetail.tsx` vẫn đọc `sessionStorage["ieltspace-learner"]` làm dự phòng khi URL không có `?id=` (kế hoạch yêu cầu bỏ).
+  3. Ghi chú danh mục ở trên khác seed của `05_danh_muc_bo_de.sql` (Mock Test, Actual Test, Practice Test, Forecast, Khác).
+  4. API.md đánh số A1–A16 khác chú thích trong `exams.admin.routes.ts` và ghi route `/exam-skills/:id/draft` chưa có (sẽ làm ở PLAN_EDITOR_WRITING_SPEAKING, E3).

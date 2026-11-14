@@ -270,6 +270,7 @@ export async function publishSkill(
         const latestRule = await tx.grading_rules.findFirst({
           where: {
             skill: skill.skill,
+            assessment_scope: 'FULL_SKILL',
           },
           orderBy: { version: 'desc' },
         });

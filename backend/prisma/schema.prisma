@@ -169,11 +169,27 @@ model band_scales {
 }
 
 model grading_rules {
-  id               String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name             String
-  skill            String
-  assessment_scope String
-  version          Int
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  skill             String
+  assessment_scope  String
+  version           Int
+  aggregation_rules Json?
+  rounding_rules    Json?
+  rubric_criteria   rubric_criteria[]
+}
+
+model rubric_criteria {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  grading_rule_id String        @db.Uuid
+  name            String
+  description     String?
+  weight          Decimal       @db.Decimal
+  min_score       Decimal       @db.Decimal
+  max_score       Decimal       @db.Decimal
+  score_step      Decimal       @db.Decimal
+  order_no        Int
+  grading_rule    grading_rules @relation(fields: [grading_rule_id], references: [id])
 }
 
 model import_batches {

@@ -73,4 +73,8 @@ select count(*) from pg_tables where schemaname='public';
 
 So số dòng với trước nâng cấp. Với DB chỉ chứa bảng IELTSpace, public có 39 bảng (01 sau D08). Nếu có thêm bảng riêng, tổng số sẽ khác. Trên đường nâng cấp, nhan_trong_nghiep_vu là NULL và nhan_luu_tru có giá trị. Chạy lại kiểm tra RLS/quyền ở 03 cũ, thử đăng nhập bằng tài khoản đã có, mở đề mẫu và kiểm tra dữ liệu thật trước khi bật ghi trở lại.
 
+### Nâng cấp quy tắc chấm Writing & Speaking (06)
+
+Ngày 14/11: [06_quy_tac_cham_ws.sql](06_quy_tac_cham_ws.sql) khởi tạo 4 bộ quy tắc chấm `grading_rules` chuẩn IELTS với phạm vi `assessment_scope = 'FULL_SKILL'` và bảng `rubric_criteria` với 16 tiêu chí rubric (Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy cho Writing; Fluency & Coherence, Lexical Resource, Grammatical Range & Accuracy, Pronunciation cho Speaking).
+
 [Từ điển bảng](CSDL.md).

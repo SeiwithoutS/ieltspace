@@ -1,0 +1,71 @@
+.attempt-sans {
+  font-family: var(--font-sans), sans-serif;
+}
+:root {
+  --attempt-text-c0412a: #c0412a;
+  --attempt-text-352637: #352637;
+  --attempt-bg-fcfbf7: #fcfbf7;
+  --attempt-line-d6d4d0: #d6d4d0;
+  --attempt-line-e6e4e0: #e6e4e0;
+  --attempt-text-706473: #706473;
+  --attempt-line-dddbd7: #dddbd7;
+  --attempt-bg-f3f0ea: #f3f0ea;
+  --attempt-bg-ffffff: #ffffff;
+  --attempt-bg-faf9f5: #faf9f5;
+  --attempt-bg-dcede2: #dcede2;
+  --attempt-text-2e6a48: #2e6a48;
+  --attempt-bg-352637: #352637;
+  --attempt-bg-e8e4fa: #e8e4fa;
+  --attempt-text-5543b0: #5543b0;
+  --attempt-bg-5543b0: #5543b0;
+  --attempt-bg-c0412a: #c0412a;
+  --attempt-bg-e3ecfd: #e3ecfd;
+  --attempt-bg-e6f3ec: #e6f3ec;
+  --attempt-line-352637: #352637;
+  --attempt-bg-fbedbf: #fbedbf;
+  --attempt-bg-dde8fc: #dde8fc;
+  --attempt-bg-fbdcd3: #fbdcd3;
+  --attempt-text-4b3d4d: #4b3d4d;
+  --attempt-bg-e5604a: #e5604a;
+  --attempt-text-7a5a0e: #7a5a0e;
+  --attempt-text-2a55b8: #2a55b8;
+  --attempt-bg-2e6a48: #2e6a48;
+  --attempt-bg-c5cef5: #c5cef5;
+  --attempt-bg-b3a9b5: #b3a9b5;
+  --attempt-text-2963cc: #2963cc;
+  --attempt-line-ffffff: #ffffff;
+}
+.dark {
+  --attempt-text-c0412a: #f49a85;
+  --attempt-text-352637: #f1f2f4;
+  --attempt-bg-fcfbf7: #202125;
+  --attempt-line-d6d4d0: #46474d;
+  --attempt-line-e6e4e0: #3b3c41;
+  --attempt-text-706473: #9fa0a7;
+  --attempt-line-dddbd7: #3f4045;
+  --attempt-bg-f3f0ea: #333438;
+  --attempt-bg-ffffff: #292a2e;
+  --attempt-bg-faf9f5: #1a1b1e;
+  --attempt-bg-dcede2: #1d2f27;
+  --attempt-text-2e6a48: #a7d7b6;
+  --attempt-bg-352637: #f1f2f4;
+  --attempt-bg-e8e4fa: #282543;
+  --attempt-text-5543b0: #c3b9f7;
+  --attempt-bg-5543b0: #c3b9f7;
+  --attempt-bg-c0412a: #f49a85;
+  --attempt-bg-e3ecfd: #26314d;
+  --attempt-bg-e6f3ec: #24342f;
+  --attempt-line-352637: #f1f2f4;
+  --attempt-bg-fbedbf: #352e18;
+  --attempt-bg-dde8fc: #1f2842;
+  --attempt-bg-fbdcd3: #432a26;
+  --attempt-text-4b3d4d: #d5d6da;
+  --attempt-bg-e5604a: #d9553f;
+  --attempt-text-7a5a0e: #f4d66f;
+  --attempt-text-2a55b8: #a9c2f7;
+  --attempt-bg-2e6a48: #a7d7b6;
+  --attempt-bg-c5cef5: #3b4270;
+  --attempt-bg-b3a9b5: #74757c;
+  --attempt-text-2963cc: #8db0f7;
+  --attempt-line-ffffff: #292a2e;
+}

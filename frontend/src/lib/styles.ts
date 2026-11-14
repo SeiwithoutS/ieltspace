@@ -55,7 +55,12 @@ export function styleOf(value: string): CSSProperties {
       : k
           .replace(/^-ms-/, "ms-")
           .replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-    style[key] = declaration.getPropertyValue(k);
+    const raw = declaration.getPropertyValue(k);
+    if (key === "fontFamily" && raw !== "inherit") {
+      style[key] = /IBM Plex Serif|Georgia/i.test(raw) ? "var(--font-serif)" : "var(--font-sans)";
+    } else {
+      style[key] = raw;
+    }
   }
   if (document.documentElement.classList.contains("dark")) {
     const bg = style.backgroundColor || style.background;

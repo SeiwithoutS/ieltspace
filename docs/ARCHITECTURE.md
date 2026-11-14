@@ -25,3 +25,8 @@ Trình duyệt chạy React 18 và Vite 5. Backend là một dịch vụ Node.js
 ## Ranh giới triển khai
 
 Duy trì một backend chia module. Route/controller đọc đầu vào và trả HTTP. Service kiểm tra quyền theo bản ghi, áp dụng quy tắc và mở giao dịch. Lớp truy cập dữ liệu dùng Prisma/SQL. Auth hiện tập trung phần lớn xử lý ở auth.routes.ts. Vercel cho frontend tĩnh và Render cho backend là phương án triển khai. Cần kiểm thử redirect, HTTPS, CORS và cookie với tên miền thực. [Cấu hình Auth của dự án](PROGRESS/2026-11-07-trang-thai-du-an.md#cấu-hình-auth).
+
+
+## Luồng làm bài — cập nhật 14/11/2026
+
+Các thư mục frontend/src/pages/attempts, pages/results và components/attempts đã chuyển sang TSX. AttemptSession nhận snapshot qua callback đã định kiểu trong types.ts. parseAttemptDraft kiểm tra nháp trên trình duyệt trước khi cấp initialState cho trang. Dữ liệu mẫu được tập trung trong data/attempt-samples.ts. DesktopOnly kiểm tra điều kiện hiển thị tại đầu vào bốn trang làm bài; Popup dùng native dialog và nhận trạng thái desktop qua context.

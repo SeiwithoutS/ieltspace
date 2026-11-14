@@ -1,6 +1,8 @@
+import DesktopOnly from "../components/attempts/DesktopOnly";
 import {emailCallback} from '../lib/auth-links';
 import {useAuth,refresh,logout,home,navigate} from '../lib/auth';
 import React, { useEffect, useState } from 'react';
+import AttemptSession from "../components/attempts/AttemptSession";
 import AccountMenu from '../components/account/AccountMenu';
 import { pages, type PageName } from './pages';
 const googleCallback = location.pathname === '/auth/callback' && !location.hash;
@@ -45,7 +47,7 @@ export default function App() {
    if(authAnchor === '#dang-ky' || authAnchor === '#dang-nhap') { e.preventDefault(); e.stopPropagation(); const route=authAnchor === '#dang-ky' ? 'Register' : 'Login'; history.pushState(null,'','#'+route); go(route); return; }
    if(a?.textContent?.includes('Đăng xuất')){e.preventDefault();e.stopPropagation();void logout().catch(err=>window.alert(err.message));return;}
 
-   if(a?.getAttribute('href') === 'AvatarMenu.dc.html') { e.preventDefault(); setMenu(v=>!v); return; }
+   if(authAnchor === '#AvatarMenu' || authAnchor === 'AvatarMenu.dc.html') { e.preventDefault(); setMenu(v=>!v); return; }
    if(a?.getAttribute('href') === '#') { e.preventDefault(); return; }
    const match = /^([A-Za-z0-9_-]+)\.dc\.html(#.*)?$/.exec(a?.getAttribute('href') || '');
    if (match && !e.defaultPrevented) { e.preventDefault(); history.pushState(null,'','#'+resolve(match[1])); go(match[1]); if(match[2]) setTimeout(()=>document.getElementById(match[2].slice(1))?.scrollIntoView(),100); }
@@ -67,5 +69,6 @@ export default function App() {
  if(auth.error)return <div role="alert"><p>{auth.error}</p><button onClick={()=>{void refresh().catch(()=>{});}}>Thử lại</button></div>;
  if(denied)return <p>Đang chuyển trang…</p>;
  const Page = pages[page];
- return <><React.Suspense fallback={<div role="status" style={{padding:24,fontFamily:"Inter, sans-serif"}}>Đang tải…</div>}>{React.createElement(Page as React.ComponentType<any>, {key:page, themeRevision:revision, callbackNotice:googleNotice || emailCallback?.notice})}</React.Suspense>{menu && <AccountMenu onClose={()=>setMenu(false)} />}</>;
+ const AttemptPage = page === "ReadingTest" || page === "ListeningTest" || page === "WritingTest" || page === "SpeakingTest" ? pages[page] : null;
+ return <><React.Suspense fallback={<div role="status" style={{padding:24,fontFamily:"Inter, sans-serif"}}>Đang tải…</div>}>{AttemptPage ? <DesktopOnly key={page}><AttemptSession page={page} Screen={AttemptPage}/></DesktopOnly> : React.createElement(Page as React.ComponentType<any>, {key:page, themeRevision:revision, kyNang:new URLSearchParams(location.hash.split("?")[1]).get("skill") || undefined, cheDo:new URLSearchParams(location.hash.split("?")[1]).get("mode") || undefined, callbackNotice:googleNotice || emailCallback?.notice})}</React.Suspense>{menu && <AccountMenu onClose={()=>setMenu(false)} />}</>;
 }

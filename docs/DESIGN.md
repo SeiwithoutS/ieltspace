@@ -71,11 +71,7 @@ Chốt nền `#202125` (xám lạnh) ngày 30/10; xem trước ở `docs/ui/bang
 
 ## 3. Chữ
 
-| Font | Dùng cho |
-|---|---|
-| Inter (dự phòng Be Vietnam Pro) | Giao diện |
-| IBM Plex Serif 500–700 | Tiêu đề và tên thẻ từ 20px |
-| IBM Plex Mono 500–600 | Số liệu lớn (band, số bài, %, đếm ngược) |
+Font của IELTSpace: **Inter** (không chân) và **IBM Plex Serif** (có chân).
 
 ### Thang cỡ chữ (px, đồng bộ 08/11/2026)
 
@@ -233,7 +229,6 @@ Các mục 1–9 ở trên là quy chuẩn thiết kế gốc. Các số đo dư
 | Tương tác | Link và viền focus #2963CC | Ô nhập Auth có outline 2 px lệch 2 px. Link trong form gạch chân khi hover. |
 | Phản hồi | Lỗi nền #FBDCD3, chữ #9D301E. Thành công nền #E6F3EC, chữ #24543D. | Notice hiển thị thông điệp bằng chữ và dùng alert/status. |
 | Tối | Nền trang #202125, bề mặt của nút chọn theme #292A2E, viền #46474D, chữ #F1F2F4 | Theme áp trên html.dark. styleOf chuyển màu theo vai trò nền, viền, chữ và bóng qua dark-palette.json. Kiểm tra component ở cả hai chế độ. |
-| Chữ | Auth dùng Inter, dự phòng Be Vietnam Pro/sans-serif. Tiêu đề form IBM Plex Serif 600, 32 px, line-height 1.2. Nội dung 14 px, nhãn 13 px. | fonts.css nhúng WOFF2 và còn khai báo IBM Plex Mono. Chưa xác định được tệp giấy phép tương ứng trong các tệp mã nguồn đã rà soát. |
 
 #### Nhận diện bốn kỹ năng
 
@@ -261,6 +256,6 @@ AuthFields gắn input vào label. GoogleButton khóa thao tác lặp, đặt ar
 
 Theo [quy tắc nghiệp vụ](BUSINESS_RULES.md), hiển thị số đúng/tổng và tỷ lệ ở bài luyện L/R, ghi “band tham khảo” khi bài đủ điều kiện. W/S chưa chấm ghi “Chưa có điểm”. Nêu rõ Task/Part nếu chỉ đánh giá một phần. Hiển thị hạn tải theo mốc backend trả về. Khi quá hạn, bỏ thao tác tải nhưng vẫn trình bày điểm và nhận xét đã công bố. Đây là tiêu chí khi nối dữ liệu thật cho các màn hình kết quả.
 
-Đối chiếu trực tiếp [CSS Auth](../frontend/src/components/auth/auth.css), [AuthFields](../frontend/src/components/auth/AuthFields.jsx), [khung trang và theme](../frontend/src/styles/globals.css), [font](../frontend/src/styles/fonts.css), [ánh xạ màu](../frontend/src/lib/styles.ts) và [chi tiết bộ đề](../frontend/src/pages/exams/ExamDetail.jsx).
+Đối chiếu trực tiếp [CSS Auth](../frontend/src/components/auth/auth.css), [AuthFields](../frontend/src/components/auth/AuthFields.jsx), [khung trang và theme](../frontend/src/assets/css/app.css), [font](../frontend/src/styles/fonts.css), [ánh xạ màu](../frontend/src/lib/styles.ts) và [chi tiết bộ đề](../frontend/src/pages/exams/ExamDetail.jsx).
 
 Trong mục 7, ghi chú về các màn làm bài phản ánh thời điểm chốt thiết kế. Hiện [danh sách trang](../frontend/src/app/pages.ts) đã khai báo ReadingTest, ListeningTest, WritingTest và SpeakingTest. Việc khai báo trang chỉ xác nhận có giao diện trong mã nguồn.

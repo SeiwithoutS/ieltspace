@@ -261,6 +261,6 @@ AuthFields gắn input vào label. GoogleButton khóa thao tác lặp, đặt ar
 
 Theo [quy tắc nghiệp vụ](BUSINESS_RULES.md), hiển thị số đúng/tổng và tỷ lệ ở bài luyện L/R, ghi “band tham khảo” khi bài đủ điều kiện. W/S chưa chấm ghi “Chưa có điểm”. Nêu rõ Task/Part nếu chỉ đánh giá một phần. Hiển thị hạn tải theo mốc backend trả về. Khi quá hạn, bỏ thao tác tải nhưng vẫn trình bày điểm và nhận xét đã công bố. Đây là tiêu chí khi nối dữ liệu thật cho các màn hình kết quả.
 
-Đối chiếu trực tiếp [CSS Auth](../frontend/src/components/auth/auth.css), [AuthFields](../frontend/src/components/auth/AuthFields.jsx), [khung trang và theme](../frontend/src/styles/globals.css), [font](../frontend/src/styles/fonts.css), [ánh xạ màu](../frontend/src/lib/styles.ts) và [chi tiết bộ đề](../frontend/src/pages/exams/ExamDetail.jsx).
+Đối chiếu trực tiếp [CSS Auth](../frontend/src/components/auth/auth.css), [AuthFields](../frontend/src/components/auth/AuthFields.jsx), [khung trang và theme](../frontend/src/styles/globals.css), [font](../frontend/src/styles/fonts.css), [ánh xạ màu](../frontend/src/lib/styles.ts) và [chi tiết bộ đề](../frontend/src/pages/exams/ExamDetail.tsx).
 
 Trong mục 7, ghi chú về các màn làm bài phản ánh thời điểm chốt thiết kế. Hiện [danh sách trang](../frontend/src/app/pages.ts) đã khai báo ReadingTest, ListeningTest, WritingTest và SpeakingTest. Việc khai báo trang chỉ xác nhận có giao diện trong mã nguồn.

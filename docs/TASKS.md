@@ -39,9 +39,9 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | QLBD-08 | Controller và Router Admin (A1–A16) | QLBD-05, QLBD-06, QLBD-07 | 16 endpoints quản trị tại /admin/exam-sets, /admin/exams, /admin/exam-skills, /admin/categories kiểm tra Zod và RBAC ADMIN. |
 | QLBD-09 | Controller và Router Public (P1: GET /exam-sets/:id) | QLBD-05 | Trả chi tiết bộ đề công khai, chỉ hiển thị skills PUBLISHED (theo O4), kèm tối đa 5 bộ đề cùng danh mục. |
 | QLBD-10 | Thư viện API Frontend (api.ts, exam-admin.ts) | QLBD-08, QLBD-09 | apiFetch tự chèn token/refresh, exam-admin cung cấp hàm gọi A1–A16 & P1 và các hàm chuyển đổi toUiSet, toLearnerSet, slotUi. |
-| QLBD-11 | Nối backend cho AdminExams.jsx (Danh sách bộ đề) | QLBD-10 | Danh sách tải từ DB, Combobox danh mục có tạo mới inline, upload ảnh bìa xem trước, tạo/xóa bộ đề thời gian thực. |
-| QLBD-12 | Nối backend cho AdminExamSet.jsx (Chi tiết bộ đề) | QLBD-10 | Hiển thị thông tin thực tế, thêm/xóa Test, menu kỹ năng cố định viewport, công khai/ẩn bộ đề, xóa an toàn. |
-| QLBD-13 | Nối backend cho ExamDetail.jsx (Học viên) | QLBD-10 | Đọc ID từ URL, hiển thị dữ liệu thực tế từ P1, gợi ý bộ đề cùng loại, xử lý trạng thái không tìm thấy hoặc chưa công khai. |
+| QLBD-11 | Nối backend cho AdminExams.tsx (Danh sách bộ đề) | QLBD-10 | Danh sách tải từ DB, Combobox danh mục có tạo mới inline, upload ảnh bìa xem trước, tạo/xóa bộ đề thời gian thực. |
+| QLBD-12 | Nối backend cho AdminExamSet.tsx (Chi tiết bộ đề) | QLBD-10 | Hiển thị thông tin thực tế, thêm/xóa Test, menu kỹ năng cố định viewport, công khai/ẩn bộ đề, xóa an toàn. |
+| QLBD-13 | Nối backend cho ExamDetail.tsx (Học viên) | QLBD-10 | Đọc ID từ URL, hiển thị dữ liệu thực tế từ P1, gợi ý bộ đề cùng loại, xử lý trạng thái không tìm thấy hoặc chưa công khai. |
 | QLBD-14 | Kiểm thử tổng thể và hoàn thiện tài liệu | QLBD-00..13 | Unit tests và typecheck/build cả frontend và backend đều đạt 100%, tài liệu API, CSDL, Business Rules đồng bộ. |
 
 Khi nhận một dòng liên quan nhiều kỹ năng, thực hiện và kiểm tra từng kỹ năng bằng fixture riêng. Với API mới, cập nhật [hợp đồng](API.md) cùng thay đổi phía gọi và phía phục vụ.

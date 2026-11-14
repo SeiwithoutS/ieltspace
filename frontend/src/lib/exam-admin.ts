@@ -1,4 +1,4 @@
-import { apiFetch } from './api';
+import { apiFetch, ApiError } from './api';
 
 export type Category = {
   id: string;
@@ -71,6 +71,68 @@ export type ExamSetPublic = {
     attemptCount: number;
   }>;
 };
+
+// Dạng dữ liệu mà các trang Quản lý và ExamDetail dùng để vẽ giao diện.
+export type Cell = 'pub' | 'hidden' | 'draft' | null;
+export type FormCells = { A: Cell; G: Cell };
+
+export type UiTest = {
+  id: string;
+  name: string;
+  updated: string;
+  everPublished: boolean;
+  L: Cell;
+  R: FormCells;
+  W: FormCells;
+  S: Cell;
+  _slots: Record<SlotKey, Slot>;
+};
+
+export type UiSet = {
+  id: string;
+  name: string;
+  desc: string;
+  cat: string;
+  catName: string;
+  status: 'draft' | 'pub' | 'hidden';
+  updated: string;
+  plays: string;
+  canDelete: boolean;
+  img: string | null;
+  art: number | null;
+  short: string;
+  tests: UiTest[];
+};
+
+export type UiLearnerTest = {
+  id: string;
+  name: string;
+  orderNo: number;
+  L: Cell;
+  R: FormCells;
+  W: FormCells;
+  S: Cell;
+};
+
+export type UiLearnerSet = {
+  id: string;
+  name: string;
+  short: string;
+  desc: string;
+  plays: string;
+  updated: string;
+  art: number | null;
+  img: string | null;
+  status: 'pub';
+  tests: UiLearnerTest[];
+};
+
+// Lấy thông điệp và mã lỗi từ giá trị bắt được trong catch.
+export function errorInfo(err: unknown): { message: string; code: string; status: number } {
+  if (err instanceof ApiError) return { message: err.message, code: err.code, status: err.status };
+  if (err instanceof Error) return { message: err.message, code: '', status: 0 };
+  return { message: '', code: '', status: 0 };
+}
 
 // API Functions
 export async function listCategories(): Promise<Category[]> {
@@ -236,7 +298,7 @@ export function slotUi(slot: Slot): 'pub' | 'hidden' | 'draft' | null {
   return null;
 }
 
-export function toUiTest(t: ExamAdmin) {
+export function toUiTest(t: ExamAdmin): UiTest {
   return {
     id: t.id,
     name: t.title,
@@ -256,7 +318,7 @@ export function toUiTest(t: ExamAdmin) {
   };
 }
 
-export function toUiSet(s: ExamSetAdmin) {
+export function toUiSet(s: ExamSetAdmin): UiSet {
   let art: number | null = null;
   let img: string | null = null;
 
@@ -289,7 +351,7 @@ export function toUiSet(s: ExamSetAdmin) {
   };
 }
 
-export function toLearnerSet(p: ExamSetPublic) {
+export function toLearnerSet(p: ExamSetPublic): UiLearnerSet {
   let art: number | null = null;
   let img: string | null = null;
 
@@ -304,7 +366,7 @@ export function toLearnerSet(p: ExamSetPublic) {
 
   const short = (p.name.match(/(Vol|Test|Pack)\s*\S+$/i) || [p.name.split(' ').slice(-1)[0]])[0];
 
-  const tests = (p.tests || []).map((t) => ({
+  const tests = (p.tests || []).map((t): UiLearnerTest => ({
     id: t.id,
     name: t.title,
     orderNo: t.orderNo,

@@ -16,9 +16,102 @@ import {
   patchSet,
   uploadCover,
   toUiSet,
+  errorInfo,
+  type Cell,
+  type ExamSetAdmin,
+  type FormCells,
+  type SlotKey,
+  type UiSet,
+  type UiTest,
 } from "../../../lib/exam-admin";
-class AdminExamSet extends React.Component {
-  state = {
+
+type Ev = React.SyntheticEvent | null | undefined;
+type SkillKey = "L" | "R" | "W" | "S";
+type FormKey = "A" | "G";
+type Palette = [label: string, background: string, color: string];
+type ConfirmKind = "pub" | "hide" | "del";
+// Việc hoàn tác sau khi ẩn hoặc hiện lại một kỹ năng.
+type UndoAction = {
+  action: "show" | "hide";
+  liveId: string;
+  nm: string;
+  tName: string;
+};
+type MenuPos = { l: number; t: number; b: number; up: boolean };
+type MenuItem = {
+  label: string;
+  st: string;
+  href: string;
+  act: (e: Ev) => unknown;
+  disabled?: boolean;
+};
+// Nội dung hộp xác nhận Đăng / Ẩn / Xóa bộ đề.
+type ConfirmBase = {
+  title: string;
+  text: string;
+  hasList: boolean;
+  list: Array<{ n: number; text: string; dot: string }>;
+  goText: string;
+  goSt: string;
+  icon: string;
+  tone: [string, string];
+  noGo?: boolean;
+};
+type Confirm = ConfirmBase & { canGo: boolean; noGo: boolean; iconSt: string };
+
+type State = {
+  id: string | null;
+  loading: boolean;
+  loadError: string | null;
+  apiSet: ExamSetAdmin | null;
+  gone: boolean;
+  col: number;
+  menu: string | null;
+  menuPos: MenuPos | null;
+  cf: ConfirmKind | null;
+  artOpen: boolean;
+  artMsg: string;
+  artBad: boolean;
+  toast: string;
+  flash: string;
+  undoAction: UndoAction | null;
+  toastLink: string | null;
+};
+
+const SLOT_KEYS: Record<string, SlotKey> = {
+  "0-null": "LISTENING",
+  "1-A": "READING_ACADEMIC",
+  "1-G": "READING_GENERAL",
+  "2-A": "WRITING_ACADEMIC",
+  "2-G": "WRITING_GENERAL",
+  "3-null": "SPEAKING",
+};
+const EDITORS: Record<SkillKey, string> = {
+  L: "AdminListeningEditor",
+  R: "AdminReadingEditor",
+  W: "AdminWritingEditor",
+  S: "AdminSpeakingEditor",
+};
+const EMPTY_CONFIRM: Confirm = {
+  title: "",
+  text: "",
+  hasList: false,
+  list: [],
+  goText: "",
+  goSt: "",
+  icon: "",
+  tone: ["", ""],
+  noGo: false,
+  canGo: false,
+  iconSt: "",
+};
+
+function isForms(x: Cell | FormCells): x is FormCells {
+  return typeof x === "object" && x !== null;
+}
+
+class AdminExamSet extends React.Component<Record<string, unknown>, State> {
+  state: State = {
     id: null,
     loading: true,
     loadError: null,
@@ -34,21 +127,25 @@ class AdminExamSet extends React.Component {
     toast: "",
     flash: "",
     undoAction: null,
+    toastLink: null,
   };
+  _key?: (e: KeyboardEvent) => void;
+  _scr?: () => void;
+  _t?: ReturnType<typeof setTimeout>;
 
-  loadData = async (id) => {
-    var setId = id || this.state.id;
+  loadData = async (id?: string) => {
+    var setId = id || this.state.id || "";
     this.setState({ loading: true, loadError: null });
     try {
       var data = await getSet(setId);
       this.setState({ apiSet: data, loading: false });
     } catch (err) {
-      if (err?.status === 404) {
+      if (errorInfo(err).status === 404) {
         this.setState({ gone: true, loading: false });
       } else {
         this.setState({
           loading: false,
-          loadError: err?.message || "Không thể tải bộ đề.",
+          loadError: errorInfo(err).message || "Không thể tải bộ đề.",
         });
       }
     }
@@ -70,7 +167,7 @@ class AdminExamSet extends React.Component {
     this.setState({ id: id });
     this.loadData(id);
 
-    this._key = function (e) {
+    this._key = function (e: KeyboardEvent) {
       if (e.key === "Escape") {
         me.setState({ cf: null, menu: null, artOpen: false });
       }
@@ -82,33 +179,41 @@ class AdminExamSet extends React.Component {
         me.setState({ menu: null });
       }
     };
-    window.addEventListener("scroll", this._scr, { passive: true, capture: true });
+    window.addEventListener("scroll", this._scr, {
+      passive: true,
+      capture: true,
+    });
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", this._key);
-    window.removeEventListener("scroll", this._scr, { capture: true });
+    if (this._key) document.removeEventListener("keydown", this._key);
+    if (this._scr)
+      window.removeEventListener("scroll", this._scr, { capture: true });
     clearTimeout(this._t);
   }
 
   renderVals() {
     var me = this,
-      s = this.state || {},
+      s = this.state,
       self = this;
+    var sid: string = s.id || "";
 
-    function stop(e) {
+    function stop(e?: Ev) {
       if (e && e.preventDefault) {
         e.preventDefault();
       }
     }
-    function keep(e) {
+    function keep(e?: Ev) {
       if (e && e.stopPropagation) {
         e.stopPropagation();
       }
     }
 
     // đọc ảnh người dùng chọn: kiểm tra loại và dung lượng, đo tỉ lệ để cảnh báo khi lệch xa 3:2
-    function readImage(e, done) {
+    function readImage(
+      e: React.ChangeEvent<HTMLInputElement>,
+      done: (url: string | null, msg: string, ok?: boolean) => void,
+    ) {
       var f = e && e.target && e.target.files && e.target.files[0];
       if (!f) {
         return;
@@ -123,7 +228,7 @@ class AdminExamSet extends React.Component {
       }
       var r = new FileReader();
       r.onload = function () {
-        var url = r.result,
+        var url = typeof r.result === "string" ? r.result : "",
           im = new Image();
         im.onload = function () {
           var q = im.width / im.height;
@@ -131,10 +236,10 @@ class AdminExamSet extends React.Component {
             url,
             Math.abs(q - 1.5) > 0.12
               ? "Ảnh " +
-              im.width +
-              " × " +
-              im.height +
-              " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
+                  im.width +
+                  " × " +
+                  im.height +
+                  " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
               : "",
             true,
           );
@@ -147,30 +252,30 @@ class AdminExamSet extends React.Component {
       r.readAsDataURL(f);
       try {
         e.target.value = "";
-      } catch (err) { }
+      } catch (err) {}
     }
 
-    var SK = [
-      ["L", "Listening", "#DDE8FC", "#2A55B8"],
-      ["R", "Reading", "#DCEDE2", "#2E6A48"],
-      ["W", "Writing", "#FBEDBF", "#7A5A0E"],
-      ["S", "Speaking", "#E8E4FA", "#5543B0"],
-    ],
-      ST = {
+    var SK: Array<[SkillKey, string, string, string]> = [
+        ["L", "Listening", "#DDE8FC", "#2A55B8"],
+        ["R", "Reading", "#DCEDE2", "#2E6A48"],
+        ["W", "Writing", "#FBEDBF", "#7A5A0E"],
+        ["S", "Speaking", "#E8E4FA", "#5543B0"],
+      ],
+      ST: Record<NonNullable<Cell>, Palette> = {
         pub: ["Đã đăng", "#DCEDE2", "#2E6A48"],
         draft: ["Đang soạn", "#FBEDBF", "#7A5A0E"],
         hidden: ["Đã ẩn", "#F3F0EA", "#706473"],
       },
-      SST = {
+      SST: Record<UiSet["status"], Palette> = {
         pub: ["Công khai", "#DCEDE2", "#2E6A48"],
         draft: ["Bản nháp", "#FBEDBF", "#7A5A0E"],
         hidden: ["Đã ẩn", "#F3F0EA", "#706473"],
       },
-      TY = {
+      TY: Record<FormKey, Palette> = {
         A: ["Academic", "#DFF1F4", "#1F6A78"],
         G: ["General Training", "#FCE6D6", "#9A4A17"],
       },
-      ART = [
+      ART: Array<[string, string, boolean]> = [
         [
           "Bìa CAM Inspired",
           "url('data:image/jpeg;base64,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') center / contain no-repeat, #322A9A",
@@ -193,28 +298,30 @@ class AdminExamSet extends React.Component {
         ],
       ];
 
-    var SET = s.apiSet
+    var SET: UiSet = s.apiSet
       ? toUiSet(s.apiSet)
       : {
-        id: s.id,
-        name: s.loading ? "Đang tải…" : s.gone ? "Đã xóa" : "",
-        art: null,
-        img: null,
-        short: "",
-        status: "draft",
-        updated: "",
-        plays: "0",
-        desc: "",
-        tests: [],
-        canDelete: true,
-      };
+          id: sid,
+          cat: "",
+          catName: "",
+          name: s.loading ? "Đang tải…" : s.gone ? "Đã xóa" : "",
+          art: null,
+          img: null,
+          short: "",
+          status: "draft",
+          updated: "",
+          plays: "0",
+          desc: "",
+          tests: [],
+          canDelete: true,
+        };
 
     var tests = SET.tests,
       col = s.col == null ? -1 : s.col,
       status = SET.status;
 
     // 6 cột trạng thái: Listening, Reading Academic/GT, Writing Academic/GT, Speaking
-    var COLS = [
+    var COLS: Array<[0 | 1 | 2 | 3, FormKey | null]> = [
       [0, null],
       [1, "A"],
       [1, "G"],
@@ -222,34 +329,36 @@ class AdminExamSet extends React.Component {
       [2, "G"],
       [3, null],
     ];
-    function val(t, k, v) {
+    function val(t: UiTest, k: SkillKey, v?: FormKey | null): Cell {
       var x = t[k];
-      return v ? (x || {})[v] || null : x;
+      if (isForms(x)) return v ? x[v] : null;
+      return v ? null : x;
     }
-    function vals(t, k) {
+    function vals(t: UiTest, k: SkillKey): Cell[] {
       var x = t[k];
-      return (x && typeof x === "object" ? [x.A, x.G] : [x]).filter(
-        function (y) {
-          return y;
-        },
-      );
+      return (isForms(x) ? [x.A, x.G] : [x]).filter(function (y) {
+        return y;
+      });
     }
-    function toastSet(m, extra, undoable, undoAction) {
+    function toastSet(
+      m: string,
+      extra?: Partial<State>,
+      undoable?: boolean,
+      undoAction?: UndoAction,
+    ) {
       clearTimeout(me._t);
-      var st = {
+      var st: Partial<State> = {
         toast: m,
-        undoAction: undoable ? undoAction : null,
+        undoAction: undoable && undoAction ? undoAction : null,
         toastLink: null,
       };
-      for (var k in extra || {}) {
-        st[k] = extra[k];
-      }
-      self.setState(st);
+      Object.assign(st, extra);
+      self.setState(st as Pick<State, keyof State>);
       me._t = setTimeout(function () {
         self.setState({ toast: "", undoAction: null });
       }, 5000);
     }
-    function pill(c, h) {
+    function pill(c: FormKey, h?: number) {
       return (
         "display: inline-flex; align-items: center; height: " +
         (h || 22) +
@@ -261,35 +370,35 @@ class AdminExamSet extends React.Component {
     }
 
     var tiles = SK.map(function (k, i) {
-      var all = [],
+      var all: Cell[] = [],
         on = col === i;
       tests.forEach(function (t) {
         all = all.concat(vals(t, k[0]));
       });
       var pub = all.filter(function (x) {
-        return x === "pub";
-      }).length,
+          return x === "pub";
+        }).length,
         dr = all.filter(function (x) {
           return x === "draft";
         }).length,
         hid = all.length - pub - dr;
       var sub = [pub + " đã đăng", dr + " đang soạn"]
-        .concat(hid ? [hid + " đã ẩn"] : [])
-        .join(" · "),
+          .concat(hid ? [hid + " đã ẩn"] : [])
+          .join(" · "),
         rw = k[0] === "R" || k[0] === "W";
       var kinds = rw
-        ? ["A", "G"].map(function (c) {
-          var n = tests.filter(function (t) {
-            return val(t, k[0], c);
-          }).length;
-          return { text: TY[c][0] + " " + n, st: pill(c) };
-        })
+        ? (["A", "G"] as FormKey[]).map(function (c) {
+            var n = tests.filter(function (t) {
+              return val(t, k[0], c);
+            }).length;
+            return { text: TY[c][0] + " " + n, st: pill(c) };
+          })
         : [
-          {
-            text: "Dùng chung cho cả 2 hình thức",
-            st: "font-size: 13px; color: #706473",
-          },
-        ];
+            {
+              text: "Dùng chung cho cả 2 hình thức",
+              st: "font-size: 13px; color: #706473",
+            },
+          ];
       return {
         label: k[1],
         n: String(all.length),
@@ -306,28 +415,22 @@ class AdminExamSet extends React.Component {
           "display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; text-decoration: none; color: #352637; box-sizing: border-box; cursor: pointer; " +
           (on
             ? "border: 2px solid " +
-            k[3] +
-            "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
+              k[3] +
+              "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
             : "border: 1.5px solid #D6D4D0"),
         canImp: true,
         impHref: "#",
-        imp: function (e) {
+        imp: function (e: Ev) {
           stop(e);
-          var ed = {
-            L: "AdminListeningEditor",
-            R: "AdminReadingEditor",
-            W: "AdminWritingEditor",
-            S: "AdminSpeakingEditor",
-          }[k[0]];
-          navigate(ed);
+          navigate(EDITORS[k[0]]);
         },
-        pick: function (e) {
+        pick: function (e: Ev) {
           stop(e);
           self.setState({ col: on ? -1 : i });
         },
       };
     });
-    function hst(i, grp, subRow) {
+    function hst(i: number, grp?: boolean, subRow?: boolean) {
       var k = SK[i],
         on = col === i;
       return (
@@ -351,7 +454,7 @@ class AdminExamSet extends React.Component {
       var n = SK.filter(function (k) {
         return vals(t, k[0]).length;
       }).length;
-      var ty = ["A", "G"]
+      var ty = (["A", "G"] as FormKey[])
         .filter(function (c) {
           return val(t, "R", c) || val(t, "W", c);
         })
@@ -366,21 +469,21 @@ class AdminExamSet extends React.Component {
           ? n + "/4 kỹ năng" + (ty ? " · " + ty : "")
           : "Chưa có kỹ năng nào",
         cls: s.flash === t.name ? "an-flash" : "",
-        del: async function (e) {
+        del: async function (e: Ev) {
           stop(e);
           if (t.everPublished) {
             toastSet(
               t.name +
-              " đã đăng nên không xóa được, để giữ bài làm của người học. Hãy ẩn từng kỹ năng nếu không muốn người học thấy.",
+                " đã đăng nên không xóa được, để giữ bài làm của người học. Hãy ẩn từng kỹ năng nếu không muốn người học thấy.",
             );
             return;
           }
           try {
-            var res = await deleteTest(s.id, t.id);
+            var res = await deleteTest(sid, t.id);
             self.setState({ apiSet: res, menu: null });
             toastSet("Đã xóa " + t.name + ".");
           } catch (err) {
-            toastSet(err?.message || "Không thể xóa đề thi.");
+            toastSet(errorInfo(err).message || "Không thể xóa đề thi.");
           }
         },
         cells: COLS.map(function (cv, ci) {
@@ -393,34 +496,27 @@ class AdminExamSet extends React.Component {
             key = r + "-" + ci,
             open = s.menu === key;
 
-          var slotKey = {
-            "0-null": "LISTENING",
-            "1-A": "READING_ACADEMIC",
-            "1-G": "READING_GENERAL",
-            "2-A": "WRITING_ACADEMIC",
-            "2-G": "WRITING_GENERAL",
-            "3-null": "SPEAKING",
-          }[i + "-" + c];
+          var slotKey = SLOT_KEYS[i + "-" + c];
           var slot = t._slots ? t._slots[slotKey] : null;
 
-          var items = [];
+          var items: MenuItem[] = [];
           if (v === "pub") {
             items.push({
               label: "Ẩn với người học",
               st: MI + "color: #352637",
               href: "#",
-              act: async function (e) {
+              act: async function (e: Ev) {
                 stop(e);
                 if (!slot || !slot.liveId) return;
                 try {
-                  var res = await hideSkill(s.id, slot.liveId);
+                  var res = await hideSkill(sid, slot.liveId);
                   self.setState({ apiSet: res, menu: null });
                   toastSet(
                     "Đã ẩn " +
-                    nm +
-                    " của " +
-                    t.name +
-                    ". Người học không thấy kỹ năng này nữa.",
+                      nm +
+                      " của " +
+                      t.name +
+                      ". Người học không thấy kỹ năng này nữa.",
                     {},
                     true,
                     {
@@ -431,7 +527,7 @@ class AdminExamSet extends React.Component {
                     },
                   );
                 } catch (err) {
-                  toastSet(err?.message || "Không thể ẩn kỹ năng.");
+                  toastSet(errorInfo(err).message || "Không thể ẩn kỹ năng.");
                 }
               },
             });
@@ -441,11 +537,11 @@ class AdminExamSet extends React.Component {
               label: "Hiện lại cho người học",
               st: MI + "color: #352637",
               href: "#",
-              act: async function (e) {
+              act: async function (e: Ev) {
                 stop(e);
                 if (!slot || !slot.liveId) return;
                 try {
-                  var res = await showSkill(s.id, slot.liveId);
+                  var res = await showSkill(sid, slot.liveId);
                   self.setState({ apiSet: res, menu: null });
                   toastSet(
                     "Đã hiện lại " + nm + " của " + t.name + ".",
@@ -459,23 +555,18 @@ class AdminExamSet extends React.Component {
                     },
                   );
                 } catch (err) {
-                  toastSet(err?.message || "Không thể hiện kỹ năng.");
+                  toastSet(errorInfo(err).message || "Không thể hiện kỹ năng.");
                 }
               },
             });
           }
           var skillId = (slot && (slot.draftId || slot.liveId)) || "";
-          var edName = {
-            R: "AdminReadingEditor",
-            L: "AdminListeningEditor",
-            W: "AdminWritingEditor",
-            S: "AdminSpeakingEditor",
-          }[k[0]];
+          var edName = EDITORS[k[0]];
           items.push({
             label: "Mở editor " + k[1],
             st: MI + "color: #2963CC",
             href: "#",
-            act: function (e) {
+            act: function (e: Ev) {
               stop(e);
               navigate(edName + (skillId ? "?skillId=" + skillId : ""));
             },
@@ -508,10 +599,10 @@ class AdminExamSet extends React.Component {
               (s.menuPos && s.menuPos.up
                 ? "bottom: " + s.menuPos.b + "px"
                 : "top: " + (s.menuPos ? s.menuPos.t : 0) + "px"),
-            toggle: function (e) {
+            toggle: function (e: React.MouseEvent<HTMLElement>) {
               stop(e);
               var el = e && e.currentTarget,
-                pos = null;
+                pos: MenuPos | null = null;
               if (!open && el && el.getBoundingClientRect) {
                 var r0 = el.getBoundingClientRect(),
                   vw = window.innerWidth,
@@ -535,10 +626,10 @@ class AdminExamSet extends React.Component {
               (stx ? stx[1] + "; color: " + stx[2] : "#FFFFFF") +
               (open
                 ? "; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px " +
-                (stx ? stx[2] : "#2963CC") +
-                "55"
+                  (stx ? stx[2] : "#2963CC") +
+                  "55"
                 : ""),
-            create: async function (e) {
+            create: async function (e: Ev) {
               stop(e);
               var skillEnum = {
                 0: "LISTENING",
@@ -552,7 +643,7 @@ class AdminExamSet extends React.Component {
                 self.setState({ apiSet: res, menu: null });
                 toastSet("Đã tạo " + nm + " cho " + t.name + " (Đang soạn).");
               } catch (err) {
-                toastSet(err?.message || "Không thể tạo kỹ năng.");
+                toastSet(errorInfo(err).message || "Không thể tạo kỹ năng.");
               }
             },
           };
@@ -562,22 +653,27 @@ class AdminExamSet extends React.Component {
     // ---- ảnh bìa
     var ai = SET.art,
       img = SET.img || null,
-      AR = img
+      AR: [string, string, boolean] | null = img
         ? [
-          "Ảnh đã tải lên",
-          "url('" + img + "') center / contain no-repeat, #E9E4DA",
-          false,
-        ]
+            "Ảnh đã tải lên",
+            "url('" + img + "') center / contain no-repeat, #E9E4DA",
+            false,
+          ]
         : ai == null
           ? null
           : ART[ai];
     // ---- đăng / ẩn / xóa bộ đề
-    var cnt = { pub: 0, draft: 0, hidden: 0 },
+    var cnt: Record<"pub" | "draft" | "hidden", number> = {
+        pub: 0,
+        draft: 0,
+        hidden: 0,
+      },
       live = 0;
     tests.forEach(function (t) {
       var any = false;
       SK.forEach(function (k) {
         vals(t, k[0]).forEach(function (x) {
+          if (!x) return;
           cnt[x]++;
           if (x === "pub") {
             any = true;
@@ -589,63 +685,65 @@ class AdminExamSet extends React.Component {
       }
     });
     var canDel =
-      SET.canDelete !== undefined
-        ? SET.canDelete
-        : status === "draft" || !tests.length,
-      cf = null;
-    function dot(c) {
+        SET.canDelete !== undefined
+          ? SET.canDelete
+          : status === "draft" || !tests.length,
+      cfBase: ConfirmBase | null = null;
+    function dot(c: string) {
       return (
         "display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 999px; background: " +
         c
       );
     }
     if (s.cf === "pub") {
-      cf = cnt.pub
+      cfBase = cnt.pub
         ? {
-          title:
-            (status === "hidden" ? "Đăng lại" : "Đăng") +
-            " bộ đề “" +
-            SET.name +
-            "”?",
-          text: "Bộ đề sẽ hiện trong Thư viện đề của người học. Từng đề hiện theo các kỹ năng đã có:",
-          hasList: true,
-          list: [
-            {
-              n: cnt.pub,
-              text:
-                "kỹ năng đã đăng trong " +
-                live +
-                " đề: người học bấm Làm bài được ngay",
-              dot: dot("#2E7D4F"),
-            },
-            {
-              n: cnt.draft,
-              text: "kỹ năng đang soạn: chưa hiện, thấy “—”",
-              dot: dot("#C9A227"),
-            },
-            {
-              n: cnt.hidden,
-              text: "kỹ năng đã ẩn: không hiện",
-              dot: dot("#B3A9B5"),
-            },
-          ],
-          goText: "Đăng bộ đề",
-          goSt: "BTN_DARK",
-          icon: "↑",
-          tone: ["#DCEDE2", "#2E6A48"],
-        }
+            title:
+              (status === "hidden" ? "Đăng lại" : "Đăng") +
+              " bộ đề “" +
+              SET.name +
+              "”?",
+            text: "Bộ đề sẽ hiện trong Thư viện đề của người học. Từng đề hiện theo các kỹ năng đã có:",
+            hasList: true,
+            list: [
+              {
+                n: cnt.pub,
+                text:
+                  "kỹ năng đã đăng trong " +
+                  live +
+                  " đề: người học bấm Làm bài được ngay",
+                dot: dot("#2E7D4F"),
+              },
+              {
+                n: cnt.draft,
+                text: "kỹ năng đang soạn: chưa hiện, thấy “—”",
+                dot: dot("#C9A227"),
+              },
+              {
+                n: cnt.hidden,
+                text: "kỹ năng đã ẩn: không hiện",
+                dot: dot("#B3A9B5"),
+              },
+            ],
+            goText: "Đăng bộ đề",
+            goSt: "BTN_DARK",
+            icon: "↑",
+            tone: ["#DCEDE2", "#2E6A48"],
+          }
         : {
-          title: "Chưa đăng được bộ đề",
-          text: "Bộ đề chưa có kỹ năng nào ở trạng thái Đã đăng. Soạn xong và đăng ít nhất một kỹ năng của một đề trong editor (đủ đáp án, tiêu chí và tệp audio/ảnh) rồi mới đăng cả bộ.",
-          hasList: false,
-          list: [],
-          noGo: true,
-          icon: "!",
-          tone: ["#FBEDBF", "#7A5A0E"],
-        };
+            title: "Chưa đăng được bộ đề",
+            text: "Bộ đề chưa có kỹ năng nào ở trạng thái Đã đăng. Soạn xong và đăng ít nhất một kỹ năng của một đề trong editor (đủ đáp án, tiêu chí và tệp audio/ảnh) rồi mới đăng cả bộ.",
+            hasList: false,
+            list: [],
+            noGo: true,
+            goText: "",
+            goSt: "",
+            icon: "!",
+            tone: ["#FBEDBF", "#7A5A0E"],
+          };
     }
     if (s.cf === "hide") {
-      cf = {
+      cfBase = {
         title: "Ẩn bộ đề “" + SET.name + "”?",
         text: "Người học không thấy bộ đề trong thư viện và không bắt đầu lượt làm mới. Bài đã làm, bài đã lưu và lượt đang làm dở vẫn được giữ nguyên.",
         hasList: false,
@@ -657,12 +755,12 @@ class AdminExamSet extends React.Component {
       };
     }
     if (s.cf === "del") {
-      cf = {
+      cfBase = {
         title: "Xóa bộ đề “" + SET.name + "”?",
         text: tests.length
           ? "Bộ đề đang là Bản nháp với " +
-          tests.length +
-          " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
+            tests.length +
+            " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
           : "Bộ đề chưa có đề nào. Thao tác này không hoàn tác được.",
         hasList: false,
         list: [],
@@ -672,21 +770,25 @@ class AdminExamSet extends React.Component {
         tone: ["#FBDCD3", "#C0412A"],
       };
     }
-    if (cf) {
-      cf.canGo = !cf.noGo;
-      cf.noGo = !!cf.noGo;
-      cf.goSt =
-        cf.goSt === "BTN_RED"
-          ? "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #C0412A; background: #C0412A; color: #FFFFFF"
-          : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF";
-      cf.iconSt =
-        "display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; font-size: 22px; font-weight: 700; background: " +
-        cf.tone[0] +
-        "; color: " +
-        cf.tone[1];
+    var cf: Confirm | null = null;
+    if (cfBase) {
+      cf = {
+        ...cfBase,
+        canGo: !cfBase.noGo,
+        noGo: !!cfBase.noGo,
+        goSt:
+          cfBase.goSt === "BTN_RED"
+            ? "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #C0412A; background: #C0412A; color: #FFFFFF"
+            : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+        iconSt:
+          "display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; font-size: 22px; font-weight: 700; background: " +
+          cfBase.tone[0] +
+          "; color: " +
+          cfBase.tone[1],
+      };
     }
     var sst = SST[status],
-      used = ["A", "G"].filter(function (c) {
+      used = (["A", "G"] as FormKey[]).filter(function (c) {
         return tests.some(function (t) {
           return val(t, "R", c) || val(t, "W", c);
         });
@@ -696,13 +798,17 @@ class AdminExamSet extends React.Component {
       alive: !s.gone && !s.loading && !s.loadError,
       loading: !!s.loading,
       loadError: s.loadError || null,
-      retry: function (e) {
+      retry: function (e: Ev) {
         stop(e);
-        me.loadData();
+        me.loadData(sid);
       },
       gone: !!s.gone,
-      goneTitle: s.apiSet ? "Đã xóa bộ đề “" + SET.name + "”" : "Không tìm thấy bộ đề.",
-      goneSub: s.apiSet ? "Bộ đề và các đề đang soạn bên trong đã bị xóa." : "Bộ đề không tồn tại hoặc đã bị xóa.",
+      goneTitle: s.apiSet
+        ? "Đã xóa bộ đề “" + SET.name + "”"
+        : "Không tìm thấy bộ đề.",
+      goneSub: s.apiSet
+        ? "Bộ đề và các đề đang soạn bên trong đã bị xóa."
+        : "Bộ đề không tồn tại hoặc đã bị xóa.",
       setName: SET.name,
       setTypes: used.map(function (c) {
         return {
@@ -726,38 +832,38 @@ class AdminExamSet extends React.Component {
       blockPub: status !== "pub" && tests.length === 0,
       pubLabel: status === "hidden" ? "Đăng lại bộ đề" : "Đăng bộ đề",
       canDel: canDel,
-      back: function (e) {
+      back: function (e: Ev) {
         stop(e);
         navigate("AdminExams");
       },
-      toLearner: function (e) {
+      toLearner: function (e: Ev) {
         stop(e);
         navigate("ExamDetail?id=" + s.id);
       },
-      askPub: function (e) {
+      askPub: function (e: Ev) {
         stop(e);
         self.setState({ cf: "pub", menu: null });
       },
-      askHide: function (e) {
+      askHide: function (e: Ev) {
         stop(e);
         self.setState({ cf: "hide", menu: null });
       },
-      askDel: function (e) {
+      askDel: function (e: Ev) {
         stop(e);
         self.setState({ cf: "del", menu: null });
       },
       cfOpen: !!cf,
-      cf: cf || { list: [] },
-      cfClose: function (e) {
+      cf: cf || EMPTY_CONFIRM,
+      cfClose: function (e: Ev) {
         stop(e);
         self.setState({ cf: null });
       },
-      cfGo: async function (e) {
+      cfGo: async function (e: Ev) {
         stop(e);
         var w = s.cf;
         if (w === "pub") {
           try {
-            var res = await publishSet(s.id);
+            var res = await publishSet(sid);
             clearTimeout(me._t);
             self.setState({
               apiSet: res,
@@ -770,26 +876,32 @@ class AdminExamSet extends React.Component {
               self.setState({ toast: "" });
             }, 6000);
           } catch (err) {
-            toastSet(err?.message || "Không thể đăng bộ đề.", { cf: null });
+            toastSet(errorInfo(err).message || "Không thể đăng bộ đề.", {
+              cf: null,
+            });
           }
         }
         if (w === "hide") {
           try {
-            var res = await hideSet(s.id);
+            var res = await hideSet(sid);
             toastSet("Đã ẩn bộ đề. Bài đã làm của người học vẫn được giữ.", {
               apiSet: res,
               cf: null,
             });
           } catch (err) {
-            toastSet(err?.message || "Không thể ẩn bộ đề.", { cf: null });
+            toastSet(errorInfo(err).message || "Không thể ẩn bộ đề.", {
+              cf: null,
+            });
           }
         }
         if (w === "del") {
           try {
-            await deleteSet(s.id);
+            await deleteSet(sid);
             self.setState({ cf: null, gone: true, toast: "" });
           } catch (err) {
-            toastSet(err?.message || "Không thể xóa bộ đề.", { cf: null });
+            toastSet(errorInfo(err).message || "Không thể xóa bộ đề.", {
+              cf: null,
+            });
           }
         }
       },
@@ -807,21 +919,21 @@ class AdminExamSet extends React.Component {
       artMsg: !!s.artMsg,
       artMsgText: s.artMsg || "",
       artMsgColor: s.artBad ? "#C0412A" : "#7A5A0E",
-      artMenu: function (e) {
+      artMenu: function (e: Ev) {
         stop(e);
         self.setState({ artOpen: !s.artOpen, menu: null, artMsg: "" });
       },
       arts: ART.map(function (g, i) {
         return {
           name: g[0],
-          pick: async function (e) {
+          pick: async function (e: Ev) {
             stop(e);
             try {
-              var res = await patchSet(s.id, { coverUrl: "preset:" + i });
+              var res = await patchSet(sid, { coverUrl: "preset:" + i });
               self.setState({ apiSet: res, artOpen: false, artMsg: "" });
             } catch (err) {
               self.setState({
-                artMsg: err?.message || "Không thể chọn ảnh mẫu.",
+                artMsg: errorInfo(err).message || "Không thể chọn ảnh mẫu.",
                 artBad: true,
               });
             }
@@ -835,16 +947,17 @@ class AdminExamSet extends React.Component {
               : "outline: 1.5px solid #D6D4D0"),
         };
       }),
-      artFile: function (e) {
+      artFile: function (e: React.ChangeEvent<HTMLInputElement>) {
         var f = e && e.target && e.target.files && e.target.files[0];
         if (!f) return;
-        readImage(e, async function (url, msg) {
+        var file: File = f;
+        readImage(e, async function (url: string | null, msg: string) {
           if (!url) {
             self.setState({ artMsg: msg, artBad: true });
             return;
           }
           try {
-            var cov = await uploadCover(s.id, f);
+            var cov = await uploadCover(sid, file);
             var updatedApiSet = Object.assign({}, s.apiSet, {
               coverUrl: cov.coverUrl,
             });
@@ -857,21 +970,21 @@ class AdminExamSet extends React.Component {
           } catch (err) {
             self.setState({
               artMsg:
-                err?.message ||
+                errorInfo(err).message ||
                 "Chưa tải được ảnh. Hãy chọn ảnh mẫu hoặc thử lại sau.",
               artBad: true,
             });
           }
         });
       },
-      artRemove: async function (e) {
+      artRemove: async function (e: Ev) {
         stop(e);
         try {
-          var res = await patchSet(s.id, { coverUrl: null });
+          var res = await patchSet(sid, { coverUrl: null });
           self.setState({ apiSet: res, artOpen: false, artMsg: "" });
         } catch (err) {
           self.setState({
-            artMsg: err?.message || "Không thể xóa ảnh bìa.",
+            artMsg: errorInfo(err).message || "Không thể xóa ảnh bìa.",
             artBad: true,
           });
         }
@@ -880,7 +993,7 @@ class AdminExamSet extends React.Component {
       rows: rows,
       noTests: !tests.length,
       anyMenu: !!s.menu || !!s.artOpen,
-      closeMenus: function (e) {
+      closeMenus: function (e: Ev) {
         stop(e);
         self.setState({ menu: null, artOpen: false });
       },
@@ -890,10 +1003,10 @@ class AdminExamSet extends React.Component {
       h3: hst(3),
       s1: hst(1, true, true),
       s2: hst(2, true, true),
-      addTest: async function (e) {
+      addTest: async function (e: Ev) {
         stop(e);
         try {
-          var res = await createTest(s.id);
+          var res = await createTest(sid);
           var newTest = res.tests[res.tests.length - 1];
           self.setState({
             apiSet: res,
@@ -902,17 +1015,17 @@ class AdminExamSet extends React.Component {
           });
           toastSet(
             "Đã thêm " +
-            (newTest ? newTest.title : "đề mới") +
-            ". Bấm “Tạo” ở từng kỹ năng để soạn.",
+              (newTest ? newTest.title : "đề mới") +
+              ". Bấm “Tạo” ở từng kỹ năng để soạn.",
           );
         } catch (err) {
-          toastSet(err?.message || "Không thể thêm đề thi.");
+          toastSet(errorInfo(err).message || "Không thể thêm đề thi.");
         }
       },
       toast: !!s.toast,
       toastText: s.toast || "",
       canUndo: !!s.undoAction,
-      undo: async function (e) {
+      undo: async function (e: Ev) {
         stop(e);
         var u = s.undoAction;
         if (!u) return;
@@ -920,21 +1033,21 @@ class AdminExamSet extends React.Component {
         try {
           var res;
           if (u.action === "show") {
-            res = await showSkill(s.id, u.liveId);
+            res = await showSkill(sid, u.liveId);
             toastSet("Đã hiện lại " + u.nm + " của " + u.tName + ".");
           } else {
-            res = await hideSkill(s.id, u.liveId);
+            res = await hideSkill(sid, u.liveId);
             toastSet("Đã ẩn " + u.nm + " của " + u.tName + ".");
           }
           self.setState({ apiSet: res });
         } catch (err) {
-          toastSet(err?.message || "Không thể hoàn tác.");
+          toastSet(errorInfo(err).message || "Không thể hoàn tác.");
         }
       },
       toastLink: !!s.toastLink,
       toastHref: "#",
       toastLinkText: s.toastLink || "",
-      clickToastLink: function (e) {
+      clickToastLink: function (e: Ev) {
         stop(e);
         navigate("ExamDetail?id=" + s.id);
       },
@@ -987,7 +1100,8 @@ class AdminExamSet extends React.Component {
                 )}
               >
                 <a
-                  href={"#"} onClick={v.back}
+                  href={"#"}
+                  onClick={v.back}
                   style={styleOf(
                     "display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #706473; text-decoration: none; align-self: flex-start",
                   )}
@@ -1182,7 +1296,7 @@ class AdminExamSet extends React.Component {
                                       <div
                                         style={styleOf(
                                           "font-size: 13px; color: " +
-                                          v.artMsgColor,
+                                            v.artMsgColor,
                                         )}
                                       >
                                         {v.artMsgText}
@@ -1467,7 +1581,7 @@ class AdminExamSet extends React.Component {
                           <React.Fragment key={index}>
                             <div
                               role={"button"}
-                              tabIndex={"0"}
+                              tabIndex={0}
                               onClick={t.pick}
                               aria-pressed={t.on}
                               className={"lift"}
@@ -1626,11 +1740,7 @@ class AdminExamSet extends React.Component {
                             </span>
                           </span>
                         </div>
-                        <div
-                          style={styleOf(
-                            "overflow-x: auto",
-                          )}
-                        >
+                        <div style={styleOf("overflow-x: auto")}>
                           <table
                             className={"hov"}
                             style={styleOf(
@@ -1640,27 +1750,27 @@ class AdminExamSet extends React.Component {
                             <thead>
                               <tr>
                                 <th
-                                  rowSpan={"2"}
+                                  rowSpan={2}
                                   style={styleOf(
                                     "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; width: 20%; vertical-align: bottom",
                                   )}
                                 >
                                   {"Đề"}
                                 </th>
-                                <th rowSpan={"2"} style={styleOf(v.h0)}>
+                                <th rowSpan={2} style={styleOf(v.h0)}>
                                   {"Listening"}
                                 </th>
-                                <th colSpan={"2"} style={styleOf(v.h1)}>
+                                <th colSpan={2} style={styleOf(v.h1)}>
                                   {"Reading"}
                                 </th>
-                                <th colSpan={"2"} style={styleOf(v.h2)}>
+                                <th colSpan={2} style={styleOf(v.h2)}>
                                   {"Writing"}
                                 </th>
-                                <th rowSpan={"2"} style={styleOf(v.h3)}>
+                                <th rowSpan={2} style={styleOf(v.h3)}>
                                   {"Speaking"}
                                 </th>
                                 <th
-                                  rowSpan={"2"}
+                                  rowSpan={2}
                                   style={styleOf(
                                     "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; vertical-align: bottom",
                                   )}
@@ -1668,7 +1778,7 @@ class AdminExamSet extends React.Component {
                                   {"Cập nhật"}
                                 </th>
                                 <th
-                                  rowSpan={"2"}
+                                  rowSpan={2}
                                   style={styleOf(
                                     "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
                                   )}
@@ -1823,8 +1933,12 @@ class AdminExamSet extends React.Component {
                                                         {it.disabled ? (
                                                           <div
                                                             role={"menuitem"}
-                                                            aria-disabled={"true"}
-                                                            style={styleOf(it.st)}
+                                                            aria-disabled={
+                                                              "true"
+                                                            }
+                                                            style={styleOf(
+                                                              it.st,
+                                                            )}
                                                           >
                                                             {it.label}
                                                           </div>
@@ -1833,7 +1947,9 @@ class AdminExamSet extends React.Component {
                                                             href={it.href}
                                                             role={"menuitem"}
                                                             onClick={it.act}
-                                                            style={styleOf(it.st)}
+                                                            style={styleOf(
+                                                              it.st,
+                                                            )}
                                                           >
                                                             {it.label}
                                                           </a>

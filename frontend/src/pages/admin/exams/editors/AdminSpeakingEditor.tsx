@@ -230,84 +230,84 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
     var GTF = skill ? skill.form === "GENERAL" : PR.loaiDe === "General Training",
       FIX = GTF ? FIXQ.GT : FIXQ.AC;
     var FULL = GTF
-        ? {
-            title: "Practice Test 01",
-            tot: "5",
-            items: [
-              {
-                instr: "Two or three complex sentences for each answer.",
-                qs: [
-                  "Do you like to travel?",
-                  "What kind of places have you visited?",
-                  "What is the best place you have ever visited?",
-                  "Which place would you really like to visit?",
-                  "How do you feel about shopping?",
-                  "Do you like shopping on the internet?",
-                  "What don't you like about shopping?",
-                  "Which is the most popular place to shop where you live?",
-                  "Can you describe your hometown?",
-                  "What are the most interesting things in your hometown?",
-                  "What would be the best way for me to travel around your hometown?",
-                  "Should I go there at any special time of year?",
-                ],
-              },
-              {
-                prep: "1",
-                speak: "2",
-                text: "## Describe your exercise routine.\nYou should say:\n- What exercise you do.\n- How often you do exercise.\n- How you feel after exercise.\nAnd explain why exercise is or isn't important to you.",
-              },
-              {
-                instr: "Four or five complex sentences for each answer.",
-                qs: [
-                  "Do you think young people live healthier lives now than in the past?",
-                  "What can be done to overcome increasing global obesity?",
-                  "What can governments do to help individuals become healthier?",
-                  "Are people in your country health conscious?",
-                  "Should restaurants be forced to label how healthy their food is?",
-                  "Should diet and exercise classes be taught in schools?",
-                ],
-              },
-            ],
-          }
-        : {
-            title: "Practice Test 01",
-            tot: "5",
-            items: [
-              {
-                instr: "Two or three complex sentences for each answer.",
-                qs: [
-                  "Do you like to travel?",
-                  "What kind of places have you visited?",
-                  "What is the best place you have ever visited?",
-                  "Which place would you really like to visit?",
-                  "How do you feel about shopping?",
-                  "Do you like shopping on the internet?",
-                  "What don't you like about shopping?",
-                  "Which is the most popular place to shop where you live?",
-                  "Can you describe your hometown?",
-                  "What are the most interesting things in your hometown?",
-                  "What would be the best way for me to travel around your hometown?",
-                  "Should I go there at any special time of year?",
-                ],
-              },
-              {
-                prep: "1",
-                speak: "2",
-                text: "## Describe your exercise routine.\nYou should say:\n- What exercise you do.\n- How often you do exercise.\n- How you feel after exercise.\nAnd explain why exercise is or isn't important to you.",
-              },
-              {
-                instr: "Four or five complex sentences for each answer.",
-                qs: [
-                  "Do you think young people live healthier lives now than in the past?",
-                  "What can be done to overcome increasing global obesity?",
-                  "What can governments do to help individuals become healthier?",
-                  "Are people in your country health conscious?",
-                  "Should restaurants be forced to label how healthy their food is?",
-                  "Should diet and exercise classes be taught in schools?",
-                ],
-              },
+      ? {
+        title: "Practice Test 01",
+        tot: "5",
+        items: [
+          {
+            instr: "Two or three complex sentences for each answer.",
+            qs: [
+              "Do you like to travel?",
+              "What kind of places have you visited?",
+              "What is the best place you have ever visited?",
+              "Which place would you really like to visit?",
+              "How do you feel about shopping?",
+              "Do you like shopping on the internet?",
+              "What don't you like about shopping?",
+              "Which is the most popular place to shop where you live?",
+              "Can you describe your hometown?",
+              "What are the most interesting things in your hometown?",
+              "What would be the best way for me to travel around your hometown?",
+              "Should I go there at any special time of year?",
             ],
           },
+          {
+            prep: "1",
+            speak: "2",
+            text: "## Describe your exercise routine.\nYou should say:\n- What exercise you do.\n- How often you do exercise.\n- How you feel after exercise.\nAnd explain why exercise is or isn't important to you.",
+          },
+          {
+            instr: "Four or five complex sentences for each answer.",
+            qs: [
+              "Do you think young people live healthier lives now than in the past?",
+              "What can be done to overcome increasing global obesity?",
+              "What can governments do to help individuals become healthier?",
+              "Are people in your country health conscious?",
+              "Should restaurants be forced to label how healthy their food is?",
+              "Should diet and exercise classes be taught in schools?",
+            ],
+          },
+        ],
+      }
+      : {
+        title: "Practice Test 01",
+        tot: "5",
+        items: [
+          {
+            instr: "Two or three complex sentences for each answer.",
+            qs: [
+              "Do you like to travel?",
+              "What kind of places have you visited?",
+              "What is the best place you have ever visited?",
+              "Which place would you really like to visit?",
+              "How do you feel about shopping?",
+              "Do you like shopping on the internet?",
+              "What don't you like about shopping?",
+              "Which is the most popular place to shop where you live?",
+              "Can you describe your hometown?",
+              "What are the most interesting things in your hometown?",
+              "What would be the best way for me to travel around your hometown?",
+              "Should I go there at any special time of year?",
+            ],
+          },
+          {
+            prep: "1",
+            speak: "2",
+            text: "## Describe your exercise routine.\nYou should say:\n- What exercise you do.\n- How often you do exercise.\n- How you feel after exercise.\nAnd explain why exercise is or isn't important to you.",
+          },
+          {
+            instr: "Four or five complex sentences for each answer.",
+            qs: [
+              "Do you think young people live healthier lives now than in the past?",
+              "What can be done to overcome increasing global obesity?",
+              "What can governments do to help individuals become healthier?",
+              "Are people in your country health conscious?",
+              "Should restaurants be forced to label how healthy their food is?",
+              "Should diet and exercise classes be taught in schools?",
+            ],
+          },
+        ],
+      },
       EMPTY = {
         title: "Practice Test 02",
         tot: "5",
@@ -453,8 +453,8 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       return KIND === "speak"
         ? it.qs
           ? !it.qs.some(function (q) {
-              return String(q).trim();
-            })
+            return String(q).trim();
+          })
           : !String(it.text || "").trim()
         : !String(it.prompt || "").trim() && !it.img;
     }
@@ -598,8 +598,8 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         ask(
           "Xóa nội dung " + UNIT + " " + (ti + 1) + "?",
           "Toàn bộ nội dung đã nhập trong " +
-            UNIT +
-            " này sẽ bị xóa. Có thể hoàn tác ngay sau khi xóa.",
+          UNIT +
+          " này sẽ bị xóa. Có thể hoàn tác ngay sau khi xóa.",
           function () {
             upd(
               function (x) {
@@ -772,24 +772,24 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       var head =
         ti === 1
           ? "Prepare for " +
-            plural(num(it.prep) || 1, "minute") +
-            " then speak for " +
-            plural(num(it.speak) || 2, "minute") +
-            "."
+          plural(num(it.prep) || 1, "minute") +
+          " then speak for " +
+          plural(num(it.speak) || 2, "minute") +
+          "."
           : String(it.instr || "").trim() || "...";
       F.headLine = "PART " + (ti + 1) + " – " + head;
       F.pv = ti === 1 ? mdLines(it.text) : [];
       F.countNote =
         ti === 1
           ? "Thẻ đề: người học có " +
-            (num(it.prep) || 1) +
-            " phút chuẩn bị rồi nói " +
-            (num(it.speak) || 2) +
-            " phút."
+          (num(it.prep) || 1) +
+          " phút chuẩn bị rồi nói " +
+          (num(it.speak) || 2) +
+          " phút."
           : qs.length +
-            " câu hỏi. Người học xem từng câu một và ghi âm trả lời; tổng thời gian Part 1 và 3 là " +
-            (num(ex.tot) || "…") +
-            " phút.";
+          " câu hỏi. Người học xem từng câu một và ghi âm trả lời; tổng thời gian Part 1 và 3 là " +
+          (num(ex.tot) || "…") +
+          " phút.";
     } else {
       var t1 = ti === 0;
       F.isTask1 = t1;
@@ -819,7 +819,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         if (!s.editing) {
           try {
             e.target.value = "";
-          } catch (err) {}
+          } catch (err) { }
           return;
         }
         var f = e && e.target && e.target.files && e.target.files[0];
@@ -851,7 +851,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         r.readAsDataURL(f);
         try {
           e.target.value = "";
-        } catch (err) {}
+        } catch (err) { }
       };
       F.delImg = function (e) {
         stop(e);
@@ -864,8 +864,8 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         ask(
           "Xóa ảnh " + im.name + "?",
           "Ảnh đề bài sẽ bị gỡ khỏi " +
-            UNIT +
-            " này. Có thể hoàn tác ngay sau khi xóa.",
+          UNIT +
+          " này. Có thể hoàn tác ngay sau khi xóa.",
           function () {
             upd(
               function (x) {
@@ -907,9 +907,9 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       : GTF
         ? [["practice_test_05.xlsx", 7680, "xlsx"]]
         : [
-            ["practice_test_01.xlsx", 7680, "xlsx"],
-            ["radio-tv-audiences-1992.jpg", 30720, "img"],
-          ];
+          ["practice_test_01.xlsx", 7680, "xlsx"],
+          ["radio-tv-audiences-1992.jpg", 30720, "img"],
+        ];
     var IMP_FIXED = [
       [
         SPK ? "practice_test_01_da_sua.xlsx" : "practice_test_01_da_sua.xlsx",
@@ -919,60 +919,60 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
     ].concat(IMP_SAMPLE.slice(1));
     var IMP_ERR = SPK
       ? [
-          [
-            "Part1",
-            "6",
-            "question",
-            "Dòng 6 trống giữa danh sách câu hỏi. Điền câu hỏi hoặc xóa dòng.",
-          ],
-          [
-            "Part2",
-            "2",
-            "prep_minutes",
-            'Cần là số nguyên từ 1, tệp ghi "một phút".',
-          ],
-          [
-            "De_thi",
-            "2",
-            "part13_minutes",
-            "Cần là số phút từ 1 đến 60, tệp ghi 0.",
-          ],
-        ]
+        [
+          "Part1",
+          "6",
+          "question",
+          "Dòng 6 trống giữa danh sách câu hỏi. Điền câu hỏi hoặc xóa dòng.",
+        ],
+        [
+          "Part2",
+          "2",
+          "prep_minutes",
+          'Cần là số nguyên từ 1, tệp ghi "một phút".',
+        ],
+        [
+          "De_thi",
+          "2",
+          "part13_minutes",
+          "Cần là số phút từ 1 đến 60, tệp ghi 0.",
+        ],
+      ]
       : [
-          [
-            "Tasks",
-            "3",
-            "prompt",
-            "Task 2 chưa có yêu cầu (đề bài). Nhập nội dung cột prompt.",
-          ],
-          [
-            "De_thi",
-            "2",
-            "exam_form",
-            '"Academic Training" không hợp lệ. Dùng Academic hoặc General Training.',
-          ],
-          [
-            "Tasks",
-            "2",
-            "image_file",
-            "Không thấy radio-tv-audiences-1992.jpg trong các tệp đã chọn. Chọn kèm ảnh hoặc sửa tên.",
-          ],
-        ];
+        [
+          "Tasks",
+          "3",
+          "prompt",
+          "Task 2 chưa có yêu cầu (đề bài). Nhập nội dung cột prompt.",
+        ],
+        [
+          "De_thi",
+          "2",
+          "exam_form",
+          '"Academic Training" không hợp lệ. Dùng Academic hoặc General Training.',
+        ],
+        [
+          "Tasks",
+          "2",
+          "image_file",
+          "Không thấy radio-tv-audiences-1992.jpg trong các tệp đã chọn. Chọn kèm ảnh hoặc sửa tên.",
+        ],
+      ];
     var IMP_CHECKS = SPK
       ? [
-          "Đọc tệp và 4 sheet theo mẫu",
-          "Trường bắt buộc và kiểu dữ liệu",
-          "Câu hỏi Part 1 và Part 3 không trống",
-          "Thời gian chờ, nói và tổng là số phút hợp lệ",
-          "Thẻ đề Part 2 có nội dung",
-        ]
+        "Đọc tệp và 4 sheet theo mẫu",
+        "Trường bắt buộc và kiểu dữ liệu",
+        "Câu hỏi Part 1 và Part 3 không trống",
+        "Thời gian chờ, nói và tổng là số phút hợp lệ",
+        "Thẻ đề Part 2 có nội dung",
+      ]
       : [
-          "Đọc tệp và 2 sheet theo mẫu",
-          "Trường bắt buộc và kiểu dữ liệu",
-          "Đề bài Task 1 và Task 2 đã nhập",
-          "Hình thức đề khớp loại đề đang mở",
-          "Ảnh khớp cột image_file",
-        ];
+        "Đọc tệp và 2 sheet theo mẫu",
+        "Trường bắt buộc và kiểu dữ liệu",
+        "Đề bài Task 1 và Task 2 đã nhập",
+        "Hình thức đề khớp loại đề đang mở",
+        "Ảnh khớp cột image_file",
+      ];
     function kbs(n) {
       return n >= 1048576
         ? (n / 1048576).toFixed(1).replace(".", ",") + " MB"
@@ -1007,9 +1007,9 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         impDrag: false,
         impErr: bad.length
           ? "Không nhận " +
-            bad.join(", ") +
-            ": chỉ nhận " +
-            (SPK ? ".xlsx." : ".xlsx và ảnh .png/.jpg/.webp.")
+          bad.join(", ") +
+          ": chỉ nhận " +
+          (SPK ? ".xlsx." : ".xlsx và ảnh .png/.jpg/.webp.")
           : "",
       });
     }
@@ -1047,8 +1047,8 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       );
     }
     var impHas = ex.items.some(function (x) {
-        return !isEmptyItem(x);
-      }),
+      return !isEmptyItem(x);
+    }),
       impP = s.impP || 0;
     var impVals = {
       impOn: !!s.imp,
@@ -1111,7 +1111,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         impAdd(e.target.files || []);
         try {
           e.target.value = "";
-        } catch (err) {}
+        } catch (err) { }
       },
       impFiles: impF.map(function (f, i) {
         return {
@@ -1201,50 +1201,50 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           : "Academic",
       impStats: SPK
         ? [
-            { n: "3", label: "part" },
-            { n: String(FULL.items[0].qs.length), label: "câu Part 1" },
-            { n: String(FULL.items[2].qs.length), label: "câu Part 3" },
-            {
-              n: FULL.items[1].prep + " + " + FULL.items[1].speak,
-              label: "phút Part 2",
-            },
-          ]
+          { n: "3", label: "part" },
+          { n: String(FULL.items[0].qs.length), label: "câu Part 1" },
+          { n: String(FULL.items[2].qs.length), label: "câu Part 3" },
+          {
+            n: FULL.items[1].prep + " + " + FULL.items[1].speak,
+            label: "phút Part 2",
+          },
+        ]
         : [
-            { n: "2", label: "task" },
-            {
-              n:
-                String(
-                  FULL.items.filter(function (x) {
-                    return x.img;
-                  }).length,
-                ) +
-                "/" +
-                String(
-                  FULL.items.filter(function (x) {
-                    return x.img;
-                  }).length,
-                ),
-              label: "ảnh khớp",
-            },
-            { n: String(FIX[0].words), label: "từ tối thiểu Task 1" },
-            { n: String(FIX[1].words), label: "từ tối thiểu Task 2" },
-          ],
+          { n: "2", label: "task" },
+          {
+            n:
+              String(
+                FULL.items.filter(function (x) {
+                  return x.img;
+                }).length,
+              ) +
+              "/" +
+              String(
+                FULL.items.filter(function (x) {
+                  return x.img;
+                }).length,
+              ),
+            label: "ảnh khớp",
+          },
+          { n: String(FIX[0].words), label: "từ tối thiểu Task 1" },
+          { n: String(FIX[1].words), label: "từ tối thiểu Task 2" },
+        ],
       impPrev: FULL.items.map(function (x, k) {
         var nm = UNIT + " " + (k + 1);
         if (SPK) {
           return k === 1
             ? {
-                title: nm,
-                sub: "thẻ đề",
-                groups: [x.prep + " phút chờ", x.speak + " phút nói"],
-              }
+              title: nm,
+              sub: "thẻ đề",
+              groups: [x.prep + " phút chờ", x.speak + " phút nói"],
+            }
             : {
-                title: nm,
-                sub: x.qs.length + " câu hỏi",
-                groups: x.qs.slice(0, 3).map(function (q) {
-                  return q.length > 28 ? q.slice(0, 26) + "…" : q;
-                }),
-              };
+              title: nm,
+              sub: x.qs.length + " câu hỏi",
+              groups: x.qs.slice(0, 3).map(function (q) {
+                return q.length > 28 ? q.slice(0, 26) + "…" : q;
+              }),
+            };
         }
         return {
           title: nm,
@@ -1258,13 +1258,13 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       }),
       impWarns: SPK
         ? [
-            "Part 2: xem lại thẻ đề ở bản xem trước, kiểm tra các gạch đầu dòng.",
-          ]
+          "Part 2: xem lại thẻ đề ở bản xem trước, kiểm tra các gạch đầu dòng.",
+        ]
         : [
-            GTF
-              ? "Task 1 là thư: kiểm tra các ý cần viết trong đề bài."
-              : "Task 1: kiểm tra ảnh biểu đồ hiển thị đúng và đủ nét.",
-          ],
+          GTF
+            ? "Task 1 là thư: kiểm tra các ý cần viết trong đề bài."
+            : "Task 1: kiểm tra ảnh biểu đồ hiển thị đúng và đủ nét.",
+        ],
       impReplaceNote:
         (impHas ? "Nội dung hiện tại sẽ được thay. " : "") +
         "Đề chuyển sang chế độ Chỉnh sửa, chưa lưu: xem lại rồi bấm Lưu, hoặc Hoàn tác.",
@@ -1328,7 +1328,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         KIND === "speak"
           ? "Speaking dùng chung cho Academic và General Training"
           : "Writing có đề riêng cho Academic và General Training: Task 1 " +
-            (GTF ? "là thư" : "mô tả biểu đồ, bảng, sơ đồ hoặc bản đồ"),
+          (GTF ? "là thư" : "mô tả biểu đồ, bảng, sơ đồ hoặc bản đồ"),
       typeSt:
         CHIP +
         "; " +
@@ -1724,10 +1724,10 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                       skill.status === "ARCHIVED"
                         ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap"
                         : skill.status === "HIDDEN"
-                        ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
-                        : skill.status === "DRAFT"
-                        ? "background: #EFF6FF; border-bottom: 1.5px solid #BFDBFE; color: #1E40AF; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
-                        : "display: none"
+                          ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
+                          : skill.status === "DRAFT"
+                            ? "background: #EFF6FF; border-bottom: 1.5px solid #BFDBFE; color: #1E40AF; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
+                            : "display: none"
                     )}
                   >
                     {skill.status === "ARCHIVED" ? (
@@ -1750,7 +1750,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                               e.preventDefault();
                               navigate(
                                 "AdminSpeakingEditor?skillId=" +
-                                  (skill.slot.draftId || skill.slot.liveId)
+                                (skill.slot.draftId || skill.slot.liveId)
                               );
                             }}
                             style={styleOf(
@@ -1778,11 +1778,11 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                         <span>
                           {skill.slot.liveId
                             ? versionMessages.bannerDraftWithLive(
-                                skill.versionNumber,
-                                skill.slot.liveVersion || (skill.versionNumber - 1),
-                                skill.slot.liveVersion || 1,
-                                skill.slot.liveStatus || "PUBLISHED"
-                              )
+                              skill.versionNumber,
+                              skill.slot.liveVersion || (skill.versionNumber - 1),
+                              skill.slot.liveVersion || 1,
+                              skill.slot.liveStatus || "PUBLISHED"
+                            )
                             : versionMessages.bannerDraftFirst(skill.versionNumber)}
                         </span>
                       </>
@@ -1796,18 +1796,18 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                 >
                   <div style={styleOf("min-width: 0; flex: 1 1 260px")}>
                     <a
-                        href={"#"}
-                        onClick={function (e) {
-                          e.preventDefault();
-                          navigate(skill ? "AdminExamSet?id=" + skill.set.id : "AdminExams");
-                        }}
-                        style={styleOf("display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: #706473; text-decoration: none; cursor: pointer")}
-                      >
-                        <svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"}>
-                          <path d={"M19 12H5M12 19l-7-7 7-7"}></path>
-                        </svg>
-                        {v.examPath}
-                      </a>
+                      href={"#"}
+                      onClick={function (e) {
+                        e.preventDefault();
+                        navigate(skill ? "AdminExamSet?id=" + skill.set.id : "AdminExams");
+                      }}
+                      style={styleOf("display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: #706473; text-decoration: none; cursor: pointer")}
+                    >
+                      <svg width={"14"} height={"14"} viewBox={"0 0 24 24"} fill={"none"} stroke={"currentColor"} strokeWidth={"2"} strokeLinecap={"round"} strokeLinejoin={"round"}>
+                        <path d={"M19 12H5M12 19l-7-7 7-7"}></path>
+                      </svg>
+                      {v.examPath}
+                    </a>
                     <div
                       style={styleOf(
                         "display: flex; align-items: center; gap: 8px; flex-wrap: wrap",
@@ -2797,7 +2797,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                                   <div
                                     style={styleOf(
                                       "display: flex; align-items: center; gap: 12px; font-size: 14px; color: " +
-                                        c.color,
+                                      c.color,
                                     )}
                                   >
                                     <span

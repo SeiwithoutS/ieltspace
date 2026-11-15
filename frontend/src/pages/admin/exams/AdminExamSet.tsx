@@ -36,17 +36,17 @@ type ConfirmKind = "pub" | "hide" | "del" | "delSkill";
 // Việc hoàn tác sau khi ẩn hoặc hiện lại một kỹ năng, hoặc hoàn tác tạo kỹ năng.
 type UndoAction =
   | {
-      action: "show" | "hide";
-      liveId: string;
-      nm: string;
-      tName: string;
-    }
+    action: "show" | "hide";
+    liveId: string;
+    nm: string;
+    tName: string;
+  }
   | {
-      action: "deleteSkill";
-      draftId: string;
-      nm: string;
-      tName: string;
-    };
+    action: "deleteSkill";
+    draftId: string;
+    nm: string;
+    tName: string;
+  };
 type MenuPos = { l: number; t: number; b: number; up: boolean };
 type MenuItem = {
   label: string;
@@ -261,10 +261,10 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
             url,
             Math.abs(q - 1.5) > 0.12
               ? "Ảnh " +
-                  im.width +
-                  " × " +
-                  im.height +
-                  " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
+              im.width +
+              " × " +
+              im.height +
+              " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
               : "",
             true,
           );
@@ -277,15 +277,15 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       r.readAsDataURL(f);
       try {
         e.target.value = "";
-      } catch (err) {}
+      } catch (err) { }
     }
 
     var SK: Array<[SkillKey, string, string, string]> = [
-        ["L", "Listening", "#DDE8FC", "#2A55B8"],
-        ["R", "Reading", "#DCEDE2", "#2E6A48"],
-        ["W", "Writing", "#FBEDBF", "#7A5A0E"],
-        ["S", "Speaking", "#E8E4FA", "#5543B0"],
-      ],
+      ["L", "Listening", "#DDE8FC", "#2A55B8"],
+      ["R", "Reading", "#DCEDE2", "#2E6A48"],
+      ["W", "Writing", "#FBEDBF", "#7A5A0E"],
+      ["S", "Speaking", "#E8E4FA", "#5543B0"],
+    ],
       ST: Record<NonNullable<Cell>, Palette> = {
         pub: ["Đã đăng", "#DCEDE2", "#2E6A48"],
         draft: ["Đang soạn", "#FBEDBF", "#7A5A0E"],
@@ -326,20 +326,20 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
     var SET: UiSet = s.apiSet
       ? toUiSet(s.apiSet)
       : {
-          id: sid,
-          cat: "",
-          catName: "",
-          name: s.loading ? "Đang tải…" : s.gone ? "Đã xóa" : "",
-          art: null,
-          img: null,
-          short: "",
-          status: "draft",
-          updated: "",
-          plays: "0",
-          desc: "",
-          tests: [],
-          canDelete: true,
-        };
+        id: sid,
+        cat: "",
+        catName: "",
+        name: s.loading ? "Đang tải…" : s.gone ? "Đã xóa" : "",
+        art: null,
+        img: null,
+        short: "",
+        status: "draft",
+        updated: "",
+        plays: "0",
+        desc: "",
+        tests: [],
+        canDelete: true,
+      };
 
     var tests = SET.tests,
       col = s.col == null ? -1 : s.col,
@@ -401,29 +401,29 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         all = all.concat(vals(t, k[0]));
       });
       var pub = all.filter(function (x) {
-          return x === "pub";
-        }).length,
+        return x === "pub";
+      }).length,
         dr = all.filter(function (x) {
           return x === "draft";
         }).length,
         hid = all.length - pub - dr;
       var sub = [pub + " đã đăng", dr + " đang soạn"]
-          .concat(hid ? [hid + " đã ẩn"] : [])
-          .join(" · "),
+        .concat(hid ? [hid + " đã ẩn"] : [])
+        .join(" · "),
         rw = k[0] === "R" || k[0] === "W";
       var kinds = rw
         ? (["A", "G"] as FormKey[]).map(function (c) {
-            var n = tests.filter(function (t) {
-              return val(t, k[0], c);
-            }).length;
-            return { text: TY[c][0] + " " + n, st: pill(c) };
-          })
+          var n = tests.filter(function (t) {
+            return val(t, k[0], c);
+          }).length;
+          return { text: TY[c][0] + " " + n, st: pill(c) };
+        })
         : [
-            {
-              text: "Dùng chung cho cả 2 hình thức",
-              st: "font-size: 13px; color: #706473",
-            },
-          ];
+          {
+            text: "Dùng chung cho cả 2 hình thức",
+            st: "font-size: 13px; color: #706473",
+          },
+        ];
       return {
         label: k[1],
         n: String(all.length),
@@ -440,8 +440,8 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           "display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; text-decoration: none; color: #352637; box-sizing: border-box; cursor: pointer; " +
           (on
             ? "border: 2px solid " +
-              k[3] +
-              "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
+            k[3] +
+            "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
             : "border: 1.5px solid #D6D4D0"),
         canImp: true,
         impHref: "#",
@@ -499,7 +499,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           if (t.everPublished) {
             toastSet(
               t.name +
-                " đã đăng nên không xóa được, để giữ bài làm của người học. Hãy ẩn từng kỹ năng nếu không muốn người học thấy.",
+              " đã đăng nên không xóa được, để giữ bài làm của người học. Hãy ẩn từng kỹ năng nếu không muốn người học thấy.",
             );
             return;
           }
@@ -538,10 +538,10 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
                   self.setState({ apiSet: res, menu: null });
                   toastSet(
                     "Đã ẩn " +
-                      nm +
-                      " của " +
-                      t.name +
-                      ". Người học không thấy kỹ năng này nữa.",
+                    nm +
+                    " của " +
+                    t.name +
+                    ". Người học không thấy kỹ năng này nữa.",
                     {},
                     true,
                     {
@@ -718,8 +718,8 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
               (stx ? stx[1] + "; color: " + stx[2] : "#FFFFFF") +
               (open
                 ? "; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px " +
-                  (stx ? stx[2] : "#2963CC") +
-                  "55"
+                (stx ? stx[2] : "#2963CC") +
+                "55"
                 : ""),
             create: async function (e: Ev) {
               stop(e);
@@ -767,19 +767,19 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       img = SET.img || null,
       AR: [string, string, boolean] | null = img
         ? [
-            "Ảnh đã tải lên",
-            "url('" + img + "') center / contain no-repeat, #E9E4DA",
-            false,
-          ]
+          "Ảnh đã tải lên",
+          "url('" + img + "') center / contain no-repeat, #E9E4DA",
+          false,
+        ]
         : ai == null
           ? null
           : ART[ai];
     // ---- đăng / ẩn / xóa bộ đề
     var cnt: Record<"pub" | "draft" | "hidden", number> = {
-        pub: 0,
-        draft: 0,
-        hidden: 0,
-      },
+      pub: 0,
+      draft: 0,
+      hidden: 0,
+    },
       live = 0;
     tests.forEach(function (t) {
       var any = false;
@@ -797,9 +797,9 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       }
     });
     var canDel =
-        SET.canDelete !== undefined
-          ? SET.canDelete
-          : status === "draft" || !tests.length,
+      SET.canDelete !== undefined
+        ? SET.canDelete
+        : status === "draft" || !tests.length,
       cfBase: ConfirmBase | null = null;
     function dot(c: string) {
       return (
@@ -810,49 +810,49 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
     if (s.cf === "pub") {
       cfBase = cnt.pub
         ? {
-            title:
-              (status === "hidden" ? "Đăng lại" : "Đăng") +
-              " bộ đề “" +
-              SET.name +
-              "”?",
-            text: "Bộ đề sẽ hiện trong Thư viện đề của người học. Từng đề hiện theo các kỹ năng đã có:",
-            hasList: true,
-            list: [
-              {
-                n: cnt.pub,
-                text:
-                  "kỹ năng đã đăng trong " +
-                  live +
-                  " đề: người học bấm Làm bài được ngay",
-                dot: dot("#2E7D4F"),
-              },
-              {
-                n: cnt.draft,
-                text: "kỹ năng đang soạn: chưa hiện, thấy “—”",
-                dot: dot("#C9A227"),
-              },
-              {
-                n: cnt.hidden,
-                text: "kỹ năng đã ẩn: không hiện",
-                dot: dot("#B3A9B5"),
-              },
-            ],
-            goText: "Đăng bộ đề",
-            goSt: "BTN_DARK",
-            icon: "↑",
-            tone: ["#DCEDE2", "#2E6A48"],
-          }
+          title:
+            (status === "hidden" ? "Đăng lại" : "Đăng") +
+            " bộ đề “" +
+            SET.name +
+            "”?",
+          text: "Bộ đề sẽ hiện trong Thư viện đề của người học. Từng đề hiện theo các kỹ năng đã có:",
+          hasList: true,
+          list: [
+            {
+              n: cnt.pub,
+              text:
+                "kỹ năng đã đăng trong " +
+                live +
+                " đề: người học bấm Làm bài được ngay",
+              dot: dot("#2E7D4F"),
+            },
+            {
+              n: cnt.draft,
+              text: "kỹ năng đang soạn: chưa hiện, thấy “—”",
+              dot: dot("#C9A227"),
+            },
+            {
+              n: cnt.hidden,
+              text: "kỹ năng đã ẩn: không hiện",
+              dot: dot("#B3A9B5"),
+            },
+          ],
+          goText: "Đăng bộ đề",
+          goSt: "BTN_DARK",
+          icon: "↑",
+          tone: ["#DCEDE2", "#2E6A48"],
+        }
         : {
-            title: "Chưa đăng được bộ đề",
-            text: "Bộ đề chưa có kỹ năng nào ở trạng thái Đã đăng. Soạn xong và đăng ít nhất một kỹ năng của một đề trong editor (đủ đáp án, tiêu chí và tệp audio/ảnh) rồi mới đăng cả bộ.",
-            hasList: false,
-            list: [],
-            noGo: true,
-            goText: "",
-            goSt: "",
-            icon: "!",
-            tone: ["#FBEDBF", "#7A5A0E"],
-          };
+          title: "Chưa đăng được bộ đề",
+          text: "Bộ đề chưa có kỹ năng nào ở trạng thái Đã đăng. Soạn xong và đăng ít nhất một kỹ năng của một đề trong editor (đủ đáp án, tiêu chí và tệp audio/ảnh) rồi mới đăng cả bộ.",
+          hasList: false,
+          list: [],
+          noGo: true,
+          goText: "",
+          goSt: "",
+          icon: "!",
+          tone: ["#FBEDBF", "#7A5A0E"],
+        };
     }
     if (s.cf === "hide") {
       cfBase = {
@@ -871,8 +871,8 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         title: "Xóa bộ đề “" + SET.name + "”?",
         text: tests.length
           ? "Bộ đề đang là Bản nháp với " +
-            tests.length +
-            " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
+          tests.length +
+          " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
           : "Bộ đề chưa có đề nào. Thao tác này không hoàn tác được.",
         hasList: false,
         list: [],
@@ -1162,8 +1162,8 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           });
           toastSet(
             "Đã thêm " +
-              (newTest ? newTest.title : "đề mới") +
-              ". Bấm “Tạo” ở từng kỹ năng để soạn.",
+            (newTest ? newTest.title : "đề mới") +
+            ". Bấm “Tạo” ở từng kỹ năng để soạn.",
           );
         } catch (err) {
           toastSet(errorInfo(err).message || "Không thể thêm đề thi.");
@@ -1227,11 +1227,1020 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           ]}
           contentClassName="p-4 sm:p-6 md:p-8 flex flex-col gap-6"
         >
-                <a
-                  href={"#"}
-                  onClick={v.back}
+          <a
+            href={"#"}
+            onClick={v.back}
+            style={styleOf(
+              "display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #706473; text-decoration: none; align-self: flex-start",
+            )}
+          >
+            <svg
+              width={"16"}
+              height={"16"}
+              viewBox={"0 0 24 24"}
+              fill={"none"}
+              stroke={"currentColor"}
+              strokeWidth={"2"}
+              strokeLinecap={"round"}
+              strokeLinejoin={"round"}
+              aria-hidden={"true"}
+            >
+              <path d={"M19 12H5M11 6l-6 6 6 6"}></path>
+            </svg>
+            {" Bộ đề và đề thi"}
+          </a>
+          {v.loading ? (
+            <div
+              className={"an-fade"}
+              style={styleOf(
+                "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; padding: 48px 24px; text-align: center; color: #706473; font-size: 14px",
+              )}
+            >
+              {"Đang tải thông tin bộ đề…"}
+            </div>
+          ) : v.loadError ? (
+            <div
+              className={"an-fade"}
+              style={styleOf(
+                "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; padding: 48px 24px; text-align: center; color: #C0412A; font-size: 14px",
+              )}
+            >
+              <div>{v.loadError}</div>
+              <a
+                href={"#"}
+                onClick={v.retry}
+                style={styleOf(
+                  "display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: #2963CC; margin-top: 10px",
+                )}
+              >
+                {"Thử lại"}
+              </a>
+            </div>
+          ) : v.alive ? (
+            <>
+              <div
+                style={styleOf(
+                  "display: flex; flex-direction: column; gap: 24px",
+                )}
+              >
+                <div style={styleOf("margin-top: -8px")}>
+                  <div
+                    style={styleOf(
+                      "display: flex; align-items: center; gap: 20px; flex-wrap: wrap",
+                    )}
+                  >
+                    <div
+                      style={styleOf("position: relative; flex: none")}
+                    >
+                      <div
+                        className={"thumb-h"}
+                        style={styleOf(
+                          "border-radius: 12px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.06), 0 6px 18px rgba(53, 38, 55, 0.10)",
+                        )}
+                      >
+                        <div
+                          role={"img"}
+                          aria-label={v.artLabel}
+                          style={styleOf(v.artSt)}
+                        >
+                          {v.artShowText ? (
+                            <>
+                              <span
+                                style={styleOf(
+                                  "padding: 0 0 12px 12px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 24px; font-weight: 600; line-height: 1; letter-spacing: -0.01em; text-shadow: 0 1px 8px rgba(0,0,0,0.18)",
+                                )}
+                              >
+                                {v.artText}
+                              </span>
+                            </>
+                          ) : null}
+                          {v.artNone ? (
+                            <>
+                              <span
+                                style={styleOf(
+                                  "margin: auto; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 13px; font-weight: 600",
+                                )}
+                              >
+                                <svg
+                                  width={"26"}
+                                  height={"26"}
+                                  viewBox={"0 0 24 24"}
+                                  fill={"none"}
+                                  stroke={"currentColor"}
+                                  strokeWidth={"1.8"}
+                                  strokeLinecap={"round"}
+                                  strokeLinejoin={"round"}
+                                  aria-hidden={"true"}
+                                >
+                                  <rect
+                                    x={"3"}
+                                    y={"4"}
+                                    width={"18"}
+                                    height={"16"}
+                                    rx={"2"}
+                                  ></rect>
+                                  <circle
+                                    cx={"9"}
+                                    cy={"10"}
+                                    r={"1.5"}
+                                  ></circle>
+                                  <path d={"M21 16l-5-5-8 9"}></path>
+                                </svg>
+                                {" Chưa có ảnh"}
+                              </span>
+                            </>
+                          ) : null}
+                        </div>
+                      </div>
+                      <a
+                        href={"#"}
+                        onClick={v.artMenu}
+                        title={"Đổi ảnh bìa"}
+                        aria-label={"Đổi ảnh bìa"}
+                        aria-expanded={v.artOpen}
+                        className={"press"}
+                        style={styleOf(
+                          "position: absolute; right: -10px; top: -10px; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 999px; background: #352637; color: #FFFFFF; border: 3px solid #FAF9F5; box-sizing: border-box; text-decoration: none",
+                        )}
+                      >
+                        <svg
+                          width={"17"}
+                          height={"17"}
+                          viewBox={"0 0 24 24"}
+                          fill={"none"}
+                          stroke={"currentColor"}
+                          strokeWidth={"2"}
+                          strokeLinecap={"round"}
+                          strokeLinejoin={"round"}
+                          aria-hidden={"true"}
+                        >
+                          <path d={"M4 8h3l2-3h6l2 3h3v11H4z"}></path>
+                          <circle cx={"12"} cy={"13"} r={"3.5"}></circle>
+                        </svg>
+                      </a>
+                      {v.artOpen ? (
+                        <>
+                          <div
+                            role={"dialog"}
+                            aria-label={"Ảnh bìa bộ đề"}
+                            className={"an-drop"}
+                            style={styleOf(
+                              "position: absolute; left: 0; top: calc(100% + 10px); z-index: 30; width: 272px; padding: 14px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
+                            )}
+                          >
+                            <div
+                              style={styleOf(
+                                "font-size: 13px; font-weight: 600; color: #706473",
+                              )}
+                            >
+                              {"Ảnh bìa bộ đề"}
+                            </div>
+                            <div
+                              style={styleOf("display: flex; gap: 8px")}
+                            >
+                              {(v.arts || []).map((g, index) => (
+                                <React.Fragment key={index}>
+                                  <a
+                                    href={"#"}
+                                    onClick={g.pick}
+                                    title={g.name}
+                                    aria-label={g.name}
+                                    style={styleOf(g.st)}
+                                  ></a>
+                                </React.Fragment>
+                              ))}
+                            </div>
+                            <div
+                              style={styleOf(
+                                "font-size: 13px; color: #706473",
+                              )}
+                            >
+                              {
+                                "Ảnh bìa ngang tỉ lệ 3:2, tối thiểu 1200 × 800 px, JPG, PNG hoặc WebP."
+                              }
+                            </div>
+                            {v.artMsg ? (
+                              <>
+                                <div
+                                  style={styleOf(
+                                    "font-size: 13px; color: " +
+                                    v.artMsgColor,
+                                  )}
+                                >
+                                  {v.artMsgText}
+                                </div>
+                              </>
+                            ) : null}
+                            <label
+                              style={styleOf(
+                                "display: flex; align-items: center; gap: 8px; width: 100%; height: 36px; padding: 0 10px; border-radius: 10px; box-sizing: border-box; font-size: 14px; font-weight: 600; text-decoration: none; color: #352637; cursor: pointer; position: relative; overflow: hidden",
+                              )}
+                            >
+                              <svg
+                                width={"15"}
+                                height={"15"}
+                                viewBox={"0 0 24 24"}
+                                fill={"none"}
+                                stroke={"currentColor"}
+                                strokeWidth={"2"}
+                                strokeLinecap={"round"}
+                                strokeLinejoin={"round"}
+                                aria-hidden={"true"}
+                              >
+                                <path
+                                  d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
+                                ></path>
+                              </svg>
+                              {" Tải ảnh lên"}
+                              <input
+                                type={"file"}
+                                accept={"image/png,image/jpeg,image/webp"}
+                                onChange={v.artFile}
+                                style={styleOf(
+                                  "position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none",
+                                )}
+                              />
+                            </label>
+                            {v.artHas ? (
+                              <>
+                                <a
+                                  href={"#"}
+                                  onClick={v.artRemove}
+                                  style={styleOf(
+                                    "display: flex; align-items: center; gap: 8px; width: 100%; height: 36px; padding: 0 10px; border-radius: 10px; box-sizing: border-box; font-size: 14px; font-weight: 600; text-decoration: none; color: #352637; cursor: pointer; position: relative; overflow: hidden; color: #C0412A",
+                                  )}
+                                >
+                                  <svg
+                                    width={"16"}
+                                    height={"16"}
+                                    viewBox={"0 0 24 24"}
+                                    fill={"none"}
+                                    stroke={"currentColor"}
+                                    strokeWidth={"2"}
+                                    strokeLinecap={"round"}
+                                    strokeLinejoin={"round"}
+                                    aria-hidden={"true"}
+                                  >
+                                    <path
+                                      d={
+                                        "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                      }
+                                    ></path>
+                                  </svg>
+                                  {" Xóa ảnh"}
+                                </a>
+                              </>
+                            ) : null}
+                          </div>
+                        </>
+                      ) : null}
+                    </div>
+                    <div style={styleOf("flex: 1 1 320px; min-width: 0")}>
+                      <h1
+                        style={styleOf(
+                          "margin: 0; font-size: 28px; line-height: 1.25; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                        )}
+                      >
+                        {v.setName}
+                      </h1>
+                      <div
+                        style={styleOf(
+                          "display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px",
+                        )}
+                      >
+                        {(v.setTypes || []).map((y, index) => (
+                          <React.Fragment key={index}>
+                            <span style={styleOf(y.st)}>{y.text}</span>
+                          </React.Fragment>
+                        ))}
+                        <span style={styleOf(v.setStatusSt)}>
+                          {v.setStatus}
+                        </span>
+                      </div>
+                      <div
+                        style={styleOf(
+                          "font-size: 14px; color: #706473; margin-top: 6px",
+                        )}
+                      >
+                        {v.setSub}
+                      </div>
+                    </div>
+                    <div
+                      style={styleOf(
+                        "display: flex; gap: 10px; flex-wrap: wrap; align-items: center",
+                      )}
+                    >
+                      <a
+                        href={"ExamDetail.dc.html"}
+                        onClick={v.toLearner}
+                        title={"Xem như người học"}
+                        aria-label={"Xem như người học"}
+                        className={"press"}
+                        style={styleOf(
+                          "display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 999px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #4B3D4D; text-decoration: none",
+                        )}
+                      >
+                        <svg
+                          width={"18"}
+                          height={"18"}
+                          viewBox={"0 0 24 24"}
+                          fill={"none"}
+                          stroke={"currentColor"}
+                          strokeWidth={"2"}
+                          strokeLinecap={"round"}
+                          strokeLinejoin={"round"}
+                          aria-hidden={"true"}
+                        >
+                          <path
+                            d={
+                              "M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"
+                            }
+                          ></path>
+                          <circle cx={"12"} cy={"12"} r={"3"}></circle>
+                        </svg>
+                      </a>
+                      {v.canDel ? (
+                        <>
+                          <a
+                            href={"#"}
+                            onClick={v.askDel}
+                            className={"press"}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
+                            )}
+                          >
+                            <svg
+                              width={"16"}
+                              height={"16"}
+                              viewBox={"0 0 24 24"}
+                              fill={"none"}
+                              stroke={"currentColor"}
+                              strokeWidth={"2"}
+                              strokeLinecap={"round"}
+                              strokeLinejoin={"round"}
+                              aria-hidden={"true"}
+                            >
+                              <path
+                                d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}
+                              ></path>
+                            </svg>
+                            {" Xóa bộ đề"}
+                          </a>
+                        </>
+                      ) : null}
+                      <a
+                        href={"#"}
+                        onClick={v.addTest}
+                        className={"press"}
+                        style={styleOf(
+                          "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
+                        )}
+                      >
+                        <svg
+                          width={"16"}
+                          height={"16"}
+                          viewBox={"0 0 24 24"}
+                          fill={"none"}
+                          stroke={"currentColor"}
+                          strokeWidth={"2"}
+                          strokeLinecap={"round"}
+                          strokeLinejoin={"round"}
+                          aria-hidden={"true"}
+                        >
+                          <path d={"M12 5v14M5 12h14"}></path>
+                        </svg>
+                        {" Thêm đề"}
+                      </a>
+                      {v.isPub ? (
+                        <>
+                          <a
+                            href={"#"}
+                            onClick={v.askHide}
+                            className={"press"}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
+                            )}
+                          >
+                            <svg
+                              width={"16"}
+                              height={"16"}
+                              viewBox={"0 0 24 24"}
+                              fill={"none"}
+                              stroke={"currentColor"}
+                              strokeWidth={"2"}
+                              strokeLinecap={"round"}
+                              strokeLinejoin={"round"}
+                              aria-hidden={"true"}
+                            >
+                              <path d={"M3 3l18 18"}></path>
+                              <path
+                                d={
+                                  "M10.6 6.1A9.8 9.8 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-3 3.5M6.5 7.5C4.3 9 3 12 3 12s4 6 9 6a9 9 0 0 0 4-1"
+                                }
+                              ></path>
+                            </svg>
+                            {" Ẩn bộ đề"}
+                          </a>
+                        </>
+                      ) : null}
+                      {v.notPub ? (
+                        <>
+                          <a
+                            href={"#"}
+                            onClick={v.askPub}
+                            className={"press"}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                            )}
+                          >
+                            <svg
+                              width={"16"}
+                              height={"16"}
+                              viewBox={"0 0 24 24"}
+                              fill={"none"}
+                              stroke={"currentColor"}
+                              strokeWidth={"2"}
+                              strokeLinecap={"round"}
+                              strokeLinejoin={"round"}
+                              aria-hidden={"true"}
+                            >
+                              <path d={"M4 12l16-8-6 16-3-7z"}></path>
+                            </svg>
+                            {" " + v.pubLabel}
+                          </a>
+                        </>
+                      ) : null}
+                      {v.blockPub ? (
+                        <span
+                          role={"button"}
+                          aria-disabled={"true"}
+                          title={
+                            "Bộ đề chưa có đề nào. Thêm ít nhất một đề rồi mới đăng được."
+                          }
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; white-space: nowrap; cursor: not-allowed; border: 1.5px solid #D6D4D0; background: #F3F0EA; color: #8E8392",
+                          )}
+                        >
+                          <svg
+                            width={"16"}
+                            height={"16"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"2"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M4 12l16-8-6 16-3-7z"}></path>
+                          </svg>
+                          {" " + v.pubLabel}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
+                <div
                   style={styleOf(
-                    "display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #706473; text-decoration: none; align-self: flex-start",
+                    "display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px",
+                  )}
+                >
+                  {(v.tiles || []).map((t, index) => (
+                    <React.Fragment key={index}>
+                      <div
+                        role={"button"}
+                        tabIndex={0}
+                        onClick={t.pick}
+                        aria-pressed={t.on}
+                        className={"lift"}
+                        style={styleOf(t.st)}
+                      >
+                        <div
+                          style={styleOf(
+                            "display: flex; align-items: center; gap: 10px",
+                          )}
+                        >
+                          <span style={styleOf(t.iconSt)}>{t.icon}</span>
+                          <span
+                            style={styleOf(
+                              "font-weight: 600; font-size: 15px",
+                            )}
+                          >
+                            {t.label}
+                          </span>
+                          {t.canImp ? (
+                            <>
+                              <a
+                                href={t.impHref}
+                                onClick={t.imp}
+                                title={
+                                  "Tạo đề " +
+                                  t.label +
+                                  " mới và nhập cả đề từ file xlsx trong editor"
+                                }
+                                className={"press"}
+                                style={styleOf(
+                                  "margin-left: auto; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap",
+                                )}
+                              >
+                                <svg
+                                  width={"13"}
+                                  height={"13"}
+                                  viewBox={"0 0 24 24"}
+                                  fill={"none"}
+                                  stroke={"currentColor"}
+                                  strokeWidth={"2"}
+                                  strokeLinecap={"round"}
+                                  strokeLinejoin={"round"}
+                                  aria-hidden={"true"}
+                                >
+                                  <path
+                                    d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
+                                  ></path>
+                                </svg>
+                                {" Nhập xlsx"}
+                              </a>
+                            </>
+                          ) : null}
+                        </div>
+                        <div
+                          style={styleOf(
+                            "display: flex; align-items: baseline; gap: 6px",
+                          )}
+                        >
+                          <span
+                            style={styleOf(
+                              "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 32px; font-weight: 600; line-height: 1.1",
+                            )}
+                          >
+                            {t.n}
+                          </span>
+                          <span
+                            style={styleOf(
+                              "font-size: 14px; color: #706473",
+                            )}
+                          >
+                            {"đề"}
+                          </span>
+                        </div>
+                        <div
+                          style={styleOf(
+                            "font-size: 13px; color: #706473",
+                          )}
+                        >
+                          {t.sub}
+                        </div>
+                        <div
+                          style={styleOf(
+                            "display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 13px; color: #706473",
+                          )}
+                        >
+                          {(t.kinds || []).map((q, index) => (
+                            <React.Fragment key={index}>
+                              <span style={styleOf(q.st)}>{q.text}</span>
+                            </React.Fragment>
+                          ))}
+                        </div>
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </div>
+                <div
+                  style={styleOf(
+                    "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; overflow: visible; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                  )}
+                >
+                  <div
+                    style={styleOf(
+                      "display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px 20px; border-bottom: 1px solid #E6E4E0",
+                    )}
+                  >
+                    <span
+                      style={styleOf("font-size: 18px; font-weight: 600")}
+                    >
+                      {"Các đề trong bộ"}
+                    </span>
+                    <span
+                      style={styleOf(
+                        "display: flex; gap: 6px; flex-wrap: wrap; align-items: center",
+                      )}
+                    >
+                      <span
+                        style={styleOf(
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #DCEDE2; color: #2E6A48",
+                        )}
+                      >
+                        {"Đã đăng"}
+                      </span>
+                      <span
+                        style={styleOf(
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #FBEDBF; color: #7A5A0E",
+                        )}
+                      >
+                        {"Đang soạn"}
+                      </span>
+                      <span
+                        style={styleOf(
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #F3F0EA; color: #706473",
+                        )}
+                      >
+                        {"Đã ẩn"}
+                      </span>
+                      <span
+                        style={styleOf(
+                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #FFFFFF; color: #706473; border: 1.5px dashed #D6D4D0",
+                        )}
+                      >
+                        <svg
+                          width={"12"}
+                          height={"12"}
+                          viewBox={"0 0 24 24"}
+                          fill={"none"}
+                          stroke={"currentColor"}
+                          strokeWidth={"2"}
+                          strokeLinecap={"round"}
+                          strokeLinejoin={"round"}
+                          aria-hidden={"true"}
+                        >
+                          <path d={"M12 5v14M5 12h14"}></path>
+                        </svg>
+                        {" Chưa có"}
+                      </span>
+                    </span>
+                  </div>
+                  <div style={styleOf("overflow-x: auto")}>
+                    <table
+                      className={"hov"}
+                      style={styleOf(
+                        "width: 100%; border-collapse: collapse; min-width: 1000px",
+                      )}
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            rowSpan={2}
+                            style={styleOf(
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; width: 20%; vertical-align: bottom",
+                            )}
+                          >
+                            {"Đề"}
+                          </th>
+                          <th rowSpan={2} style={styleOf(v.h0)}>
+                            {"Listening"}
+                          </th>
+                          <th colSpan={2} style={styleOf(v.h1)}>
+                            {"Reading"}
+                          </th>
+                          <th colSpan={2} style={styleOf(v.h2)}>
+                            {"Writing"}
+                          </th>
+                          <th rowSpan={2} style={styleOf(v.h3)}>
+                            {"Speaking"}
+                          </th>
+                          <th
+                            rowSpan={2}
+                            style={styleOf(
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; vertical-align: bottom",
+                            )}
+                          >
+                            {"Cập nhật"}
+                          </th>
+                          <th
+                            rowSpan={2}
+                            style={styleOf(
+                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
+                            )}
+                          ></th>
+                        </tr>
+                        <tr>
+                          <th style={styleOf(v.s1)}>
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #DFF1F4; color: #1F6A78",
+                              )}
+                            >
+                              {"Academic"}
+                            </span>
+                          </th>
+                          <th style={styleOf(v.s1)}>
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #FCE6D6; color: #9A4A17",
+                              )}
+                            >
+                              {"General Training"}
+                            </span>
+                          </th>
+                          <th style={styleOf(v.s2)}>
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #DFF1F4; color: #1F6A78",
+                              )}
+                            >
+                              {"Academic"}
+                            </span>
+                          </th>
+                          <th style={styleOf(v.s2)}>
+                            <span
+                              style={styleOf(
+                                "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #FCE6D6; color: #9A4A17",
+                              )}
+                            >
+                              {"General Training"}
+                            </span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(v.rows || []).map((r, index) => (
+                          <React.Fragment key={index}>
+                            <tr className={r.cls}>
+                              <td
+                                style={styleOf(
+                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
+                                )}
+                              >
+                                <div style={styleOf("font-weight: 600")}>
+                                  {r.name}
+                                </div>
+                                <div
+                                  style={styleOf(
+                                    "font-size: 13px; color: #706473",
+                                  )}
+                                >
+                                  {r.sub}
+                                </div>
+                              </td>
+                              {(r.cells || []).map((x, index) => (
+                                <React.Fragment key={index}>
+                                  <td style={styleOf(x.tdSt)}>
+                                    <div
+                                      style={styleOf(
+                                        "position: relative; display: inline-flex",
+                                      )}
+                                    >
+                                      {x.has ? (
+                                        <>
+                                          <a
+                                            href={"#"}
+                                            onClick={x.toggle}
+                                            title={x.title}
+                                            aria-haspopup={"menu"}
+                                            aria-expanded={x.open}
+                                            className={"press"}
+                                            style={styleOf(x.st)}
+                                          >
+                                            {x.label + " "}
+                                            <svg
+                                              width={"13"}
+                                              height={"13"}
+                                              viewBox={"0 0 24 24"}
+                                              fill={"none"}
+                                              stroke={"currentColor"}
+                                              strokeWidth={"2.2"}
+                                              strokeLinecap={"round"}
+                                              strokeLinejoin={"round"}
+                                              aria-hidden={"true"}
+                                            >
+                                              <path
+                                                d={"M7 10l5 5 5-5"}
+                                              ></path>
+                                            </svg>
+                                          </a>
+                                        </>
+                                      ) : null}
+                                      {x.none ? (
+                                        <>
+                                          <a
+                                            href={"#"}
+                                            onClick={x.create}
+                                            title={x.title}
+                                            className={"press"}
+                                            style={styleOf(
+                                              "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; border: 1.5px dashed #D6D4D0; height: 28px",
+                                            )}
+                                          >
+                                            <svg
+                                              width={"13"}
+                                              height={"13"}
+                                              viewBox={"0 0 24 24"}
+                                              fill={"none"}
+                                              stroke={"currentColor"}
+                                              strokeWidth={"2"}
+                                              strokeLinecap={"round"}
+                                              strokeLinejoin={"round"}
+                                              aria-hidden={"true"}
+                                            >
+                                              <path
+                                                d={"M12 5v14M5 12h14"}
+                                              ></path>
+                                            </svg>
+                                            {" Tạo"}
+                                          </a>
+                                        </>
+                                      ) : null}
+                                      {x.open ? (
+                                        <>
+                                          <div
+                                            role={"menu"}
+                                            className={"an-drop"}
+                                            style={styleOf(x.menuSt)}
+                                          >
+                                            <div
+                                              style={styleOf(
+                                                "padding: 6px 12px 6px; font-size: 12px; font-weight: 600; color: #706473; white-space: nowrap",
+                                              )}
+                                            >
+                                              {x.menuHead}
+                                            </div>
+                                            {(x.items || []).map(
+                                              (it, index) => (
+                                                <React.Fragment
+                                                  key={index}
+                                                >
+                                                  {it.disabled ? (
+                                                    <div
+                                                      role={"menuitem"}
+                                                      aria-disabled={
+                                                        "true"
+                                                      }
+                                                      style={styleOf(
+                                                        it.st,
+                                                      )}
+                                                    >
+                                                      {it.label}
+                                                    </div>
+                                                  ) : (
+                                                    <a
+                                                      href={it.href}
+                                                      role={"menuitem"}
+                                                      onClick={it.act}
+                                                      style={styleOf(
+                                                        it.st,
+                                                      )}
+                                                    >
+                                                      {it.label}
+                                                    </a>
+                                                  )}
+                                                </React.Fragment>
+                                              ),
+                                            )}
+                                          </div>
+                                        </>
+                                      ) : null}
+                                    </div>
+                                  </td>
+                                </React.Fragment>
+                              ))}
+                              <td
+                                style={styleOf(
+                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; color: #706473",
+                                )}
+                              >
+                                {r.updated}
+                              </td>
+                              <td
+                                style={styleOf(
+                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; text-align: right",
+                                )}
+                              >
+                                <a
+                                  href={"#"}
+                                  onClick={r.del}
+                                  aria-label={"Xóa " + r.name}
+                                  title={"Xóa đề"}
+                                  className={"press"}
+                                  style={styleOf(
+                                    "display: inline-flex; color: #C0412A; padding: 6px; border-radius: 8px",
+                                  )}
+                                >
+                                  <svg
+                                    width={"15"}
+                                    height={"15"}
+                                    viewBox={"0 0 24 24"}
+                                    fill={"none"}
+                                    stroke={"currentColor"}
+                                    strokeWidth={"2"}
+                                    strokeLinecap={"round"}
+                                    strokeLinejoin={"round"}
+                                    aria-hidden={"true"}
+                                  >
+                                    <path
+                                      d={
+                                        "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                      }
+                                    ></path>
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                          </React.Fragment>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {v.noTests ? (
+                    <>
+                      <div
+                        className={"an-fade"}
+                        style={styleOf(
+                          "padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center",
+                        )}
+                      >
+                        <div
+                          style={styleOf(
+                            "font-size: 16px; font-weight: 600",
+                          )}
+                        >
+                          {"Bộ đề chưa có đề nào"}
+                        </div>
+                        <div
+                          style={styleOf(
+                            "font-size: 14px; color: #706473; max-width: 460px",
+                          )}
+                        >
+                          {
+                            "Thêm đề rồi bấm “Tạo” ở từng kỹ năng để soạn trong editor, hoặc dùng nút Nhập xlsx ở ô Listening, Reading phía trên để nhập cả đề từ file."
+                          }
+                        </div>
+                        <a
+                          href={"#"}
+                          onClick={v.addTest}
+                          className={"press"}
+                          style={styleOf(
+                            "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; margin-top: 4px",
+                          )}
+                        >
+                          <svg
+                            width={"16"}
+                            height={"16"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"currentColor"}
+                            strokeWidth={"2"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
+                            aria-hidden={"true"}
+                          >
+                            <path d={"M12 5v14M5 12h14"}></path>
+                          </svg>
+                          {" Thêm đề đầu tiên"}
+                        </a>
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+                <div style={styleOf("font-size: 13px; color: #706473")}>
+                  {
+                    "Reading và Writing có đề riêng cho Academic và General Training; Listening và Speaking dùng chung. Bấm chip trạng thái để ẩn, hiện lại hoặc mở editor. Khi bộ đề công khai, kỹ năng Đã đăng hiện nút Làm bài, kỹ năng Đang soạn hiện dấu “—” như chưa có, kỹ năng Đã ẩn không hiện với người học."
+                  }
+                </div>
+              </div>
+            </>
+          ) : null}
+          {v.gone ? (
+            <>
+              <div
+                className={"an-pop"}
+                style={styleOf(
+                  "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center",
+                )}
+              >
+                <span
+                  className={"an-check"}
+                  style={styleOf(
+                    "display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 999px; background: #FBDCD3; color: #C0412A",
+                  )}
+                >
+                  <svg
+                    width={"22"}
+                    height={"22"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={"currentColor"}
+                    strokeWidth={"2"}
+                    strokeLinecap={"round"}
+                    strokeLinejoin={"round"}
+                    aria-hidden={"true"}
+                  >
+                    <path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path>
+                  </svg>
+                </span>
+                <div
+                  style={styleOf(
+                    "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 22px; font-weight: 600",
+                  )}
+                >
+                  {v.goneTitle}
+                </div>
+                <div style={styleOf("font-size: 14px; color: #706473")}>
+                  {v.goneSub}
+                </div>
+                <a
+                  href={"AdminExams.dc.html"}
+                  className={"press"}
+                  style={styleOf(
+                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; margin-top: 6px",
                   )}
                 >
                   <svg
@@ -1247,1183 +2256,174 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
                   >
                     <path d={"M19 12H5M11 6l-6 6 6 6"}></path>
                   </svg>
-                  {" Bộ đề và đề thi"}
+                  {" Về danh sách bộ đề"}
                 </a>
-                {v.loading ? (
+              </div>
+            </>
+          ) : null}
+          {v.anyMenu ? (
+            <>
+              <div
+                onClick={v.closeMenus}
+                style={styleOf("position: fixed; inset: 0; z-index: 20")}
+              ></div>
+            </>
+          ) : null}
+          {v.cfOpen ? (
+            <>
+              <div
+                className={"an-fade"}
+                onClick={v.cfClose}
+                style={styleOf(
+                  "position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.42); display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box",
+                )}
+              >
+                <div
+                  className={"an-pop"}
+                  role={"dialog"}
+                  aria-modal={"true"}
+                  aria-label={"Xác nhận"}
+                  onClick={v.keep}
+                  style={styleOf(
+                    "width: 460px; max-width: 100%; max-height: calc(100vh - 48px); overflow: auto; background: #FFFFFF; border-radius: 22px; border: 1.5px solid #D6D4D0; box-shadow: 0 24px 64px rgba(53, 38, 55, 0.22); box-sizing: border-box",
+                  )}
+                >
                   <div
-                    className={"an-fade"}
                     style={styleOf(
-                      "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; padding: 48px 24px; text-align: center; color: #706473; font-size: 14px",
+                      "padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 14px",
                     )}
                   >
-                    {"Đang tải thông tin bộ đề…"}
-                  </div>
-                ) : v.loadError ? (
-                  <div
-                    className={"an-fade"}
-                    style={styleOf(
-                      "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; padding: 48px 24px; text-align: center; color: #C0412A; font-size: 14px",
-                    )}
-                  >
-                    <div>{v.loadError}</div>
-                    <a
-                      href={"#"}
-                      onClick={v.retry}
-                      style={styleOf(
-                        "display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: #2963CC; margin-top: 10px",
-                      )}
+                    <span
+                      className={"an-check"}
+                      style={styleOf(v.cf.iconSt)}
                     >
-                      {"Thử lại"}
-                    </a>
-                  </div>
-                ) : v.alive ? (
-                  <>
+                      {v.cf.icon}
+                    </span>
                     <div
                       style={styleOf(
-                        "display: flex; flex-direction: column; gap: 24px",
+                        "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600",
                       )}
                     >
-                      <div style={styleOf("margin-top: -8px")}>
+                      {v.cf.title}
+                    </div>
+                    <div
+                      style={styleOf(
+                        "font-size: 14px; color: #4B3D4D; line-height: 1.55",
+                      )}
+                    >
+                      {v.cf.text}
+                    </div>
+                    {v.cf.hasList ? (
+                      <>
                         <div
                           style={styleOf(
-                            "display: flex; align-items: center; gap: 20px; flex-wrap: wrap",
+                            "display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 12px; background: #F3F0EA",
                           )}
                         >
-                          <div
-                            style={styleOf("position: relative; flex: none")}
-                          >
-                            <div
-                              className={"thumb-h"}
-                              style={styleOf(
-                                "border-radius: 12px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.06), 0 6px 18px rgba(53, 38, 55, 0.10)",
-                              )}
-                            >
+                          {(v.cf.list || []).map((li, index) => (
+                            <React.Fragment key={index}>
                               <div
-                                role={"img"}
-                                aria-label={v.artLabel}
-                                style={styleOf(v.artSt)}
-                              >
-                                {v.artShowText ? (
-                                  <>
-                                    <span
-                                      style={styleOf(
-                                        "padding: 0 0 12px 12px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 24px; font-weight: 600; line-height: 1; letter-spacing: -0.01em; text-shadow: 0 1px 8px rgba(0,0,0,0.18)",
-                                      )}
-                                    >
-                                      {v.artText}
-                                    </span>
-                                  </>
-                                ) : null}
-                                {v.artNone ? (
-                                  <>
-                                    <span
-                                      style={styleOf(
-                                        "margin: auto; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 13px; font-weight: 600",
-                                      )}
-                                    >
-                                      <svg
-                                        width={"26"}
-                                        height={"26"}
-                                        viewBox={"0 0 24 24"}
-                                        fill={"none"}
-                                        stroke={"currentColor"}
-                                        strokeWidth={"1.8"}
-                                        strokeLinecap={"round"}
-                                        strokeLinejoin={"round"}
-                                        aria-hidden={"true"}
-                                      >
-                                        <rect
-                                          x={"3"}
-                                          y={"4"}
-                                          width={"18"}
-                                          height={"16"}
-                                          rx={"2"}
-                                        ></rect>
-                                        <circle
-                                          cx={"9"}
-                                          cy={"10"}
-                                          r={"1.5"}
-                                        ></circle>
-                                        <path d={"M21 16l-5-5-8 9"}></path>
-                                      </svg>
-                                      {" Chưa có ảnh"}
-                                    </span>
-                                  </>
-                                ) : null}
-                              </div>
-                            </div>
-                            <a
-                              href={"#"}
-                              onClick={v.artMenu}
-                              title={"Đổi ảnh bìa"}
-                              aria-label={"Đổi ảnh bìa"}
-                              aria-expanded={v.artOpen}
-                              className={"press"}
-                              style={styleOf(
-                                "position: absolute; right: -10px; top: -10px; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 999px; background: #352637; color: #FFFFFF; border: 3px solid #FAF9F5; box-sizing: border-box; text-decoration: none",
-                              )}
-                            >
-                              <svg
-                                width={"17"}
-                                height={"17"}
-                                viewBox={"0 0 24 24"}
-                                fill={"none"}
-                                stroke={"currentColor"}
-                                strokeWidth={"2"}
-                                strokeLinecap={"round"}
-                                strokeLinejoin={"round"}
-                                aria-hidden={"true"}
-                              >
-                                <path d={"M4 8h3l2-3h6l2 3h3v11H4z"}></path>
-                                <circle cx={"12"} cy={"13"} r={"3.5"}></circle>
-                              </svg>
-                            </a>
-                            {v.artOpen ? (
-                              <>
-                                <div
-                                  role={"dialog"}
-                                  aria-label={"Ảnh bìa bộ đề"}
-                                  className={"an-drop"}
-                                  style={styleOf(
-                                    "position: absolute; left: 0; top: calc(100% + 10px); z-index: 30; width: 272px; padding: 14px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
-                                  )}
-                                >
-                                  <div
-                                    style={styleOf(
-                                      "font-size: 13px; font-weight: 600; color: #706473",
-                                    )}
-                                  >
-                                    {"Ảnh bìa bộ đề"}
-                                  </div>
-                                  <div
-                                    style={styleOf("display: flex; gap: 8px")}
-                                  >
-                                    {(v.arts || []).map((g, index) => (
-                                      <React.Fragment key={index}>
-                                        <a
-                                          href={"#"}
-                                          onClick={g.pick}
-                                          title={g.name}
-                                          aria-label={g.name}
-                                          style={styleOf(g.st)}
-                                        ></a>
-                                      </React.Fragment>
-                                    ))}
-                                  </div>
-                                  <div
-                                    style={styleOf(
-                                      "font-size: 13px; color: #706473",
-                                    )}
-                                  >
-                                    {
-                                      "Ảnh bìa ngang tỉ lệ 3:2, tối thiểu 1200 × 800 px, JPG, PNG hoặc WebP."
-                                    }
-                                  </div>
-                                  {v.artMsg ? (
-                                    <>
-                                      <div
-                                        style={styleOf(
-                                          "font-size: 13px; color: " +
-                                            v.artMsgColor,
-                                        )}
-                                      >
-                                        {v.artMsgText}
-                                      </div>
-                                    </>
-                                  ) : null}
-                                  <label
-                                    style={styleOf(
-                                      "display: flex; align-items: center; gap: 8px; width: 100%; height: 36px; padding: 0 10px; border-radius: 10px; box-sizing: border-box; font-size: 14px; font-weight: 600; text-decoration: none; color: #352637; cursor: pointer; position: relative; overflow: hidden",
-                                    )}
-                                  >
-                                    <svg
-                                      width={"15"}
-                                      height={"15"}
-                                      viewBox={"0 0 24 24"}
-                                      fill={"none"}
-                                      stroke={"currentColor"}
-                                      strokeWidth={"2"}
-                                      strokeLinecap={"round"}
-                                      strokeLinejoin={"round"}
-                                      aria-hidden={"true"}
-                                    >
-                                      <path
-                                        d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
-                                      ></path>
-                                    </svg>
-                                    {" Tải ảnh lên"}
-                                    <input
-                                      type={"file"}
-                                      accept={"image/png,image/jpeg,image/webp"}
-                                      onChange={v.artFile}
-                                      style={styleOf(
-                                        "position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none",
-                                      )}
-                                    />
-                                  </label>
-                                  {v.artHas ? (
-                                    <>
-                                      <a
-                                        href={"#"}
-                                        onClick={v.artRemove}
-                                        style={styleOf(
-                                          "display: flex; align-items: center; gap: 8px; width: 100%; height: 36px; padding: 0 10px; border-radius: 10px; box-sizing: border-box; font-size: 14px; font-weight: 600; text-decoration: none; color: #352637; cursor: pointer; position: relative; overflow: hidden; color: #C0412A",
-                                        )}
-                                      >
-                                        <svg
-                                          width={"16"}
-                                          height={"16"}
-                                          viewBox={"0 0 24 24"}
-                                          fill={"none"}
-                                          stroke={"currentColor"}
-                                          strokeWidth={"2"}
-                                          strokeLinecap={"round"}
-                                          strokeLinejoin={"round"}
-                                          aria-hidden={"true"}
-                                        >
-                                          <path
-                                            d={
-                                              "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
-                                            }
-                                          ></path>
-                                        </svg>
-                                        {" Xóa ảnh"}
-                                      </a>
-                                    </>
-                                  ) : null}
-                                </div>
-                              </>
-                            ) : null}
-                          </div>
-                          <div style={styleOf("flex: 1 1 320px; min-width: 0")}>
-                            <h1
-                              style={styleOf(
-                                "margin: 0; font-size: 28px; line-height: 1.25; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
-                              )}
-                            >
-                              {v.setName}
-                            </h1>
-                            <div
-                              style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px",
-                              )}
-                            >
-                              {(v.setTypes || []).map((y, index) => (
-                                <React.Fragment key={index}>
-                                  <span style={styleOf(y.st)}>{y.text}</span>
-                                </React.Fragment>
-                              ))}
-                              <span style={styleOf(v.setStatusSt)}>
-                                {v.setStatus}
-                              </span>
-                            </div>
-                            <div
-                              style={styleOf(
-                                "font-size: 14px; color: #706473; margin-top: 6px",
-                              )}
-                            >
-                              {v.setSub}
-                            </div>
-                          </div>
-                          <div
-                            style={styleOf(
-                              "display: flex; gap: 10px; flex-wrap: wrap; align-items: center",
-                            )}
-                          >
-                            <a
-                              href={"ExamDetail.dc.html"}
-                              onClick={v.toLearner}
-                              title={"Xem như người học"}
-                              aria-label={"Xem như người học"}
-                              className={"press"}
-                              style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 999px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #4B3D4D; text-decoration: none",
-                              )}
-                            >
-                              <svg
-                                width={"18"}
-                                height={"18"}
-                                viewBox={"0 0 24 24"}
-                                fill={"none"}
-                                stroke={"currentColor"}
-                                strokeWidth={"2"}
-                                strokeLinecap={"round"}
-                                strokeLinejoin={"round"}
-                                aria-hidden={"true"}
-                              >
-                                <path
-                                  d={
-                                    "M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"
-                                  }
-                                ></path>
-                                <circle cx={"12"} cy={"12"} r={"3"}></circle>
-                              </svg>
-                            </a>
-                            {v.canDel ? (
-                              <>
-                                <a
-                                  href={"#"}
-                                  onClick={v.askDel}
-                                  className={"press"}
-                                  style={styleOf(
-                                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
-                                  )}
-                                >
-                                  <svg
-                                    width={"16"}
-                                    height={"16"}
-                                    viewBox={"0 0 24 24"}
-                                    fill={"none"}
-                                    stroke={"currentColor"}
-                                    strokeWidth={"2"}
-                                    strokeLinecap={"round"}
-                                    strokeLinejoin={"round"}
-                                    aria-hidden={"true"}
-                                  >
-                                    <path
-                                      d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}
-                                    ></path>
-                                  </svg>
-                                  {" Xóa bộ đề"}
-                                </a>
-                              </>
-                            ) : null}
-                            <a
-                              href={"#"}
-                              onClick={v.addTest}
-                              className={"press"}
-                              style={styleOf(
-                                "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
-                              )}
-                            >
-                              <svg
-                                width={"16"}
-                                height={"16"}
-                                viewBox={"0 0 24 24"}
-                                fill={"none"}
-                                stroke={"currentColor"}
-                                strokeWidth={"2"}
-                                strokeLinecap={"round"}
-                                strokeLinejoin={"round"}
-                                aria-hidden={"true"}
-                              >
-                                <path d={"M12 5v14M5 12h14"}></path>
-                              </svg>
-                              {" Thêm đề"}
-                            </a>
-                            {v.isPub ? (
-                              <>
-                                <a
-                                  href={"#"}
-                                  onClick={v.askHide}
-                                  className={"press"}
-                                  style={styleOf(
-                                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
-                                  )}
-                                >
-                                  <svg
-                                    width={"16"}
-                                    height={"16"}
-                                    viewBox={"0 0 24 24"}
-                                    fill={"none"}
-                                    stroke={"currentColor"}
-                                    strokeWidth={"2"}
-                                    strokeLinecap={"round"}
-                                    strokeLinejoin={"round"}
-                                    aria-hidden={"true"}
-                                  >
-                                    <path d={"M3 3l18 18"}></path>
-                                    <path
-                                      d={
-                                        "M10.6 6.1A9.8 9.8 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-3 3.5M6.5 7.5C4.3 9 3 12 3 12s4 6 9 6a9 9 0 0 0 4-1"
-                                      }
-                                    ></path>
-                                  </svg>
-                                  {" Ẩn bộ đề"}
-                                </a>
-                              </>
-                            ) : null}
-                            {v.notPub ? (
-                              <>
-                                <a
-                                  href={"#"}
-                                  onClick={v.askPub}
-                                  className={"press"}
-                                  style={styleOf(
-                                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
-                                  )}
-                                >
-                                  <svg
-                                    width={"16"}
-                                    height={"16"}
-                                    viewBox={"0 0 24 24"}
-                                    fill={"none"}
-                                    stroke={"currentColor"}
-                                    strokeWidth={"2"}
-                                    strokeLinecap={"round"}
-                                    strokeLinejoin={"round"}
-                                    aria-hidden={"true"}
-                                  >
-                                    <path d={"M4 12l16-8-6 16-3-7z"}></path>
-                                  </svg>
-                                  {" " + v.pubLabel}
-                                </a>
-                              </>
-                            ) : null}
-                            {v.blockPub ? (
-                              <span
-                                role={"button"}
-                                aria-disabled={"true"}
-                                title={
-                                  "Bộ đề chưa có đề nào. Thêm ít nhất một đề rồi mới đăng được."
-                                }
+                                className={"an-rise"}
                                 style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; white-space: nowrap; cursor: not-allowed; border: 1.5px solid #D6D4D0; background: #F3F0EA; color: #8E8392",
+                                  "display: flex; gap: 10px; align-items: baseline; font-size: 14px",
                                 )}
                               >
-                                <svg
-                                  width={"16"}
-                                  height={"16"}
-                                  viewBox={"0 0 24 24"}
-                                  fill={"none"}
-                                  stroke={"currentColor"}
-                                  strokeWidth={"2"}
-                                  strokeLinecap={"round"}
-                                  strokeLinejoin={"round"}
-                                  aria-hidden={"true"}
-                                >
-                                  <path d={"M4 12l16-8-6 16-3-7z"}></path>
-                                </svg>
-                                {" " + v.pubLabel}
-                              </span>
-                            ) : null}
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        style={styleOf(
-                          "display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px",
-                        )}
-                      >
-                        {(v.tiles || []).map((t, index) => (
-                          <React.Fragment key={index}>
-                            <div
-                              role={"button"}
-                              tabIndex={0}
-                              onClick={t.pick}
-                              aria-pressed={t.on}
-                              className={"lift"}
-                              style={styleOf(t.st)}
-                            >
-                              <div
-                                style={styleOf(
-                                  "display: flex; align-items: center; gap: 10px",
-                                )}
-                              >
-                                <span style={styleOf(t.iconSt)}>{t.icon}</span>
-                                <span
-                                  style={styleOf(
-                                    "font-weight: 600; font-size: 15px",
-                                  )}
-                                >
-                                  {t.label}
-                                </span>
-                                {t.canImp ? (
-                                  <>
-                                    <a
-                                      href={t.impHref}
-                                      onClick={t.imp}
-                                      title={
-                                        "Tạo đề " +
-                                        t.label +
-                                        " mới và nhập cả đề từ file xlsx trong editor"
-                                      }
-                                      className={"press"}
-                                      style={styleOf(
-                                        "margin-left: auto; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap",
-                                      )}
-                                    >
-                                      <svg
-                                        width={"13"}
-                                        height={"13"}
-                                        viewBox={"0 0 24 24"}
-                                        fill={"none"}
-                                        stroke={"currentColor"}
-                                        strokeWidth={"2"}
-                                        strokeLinecap={"round"}
-                                        strokeLinejoin={"round"}
-                                        aria-hidden={"true"}
-                                      >
-                                        <path
-                                          d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
-                                        ></path>
-                                      </svg>
-                                      {" Nhập xlsx"}
-                                    </a>
-                                  </>
-                                ) : null}
-                              </div>
-                              <div
-                                style={styleOf(
-                                  "display: flex; align-items: baseline; gap: 6px",
-                                )}
-                              >
-                                <span
-                                  style={styleOf(
-                                    "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 32px; font-weight: 600; line-height: 1.1",
-                                  )}
-                                >
-                                  {t.n}
-                                </span>
-                                <span
-                                  style={styleOf(
-                                    "font-size: 14px; color: #706473",
-                                  )}
-                                >
-                                  {"đề"}
+                                <span style={styleOf(li.dot)}></span>
+                                <span>
+                                  <b>{li.n}</b>
+                                  {" " + li.text}
                                 </span>
                               </div>
-                              <div
-                                style={styleOf(
-                                  "font-size: 13px; color: #706473",
-                                )}
-                              >
-                                {t.sub}
-                              </div>
-                              <div
-                                style={styleOf(
-                                  "display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 13px; color: #706473",
-                                )}
-                              >
-                                {(t.kinds || []).map((q, index) => (
-                                  <React.Fragment key={index}>
-                                    <span style={styleOf(q.st)}>{q.text}</span>
-                                  </React.Fragment>
-                                ))}
-                              </div>
-                            </div>
-                          </React.Fragment>
-                        ))}
-                      </div>
-                      <div
-                        style={styleOf(
-                          "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; overflow: visible; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
-                        )}
-                      >
-                        <div
-                          style={styleOf(
-                            "display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px 20px; border-bottom: 1px solid #E6E4E0",
-                          )}
-                        >
-                          <span
-                            style={styleOf("font-size: 18px; font-weight: 600")}
-                          >
-                            {"Các đề trong bộ"}
-                          </span>
-                          <span
-                            style={styleOf(
-                              "display: flex; gap: 6px; flex-wrap: wrap; align-items: center",
-                            )}
-                          >
-                            <span
-                              style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #DCEDE2; color: #2E6A48",
-                              )}
-                            >
-                              {"Đã đăng"}
-                            </span>
-                            <span
-                              style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #FBEDBF; color: #7A5A0E",
-                              )}
-                            >
-                              {"Đang soạn"}
-                            </span>
-                            <span
-                              style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #F3F0EA; color: #706473",
-                              )}
-                            >
-                              {"Đã ẩn"}
-                            </span>
-                            <span
-                              style={styleOf(
-                                "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #FFFFFF; color: #706473; border: 1.5px dashed #D6D4D0",
-                              )}
-                            >
-                              <svg
-                                width={"12"}
-                                height={"12"}
-                                viewBox={"0 0 24 24"}
-                                fill={"none"}
-                                stroke={"currentColor"}
-                                strokeWidth={"2"}
-                                strokeLinecap={"round"}
-                                strokeLinejoin={"round"}
-                                aria-hidden={"true"}
-                              >
-                                <path d={"M12 5v14M5 12h14"}></path>
-                              </svg>
-                              {" Chưa có"}
-                            </span>
-                          </span>
+                            </React.Fragment>
+                          ))}
                         </div>
-                        <div style={styleOf("overflow-x: auto")}>
-                          <table
-                            className={"hov"}
-                            style={styleOf(
-                              "width: 100%; border-collapse: collapse; min-width: 1000px",
-                            )}
-                          >
-                            <thead>
-                              <tr>
-                                <th
-                                  rowSpan={2}
-                                  style={styleOf(
-                                    "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; width: 20%; vertical-align: bottom",
-                                  )}
-                                >
-                                  {"Đề"}
-                                </th>
-                                <th rowSpan={2} style={styleOf(v.h0)}>
-                                  {"Listening"}
-                                </th>
-                                <th colSpan={2} style={styleOf(v.h1)}>
-                                  {"Reading"}
-                                </th>
-                                <th colSpan={2} style={styleOf(v.h2)}>
-                                  {"Writing"}
-                                </th>
-                                <th rowSpan={2} style={styleOf(v.h3)}>
-                                  {"Speaking"}
-                                </th>
-                                <th
-                                  rowSpan={2}
-                                  style={styleOf(
-                                    "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; vertical-align: bottom",
-                                  )}
-                                >
-                                  {"Cập nhật"}
-                                </th>
-                                <th
-                                  rowSpan={2}
-                                  style={styleOf(
-                                    "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
-                                  )}
-                                ></th>
-                              </tr>
-                              <tr>
-                                <th style={styleOf(v.s1)}>
-                                  <span
-                                    style={styleOf(
-                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #DFF1F4; color: #1F6A78",
-                                    )}
-                                  >
-                                    {"Academic"}
-                                  </span>
-                                </th>
-                                <th style={styleOf(v.s1)}>
-                                  <span
-                                    style={styleOf(
-                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #FCE6D6; color: #9A4A17",
-                                    )}
-                                  >
-                                    {"General Training"}
-                                  </span>
-                                </th>
-                                <th style={styleOf(v.s2)}>
-                                  <span
-                                    style={styleOf(
-                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #DFF1F4; color: #1F6A78",
-                                    )}
-                                  >
-                                    {"Academic"}
-                                  </span>
-                                </th>
-                                <th style={styleOf(v.s2)}>
-                                  <span
-                                    style={styleOf(
-                                      "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #FCE6D6; color: #9A4A17",
-                                    )}
-                                  >
-                                    {"General Training"}
-                                  </span>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {(v.rows || []).map((r, index) => (
-                                <React.Fragment key={index}>
-                                  <tr className={r.cls}>
-                                    <td
-                                      style={styleOf(
-                                        "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
-                                      )}
-                                    >
-                                      <div style={styleOf("font-weight: 600")}>
-                                        {r.name}
-                                      </div>
-                                      <div
-                                        style={styleOf(
-                                          "font-size: 13px; color: #706473",
-                                        )}
-                                      >
-                                        {r.sub}
-                                      </div>
-                                    </td>
-                                    {(r.cells || []).map((x, index) => (
-                                      <React.Fragment key={index}>
-                                        <td style={styleOf(x.tdSt)}>
-                                          <div
-                                            style={styleOf(
-                                              "position: relative; display: inline-flex",
-                                            )}
-                                          >
-                                            {x.has ? (
-                                              <>
-                                                <a
-                                                  href={"#"}
-                                                  onClick={x.toggle}
-                                                  title={x.title}
-                                                  aria-haspopup={"menu"}
-                                                  aria-expanded={x.open}
-                                                  className={"press"}
-                                                  style={styleOf(x.st)}
-                                                >
-                                                  {x.label + " "}
-                                                  <svg
-                                                    width={"13"}
-                                                    height={"13"}
-                                                    viewBox={"0 0 24 24"}
-                                                    fill={"none"}
-                                                    stroke={"currentColor"}
-                                                    strokeWidth={"2.2"}
-                                                    strokeLinecap={"round"}
-                                                    strokeLinejoin={"round"}
-                                                    aria-hidden={"true"}
-                                                  >
-                                                    <path
-                                                      d={"M7 10l5 5 5-5"}
-                                                    ></path>
-                                                  </svg>
-                                                </a>
-                                              </>
-                                            ) : null}
-                                            {x.none ? (
-                                              <>
-                                                <a
-                                                  href={"#"}
-                                                  onClick={x.create}
-                                                  title={x.title}
-                                                  className={"press"}
-                                                  style={styleOf(
-                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; border: 1.5px dashed #D6D4D0; height: 28px",
-                                                  )}
-                                                >
-                                                  <svg
-                                                    width={"13"}
-                                                    height={"13"}
-                                                    viewBox={"0 0 24 24"}
-                                                    fill={"none"}
-                                                    stroke={"currentColor"}
-                                                    strokeWidth={"2"}
-                                                    strokeLinecap={"round"}
-                                                    strokeLinejoin={"round"}
-                                                    aria-hidden={"true"}
-                                                  >
-                                                    <path
-                                                      d={"M12 5v14M5 12h14"}
-                                                    ></path>
-                                                  </svg>
-                                                  {" Tạo"}
-                                                </a>
-                                              </>
-                                            ) : null}
-                                            {x.open ? (
-                                              <>
-                                                <div
-                                                  role={"menu"}
-                                                  className={"an-drop"}
-                                                  style={styleOf(x.menuSt)}
-                                                >
-                                                  <div
-                                                    style={styleOf(
-                                                      "padding: 6px 12px 6px; font-size: 12px; font-weight: 600; color: #706473; white-space: nowrap",
-                                                    )}
-                                                  >
-                                                    {x.menuHead}
-                                                  </div>
-                                                  {(x.items || []).map(
-                                                    (it, index) => (
-                                                      <React.Fragment
-                                                        key={index}
-                                                      >
-                                                        {it.disabled ? (
-                                                          <div
-                                                            role={"menuitem"}
-                                                            aria-disabled={
-                                                              "true"
-                                                            }
-                                                            style={styleOf(
-                                                              it.st,
-                                                            )}
-                                                          >
-                                                            {it.label}
-                                                          </div>
-                                                        ) : (
-                                                          <a
-                                                            href={it.href}
-                                                            role={"menuitem"}
-                                                            onClick={it.act}
-                                                            style={styleOf(
-                                                              it.st,
-                                                            )}
-                                                          >
-                                                            {it.label}
-                                                          </a>
-                                                        )}
-                                                      </React.Fragment>
-                                                    ),
-                                                  )}
-                                                </div>
-                                              </>
-                                            ) : null}
-                                          </div>
-                                        </td>
-                                      </React.Fragment>
-                                    ))}
-                                    <td
-                                      style={styleOf(
-                                        "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; color: #706473",
-                                      )}
-                                    >
-                                      {r.updated}
-                                    </td>
-                                    <td
-                                      style={styleOf(
-                                        "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; text-align: right",
-                                      )}
-                                    >
-                                      <a
-                                        href={"#"}
-                                        onClick={r.del}
-                                        aria-label={"Xóa " + r.name}
-                                        title={"Xóa đề"}
-                                        className={"press"}
-                                        style={styleOf(
-                                          "display: inline-flex; color: #C0412A; padding: 6px; border-radius: 8px",
-                                        )}
-                                      >
-                                        <svg
-                                          width={"15"}
-                                          height={"15"}
-                                          viewBox={"0 0 24 24"}
-                                          fill={"none"}
-                                          stroke={"currentColor"}
-                                          strokeWidth={"2"}
-                                          strokeLinecap={"round"}
-                                          strokeLinejoin={"round"}
-                                          aria-hidden={"true"}
-                                        >
-                                          <path
-                                            d={
-                                              "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
-                                            }
-                                          ></path>
-                                        </svg>
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </React.Fragment>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                        {v.noTests ? (
-                          <>
-                            <div
-                              className={"an-fade"}
-                              style={styleOf(
-                                "padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center",
-                              )}
-                            >
-                              <div
-                                style={styleOf(
-                                  "font-size: 16px; font-weight: 600",
-                                )}
-                              >
-                                {"Bộ đề chưa có đề nào"}
-                              </div>
-                              <div
-                                style={styleOf(
-                                  "font-size: 14px; color: #706473; max-width: 460px",
-                                )}
-                              >
-                                {
-                                  "Thêm đề rồi bấm “Tạo” ở từng kỹ năng để soạn trong editor, hoặc dùng nút Nhập xlsx ở ô Listening, Reading phía trên để nhập cả đề từ file."
-                                }
-                              </div>
-                              <a
-                                href={"#"}
-                                onClick={v.addTest}
-                                className={"press"}
-                                style={styleOf(
-                                  "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; margin-top: 4px",
-                                )}
-                              >
-                                <svg
-                                  width={"16"}
-                                  height={"16"}
-                                  viewBox={"0 0 24 24"}
-                                  fill={"none"}
-                                  stroke={"currentColor"}
-                                  strokeWidth={"2"}
-                                  strokeLinecap={"round"}
-                                  strokeLinejoin={"round"}
-                                  aria-hidden={"true"}
-                                >
-                                  <path d={"M12 5v14M5 12h14"}></path>
-                                </svg>
-                                {" Thêm đề đầu tiên"}
-                              </a>
-                            </div>
-                          </>
-                        ) : null}
-                      </div>
-                      <div style={styleOf("font-size: 13px; color: #706473")}>
-                        {
-                          "Reading và Writing có đề riêng cho Academic và General Training; Listening và Speaking dùng chung. Bấm chip trạng thái để ẩn, hiện lại hoặc mở editor. Khi bộ đề công khai, kỹ năng Đã đăng hiện nút Làm bài, kỹ năng Đang soạn hiện dấu “—” như chưa có, kỹ năng Đã ẩn không hiện với người học."
-                        }
-                      </div>
-                    </div>
-                  </>
-                ) : null}
-                {v.gone ? (
-                  <>
+                      </>
+                    ) : null}
                     <div
-                      className={"an-pop"}
                       style={styleOf(
-                        "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center",
+                        "display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px",
                       )}
                     >
-                      <span
-                        className={"an-check"}
-                        style={styleOf(
-                          "display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 999px; background: #FBDCD3; color: #C0412A",
-                        )}
-                      >
-                        <svg
-                          width={"22"}
-                          height={"22"}
-                          viewBox={"0 0 24 24"}
-                          fill={"none"}
-                          stroke={"currentColor"}
-                          strokeWidth={"2"}
-                          strokeLinecap={"round"}
-                          strokeLinejoin={"round"}
-                          aria-hidden={"true"}
-                        >
-                          <path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path>
-                        </svg>
-                      </span>
-                      <div
-                        style={styleOf(
-                          "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 22px; font-weight: 600",
-                        )}
-                      >
-                        {v.goneTitle}
-                      </div>
-                      <div style={styleOf("font-size: 14px; color: #706473")}>
-                        {v.goneSub}
-                      </div>
-                      <a
-                        href={"AdminExams.dc.html"}
-                        className={"press"}
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; margin-top: 6px",
-                        )}
-                      >
-                        <svg
-                          width={"16"}
-                          height={"16"}
-                          viewBox={"0 0 24 24"}
-                          fill={"none"}
-                          stroke={"currentColor"}
-                          strokeWidth={"2"}
-                          strokeLinecap={"round"}
-                          strokeLinejoin={"round"}
-                          aria-hidden={"true"}
-                        >
-                          <path d={"M19 12H5M11 6l-6 6 6 6"}></path>
-                        </svg>
-                        {" Về danh sách bộ đề"}
-                      </a>
-                    </div>
-                  </>
-                ) : null}
-                {v.anyMenu ? (
-                  <>
-                    <div
-                      onClick={v.closeMenus}
-                      style={styleOf("position: fixed; inset: 0; z-index: 20")}
-                    ></div>
-                  </>
-                ) : null}
-                {v.cfOpen ? (
-                  <>
-                    <div
-                      className={"an-fade"}
-                      onClick={v.cfClose}
-                      style={styleOf(
-                        "position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.42); display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box",
-                      )}
-                    >
-                      <div
-                        className={"an-pop"}
-                        role={"dialog"}
-                        aria-modal={"true"}
-                        aria-label={"Xác nhận"}
-                        onClick={v.keep}
-                        style={styleOf(
-                          "width: 460px; max-width: 100%; max-height: calc(100vh - 48px); overflow: auto; background: #FFFFFF; border-radius: 22px; border: 1.5px solid #D6D4D0; box-shadow: 0 24px 64px rgba(53, 38, 55, 0.22); box-sizing: border-box",
-                        )}
-                      >
-                        <div
-                          style={styleOf(
-                            "padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 14px",
-                          )}
-                        >
-                          <span
-                            className={"an-check"}
-                            style={styleOf(v.cf.iconSt)}
-                          >
-                            {v.cf.icon}
-                          </span>
-                          <div
-                            style={styleOf(
-                              "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600",
-                            )}
-                          >
-                            {v.cf.title}
-                          </div>
-                          <div
-                            style={styleOf(
-                              "font-size: 14px; color: #4B3D4D; line-height: 1.55",
-                            )}
-                          >
-                            {v.cf.text}
-                          </div>
-                          {v.cf.hasList ? (
-                            <>
-                              <div
-                                style={styleOf(
-                                  "display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 12px; background: #F3F0EA",
-                                )}
-                              >
-                                {(v.cf.list || []).map((li, index) => (
-                                  <React.Fragment key={index}>
-                                    <div
-                                      className={"an-rise"}
-                                      style={styleOf(
-                                        "display: flex; gap: 10px; align-items: baseline; font-size: 14px",
-                                      )}
-                                    >
-                                      <span style={styleOf(li.dot)}></span>
-                                      <span>
-                                        <b>{li.n}</b>
-                                        {" " + li.text}
-                                      </span>
-                                    </div>
-                                  </React.Fragment>
-                                ))}
-                              </div>
-                            </>
-                          ) : null}
-                          <div
-                            style={styleOf(
-                              "display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px",
-                            )}
-                          >
-                            {v.cf.canGo ? (
-                              <>
-                                <a
-                                  href={"#"}
-                                  onClick={v.cfClose}
-                                  className={"press"}
-                                  style={styleOf(
-                                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
-                                  )}
-                                >
-                                  {"Hủy"}
-                                </a>
-                                <a
-                                  href={"#"}
-                                  onClick={v.cfGo}
-                                  className={"press"}
-                                  style={styleOf(v.cf.goSt)}
-                                >
-                                  {v.cf.goText}
-                                </a>
-                              </>
-                            ) : null}
-                            {v.cf.noGo ? (
-                              <>
-                                <a
-                                  href={"#"}
-                                  onClick={v.cfClose}
-                                  className={"press"}
-                                  style={styleOf(
-                                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
-                                  )}
-                                >
-                                  {"Đã hiểu"}
-                                </a>
-                              </>
-                            ) : null}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                ) : null}
-                {v.toast ? (
-                  <>
-                    <div
-                      role={"status"}
-                      className={"an-toast"}
-                      style={styleOf(
-                        "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; gap: 16px; padding: 10px 14px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
-                      )}
-                    >
-                      <span>{v.toastText}</span>
-                      {v.canUndo ? (
+                      {v.cf.canGo ? (
                         <>
                           <a
                             href={"#"}
-                            onClick={v.undo}
+                            onClick={v.cfClose}
+                            className={"press"}
                             style={styleOf(
-                              "color: #A9C4F5; font-weight: 600; text-decoration: none; white-space: nowrap",
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
                             )}
                           >
-                            {"Hoàn tác"}
+                            {"Hủy"}
+                          </a>
+                          <a
+                            href={"#"}
+                            onClick={v.cfGo}
+                            className={"press"}
+                            style={styleOf(v.cf.goSt)}
+                          >
+                            {v.cf.goText}
                           </a>
                         </>
                       ) : null}
-                      {v.toastLink ? (
+                      {v.cf.noGo ? (
                         <>
                           <a
-                            href={v.toastHref}
+                            href={"#"}
+                            onClick={v.cfClose}
+                            className={"press"}
                             style={styleOf(
-                              "color: #A9C4F5; font-weight: 600; text-decoration: none; white-space: nowrap",
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
                             )}
                           >
-                            {v.toastLinkText}
+                            {"Đã hiểu"}
                           </a>
                         </>
                       ) : null}
                     </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : null}
+          {v.toast ? (
+            <>
+              <div
+                role={"status"}
+                className={"an-toast"}
+                style={styleOf(
+                  "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; gap: 16px; padding: 10px 14px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
+                )}
+              >
+                <span>{v.toastText}</span>
+                {v.canUndo ? (
+                  <>
+                    <a
+                      href={"#"}
+                      onClick={v.undo}
+                      style={styleOf(
+                        "color: #A9C4F5; font-weight: 600; text-decoration: none; white-space: nowrap",
+                      )}
+                    >
+                      {"Hoàn tác"}
+                    </a>
                   </>
                 ) : null}
+                {v.toastLink ? (
+                  <>
+                    <a
+                      href={v.toastHref}
+                      style={styleOf(
+                        "color: #A9C4F5; font-weight: 600; text-decoration: none; white-space: nowrap",
+                      )}
+                    >
+                      {v.toastLinkText}
+                    </a>
+                  </>
+                ) : null}
+              </div>
+            </>
+          ) : null}
         </StaffLayout>
         {"\n"}
         <SkillHistoryDrawer

@@ -65,7 +65,7 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | CT-10 | Thông báo phiên bản ở 4 editor | CT-09 | Mọi thông báo lưu, đăng, tạo bản sửa và xóa đều nêu rõ số phiên bản (VH-01..VH-05); hộp thoại xác nhận tạo bản sửa mới từ bản đang hiển thị. |
 | CT-11 | StaffLayout + khung dashboard quản trị đáp ứng | CT-02 | StaffLayout chuẩn hóa layout quản trị: sidebar inline (≥1024px), drawer overlay (768–1023px), dải cảnh báo thiết bị mobile (<768px); bọc 6 trang admin chính. |
 | CT-12 | Responsive cho student landing, detail và test grid | CT-11 | Hamburger menu cho mobile trên Landing, co giãn font hero bằng clamp(), lưới thẻ 3:2 tự động thích ứng 1 cột (mobile) và 2 cột (tablet). |
-| CT-13 | Cảnh báo và chặn màn hình nhỏ khi làm bài thi | CT-12 | Module device.ts, ScreenSupportConfirmDialog tại nút bắt đầu bài thi; PhoneTestBlocker chặn làm bài trên điện thoại khi chưa bắt đầu, SmallScreenWarningBanner khi đang làm. |
+| CT-13 | Cảnh báo và chặn màn hình nhỏ khi làm bài thi | CT-12 | Đã thay bằng RT-06: `lib/device.ts` giữ điều kiện dùng chung, `DesktopRequiredDialog` ở nút bắt đầu, `DesktopOnly` chặn màn làm bài. |
 | CT-14 | Đo kiểm, cập nhật tài liệu kỹ thuật và báo cáo tiến độ | CT-01..13 | Cập nhật API.md, DATABASE.md, ARCHITECTURE.md, DECISIONS.md, BUSINESS_RULES.md, TASKS.md; biên bản tiến độ PROGRESS đầy đủ số đo trước/sau. |
 | CT-15 | Khôi phục phiên bản cũ (tạo bản nháp mới từ bản ARCHIVED) | CT-08..10 | Cho phép quản lý chọn một phiên bản ARCHIVED cũ trong lịch sử để tạo ra một bản nháp mới kế thừa toàn bộ nội dung của phiên bản đó. (Backlog đợt sau theo O-D2) |
 | RT-01 | Gộp một LearnerHeader duy nhất, chuyển 4 trang của main, xóa attempts/LearnerHeader | CT-12 | Header dùng chung 3 mốc responsive, drawer mobile, giữ nguyên --attempt-* CSS vars, xóa component trùng. |
@@ -73,7 +73,7 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | RT-03 | Rà soát và xác minh StudentLanding | RT-01 | Kiểm tra layout và navigation không tràn ngang trên mobile/tablet. |
 | RT-04 | Responsive ResultLR và ResultWS | RT-01 | Thống kê số liệu xếp dọc/lưới thích ứng, bố cục 2 cột stack trên mobile/tablet, chia tách dòng đáp án. |
 | RT-05 | Responsive MyWS, Flashcard, Vocabulary, xóa Vocab.jsx | RT-01 | MyWS lọc select ở mobile, card list bài làm; Flashcard max-w 444px; Vocabulary lưới 1/2/3 cột; xóa file mồ côi Vocab.jsx. |
-| RT-06 | Thống nhất DesktopOnly theo RS-01..RS-03 và audit tràn ngang | RT-01..05 | Điện thoại chặn trước thi, tablet cảnh báo có nút tiếp tục, bài đang làm chỉ hiện banner cảnh báo; rà soát 0 phần tử tràn ngang. |
+| RT-06 | Thống nhất DesktopOnly theo RS-01..RS-03 và audit tràn ngang | RT-01..05 | Giữ DesktopOnly của THuong: chặn làm bài dưới 1024px hoặc cảm ứng; ExamDetail dùng chung điều kiện; rà soát 0 phần tử tràn ngang. |
 | RT-07 | Định kiểu hoàn chỉnh AdminWritingEditor, gỡ bỏ @ts-nocheck | WSE-06 | Bỏ @ts-nocheck, khai báo State, WritingView, dọn dead code Speaking, 0 any/as any/@ts-ignore, tsc 0 lỗi. |
 | RT-08 | Định kiểu hoàn chỉnh AdminSpeakingEditor với SpeakingPart union, gỡ bỏ @ts-nocheck | WSE-07 | Bỏ @ts-nocheck, union SpeakingPartQs \| SpeakingPartCue, dọn dead code Writing, bỏ (tx as any) ở backend, tsc 0 lỗi. |
 | RT-09 | Cập nhật tài liệu: PROGRESS, DESIGN, RULES, TASKS, DECISIONS, BUSINESS_RULES | RT-01..08 | Hoàn tất báo cáo tiến độ và đồng bộ quy chuẩn thiết kế, quy tắc responsive, quyết định kiến trúc. |

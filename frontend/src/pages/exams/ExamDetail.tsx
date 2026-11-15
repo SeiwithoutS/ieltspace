@@ -10,8 +10,8 @@ import {
   type UiLearnerSet,
 } from "../../lib/exam-admin";
 import { navigate } from "../../lib/auth";
-import { ScreenSupportConfirmDialog } from "../../components/exams/TestScreenGuard";
-import { getTestScreenSupport } from "../../lib/device";
+import { DesktopRequiredDialog } from "../../components/exams/TestScreenGuard";
+import { canTakeTest } from "../../lib/device";
 
 type Ev = {
   preventDefault?: () => void;
@@ -47,7 +47,6 @@ type State = {
   form?: FormKey;
   toast?: string;
   screenGuardOpen?: boolean;
-  pendingTestUrl?: string | null;
 };
 
 class ExamDetail extends React.Component<Record<string, unknown>, State> {
@@ -55,8 +54,8 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
   state: State = {};
 
   handleStartTest = (targetUrl: string) => {
-    if (getTestScreenSupport() !== "ok") {
-      this.setState({ pendingTestUrl: targetUrl, screenGuardOpen: true });
+    if (!canTakeTest()) {
+      this.setState({ screenGuardOpen: true });
     } else {
       navigate(targetUrl);
     }
@@ -1225,16 +1224,9 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
           {"\n"}
         </div>
         {"\n"}
-        <ScreenSupportConfirmDialog
+        <DesktopRequiredDialog
           isOpen={!!this.state.screenGuardOpen}
-          onConfirm={() => {
-            const url = this.state.pendingTestUrl;
-            this.setState({ screenGuardOpen: false, pendingTestUrl: null });
-            if (url) navigate(url);
-          }}
-          onCancel={() => {
-            this.setState({ screenGuardOpen: false, pendingTestUrl: null });
-          }}
+          onClose={() => this.setState({ screenGuardOpen: false })}
         />
       </>
     );

@@ -2,7 +2,7 @@
 
 ## Phạm vi và trạng thái
 
-- **Phạm vi:** Triển khai toàn bộ Kế hoạch cải tiến đợt 2 ngày 15/11/2026 ([PLAN_RESPONSIVE_VA_KIEU_15_11.md](../PLAN_RESPONSIVE_VA_KIEU_15_11.md)):
+- **Phạm vi:** Triển khai toàn bộ Kế hoạch cải tiến đợt 2 ngày 15/11/2026 (plan đã xóa sau khi kiểm tra, bản lưu ở Library `01-bao-cao/plan-responsive-va-kieu-15-11.md`):
   - **Phần R (Responsive Người học & Thống nhất Header):** RT-00 đến RT-06.
   - **Phần T (Gỡ bỏ `@ts-nocheck` & Định kiểu TypeScript cho 2 Editor):** RT-07 và RT-08.
   - **Phần Tài liệu:** RT-09.
@@ -35,11 +35,10 @@
   - `Vocabulary.tsx`: Thanh công cụ tìm kiếm và lọc xếp dọc ở mobile; lưới thẻ từ đổi thành `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`.
   - `Flashcard.jsx`: Giới hạn chiều rộng tối đa `max-w-[444px]`, hàng 3 nút hành động chia đều `grid-cols-3 gap-2`, chữ không xuống dòng.
   - Xóa bỏ file mồ côi `frontend/src/pages/vocabulary/Vocab.jsx`.
-- **RT-06:** Thống nhất `DesktopOnly.tsx` theo RS-01..RS-03:
-  - Phone (<768px hoặc pointer coarse): Chặn trước khi bắt đầu bài thi với nút quay về chi tiết đề.
-  - Tablet (768–1023px hoặc cảm ứng): Hiển thị cảnh báo màn hình nhỏ với hai nút "Vẫn tiếp tục" (được phép vào làm bài) và "Quay lại".
-  - **Lượt làm đã bắt đầu (`started === true`):** Tuyệt đối không che hoặc ẩn bài thi khi cửa sổ bị thu hẹp hoặc xoay màn hình (tuân thủ nghiêm ngặt RS-03); chỉ hiển thị dải cảnh báo nhỏ dính ở mép trên màn hình.
-  - Ghi nhận quyết định D17 trong [DECISIONS.md](../DECISIONS.md) và ghi rõ file thực thi trong [BUSINESS_RULES.md](../BUSINESS_RULES.md).
+- **RT-06:** Giữ `DesktopOnly.tsx` của THuong (người dùng chốt 15/11, bản của Gemini đã hoàn lại):
+  - Màn dưới 1024px hoặc cảm ứng không làm bài được, kể cả lượt đã bắt đầu. Cửa sổ thu hẹp thì bài bị che, nội dung giữ nguyên.
+  - `ExamDetail` dùng chung điều kiện qua `lib/device.ts`: màn không đạt thì bấm "Bắt đầu" hiện `DesktopRequiredDialog`, không tạo lượt.
+  - Ghi nhận D17 trong [DECISIONS.md](../DECISIONS.md), viết lại RS-01..RS-03 trong [BUSINESS_RULES.md](../BUSINESS_RULES.md).
 
 ---
 
@@ -98,7 +97,7 @@ Tiêu chí: `document.documentElement.scrollWidth === clientWidth`, không chữ
 | `MyWS` | Đạt (dropdown select, card list) | Đạt (segmented bar) | Đạt | Đạt | Đạt | Không tràn |
 | `Vocabulary` | Đạt (công cụ stack dọc, lưới 1 cột) | Đạt (lưới 2 cột) | Đạt (lưới 3 cột) | Đạt | Đạt | Không tràn |
 | `Flashcard` | Đạt (card max-w 444px, nút 1 hàng) | Đạt | Đạt | Đạt | Đạt | Không tràn |
-| `DesktopOnly` | Chặn vào thi, nút quay về | Cảnh báo, nút Vẫn tiếp tục | Vào thẳng bài thi | Vào thẳng bài thi | Vào thẳng bài thi | Đúng RS-01..03 |
+| `DesktopOnly` | Chặn làm bài | Chặn làm bài | Vào thẳng bài thi | Vào thẳng bài thi | Vào thẳng bài thi | Đúng RS-01..03 (D17) |
 
 ---
 
@@ -109,7 +108,7 @@ Tiêu chí: `document.documentElement.scrollWidth === clientWidth`, không chữ
 3. `19c8e38` - `feat(ui): responsive StudentHome voi sidebar trong LearnerHeader va card list lich su (RT-02)`
 4. `a075d58` - `feat(ui): responsive ResultLR va ResultWS (RT-04)`
 5. `49381a0` - `feat(ui): responsive MyWS, Flashcard va Vocabulary, xoa Vocab.jsx (RT-05)`
-6. `8625124` - `feat(attempts): thong nhat DesktopOnly theo RS-01..RS-03 va audit responsive (RT-06)`
+6. `8625124` - `feat(attempts): thong nhat DesktopOnly theo RS-01..RS-03 va audit responsive (RT-06), sau đó hoàn lại theo THuong`
 7. `e50ad07` - `fix(editor): bo @ts-nocheck va dinh kieu AdminWritingEditor (RT-07)`
 8. `fab5677` - `fix(editor): bo @ts-nocheck va dinh kieu AdminSpeakingEditor voi union SpeakingPart (RT-08)`
 
@@ -125,3 +124,10 @@ Tiêu chí: `document.documentElement.scrollWidth === clientWidth`, không chữ
 
 1. Bàn giao kết quả đợt cải tiến 15/11 cho người dùng kiểm tra trên trình duyệt thực tế.
 2. Sẵn sàng cho giai đoạn tiếp theo (chấm điểm Writing/Speaking, quản lý giáo viên hoặc khôi phục phiên bản ARCHIVED cũ).
+
+## Kiểm tra lần cuối (Claude, 15/11)
+
+- Hoàn lại `DesktopOnly.tsx` về bản của THuong theo quyết định D17; `ExamDetail` dùng chung điều kiện qua `lib/device.ts` và hộp thoại `DesktopRequiredDialog`.
+- `tsc --noEmit` 0 lỗi, `vite build` qua, test frontend 7/7. Không còn `@ts-nocheck` trong `frontend/src`.
+- Chạy trình duyệt (Playwright, mock API vai LEARNER): `ReadingTest` bị che ở 375, 800, 1023px và vào thẳng ở 1024, 1366px; đang làm ở 1366 rồi thu về 800 thì bị che, mở rộng lại thì hiện lại; ExamDetail không tràn ngang ở 375, 800, 1366px, không lỗi console.
+- Chưa kiểm tay: bấm "Bắt đầu" trên màn nhỏ để thấy `DesktopRequiredDialog` (mock không có dữ liệu bộ đề).

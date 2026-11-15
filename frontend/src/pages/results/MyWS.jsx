@@ -45,131 +45,79 @@ class MyWS extends React.Component {
                 "max-width: 1280px; margin: 0 auto; padding: 36px 24px 56px; display: flex; flex-direction: column; gap: 24px",
               )}
             >
-              <div
-                style={styleOf(
-                  "display: flex; justify-content: space-between; align-items: flex-end; gap: 16px",
-                )}
-              >
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
-                  <h1
-                    style={styleOf(
-                      "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
-                    )}
-                  >
+                  <h1 className="m-0 text-2xl sm:text-[28px] font-bold font-serif leading-tight text-[#352637]">
                     {"Bài Writing và Speaking của tôi"}
                   </h1>
-                  <div
-                    style={styleOf(
-                      "font-size: 15px; color: #706473; margin-top: 4px",
-                    )}
-                  >
-                    {
-                      "Bài đã hoàn thành, trạng thái yêu cầu chấm và thời hạn nội dung."
-                    }
+                  <div className="text-sm sm:text-base text-[#706473] mt-1">
+                    {"Bài đã hoàn thành, trạng thái yêu cầu chấm và thời hạn nội dung."}
                   </div>
                 </div>
-                <div style={styleOf("display: flex; gap: 10px")}>
+                <div className="w-full sm:w-auto flex">
                   <a
                     href={"PracticeWS.dc.html"}
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
-                    )}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-[1.5px] border-[#D6D4D0] bg-white text-[#352637] font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                   >
                     {"Luyện Writing, Speaking"}
                   </a>
                 </div>
               </div>
-              <div
-                style={styleOf(
-                  "display: flex; flex-wrap: wrap; gap: 14px; align-items: center",
-                )}
-              >
-                <div
-                  style={styleOf(
-                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
-                  )}
-                >
-                  <span
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
-                    )}
-                  >
+              <div className="flex flex-col md:flex-row gap-3 md:items-center">
+                <div className="inline-flex gap-0.5 p-1 rounded-xl bg-[#F3F0EA] self-start">
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg bg-white border border-[#D6D4D0] text-xs font-semibold text-[#352637]">
                     {"Tất cả"}
                   </span>
-                  <span
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
-                    )}
-                  >
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[#706473] hover:text-[#352637] cursor-pointer">
                     {"Writing"}
                   </span>
-                  <span
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
-                    )}
-                  >
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[#706473] hover:text-[#352637] cursor-pointer">
                     {"Speaking"}
                   </span>
                 </div>
-                <div
-                  style={styleOf(
-                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
-                  )}
-                >
-                  <span
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
-                    )}
+
+                {/* Mobile status select (< 768px) */}
+                <div className="md:hidden flex items-center gap-2 w-full">
+                  <label htmlFor="ws-status" className="text-xs font-semibold text-[#706473] shrink-0">
+                    Trạng thái:
+                  </label>
+                  <select
+                    id="ws-status"
+                    className="flex-1 h-9 px-3 rounded-lg border border-[#D6D4D0] bg-white text-xs text-[#352637] font-medium"
                   >
+                    <option>Mọi trạng thái</option>
+                    <option>Chưa gửi chấm</option>
+                    <option>Chờ phân công</option>
+                    <option>Chờ chấm</option>
+                    <option>Đã có kết quả</option>
+                    <option>Đã hủy</option>
+                  </select>
+                </div>
+
+                {/* Desktop status segmented (>= 768px) */}
+                <div className="hidden md:inline-flex gap-0.5 p-1 rounded-xl bg-[#F3F0EA] overflow-x-auto whitespace-nowrap">
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg bg-white border border-[#D6D4D0] text-xs font-semibold text-[#352637]">
                     {"Mọi trạng thái"}
                   </span>
-                  <span
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
-                    )}
-                  >
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[#706473] hover:text-[#352637] cursor-pointer">
                     {"Chưa gửi chấm"}
                   </span>
-                  <span
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
-                    )}
-                  >
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[#706473] hover:text-[#352637] cursor-pointer">
                     {"Chờ phân công"}
                   </span>
-                  <span
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
-                    )}
-                  >
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[#706473] hover:text-[#352637] cursor-pointer">
                     {"Chờ chấm"}
                   </span>
-                  <span
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
-                    )}
-                  >
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[#706473] hover:text-[#352637] cursor-pointer">
                     {"Đã có kết quả"}
                   </span>
-                  <span
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
-                    )}
-                  >
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[#706473] hover:text-[#352637] cursor-pointer">
                     {"Đã hủy"}
                   </span>
                 </div>
               </div>
-              <div
-                style={styleOf(
-                  "display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start",
-                )}
-              >
-                <div
-                  style={styleOf(
-                    "flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 24px",
-                  )}
-                >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                <div className="w-full flex flex-col gap-6">
                   <div
                     style={styleOf(
                       "padding: 22px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
@@ -183,11 +131,7 @@ class MyWS extends React.Component {
                       <div style={styleOf("font-size: 18px; font-weight: 600")}>
                         {"Lượt hỗ trợ chấm còn hiệu lực"}
                       </div>
-                      <div
-                        style={styleOf(
-                          "display: flex; gap: 12px; align-items: flex-start",
-                        )}
-                      >
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div
                           style={styleOf(
                             "flex: 1; padding: 14px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #DCEDE2",
@@ -239,11 +183,7 @@ class MyWS extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div
-                  style={styleOf(
-                    "flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 24px",
-                  )}
-                >
+                <div className="w-full flex flex-col gap-6">
                   <div
                     style={styleOf(
                       "padding: 22px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
@@ -351,7 +291,7 @@ class MyWS extends React.Component {
                     {" mới có kết quả hoặc vừa bị hủy"}
                   </span>
                 </div>
-                <div style={styleOf("overflow-x: auto")}>
+                <div className="hidden md:block overflow-x-auto">
                   <table
                     style={styleOf("width: 100%; border-collapse: collapse")}
                   >
@@ -992,6 +932,232 @@ class MyWS extends React.Component {
                       </tr>
                     </tbody>
                   </table>
+                </div>
+                <div className="md:hidden divide-y divide-[#E6E4E0]">
+                  {/* Card 1 */}
+                  <div className="p-4 flex flex-col gap-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="font-semibold text-sm text-[#352637]">
+                          Writing Task 2 · Public transport
+                        </div>
+                        <div className="text-xs text-[#706473] mt-0.5">
+                          Hoàn thành 20/10 10:05
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[#FBEDBF] text-[#7A5A0E] text-xs font-semibold shrink-0">
+                        Writing
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border border-[#D6D4D0] bg-[#DCEDE2] text-[#2E6A48] font-semibold">
+                        Đã có kết quả · 6.5
+                        <span aria-label="Chưa xem" className="inline-block w-2 h-2 rounded-full bg-[#E5604A] shrink-0" />
+                      </span>
+                      <span className="text-[#706473]">Giữ đến 05/11</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <a
+                        href="ResultWS.dc.html"
+                        className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      >
+                        Xem kết quả
+                      </a>
+                      <a
+                        href="#"
+                        className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                        </svg>
+                        Tải .docx
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Card 2 */}
+                  <div className="p-4 flex flex-col gap-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="font-semibold text-sm text-[#352637]">
+                          Speaking Part 2 · A skill worth learning
+                        </div>
+                        <div className="text-xs text-[#706473] mt-0.5">
+                          Hoàn thành 22/10 20:30
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[#E8E4FA] text-[#5543B0] text-xs font-semibold shrink-0">
+                        Speaking
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[#D6D4D0] bg-[#DDE8FC] text-[#2A55B8] font-semibold">
+                        Chờ chấm · phân công 22/10 20:40
+                      </span>
+                      <span className="text-[#706473]">Tạm giữ</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <a
+                        href="#"
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M8 5l11 7-11 7z" />
+                        </svg>
+                        Nghe lại
+                      </a>
+                      <a
+                        href="#"
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                        </svg>
+                        Tải ghi âm
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Card 3 */}
+                  <div className="p-4 flex flex-col gap-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="font-semibold text-sm text-[#352637]">
+                          Writing Task 1 Academic · Energy use
+                        </div>
+                        <div className="text-xs text-[#706473] mt-0.5">
+                          Hoàn thành 21/10 08:55
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[#FBEDBF] text-[#7A5A0E] text-xs font-semibold shrink-0">
+                        Writing
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[#D6D4D0] bg-[#FBEDBF] text-[#7A5A0E] font-semibold">
+                        Chờ phân công · còn 21 giờ
+                      </span>
+                      <span className="text-[#706473]">Tạm giữ</span>
+                    </div>
+                    <div className="flex gap-2 pt-1">
+                      <a
+                        href="#"
+                        className="w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                        </svg>
+                        Tải .docx
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Card 4 */}
+                  <div className="p-4 flex flex-col gap-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="font-semibold text-sm text-[#352637]">
+                          Speaking Part 3 · Technology
+                        </div>
+                        <div className="text-xs text-[#706473] mt-0.5">
+                          Hoàn thành 18/10 19:40
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[#E8E4FA] text-[#5543B0] text-xs font-semibold shrink-0">
+                        Speaking
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border border-[#D6D4D0] bg-[#FBDCD3] text-[#C0412A] font-semibold">
+                        Đã hủy · đã hoàn 1 bonus
+                        <span aria-label="Chưa xem" className="inline-block w-2 h-2 rounded-full bg-[#E5604A] shrink-0" />
+                      </span>
+                      <span className="text-[#706473]">Hạn ban đầu 01/11</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <a
+                        href="SubmitDialogs.dc.html"
+                        className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border border-[#352637] bg-[#352637] text-white font-semibold text-xs no-underline hover:bg-[#221824]"
+                      >
+                        Gửi lại yêu cầu
+                      </a>
+                      <a
+                        href="#"
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                        </svg>
+                        Tải ghi âm
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Card 5 */}
+                  <div className="p-4 flex flex-col gap-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="font-semibold text-sm text-[#352637]">
+                          Writing Task 2 · Online education
+                        </div>
+                        <div className="text-xs text-[#706473] mt-0.5">
+                          Hoàn thành 22/10 21:15
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[#FBEDBF] text-[#7A5A0E] text-xs font-semibold shrink-0">
+                        Writing
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[#DDDBD7] bg-[#F3F0EA] text-[#706473] font-semibold">
+                        Đã lưu · chưa gửi chấm
+                      </span>
+                      <span className="text-[#706473]">Giữ đến 05/11</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <a
+                        href="SubmitDialogs.dc.html"
+                        className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border border-[#352637] bg-[#352637] text-white font-semibold text-xs no-underline hover:bg-[#221824]"
+                      >
+                        Gửi yêu cầu chấm
+                      </a>
+                      <a
+                        href="#"
+                        className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                        </svg>
+                        Tải .docx
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Card 6 */}
+                  <div className="p-4 flex flex-col gap-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="font-semibold text-sm text-[#352637]">
+                          Writing Task 1 General · Complaint letter
+                        </div>
+                        <div className="text-xs text-[#706473] mt-0.5">
+                          Hoàn thành 02/10 09:30
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[#FBEDBF] text-[#7A5A0E] text-xs font-semibold shrink-0">
+                        Writing
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[#DDDBD7] bg-[#F3F0EA] text-[#706473] font-semibold">
+                        Chưa có điểm
+                      </span>
+                      <span className="text-[#706473]">Nội dung đã hết hạn 16/10</span>
+                    </div>
+                    <div className="text-xs text-[#706473] pt-1">
+                      Không mở hoặc tải được
+                    </div>
+                  </div>
                 </div>
               </div>
             </main>

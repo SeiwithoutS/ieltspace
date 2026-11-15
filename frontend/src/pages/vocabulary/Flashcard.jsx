@@ -79,16 +79,8 @@ class Flashcard extends React.Component {
                   </a>
                 </div>
               </div>
-              <div
-                style={styleOf(
-                  "display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; align-items: flex-start",
-                )}
-              >
-                <div
-                  style={styleOf(
-                    "padding: 32px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); flex: 1 1 460px; max-width: 600px",
-                  )}
-                >
+              <div className="flex flex-col lg:flex-row gap-7 justify-center items-center lg:items-start">
+                <div className="w-full max-w-[500px] p-6 sm:p-8 rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-4">
                   <div
                     style={styleOf(
                       "display: flex; flex-direction: column; gap: 16px; ",
@@ -148,36 +140,26 @@ class Flashcard extends React.Component {
                     >
                       {"Bạn nhớ từ này đến đâu?"}
                     </div>
-                    <div
-                      style={styleOf(
-                        "display: flex; gap: 10px; align-items: flex-start",
-                      )}
-                    >
+                    <div className="grid grid-cols-3 gap-2 w-full pt-1">
                       <a
                         href={"#"}
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
-                        )}
+                        className="inline-flex items-center justify-center h-11 px-2 sm:px-4 rounded-full border-[1.5px] border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs sm:text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                       >
                         {"Chưa nhớ"}
                       </a>
                       <a
                         href={"#"}
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
-                        )}
+                        className="inline-flex items-center justify-center h-11 px-2 sm:px-4 rounded-full border-[1.5px] border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs sm:text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                       >
                         {"Còn phân vân"}
                       </a>
                       <a
                         href={"#"}
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 20px; width: 100%; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
-                        )}
+                        className="inline-flex items-center justify-center gap-1.5 h-11 px-2 sm:px-4 rounded-full border-[1.5px] border-[#352637] bg-[#352637] text-white font-semibold text-xs sm:text-sm no-underline whitespace-nowrap hover:bg-[#221824]"
                       >
                         <svg
-                          width={"18"}
-                          height={"18"}
+                          width={"16"}
+                          height={"16"}
                           viewBox={"0 0 24 24"}
                           fill={"none"}
                           stroke={"currentColor"}
@@ -193,7 +175,7 @@ class Flashcard extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div style={styleOf("flex: 0 1 360px")}>
+                <div className="w-full max-w-[500px] lg:max-w-[360px] flex flex-col gap-5">
                   <div
                     style={styleOf(
                       "display: flex; flex-direction: column; gap: 20px; ",

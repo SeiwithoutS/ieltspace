@@ -1,7 +1,10 @@
 import type { RequestHandler } from "express";
+import { createRemoteJWKSet, jwtVerify } from "jose";
+import { env } from "../config.js";
 import { prisma } from "../lib/prisma.js";
 import { createAuthClient } from "../lib/supabase.js";
 import { asyncHandler, HttpError } from "../utils/http.js";
+import { recordAuthTiming } from "./server-timing.js";
 
 export type AppUser = {
   id: string;
@@ -34,7 +37,35 @@ export const userSelect = {
   status: true,
 } as const;
 
-export async function findActiveUser(authUserId: string) {
+// In-memory user profile cache (TTL 60 seconds, max 1000 items)
+type CachedProfile = {
+  user: AppUser;
+  expires: number;
+};
+
+const userProfileCache = new Map<string, CachedProfile>();
+const MAX_CACHE_SIZE = 1000;
+const CACHE_TTL_MS = 60_000;
+
+export function invalidateUserCache(authUserId: string): void {
+  userProfileCache.delete(authUserId);
+}
+
+export function clearUserCache(): void {
+  userProfileCache.clear();
+}
+
+export function getUserCacheSize(): number {
+  return userProfileCache.size;
+}
+
+export async function findActiveUser(authUserId: string): Promise<AppUser> {
+  const now = Date.now();
+  const cached = userProfileCache.get(authUserId);
+  if (cached && cached.expires > now) {
+    return cached.user;
+  }
+
   const user = await prisma.users.findUnique({
     where: {
       auth_user_id: authUserId,
@@ -58,55 +89,141 @@ export async function findActiveUser(authUserId: string) {
     );
   }
 
+  // FIFO eviction if cache size exceeds limit
+  if (userProfileCache.size >= MAX_CACHE_SIZE) {
+    const firstKey = userProfileCache.keys().next().value;
+    if (firstKey) userProfileCache.delete(firstKey);
+  }
+
+  userProfileCache.set(authUserId, {
+    user,
+    expires: now + CACHE_TTL_MS,
+  });
+
   return user;
 }
 
-export const requireAuth = asyncHandler(async (req, _res, next) => {
-  const authorization = req.headers.authorization;
+// Local JWKS verification instance with key caching
+let jwksInstance: ReturnType<typeof createRemoteJWKSet> | null = null;
 
-  const match = authorization?.match(/^Bearer\s+(\S+)$/i);
-
-  if (!match) {
-    throw new HttpError(
-      401,
-      "UNAUTHENTICATED",
-      "Bạn cần đăng nhập."
-    );
+function getJWKS() {
+  if (!jwksInstance) {
+    const jwksUrl = new URL(`${env.SUPABASE_URL}/auth/v1/.well-known/jwks.json`);
+    jwksInstance = createRemoteJWKSet(jwksUrl, {
+      cacheMaxAge: 10 * 60 * 1000, // Cache public keys for 10 minutes
+      cooldownDuration: 30 * 1000, // 30 seconds cooldown between refreshes
+    });
   }
+  return jwksInstance;
+}
 
-  const accessToken = match[1];
-  const supabase = createAuthClient();
+/**
+ * Verify JWT token locally using Supabase JWKS (ES256/RS256) or JWT secret.
+ * Falls back to Supabase Auth API if JWKS verification cannot complete.
+ */
+export async function verifyAccessToken(accessToken: string): Promise<string> {
+  try {
+    const JWKS = getJWKS();
+    const { payload } = await jwtVerify(accessToken, JWKS, {
+      issuer: `${env.SUPABASE_URL}/auth/v1`,
+      audience: "authenticated",
+    });
 
-  const { data, error } = await supabase.auth.getUser(accessToken);
+    if (!payload.sub) {
+      throw new HttpError(401, "INVALID_TOKEN", "Phiên truy cập không hợp lệ.");
+    }
 
-  if (error) {
-    if (!error.status || error.status >= 500) {
+    return payload.sub;
+  } catch (err: any) {
+    // If token expired, throw immediately without remote fallback
+    if (err?.code === "ERR_JWT_EXPIRED") {
       throw new HttpError(
-        503,
-        "AUTH_UNAVAILABLE",
-        "Dịch vụ xác thực tạm thời không khả dụng."
+        401,
+        "INVALID_TOKEN",
+        "Phiên truy cập không hợp lệ hoặc đã hết hạn."
       );
     }
 
-    throw new HttpError(
-      401,
-      "INVALID_TOKEN",
-      "Phiên truy cập không hợp lệ hoặc đã hết hạn."
-    );
+    // Try symmetric secret verification if configured (e.g. HS256 tokens)
+    if (process.env.SUPABASE_JWT_SECRET) {
+      try {
+        const secret = new TextEncoder().encode(process.env.SUPABASE_JWT_SECRET);
+        const { payload } = await jwtVerify(accessToken, secret, {
+          audience: "authenticated",
+        });
+        if (payload.sub) {
+          return payload.sub;
+        }
+      } catch {
+        // Fall through to remote fallback
+      }
+    }
+
+    // Fallback to Supabase Auth API
+    try {
+      const supabase = createAuthClient();
+      const { data, error } = await supabase.auth.getUser(accessToken);
+
+      if (error) {
+        if (!error.status || error.status >= 500) {
+          throw new HttpError(
+            503,
+            "AUTH_UNAVAILABLE",
+            "Dịch vụ xác thực tạm thời không khả dụng."
+          );
+        }
+
+        throw new HttpError(
+          401,
+          "INVALID_TOKEN",
+          "Phiên truy cập không hợp lệ hoặc đã hết hạn."
+        );
+      }
+
+      if (!data.user) {
+        throw new HttpError(
+          401,
+          "INVALID_TOKEN",
+          "Phiên truy cập không hợp lệ."
+        );
+      }
+
+      return data.user.id;
+    } catch (fallbackErr) {
+      if (fallbackErr instanceof HttpError) throw fallbackErr;
+      throw new HttpError(
+        401,
+        "INVALID_TOKEN",
+        "Phiên truy cập không hợp lệ hoặc đã hết hạn."
+      );
+    }
   }
+}
 
-  if (!data.user) {
-    throw new HttpError(
-      401,
-      "INVALID_TOKEN",
-      "Phiên truy cập không hợp lệ."
-    );
+export const requireAuth = asyncHandler(async (req, _res, next) => {
+  const authStart = process.hrtime.bigint();
+  try {
+    const authorization = req.headers.authorization;
+    const match = authorization?.match(/^Bearer\s+(\S+)$/i);
+
+    if (!match) {
+      throw new HttpError(
+        401,
+        "UNAUTHENTICATED",
+        "Bạn cần đăng nhập."
+      );
+    }
+
+    const accessToken = match[1];
+    const authUserId = await verifyAccessToken(accessToken);
+
+    req.appUser = await findActiveUser(authUserId);
+    req.accessToken = accessToken;
+
+    next();
+  } finally {
+    recordAuthTiming(Number(process.hrtime.bigint() - authStart) / 1_000_000);
   }
-
-  req.appUser = await findActiveUser(data.user.id);
-  req.accessToken = accessToken;
-
-  next();
 });
 
 export function requireRole(

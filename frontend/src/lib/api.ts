@@ -16,6 +16,19 @@ export class ApiError extends Error {
 
 const base = ((import.meta as any).env?.VITE_API_URL || 'http://localhost:3001/api').replace(/\/$/, '');
 
+function isTokenExpiringSoon(token: string): boolean {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return false;
+    const payload = JSON.parse(atob(parts[1]));
+    if (!payload.exp) return false;
+    // Làm mới nếu còn dưới 60 giây hoặc đã hết hạn
+    return payload.exp * 1000 - Date.now() < 60_000;
+  } catch {
+    return false;
+  }
+}
+
 export type ApiFetchOptions = {
   method?: string;
   json?: unknown;
@@ -31,7 +44,16 @@ export async function apiFetch<T = any>(
   const method = options.method || 'GET';
   const headers: Record<string, string> = { ...options.headers };
 
-  const token = getAccessToken();
+  let token = getAccessToken();
+  if (token && isTokenExpiringSoon(token) && !retried) {
+    try {
+      await refresh();
+      token = getAccessToken();
+    } catch {
+      // Tiếp tục với token hiện tại nếu refresh gặp lỗi tạm thời
+    }
+  }
+
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }

@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import type { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { HttpError } from '../../utils/http.js';
@@ -25,11 +26,12 @@ import {
  * Helper to build EditorSkill inside or outside a transaction.
  */
 export async function getEditorSkillInTx(
-  tx: Prisma.TransactionClient,
+  tx: Prisma.TransactionClient | typeof prisma,
   skillId: string
 ): Promise<EditorSkill> {
-  const skill = await tx.exam_skills.findUnique({
+  const skill = await (tx as any).exam_skills.findUnique({
     where: { id: skillId },
+    relationLoadStrategy: 'join',
     include: {
       exam: {
         select: {
@@ -136,9 +138,7 @@ export async function getEditorSkillInTx(
  * E1: Lấy thông tin kỹ năng để mở trong editor (chỉ WRITING / SPEAKING).
  */
 export async function getEditorSkill(skillId: string): Promise<EditorSkill> {
-  return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-    return getEditorSkillInTx(tx, skillId);
-  });
+  return getEditorSkillInTx(prisma, skillId);
 }
 
 /**
@@ -313,59 +313,72 @@ export async function saveSkillContent(
     // Xóa nội dung cũ dưới lên
     await deleteSkillSectionsBottomUp(tx, skillId);
 
-    // Ghi nội dung mới
+    // Ghi nội dung mới (E2: Batch write)
     if (skill.skill === 'WRITING' && input.writing) {
       const rows = writingToRows(input.writing);
-      for (const r of rows) {
-        await tx.exam_sections.create({
-          data: {
-            exam_skill_id: skillId,
-            order_no: r.order_no,
-            title: r.title,
-            section_type: r.section_type,
-            content: r.content as Prisma.InputJsonValue,
-            config: r.config as Prisma.InputJsonValue,
-            image_path: r.image_path,
-            instruction: r.instruction,
-          },
-        });
+      const sectionInserts: Prisma.exam_sectionsCreateManyInput[] = rows.map((r) => ({
+        id: crypto.randomUUID(),
+        exam_skill_id: skillId,
+        order_no: r.order_no,
+        title: r.title,
+        section_type: r.section_type,
+        content: r.content as Prisma.InputJsonValue,
+        config: r.config as Prisma.InputJsonValue,
+        image_path: r.image_path,
+        instruction: r.instruction,
+      }));
+      if (sectionInserts.length > 0) {
+        await tx.exam_sections.createMany({ data: sectionInserts });
       }
     } else if (skill.skill === 'SPEAKING' && input.speaking) {
       const rows = speakingToRows(input.speaking);
+      const sectionInserts: Prisma.exam_sectionsCreateManyInput[] = [];
+      const groupInserts: Prisma.question_groupsCreateManyInput[] = [];
+      const questionInserts: Prisma.questionsCreateManyInput[] = [];
+
       for (const r of rows) {
-        const sec = await tx.exam_sections.create({
-          data: {
-            exam_skill_id: skillId,
-            order_no: r.order_no,
-            title: r.title,
-            section_type: r.section_type,
-            instruction: r.instruction,
-            content: r.content as Prisma.InputJsonValue,
-            config: r.config as Prisma.InputJsonValue,
-          },
+        const secId = crypto.randomUUID();
+        sectionInserts.push({
+          id: secId,
+          exam_skill_id: skillId,
+          order_no: r.order_no,
+          title: r.title,
+          section_type: r.section_type,
+          instruction: r.instruction,
+          content: r.content as Prisma.InputJsonValue,
+          config: r.config as Prisma.InputJsonValue,
         });
 
         for (const g of r.groups) {
-          const grp = await tx.question_groups.create({
-            data: {
-              section_id: sec.id,
-              order_no: g.order_no,
-              question_type: g.question_type,
-              instruction: null,
-            },
+          const grpId = crypto.randomUUID();
+          groupInserts.push({
+            id: grpId,
+            section_id: secId,
+            order_no: g.order_no,
+            question_type: g.question_type,
+            instruction: null,
           });
 
           for (const q of g.questions) {
-            await tx.questions.create({
-              data: {
-                question_group_id: grp.id,
-                order_no: q.order_no,
-                question_type: q.question_type,
-                content: q.content as Prisma.InputJsonValue,
-              },
+            questionInserts.push({
+              id: crypto.randomUUID(),
+              question_group_id: grpId,
+              order_no: q.order_no,
+              question_type: q.question_type,
+              content: q.content as Prisma.InputJsonValue,
             });
           }
         }
+      }
+
+      if (sectionInserts.length > 0) {
+        await tx.exam_sections.createMany({ data: sectionInserts });
+      }
+      if (groupInserts.length > 0) {
+        await tx.question_groups.createMany({ data: groupInserts });
+      }
+      if (questionInserts.length > 0) {
+        await tx.questions.createMany({ data: questionInserts });
       }
     }
 
@@ -546,77 +559,98 @@ export async function createRevisionDraft(
       },
     });
 
+    // Chép toàn bộ sections, question_groups, questions, question_options, question_answers (E2: Batch write)
+    const sectionInserts: Prisma.exam_sectionsCreateManyInput[] = [];
+    const groupInserts: Prisma.question_groupsCreateManyInput[] = [];
+    const questionInserts: Prisma.questionsCreateManyInput[] = [];
+    const optionInserts: Prisma.question_optionsCreateManyInput[] = [];
+    const answerInserts: Prisma.question_answersCreateManyInput[] = [];
+
     for (const sec of sourceSections) {
-      const createdSec = await tx.exam_sections.create({
-        data: {
-          exam_skill_id: newSkill.id,
-          order_no: sec.order_no,
-          title: sec.title,
-          section_type: sec.section_type,
-          instruction: sec.instruction,
-          content: sec.content as Prisma.InputJsonValue,
-          config: sec.config as Prisma.InputJsonValue,
-          transcript: sec.transcript as Prisma.InputJsonValue,
-          audio_path: sec.audio_path,
-          image_path: sec.image_path,
-        },
+      const secId = crypto.randomUUID();
+      sectionInserts.push({
+        id: secId,
+        exam_skill_id: newSkill.id,
+        order_no: sec.order_no,
+        title: sec.title,
+        section_type: sec.section_type,
+        instruction: sec.instruction,
+        content: sec.content as Prisma.InputJsonValue,
+        config: sec.config as Prisma.InputJsonValue,
+        transcript: sec.transcript as Prisma.InputJsonValue,
+        audio_path: sec.audio_path,
+        image_path: sec.image_path,
       });
 
       for (const grp of sec.groups) {
-        const createdGrp = await tx.question_groups.create({
-          data: {
-            section_id: createdSec.id,
-            order_no: grp.order_no,
-            title: grp.title,
-            question_from: grp.question_from,
-            question_to: grp.question_to,
-            config: grp.config as Prisma.InputJsonValue,
-            question_type: grp.question_type,
-            instruction: grp.instruction,
-            content: grp.content as Prisma.InputJsonValue,
-            audio_path: grp.audio_path,
-            image_path: grp.image_path,
-          },
+        const grpId = crypto.randomUUID();
+        groupInserts.push({
+          id: grpId,
+          section_id: secId,
+          order_no: grp.order_no,
+          title: grp.title,
+          question_from: grp.question_from,
+          question_to: grp.question_to,
+          config: grp.config as Prisma.InputJsonValue,
+          question_type: grp.question_type,
+          instruction: grp.instruction,
+          content: grp.content as Prisma.InputJsonValue,
+          audio_path: grp.audio_path,
+          image_path: grp.image_path,
         });
 
         for (const q of grp.questions) {
-          const createdQ = await tx.questions.create({
-            data: {
-              question_group_id: createdGrp.id,
-              order_no: q.order_no,
-              question_type: q.question_type,
-              number_from: q.number_from,
-              number_to: q.number_to,
-              answer_count: q.answer_count,
-              max_score: q.max_score,
-              explanation: q.explanation as Prisma.InputJsonValue,
-              content: q.content as Prisma.InputJsonValue,
-            },
+          const qId = crypto.randomUUID();
+          questionInserts.push({
+            id: qId,
+            question_group_id: grpId,
+            order_no: q.order_no,
+            question_type: q.question_type,
+            number_from: q.number_from,
+            number_to: q.number_to,
+            answer_count: q.answer_count,
+            max_score: q.max_score,
+            explanation: q.explanation as Prisma.InputJsonValue,
+            content: q.content as Prisma.InputJsonValue,
           });
 
           for (const opt of q.options) {
-            await tx.question_options.create({
-              data: {
-                question_id: createdQ.id,
-                order_no: opt.order_no,
-                label: opt.label,
-                content: opt.content,
-              },
+            optionInserts.push({
+              id: crypto.randomUUID(),
+              question_id: qId,
+              order_no: opt.order_no,
+              label: opt.label,
+              content: opt.content,
             });
           }
 
           if (q.answer) {
-            await tx.question_answers.create({
-              data: {
-                question_id: createdQ.id,
-                accepted_answers: q.answer.accepted_answers as Prisma.InputJsonValue,
-                matching_rule: q.answer.matching_rule as Prisma.InputJsonValue,
-                evidence: q.answer.evidence as Prisma.InputJsonValue,
-              },
+            answerInserts.push({
+              id: crypto.randomUUID(),
+              question_id: qId,
+              accepted_answers: q.answer.accepted_answers as Prisma.InputJsonValue,
+              matching_rule: q.answer.matching_rule as Prisma.InputJsonValue,
+              evidence: q.answer.evidence as Prisma.InputJsonValue,
             });
           }
         }
       }
+    }
+
+    if (sectionInserts.length > 0) {
+      await tx.exam_sections.createMany({ data: sectionInserts });
+    }
+    if (groupInserts.length > 0) {
+      await tx.question_groups.createMany({ data: groupInserts });
+    }
+    if (questionInserts.length > 0) {
+      await tx.questions.createMany({ data: questionInserts });
+    }
+    if (optionInserts.length > 0) {
+      await tx.question_options.createMany({ data: optionInserts });
+    }
+    if (answerInserts.length > 0) {
+      await tx.question_answers.createMany({ data: answerInserts });
     }
 
     // WS-12: Audit log

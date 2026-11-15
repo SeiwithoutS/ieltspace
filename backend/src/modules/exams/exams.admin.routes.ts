@@ -49,6 +49,7 @@ adminExamsRouter.use(requireAuth, requireRole('ADMIN'));
 adminExamsRouter.get(
   '/exam-set-categories',
   asyncHandler(async (_req, res) => {
+    res.setHeader('Cache-Control', 'private, max-age=60');
     const cats = await listCategories();
     res.json({ items: cats.map(toCategoryDto) });
   })

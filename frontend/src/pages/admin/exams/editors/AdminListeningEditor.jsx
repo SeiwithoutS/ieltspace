@@ -39,17 +39,17 @@ class AdminListeningEditor extends React.Component {
     document.addEventListener("keydown", this._key);
     // mở sẵn hộp Nhập từ xlsx khi đến từ nút Nhập xlsx ở trang Thông tin bộ đề
     var got = (function () {
-      try {
-        var o = JSON.parse(
-          sessionStorage.getItem("ieltspace-editor-import") || "null",
-        );
-        if (o && Date.now() - o.at < 20000) {
-          sessionStorage.removeItem("ieltspace-editor-import");
-          return o.v;
-        }
-      } catch (err) { }
-      return null;
-    })(),
+        try {
+          var o = JSON.parse(
+            sessionStorage.getItem("ieltspace-editor-import") || "null",
+          );
+          if (o && Date.now() - o.at < 20000) {
+            sessionStorage.removeItem("ieltspace-editor-import");
+            return o.v;
+          }
+        } catch (err) {}
+        return null;
+      })(),
       P0 = this.props || {};
     if (got) {
       this.setState({
@@ -67,7 +67,7 @@ class AdminListeningEditor extends React.Component {
     if (this._au) {
       try {
         this._au.pause();
-      } catch (err) { }
+      } catch (err) {}
     }
     (this._it || []).forEach(clearTimeout);
   }
@@ -400,11 +400,11 @@ class AdminListeningEditor extends React.Component {
     var GT =
       PR.loaiDe === "General Training"
         ? [
-          "General Training",
-          "#FCE6D6",
-          "#9A4A17",
-          "Section 1-2 gồm các văn bản ngắn đời sống, công việc; Section 3 là một bài dài",
-        ]
+            "General Training",
+            "#FCE6D6",
+            "#9A4A17",
+            "Section 1-2 gồm các văn bản ngắn đời sống, công việc; Section 3 là một bài dài",
+          ]
         : ["Academic", "#DFF1F4", "#1F6A78", "3 transcript học thuật dài"];
     var INIT = variant(),
       TYPES = [
@@ -558,7 +558,7 @@ class AdminListeningEditor extends React.Component {
       if (me._au) {
         try {
           me._au.pause();
-        } catch (err) { }
+        } catch (err) {}
       }
     }
     // tệp thật (vừa tải lên) phát bằng Audio; tệp ví dụ không có âm thanh nên chỉ chạy đồng hồ
@@ -577,7 +577,7 @@ class AdminListeningEditor extends React.Component {
         var a = me._au;
         try {
           a.currentTime = t0;
-        } catch (err) { }
+        } catch (err) {}
         a.ontimeupdate = function () {
           me.setState({ auT: a.currentTime });
         };
@@ -625,13 +625,13 @@ class AdminListeningEditor extends React.Component {
       if (!editing) {
         try {
           e.target.value = "";
-        } catch (err) { }
+        } catch (err) {}
         return;
       }
       var f = e.target.files && e.target.files[0];
       try {
         e.target.value = "";
-      } catch (err) { }
+      } catch (err) {}
       if (!f) {
         return;
       }
@@ -821,11 +821,11 @@ class AdminListeningEditor extends React.Component {
       return v == null
         ? []
         : String(v)
-          .split(/(?<![0-9]),|,(?![0-9])/)
-          .map(function (x) {
-            return x.trim();
-          })
-          .filter(Boolean);
+            .split(/(?<![0-9]),|,(?![0-9])/)
+            .map(function (x) {
+              return x.trim();
+            })
+            .filter(Boolean);
     }
     function rngLetters(n) {
       return n > 1 ? "A-" + LET[n - 1] : "A";
@@ -1160,8 +1160,8 @@ class AdminListeningEditor extends React.Component {
       var p = ex.passages[a],
         c = p
           ? p.groups.reduce(function (x, g) {
-            return x + cnt(g, p);
-          }, 0)
+              return x + cnt(g, p);
+            }, 0)
           : 0;
       var blank =
         !p ||
@@ -1188,8 +1188,8 @@ class AdminListeningEditor extends React.Component {
           "; font-size: 14px; line-height: 1.3; box-sizing: border-box; " +
           (a === pi
             ? "background: #FFFFFF; border: 1.5px " +
-            (p ? "solid" : "dashed") +
-            " #D6D4D0"
+              (p ? "solid" : "dashed") +
+              " #D6D4D0"
             : "border: 1.5px " + (p ? "solid transparent" : "dashed #D6D4D0")),
         pick: function (e) {
           stop(e);
@@ -1381,7 +1381,7 @@ class AdminListeningEditor extends React.Component {
           ask(
             "Xóa nhóm " + nm + "?",
             (c ? c + " câu hỏi cùng đáp án" : "Nhóm này") +
-            " sẽ bị xóa, số câu các nhóm sau tự đánh lại. Có thể hoàn tác ngay sau khi xóa.",
+              " sẽ bị xóa, số câu các nhóm sau tự đánh lại. Có thể hoàn tác ngay sau khi xóa.",
             function () {
               upd(
                 function (n, p) {
@@ -1664,10 +1664,10 @@ class AdminListeningEditor extends React.Component {
           altHint: !parts.length
             ? "Có thể nhập nhiều cách, ngăn bằng dấu phẩy."
             : "Chấp nhận thêm " +
-            parts.length +
-            " cách: " +
-            parts.join(" · ") +
-            (bad ? ". Có cách vượt giới hạn từ." : "."),
+              parts.length +
+              " cách: " +
+              parts.join(" · ") +
+              (bad ? ". Có cách vượt giới hạn từ." : "."),
           altHintShort: !on
             ? ""
             : bad
@@ -2010,11 +2010,11 @@ class AdminListeningEditor extends React.Component {
         var labF =
           cg.type === "MATCH_HEADING"
             ? function (j) {
-              return ROM[j];
-            }
+                return ROM[j];
+              }
             : function (j) {
-              return LET[j];
-            };
+                return LET[j];
+              };
         G.opts = (cg.opts || []).map(function (o, j) {
           var isAns = f === "mcqN" && (cg.ans || []).indexOf(j) >= 0;
           return {
@@ -2106,10 +2106,10 @@ class AdminListeningEditor extends React.Component {
               var who = bAns[q];
               labels.push(
                 "Câu " +
-                (a0 + q) +
-                (who != null && who >= 0 && who !== j
-                  ? " · đã gán " + LET[who]
-                  : ""),
+                  (a0 + q) +
+                  (who != null && who >= 0 && who !== j
+                    ? " · đã gán " + LET[who]
+                    : ""),
               );
             }
             var d = dd(
@@ -2205,11 +2205,11 @@ class AdminListeningEditor extends React.Component {
         var LN = ts && ts[6],
           DR = LN
             ? [
-              Math.min(ar, fr0),
-              Math.min(ac, fc0),
-              Math.max(ar, fr0),
-              Math.max(ac, fc0),
-            ]
+                Math.min(ar, fr0),
+                Math.min(ac, fc0),
+                Math.max(ar, fr0),
+                Math.max(ac, fc0),
+              ]
             : RC;
         var inR = function (r, c) {
           var q = tb.sp[r][c] || [1, 1];
@@ -2363,10 +2363,10 @@ class AdminListeningEditor extends React.Component {
           ? "Đang chọn " + (LN === "c" ? "cột " + (ac + 1) : "hàng " + (ar + 1))
           : multi
             ? "Đang chọn " +
-            (RC[2] - RC[0] + 1) +
-            " hàng × " +
-            (RC[3] - RC[1] + 1) +
-            " cột"
+              (RC[2] - RC[0] + 1) +
+              " hàng × " +
+              (RC[3] - RC[1] + 1) +
+              " cột"
             : "Ô hàng " + (RC[0] + 1) + ", cột " + (RC[1] + 1);
         G.tHeadOn = allHd;
         G.tHeadSt = tbSt(allHd);
@@ -2540,8 +2540,8 @@ class AdminListeningEditor extends React.Component {
                   ? selSt(0, Math.min(i, NC - 2), 0, Math.min(i, NC - 2))
                   : selSt(Math.min(i, NR - 2), 0, Math.min(i, NR - 2), 0),
                 (isCol ? "Đã xóa cột " : "Đã xóa hàng ") +
-                (i + 1) +
-                " của bảng.",
+                  (i + 1) +
+                  " của bảng.",
               ),
             },
           ];
@@ -2776,8 +2776,8 @@ class AdminListeningEditor extends React.Component {
         for (var r = 0; r < R; r++) {
           (function (r) {
             var fr = fl.frames.filter(function (x) {
-              return x.row === r;
-            })[0],
+                return x.row === r;
+              })[0],
               rowNodes = fl.nodes.filter(function (n) {
                 return n.row === r;
               });
@@ -2854,8 +2854,8 @@ class AdminListeningEditor extends React.Component {
               }),
               nodes: rowNodes.map(function (n) {
                 var above = fl.nodes.filter(function (m) {
-                  return m.row < r || (m.row === r && !m.side && n.side);
-                }),
+                    return m.row < r || (m.row === r && !m.side && n.side);
+                  }),
                   back = fl.edges.filter(function (e) {
                     return e[0] === n.id && e[2] === "back";
                   })[0],
@@ -2872,10 +2872,10 @@ class AdminListeningEditor extends React.Component {
                   ),
                   back
                     ? cands
-                      .map(function (m) {
-                        return m.id;
-                      })
-                      .indexOf(back[1]) + 1
+                        .map(function (m) {
+                          return m.id;
+                        })
+                        .indexOf(back[1]) + 1
                     : 0,
                   function (j) {
                     upd(
@@ -2898,7 +2898,7 @@ class AdminListeningEditor extends React.Component {
                     tagOf[n.id] +
                     (nr
                       ? " · Câu " +
-                      (nr[0] === nr[1] ? nr[0] : nr[0] + "-" + nr[1])
+                        (nr[0] === nr[1] ? nr[0] : nr[0] + "-" + nr[1])
                       : ""),
                   text: n.text,
                   oval: !!n.oval || n.shape === "oval",
@@ -3034,8 +3034,8 @@ class AdminListeningEditor extends React.Component {
         };
         for (var r2 = 0; r2 < R; r2++) {
           var main = fl.nodes.filter(function (n) {
-            return n.row === r2 && !n.side;
-          }),
+              return n.row === r2 && !n.side;
+            }),
             side = fl.nodes.filter(function (n) {
               return n.row === r2 && n.side;
             }),
@@ -3139,8 +3139,8 @@ class AdminListeningEditor extends React.Component {
             return;
           }
           var na = fl.nodes.filter(function (n) {
-            return n.id === e[0];
-          })[0],
+              return n.id === e[0];
+            })[0],
             nb = fl.nodes.filter(function (n) {
               return n.id === e[1];
             })[0],
@@ -3231,7 +3231,7 @@ class AdminListeningEditor extends React.Component {
         }
         // nhãn số đặt trên hình (m[0], m[1] theo % khung), m[2], m[3] là điểm mũi tên chỉ tới (không có thì nhãn nằm ngay trên hình)
         var dsel =
-          s.dsel && s.dsel[0] === pi && s.dsel[1] === gi ? s.dsel[2] : -1,
+            s.dsel && s.dsel[0] === pi && s.dsel[1] === gi ? s.dsel[2] : -1,
           dp =
             s.dprev && s.dprev[0] === pi && s.dprev[1] === gi ? s.dprev : null;
         var mk = (cg.marks || []).map(function (m, k) {
@@ -3972,8 +3972,8 @@ class AdminListeningEditor extends React.Component {
           ? tblCells(g)
           : f === "flow"
             ? flowSeq(flowOf(g)).map(function (x) {
-              return x.t;
-            })
+                return x.t;
+              })
             : f === "text"
               ? [g.body]
               : [];
@@ -3982,7 +3982,7 @@ class AdminListeningEditor extends React.Component {
         text:
           f === "diagram"
             ? String((g.texts || [])[j] || "").trim() ||
-            "Nhãn " + (j + 1) + " trên sơ đồ"
+              "Nhãn " + (j + 1) + " trên sơ đồ"
             : blankCtx(strs, j),
         ans: v || "",
         words: [v].concat(parseAlt((g.alt || [])[j])),
@@ -4136,12 +4136,12 @@ class AdminListeningEditor extends React.Component {
         me._kid || (me._kid = "kp-" + Math.random().toString(36).slice(2, 8)),
       head: nQ
         ? "Đã gán đoạn cho " +
-        nDone +
-        "/" +
-        nQ +
-        " câu · " +
-        nKeys +
-        " câu có key phrase. Bấm một câu để nhập."
+          nDone +
+          "/" +
+          nQ +
+          " câu · " +
+          nKeys +
+          " câu có key phrase. Bấm một câu để nhập."
         : "Section này chưa có câu hỏi. Nhập câu hỏi ở tab Câu hỏi trước.",
     };
     if (cur) {
@@ -4185,8 +4185,8 @@ class AdminListeningEditor extends React.Component {
           title: found
             ? "Sẽ được tô sáng trong transcript"
             : "Không có trong đoạn " +
-            LET[ce.para] +
-            ", người học sẽ không thấy tô sáng",
+              LET[ce.para] +
+              ", người học sẽ không thấy tô sáng",
           st:
             "display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 4px 0 12px; box-sizing: border-box; border-radius: 999px; font-size: 13px; font-weight: 600; " +
             (found
@@ -4326,8 +4326,8 @@ class AdminListeningEditor extends React.Component {
       var p = ex.passages[a],
         c = p
           ? p.groups.reduce(function (x, g) {
-            return x + cnt(g, p);
-          }, 0)
+              return x + cnt(g, p);
+            }, 0)
           : 0,
         here = a === pi;
       return {
@@ -4358,27 +4358,27 @@ class AdminListeningEditor extends React.Component {
       : "Section " + (pi + 1) + " chưa được tạo";
     var emptySub = blocked
       ? "Các section được tạo theo thứ tự. Hãy tạo Section " +
-      (NP + 1) +
-      " trước, sau đó mới tạo được Section " +
-      (pi + 1) +
-      "."
+        (NP + 1) +
+        " trước, sau đó mới tạo được Section " +
+        (pi + 1) +
+        "."
       : !NP
         ? "Một đề Listening gồm 4 section và tổng cộng 40 câu hỏi, mỗi section thường 10 câu. Bắt đầu bằng Section 1: nhập chủ đề, tải ghi âm, dán transcript rồi thêm các nhóm câu hỏi."
         : blocked
           ? "Các section được tạo theo thứ tự. Hãy tạo Section " +
-          (NP + 1) +
-          " trước, sau đó mới tạo được Section " +
-          (pi + 1) +
-          "."
+            (NP + 1) +
+            " trước, sau đó mới tạo được Section " +
+            (pi + 1) +
+            "."
           : "Đề đang có " +
-          NP +
-          "/4 section và " +
-          total +
-          "/40 câu. Tạo Section " +
-          (pi + 1) +
-          " để soạn tiếp; số câu sẽ nối tiếp từ câu " +
-          (total + 1) +
-          ".";
+            NP +
+            "/4 section và " +
+            total +
+            "/40 câu. Tạo Section " +
+            (pi + 1) +
+            " để soạn tiếp; số câu sẽ nối tiếp từ câu " +
+            (total + 1) +
+            ".";
     function createP(e) {
       stop(e);
       var n = clone(ex);
@@ -4494,8 +4494,8 @@ class AdminListeningEditor extends React.Component {
         impDrag: false,
         impErr: bad.length
           ? "Không nhận " +
-          bad.join(", ") +
-          ": chỉ nhận .xlsx, ghi âm .mp3/.wav/.m4a và ảnh .png/.jpg/.webp."
+            bad.join(", ") +
+            ": chỉ nhận .xlsx, ghi âm .mp3/.wav/.m4a và ảnh .png/.jpg/.webp."
           : "",
       });
     }
@@ -4594,7 +4594,7 @@ class AdminListeningEditor extends React.Component {
         impAdd(e.target.files || []);
         try {
           e.target.value = "";
-        } catch (err) { }
+        } catch (err) {}
       },
       impFiles: impF.map(function (f, i) {
         return {
@@ -4716,8 +4716,8 @@ class AdminListeningEditor extends React.Component {
       ],
       impReplaceNote: impHas
         ? "Nội dung hiện tại (" +
-        total +
-        " câu) sẽ được thay. Đề chuyển sang chế độ Chỉnh sửa, chưa lưu: xem lại rồi bấm Lưu, hoặc Hoàn tác."
+          total +
+          " câu) sẽ được thay. Đề chuyển sang chế độ Chỉnh sửa, chưa lưu: xem lại rồi bấm Lưu, hoặc Hoàn tác."
         : "Đề chuyển sang chế độ Chỉnh sửa, chưa lưu: xem lại rồi bấm Lưu, hoặc Hoàn tác.",
       impApply: function (e) {
         stop(e);
@@ -4767,8 +4767,8 @@ class AdminListeningEditor extends React.Component {
       E: E,
       xHint: cur
         ? "Câu " +
-        cur.no +
-        ": bấm vào một đoạn để gán làm đoạn chứa đáp án; bôi đen chữ trong đoạn để thêm key phrase."
+          cur.no +
+          ": bấm vào một đoạn để gán làm đoạn chứa đáp án; bôi đen chữ trong đoạn để thêm key phrase."
         : "Chọn một câu ở cột phải để gán đoạn và key phrases.",
       tabQ: function (ev) {
         stop(ev);
@@ -5082,9 +5082,9 @@ class AdminListeningEditor extends React.Component {
       aName: AU ? AU.name : "",
       aMeta: AU
         ? AU.dur +
-        " · " +
-        AU.size +
-        (AU.url ? "" : " · tệp ví dụ, không có âm thanh")
+          " · " +
+          AU.size +
+          (AU.url ? "" : " · tệp ví dụ, không có âm thanh")
         : "",
       aTime: mmss(auT) + " / " + (AU ? AU.dur : "00:00"),
       aBar:
@@ -5120,7 +5120,7 @@ class AdminListeningEditor extends React.Component {
           if (me._au && AU.url) {
             try {
               me._au.currentTime = x * auDur;
-            } catch (err) { }
+            } catch (err) {}
           }
           self.setState({ auKey: auKey, auT: x * auDur, auOn: false });
         }
@@ -5150,8 +5150,8 @@ class AdminListeningEditor extends React.Component {
         ask(
           "Xóa ghi âm " + AU.name + "?",
           "Người học sẽ không nghe được Section " +
-          (pi + 1) +
-          " cho đến khi có tệp mới. Có thể hoàn tác ngay sau khi xóa.",
+            (pi + 1) +
+            " cho đến khi có tệp mới. Có thể hoàn tác ngay sau khi xóa.",
           function () {
             upd(
               function (n, p) {
@@ -5396,8 +5396,8 @@ class AdminListeningEditor extends React.Component {
                         <span
                           style={styleOf(
                             "font-size: 13px; color: " +
-                            v.dirtyColor +
-                            "; white-space: nowrap",
+                              v.dirtyColor +
+                              "; white-space: nowrap",
                           )}
                         >
                           {v.dirtyText}
@@ -6164,7 +6164,7 @@ class AdminListeningEditor extends React.Component {
                                   <div
                                     style={styleOf(
                                       "display: flex; align-items: center; gap: 12px; font-size: 14px; color: " +
-                                      c.color,
+                                        c.color,
                                     )}
                                   >
                                     <span
@@ -7019,10 +7019,10 @@ class AdminListeningEditor extends React.Component {
                                           tabIndex={v.editing ? 0 : -1}
                                           style={styleOf(
                                             "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: " +
-                                            (v.editing ? "#706473" : "#9A8F9C") +
-                                            "; text-decoration: none; cursor: " +
-                                            (v.editing ? "pointer" : "not-allowed") +
-                                            "; white-space: nowrap; position: relative; overflow: hidden",
+                                              (v.editing ? "#706473" : "#9A8F9C") +
+                                              "; text-decoration: none; cursor: " +
+                                              (v.editing ? "pointer" : "not-allowed") +
+                                              "; white-space: nowrap; position: relative; overflow: hidden",
                                           )}
                                         >
                                           <svg
@@ -7049,7 +7049,7 @@ class AdminListeningEditor extends React.Component {
                                             aria-label={"Chọn tệp ghi âm khác"}
                                             style={styleOf(
                                               "position: absolute; inset: 0; opacity: 0; cursor: " +
-                                              (v.editing ? "pointer" : "not-allowed"),
+                                                (v.editing ? "pointer" : "not-allowed"),
                                             )}
                                           />
                                         </label>
@@ -7058,14 +7058,14 @@ class AdminListeningEditor extends React.Component {
                                           className={"eo"}
                                           aria-disabled={!v.editing}
                                           tabIndex={v.editing ? 0 : -1}
-                                          onClick={v.editing ? v.aDel : function (e) { e.preventDefault(); }}
+                                          onClick={v.editing ? v.aDel : function(e) { e.preventDefault(); }}
                                           aria-label={"Xóa ghi âm"}
                                           title={"Xóa ghi âm"}
                                           style={styleOf(
                                             "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: " +
-                                            (v.editing ? "#C0412A" : "#D6D4D0") +
-                                            "; text-decoration: none; cursor: " +
-                                            (v.editing ? "pointer" : "not-allowed"),
+                                              (v.editing ? "#C0412A" : "#D6D4D0") +
+                                              "; text-decoration: none; cursor: " +
+                                              (v.editing ? "pointer" : "not-allowed"),
                                           )}
                                         >
                                           <svg
@@ -7097,7 +7097,7 @@ class AdminListeningEditor extends React.Component {
                                       tabIndex={v.editing ? 0 : -1}
                                       style={styleOf(
                                         "position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 104px; padding: 12px; text-align: center; border-radius: 12px; border: 1.5px dashed #C9C2C6; background: #FAF9F5; cursor: " +
-                                        (v.editing ? "pointer" : "not-allowed"),
+                                          (v.editing ? "pointer" : "not-allowed"),
                                       )}
                                     >
                                       {v.editing ? (
@@ -7158,16 +7158,29 @@ class AdminListeningEditor extends React.Component {
                                         onChange={v.aPick}
                                         aria-label={"Chọn tệp ghi âm"}
                                         style={styleOf(
-                                          "position: absolute; inset: 0; opacity: 0; cursor: pointer",
+                                          "position: absolute; inset: 0; opacity: 0; cursor: " +
+                                            (v.editing ? "pointer" : "not-allowed"),
                                         )}
                                       />
                                     </label>
                                     <a
                                       href={"#"}
                                       className={"eo"}
-                                      onClick={v.aSample}
+                                      aria-disabled={!v.editing}
+                                      tabIndex={v.editing ? 0 : -1}
+                                      onClick={
+                                        v.editing
+                                          ? v.aSample
+                                          : function (e) {
+                                              e.preventDefault();
+                                            }
+                                      }
                                       style={styleOf(
-                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: " +
+                                          (v.editing ? "#706473" : "#D6D4D0") +
+                                          "; text-decoration: none; cursor: " +
+                                          (v.editing ? "pointer" : "not-allowed") +
+                                          "; white-space: nowrap; align-self: flex-start",
                                       )}
                                     >
                                       {"Dùng tệp ví dụ"}
@@ -8195,13 +8208,13 @@ class AdminListeningEditor extends React.Component {
                                                     onClick={v.G.lim.toggle}
                                                     style={styleOf(
                                                       "display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-width: 0; height: 38px; padding: 0 10px 0 12px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; font-size: 14px; text-decoration: none; cursor: pointer; " +
-                                                      v.G.lim.tone,
+                                                        v.G.lim.tone,
                                                     )}
                                                   >
                                                     <span
                                                       style={styleOf(
                                                         "min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: " +
-                                                        v.G.lim.color,
+                                                          v.G.lim.color,
                                                       )}
                                                     >
                                                       {v.G.lim.label}
@@ -8898,7 +8911,7 @@ class AdminListeningEditor extends React.Component {
                                                                 onChange={o.set}
                                                                 style={styleOf(
                                                                   o.inSt +
-                                                                  "; flex: 1 1 200px",
+                                                                    "; flex: 1 1 200px",
                                                                 )}
                                                               />
                                                               {o.on ? (
@@ -8931,15 +8944,15 @@ class AdminListeningEditor extends React.Component {
                                                                       }
                                                                       style={styleOf(
                                                                         "display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-width: 0; height: 38px; padding: 0 10px 0 12px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; font-size: 14px; text-decoration: none; cursor: pointer; " +
-                                                                        o.dd
-                                                                          .tone,
+                                                                          o.dd
+                                                                            .tone,
                                                                       )}
                                                                     >
                                                                       <span
                                                                         style={styleOf(
                                                                           "min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: " +
-                                                                          o.dd
-                                                                            .color,
+                                                                            o.dd
+                                                                              .color,
                                                                         )}
                                                                       >
                                                                         {
@@ -9964,4 +9977,3391 @@ class AdminListeningEditor extends React.Component {
                                                                         b.rmAlt
                                                                       }
                                                                       aria-label={
-... [truncated for diff preview]
+                                                                        "Bỏ cách viết khác câu " +
+                                                                        b.no
+                                                                      }
+                                                                      style={styleOf(
+                                                                        "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #706473; text-decoration: none; cursor: pointer",
+                                                                      )}
+                                                                    >
+                                                                      <svg
+                                                                        width={
+                                                                          "15"
+                                                                        }
+                                                                        height={
+                                                                          "15"
+                                                                        }
+                                                                        viewBox={
+                                                                          "0 0 24 24"
+                                                                        }
+                                                                        fill={
+                                                                          "none"
+                                                                        }
+                                                                        stroke={
+                                                                          "currentColor"
+                                                                        }
+                                                                        strokeWidth={
+                                                                          "2"
+                                                                        }
+                                                                        strokeLinecap={
+                                                                          "round"
+                                                                        }
+                                                                        strokeLinejoin={
+                                                                          "round"
+                                                                        }
+                                                                        aria-hidden={
+                                                                          "true"
+                                                                        }
+                                                                      >
+                                                                        <path
+                                                                          d={
+                                                                            "M6 6l12 12M18 6L6 18"
+                                                                          }
+                                                                        ></path>
+                                                                      </svg>
+                                                                    </a>
+                                                                  </div>
+                                                                  <span
+                                                                    style={styleOf(
+                                                                      "font-size: 13px; color: #706473",
+                                                                    )}
+                                                                  >
+                                                                    {
+                                                                      b.altHintShort
+                                                                    }
+                                                                  </span>
+                                                                </div>
+                                                              </>
+                                                            ) : null}
+                                                          </div>
+                                                          <div className={"qd"}>
+                                                            {b.canDel ? (
+                                                              <>
+                                                                <a
+                                                                  className={
+                                                                    "eo"
+                                                                  }
+                                                                  href={"#"}
+                                                                  onClick={
+                                                                    b.del
+                                                                  }
+                                                                  aria-label={
+                                                                    "Xóa chỗ trống câu " +
+                                                                    b.no
+                                                                  }
+                                                                  title={
+                                                                    "Xóa chỗ trống"
+                                                                  }
+                                                                  style={styleOf(
+                                                                    "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                                                  )}
+                                                                >
+                                                                  <svg
+                                                                    width={"15"}
+                                                                    height={
+                                                                      "15"
+                                                                    }
+                                                                    viewBox={
+                                                                      "0 0 24 24"
+                                                                    }
+                                                                    fill={
+                                                                      "none"
+                                                                    }
+                                                                    stroke={
+                                                                      "currentColor"
+                                                                    }
+                                                                    strokeWidth={
+                                                                      "2"
+                                                                    }
+                                                                    strokeLinecap={
+                                                                      "round"
+                                                                    }
+                                                                    strokeLinejoin={
+                                                                      "round"
+                                                                    }
+                                                                    aria-hidden={
+                                                                      "true"
+                                                                    }
+                                                                  >
+                                                                    <path
+                                                                      d={
+                                                                        "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                                      }
+                                                                    ></path>
+                                                                  </svg>
+                                                                </a>
+                                                              </>
+                                                            ) : null}
+                                                          </div>
+                                                        </div>
+                                                      </React.Fragment>
+                                                    ),
+                                                  )}
+                                                  {v.G.noBlanks ? (
+                                                    <>
+                                                      <div
+                                                        style={styleOf(
+                                                          "font-size: 13px; color: #706473",
+                                                        )}
+                                                      >
+                                                        {v.G.noBlanksText}
+                                                      </div>
+                                                    </>
+                                                  ) : null}
+                                                </div>
+                                              </div>
+                                            </>
+                                          ) : null}
+                                          {v.G.isFlowType ? (
+                                            <>
+                                              <div
+                                                style={styleOf(
+                                                  "display: flex; flex-direction: column; gap: 6px",
+                                                )}
+                                              >
+                                                <span
+                                                  style={styleOf(
+                                                    "font-size: 13px; font-weight: 700; color: #352637",
+                                                  )}
+                                                >
+                                                  {"Cách nhập sơ đồ"}
+                                                </span>
+                                                <div
+                                                  role={"radiogroup"}
+                                                  aria-label={"Cách nhập sơ đồ"}
+                                                  style={styleOf(
+                                                    "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA; align-self: flex-start",
+                                                  )}
+                                                >
+                                                  <a
+                                                    className={"lk"}
+                                                    href={"#"}
+                                                    role={"radio"}
+                                                    aria-checked={v.G.isFlow}
+                                                    onClick={v.G.setLevels}
+                                                    style={styleOf(
+                                                      "display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; " +
+                                                        v.G.segLv,
+                                                    )}
+                                                  >
+                                                    {"Theo tầng"}
+                                                  </a>
+                                                  <a
+                                                    className={"lk"}
+                                                    href={"#"}
+                                                    role={"radio"}
+                                                    aria-checked={v.G.flowImg}
+                                                    onClick={v.G.setImage}
+                                                    style={styleOf(
+                                                      "display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; " +
+                                                        v.G.segImg,
+                                                    )}
+                                                  >
+                                                    {"Hình có nhãn"}
+                                                  </a>
+                                                </div>
+                                                <span
+                                                  style={styleOf(
+                                                    "font-size: 13px; color: #706473",
+                                                  )}
+                                                >
+                                                  {v.G.modeHint}
+                                                </span>
+                                              </div>
+                                            </>
+                                          ) : null}
+                                          {v.G.isFlow ? (
+                                            <>
+                                              <div
+                                                style={styleOf(
+                                                  "display: flex; flex-direction: column; gap: 10px",
+                                                )}
+                                              >
+                                                <span
+                                                  style={styleOf(
+                                                    "font-size: 13px; font-weight: 700; color: #352637",
+                                                  )}
+                                                >
+                                                  {"Các tầng của sơ đồ"}
+                                                </span>
+                                                <span
+                                                  style={styleOf(
+                                                    "font-size: 13px; color: #706473",
+                                                  )}
+                                                >
+                                                  {
+                                                    "Mỗi tầng có 1-4 ô đặt ngang hàng; ___ là chỗ trống. Mũi tên tự nối khi thêm ô: một ô xuống nhiều ô là rẽ nhánh, nhiều ô xuống một ô là gộp. Sửa ở mục Nối từ."
+                                                  }
+                                                </span>
+                                                {(v.G.frows || []).map(
+                                                  (fr, index) => (
+                                                    <React.Fragment key={index}>
+                                                      <div
+                                                        style={styleOf(
+                                                          "display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FCFBF7",
+                                                        )}
+                                                      >
+                                                        <div
+                                                          style={styleOf(
+                                                            "display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap",
+                                                          )}
+                                                        >
+                                                          <span
+                                                            style={styleOf(
+                                                              "font-size: 13px; font-weight: 700; color: #352637",
+                                                            )}
+                                                          >
+                                                            {fr.label}
+                                                          </span>
+                                                          <div
+                                                            style={styleOf(
+                                                              "display: flex; align-items: center; gap: 6px; flex-wrap: wrap",
+                                                            )}
+                                                          >
+                                                            <a
+                                                              className={"eo"}
+                                                              href={"#"}
+                                                              onClick={
+                                                                fr.toggleFrame
+                                                              }
+                                                              role={"switch"}
+                                                              aria-checked={
+                                                                fr.hasFrame
+                                                              }
+                                                              style={styleOf(
+                                                                "display: flex; align-items: center; gap: 8px; font-size: 13px; color: #352637; text-decoration: none; margin-right: 6px",
+                                                              )}
+                                                            >
+                                                              <span
+                                                                style={styleOf(
+                                                                  fr.swSt,
+                                                                )}
+                                                              >
+                                                                <span
+                                                                  style={styleOf(
+                                                                    fr.knobSt,
+                                                                  )}
+                                                                ></span>
+                                                              </span>
+                                                              {"Khung nhóm"}
+                                                            </a>
+                                                            {fr.canAdd ? (
+                                                              <>
+                                                                <a
+                                                                  className={
+                                                                    "eo"
+                                                                  }
+                                                                  href={"#"}
+                                                                  onClick={
+                                                                    fr.addNode
+                                                                  }
+                                                                  style={styleOf(
+                                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                                                  )}
+                                                                >
+                                                                  <svg
+                                                                    width={"15"}
+                                                                    height={
+                                                                      "15"
+                                                                    }
+                                                                    viewBox={
+                                                                      "0 0 24 24"
+                                                                    }
+                                                                    fill={
+                                                                      "none"
+                                                                    }
+                                                                    stroke={
+                                                                      "currentColor"
+                                                                    }
+                                                                    strokeWidth={
+                                                                      "2"
+                                                                    }
+                                                                    strokeLinecap={
+                                                                      "round"
+                                                                    }
+                                                                    strokeLinejoin={
+                                                                      "round"
+                                                                    }
+                                                                    aria-hidden={
+                                                                      "true"
+                                                                    }
+                                                                  >
+                                                                    <path
+                                                                      d={
+                                                                        "M12 5v14M5 12h14"
+                                                                      }
+                                                                    ></path>
+                                                                  </svg>
+                                                                  {
+                                                                    " Ô song song"
+                                                                  }
+                                                                </a>
+                                                              </>
+                                                            ) : null}
+                                                            <a
+                                                              className={"eo"}
+                                                              href={"#"}
+                                                              onClick={
+                                                                fr.delRow
+                                                              }
+                                                              aria-label={
+                                                                "Xóa " +
+                                                                fr.label
+                                                              }
+                                                              title={"Xóa tầng"}
+                                                              style={styleOf(
+                                                                "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                                              )}
+                                                            >
+                                                              <svg
+                                                                width={"15"}
+                                                                height={"15"}
+                                                                viewBox={
+                                                                  "0 0 24 24"
+                                                                }
+                                                                fill={"none"}
+                                                                stroke={
+                                                                  "currentColor"
+                                                                }
+                                                                strokeWidth={
+                                                                  "2"
+                                                                }
+                                                                strokeLinecap={
+                                                                  "round"
+                                                                }
+                                                                strokeLinejoin={
+                                                                  "round"
+                                                                }
+                                                                aria-hidden={
+                                                                  "true"
+                                                                }
+                                                              >
+                                                                <path
+                                                                  d={
+                                                                    "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                                  }
+                                                                ></path>
+                                                              </svg>
+                                                            </a>
+                                                          </div>
+                                                        </div>
+                                                        <div
+                                                          style={styleOf(
+                                                            "display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px",
+                                                          )}
+                                                        >
+                                                          {(fr.nodes || []).map(
+                                                            (nd, index) => (
+                                                              <React.Fragment
+                                                                key={index}
+                                                              >
+                                                                <div
+                                                                  style={styleOf(
+                                                                    nd.cardSt,
+                                                                  )}
+                                                                >
+                                                                  <div
+                                                                    style={styleOf(
+                                                                      "display: flex; justify-content: space-between; align-items: center; gap: 6px",
+                                                                    )}
+                                                                  >
+                                                                    <span
+                                                                      style={styleOf(
+                                                                        "font-size: 13px; font-weight: 700; color: #4B3D4D",
+                                                                      )}
+                                                                    >
+                                                                      {nd.tag}
+                                                                    </span>
+                                                                    <a
+                                                                      className={
+                                                                        "eo"
+                                                                      }
+                                                                      href={"#"}
+                                                                      onClick={
+                                                                        nd.del
+                                                                      }
+                                                                      aria-label={
+                                                                        "Xóa ô " +
+                                                                        nd.tag
+                                                                      }
+                                                                      style={styleOf(
+                                                                        "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer; width: 26px; height: 26px",
+                                                                      )}
+                                                                    >
+                                                                      <svg
+                                                                        width={
+                                                                          "14"
+                                                                        }
+                                                                        height={
+                                                                          "14"
+                                                                        }
+                                                                        viewBox={
+                                                                          "0 0 24 24"
+                                                                        }
+                                                                        fill={
+                                                                          "none"
+                                                                        }
+                                                                        stroke={
+                                                                          "currentColor"
+                                                                        }
+                                                                        strokeWidth={
+                                                                          "2"
+                                                                        }
+                                                                        strokeLinecap={
+                                                                          "round"
+                                                                        }
+                                                                        strokeLinejoin={
+                                                                          "round"
+                                                                        }
+                                                                        aria-hidden={
+                                                                          "true"
+                                                                        }
+                                                                      >
+                                                                        <path
+                                                                          d={
+                                                                            "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                                          }
+                                                                        ></path>
+                                                                      </svg>
+                                                                    </a>
+                                                                  </div>
+                                                                  <textarea
+                                                                    rows={"2"}
+                                                                    aria-label={
+                                                                      "Nội dung ô " +
+                                                                      nd.tag
+                                                                    }
+                                                                    value={
+                                                                      nd.text
+                                                                    }
+                                                                    onChange={
+                                                                      nd.set
+                                                                    }
+                                                                    placeholder={
+                                                                      "Nội dung ô, ___ là chỗ trống"
+                                                                    }
+                                                                    style={styleOf(
+                                                                      "box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; resize: vertical; outline-color: #2963CC; padding: 8px 10px; font-size: 13px",
+                                                                    )}
+                                                                  ></textarea>
+                                                                  {nd.hasParents ? (
+                                                                    <>
+                                                                      <div
+                                                                        style={styleOf(
+                                                                          "display: flex; flex-direction: column; gap: 4px",
+                                                                        )}
+                                                                      >
+                                                                        <span
+                                                                          style={styleOf(
+                                                                            "font-size: 13px; font-weight: 700; color: #4B3D4D",
+                                                                          )}
+                                                                        >
+                                                                          {
+                                                                            "Nối từ"
+                                                                          }
+                                                                        </span>
+                                                                        <div
+                                                                          style={styleOf(
+                                                                            "display: flex; flex-wrap: wrap; gap: 4px",
+                                                                          )}
+                                                                        >
+                                                                          {(
+                                                                            nd.par ||
+                                                                            []
+                                                                          ).map(
+                                                                            (
+                                                                              pp,
+                                                                              index,
+                                                                            ) => (
+                                                                              <React.Fragment
+                                                                                key={
+                                                                                  index
+                                                                                }
+                                                                              >
+                                                                                <a
+                                                                                  className={
+                                                                                    "lk"
+                                                                                  }
+                                                                                  href={
+                                                                                    "#"
+                                                                                  }
+                                                                                  onClick={
+                                                                                    pp.pick
+                                                                                  }
+                                                                                  aria-pressed={
+                                                                                    pp.on
+                                                                                  }
+                                                                                  style={styleOf(
+                                                                                    pp.st,
+                                                                                  )}
+                                                                                >
+                                                                                  {
+                                                                                    pp.lab
+                                                                                  }
+                                                                                </a>
+                                                                              </React.Fragment>
+                                                                            ),
+                                                                          )}
+                                                                        </div>
+                                                                      </div>
+                                                                    </>
+                                                                  ) : null}
+                                                                  <div
+                                                                    style={styleOf(
+                                                                      "display: flex; flex-wrap: wrap; gap: 4px",
+                                                                    )}
+                                                                  >
+                                                                    <a
+                                                                      className={
+                                                                        "eo"
+                                                                      }
+                                                                      href={"#"}
+                                                                      onClick={
+                                                                        nd.togOval
+                                                                      }
+                                                                      aria-pressed={
+                                                                        nd.oval
+                                                                      }
+                                                                      style={styleOf(
+                                                                        nd.ovalSt,
+                                                                      )}
+                                                                    >
+                                                                      {
+                                                                        "Bầu dục"
+                                                                      }
+                                                                    </a>
+                                                                    <a
+                                                                      className={
+                                                                        "eo"
+                                                                      }
+                                                                      href={"#"}
+                                                                      onClick={
+                                                                        nd.togSide
+                                                                      }
+                                                                      aria-pressed={
+                                                                        nd.side
+                                                                      }
+                                                                      style={styleOf(
+                                                                        nd.sideSt,
+                                                                      )}
+                                                                    >
+                                                                      {
+                                                                        "Đặt bên cạnh"
+                                                                      }
+                                                                    </a>
+                                                                  </div>
+                                                                  {nd.hasBack ? (
+                                                                    <>
+                                                                      <div
+                                                                        style={styleOf(
+                                                                          "display: flex; flex-direction: column; gap: 4px",
+                                                                        )}
+                                                                      >
+                                                                        <span
+                                                                          style={styleOf(
+                                                                            "font-size: 13px; font-weight: 700; color: #4B3D4D",
+                                                                          )}
+                                                                        >
+                                                                          {
+                                                                            "Mũi tên quay lại"
+                                                                          }
+                                                                        </span>
+                                                                        <div
+                                                                          style={styleOf(
+                                                                            "position: relative; min-width: 0; width: 100%",
+                                                                          )}
+                                                                        >
+                                                                          <a
+                                                                            href={
+                                                                              "#"
+                                                                            }
+                                                                            role={
+                                                                              "combobox"
+                                                                            }
+                                                                            aria-haspopup={
+                                                                              "listbox"
+                                                                            }
+                                                                            aria-expanded={
+                                                                              nd
+                                                                                .bd
+                                                                                .open
+                                                                            }
+                                                                            aria-label={
+                                                                              "Mũi tên quay lại từ ô " +
+                                                                              nd.tag
+                                                                            }
+                                                                            onClick={
+                                                                              nd
+                                                                                .bd
+                                                                                .toggle
+                                                                            }
+                                                                            style={styleOf(
+                                                                              "display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-width: 0; height: 38px; padding: 0 10px 0 12px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; font-size: 14px; text-decoration: none; cursor: pointer; " +
+                                                                                nd
+                                                                                  .bd
+                                                                                  .tone,
+                                                                            )}
+                                                                          >
+                                                                            <span
+                                                                              style={styleOf(
+                                                                                "min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: " +
+                                                                                  nd
+                                                                                    .bd
+                                                                                    .color,
+                                                                              )}
+                                                                            >
+                                                                              {
+                                                                                nd
+                                                                                  .bd
+                                                                                  .label
+                                                                              }
+                                                                            </span>
+                                                                            <span
+                                                                              style={styleOf(
+                                                                                "display: flex; flex: none; color: #706473",
+                                                                              )}
+                                                                            >
+                                                                              <svg
+                                                                                width={
+                                                                                  "16"
+                                                                                }
+                                                                                height={
+                                                                                  "16"
+                                                                                }
+                                                                                viewBox={
+                                                                                  "0 0 24 24"
+                                                                                }
+                                                                                fill={
+                                                                                  "none"
+                                                                                }
+                                                                                stroke={
+                                                                                  "currentColor"
+                                                                                }
+                                                                                strokeWidth={
+                                                                                  "2"
+                                                                                }
+                                                                                strokeLinecap={
+                                                                                  "round"
+                                                                                }
+                                                                                strokeLinejoin={
+                                                                                  "round"
+                                                                                }
+                                                                                aria-hidden={
+                                                                                  "true"
+                                                                                }
+                                                                              >
+                                                                                <path
+                                                                                  d={
+                                                                                    "M6 9l6 6 6-6"
+                                                                                  }
+                                                                                ></path>
+                                                                              </svg>
+                                                                            </span>
+                                                                          </a>
+                                                                          {nd.bd
+                                                                            .open ? (
+                                                                            <>
+                                                                              <div
+                                                                                onClick={
+                                                                                  nd
+                                                                                    .bd
+                                                                                    .close
+                                                                                }
+                                                                                style={styleOf(
+                                                                                  "position: fixed; inset: 0; z-index: 30",
+                                                                                )}
+                                                                              ></div>
+                                                                              <div
+                                                                                role={
+                                                                                  "listbox"
+                                                                                }
+                                                                                style={styleOf(
+                                                                                  "position: absolute; left: 0; right: 0; top: 42px; z-index: 31; max-height: 264px; overflow-y: auto; padding: 6px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 12px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                                                                                )}
+                                                                              >
+                                                                                {(
+                                                                                  nd
+                                                                                    .bd
+                                                                                    .opts ||
+                                                                                  []
+                                                                                ).map(
+                                                                                  (
+                                                                                    bo2,
+                                                                                    index,
+                                                                                  ) => (
+                                                                                    <React.Fragment
+                                                                                      key={
+                                                                                        index
+                                                                                      }
+                                                                                    >
+                                                                                      <a
+                                                                                        href={
+                                                                                          "#"
+                                                                                        }
+                                                                                        role={
+                                                                                          "option"
+                                                                                        }
+                                                                                        aria-selected={
+                                                                                          bo2.on
+                                                                                        }
+                                                                                        onClick={
+                                                                                          bo2.pick
+                                                                                        }
+                                                                                        style={styleOf(
+                                                                                          bo2.st,
+                                                                                        )}
+                                                                                      >
+                                                                                        {
+                                                                                          bo2.lab
+                                                                                        }
+                                                                                      </a>
+                                                                                    </React.Fragment>
+                                                                                  ),
+                                                                                )}
+                                                                              </div>
+                                                                            </>
+                                                                          ) : null}
+                                                                        </div>
+                                                                      </div>
+                                                                    </>
+                                                                  ) : null}
+                                                                </div>
+                                                              </React.Fragment>
+                                                            ),
+                                                          )}
+                                                        </div>
+                                                        {fr.hasFrame ? (
+                                                          <>
+                                                            <input
+                                                              aria-label={
+                                                                "Chú thích khung " +
+                                                                fr.label
+                                                              }
+                                                              value={fr.cap}
+                                                              onChange={
+                                                                fr.setCap
+                                                              }
+                                                              placeholder={
+                                                                "Chú thích của khung, ví dụ: Information held for ___"
+                                                              }
+                                                              style={styleOf(
+                                                                "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
+                                                              )}
+                                                            />
+                                                          </>
+                                                        ) : null}
+                                                      </div>
+                                                    </React.Fragment>
+                                                  ),
+                                                )}
+                                                <a
+                                                  className={"eo"}
+                                                  href={"#"}
+                                                  onClick={v.G.addRow}
+                                                  style={styleOf(
+                                                    "display: flex; align-items: center; justify-content: center; gap: 6px; height: 42px; border-radius: 12px; border: 1.5px dashed #D6D4D0; color: #706473; font-weight: 600; font-size: 14px; text-decoration: none",
+                                                  )}
+                                                >
+                                                  <svg
+                                                    width={"16"}
+                                                    height={"16"}
+                                                    viewBox={"0 0 24 24"}
+                                                    fill={"none"}
+                                                    stroke={"currentColor"}
+                                                    strokeWidth={"2"}
+                                                    strokeLinecap={"round"}
+                                                    strokeLinejoin={"round"}
+                                                    aria-hidden={"true"}
+                                                  >
+                                                    <path
+                                                      d={"M12 5v14M5 12h14"}
+                                                    ></path>
+                                                  </svg>
+                                                  {" Thêm tầng"}
+                                                </a>
+                                                <span
+                                                  style={styleOf(
+                                                    "font-size: 13px; font-weight: 700; color: #352637; margin-top: 4px",
+                                                  )}
+                                                >
+                                                  {"Xem trước"}
+                                                </span>
+                                                <div
+                                                  style={styleOf(
+                                                    "overflow-x: auto; padding: 12px; border-radius: 12px; border: 1.5px solid #E6E4E0; background: #FFFFFF",
+                                                  )}
+                                                >
+                                                  <div
+                                                    style={styleOf(
+                                                      "position: relative; width: 560px; height: " +
+                                                        v.G.fp.h +
+                                                        "; margin: 0 auto",
+                                                    )}
+                                                  >
+                                                    {(v.G.fp.frames || []).map(
+                                                      (fz, index) => (
+                                                        <React.Fragment
+                                                          key={index}
+                                                        >
+                                                          <div
+                                                            style={styleOf(
+                                                              fz.st,
+                                                            )}
+                                                          >
+                                                            <div
+                                                              style={styleOf(
+                                                                fz.capSt,
+                                                              )}
+                                                            >
+                                                              {(
+                                                                fz.segs || []
+                                                              ).map(
+                                                                (sg, index) => (
+                                                                  <React.Fragment
+                                                                    key={index}
+                                                                  >
+                                                                    {sg.txt ? (
+                                                                      <>
+                                                                        <span>
+                                                                          {sg.t}
+                                                                        </span>
+                                                                      </>
+                                                                    ) : null}
+                                                                    {sg.blank ? (
+                                                                      <>
+                                                                        <span
+                                                                          style={styleOf(
+                                                                            "display: inline-flex; align-items: center; gap: 3px; margin: 0 2px; vertical-align: baseline",
+                                                                          )}
+                                                                        >
+                                                                          <span
+                                                                            style={styleOf(
+                                                                              "display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E3ECFD; color: #2257B8; font-size: 12px; font-weight: 700",
+                                                                            )}
+                                                                          >
+                                                                            {
+                                                                              sg.no
+                                                                            }
+                                                                          </span>
+                                                                          <span
+                                                                            style={styleOf(
+                                                                              "display: inline-block; width: 44px; border-bottom: 1.5px solid #706473; transform: translateY(3px)",
+                                                                            )}
+                                                                          ></span>
+                                                                        </span>
+                                                                      </>
+                                                                    ) : null}
+                                                                  </React.Fragment>
+                                                                ),
+                                                              )}
+                                                            </div>
+                                                          </div>
+                                                        </React.Fragment>
+                                                      ),
+                                                    )}
+                                                    {(v.G.fp.lines || []).map(
+                                                      (ln, index) => (
+                                                        <React.Fragment
+                                                          key={index}
+                                                        >
+                                                          <div
+                                                            style={styleOf(
+                                                              ln.st,
+                                                            )}
+                                                          >
+                                                            <span
+                                                              style={styleOf(
+                                                                ln.head,
+                                                              )}
+                                                            ></span>
+                                                          </div>
+                                                        </React.Fragment>
+                                                      ),
+                                                    )}
+                                                    {(v.G.fp.nodes || []).map(
+                                                      (nz, index) => (
+                                                        <React.Fragment
+                                                          key={index}
+                                                        >
+                                                          <div
+                                                            style={styleOf(
+                                                              nz.st,
+                                                            )}
+                                                          >
+                                                            <span>
+                                                              {(
+                                                                nz.segs || []
+                                                              ).map(
+                                                                (sg, index) => (
+                                                                  <React.Fragment
+                                                                    key={index}
+                                                                  >
+                                                                    {sg.txt ? (
+                                                                      <>
+                                                                        <span>
+                                                                          {sg.t}
+                                                                        </span>
+                                                                      </>
+                                                                    ) : null}
+                                                                    {sg.blank ? (
+                                                                      <>
+                                                                        <span
+                                                                          style={styleOf(
+                                                                            "display: inline-flex; align-items: center; gap: 3px; margin: 0 2px; vertical-align: baseline",
+                                                                          )}
+                                                                        >
+                                                                          <span
+                                                                            style={styleOf(
+                                                                              "display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #E3ECFD; color: #2257B8; font-size: 12px; font-weight: 700",
+                                                                            )}
+                                                                          >
+                                                                            {
+                                                                              sg.no
+                                                                            }
+                                                                          </span>
+                                                                          <span
+                                                                            style={styleOf(
+                                                                              "display: inline-block; width: 44px; border-bottom: 1.5px solid #706473; transform: translateY(3px)",
+                                                                            )}
+                                                                          ></span>
+                                                                        </span>
+                                                                      </>
+                                                                    ) : null}
+                                                                  </React.Fragment>
+                                                                ),
+                                                              )}
+                                                            </span>
+                                                          </div>
+                                                        </React.Fragment>
+                                                      ),
+                                                    )}
+                                                  </div>
+                                                </div>
+                                                <div
+                                                  style={styleOf(
+                                                    "display: flex; flex-direction: column; gap: 10px",
+                                                  )}
+                                                >
+                                                  <span
+                                                    style={styleOf(
+                                                      "font-size: 13px; font-weight: 700; color: #352637",
+                                                    )}
+                                                  >
+                                                    {v.G.blankHead}
+                                                  </span>
+                                                  {(v.G.blanks || []).map(
+                                                    (b, index) => (
+                                                      <React.Fragment
+                                                        key={index}
+                                                      >
+                                                        <div className={"qb"}>
+                                                          <span
+                                                            className={"qn"}
+                                                            style={styleOf(
+                                                              "flex: none; width: 30px; height: 30px; border-radius: 8px; background: #F3F0EA; color: #352637; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600",
+                                                            )}
+                                                          >
+                                                            {b.no}
+                                                          </span>
+                                                          <div className={"qa"}>
+                                                            <input
+                                                              aria-label={
+                                                                "Đáp án câu " +
+                                                                b.no
+                                                              }
+                                                              value={b.ans}
+                                                              onChange={
+                                                                b.setAns
+                                                              }
+                                                              placeholder={
+                                                                "Đáp án"
+                                                              }
+                                                              style={styleOf(
+                                                                b.ansSt,
+                                                              )}
+                                                            />
+                                                          </div>
+                                                          <div className={"qt"}>
+                                                            {b.noAlt ? (
+                                                              <>
+                                                                <a
+                                                                  className={
+                                                                    "eo"
+                                                                  }
+                                                                  href={"#"}
+                                                                  onClick={
+                                                                    b.addAlt
+                                                                  }
+                                                                  title={
+                                                                    "Thêm cách viết khác"
+                                                                  }
+                                                                  style={styleOf(
+                                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                                                  )}
+                                                                >
+                                                                  <svg
+                                                                    width={"14"}
+                                                                    height={
+                                                                      "14"
+                                                                    }
+                                                                    viewBox={
+                                                                      "0 0 24 24"
+                                                                    }
+                                                                    fill={
+                                                                      "none"
+                                                                    }
+                                                                    stroke={
+                                                                      "currentColor"
+                                                                    }
+                                                                    strokeWidth={
+                                                                      "2"
+                                                                    }
+                                                                    strokeLinecap={
+                                                                      "round"
+                                                                    }
+                                                                    strokeLinejoin={
+                                                                      "round"
+                                                                    }
+                                                                    aria-hidden={
+                                                                      "true"
+                                                                    }
+                                                                  >
+                                                                    <path
+                                                                      d={
+                                                                        "M12 5v14M5 12h14"
+                                                                      }
+                                                                    ></path>
+                                                                  </svg>
+                                                                  {
+                                                                    " Cách viết khác"
+                                                                  }
+                                                                </a>
+                                                              </>
+                                                            ) : null}
+                                                            {b.altOn ? (
+                                                              <>
+                                                                <div
+                                                                  style={styleOf(
+                                                                    "display: flex; flex-direction: column; gap: 2px",
+                                                                  )}
+                                                                >
+                                                                  <div
+                                                                    style={styleOf(
+                                                                      "display: flex; align-items: center; gap: 4px",
+                                                                    )}
+                                                                  >
+                                                                    <input
+                                                                      aria-label={
+                                                                        "Cách viết khác câu " +
+                                                                        b.no
+                                                                      }
+                                                                      value={
+                                                                        b.alt
+                                                                      }
+                                                                      onChange={
+                                                                        b.setAlt
+                                                                      }
+                                                                      placeholder={
+                                                                        "Cách viết khác, ngăn bằng dấu phẩy"
+                                                                      }
+                                                                      title={
+                                                                        "Ngăn các cách viết bằng dấu phẩy"
+                                                                      }
+                                                                      style={styleOf(
+                                                                        "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; height: 34px; max-width: 260px",
+                                                                      )}
+                                                                    />
+                                                                    <a
+                                                                      className={
+                                                                        "eo"
+                                                                      }
+                                                                      href={"#"}
+                                                                      onClick={
+                                                                        b.rmAlt
+                                                                      }
+                                                                      aria-label={
+                                                                        "Bỏ cách viết khác câu " +
+                                                                        b.no
+                                                                      }
+                                                                      style={styleOf(
+                                                                        "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #706473; text-decoration: none; cursor: pointer",
+                                                                      )}
+                                                                    >
+                                                                      <svg
+                                                                        width={
+                                                                          "15"
+                                                                        }
+                                                                        height={
+                                                                          "15"
+                                                                        }
+                                                                        viewBox={
+                                                                          "0 0 24 24"
+                                                                        }
+                                                                        fill={
+                                                                          "none"
+                                                                        }
+                                                                        stroke={
+                                                                          "currentColor"
+                                                                        }
+                                                                        strokeWidth={
+                                                                          "2"
+                                                                        }
+                                                                        strokeLinecap={
+                                                                          "round"
+                                                                        }
+                                                                        strokeLinejoin={
+                                                                          "round"
+                                                                        }
+                                                                        aria-hidden={
+                                                                          "true"
+                                                                        }
+                                                                      >
+                                                                        <path
+                                                                          d={
+                                                                            "M6 6l12 12M18 6L6 18"
+                                                                          }
+                                                                        ></path>
+                                                                      </svg>
+                                                                    </a>
+                                                                  </div>
+                                                                  <span
+                                                                    style={styleOf(
+                                                                      "font-size: 13px; color: #706473",
+                                                                    )}
+                                                                  >
+                                                                    {
+                                                                      b.altHintShort
+                                                                    }
+                                                                  </span>
+                                                                </div>
+                                                              </>
+                                                            ) : null}
+                                                          </div>
+                                                          <div className={"qd"}>
+                                                            {b.canDel ? (
+                                                              <>
+                                                                <a
+                                                                  className={
+                                                                    "eo"
+                                                                  }
+                                                                  href={"#"}
+                                                                  onClick={
+                                                                    b.del
+                                                                  }
+                                                                  aria-label={
+                                                                    "Xóa chỗ trống câu " +
+                                                                    b.no
+                                                                  }
+                                                                  title={
+                                                                    "Xóa chỗ trống"
+                                                                  }
+                                                                  style={styleOf(
+                                                                    "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                                                  )}
+                                                                >
+                                                                  <svg
+                                                                    width={"15"}
+                                                                    height={
+                                                                      "15"
+                                                                    }
+                                                                    viewBox={
+                                                                      "0 0 24 24"
+                                                                    }
+                                                                    fill={
+                                                                      "none"
+                                                                    }
+                                                                    stroke={
+                                                                      "currentColor"
+                                                                    }
+                                                                    strokeWidth={
+                                                                      "2"
+                                                                    }
+                                                                    strokeLinecap={
+                                                                      "round"
+                                                                    }
+                                                                    strokeLinejoin={
+                                                                      "round"
+                                                                    }
+                                                                    aria-hidden={
+                                                                      "true"
+                                                                    }
+                                                                  >
+                                                                    <path
+                                                                      d={
+                                                                        "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                                      }
+                                                                    ></path>
+                                                                  </svg>
+                                                                </a>
+                                                              </>
+                                                            ) : null}
+                                                          </div>
+                                                        </div>
+                                                      </React.Fragment>
+                                                    ),
+                                                  )}
+                                                  {v.G.noBlanks ? (
+                                                    <>
+                                                      <div
+                                                        style={styleOf(
+                                                          "font-size: 13px; color: #706473",
+                                                        )}
+                                                      >
+                                                        {v.G.noBlanksText}
+                                                      </div>
+                                                    </>
+                                                  ) : null}
+                                                </div>
+                                              </div>
+                                            </>
+                                          ) : null}
+                                          {v.G.isDiagram ? (
+                                            <>
+                                              <div
+                                                style={styleOf(
+                                                  "display: flex; flex-direction: column; gap: 10px",
+                                                )}
+                                              >
+                                                <div
+                                                  style={styleOf(
+                                                    "display: flex; justify-content: space-between; align-items: center; gap: 8px",
+                                                  )}
+                                                >
+                                                  <span
+                                                    style={styleOf(
+                                                      "font-size: 13px; font-weight: 700; color: #352637",
+                                                    )}
+                                                  >
+                                                    {"Hình sơ đồ"}
+                                                  </span>
+                                                  <a
+                                                    className={"eo"}
+                                                    aria-disabled={!v.editing}
+                                                    tabIndex={v.editing ? 0 : -1}
+                                                    href={"#"}
+                                                    onClick={v.editing ? v.G.upload : function(e) { e.preventDefault(); }}
+                                                    style={styleOf(
+                                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: " +
+                                                        (v.editing ? "#706473" : "#9A8F9C") +
+                                                        "; text-decoration: none; cursor: " +
+                                                        (v.editing ? "pointer" : "not-allowed") +
+                                                        "; white-space: nowrap",
+                                                    )}
+                                                  >
+                                                    <svg
+                                                      width={"15"}
+                                                      height={"15"}
+                                                      viewBox={"0 0 24 24"}
+                                                      fill={"none"}
+                                                      stroke={"currentColor"}
+                                                      strokeWidth={"2"}
+                                                      strokeLinecap={"round"}
+                                                      strokeLinejoin={"round"}
+                                                      aria-hidden={"true"}
+                                                    >
+                                                      <path
+                                                        d={
+                                                          "M12 16V4M7 9l5-5 5 5M4 20h16"
+                                                        }
+                                                      ></path>
+                                                    </svg>
+                                                    {" " + v.G.imgLabel}
+                                                  </a>
+                                                </div>
+                                                {v.G.hasImg ? (
+                                                  <>
+                                                    <div
+                                                      style={styleOf(
+                                                        "font-size: 13px; color: #706473",
+                                                      )}
+                                                    >
+                                                      {v.G.imgName +
+                                                        " · " +
+                                                        v.G.dHint}
+                                                    </div>
+                                                  </>
+                                                ) : null}
+                                                <div
+                                                  data-stage={"1"}
+                                                  onClick={v.G.placeLabel}
+                                                  style={styleOf(
+                                                    "position: relative; width: 100%; max-width: 560px; aspect-ratio: 560 / 300; align-self: center; box-sizing: border-box; border-radius: 12px; border: 1.5px dashed #D6D4D0; background: " +
+                                                      v.G.imgBg +
+                                                      "; cursor: " +
+                                                      v.G.cursor +
+                                                      "; overflow: hidden",
+                                                  )}
+                                                >
+                                                  {v.G.sampleImg ? (
+                                                    <>
+                                                      <svg
+                                                        viewBox={"0 0 560 220"}
+                                                        width={"100%"}
+                                                        height={"100%"}
+                                                        aria-hidden={"true"}
+                                                        style={styleOf(
+                                                          "position: absolute; inset: 0",
+                                                        )}
+                                                      >
+                                                        <g
+                                                          fill={"none"}
+                                                          stroke={"#352637"}
+                                                          strokeWidth={"2"}
+                                                          strokeLinejoin={
+                                                            "round"
+                                                          }
+                                                        >
+                                                          <path
+                                                            d={
+                                                              "M58 30h70l-20 40h-30z"
+                                                            }
+                                                            fill={"#FFFFFF"}
+                                                          ></path>
+                                                          <path
+                                                            d={"M93 70v24"}
+                                                          ></path>
+                                                          <rect
+                                                            x={"150"}
+                                                            y={"80"}
+                                                            width={"150"}
+                                                            height={"74"}
+                                                            rx={"10"}
+                                                            fill={"#FFFFFF"}
+                                                          ></rect>
+                                                          <path
+                                                            d={
+                                                              "M180 154c6-14 14-14 20 0M215 154c6-14 14-14 20 0M250 154c6-14 14-14 20 0"
+                                                            }
+                                                            stroke={"#E5604A"}
+                                                          ></path>
+                                                          <path
+                                                            d={"M93 94h57"}
+                                                          ></path>
+                                                          <path
+                                                            d={"M300 118h30v42"}
+                                                          ></path>
+                                                          <rect
+                                                            x={"300"}
+                                                            y={"160"}
+                                                            width={"200"}
+                                                            height={"34"}
+                                                            rx={"6"}
+                                                            fill={"#C5CEF5"}
+                                                          ></rect>
+                                                          <path
+                                                            d={"M330 160h170"}
+                                                            stroke={"#2963CC"}
+                                                            strokeWidth={"4"}
+                                                          ></path>
+                                                          <path
+                                                            d={
+                                                              "M500 140h40M500 132l12 8-12 8"
+                                                            }
+                                                          ></path>
+                                                        </g>
+                                                        <text
+                                                          x={"64"}
+                                                          y={"20"}
+                                                          fontSize={"12"}
+                                                          fill={"#706473"}
+                                                          fontFamily={
+                                                            "Inter, sans-serif"
+                                                          }
+                                                        >
+                                                          {"sand, soda, lime"}
+                                                        </text>
+                                                      </svg>
+                                                    </>
+                                                  ) : null}
+                                                  {v.G.mapImg ? (
+                                                    <>
+                                                      <svg
+                                                        viewBox={"0 0 560 300"}
+                                                        width={"100%"}
+                                                        height={"100%"}
+                                                        aria-hidden={"true"}
+                                                        style={styleOf(
+                                                          "position: absolute; inset: 0",
+                                                        )}
+                                                        fontFamily={
+                                                          "Inter, sans-serif"
+                                                        }
+                                                      >
+                                                        <rect
+                                                          x={"0"}
+                                                          y={"0"}
+                                                          width={"560"}
+                                                          height={"34"}
+                                                          fill={"#DCEBFA"}
+                                                        ></rect>
+                                                        <text
+                                                          x={"280"}
+                                                          y={"22"}
+                                                          textAnchor={"middle"}
+                                                          fontSize={"12"}
+                                                          fontWeight={"600"}
+                                                          fill={"#2257B8"}
+                                                          letterSpacing={"3"}
+                                                        >
+                                                          {"RIVER"}
+                                                        </text>
+                                                        <rect
+                                                          x={"40"}
+                                                          y={"48"}
+                                                          width={"480"}
+                                                          height={"222"}
+                                                          fill={"#FAF9F5"}
+                                                          stroke={"#352637"}
+                                                          strokeWidth={"2"}
+                                                        ></rect>
+                                                        <rect
+                                                          x={"52"}
+                                                          y={"60"}
+                                                          width={"130"}
+                                                          height={"92"}
+                                                          rx={"6"}
+                                                          fill={"#FFFFFF"}
+                                                          stroke={"#4B3D4D"}
+                                                          strokeWidth={"1.5"}
+                                                        ></rect>
+                                                        <rect
+                                                          x={"52"}
+                                                          y={"166"}
+                                                          width={"130"}
+                                                          height={"92"}
+                                                          rx={"6"}
+                                                          fill={"#FFFFFF"}
+                                                          stroke={"#4B3D4D"}
+                                                          strokeWidth={"1.5"}
+                                                        ></rect>
+                                                        <text
+                                                          x={"117"}
+                                                          y={"216"}
+                                                          textAnchor={"middle"}
+                                                          fontSize={"11"}
+                                                          fill={"#4B3D4D"}
+                                                        >
+                                                          {"Main hall"}
+                                                        </text>
+                                                        <rect
+                                                          x={"206"}
+                                                          y={"60"}
+                                                          width={"116"}
+                                                          height={"50"}
+                                                          rx={"6"}
+                                                          fill={"#FFFFFF"}
+                                                          stroke={"#4B3D4D"}
+                                                          strokeWidth={"1.5"}
+                                                        ></rect>
+                                                        <text
+                                                          x={"264"}
+                                                          y={"89"}
+                                                          textAnchor={"middle"}
+                                                          fontSize={"11"}
+                                                          fill={"#4B3D4D"}
+                                                        >
+                                                          {"Office"}
+                                                        </text>
+                                                        <rect
+                                                          x={"206"}
+                                                          y={"122"}
+                                                          width={"116"}
+                                                          height={"46"}
+                                                          rx={"6"}
+                                                          fill={"#FFFFFF"}
+                                                          stroke={"#4B3D4D"}
+                                                          strokeWidth={"1.5"}
+                                                        ></rect>
+                                                        <rect
+                                                          x={"226"}
+                                                          y={"184"}
+                                                          width={"76"}
+                                                          height={"26"}
+                                                          rx={"5"}
+                                                          fill={"#E3ECFD"}
+                                                          stroke={"#2257B8"}
+                                                        ></rect>
+                                                        <text
+                                                          x={"264"}
+                                                          y={"201"}
+                                                          textAnchor={"middle"}
+                                                          fontSize={"11"}
+                                                          fill={"#2257B8"}
+                                                        >
+                                                          {"Reception"}
+                                                        </text>
+                                                        <rect
+                                                          x={"336"}
+                                                          y={"60"}
+                                                          width={"46"}
+                                                          height={"70"}
+                                                          fill={"url(#st)"}
+                                                          stroke={"#4B3D4D"}
+                                                        ></rect>
+                                                        <text
+                                                          x={"359"}
+                                                          y={"146"}
+                                                          textAnchor={"middle"}
+                                                          fontSize={"11"}
+                                                          fill={"#4B3D4D"}
+                                                        >
+                                                          {"Stairs"}
+                                                        </text>
+                                                        <defs>
+                                                          <pattern
+                                                            id={"st"}
+                                                            width={"46"}
+                                                            height={"10"}
+                                                            patternunits={
+                                                              "userSpaceOnUse"
+                                                            }
+                                                          >
+                                                            <path
+                                                              d={"M0 9h46"}
+                                                              stroke={"#B5ADB7"}
+                                                            ></path>
+                                                          </pattern>
+                                                        </defs>
+                                                        <rect
+                                                          x={"396"}
+                                                          y={"60"}
+                                                          width={"30"}
+                                                          height={"210"}
+                                                          fill={"#F3F0EA"}
+                                                        ></rect>
+                                                        <text
+                                                          x={"411"}
+                                                          y={"170"}
+                                                          textAnchor={"middle"}
+                                                          fontSize={"10"}
+                                                          fill={"#706473"}
+                                                          transform={
+                                                            "rotate(-90 411 170)"
+                                                          }
+                                                        >
+                                                          {"corridor"}
+                                                        </text>
+                                                        <rect
+                                                          x={"438"}
+                                                          y={"60"}
+                                                          width={"72"}
+                                                          height={"64"}
+                                                          rx={"6"}
+                                                          fill={"#FFFFFF"}
+                                                          stroke={"#4B3D4D"}
+                                                          strokeWidth={"1.5"}
+                                                        ></rect>
+                                                        <rect
+                                                          x={"438"}
+                                                          y={"134"}
+                                                          width={"72"}
+                                                          height={"60"}
+                                                          rx={"6"}
+                                                          fill={"#FFFFFF"}
+                                                          stroke={"#4B3D4D"}
+                                                          strokeWidth={"1.5"}
+                                                        ></rect>
+                                                        <rect
+                                                          x={"438"}
+                                                          y={"204"}
+                                                          width={"72"}
+                                                          height={"56"}
+                                                          rx={"6"}
+                                                          fill={"#FFFFFF"}
+                                                          stroke={"#4B3D4D"}
+                                                          strokeWidth={"1.5"}
+                                                        ></rect>
+                                                        <rect
+                                                          x={"336"}
+                                                          y={"214"}
+                                                          width={"50"}
+                                                          height={"46"}
+                                                          rx={"6"}
+                                                          fill={"#FFFFFF"}
+                                                          stroke={"#4B3D4D"}
+                                                          strokeWidth={"1.5"}
+                                                        ></rect>
+                                                        <text
+                                                          x={"361"}
+                                                          y={"241"}
+                                                          textAnchor={"middle"}
+                                                          fontSize={"11"}
+                                                          fill={"#4B3D4D"}
+                                                        >
+                                                          {"Shop"}
+                                                        </text>
+                                                        <rect
+                                                          x={"244"}
+                                                          y={"266"}
+                                                          width={"40"}
+                                                          height={"8"}
+                                                          fill={"#FAF9F5"}
+                                                        ></rect>
+                                                        <path
+                                                          d={
+                                                            "M264 296v-22M258 282l6-8 6 8"
+                                                          }
+                                                          stroke={"#2E7D4F"}
+                                                          strokeWidth={"2"}
+                                                          fill={"none"}
+                                                        ></path>
+                                                        <text
+                                                          x={"300"}
+                                                          y={"292"}
+                                                          fontSize={"11"}
+                                                          fontWeight={"600"}
+                                                          fill={"#2E7D4F"}
+                                                        >
+                                                          {"ENTRANCE"}
+                                                        </text>
+                                                      </svg>
+                                                    </>
+                                                  ) : null}
+                                                  {v.G.noImg ? (
+                                                    <>
+                                                      <div
+                                                        style={styleOf(
+                                                          "position: absolute; inset: 0; display: flex; flex-direction: column; gap: 6px; align-items: center; justify-content: center; color: #706473; font-size: 14px",
+                                                        )}
+                                                      >
+                                                        <svg
+                                                          width={"26"}
+                                                          height={"26"}
+                                                          viewBox={"0 0 24 24"}
+                                                          fill={"none"}
+                                                          stroke={
+                                                            "currentColor"
+                                                          }
+                                                          strokeWidth={"1.8"}
+                                                          strokeLinecap={
+                                                            "round"
+                                                          }
+                                                          strokeLinejoin={
+                                                            "round"
+                                                          }
+                                                          aria-hidden={"true"}
+                                                        >
+                                                          <rect
+                                                            x={"3"}
+                                                            y={"4"}
+                                                            width={"18"}
+                                                            height={"16"}
+                                                            rx={"2"}
+                                                          ></rect>
+                                                          <circle
+                                                            cx={"9"}
+                                                            cy={"10"}
+                                                            r={"1.5"}
+                                                          ></circle>
+                                                          <path
+                                                            d={
+                                                              "M21 16l-5-5-8 9"
+                                                            }
+                                                          ></path>
+                                                        </svg>
+                                                        <span>
+                                                          {
+                                                            v.editing
+                                                              ? "Chưa có hình. Bấm Tải ảnh lên (PNG, JPG, tối đa 5 MB)."
+                                                              : "Chưa có ảnh đề bài"
+                                                          }
+                                                        </span>
+                                                      </div>
+                                                    </>
+                                                  ) : null}
+                                                  {(v.G.dLines || []).map(
+                                                    (ln, index) => (
+                                                      <React.Fragment
+                                                        key={index}
+                                                      >
+                                                        <div
+                                                          style={styleOf(ln.st)}
+                                                        >
+                                                          <span
+                                                            style={styleOf(
+                                                              ln.head,
+                                                            )}
+                                                          ></span>
+                                                        </div>
+                                                      </React.Fragment>
+                                                    ),
+                                                  )}
+                                                  {(v.G.marks || []).map(
+                                                    (m, index) => (
+                                                      <React.Fragment
+                                                        key={index}
+                                                      >
+                                                        <span
+                                                          onMouseDown={m.down}
+                                                          onClick={m.click}
+                                                          style={styleOf(m.st)}
+                                                        >
+                                                          {m.no}
+                                                        </span>
+                                                        {m.hasTip ? (
+                                                          <>
+                                                            <span
+                                                              onMouseDown={
+                                                                m.tipDown
+                                                              }
+                                                              onClick={m.click}
+                                                              title={
+                                                                "Kéo để đổi điểm mũi tên"
+                                                              }
+                                                              style={styleOf(
+                                                                m.tipSt,
+                                                              )}
+                                                            ></span>
+                                                          </>
+                                                        ) : null}
+                                                      </React.Fragment>
+                                                    ),
+                                                  )}
+                                                </div>
+                                                <span
+                                                  style={styleOf(
+                                                    "font-size: 13px; font-weight: 700; color: #352637; margin-top: 4px",
+                                                  )}
+                                                >
+                                                  {
+                                                    "Nội dung từng câu và đáp án"
+                                                  }
+                                                </span>
+                                                {(v.G.drows || []).map(
+                                                  (dr, index) => (
+                                                    <React.Fragment key={index}>
+                                                      <div className={"qr"}>
+                                                        <span
+                                                          className={"qn"}
+                                                          style={styleOf(
+                                                            "flex: none; width: 30px; height: 30px; border-radius: 8px; background: #F3F0EA; color: #352637; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600",
+                                                          )}
+                                                        >
+                                                          {dr.no}
+                                                        </span>
+                                                        <input
+                                                          className={"qq"}
+                                                          aria-label={
+                                                            "Nội dung câu " +
+                                                            dr.no
+                                                          }
+                                                          value={dr.text}
+                                                          onChange={dr.setText}
+                                                          placeholder={
+                                                            "Nội dung câu, ___ là chỗ trống (để trống nếu chỉ điền nhãn)"
+                                                          }
+                                                          style={styleOf(
+                                                            "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
+                                                          )}
+                                                        />
+                                                        <div className={"qa"}>
+                                                          <input
+                                                            aria-label={
+                                                              "Đáp án câu " +
+                                                              dr.no
+                                                            }
+                                                            value={dr.ans}
+                                                            onChange={dr.setAns}
+                                                            placeholder={
+                                                              "Đáp án"
+                                                            }
+                                                            style={styleOf(
+                                                              dr.ansSt,
+                                                            )}
+                                                          />
+                                                        </div>
+                                                        <div className={"qt"}>
+                                                          {dr.noAlt ? (
+                                                            <>
+                                                              <a
+                                                                className={"eo"}
+                                                                href={"#"}
+                                                                onClick={
+                                                                  dr.addAlt
+                                                                }
+                                                                title={
+                                                                  "Thêm cách viết khác"
+                                                                }
+                                                                style={styleOf(
+                                                                  "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; padding: 0 4px",
+                                                                )}
+                                                              >
+                                                                <svg
+                                                                  width={"14"}
+                                                                  height={"14"}
+                                                                  viewBox={
+                                                                    "0 0 24 24"
+                                                                  }
+                                                                  fill={"none"}
+                                                                  stroke={
+                                                                    "currentColor"
+                                                                  }
+                                                                  strokeWidth={
+                                                                    "2"
+                                                                  }
+                                                                  strokeLinecap={
+                                                                    "round"
+                                                                  }
+                                                                  strokeLinejoin={
+                                                                    "round"
+                                                                  }
+                                                                  aria-hidden={
+                                                                    "true"
+                                                                  }
+                                                                >
+                                                                  <path
+                                                                    d={
+                                                                      "M12 5v14M5 12h14"
+                                                                    }
+                                                                  ></path>
+                                                                </svg>
+                                                                {
+                                                                  " Cách viết khác"
+                                                                }
+                                                              </a>
+                                                            </>
+                                                          ) : null}
+                                                          {dr.altOn ? (
+                                                            <>
+                                                              <div
+                                                                style={styleOf(
+                                                                  "display: flex; flex-direction: column; gap: 2px",
+                                                                )}
+                                                              >
+                                                                <div
+                                                                  style={styleOf(
+                                                                    "display: flex; align-items: center; gap: 4px",
+                                                                  )}
+                                                                >
+                                                                  <input
+                                                                    aria-label={
+                                                                      "Cách viết khác câu " +
+                                                                      dr.no
+                                                                    }
+                                                                    value={
+                                                                      dr.alt
+                                                                    }
+                                                                    onChange={
+                                                                      dr.setAlt
+                                                                    }
+                                                                    placeholder={
+                                                                      "Cách viết khác, ngăn bằng dấu phẩy"
+                                                                    }
+                                                                    title={
+                                                                      "Ngăn các cách viết bằng dấu phẩy"
+                                                                    }
+                                                                    style={styleOf(
+                                                                      "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; height: 34px; max-width: 260px",
+                                                                    )}
+                                                                  />
+                                                                  <a
+                                                                    className={
+                                                                      "eo"
+                                                                    }
+                                                                    href={"#"}
+                                                                    onClick={
+                                                                      dr.rmAlt
+                                                                    }
+                                                                    aria-label={
+                                                                      "Bỏ cách viết khác câu " +
+                                                                      dr.no
+                                                                    }
+                                                                    style={styleOf(
+                                                                      "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #706473; text-decoration: none; cursor: pointer",
+                                                                    )}
+                                                                  >
+                                                                    <svg
+                                                                      width={
+                                                                        "15"
+                                                                      }
+                                                                      height={
+                                                                        "15"
+                                                                      }
+                                                                      viewBox={
+                                                                        "0 0 24 24"
+                                                                      }
+                                                                      fill={
+                                                                        "none"
+                                                                      }
+                                                                      stroke={
+                                                                        "currentColor"
+                                                                      }
+                                                                      strokeWidth={
+                                                                        "2"
+                                                                      }
+                                                                      strokeLinecap={
+                                                                        "round"
+                                                                      }
+                                                                      strokeLinejoin={
+                                                                        "round"
+                                                                      }
+                                                                      aria-hidden={
+                                                                        "true"
+                                                                      }
+                                                                    >
+                                                                      <path
+                                                                        d={
+                                                                          "M6 6l12 12M18 6L6 18"
+                                                                        }
+                                                                      ></path>
+                                                                    </svg>
+                                                                  </a>
+                                                                </div>
+                                                                <span
+                                                                  style={styleOf(
+                                                                    "font-size: 13px; color: #706473",
+                                                                  )}
+                                                                >
+                                                                  {
+                                                                    dr.altHintShort
+                                                                  }
+                                                                </span>
+                                                              </div>
+                                                            </>
+                                                          ) : null}
+                                                        </div>
+                                                        <div
+                                                          className={"qd"}
+                                                          style={styleOf(
+                                                            "display: flex; flex-direction: column; gap: 4px; align-items: center",
+                                                          )}
+                                                        >
+                                                          <a
+                                                            className={"eo"}
+                                                            href={"#"}
+                                                            onClick={dr.del}
+                                                            aria-label={
+                                                              "Xóa nhãn câu " +
+                                                              dr.no
+                                                            }
+                                                            style={styleOf(
+                                                              "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                                            )}
+                                                          >
+                                                            <svg
+                                                              width={"15"}
+                                                              height={"15"}
+                                                              viewBox={
+                                                                "0 0 24 24"
+                                                              }
+                                                              fill={"none"}
+                                                              stroke={
+                                                                "currentColor"
+                                                              }
+                                                              strokeWidth={"2"}
+                                                              strokeLinecap={
+                                                                "round"
+                                                              }
+                                                              strokeLinejoin={
+                                                                "round"
+                                                              }
+                                                              aria-hidden={
+                                                                "true"
+                                                              }
+                                                            >
+                                                              <path
+                                                                d={
+                                                                  "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                                }
+                                                              ></path>
+                                                            </svg>
+                                                          </a>
+                                                          <a
+                                                            className={"eo"}
+                                                            href={"#"}
+                                                            onClick={
+                                                              dr.togArrow
+                                                            }
+                                                            aria-pressed={
+                                                              dr.arrowOn
+                                                            }
+                                                            title={
+                                                              "Bật/tắt mũi tên của nhãn"
+                                                            }
+                                                            aria-label={
+                                                              "Mũi tên của nhãn " +
+                                                              dr.no
+                                                            }
+                                                            style={styleOf(
+                                                              dr.arrowSt +
+                                                                "; padding: 0 6px",
+                                                            )}
+                                                          >
+                                                            <svg
+                                                              width={"14"}
+                                                              height={"14"}
+                                                              viewBox={
+                                                                "0 0 24 24"
+                                                              }
+                                                              fill={"none"}
+                                                              stroke={
+                                                                "currentColor"
+                                                              }
+                                                              strokeWidth={"2"}
+                                                              strokeLinecap={
+                                                                "round"
+                                                              }
+                                                              strokeLinejoin={
+                                                                "round"
+                                                              }
+                                                              aria-hidden={
+                                                                "true"
+                                                              }
+                                                            >
+                                                              <path
+                                                                d={
+                                                                  "M5 12h14M13 6l6 6-6 6"
+                                                                }
+                                                              ></path>
+                                                            </svg>
+                                                          </a>
+                                                        </div>
+                                                      </div>
+                                                    </React.Fragment>
+                                                  ),
+                                                )}
+                                                {v.G.noMarks ? (
+                                                  <>
+                                                    <div
+                                                      style={styleOf(
+                                                        "font-size: 13px; color: #706473",
+                                                      )}
+                                                    >
+                                                      {v.G.noMarksText}
+                                                    </div>
+                                                  </>
+                                                ) : null}
+                                              </div>
+                                            </>
+                                          ) : null}
+                                          {v.G.isMatch ? (
+                                            <>
+                                              <div
+                                                style={styleOf(
+                                                  "display: flex; flex-direction: column; gap: 12px",
+                                                )}
+                                              >
+                                                {v.G.ownOpts ? (
+                                                  <>
+                                                    <div
+                                                      style={styleOf(
+                                                        "display: flex; flex-direction: column; gap: 8px",
+                                                      )}
+                                                    >
+                                                      <span
+                                                        style={styleOf(
+                                                          "font-size: 13px; font-weight: 700; color: #352637",
+                                                        )}
+                                                      >
+                                                        {v.G.optLabel}
+                                                      </span>
+                                                      {(v.G.opts || []).map(
+                                                        (o, index) => (
+                                                          <React.Fragment
+                                                            key={index}
+                                                          >
+                                                            <div
+                                                              style={styleOf(
+                                                                "display: flex; align-items: center; gap: 8px",
+                                                              )}
+                                                            >
+                                                              <span
+                                                                style={styleOf(
+                                                                  "flex: none; width: 30px; height: 30px; border-radius: 8px; background: #F3F0EA; color: #352637; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; width: auto; min-width: 30px; padding: 0 6px; box-sizing: border-box",
+                                                                )}
+                                                              >
+                                                                {o.lab}
+                                                              </span>
+                                                              <input
+                                                                aria-label={
+                                                                  "Lựa chọn " +
+                                                                  o.lab
+                                                                }
+                                                                value={o.text}
+                                                                onChange={o.set}
+                                                                style={styleOf(
+                                                                  "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; flex: 1",
+                                                                )}
+                                                              />
+                                                              <a
+                                                                className={"eo"}
+                                                                href={"#"}
+                                                                onClick={o.del}
+                                                                aria-label={
+                                                                  "Xóa " + o.lab
+                                                                }
+                                                                style={styleOf(
+                                                                  "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                                                )}
+                                                              >
+                                                                <svg
+                                                                  width={"15"}
+                                                                  height={"15"}
+                                                                  viewBox={
+                                                                    "0 0 24 24"
+                                                                  }
+                                                                  fill={"none"}
+                                                                  stroke={
+                                                                    "currentColor"
+                                                                  }
+                                                                  strokeWidth={
+                                                                    "2"
+                                                                  }
+                                                                  strokeLinecap={
+                                                                    "round"
+                                                                  }
+                                                                  strokeLinejoin={
+                                                                    "round"
+                                                                  }
+                                                                  aria-hidden={
+                                                                    "true"
+                                                                  }
+                                                                >
+                                                                  <path
+                                                                    d={
+                                                                      "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                                    }
+                                                                  ></path>
+                                                                </svg>
+                                                              </a>
+                                                            </div>
+                                                          </React.Fragment>
+                                                        ),
+                                                      )}
+                                                      <a
+                                                        className={"eo"}
+                                                        href={"#"}
+                                                        onClick={v.G.addOpt}
+                                                        style={styleOf(
+                                                          "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                        )}
+                                                      >
+                                                        <svg
+                                                          width={"15"}
+                                                          height={"15"}
+                                                          viewBox={"0 0 24 24"}
+                                                          fill={"none"}
+                                                          stroke={
+                                                            "currentColor"
+                                                          }
+                                                          strokeWidth={"2"}
+                                                          strokeLinecap={
+                                                            "round"
+                                                          }
+                                                          strokeLinejoin={
+                                                            "round"
+                                                          }
+                                                          aria-hidden={"true"}
+                                                        >
+                                                          <path
+                                                            d={
+                                                              "M12 5v14M5 12h14"
+                                                            }
+                                                          ></path>
+                                                        </svg>
+                                                        {" Thêm lựa chọn"}
+                                                      </a>
+                                                    </div>
+                                                  </>
+                                                ) : null}
+                                                {v.G.paraOpts ? (
+                                                  <>
+                                                    <div
+                                                      style={styleOf(
+                                                        "font-size: 13px; color: #706473; padding: 10px 12px; border-radius: 10px; background: #F3F0EA",
+                                                      )}
+                                                    >
+                                                      {"Lựa chọn là các đoạn của bài đọc: " +
+                                                        v.G.paraLetters +
+                                                        ". Sửa đoạn ở cột trái."}
+                                                    </div>
+                                                  </>
+                                                ) : null}
+                                                {v.G.showOne ? (
+                                                  <>
+                                                    <a
+                                                      className={"lk"}
+                                                      href={"#"}
+                                                      onClick={v.G.toggleOne}
+                                                      role={"switch"}
+                                                      aria-checked={v.G.oneUse}
+                                                      style={styleOf(
+                                                        "display: flex; align-items: center; gap: 10px; font-size: 14px; color: #352637; text-decoration: none",
+                                                      )}
+                                                    >
+                                                      <span
+                                                        style={styleOf(
+                                                          v.G.switchSt,
+                                                        )}
+                                                      >
+                                                        <span
+                                                          style={styleOf(
+                                                            v.G.knobSt,
+                                                          )}
+                                                        ></span>
+                                                      </span>
+                                                      {
+                                                        "Mỗi lựa chọn chỉ dùng một lần"
+                                                      }
+                                                    </a>
+                                                  </>
+                                                ) : null}
+                                                <div
+                                                  style={styleOf(
+                                                    "display: flex; flex-direction: column; gap: 10px",
+                                                  )}
+                                                >
+                                                  <span
+                                                    style={styleOf(
+                                                      "font-size: 13px; font-weight: 700; color: #352637",
+                                                    )}
+                                                  >
+                                                    {v.G.itemLabel}
+                                                  </span>
+                                                  {v.G.isHead ? (
+                                                    <>
+                                                      <div
+                                                        style={styleOf(
+                                                          "font-size: 13px; color: #706473",
+                                                        )}
+                                                      >
+                                                        {
+                                                          "Mỗi đoạn của bài đọc là một câu, tự tạo theo thứ tự đoạn. Thêm hoặc xóa đoạn ở cột trái thì danh sách đổi theo. Tiêu đề chỉ dùng một lần."
+                                                        }
+                                                      </div>
+                                                      {(v.G.hitems || []).map(
+                                                        (hi, index) => (
+                                                          <React.Fragment
+                                                            key={index}
+                                                          >
+                                                            <div
+                                                              className={"qm"}
+                                                            >
+                                                              <span
+                                                                className={"qn"}
+                                                                style={styleOf(
+                                                                  "flex: none; width: 30px; height: 30px; border-radius: 8px; background: #F3F0EA; color: #352637; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600",
+                                                                )}
+                                                              >
+                                                                {hi.no}
+                                                              </span>
+                                                              <div
+                                                                className={"qq"}
+                                                                style={styleOf(
+                                                                  "display: flex; align-items: center; gap: 8px",
+                                                                )}
+                                                              >
+                                                                <span
+                                                                  style={styleOf(
+                                                                    "flex: none; font-weight: 700",
+                                                                  )}
+                                                                >
+                                                                  {"Đoạn " +
+                                                                    hi.lab}
+                                                                </span>
+                                                                <span
+                                                                  style={styleOf(
+                                                                    "min-width: 0; font-size: 13px; color: #706473; white-space: nowrap; overflow: hidden; text-overflow: ellipsis",
+                                                                  )}
+                                                                >
+                                                                  {hi.excerpt}
+                                                                </span>
+                                                              </div>
+                                                              <div
+                                                                className={"qa"}
+                                                              >
+                                                                <div
+                                                                  style={styleOf(
+                                                                    "position: relative; min-width: 0; max-width: 180px",
+                                                                  )}
+                                                                >
+                                                                  <a
+                                                                    href={"#"}
+                                                                    role={
+                                                                      "combobox"
+                                                                    }
+                                                                    aria-haspopup={
+                                                                      "listbox"
+                                                                    }
+                                                                    aria-expanded={
+                                                                      hi.dd.open
+                                                                    }
+                                                                    aria-label={
+                                                                      "Tiêu đề cho đoạn " +
+                                                                      hi.lab
+                                                                    }
+                                                                    onClick={
+                                                                      hi.dd
+                                                                        .toggle
+                                                                    }
+                                                                    style={styleOf(
+                                                                      "display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-width: 0; height: 38px; padding: 0 10px 0 12px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; font-size: 14px; text-decoration: none; cursor: pointer; " +
+                                                                        hi.dd
+                                                                          .tone,
+                                                                    )}
+                                                                  >
+                                                                    <span
+                                                                      style={styleOf(
+                                                                        "min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: " +
+                                                                          hi.dd
+                                                                            .color,
+                                                                      )}
+                                                                    >
+                                                                      {
+                                                                        hi.dd
+                                                                          .label
+                                                                      }
+                                                                    </span>
+                                                                    <span
+                                                                      style={styleOf(
+                                                                        "display: flex; flex: none; color: #706473",
+                                                                      )}
+                                                                    >
+                                                                      <svg
+                                                                        width={
+                                                                          "16"
+                                                                        }
+                                                                        height={
+                                                                          "16"
+                                                                        }
+                                                                        viewBox={
+                                                                          "0 0 24 24"
+                                                                        }
+                                                                        fill={
+                                                                          "none"
+                                                                        }
+                                                                        stroke={
+                                                                          "currentColor"
+                                                                        }
+                                                                        strokeWidth={
+                                                                          "2"
+                                                                        }
+                                                                        strokeLinecap={
+                                                                          "round"
+                                                                        }
+                                                                        strokeLinejoin={
+                                                                          "round"
+                                                                        }
+                                                                        aria-hidden={
+                                                                          "true"
+                                                                        }
+                                                                      >
+                                                                        <path
+                                                                          d={
+                                                                            "M6 9l6 6 6-6"
+                                                                          }
+                                                                        ></path>
+                                                                      </svg>
+                                                                    </span>
+                                                                  </a>
+                                                                  {hi.dd
+                                                                    .open ? (
+                                                                    <>
+                                                                      <div
+                                                                        onClick={
+                                                                          hi.dd
+                                                                            .close
+                                                                        }
+                                                                        style={styleOf(
+                                                                          "position: fixed; inset: 0; z-index: 30",
+                                                                        )}
+                                                                      ></div>
+                                                                      <div
+                                                                        role={
+                                                                          "listbox"
+                                                                        }
+                                                                        style={styleOf(
+                                                                          "position: absolute; left: 0; right: 0; top: 42px; z-index: 31; max-height: 264px; overflow-y: auto; padding: 6px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 12px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                                                                        )}
+                                                                      >
+                                                                        {(
+                                                                          hi.dd
+                                                                            .opts ||
+                                                                          []
+                                                                        ).map(
+                                                                          (
+                                                                            ho,
+                                                                            index,
+                                                                          ) => (
+                                                                            <React.Fragment
+                                                                              key={
+                                                                                index
+                                                                              }
+                                                                            >
+                                                                              <a
+                                                                                href={
+                                                                                  "#"
+                                                                                }
+                                                                                role={
+                                                                                  "option"
+                                                                                }
+                                                                                aria-selected={
+                                                                                  ho.on
+                                                                                }
+                                                                                onClick={
+                                                                                  ho.pick
+                                                                                }
+                                                                                style={styleOf(
+                                                                                  ho.st,
+                                                                                )}
+                                                                              >
+                                                                                {
+                                                                                  ho.lab
+                                                                                }
+                                                                              </a>
+                                                                            </React.Fragment>
+                                                                          ),
+                                                                        )}
+                                                                      </div>
+                                                                    </>
+                                                                  ) : null}
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          </React.Fragment>
+                                                        ),
+                                                      )}
+                                                    </>
+                                                  ) : null}
+                                                  {(v.G.mitems || []).map(
+                                                    (mi, index) => (
+                                                      <React.Fragment
+                                                        key={index}
+                                                      >
+                                                        <div className={"qm"}>
+                                                          <span
+                                                            className={"qn"}
+                                                            style={styleOf(
+                                                              "flex: none; width: 30px; height: 30px; border-radius: 8px; background: #F3F0EA; color: #352637; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600",
+                                                            )}
+                                                          >
+                                                            {mi.no}
+                                                          </span>
+                                                          <input
+                                                            className={"qq"}
+                                                            aria-label={
+                                                              "Câu " + mi.no
+                                                            }
+                                                            value={mi.text}
+                                                            onChange={mi.set}
+                                                            style={styleOf(
+                                                              "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
+                                                            )}
+                                                          />
+                                                          <div className={"qa"}>
+                                                            <div
+                                                              style={styleOf(
+                                                                "position: relative; min-width: 0; max-width: 180px",
+                                                              )}
+                                                            >
+                                                              <a
+                                                                href={"#"}
+                                                                role={
+                                                                  "combobox"
+                                                                }
+                                                                aria-haspopup={
+                                                                  "listbox"
+                                                                }
+                                                                aria-expanded={
+                                                                  mi.dd.open
+                                                                }
+                                                                aria-label={
+                                                                  "Đáp án câu " +
+                                                                  mi.no
+                                                                }
+                                                                onClick={
+                                                                  mi.dd.toggle
+                                                                }
+                                                                style={styleOf(
+                                                                  "display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-width: 0; height: 38px; padding: 0 10px 0 12px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; font-size: 14px; text-decoration: none; cursor: pointer; " +
+                                                                    mi.dd.tone,
+                                                                )}
+                                                              >
+                                                                <span
+                                                                  style={styleOf(
+                                                                    "min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: " +
+                                                                      mi.dd
+                                                                        .color,
+                                                                  )}
+                                                                >
+                                                                  {mi.dd.label}
+                                                                </span>
+                                                                <span
+                                                                  style={styleOf(
+                                                                    "display: flex; flex: none; color: #706473",
+                                                                  )}
+                                                                >
+                                                                  <svg
+                                                                    width={"16"}
+                                                                    height={
+                                                                      "16"
+                                                                    }
+                                                                    viewBox={
+                                                                      "0 0 24 24"
+                                                                    }
+                                                                    fill={
+                                                                      "none"
+                                                                    }
+                                                                    stroke={
+                                                                      "currentColor"
+                                                                    }
+                                                                    strokeWidth={
+                                                                      "2"
+                                                                    }
+                                                                    strokeLinecap={
+                                                                      "round"
+                                                                    }
+                                                                    strokeLinejoin={
+                                                                      "round"
+                                                                    }
+                                                                    aria-hidden={
+                                                                      "true"
+                                                                    }
+                                                                  >
+                                                                    <path
+                                                                      d={
+                                                                        "M6 9l6 6 6-6"
+                                                                      }
+                                                                    ></path>
+                                                                  </svg>
+                                                                </span>
+                                                              </a>
+                                                              {mi.dd.open ? (
+                                                                <>
+                                                                  <div
+                                                                    onClick={
+                                                                      mi.dd
+                                                                        .close
+                                                                    }
+                                                                    style={styleOf(
+                                                                      "position: fixed; inset: 0; z-index: 30",
+                                                                    )}
+                                                                  ></div>
+                                                                  <div
+                                                                    role={
+                                                                      "listbox"
+                                                                    }
+                                                                    style={styleOf(
+                                                                      "position: absolute; left: 0; right: 0; top: 42px; z-index: 31; max-height: 264px; overflow-y: auto; padding: 6px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 12px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                                                                    )}
+                                                                  >
+                                                                    {(
+                                                                      mi.dd
+                                                                        .opts ||
+                                                                      []
+                                                                    ).map(
+                                                                      (
+                                                                        mo,
+                                                                        index,
+                                                                      ) => (
+                                                                        <React.Fragment
+                                                                          key={
+                                                                            index
+                                                                          }
+                                                                        >
+                                                                          <a
+                                                                            href={
+                                                                              "#"
+                                                                            }
+                                                                            role={
+                                                                              "option"
+                                                                            }
+                                                                            aria-selected={
+                                                                              mo.on
+                                                                            }
+                                                                            onClick={
+                                                                              mo.pick
+                                                                            }
+                                                                            style={styleOf(
+                                                                              mo.st,
+                                                                            )}
+                                                                          >
+                                                                            {
+                                                                              mo.lab
+                                                                            }
+                                                                          </a>
+                                                                        </React.Fragment>
+                                                                      ),
+                                                                    )}
+                                                                  </div>
+                                                                </>
+                                                              ) : null}
+                                                            </div>
+                                                          </div>
+                                                          <a
+                                                            className={"eo qd"}
+                                                            href={"#"}
+                                                            onClick={mi.del}
+                                                            aria-label={
+                                                              "Xóa câu " + mi.no
+                                                            }
+                                                            style={styleOf(
+                                                              "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                                            )}
+                                                          >
+                                                            <svg
+                                                              width={"15"}
+                                                              height={"15"}
+                                                              viewBox={
+                                                                "0 0 24 24"
+                                                              }
+                                                              fill={"none"}
+                                                              stroke={
+                                                                "currentColor"
+                                                              }
+                                                              strokeWidth={"2"}
+                                                              strokeLinecap={
+                                                                "round"
+                                                              }
+                                                              strokeLinejoin={
+                                                                "round"
+                                                              }
+                                                              aria-hidden={
+                                                                "true"
+                                                              }
+                                                            >
+                                                              <path
+                                                                d={
+                                                                  "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                                }
+                                                              ></path>
+                                                            </svg>
+                                                          </a>
+                                                        </div>
+                                                      </React.Fragment>
+                                                    ),
+                                                  )}
+                                                  {v.G.canAdd ? (
+                                                    <>
+                                                      <a
+                                                        className={"eo"}
+                                                        href={"#"}
+                                                        onClick={v.G.addItem}
+                                                        style={styleOf(
+                                                          "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                        )}
+                                                      >
+                                                        <svg
+                                                          width={"15"}
+                                                          height={"15"}
+                                                          viewBox={"0 0 24 24"}
+                                                          fill={"none"}
+                                                          stroke={
+                                                            "currentColor"
+                                                          }
+                                                          strokeWidth={"2"}
+                                                          strokeLinecap={
+                                                            "round"
+                                                          }
+                                                          strokeLinejoin={
+                                                            "round"
+                                                          }
+                                                          aria-hidden={"true"}
+                                                        >
+                                                          <path
+                                                            d={
+                                                              "M12 5v14M5 12h14"
+                                                            }
+                                                          ></path>
+                                                        </svg>
+                                                        {" Thêm câu"}
+                                                      </a>
+                                                    </>
+                                                  ) : null}
+                                                </div>
+                                              </div>
+                                            </>
+                                          ) : null}
+                                          {v.G.isMcq1 ? (
+                                            <>
+                                              <div
+                                                style={styleOf(
+                                                  "display: flex; flex-direction: column; gap: 12px",
+                                                )}
+                                              >
+                                                {(v.G.qs || []).map(
+                                                  (q, index) => (
+                                                    <React.Fragment key={index}>
+                                                      <div
+                                                        style={styleOf(
+                                                          "display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 12px; border: 1.5px solid #E6E4E0",
+                                                        )}
+                                                      >
+                                                        <div
+                                                          style={styleOf(
+                                                            "display: flex; align-items: center; gap: 8px",
+                                                          )}
+                                                        >
+                                                          <span
+                                                            style={styleOf(
+                                                              "flex: none; width: 30px; height: 30px; border-radius: 8px; background: #F3F0EA; color: #352637; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600",
+                                                            )}
+                                                          >
+                                                            {q.no}
+                                                          </span>
+                                                          <input
+                                                            aria-label={
+                                                              "Câu hỏi " + q.no
+                                                            }
+                                                            value={q.q}
+                                                            onChange={q.setQ}
+                                                            style={styleOf(
+                                                              "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; flex: 1",
+                                                            )}
+                                                          />
+                                                          <a
+                                                            className={"eo"}
+                                                            href={"#"}
+                                                            onClick={q.del}
+                                                            aria-label={
+                                                              "Xóa câu " + q.no
+                                                            }
+                                                            style={styleOf(
+                                                              "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                                            )}
+                                                          >
+                                                            <svg
+                                                              width={"15"}
+                                                              height={"15"}
+                                                              viewBox={
+                                                                "0 0 24 24"
+                                                              }
+                                                              fill={"none"}
+                                                              stroke={
+                                                                "currentColor"
+                                                              }
+                                                              strokeWidth={"2"}
+                                                              strokeLinecap={
+                                                                "round"
+                                                              }
+                                                              strokeLinejoin={
+                                                                "round"
+                                                              }
+                                                              aria-hidden={
+                                                                "true"
+                                                              }
+                                                            >
+                                                              <path
+                                                                d={
+                                                                  "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                                }
+                                                              ></path>
+                                                            </svg>
+                                                          </a>
+                                                        </div>
+                                                        {(q.opts || []).map(
+                                                          (o, index) => (
+                                                            <React.Fragment
+                                                              key={index}
+                                                            >
+                                                              <div
+                                                                style={styleOf(
+                                                                  "display: flex; align-items: center; gap: 8px; padding-left: 38px",
+                                                                )}
+                                                              >
+                                                                <a
+                                                                  className={
+                                                                    "lk"
+                                                                  }
+                                                                  href={"#"}
+                                                                  onClick={
+                                                                    o.pick
+                                                                  }
+                                                                  aria-label={
+                                                                    "Chọn " +
+                                                                    o.lab +
+                                                                    " là đáp án đúng"
+                                                                  }
+                                                                  style={styleOf(
+                                                                    o.st,
+                                                                  )}
+                                                                >
+                                                                  {o.lab}
+                                                                </a>
+                                                                <input
+                                                                  aria-label={
+                                                                    "Lựa chọn " +
+                                                                    o.lab
+                                                                  }
+                                                                  value={o.text}
+                                                                  onChange={
+                                                                    o.set
+                                                                  }
+                                                                  style={styleOf(
+                                                                    o.inSt,
+                                                                  )}
+                                                                />
+                                                              </div>
+                                                            </React.Fragment>
+                                                          ),
+                                                        )}
+                                                      </div>
+                                                    </React.Fragment>
+                                                  ),
+                                                )}
+                                                <div
+                                                  style={styleOf(
+                                                    "font-size: 13px; color: #706473",
+                                                  )}
+                                                >
+                                                  {
+                                                    "Bấm chữ cái để đánh dấu đáp án đúng."
+                                                  }
+                                                </div>
+                                                <a
+                                                  className={"eo"}
+                                                  href={"#"}
+                                                  onClick={v.G.addItem}
+                                                  style={styleOf(
+                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                  )}
+                                                >
+                                                  <svg
+                                                    width={"15"}
+                                                    height={"15"}
+                                                    viewBox={"0 0 24 24"}
+                                                    fill={"none"}
+                                                    stroke={"currentColor"}
+                                                    strokeWidth={"2"}
+                                                    strokeLinecap={"round"}
+                                                    strokeLinejoin={"round"}
+                                                    aria-hidden={"true"}
+                                                  >
+                                                    <path
+                                                      d={"M12 5v14M5 12h14"}
+                                                    ></path>
+                                                  </svg>
+                                                  {" Thêm câu"}
+                                                </a>
+                                              </div>
+                                            </>
+                                          ) : null}
+                                          {v.G.isMcqN ? (
+                                            <>
+                                              <div
+                                                style={styleOf(
+                                                  "display: flex; flex-direction: column; gap: 10px",
+                                                )}
+                                              >
+                                                <div
+                                                  style={styleOf(
+                                                    "display: flex; align-items: center; gap: 10px; flex-wrap: wrap",
+                                                  )}
+                                                >
+                                                  <label
+                                                    htmlFor={"mcqn-pick"}
+                                                    style={styleOf(
+                                                      "font-size: 13px; font-weight: 700; color: #352637",
+                                                    )}
+                                                  >
+                                                    {"Số đáp án cần chọn"}
+                                                  </label>
+                                                  <input
+                                                    id={"mcqn-pick"}
+                                                    type={"number"}
+                                                    min={"2"}
+                                                    max={v.G.pickMax}
+                                                    value={v.G.pick}
+                                                    onChange={v.G.setPick}
+                                                    style={styleOf(
+                                                      "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC; width: 76px",
+                                                    )}
+                                                  />
+                                                  <span
+                                                    style={styleOf(
+                                                      "font-size: 13px; color: #706473",
+                                                    )}
+                                                  >
+                                                    {"trong " +
+                                                      v.G.optCount +
+                                                      " lựa chọn"}
+                                                  </span>
+                                                </div>
+                                                <label
+                                                  style={styleOf(
+                                                    "display: flex; flex-direction: column; gap: 6px",
+                                                  )}
+                                                >
+                                                  <span
+                                                    style={styleOf(
+                                                      "font-size: 13px; font-weight: 700; color: #352637",
+                                                    )}
+                                                  >
+                                                    {"Câu hỏi"}
+                                                  </span>
+                                                  <input
+                                                    value={v.G.q}
+                                                    onChange={v.G.setQ}
+                                                    style={styleOf(
+                                                      "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
+                                                    )}
+                                                  />
+                                                </label>
+                                                {(v.G.opts || []).map(
+                                                  (o, index) => (
+                                                    <React.Fragment key={index}>
+                                                      <div
+                                                        style={styleOf(
+                                                          "display: flex; align-items: center; gap: 8px",
+                                                        )}
+                                                      >
+                                                        <a
+                                                          className={"lk"}
+                                                          href={"#"}
+                                                          onClick={o.pick}
+                                                          aria-label={
+                                                            "Đánh dấu " +
+                                                            o.lab +
+                                                            " đúng"
+                                                          }
+                                                          style={styleOf(o.st)}
+                                                        >
+                                                          {o.lab}
+                                                        </a>
+                                                        <input
+                                                          aria-label={
+                                                            "Lựa chọn " + o.lab
+                                                          }
+                                                          value={o.text}
+                                                          onChange={o.set}
+                                                          style={styleOf(
+                                                            o.inSt,
+                                                          )}
+                                                        />
+                                                        <a
+                                                          className={"eo"}
+                                                          href={"#"}
+                                                          onClick={o.del}
+                                                          aria-label={
+                                                            "Xóa " + o.lab
+                                                          }
+                                                          style={styleOf(
+                                                            "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                                          )}
+                                                        >
+                                                          <svg
+                                                            width={"15"}
+                                                            height={"15"}
+                                                            viewBox={
+                                                              "0 0 24 24"
+                                                            }
+                                                            fill={"none"}
+                                                            stroke={
+                                                              "currentColor"
+                                                            }
+                                                            strokeWidth={"2"}
+                                                            strokeLinecap={
+                                                              "round"
+                                                            }
+                                                            strokeLinejoin={
+                                                              "round"
+                                                            }
+                                                            aria-hidden={"true"}
+                                                          >
+                                                            <path
+                                                              d={
+                                                                "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                              }
+                                                            ></path>
+                                                          </svg>
+                                                        </a>
+                                                      </div>
+                                                    </React.Fragment>
+                                                  ),
+                                                )}
+                                                <a
+                                                  className={"eo"}
+                                                  href={"#"}
+                                                  onClick={v.G.addOpt}
+                                                  style={styleOf(
+                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                  )}
+                                                >
+                                                  <svg
+                                                    width={"15"}
+                                                    height={"15"}
+                                                    viewBox={"0 0 24 24"}
+                                                    fill={"none"}
+                                                    stroke={"currentColor"}
+                                                    strokeWidth={"2"}
+                                                    strokeLinecap={"round"}
+                                                    strokeLinejoin={"round"}
+                                                    aria-hidden={"true"}
+                                                  >
+                                                    <path
+                                                      d={"M12 5v14M5 12h14"}
+                                                    ></path>
+                                                  </svg>
+                                                  {" Thêm lựa chọn"}
+                                                </a>
+                                                <div
+                                                  style={styleOf(
+                                                    "font-size: 13px; color: #706473",
+                                                  )}
+                                                >
+                                                  {"Cụm này chiếm " +
+                                                    v.G.count +
+                                                    " số câu (" +
+                                                    v.G.range +
+                                                    "); mỗi đáp án đúng được 1 điểm, không phân biệt thứ tự."}
+                                                </div>
+                                              </div>
+                                            </>
+                                          ) : null}
+                                          {v.G.isJudge ? (
+                                            <>
+                                              <div
+                                                style={styleOf(
+                                                  "display: flex; flex-direction: column; gap: 10px",
+                                                )}
+                                              >
+                                                {(v.G.jitems || []).map(
+                                                  (j, index) => (
+                                                    <React.Fragment key={index}>
+                                                      <div className={"qm"}>
+                                                        <span
+                                                          className={"qn"}
+                                                          style={styleOf(
+                                                            "flex: none; width: 30px; height: 30px; border-radius: 8px; background: #F3F0EA; color: #352637; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600",
+                                                          )}
+                                                        >
+                                                          {j.no}
+                                                        </span>
+                                                        <input
+                                                          className={"qq"}
+                                                          aria-label={
+                                                            "Nhận định " + j.no
+                                                          }
+                                                          value={j.text}
+                                                          onChange={j.set}
+                                                          style={styleOf(
+                                                            "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC",
+                                                          )}
+                                                        />
+                                                        <div className={"qa"}>
+                                                          <div
+                                                            style={styleOf(
+                                                              "position: relative; min-width: 0; max-width: 180px",
+                                                            )}
+                                                          >
+                                                            <a
+                                                              href={"#"}
+                                                              role={"combobox"}
+                                                              aria-haspopup={
+                                                                "listbox"
+                                                              }
+                                                              aria-expanded={
+                                                                j.dd.open
+                                                              }
+                                                              aria-label={
+                                                                "Đáp án câu " +
+                                                                j.no
+                                                              }
+                                                              onClick={
+                                                                j.dd.toggle
+                                                              }
+                                                              style={styleOf(
+                                                                "display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-width: 0; height: 38px; padding: 0 10px 0 12px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; font-size: 14px; text-decoration: none; cursor: pointer; " +
+                                                                  j.dd.tone,
+                                                              )}
+                                                            >
+                                                              <span
+                                                                style={styleOf(
+                                                                  "min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: " +
+                                                                    j.dd.color,
+                                                                )}
+                                                              >
+                                                                {j.dd.label}
+                                                              </span>
+                                                              <span
+                                                                style={styleOf(
+                                                                  "display: flex; flex: none; color: #706473",
+                                                                )}
+                                                              >
+                                                                <svg
+                                                                  width={"16"}
+                                                                  height={"16"}
+                                                                  viewBox={
+                                                                    "0 0 24 24"
+                                                                  }
+                                                                  fill={"none"}
+                                                                  stroke={
+                                                                    "currentColor"
+                                                                  }
+                                                                  strokeWidth={
+                                                                    "2"
+                                                                  }
+                                                                  strokeLinecap={
+                                                                    "round"
+                                                                  }
+                                                                  strokeLinejoin={
+                                                                    "round"
+                                                                  }
+                                                                  aria-hidden={
+                                                                    "true"
+                                                                  }
+                                                                >
+                                                                  <path
+                                                                    d={
+                                                                      "M6 9l6 6 6-6"
+                                                                    }
+                                                                  ></path>
+                                                                </svg>
+                                                              </span>
+                                                            </a>
+                                                            {j.dd.open ? (
+                                                              <>
+                                                                <div
+                                                                  onClick={
+                                                                    j.dd.close
+                                                                  }
+                                                                  style={styleOf(
+                                                                    "position: fixed; inset: 0; z-index: 30",
+                                                                  )}
+                                                                ></div>
+                                                                <div
+                                                                  role={
+                                                                    "listbox"
+                                                                  }
+                                                                  style={styleOf(
+                                                                    "position: absolute; left: 0; right: 0; top: 42px; z-index: 31; max-height: 264px; overflow-y: auto; padding: 6px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 12px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                                                                  )}
+                                                                >
+                                                                  {(
+                                                                    j.dd.opts ||
+                                                                    []
+                                                                  ).map(
+                                                                    (
+                                                                      jo,
+                                                                      index,
+                                                                    ) => (
+                                                                      <React.Fragment
+                                                                        key={
+                                                                          index
+                                                                        }
+                                                                      >
+                                                                        <a
+                                                                          href={
+                                                                            "#"
+                                                                          }
+                                                                          role={
+                                                                            "option"
+                                                                          }
+                                                                          aria-selected={
+                                                                            jo.on
+                                                                          }
+                                                                          onClick={
+                                                                            jo.pick
+                                                                          }
+                                                                          style={styleOf(
+                                                                            jo.st,
+                                                                          )}
+                                                                        >
+                                                                          {
+                                                                            jo.lab
+                                                                          }
+                                                                        </a>
+                                                                      </React.Fragment>
+                                                                    ),
+                                                                  )}
+                                                                </div>
+                                                              </>
+                                                            ) : null}
+                                                          </div>
+                                                        </div>
+                                                        <a
+                                                          className={"eo qd"}
+                                                          href={"#"}
+                                                          onClick={j.del}
+                                                          aria-label={
+                                                            "Xóa câu " + j.no
+                                                          }
+                                                          style={styleOf(
+                                                            "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                                          )}
+                                                        >
+                                                          <svg
+                                                            width={"15"}
+                                                            height={"15"}
+                                                            viewBox={
+                                                              "0 0 24 24"
+                                                            }
+                                                            fill={"none"}
+                                                            stroke={
+                                                              "currentColor"
+                                                            }
+                                                            strokeWidth={"2"}
+                                                            strokeLinecap={
+                                                              "round"
+                                                            }
+                                                            strokeLinejoin={
+                                                              "round"
+                                                            }
+                                                            aria-hidden={"true"}
+                                                          >
+                                                            <path
+                                                              d={
+                                                                "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
+                                                              }
+                                                            ></path>
+                                                          </svg>
+                                                        </a>
+                                                      </div>
+                                                    </React.Fragment>
+                                                  ),
+                                                )}
+                                                <a
+                                                  className={"eo"}
+                                                  href={"#"}
+                                                  onClick={v.G.addItem}
+                                                  style={styleOf(
+                                                    "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                                  )}
+                                                >
+                                                  <svg
+                                                    width={"15"}
+                                                    height={"15"}
+                                                    viewBox={"0 0 24 24"}
+                                                    fill={"none"}
+                                                    stroke={"currentColor"}
+                                                    strokeWidth={"2"}
+                                                    strokeLinecap={"round"}
+                                                    strokeLinejoin={"round"}
+                                                    aria-hidden={"true"}
+                                                  >
+                                                    <path
+                                                      d={"M12 5v14M5 12h14"}
+                                                    ></path>
+                                                  </svg>
+                                                  {" Thêm nhận định"}
+                                                </a>
+                                              </div>
+                                            </>
+                                          ) : null}
+                                        </div>
+                                      </>
+                                    ) : null}
+                                  </div>
+                                </React.Fragment>
+                              ))}
+                              {v.noGroups ? (
+                                <>
+                                  <div
+                                    style={styleOf(
+                                      "padding: 24px; text-align: center; color: #706473; border-radius: 12px; border: 1.5px dashed #D6D4D0",
+                                    )}
+                                  >
+                                    {
+                                      "Section này chưa có câu hỏi. Thêm nhóm đầu tiên bên dưới."
+                                    }
+                                  </div>
+                                </>
+                              ) : null}
+                              <a
+                                className={"eo"}
+                                href={"#"}
+                                onClick={v.togglePicker}
+                                aria-expanded={v.pickerOpen}
+                                style={styleOf(
+                                  "display: flex; align-items: center; justify-content: center; gap: 6px; height: 46px; flex-shrink: 0; border-radius: 12px; border: 1.5px dashed #D6D4D0; color: #706473; font-weight: 600; font-size: 14px; text-decoration: none",
+                                )}
+                              >
+                                <svg
+                                  width={"16"}
+                                  height={"16"}
+                                  viewBox={"0 0 24 24"}
+                                  fill={"none"}
+                                  stroke={"currentColor"}
+                                  strokeWidth={"2"}
+                                  strokeLinecap={"round"}
+                                  strokeLinejoin={"round"}
+                                  aria-hidden={"true"}
+                                >
+                                  <path d={"M12 5v14M5 12h14"}></path>
+                                </svg>
+                                {" Thêm nhóm câu hỏi"}
+                              </a>
+                              {v.pickerOpen ? (
+                                <>
+                                  <div
+                                    style={styleOf(
+                                      "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
+                                    )}
+                                  >
+                                    <div
+                                      style={styleOf(
+                                        "display: flex; justify-content: space-between; align-items: center; gap: 8px",
+                                      )}
+                                    >
+                                      <span
+                                        style={styleOf(
+                                          "font-size: 13px; font-weight: 700; color: #352637",
+                                        )}
+                                      >
+                                        {"Chọn dạng câu hỏi"}
+                                      </span>
+                                      <a
+                                        className={"eo"}
+                                        href={"#"}
+                                        onClick={v.togglePicker}
+                                        style={styleOf(
+                                          "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
+                                        )}
+                                      >
+                                        {"Hủy"}
+                                      </a>
+                                    </div>
+                                    <div
+                                      style={styleOf(
+                                        "display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px",
+                                      )}
+                                    >
+                                      {(v.typeList || []).map((ty, index) => (
+                                        <React.Fragment key={index}>
+                                          <a
+                                            href={"#"}
+                                            onClick={ty.pick}
+                                            style={styleOf(
+                                              "display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-radius: 10px; border: 1.5px solid #E6E4E0; color: #352637; text-decoration: none",
+                                            )}
+                                          >
+                                            <span
+                                              style={styleOf(
+                                                "font-weight: 600; font-size: 14px",
+                                              )}
+                                            >
+                                              {ty.label}
+                                            </span>
+                                            <span
+                                              style={styleOf(
+                                                "font-size: 13px; color: #706473",
+                                              )}
+                                            >
+                                              {ty.form}
+                                            </span>
+                                          </a>
+                                        </React.Fragment>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </>
+                              ) : null}
+                            </>
+                          ) : null}
+                        </div>
+                      </section>
+                    </div>
+                  </>
+                ) : null}
+              </main>
+            </div>
+          </div>
+          {"\n"}
+        </div>
+        {"\n"}
+      </>
+    );
+  }
+}
+
+export default AdminListeningEditor;

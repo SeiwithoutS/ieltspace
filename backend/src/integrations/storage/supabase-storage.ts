@@ -192,3 +192,23 @@ export async function removeObjects(
     console.warn('Storage removeObjects warning:', err instanceof Error ? err.message : err);
   }
 }
+
+/**
+ * Liệt kê tên tệp (đường dẫn đầy đủ) trong một thư mục của bucket exam-assets.
+ */
+export async function listObjectPaths(
+  folder: string,
+  bucketName: string = env.STORAGE_BUCKET_EXAM_ASSETS
+): Promise<string[]> {
+  const client = getStorageClient();
+  const { data, error } = await client.storage
+    .from(bucketName)
+    .list(folder, { limit: 1000 });
+  if (error) {
+    console.warn('Storage listObjectPaths warning:', error.message);
+    return [];
+  }
+  return (data ?? [])
+    .filter((f) => f.id)
+    .map((f) => `${folder}/${f.name}`);
+}

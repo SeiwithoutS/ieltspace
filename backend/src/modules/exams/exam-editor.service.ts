@@ -20,6 +20,7 @@ import {
   uploadSkillImage as supabaseUploadSkillImage,
   publicUrl,
   removeObjects,
+  listObjectPaths,
 } from '../../integrations/storage/supabase-storage.js';
 
 /**
@@ -689,7 +690,29 @@ export async function uploadSkillImage(
     );
   }
 
-  return supabaseUploadSkillImage(skillId, buffer, contentType);
+  const uploaded = await supabaseUploadSkillImage(skillId, buffer, contentType);
+
+  // Mỗi lần chọn ảnh tạo một tệp mới. Dọn các tệp cũ của kỹ năng này đã được tải lên
+  // nhưng chưa từng được lưu vào đề (ảnh thay trước khi bấm Lưu), tránh trùng bản trên Storage.
+  try {
+    const existing = await listObjectPaths(`exam-skills/${skillId}`);
+    const candidates = existing.filter((p) => p !== uploaded.path);
+    if (candidates.length > 0) {
+      const used = await prisma.exam_sections.findMany({
+        where: { image_path: { in: candidates } },
+        select: { image_path: true },
+      });
+      const usedSet = new Set(used.map((r: { image_path: string | null }) => r.image_path));
+      const orphaned = candidates.filter((p) => !usedSet.has(p));
+      if (orphaned.length > 0) {
+        await removeObjects(orphaned);
+      }
+    }
+  } catch (cleanupErr) {
+    console.warn('Storage cleanup warning after upload:', cleanupErr);
+  }
+
+  return uploaded;
 }
 
 /**

@@ -2190,11 +2190,6 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
                     </>
                   ) : null}
                 </div>
-                <div style={styleOf("font-size: 13px; color: #706473")}>
-                  {
-                    "Reading và Writing có đề riêng cho Academic và General Training; Listening và Speaking dùng chung. Bấm chip trạng thái để ẩn, hiện lại hoặc mở editor. Khi bộ đề công khai, kỹ năng Đã đăng hiện nút Làm bài, kỹ năng Đang soạn hiện dấu “—” như chưa có, kỹ năng Đã ẩn không hiện với người học."
-                  }
-                </div>
               </div>
             </>
           ) : null}

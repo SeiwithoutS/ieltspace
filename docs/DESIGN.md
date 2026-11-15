@@ -259,3 +259,19 @@ Theo [quy tắc nghiệp vụ](BUSINESS_RULES.md), hiển thị số đúng/tổ
 Đối chiếu trực tiếp [CSS Auth](../frontend/src/components/auth/auth.css), [AuthFields](../frontend/src/components/auth/AuthFields.jsx), [khung trang và theme](../frontend/src/assets/css/app.css), [font](../frontend/src/styles/fonts.css), [ánh xạ màu](../frontend/src/lib/styles.ts) và [chi tiết bộ đề](../frontend/src/pages/exams/ExamDetail.tsx).
 
 Trong mục 7, ghi chú về các màn làm bài phản ánh thời điểm chốt thiết kế. Hiện [danh sách trang](../frontend/src/app/pages.ts) đã khai báo ReadingTest, ListeningTest, WritingTest và SpeakingTest. Việc khai báo trang chỉ xác nhận có giao diện trong mã nguồn.
+
+---
+
+## 11. Bố cục thích ứng (Responsive) cho người học (cập nhật 15/11/2026)
+
+### LearnerHeader ở 3 mốc màn hình
+Component `components/navigation/LearnerHeader.tsx` thống nhất cho toàn bộ các trang người học (trừ màn làm bài):
+1. **Desktop (≥ 1024px):** Hiển thị đầy đủ Logo, thanh điều hướng 4 trang chính (Luyện đề, Thư viện bài mẫu, Từ vựng, Góc học tập), ô tìm kiếm, chuyển theme sáng/tối, chuông thông báo và avatar tài khoản.
+2. **Tablet (768px – 1023px):** Rút gọn thanh điều hướng và khoảng cách; giữ các nút thao tác chính trên thanh header.
+3. **Mobile (< 768px):** Header tinh giản còn Logo, nút theme, chuông thông báo và nút menu `☰` (hamburger). Nút `☰` mở Drawer trượt từ phải sang (rộng 300px), chứa toàn bộ danh sách trang, thông tin người dùng và các mục điều hướng tài khoản (truyền qua prop `accountNav` khi trang có sidebar riêng như StudentHome).
+
+### Bảng dữ liệu chuyển thành danh sách thẻ ở mobile (< 768px)
+- Với các bảng dữ liệu lịch sử thi (`StudentHome`), danh sách bài nộp Writing/Speaking (`MyWS`):
+  - **Từ 768px trở lên:** Giữ bảng chuẩn `<table>` bọc trong khung `overflow-x-auto` để đảm bảo không tràn trang khi xem trên màn hình vừa.
+  - **Dưới 768px:** Ẩn bảng (`hidden md:block`), hiển thị danh sách thẻ dọc (`flex flex-col gap-3 md:hidden`). Mỗi thẻ gói gọn tên bài/đề, badge kỹ năng/trạng thái, ngày làm và nút hành động chính (chiều cao tối thiểu 40px, dễ chạm ngón tay).
+

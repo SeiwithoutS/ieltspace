@@ -31,7 +31,9 @@
 ## Responsive và nghiệm thu trên thiết bị
 
 - Thiết kế bố cục thích ứng theo không gian hiển thị: điều chỉnh số cột, thứ tự khối, menu và khoảng cách. Giữ chữ đọc được và nút dễ thao tác; không thu nhỏ toàn bộ trang bằng transform/zoom để vừa màn hình.
-- Dùng breakpoint theo lúc nội dung cần đổi bố cục. Tránh kích thước cố định gây tràn ngang. Bảng rộng, timeline hoặc hình đề cần cuộn ngang phải có vùng cuộn riêng và dấu hiệu nhận biết.
+- Dùng breakpoint theo lúc nội dung cần đổi bố cục. Tránh kích thước cố định gây tràn ngang. Bảng rộng, timeline hoặc hình đề cần cuộn ngang phải có vùng cuộn riêng và dấu hiệu nhận biết. Khối cần đổi bố cục theo màn: chuyển thuộc tính bố cục từ style inline sang className Tailwind, vì style inline thắng class.
 - Màn làm bài giữ khung ngoài vừa viewport. Trên desktop, vùng đề và câu hỏi cuộn bên trong; trên thiết bị không hỗ trợ desktop, hiển thị màn yêu cầu dùng máy tính theo yêu cầu ngày 14/11/2026. Giữ đồng hồ, điều hướng câu và nút nộp có thể truy cập, tránh nhiều vùng cuộn lồng nhau. Kiểm tra khi bàn phím ảo mở và xoay màn hình.
 - Popup vừa chiều rộng màn hình, nội dung dài cuộn bên trong và các nút luôn có thể tiếp cận. Menu và tooltip cần thao tác được bằng chạm, không chỉ hover. Kiểm tra focus bàn phím và khả năng đọc khi phóng to chữ.
 - Khi sửa bố cục, tối thiểu thử chiều rộng 375px, 768px và 1366px cùng một trường hợp ngang có chiều cao thấp. Kiểm tra tràn ngang, nội dung bị cắt, thứ tự đọc, thao tác chính và theme. Ghi kích thước thực đã kiểm tra; build thành công không thay thế kiểm tra giao diện.
+
+- Viền với Tailwind: `preflight` đang tắt nên class `border`, `border-b`, `border-[1.5px]` chỉ đặt độ dày, không có kiểu viền, và viền sẽ không hiện. Luôn thêm `border-solid`; với viền một cạnh thêm cả `border-0` đứng trước (ví dụ `border-0 border-solid border-b`). Phần tử `w-full` có padding hoặc viền thì thêm `box-border`. Nút `<button>` tự vẽ cần `border-0 bg-transparent`.

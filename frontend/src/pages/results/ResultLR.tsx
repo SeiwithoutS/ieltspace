@@ -2,7 +2,7 @@ import PageLink from "../../components/navigation/PageLink";
 import { accentForeground } from "../../components/attempts/appearance";
 import { sampleResults } from "../../data/attempt-samples";
 import React from "react";
-import LearnerHeader from "../../components/attempts/LearnerHeader";
+import LearnerHeader from "../../components/navigation/LearnerHeader";
 function ResultLR(props: { accent?: string; cheDo?: string; kyNang?: string }) {
   function renderVals() {
     const P = props;
@@ -103,7 +103,7 @@ function ResultLR(props: { accent?: string; cheDo?: string; kyNang?: string }) {
             <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
               {"Kết quả / IELTS Recent Actual Tests · Test 1 / " + v.skillName}
             </div>
-            <div className="flex justify-between [align-items:flex-end] gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <h1 className="m-0 [font-size:28px] [line-height:1.25] [letter-spacing:-0.02em] attempt-sans [letter-spacing:-0.015em]">
                   {"Kết quả " + v.skillName}
@@ -112,114 +112,85 @@ function ResultLR(props: { accent?: string; cheDo?: string; kyNang?: string }) {
                   {v.submitNote}
                 </div>
               </div>
-              <div className="flex [gap:10px]">
+              <div className="flex gap-2.5 w-full sm:w-auto">
                 <a
                   href={v.retryHref}
-                  className="inline-flex items-center justify-center gap-2 [height:42px] [padding:0_20px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border [background:var(--attempt-bg-ffffff)] [color:var(--attempt-text-352637)] font-semibold [font-size:14px] no-underline whitespace-nowrap"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                 >
                   {"Làm lại"}
                 </a>
                 <PageLink
                   page="StudentHome"
-                  className="inline-flex items-center justify-center gap-2 [height:42px] [padding:0_20px] rounded-full [border:1.5px_solid_var(--attempt-line-352637)] box-border [background:var(--attempt-bg-352637)] [color:#FFFFFF] font-semibold [font-size:14px] no-underline whitespace-nowrap"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-solid border-[1.5px] border-[#352637] bg-[#352637] text-white font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#221824]"
                 >
                   {"Về lịch sử"}
                 </PageLink>
               </div>
             </div>
-            <div className="flex flex-wrap [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)] overflow-hidden">
+            <div className="grid grid-cols-1 min-[400px]:grid-cols-3 divide-y min-[400px]:divide-y-0 min-[400px]:divide-x divide-[var(--attempt-line-d6d4d0,#D6D4D0)] border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] rounded-[22px] bg-[var(--attempt-bg-ffffff,#FFFFFF)] shadow-sm overflow-hidden">
               {(v.stats || []).map((st, index) => (
-                <React.Fragment key={index}>
-                  <div
-                    className="[flex:1_1_0] [min-width:160px] [padding:18px_22px]"
-                    style={{ borderLeft: st.border }}
-                  >
-                    <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
-                      {st.label}
-                    </div>
-                    <div className="[font-size:28px] font-bold [letter-spacing:-0.02em] [line-height:1.25] font-sans tabular-nums [letter-spacing:-0.015em]">
-                      {st.value}
-                    </div>
-                    <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
-                      {st.sub}
-                    </div>
+                <div key={index} className="p-4 sm:p-5 flex flex-col gap-0.5">
+                  <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
+                    {st.label}
                   </div>
-                </React.Fragment>
+                  <div className="text-2xl sm:text-[28px] font-bold tracking-tight font-sans tabular-nums text-[var(--attempt-text-352637,#352637)]">
+                    {st.value}
+                  </div>
+                  <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
+                    {st.sub}
+                  </div>
+                </div>
               ))}
             </div>
-            <div className="flex gap-6 items-start">
-              <div className="[flex:1.6_1_0]">
+            <div className="flex flex-col lg:flex-row gap-6 items-start">
+              <div className="w-full lg:flex-[1.6] min-w-0">
                 <div className="[padding:0px] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)] overflow-hidden">
                   <div className="[padding:18px_24px_14px] [font-size:18px] font-semibold">
                     {"Lời giải từng câu"}
                   </div>
                   {(v.rows || []).map((r, index) => (
                     <React.Fragment key={index}>
-                      <div className="flex [gap:14px] [padding:16px_24px] [border-top:1px_solid_var(--attempt-line-e6e4e0)]">
-                        <span className="font-bold w-7">{r.n}</span>
-                        <div className="flex-1 flex flex-col gap-1">
-                          <div className="[font-size:14px]">
-                            <b>{"Bạn chọn:"}</b>
-                            {" " + r.chosen}
+                      <div className="flex flex-col gap-2 p-4 sm:p-5 border-0 border-solid border-t border-[var(--attempt-line-e6e4e0,#E6E4E0)] first:border-t-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-bold text-sm sm:text-base text-[var(--attempt-text-352637,#352637)]">
+                            {"Câu " + r.n}
+                          </span>
+                          {r.ok ? (
+                            <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-dcede2,#DCEDE2)] text-[var(--attempt-text-2e6a48,#2E6A48)] text-xs font-semibold whitespace-nowrap">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M5 12.5l4.5 4.5L19 7" />
+                              </svg>
+                              Đúng
+                            </span>
+                          ) : null}
+                          {r.wrong ? (
+                            <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-fbdcd3,#FBDCD3)] text-[var(--attempt-text-c0412a,#C0412A)] text-xs font-semibold whitespace-nowrap">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M6 6l12 12M18 6L6 18" />
+                              </svg>
+                              Sai
+                            </span>
+                          ) : null}
+                        </div>
+                        <div className="flex flex-col gap-1 text-sm">
+                          <div>
+                            <b>Bạn chọn:</b> {" " + r.chosen}
                           </div>
                           {r.wrong ? (
-                            <>
-                              <div className="[font-size:13px]">
-                                <b>{"Đáp án đúng:"}</b>
-                                {" " + r.correct}
-                              </div>
-                            </>
+                            <div>
+                              <b>Đáp án đúng:</b> {" " + r.correct}
+                            </div>
                           ) : null}
-                          <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
+                          <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)] mt-0.5">
                             {r.explain}
                           </div>
                         </div>
-                        {r.ok ? (
-                          <>
-                            <span className="inline-flex items-center [gap:6px] [height:26px] [padding:0_10px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] [background:var(--attempt-bg-dcede2)] [color:var(--attempt-text-2e6a48)] [font-size:13px] font-semibold whitespace-nowrap">
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                aria-hidden="true"
-                              >
-                                <path d="M5 12.5l4.5 4.5L19 7"></path>
-                              </svg>
-                              {"Đúng"}
-                            </span>
-                          </>
-                        ) : null}
-                        {r.wrong ? (
-                          <>
-                            <span className="inline-flex items-center [gap:6px] [height:26px] [padding:0_10px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-c0412a)] [font-size:13px] font-semibold whitespace-nowrap">
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                aria-hidden="true"
-                              >
-                                <path d="M6 6l12 12M18 6L6 18"></path>
-                              </svg>
-                              {"Sai"}
-                            </span>
-                          </>
-                        ) : null}
                       </div>
                     </React.Fragment>
                   ))}
                 </div>
               </div>
-              <div className="[flex:1_1_0]">
+              <div className="w-full lg:flex-1 min-w-0 order-first lg:order-none">
                 <div className="[padding:22px] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)]">
                   <div className="flex flex-col gap-3">
                     <div className="[font-size:18px] font-semibold">

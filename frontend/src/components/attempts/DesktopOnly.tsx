@@ -42,7 +42,7 @@ export default function DesktopOnly({
             color: "var(--attempt-text-352637,#352637)",
           }}
         >
-          <section className="max-w-lg rounded-3xl border border-solid border-[#D6D4D0] bg-[var(--attempt-bg-ffffff,#fff)] p-8 text-center">
+          <section className="w-full max-w-lg rounded-3xl border border-solid border-[#D6D4D0] bg-[var(--attempt-bg-ffffff,#fff)] px-6 py-8 text-center shadow-[0_1px_2px_rgba(53,38,55,0.04),0_6px_16px_rgba(53,38,55,0.07)] sm:px-10 sm:py-10">
             <svg
               aria-hidden="true"
               className="mx-auto mb-5 text-[#2963CC]"
@@ -56,13 +56,17 @@ export default function DesktopOnly({
               <rect x="2" y="3" width="20" height="14" rx="2" />
               <path d="M8 21h8M12 17v4" />
             </svg>
-            <h1 className="text-2xl font-bold">
+            <h1 className="m-0 text-[22px] font-bold leading-snug text-balance sm:text-2xl">
               Vui lòng làm bài trên máy tính
             </h1>
-            <p className="my-4 leading-relaxed">
+            <p className="mx-auto mb-5 mt-3 max-w-[40ch] text-[15px] leading-relaxed text-[#706473]">
               Phần làm bài chỉ hỗ trợ máy tính để bàn hoặc laptop. Hãy mở
               IELTSpace trên máy tính và mở rộng cửa sổ trình duyệt để bắt đầu.
             </p>
+            <p className="mx-auto mb-6 mt-0 inline-block rounded-full bg-[#E3ECFD] px-3 py-1 text-xs font-semibold text-[#2963CC]">
+              Cần màn hình rộng từ 1024px
+            </p>
+            <br />
             <button
               type="button"
               onClick={() => navigate("StudentHome")}

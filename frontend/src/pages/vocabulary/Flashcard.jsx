@@ -80,7 +80,7 @@ class Flashcard extends React.Component {
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-7 justify-center items-center lg:items-start">
-                <div className="w-full max-w-[500px] p-6 sm:p-8 rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-4">
+                <div className="w-full box-border max-w-[444px] p-6 sm:p-8 rounded-[22px] border-solid border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-4">
                   <div
                     style={styleOf(
                       "display: flex; flex-direction: column; gap: 16px; ",
@@ -143,19 +143,19 @@ class Flashcard extends React.Component {
                     <div className="grid grid-cols-3 gap-2 w-full pt-1">
                       <a
                         href={"#"}
-                        className="inline-flex items-center justify-center h-11 px-2 sm:px-4 rounded-full border-[1.5px] border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs sm:text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
+                        className="inline-flex items-center justify-center h-11 px-2 sm:px-4 rounded-full border-solid border-[1.5px] border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs sm:text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                       >
                         {"Chưa nhớ"}
                       </a>
                       <a
                         href={"#"}
-                        className="inline-flex items-center justify-center h-11 px-2 sm:px-4 rounded-full border-[1.5px] border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs sm:text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
+                        className="inline-flex items-center justify-center h-11 px-2 sm:px-4 rounded-full border-solid border-[1.5px] border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs sm:text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                       >
                         {"Còn phân vân"}
                       </a>
                       <a
                         href={"#"}
-                        className="inline-flex items-center justify-center gap-1.5 h-11 px-2 sm:px-4 rounded-full border-[1.5px] border-[#352637] bg-[#352637] text-white font-semibold text-xs sm:text-sm no-underline whitespace-nowrap hover:bg-[#221824]"
+                        className="inline-flex items-center justify-center gap-1.5 h-11 px-2 sm:px-4 rounded-full border-solid border-[1.5px] border-[#352637] bg-[#352637] text-white font-semibold text-xs sm:text-sm no-underline whitespace-nowrap hover:bg-[#221824]"
                       >
                         <svg
                           width={"16"}

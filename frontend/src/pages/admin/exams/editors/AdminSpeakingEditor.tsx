@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { styleOf, cssText } from "../../../../lib/styles";
 import AdminSidebar from "../../../../components/navigation/AdminSidebar";
@@ -14,7 +13,9 @@ import {
   fromSpeakingEditorState,
   type EditorSkill,
   type SpeakingEditorState,
-  type SpeakingEditorItem,
+  type SpeakingPart,
+  type SpeakingPartQs,
+  type SpeakingPartCue,
 } from "../../../../lib/exam-editor";
 import SkillHistoryDrawer from "../../../../components/exams/SkillHistoryDrawer";
 import { versionMessages } from "../../../../lib/version-messages";
@@ -27,6 +28,8 @@ type ConfirmData = {
   goText?: string;
   run?: (() => Promise<void> | void) | null;
 };
+
+type ImportFileItem = [string, number, string, (string | null)?];
 
 type State = {
   skillId: string | null;
@@ -51,7 +54,211 @@ type State = {
   imp: string | null;
   impSet: string | null;
   historyOpen: boolean;
+  impF?: ImportFileItem[];
+  impP?: number;
+  impN?: number;
+  impSaw?: boolean;
+  impDrag?: boolean;
+  impErr?: string;
 };
+
+type SpeakingQuestionItem = {
+  n: number;
+  lab: string;
+  delLab: string;
+  v: string;
+  set: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  del: (e?: Ev) => void;
+};
+
+type SpeakingFormItem = {
+  name: string;
+  empty: boolean;
+  clear: (e?: Ev) => void;
+  emptyText: string;
+  noContent: boolean;
+  edId?: string;
+  text?: string;
+  setText?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  fmtB?: (e?: Ev) => void;
+  fmtI?: (e?: Ev) => void;
+  fmtH?: (e?: Ev) => void;
+  fmtL?: (e?: Ev) => void;
+  isCue: boolean;
+  isQ: boolean;
+  hasInstr: boolean;
+  qCount: number;
+  tot: string;
+  setTot: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  totSt: string;
+  qlist: SpeakingQuestionItem[];
+  addQ: (e?: Ev) => void;
+  pq: Array<{ n: number; v: string }>;
+  instr: string;
+  setInstr: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  prep: string;
+  speak: string;
+  setPrep: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setSpeak: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  prepSt: string;
+  speakSt: string;
+  edLabel: string;
+  edHint: string;
+  ph: string;
+  headLine: string;
+  pv: MdLine[];
+  countNote: string;
+};
+
+type MdLine = { li: boolean; segs: Array<{ t: string; st: string }>; st: string };
+
+type ImportCheckItem = {
+  text: string;
+  color: string;
+  cls: string;
+  icon: string;
+  iconSt: string;
+};
+
+type ImportStatItem = {
+  n: string;
+  label: string;
+};
+
+type ImportPreviewItem = {
+  title: string;
+  sub: string;
+  groups: string[];
+};
+
+type ImportFileDisplay = {
+  name: string;
+  size: string;
+  icon: string;
+  iconSt: string;
+  rm: (e?: Ev) => void;
+};
+
+type SpeakingTabItem = {
+  name: string;
+  range: string;
+  on: boolean;
+  sub: string;
+  pick: (e?: Ev) => void;
+  st: string;
+};
+
+type SpeakingIssueItem = {
+  text: string;
+  go?: (e?: Ev) => void;
+};
+
+interface SpeakingView {
+  crumbs: Crumb[];
+  onNavigate: (go: () => void) => void;
+  examTitle: string;
+  examPath: string;
+  typeText: string;
+  typeTitle: string;
+  typeSt: string;
+  modeText: string;
+  modeSt: string;
+  counter: string;
+  counterSt: string;
+  viewing: boolean;
+  editing: boolean;
+  modeCls: string;
+  tabs: SpeakingTabItem[];
+  F: SpeakingFormItem;
+  dirtyText: string;
+  dirtyColor: string;
+  undo: (e?: Ev) => void;
+  undoSt: string;
+
+  canEdit: boolean | null;
+  canPublish: boolean | null;
+  canDelete: boolean | null;
+  deleteLabel: string;
+  confirmGoText: string;
+  deleteSkillAction: (e?: Ev) => void;
+  startEdit: (e?: Ev) => Promise<void>;
+  saveEdit: (e?: Ev) => Promise<void>;
+  cancelEdit: (e?: Ev) => void;
+  leaveOpen: boolean;
+  leaveSub: string;
+  stayEdit: (e?: Ev) => void;
+  discardEdit: (e?: Ev) => void;
+  publish: (e?: Ev) => Promise<void>;
+  pubOpen: boolean;
+  pubTitle: string;
+  pubSub: string;
+  pubCancel: (e?: Ev) => void;
+  pubOk: (e?: Ev) => Promise<void>;
+
+  hasIssues: boolean;
+  issueHead: string;
+  closeIssues: () => void;
+  issues: SpeakingIssueItem[];
+
+  confirmOpen: boolean;
+  confirmTitle: string;
+  confirmSub: string;
+  confirmCancel: (e?: Ev) => void;
+  confirmOk: (e?: Ev) => void;
+  snackOpen: boolean;
+  snack: string;
+  hideSnack: (e?: Ev) => void;
+  toast: boolean;
+  toastText: string;
+  hideToast: (e?: Ev) => void;
+  preview: (e?: Ev) => void;
+
+  impOn: boolean;
+  impPick: boolean;
+  impRun: boolean;
+  impBroken: boolean;
+  impBad: boolean;
+  impOk: boolean;
+  impSub: string;
+  impOpen: (e?: Ev) => void;
+  impClose: (e?: Ev) => void;
+  impKeep: (e?: Ev) => void;
+  impDl: () => void;
+  impDropSt: string;
+  impDragOver: (e?: Ev) => void;
+  impDragLeave: () => void;
+  impDrop: (e: React.DragEvent<HTMLElement>) => void;
+  impPickFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  impFiles: ImportFileDisplay[];
+  impErr: boolean;
+  impErrText: string;
+  impReplace: boolean;
+  impReplaceText: string;
+  impSampleText: string;
+  impSample: (e?: Ev) => void;
+  impNoX: boolean;
+  impCheckSt: string;
+  impCheck: (e?: Ev) => void;
+  impX: string;
+  impChecks: ImportCheckItem[];
+  impBack: (e?: Ev) => void;
+  impErrN: string;
+  impRows: Array<{ sheet: string; row: number; col: number; text: string }>;
+  impTitle: string;
+  impForm: string;
+  impStats: ImportStatItem[];
+  impPrev: ImportPreviewItem[];
+  impWarns: string[];
+  impReplaceNote: string;
+  impApply: (e?: Ev) => void;
+
+  skill: EditorSkill | null;
+  dirty: boolean;
+  ask: (title: string, sub: string, run: () => Promise<void> | void, goText?: string) => void;
+  historyOpen: boolean;
+  openHistory: () => void;
+  closeHistory: () => void;
+}
 
 
 class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State> {
@@ -59,6 +266,8 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
   _undo?: (e?: Ev) => void;
   _it?: Array<ReturnType<typeof setTimeout>>;
   _mounted = false;
+  _impFile?: File | Blob | null;
+  _edId?: string;
 
   state: State = {
     skillId: null,
@@ -66,11 +275,12 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
     notFound: false,
     skill: null,
     ex: {
-      tot: 15,
+      title: "Practice Test",
+      tot: "15",
       items: [
-        { instr: "", qs: [] },
-        { prep: 1, speak: 2, text: "" },
-        { instr: "", qs: [] },
+        { kind: "qs", instr: "", qs: [] },
+        { kind: "cue", prep: "1", speak: "2", text: "" },
+        { kind: "qs", instr: "", qs: [] },
       ],
     },
     base: null,
@@ -188,146 +398,78 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       }
     }
   };
-  renderVals() {
+renderVals(): SpeakingView {
     var me = this,
       s = me.state,
       self = me,
       PR = (me.props as Record<string, unknown>) || {},
-      KIND = "speak",
       UNIT = "Part",
-      NAME = "Speaking",
-      DEF = "Đủ 3 part";
+      NAME = "Speaking";
     var skill = s.skill;
-    var FIXQ = {
-      AC: [
+    var GTF = skill ? skill.form === "GENERAL" : PR.loaiDe === "General Training";
+    var FULL: SpeakingEditorState = {
+      title: "Practice Test 01",
+      tot: "15",
+      items: [
         {
-          mins: 20,
-          words: 150,
-          below:
-            "Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+          kind: "qs",
+          instr: "Two or three complex sentences for each answer.",
+          qs: [
+            "Do you like to travel?",
+            "What kind of places have you visited?",
+            "What is the best place you have ever visited?",
+            "Which place would you really like to visit?",
+            "How do you feel about shopping?",
+            "Do you like shopping on the internet?",
+            "What don't you like about shopping?",
+            "Which is the most popular place to shop where you live?",
+            "Can you describe your hometown?",
+            "What are the most interesting things in your hometown?",
+            "What would be the best way for me to travel around your hometown?",
+            "Should I go there at any special time of year?",
+          ],
         },
         {
-          mins: 40,
-          words: 250,
-          below:
-            "Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
-        },
-      ],
-      GT: [
-        {
-          mins: 20,
-          words: 150,
-          below: "You do NOT need to write any addresses.",
+          kind: "cue",
+          prep: "1",
+          speak: "2",
+          text: "## Describe your exercise routine.\nYou should say:\n- What exercise you do.\n- How often you do exercise.\n- How you feel after exercise.\nAnd explain why exercise is or isn't important to you.",
         },
         {
-          mins: 40,
-          words: 250,
-          below:
-            "Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+          kind: "qs",
+          instr: "Four or five complex sentences for each answer.",
+          qs: [
+            "Do you think young people live healthier lives now than in the past?",
+            "What can be done to overcome increasing global obesity?",
+            "What can governments do to help individuals become healthier?",
+            "Are people in your country health conscious?",
+            "Should restaurants be forced to label how healthy their food is?",
+            "Should diet and exercise classes be taught in schools?",
+          ],
         },
       ],
     };
-    var GTF = skill ? skill.form === "GENERAL" : PR.loaiDe === "General Training",
-      FIX = GTF ? FIXQ.GT : FIXQ.AC;
-    var FULL = GTF
-      ? {
-        title: "Practice Test 01",
-        tot: "5",
-        items: [
-          {
-            instr: "Two or three complex sentences for each answer.",
-            qs: [
-              "Do you like to travel?",
-              "What kind of places have you visited?",
-              "What is the best place you have ever visited?",
-              "Which place would you really like to visit?",
-              "How do you feel about shopping?",
-              "Do you like shopping on the internet?",
-              "What don't you like about shopping?",
-              "Which is the most popular place to shop where you live?",
-              "Can you describe your hometown?",
-              "What are the most interesting things in your hometown?",
-              "What would be the best way for me to travel around your hometown?",
-              "Should I go there at any special time of year?",
-            ],
-          },
-          {
-            prep: "1",
-            speak: "2",
-            text: "## Describe your exercise routine.\nYou should say:\n- What exercise you do.\n- How often you do exercise.\n- How you feel after exercise.\nAnd explain why exercise is or isn't important to you.",
-          },
-          {
-            instr: "Four or five complex sentences for each answer.",
-            qs: [
-              "Do you think young people live healthier lives now than in the past?",
-              "What can be done to overcome increasing global obesity?",
-              "What can governments do to help individuals become healthier?",
-              "Are people in your country health conscious?",
-              "Should restaurants be forced to label how healthy their food is?",
-              "Should diet and exercise classes be taught in schools?",
-            ],
-          },
-        ],
-      }
-      : {
-        title: "Practice Test 01",
-        tot: "5",
-        items: [
-          {
-            instr: "Two or three complex sentences for each answer.",
-            qs: [
-              "Do you like to travel?",
-              "What kind of places have you visited?",
-              "What is the best place you have ever visited?",
-              "Which place would you really like to visit?",
-              "How do you feel about shopping?",
-              "Do you like shopping on the internet?",
-              "What don't you like about shopping?",
-              "Which is the most popular place to shop where you live?",
-              "Can you describe your hometown?",
-              "What are the most interesting things in your hometown?",
-              "What would be the best way for me to travel around your hometown?",
-              "Should I go there at any special time of year?",
-            ],
-          },
-          {
-            prep: "1",
-            speak: "2",
-            text: "## Describe your exercise routine.\nYou should say:\n- What exercise you do.\n- How often you do exercise.\n- How you feel after exercise.\nAnd explain why exercise is or isn't important to you.",
-          },
-          {
-            instr: "Four or five complex sentences for each answer.",
-            qs: [
-              "Do you think young people live healthier lives now than in the past?",
-              "What can be done to overcome increasing global obesity?",
-              "What can governments do to help individuals become healthier?",
-              "Are people in your country health conscious?",
-              "Should restaurants be forced to label how healthy their food is?",
-              "Should diet and exercise classes be taught in schools?",
-            ],
-          },
-        ],
-      },
-      EMPTY = {
-        title: "Practice Test 02",
-        tot: "5",
-        items: [
-          { instr: "Two or three complex sentences for each answer.", qs: [] },
-          { prep: "1", speak: "2", text: "" },
-          { instr: "Four or five complex sentences for each answer.", qs: [] },
-        ],
-      };
-    function variant() {
+
+    var EMPTY: SpeakingEditorState = {
+      title: "Practice Test 02",
+      tot: "15",
+      items: [
+        { kind: "qs", instr: "", qs: [] },
+        { kind: "cue", prep: "1", speak: "2", text: "" },
+        { kind: "qs", instr: "", qs: [] },
+      ],
+    };
+
+    function variant(): SpeakingEditorState {
       var t = PR.trangThai;
       if (t === "Đề mới tạo") {
         return EMPTY;
       }
-      if (t === "Mới có Part 1" || t === "Mới có Task 1") {
-        var n = JSON.parse(JSON.stringify(FULL));
+      if (t === "Mới có Part 1") {
+        var n: SpeakingEditorState = JSON.parse(JSON.stringify(FULL));
         n.title = "Practice Test 03";
-        for (var i = 1; i < n.items.length; i++) {
-          n.items[i] = JSON.parse(JSON.stringify(EMPTY.items[i]));
-        }
+        n.items[1] = JSON.parse(JSON.stringify(EMPTY.items[1]));
+        n.items[2] = JSON.parse(JSON.stringify(EMPTY.items[2]));
         return n;
       }
       return FULL;
@@ -340,15 +482,15 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       dirty = editing && JSON.stringify(base) !== JSON.stringify(ex),
       nChange = (s.hist || []).length;
     function stop(e?: Ev) {
-      if (e && e.preventDefault) {
-        e.preventDefault();
+      if (e && (e as React.SyntheticEvent).preventDefault) {
+        (e as React.SyntheticEvent).preventDefault();
       }
     }
     function clone<T>(o: T): T {
       return JSON.parse(JSON.stringify(o));
     }
     function upd(
-      fn: (it: SpeakingEditorItem, n: SpeakingEditorState) => void,
+      fn: (it: SpeakingPart, n: SpeakingEditorState) => void,
       extra?: Partial<State> | null,
       tag?: string,
     ) {
@@ -375,7 +517,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       }
       self.setState(st as State);
     }
-    function setter(fn: (it: SpeakingEditorItem, v: string) => void) {
+    function setter(fn: (it: SpeakingPart, v: string) => void) {
       return function (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         var v = e.target.value;
         upd(
@@ -412,29 +554,28 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
     me._undo = undo;
     var CHIP =
       "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600";
-    var num = function (v) {
-      return /^\d+$/.test(String(v || "").trim()) ? parseInt(v, 10) : 0;
+    var num = function (v: unknown): number {
+      return /^\d+$/.test(String(v || "").trim()) ? parseInt(String(v), 10) : 0;
     };
-    var inp = function (bad) {
+    var inp = function (bad?: boolean): string {
       return (
         "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC" +
         (bad ? "; border-color: #C0412A; background: #FDF3F0" : "")
       );
     };
-    function plural(n, w) {
+    function plural(n: number, w: string): string {
       return n + " " + w + (n === 1 ? "" : "s");
     }
-    // ---- nội dung từng mục
-    function lines(t) {
+    function lines(t?: string): string[] {
       return String(t || "").split("\n");
     }
-    function qCount(t) {
+    function qCount(t?: string): number {
       return lines(t).filter(function (l) {
         var x = l.trim();
         return x && !/^#{1,3} /.test(x);
       }).length;
     }
-    function groupCount(t) {
+    function groupCount(t?: string): number {
       var g = 0,
         inG = false;
       lines(t).forEach(function (l) {
@@ -449,17 +590,17 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       });
       return g;
     }
-    function isEmptyItem(it) {
-      return KIND === "speak"
-        ? it.qs
-          ? !it.qs.some(function (q) {
-            return String(q).trim();
-          })
-          : !String(it.text || "").trim()
-        : !String(it.prompt || "").trim() && !it.img;
+    function isEmptyItem(it: SpeakingPart): boolean {
+      if (it.kind === "qs") {
+        return !it.qs.some(function (q) {
+          return String(q).trim();
+        });
+      } else {
+        return !String(it.text || "").trim();
+      }
     }
-    function segsOf(l) {
-      var segs = [];
+    function segsOf(l: string): Array<{ t: string; st: string }> {
+      var segs: Array<{ t: string; st: string }> = [];
       String(l)
         .split(/(\*\*[^*]+\*\*|\*[^*]+\*)/)
         .forEach(function (t) {
@@ -476,7 +617,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         });
       return segs;
     }
-    function mdLines(text) {
+    function mdLines(text: string): MdLine[] {
       return lines(text).map(function (raw) {
         var l = raw.trim(),
           kind = "p";
@@ -504,25 +645,14 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       });
     }
     var it = ex.items[ti];
-    // ---- lỗi khi đăng
-    function allIssues() {
-      var out = [];
+    function allIssues(): Array<{ t?: number; text: string }> {
+      var out: Array<{ t?: number; text: string }> = [];
       ex.items.forEach(function (x, i) {
         var nm = UNIT + " " + (i + 1);
-        if (KIND === "speak") {
-          if (
-            i !== 1 &&
-            !x.qs.some(function (q) {
-              return String(q).trim();
-            })
-          ) {
+        if (x.kind === "qs") {
+          if (!x.qs.some(function (q) { return String(q).trim(); })) {
             out.push({ t: i, text: nm + " chưa có câu hỏi." });
-          } else if (
-            i !== 1 &&
-            x.qs.some(function (q) {
-              return !String(q).trim();
-            })
-          ) {
+          } else if (x.qs.some(function (q) { return !String(q).trim(); })) {
             out.push({
               t: i,
               text: nm + " có câu hỏi để trống, hãy nhập hoặc xóa.",
@@ -534,10 +664,11 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
               text: "Thời gian tổng Part 1 và Part 3 cần là số phút từ 1 đến 60.",
             });
           }
-          if (i === 1 && !String(x.text || "").trim()) {
+        } else {
+          if (!String(x.text || "").trim()) {
             out.push({ t: i, text: nm + " chưa có nội dung thẻ đề." });
           }
-          if (i === 1 && (!num(x.prep) || !num(x.speak))) {
+          if (!num(x.prep) || !num(x.speak)) {
             out.push({
               t: i,
               text:
@@ -545,34 +676,23 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                 " cần số phút chờ chuẩn bị và số phút nói (số nguyên từ 1).",
             });
           }
-        } else {
-          if (!String(x.prompt || "").trim()) {
-            out.push({ t: i, text: nm + " chưa có yêu cầu (đề bài)." });
-          }
         }
       });
       return out;
     }
-    var tabs = ex.items.map(function (x, i) {
-      var on = i === ti,
-        sub;
-      if (KIND === "speak") {
-        sub = isEmptyItem(x)
-          ? "chưa nhập"
-          : i === 1
-            ? num(x.prep) + " + " + num(x.speak) + " phút"
-            : x.qs.length + " câu";
-      } else {
-        sub = isEmptyItem(x)
-          ? "chưa nhập"
-          : FIX[i].mins + " phút · " + FIX[i].words + " từ";
-      }
+    var tabs: SpeakingTabItem[] = ex.items.map(function (x, i) {
+      var on = i === ti;
+      var sub = isEmptyItem(x)
+        ? "chưa nhập"
+        : x.kind === "cue"
+          ? num(x.prep) + " + " + num(x.speak) + " phút"
+          : x.qs.length + " câu";
       return {
         name: UNIT + " " + (i + 1),
         range: sub,
         on: on,
         sub: on ? "#706473" : "#706473",
-        pick: function (e) {
+        pick: function (e?: Ev) {
           stop(e);
           self.setState({ t: i });
         },
@@ -586,11 +706,63 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
     var done = ex.items.filter(function (x) {
       return !isEmptyItem(x);
     }).length;
-    // ---- biểu mẫu của mục đang mở
-    var F = {
+
+    var edId =
+      me._edId ||
+      (me._edId = "soan-" + Math.random().toString(36).slice(2, 8));
+    var cuePart = it.kind === "cue" ? it : null;
+    var qsPart = it.kind === "qs" ? it : null;
+    var currentText = cuePart ? cuePart.text : "";
+    var currentQs = qsPart ? qsPart.qs : [];
+
+    var edit = function (fn: (v: string, a: number, b: number) => string) {
+      return function (e?: Ev) {
+        stop(e);
+        var el = document.getElementById(edId) as HTMLTextAreaElement | null,
+          v = (it.kind === "cue" ? it.text : "") || "",
+          a = v.length,
+          b = v.length;
+        if (el) {
+          v = el.value;
+          a = el.selectionStart ?? v.length;
+          b = el.selectionEnd ?? v.length;
+        }
+        var r = fn(v, a, b);
+        upd(function (x) {
+          if (x.kind === "cue") {
+            x.text = r;
+          }
+        });
+      };
+    };
+    var wrap = function (m: string, ph: string) {
+      return edit(function (v, a, b) {
+        return v.slice(0, a) + m + (v.slice(a, b) || ph) + m + v.slice(b);
+      });
+    };
+    var pre = function (p: string) {
+      return edit(function (v, a, b) {
+        var st = v.lastIndexOf("\n", a - 1) + 1,
+          en = v.indexOf("\n", b);
+        if (en < 0) {
+          en = v.length;
+        }
+        var blk = v.slice(st, en).split("\n"),
+          all = blk.every(function (l) {
+            return l.indexOf(p) === 0;
+          });
+        blk = blk.map(function (l) {
+          var c = l.replace(/^(#{1,3} |- |• )/, "");
+          return all ? c : p + c;
+        });
+        return v.slice(0, st) + blk.join("\n") + v.slice(en);
+      });
+    };
+
+    var F: SpeakingFormItem = {
       name: UNIT + " " + (ti + 1),
-      empty: isEmptyItem(it),
-      clear: function (e) {
+      empty: isEmptyItem(it) && !editing,
+      clear: function (e?: Ev) {
         stop(e);
         if (isEmptyItem(it)) {
           return;
@@ -603,15 +775,10 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           function () {
             upd(
               function (x) {
-                if (KIND === "speak") {
-                  if (x.qs) {
-                    x.qs = [];
-                  } else {
-                    x.text = "";
-                  }
+                if (x.kind === "qs") {
+                  x.qs = [];
                 } else {
-                  x.prompt = "";
-                  x.img = null;
+                  x.text = "";
                 }
               },
               {
@@ -622,75 +789,29 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           },
         );
       },
-    };
-    F.emptyText = isEmptyItem(it)
-      ? editing
-        ? UNIT + " này chưa có nội dung, nhập bên dưới."
-        : UNIT + " này chưa có nội dung. Bấm Soạn ngay để bắt đầu."
-      : "";
-    F.empty = isEmptyItem(it) && !editing;
-    F.noContent = isEmptyItem(it);
-    if (KIND === "speak") {
-      var edId =
-        me._edId ||
-        (me._edId = "soan-" + Math.random().toString(36).slice(2, 8));
-      F.edId = edId;
-      F.text = it.text || "";
-      F.setText = setter(function (x, v) {
-        x.text = v;
-      });
-      var edit = function (fn) {
-        return function (e) {
-          stop(e);
-          var el = document.getElementById(edId),
-            v = it.text || "",
-            a = v.length,
-            b = v.length;
-          if (el) {
-            v = el.value;
-            a = el.selectionStart;
-            b = el.selectionEnd;
-          }
-          var r = fn(v, a, b);
-          upd(function (x) {
-            x.text = r;
-          });
-        };
-      };
-      var wrap = function (m, ph) {
-        return edit(function (v, a, b) {
-          return v.slice(0, a) + m + (v.slice(a, b) || ph) + m + v.slice(b);
-        });
-      };
-      var pre = function (p) {
-        return edit(function (v, a, b) {
-          var st = v.lastIndexOf("\n", a - 1) + 1,
-            en = v.indexOf("\n", b);
-          if (en < 0) {
-            en = v.length;
-          }
-          var blk = v.slice(st, en).split("\n"),
-            all = blk.every(function (l) {
-              return l.indexOf(p) === 0;
-            });
-          blk = blk.map(function (l) {
-            var c = l.replace(/^(#{1,3} |- |• )/, "");
-            return all ? c : p + c;
-          });
-          return v.slice(0, st) + blk.join("\n") + v.slice(en);
-        });
-      };
-      F.fmtB = wrap("**", "chữ đậm");
-      F.fmtI = wrap("*", "chữ nghiêng");
-      F.fmtH = pre("## ");
-      F.fmtL = pre("- ");
-      F.isCue = ti === 1;
-      F.isQ = ti !== 1;
-      F.hasInstr = ti !== 1;
-      var qs = it.qs || [];
-      F.qCount = qs.length;
-      F.tot = ex.tot || "";
-      F.setTot = function (e) {
+      emptyText: isEmptyItem(it)
+        ? editing
+          ? UNIT + " này chưa có nội dung, nhập bên dưới."
+          : UNIT + " này chưa có nội dung. Bấm Soạn ngay để bắt đầu."
+        : "",
+      noContent: isEmptyItem(it),
+      edId: edId,
+      text: currentText,
+      setText: setter(function (x, v) {
+        if (x.kind === "cue") {
+          x.text = v;
+        }
+      }),
+      fmtB: wrap("**", "chữ đậm"),
+      fmtI: wrap("*", "chữ nghiêng"),
+      fmtH: pre("## "),
+      fmtL: pre("- "),
+      isCue: ti === 1,
+      isQ: ti !== 1,
+      hasInstr: ti !== 1,
+      qCount: currentQs.length,
+      tot: ex.tot || "",
+      setTot: function (e: React.ChangeEvent<HTMLInputElement>) {
         var v = e.target.value;
         upd(
           function (x, n) {
@@ -699,297 +820,164 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           null,
           "tot",
         );
-      };
-      F.totSt = inp(!num(ex.tot) || num(ex.tot) > 60);
-      F.qlist = qs.map(function (q, i) {
+      },
+      totSt: inp(!num(ex.tot) || num(ex.tot) > 60),
+      qlist: currentQs.map(function (q, i): SpeakingQuestionItem {
         return {
           n: i + 1,
           lab: "Câu hỏi " + (i + 1),
           delLab: "Xóa câu " + (i + 1),
           v: q,
-          set: function (e) {
+          set: function (e: React.ChangeEvent<HTMLInputElement>) {
             var v = e.target.value;
             upd(
               function (x) {
-                x.qs[i] = v;
+                if (x.kind === "qs") {
+                  x.qs[i] = v;
+                }
               },
               null,
               "q" + i,
             );
           },
-          del: function (e) {
+          del: function (e?: Ev) {
             stop(e);
             upd(
               function (x) {
-                x.qs.splice(i, 1);
+                if (x.kind === "qs") {
+                  x.qs.splice(i, 1);
+                }
               },
               { snack: "Đã xóa câu " + (i + 1) + "." },
             );
           },
         };
-      });
-      F.addQ = function (e) {
+      }),
+      addQ: function (e?: Ev) {
         stop(e);
         upd(function (x) {
-          x.qs.push("");
+          if (x.kind === "qs") {
+            x.qs.push("");
+          }
         });
-      };
-      F.pq = qs
+      },
+      pq: currentQs
         .filter(function (q) {
           return String(q).trim();
         })
         .map(function (q, i) {
           return { n: i + 1, v: q };
-        });
-      F.instr = it.instr || "";
-      F.setInstr = setter(function (x, v) {
-        x.instr = v;
-      });
-      F.prep = it.prep || "";
-      F.speak = it.speak || "";
-      F.setPrep = setter(function (x, v) {
-        x.prep = v;
-      });
-      F.setSpeak = setter(function (x, v) {
-        x.speak = v;
-      });
-      F.prepSt = inp(String(it.prep || "").trim() !== "" && !num(it.prep));
-      F.speakSt = inp(String(it.speak || "").trim() !== "" && !num(it.speak));
-      F.edLabel =
+        }),
+      instr: qsPart ? qsPart.instr : "",
+      setInstr: setter(function (x, v) {
+        if (x.kind === "qs") {
+          x.instr = v;
+        }
+      }),
+      prep: cuePart ? cuePart.prep : "",
+      speak: cuePart ? cuePart.speak : "",
+      setPrep: setter(function (x, v) {
+        if (x.kind === "cue") {
+          x.prep = v;
+        }
+      }),
+      setSpeak: setter(function (x, v) {
+        if (x.kind === "cue") {
+          x.speak = v;
+        }
+      }),
+      prepSt: inp(cuePart ? String(cuePart.prep || "").trim() !== "" && !num(cuePart.prep) : false),
+      speakSt: inp(cuePart ? String(cuePart.speak || "").trim() !== "" && !num(cuePart.speak) : false),
+      edLabel:
         ti === 1
           ? "Thẻ đề (nội dung người học đọc để chuẩn bị)"
           : ti === 0
             ? "Câu hỏi Part 1"
-            : "Câu hỏi Part 3";
-      F.edHint =
+            : "Câu hỏi Part 3",
+      edHint:
         ti === 1
           ? "## tiêu đề là dòng đề chính; - là gạch đầu dòng; **đậm**, *nghiêng*."
-          : "Mỗi dòng một câu hỏi. Dòng trống để tách thành nhóm chủ đề. ## đặt tên cho nhóm (không tính là câu).";
-      F.ph =
+          : "Mỗi dòng một câu hỏi. Dòng trống để tách thành nhóm chủ đề. ## đặt tên cho nhóm (không tính là câu).",
+      ph:
         ti === 1
           ? "## Describe ...\nYou should say:\n- ..."
-          : "Do you like to travel?\nWhat kind of places have you visited?";
-      var head =
-        ti === 1
-          ? "Prepare for " +
-          plural(num(it.prep) || 1, "minute") +
-          " then speak for " +
-          plural(num(it.speak) || 2, "minute") +
-          "."
-          : String(it.instr || "").trim() || "...";
-      F.headLine = "PART " + (ti + 1) + " – " + head;
-      F.pv = ti === 1 ? mdLines(it.text) : [];
-      F.countNote =
-        ti === 1
+          : "Do you like to travel?\nWhat kind of places have you visited?",
+      headLine: (function () {
+        var head =
+          ti === 1 && cuePart
+            ? "Prepare for " +
+            plural(num(cuePart.prep) || 1, "minute") +
+            " then speak for " +
+            plural(num(cuePart.speak) || 2, "minute") +
+            "."
+            : String(qsPart?.instr || "").trim() || "...";
+        return "PART " + (ti + 1) + " – " + head;
+      })(),
+      pv: ti === 1 ? mdLines(currentText) : [],
+      countNote:
+        ti === 1 && cuePart
           ? "Thẻ đề: người học có " +
-          (num(it.prep) || 1) +
+          (num(cuePart.prep) || 1) +
           " phút chuẩn bị rồi nói " +
-          (num(it.speak) || 2) +
+          (num(cuePart.speak) || 2) +
           " phút."
-          : qs.length +
+          : currentQs.length +
           " câu hỏi. Người học xem từng câu một và ghi âm trả lời; tổng thời gian Part 1 và 3 là " +
           (num(ex.tot) || "…") +
-          " phút.";
-    } else {
-      var t1 = ti === 0;
-      F.isTask1 = t1;
-      F.prompt = it.prompt || "";
-      F.setPrompt = setter(function (x, v) {
-        x.prompt = v;
-      });
-      F.promptSt = "";
-      F.promptNote =
-        "Hiện trong khung, chữ đậm nghiêng như đề thi thật. Dòng trống tách đoạn.";
-      F.fixedNote =
-        "Cố định theo Task: " +
-        FIX[ti].mins +
-        " phút, tối thiểu " +
-        FIX[ti].words +
-        " từ, và dòng dưới khung. Bạn chỉ nhập nội dung đề bài.";
-      var im = it.img;
-      F.hasImg = !!im;
-      F.noImg = !im;
-      F.imgUrl = im ? im.url : "";
-      F.imgName = im ? im.name : "";
-      F.imgSize = im ? im.size : "";
-      F.showImg = !!(im && im.url);
-      F.imgErr = !!s.imgErr;
-      F.imgErrText = s.imgErr || "";
-      F.pickImg = function (e) {
-        if (!s.editing) {
-          try {
-            e.target.value = "";
-          } catch (err) { }
-          return;
-        }
-        var f = e && e.target && e.target.files && e.target.files[0];
-        if (!f) {
-          return;
-        }
-        if (!/^image\/(png|jpeg|webp)$/.test(f.type)) {
-          self.setState({ imgErr: "Ảnh phải là JPG, PNG hoặc WebP." });
-          return;
-        }
-        if (f.size > 5 * 1024 * 1024) {
-          self.setState({ imgErr: "Ảnh lớn hơn 5 MB, hãy chọn ảnh nhỏ hơn." });
-          return;
-        }
-        var r = new FileReader();
-        r.onload = function () {
-          var url = r.result,
-            size =
-              f.size >= 1048576
-                ? (f.size / 1048576).toFixed(1).replace(".", ",") + " MB"
-                : Math.max(1, Math.round(f.size / 1024)) + " KB";
-          upd(
-            function (x) {
-              x.img = { name: f.name, size: size, url: url };
-            },
-            { imgErr: "" },
-          );
-        };
-        r.readAsDataURL(f);
-        try {
-          e.target.value = "";
-        } catch (err) { }
-      };
-      F.delImg = function (e) {
-        stop(e);
-        if (!s.editing) {
-          return;
-        }
-        if (!im) {
-          return;
-        }
-        ask(
-          "Xóa ảnh " + im.name + "?",
-          "Ảnh đề bài sẽ bị gỡ khỏi " +
-          UNIT +
-          " này. Có thể hoàn tác ngay sau khi xóa.",
-          function () {
-            upd(
-              function (x) {
-                x.img = null;
-              },
-              { confirm: null, imgErr: "", snack: "Đã xóa ảnh đề bài." },
-            );
-          },
-        );
-      };
-      F.headLine = "WRITING TASK " + (ti + 1);
-      F.timeLine =
-        "You should spend about " + FIX[ti].mins + " minutes on this task.";
-      F.wordLine = "Write at least " + FIX[ti].words + " words.";
-      F.belowLine = FIX[ti].below;
-      F.paras = String(it.prompt || "")
-        .split(/\n\s*\n/)
-        .map(function (p) {
-          return p.trim();
-        })
-        .filter(Boolean)
-        .map(function (p) {
-          return { t: p };
-        });
-      F.noPrompt = !F.paras.length;
-    }
+          " phút.",
+    };
+
     var iss = s.issues || [];
     var CHIP_OK = CHIP + "; background: #DCEDE2; color: #2E6A48",
       CHIP_WARN = CHIP + "; background: #FBEDBF; color: #7A5A0E";
 
-    // ---- Nhập từ xlsx: chọn tệp, kiểm tra, xem trước, đổ vào đề ở chế độ Chỉnh sửa
+    // ---- Nhập từ xlsx
     var impF = s.impF || [],
       impX = impF.filter(function (f) {
         return f[2] === "xlsx";
-      })[0],
-      SPK = KIND === "speak";
-    var IMP_SAMPLE = SPK
-      ? [["practice_test_01.xlsx", 9216, "xlsx"]]
-      : GTF
-        ? [["practice_test_05.xlsx", 7680, "xlsx"]]
-        : [
-          ["practice_test_01.xlsx", 7680, "xlsx"],
-          ["radio-tv-audiences-1992.jpg", 30720, "img"],
-        ];
-    var IMP_FIXED = [
+      })[0];
+    var IMP_SAMPLE: ImportFileItem[] = [["practice_test_01.xlsx", 9216, "xlsx"]];
+    var IMP_FIXED_ITEM: ImportFileItem = ["practice_test_01_da_sua.xlsx", 9216, "xlsx"];
+    var IMP_FIXED: ImportFileItem[] = [IMP_FIXED_ITEM].concat(IMP_SAMPLE.slice(1));
+    var IMP_ERR: Array<[string, string, string, string]> = [
       [
-        SPK ? "practice_test_01_da_sua.xlsx" : "practice_test_01_da_sua.xlsx",
-        9216,
-        "xlsx",
+        "Part1",
+        "6",
+        "question",
+        "Dòng 6 trống giữa danh sách câu hỏi. Điền câu hỏi hoặc xóa dòng.",
       ],
-    ].concat(IMP_SAMPLE.slice(1));
-    var IMP_ERR = SPK
-      ? [
-        [
-          "Part1",
-          "6",
-          "question",
-          "Dòng 6 trống giữa danh sách câu hỏi. Điền câu hỏi hoặc xóa dòng.",
-        ],
-        [
-          "Part2",
-          "2",
-          "prep_minutes",
-          'Cần là số nguyên từ 1, tệp ghi "một phút".',
-        ],
-        [
-          "De_thi",
-          "2",
-          "part13_minutes",
-          "Cần là số phút từ 1 đến 60, tệp ghi 0.",
-        ],
-      ]
-      : [
-        [
-          "Tasks",
-          "3",
-          "prompt",
-          "Task 2 chưa có yêu cầu (đề bài). Nhập nội dung cột prompt.",
-        ],
-        [
-          "De_thi",
-          "2",
-          "exam_form",
-          '"Academic Training" không hợp lệ. Dùng Academic hoặc General Training.',
-        ],
-        [
-          "Tasks",
-          "2",
-          "image_file",
-          "Không thấy radio-tv-audiences-1992.jpg trong các tệp đã chọn. Chọn kèm ảnh hoặc sửa tên.",
-        ],
-      ];
-    var IMP_CHECKS = SPK
-      ? [
-        "Đọc tệp và 4 sheet theo mẫu",
-        "Trường bắt buộc và kiểu dữ liệu",
-        "Câu hỏi Part 1 và Part 3 không trống",
-        "Thời gian chờ, nói và tổng là số phút hợp lệ",
-        "Thẻ đề Part 2 có nội dung",
-      ]
-      : [
-        "Đọc tệp và 2 sheet theo mẫu",
-        "Trường bắt buộc và kiểu dữ liệu",
-        "Đề bài Task 1 và Task 2 đã nhập",
-        "Hình thức đề khớp loại đề đang mở",
-        "Ảnh khớp cột image_file",
-      ];
-    function kbs(n) {
+      [
+        "Part2",
+        "2",
+        "prep_minutes",
+        'Cần là số nguyên từ 1, tệp ghi "một phút".',
+      ],
+      [
+        "De_thi",
+        "2",
+        "part13_minutes",
+        "Cần là số phút từ 1 đến 60, tệp ghi 0.",
+      ],
+    ];
+    var IMP_CHECKS: string[] = [
+      "Đọc tệp và 4 sheet theo mẫu",
+      "Trường bắt buộc và kiểu dữ liệu",
+      "Câu hỏi Part 1 và Part 3 không trống",
+      "Thời gian chờ, nói và tổng là số phút hợp lệ",
+      "Thẻ đề Part 2 có nội dung",
+    ];
+    function kbs(n: number): string {
       return n >= 1048576
         ? (n / 1048576).toFixed(1).replace(".", ",") + " MB"
         : Math.max(1, Math.round(n / 1024)) + " KB";
     }
-    function impAdd(list) {
+    function impAdd(list: FileList | File[]) {
       var nf = impF.slice(),
-        bad = [];
+        bad: string[] = [];
       for (var i = 0; i < list.length; i++) {
         var f = list[i],
           e = (f.name.split(".").pop() || "").toLowerCase(),
-          k =
-            e === "xlsx"
-              ? "xlsx"
-              : !SPK && /^(png|jpe?g|webp)$/.test(e)
-                ? "img"
-                : "";
+          k = e === "xlsx" ? "xlsx" : "";
         if (!k) {
           bad.push(f.name);
           continue;
@@ -1006,14 +994,11 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         impF: nf,
         impDrag: false,
         impErr: bad.length
-          ? "Không nhận " +
-          bad.join(", ") +
-          ": chỉ nhận " +
-          (SPK ? ".xlsx." : ".xlsx và ảnh .png/.jpg/.webp.")
+          ? "Không nhận " + bad.join(", ") + ": chỉ nhận .xlsx."
           : "",
       });
     }
-    function impRun(broken) {
+    function impRun(broken: boolean) {
       (me._it || []).forEach(clearTimeout);
       me._it = [];
       var na = (s.impN || 0) + 1,
@@ -1062,7 +1047,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         ex.title +
         " · 1 tệp chứa cả đề " +
         NAME,
-      impOpen: function (e) {
+      impOpen: function (e?: Ev) {
         stop(e);
         self.setState({
           imp: "pick",
@@ -1073,14 +1058,14 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           confirm: null,
         });
       },
-      impClose: function (e) {
+      impClose: function (e?: Ev) {
         stop(e);
         (me._it || []).forEach(clearTimeout);
         self.setState({ imp: null });
       },
-      impKeep: function (e) {
-        if (e && e.stopPropagation) {
-          e.stopPropagation();
+      impKeep: function (e?: Ev) {
+        if (e && (e as React.SyntheticEvent).stopPropagation) {
+          (e as React.SyntheticEvent).stopPropagation();
         }
       },
       impDl: function () {
@@ -1094,7 +1079,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         (s.impDrag
           ? "border: 2px dashed #2963CC; background: #EEF3FD"
           : "border: 1.5px dashed #C9C2C6; background: #FAF9F5"),
-      impDragOver: function (e) {
+      impDragOver: function (e?: Ev) {
         stop(e);
         if (!s.impDrag) {
           self.setState({ impDrag: true });
@@ -1103,17 +1088,17 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       impDragLeave: function () {
         self.setState({ impDrag: false });
       },
-      impDrop: function (e) {
+      impDrop: function (e: React.DragEvent<HTMLElement>) {
         stop(e);
         impAdd((e.dataTransfer && e.dataTransfer.files) || []);
       },
-      impPickFile: function (e) {
+      impPickFile: function (e: React.ChangeEvent<HTMLInputElement>) {
         impAdd(e.target.files || []);
         try {
           e.target.value = "";
         } catch (err) { }
       },
-      impFiles: impF.map(function (f, i) {
+      impFiles: impF.map(function (f, i): ImportFileDisplay {
         return {
           name: f[0],
           size: kbs(f[1]),
@@ -1123,7 +1108,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
             (f[2] === "xlsx"
               ? "background: #DCEDE2; color: #2E6A48"
               : "background: #FBEDBF; color: #7A5A0E"),
-          rm: function (e) {
+          rm: function (e?: Ev) {
             stop(e);
             var nf = impF.slice();
             nf.splice(i, 1);
@@ -1135,11 +1120,9 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       impErrText: s.impErr || "",
       impReplace: impHas,
       impReplaceText:
-        "Đề đang có nội dung. Nhập sẽ thay toàn bộ " +
-        (SPK ? "3 Part" : "2 Task") +
-        "; có thể hoàn tác ngay sau khi nhập.",
+        "Đề đang có nội dung. Nhập sẽ thay toàn bộ 3 Part; có thể hoàn tác ngay sau khi nhập.",
       impSampleText: s.impSaw ? "Dùng tệp ví dụ đã sửa lỗi" : "Dùng tệp ví dụ",
-      impSample: function (e) {
+      impSample: function (e?: Ev) {
         stop(e);
         self.setState({ impF: s.impSaw ? IMP_FIXED : IMP_SAMPLE, impErr: "" });
       },
@@ -1147,7 +1130,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       impCheckSt: impX
         ? "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF"
         : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; background: #F3F0EA; border-color: #E6E4E0; color: #706473; cursor: not-allowed",
-      impCheck: function (e) {
+      impCheck: function (e?: Ev) {
         stop(e);
         if (!impX) {
           self.setState({ impErr: "Cần đúng 1 tệp .xlsx theo mẫu." });
@@ -1156,8 +1139,10 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         if (impX[3] === "real" && me._impFile && window.FileReader) {
           var r = new FileReader();
           r.onload = function () {
-            var b = new Uint8Array(r.result);
-            impRun(!(b[0] === 0x50 && b[1] === 0x4b));
+            if (r.result instanceof ArrayBuffer) {
+              var b = new Uint8Array(r.result);
+              impRun(!(b[0] === 0x50 && b[1] === 0x4b));
+            }
           };
           r.onerror = function () {
             impRun(true);
@@ -1168,7 +1153,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         }
       },
       impX: impX ? impX[0] : "",
-      impChecks: IMP_CHECKS.map(function (c, i) {
+      impChecks: IMP_CHECKS.map(function (c, i): ImportCheckItem {
         var dn = i < impP,
           on = i === impP;
         return {
@@ -1185,96 +1170,63 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                 : "border: 1.5px solid #E6E4E0"),
         };
       }),
-      impBack: function (e) {
+      impBack: function (e?: Ev) {
         stop(e);
         self.setState({ imp: "pick", impF: [], impErr: "" });
       },
       impErrN: IMP_ERR.length + " lỗi",
       impRows: IMP_ERR.map(function (r) {
-        return { sheet: r[0], row: r[1], col: r[2], text: r[3] };
+        return { sheet: r[0], row: parseInt(r[1], 10) || 0, col: parseInt(r[2], 10) || 0, text: r[3] };
       }),
       impTitle: FULL.title,
-      impForm: SPK
-        ? FULL.tot + " phút cho Part 1 và 3"
-        : GTF
-          ? "General Training"
-          : "Academic",
-      impStats: SPK
-        ? [
-          { n: "3", label: "part" },
-          { n: String(FULL.items[0].qs.length), label: "câu Part 1" },
-          { n: String(FULL.items[2].qs.length), label: "câu Part 3" },
-          {
-            n: FULL.items[1].prep + " + " + FULL.items[1].speak,
-            label: "phút Part 2",
-          },
-        ]
-        : [
-          { n: "2", label: "task" },
-          {
-            n:
-              String(
-                FULL.items.filter(function (x) {
-                  return x.img;
-                }).length,
-              ) +
-              "/" +
-              String(
-                FULL.items.filter(function (x) {
-                  return x.img;
-                }).length,
-              ),
-            label: "ảnh khớp",
-          },
-          { n: String(FIX[0].words), label: "từ tối thiểu Task 1" },
-          { n: String(FIX[1].words), label: "từ tối thiểu Task 2" },
-        ],
-      impPrev: FULL.items.map(function (x, k) {
-        var nm = UNIT + " " + (k + 1);
-        if (SPK) {
-          return k === 1
-            ? {
-              title: nm,
-              sub: "thẻ đề",
-              groups: [x.prep + " phút chờ", x.speak + " phút nói"],
-            }
-            : {
-              title: nm,
-              sub: x.qs.length + " câu hỏi",
-              groups: x.qs.slice(0, 3).map(function (q) {
-                return q.length > 28 ? q.slice(0, 26) + "…" : q;
-              }),
-            };
-        }
-        return {
-          title: nm,
-          sub: x.prompt.split("\n")[0].slice(0, 46) + "…",
-          groups: [
-            FIX[k].mins + " phút",
-            FIX[k].words + " từ",
-            x.img ? "có ảnh" : "không ảnh",
-          ],
-        };
-      }),
-      impWarns: SPK
-        ? [
-          "Part 2: xem lại thẻ đề ở bản xem trước, kiểm tra các gạch đầu dòng.",
-        ]
-        : [
-          GTF
-            ? "Task 1 là thư: kiểm tra các ý cần viết trong đề bài."
-            : "Task 1: kiểm tra ảnh biểu đồ hiển thị đúng và đủ nét.",
-        ],
+      impForm: FULL.tot + " phút cho Part 1 và 3",
+      impStats: [
+        { n: "3", label: "part" },
+        { n: String(FULL.items[0].qs.length), label: "câu Part 1" },
+        { n: String(FULL.items[2].qs.length), label: "câu Part 3" },
+        {
+          n: FULL.items[1].prep + " + " + FULL.items[1].speak,
+          label: "phút Part 2",
+        },
+      ],
+      impPrev: [
+        {
+          title: "Part 1",
+          sub: FULL.items[0].qs.length + " câu hỏi",
+          groups: FULL.items[0].qs.slice(0, 3).map(function (q) {
+            return q.length > 28 ? q.slice(0, 26) + "…" : q;
+          }),
+        },
+        {
+          title: "Part 2",
+          sub: "thẻ đề",
+          groups: [FULL.items[1].prep + " phút chờ", FULL.items[1].speak + " phút nói"],
+        },
+        {
+          title: "Part 3",
+          sub: FULL.items[2].qs.length + " câu hỏi",
+          groups: FULL.items[2].qs.slice(0, 3).map(function (q) {
+            return q.length > 28 ? q.slice(0, 26) + "…" : q;
+          }),
+        },
+      ],
+      impWarns: [
+        "Part 2: xem lại thẻ đề ở bản xem trước, kiểm tra các gạch đầu dòng.",
+      ],
       impReplaceNote:
         (impHas ? "Nội dung hiện tại sẽ được thay. " : "") +
         "Đề chuyển sang chế độ Chỉnh sửa, chưa lưu: xem lại rồi bấm Lưu, hoặc Hoàn tác.",
-      impApply: function (e) {
+      impApply: function (e?: Ev) {
         stop(e);
-        var n = clone(ex);
-        n.items = clone(FULL.items);
-        if (SPK) {
-          n.tot = FULL.tot;
-        }
+        var n: SpeakingEditorState = {
+          title: ex.title,
+          tot: FULL.tot,
+          items: [
+            clone(FULL.items[0]),
+            clone(FULL.items[1]),
+            clone(FULL.items[2]),
+          ],
+        };
         self.setState({
           ex: n,
           t: 0,
@@ -1285,56 +1237,41 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           issues: null,
           imp: null,
           toast: "",
-          snack:
-            "Đã nhập " +
-            (SPK ? "3 Part" : "2 Task") +
-            " từ " +
-            (impX ? impX[0] : "tệp xlsx") +
-            ". Bấm Lưu để giữ.",
+          snack: "Đã nhập 3 Part từ tệp mẫu.",
         });
       },
     };
-    const crumbs: Crumb[] = [
+
+    var crumbs: Crumb[] = [
       { label: "Quản lý", page: "AdminHome" },
       { label: "Bộ đề và đề thi", page: "AdminExams" },
-      ...(skill && skill.set ? [{ label: skill.set.name, page: "AdminExamSet", params: { id: skill.set.id } }] : []),
-      { label: "Soạn đề Speaking" },
+      {
+        label: skill?.exam?.title || ex.title,
+        page: skill ? "AdminExamSet?id=" + skill.set.id : "AdminExams",
+      },
+      { label: NAME },
     ];
-    const onNavigate = (go: () => void) => {
+    var onNavigate = function (go: () => void) {
       if (dirty) {
         ask(
-          "Rời khỏi trang soạn đề?",
-          "Các thay đổi chưa lưu sẽ bị mất. Bạn có chắc muốn rời đi?",
+          "Rời trang khi chưa lưu?",
+          "Nội dung đang soạn sẽ bị mất nếu bạn rời đi bây giờ.",
           go,
-          "Rời đi"
+          "Rời đi",
         );
       } else {
         go();
       }
     };
-    var R0 = {
+    var R0: SpeakingView = {
+      ...impVals,
       crumbs: crumbs,
       onNavigate: onNavigate,
-      impVals: 0,
       examTitle: skill?.exam?.title || ex.title,
       examPath: skill ? skill.set.name + " · Speaking" : "Mock Test 2026 Vol 4 · Speaking",
-      typeText:
-        KIND === "speak"
-          ? "Dùng chung Academic và General Training"
-          : GTF
-            ? "General Training"
-            : "Academic",
-      typeTitle:
-        KIND === "speak"
-          ? "Speaking dùng chung cho Academic và General Training"
-          : "Writing có đề riêng cho Academic và General Training: Task 1 " +
-          (GTF ? "là thư" : "mô tả biểu đồ, bảng, sơ đồ hoặc bản đồ"),
-      typeSt:
-        CHIP +
-        "; " +
-        (GTF && KIND === "write"
-          ? "background: #FCE6D6; color: #9A4A17"
-          : "background: #DFF1F4; color: #1F6A78"),
+      typeText: "Dùng chung Academic và General Training",
+      typeTitle: "Speaking dùng chung cho Academic và General Training",
+      typeSt: CHIP + "; background: #DFF1F4; color: #1F6A78",
       modeText: editing ? versionMessages.modeEditing(skill?.versionNumber || 1) : versionMessages.modeViewing,
       modeSt:
         CHIP +
@@ -1364,21 +1301,22 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       canDelete: !editing && skill && skill.status === "DRAFT",
       deleteLabel: skill?.slot?.liveId ? "Bỏ bản sửa" : "Xóa kỹ năng",
       confirmGoText: s.confirm?.goText || "Xóa",
-      deleteSkillAction: function (e: Ev) {
+      deleteSkillAction: function (e?: Ev) {
         stop(e);
         if (!skill) return;
-        var hadLive = Boolean(skill.slot.liveId);
-        var conf = versionMessages.confirmDiscardDraft(skill.versionNumber, skill.slot?.liveVersion);
+        var currentSkill = skill;
+        var hadLive = Boolean(currentSkill.slot.liveId);
+        var conf = versionMessages.confirmDiscardDraft(currentSkill.versionNumber, currentSkill.slot?.liveVersion);
         ask(
           conf.title,
           conf.text,
           async function () {
             try {
-              await deleteSkill(skill.id);
-              if (hadLive && skill.slot.liveId) {
-                navigate("AdminSpeakingEditor?skillId=" + skill.slot.liveId);
+              await deleteSkill(currentSkill.id);
+              if (hadLive && currentSkill.slot.liveId) {
+                navigate("AdminSpeakingEditor?skillId=" + currentSkill.slot.liveId);
               } else {
-                navigate("AdminExamSet?id=" + skill.set.id);
+                navigate("AdminExamSet?id=" + currentSkill.set.id);
               }
             } catch (err) {
               self.setState({ toast: errorInfo(err).message || "Không thể xóa kỹ năng." });
@@ -1387,21 +1325,22 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           conf.goText
         );
       },
-      startEdit: async function (e: Ev) {
+      startEdit: async function (e?: Ev) {
         stop(e);
         if (!skill) return;
-        if (skill.status === "ARCHIVED") return;
-        if (skill.status !== "DRAFT") {
+        var currentSkill = skill;
+        if (currentSkill.status === "ARCHIVED") return;
+        if (currentSkill.status !== "DRAFT") {
           var conf = versionMessages.confirmCreateDraft(
-            (skill.versionNumber || 1) + 1,
-            skill.versionNumber || 1
+            (currentSkill.versionNumber || 1) + 1,
+            currentSkill.versionNumber || 1
           );
           ask(
             conf.title,
             conf.text,
             async function () {
               try {
-                var rev = await createRevisionDraft(skill.id);
+                var rev = await createRevisionDraft(currentSkill.id);
                 window.history.replaceState(null, "", "#AdminSpeakingEditor?skillId=" + rev.id);
                 var newEx = toSpeakingEditorState(rev);
                 self.setState({
@@ -1413,9 +1352,9 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                   hist: [],
                   lastTag: null,
                   issues: null,
-                  snack: rev.id === skill.slot?.draftId
+                  snack: rev.id === currentSkill.slot?.draftId
                     ? versionMessages.noticeReopenDraft(rev.versionNumber)
-                    : versionMessages.noticeCreatedDraft(rev.versionNumber, skill.versionNumber),
+                    : versionMessages.noticeCreatedDraft(rev.versionNumber, currentSkill.versionNumber),
                 });
               } catch (err) {
                 self.setState({ toast: errorInfo(err).message || "Không thể tạo bản sửa." });
@@ -1434,14 +1373,15 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           });
         }
       },
-      saveEdit: async function (e: Ev) {
+      saveEdit: async function (e?: Ev) {
         stop(e);
         if (!skill || self.state.saving) return;
+        var currentSkill = skill;
         self.setState({ saving: true });
         try {
           var content = fromSpeakingEditorState(ex);
-          var saved = await saveSkillContent(skill.id, {
-            baseUpdatedAt: skill.updatedAt,
+          var saved = await saveSkillContent(currentSkill.id, {
+            baseUpdatedAt: currentSkill.updatedAt,
             speaking: content,
           });
           self.setState({
@@ -1462,7 +1402,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           });
         }
       },
-      cancelEdit: function (e: Ev) {
+      cancelEdit: function (e?: Ev) {
         stop(e);
         if (dirty) {
           self.setState({ leave: true });
@@ -1475,11 +1415,11 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         "Bạn có " +
         Math.max(nChange, 1) +
         " thay đổi chưa lưu trong đề này. Chọn Không lưu thì đề quay về bản đã lưu gần nhất.",
-      stayEdit: function (e: Ev) {
+      stayEdit: function (e?: Ev) {
         stop(e);
         self.setState({ leave: false });
       },
-      discardEdit: function (e: Ev) {
+      discardEdit: function (e?: Ev) {
         stop(e);
         self.setState({
           ex: base || ex,
@@ -1493,7 +1433,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           toast: "Đã bỏ các thay đổi chưa lưu.",
         });
       },
-      publish: async function (e: Ev) {
+      publish: async function (e?: Ev) {
         stop(e);
         var li = allIssues();
         if (li.length) {
@@ -1502,11 +1442,12 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         }
         if (editing && dirty) {
           if (!skill || self.state.saving) return;
+          var currentSkill = skill;
           self.setState({ saving: true });
           try {
             var content = fromSpeakingEditorState(ex);
-            var saved = await saveSkillContent(skill.id, {
-              baseUpdatedAt: skill.updatedAt,
+            var saved = await saveSkillContent(currentSkill.id, {
+              baseUpdatedAt: currentSkill.updatedAt,
               speaking: content,
             });
             self.setState({
@@ -1531,17 +1472,18 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       pubOpen: !!s.pubAsk,
       pubTitle: versionMessages.confirmPublish(skill?.versionNumber || 1, skill?.slot?.liveVersion).title,
       pubSub: versionMessages.confirmPublish(skill?.versionNumber || 1, skill?.slot?.liveVersion).text,
-      pubCancel: function (e: Ev) {
+      pubCancel: function (e?: Ev) {
         stop(e);
         self.setState({ pubAsk: false });
       },
-      pubOk: async function (e: Ev) {
+      pubOk: async function (e?: Ev) {
         stop(e);
         if (!skill) return;
+        var currentSkill = skill;
         self.setState({ pubAsk: false });
         try {
-          await publishSkill(skill.id);
-          var refreshed = await getEditorSkill(skill.id);
+          await publishSkill(currentSkill.id);
+          var refreshed = await getEditorSkill(currentSkill.id);
           var newEx = toSpeakingEditorState(refreshed);
           self.setState({
             skill: refreshed,
@@ -1549,7 +1491,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
             base: JSON.parse(JSON.stringify(newEx)),
             editing: false,
             hist: [],
-            toast: versionMessages.noticePublished(skill.versionNumber, skill.slot?.liveVersion),
+            toast: versionMessages.noticePublished(currentSkill.versionNumber, currentSkill.slot?.liveVersion),
           });
         } catch (err) {
           var info = errorInfo(err);
@@ -1564,29 +1506,28 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           }
         }
       },
-      hasIssues: iss.length > 0,
-      issueHead: "Chưa đăng được: " + iss.length + " lỗi cần sửa",
-      closeIssues: function (e) {
-        stop(e);
+      hasIssues: !!iss.length,
+      issueHead: "Chưa thể đăng đề: còn " + iss.length + " điểm cần sửa",
+      closeIssues: function () {
         self.setState({ issues: null });
       },
       issues: iss.map(function (i) {
         return {
           text: i.text,
-          go: function (e) {
+          go: function (e?: Ev) {
             stop(e);
-            self.setState({ t: i.t });
+            self.setState({ t: i.t ?? 0 });
           },
         };
       }),
       confirmOpen: !!s.confirm,
       confirmTitle: s.confirm ? s.confirm.title : "",
       confirmSub: s.confirm ? s.confirm.sub : "",
-      confirmCancel: function (e) {
+      confirmCancel: function (e?: Ev) {
         stop(e);
         self.setState({ confirm: null });
       },
-      confirmOk: function (e) {
+      confirmOk: function (e?: Ev) {
         stop(e);
         if (s.confirmRun) {
           s.confirmRun();
@@ -1594,17 +1535,17 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       },
       snackOpen: !!s.snack,
       snack: s.snack || "",
-      hideSnack: function (e) {
+      hideSnack: function (e?: Ev) {
         stop(e);
         self.setState({ snack: null });
       },
       toast: !!s.toast,
       toastText: s.toast || "",
-      hideToast: function (e) {
+      hideToast: function (e?: Ev) {
         stop(e);
         self.setState({ toast: "" });
       },
-      preview: function (e) {
+      preview: function (e?: Ev) {
         stop(e);
         self.setState({
           toast:
@@ -1613,11 +1554,17 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
             " của người học (bản mẫu chưa nối màn này).",
         });
       },
+      skill: s.skill,
+      dirty: dirty,
+      ask: ask,
+      historyOpen: s.historyOpen,
+      openHistory: function () {
+        self.setState({ historyOpen: true });
+      },
+      closeHistory: function () {
+        self.setState({ historyOpen: false });
+      },
     };
-    delete R0.impVals;
-    for (var ik in impVals) {
-      R0[ik] = impVals[ik];
-    }
     return R0;
   }
 
@@ -1672,13 +1619,6 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
     }
 
     const v = this.renderVals();
-    const s = this.state;
-    const self = this;
-    const skill = s.skill;
-    const dirty = !!s.editing && JSON.stringify(s.base || s.ex) !== JSON.stringify(s.ex);
-    const ask = (title: string, sub: string, run: () => Promise<void> | void, goText = "Xóa") => {
-      self.setState({ confirm: { title: title, sub: sub, goText: goText, run: run }, confirmRun: run, snack: null });
-    };
     return (
       <>
         {"\n"}
@@ -1725,19 +1665,19 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                   "flex: 1; display: flex; flex-direction: column; background: #FAF9F5; min-width: 0",
                 )}
               >
-                {skill && (
+                {v.skill && (
                   <div
                     style={styleOf(
-                      skill.status === "ARCHIVED"
+                      v.skill.status === "ARCHIVED"
                         ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap"
-                        : skill.status === "HIDDEN"
+                        : v.skill.status === "HIDDEN"
                           ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
-                          : skill.status === "DRAFT"
+                          : v.skill.status === "DRAFT"
                             ? "background: #EFF6FF; border-bottom: 1.5px solid #BFDBFE; color: #1E40AF; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
                             : "display: none"
                     )}
                   >
-                    {skill.status === "ARCHIVED" ? (
+                    {v.skill.status === "ARCHIVED" ? (
                       <>
                         <div style={styleOf("display: flex; align-items: center; gap: 8px")}>
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -1745,19 +1685,19 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                           </svg>
                           <span>
                             {versionMessages.bannerArchived(
-                              skill.versionNumber,
-                              fmtDate(skill.publishedAt || skill.updatedAt)
+                              v.skill.versionNumber,
+                              fmtDate(v.skill.publishedAt || v.skill.updatedAt)
                             )}
                           </span>
                         </div>
-                        {(skill.slot.draftId || skill.slot.liveId) && (
+                        {(v.skill?.slot?.draftId || v.skill?.slot?.liveId) && (
                           <a
                             href="#"
                             onClick={function (e) {
                               e.preventDefault();
                               navigate(
                                 "AdminSpeakingEditor?skillId=" +
-                                (skill.slot.draftId || skill.slot.liveId)
+                                (v.skill?.slot?.draftId || v.skill?.slot?.liveId)
                               );
                             }}
                             style={styleOf(
@@ -1768,14 +1708,14 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                           </a>
                         )}
                       </>
-                    ) : skill.status === "HIDDEN" ? (
+                    ) : v.skill.status === "HIDDEN" ? (
                       <>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22" />
                         </svg>
-                        <span>{versionMessages.bannerHidden(skill.versionNumber)}</span>
+                        <span>{versionMessages.bannerHidden(v.skill.versionNumber)}</span>
                       </>
-                    ) : skill.status === "DRAFT" ? (
+                    ) : v.skill.status === "DRAFT" ? (
                       <>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <circle cx="12" cy="12" r="10" />
@@ -1783,14 +1723,14 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                           <line x1="12" y1="8" x2="12.01" y2="8" />
                         </svg>
                         <span>
-                          {skill.slot.liveId
+                          {v.skill.slot.liveId
                             ? versionMessages.bannerDraftWithLive(
-                              skill.versionNumber,
-                              skill.slot.liveVersion || (skill.versionNumber - 1),
-                              skill.slot.liveVersion || 1,
-                              skill.slot.liveStatus || "PUBLISHED"
+                              v.skill.versionNumber,
+                              v.skill.slot.liveVersion || (v.skill.versionNumber - 1),
+                              v.skill.slot.liveVersion || 1,
+                              v.skill.slot.liveStatus || "PUBLISHED"
                             )
-                            : versionMessages.bannerDraftFirst(skill.versionNumber)}
+                            : versionMessages.bannerDraftFirst(v.skill.versionNumber)}
                         </span>
                       </>
                     ) : null}
@@ -1806,7 +1746,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                       href={"#"}
                       onClick={function (e) {
                         e.preventDefault();
-                        navigate(skill ? "AdminExamSet?id=" + skill.set.id : "AdminExams");
+                        navigate(v.skill ? "AdminExamSet?id=" + v.skill.set.id : "AdminExams");
                       }}
                       style={styleOf("display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: #706473; text-decoration: none; cursor: pointer")}
                     >
@@ -1873,7 +1813,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                       <button
                         type="button"
                         onClick={function () {
-                          self.setState({ historyOpen: true });
+                          v.openHistory();
                         }}
                         style={styleOf(
                           "display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1px solid #D6D4D0; background: #FFFFFF; font-size: 12px; font-weight: 600; color: #5B4E5F; cursor: pointer; text-decoration: none;"
@@ -3701,24 +3641,22 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         </div>
         {"\n"}
         <SkillHistoryDrawer
-          isOpen={s.historyOpen}
-          onClose={function () {
-            self.setState({ historyOpen: false });
-          }}
-          skillId={skill ? skill.id : null}
+          isOpen={v.historyOpen}
+          onClose={v.closeHistory}
+          skillId={v.skill ? v.skill.id : null}
           onSelectVersion={function (versionId) {
-            if (s.editing && dirty) {
-              ask(
+            if (v.editing && v.dirty) {
+              v.ask(
                 "Rời trang khi chưa lưu thay đổi?",
                 "Các thay đổi bạn vừa chỉnh sửa sẽ bị mất nếu chuyển phiên bản.",
                 function () {
-                  self.setState({ historyOpen: false });
+                  v.closeHistory();
                   navigate("AdminSpeakingEditor?skillId=" + versionId);
                 },
                 "Rời đi"
               );
             } else {
-              self.setState({ historyOpen: false });
+              v.closeHistory();
               navigate("AdminSpeakingEditor?skillId=" + versionId);
             }
           }}

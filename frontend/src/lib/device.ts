@@ -1,42 +1,13 @@
 /**
- * Kiểm tra và theo dõi kích thước thiết bị hỗ trợ làm bài thi/luyện.
- * Quy tắc RS-01..RS-03:
- * - 'ok': Màn hình máy tính (width >= 1024px)
- * - 'small': Màn hình máy tính bảng (768px <= width < 1024px)
- * - 'phone': Màn hình điện thoại (width < 768px hoặc pointer: coarse và height < 500px)
+ * Điều kiện màn hình được làm bài thi/luyện (RS-01..RS-03).
+ * Phải giống hệt điều kiện trong components/attempts/DesktopOnly.tsx,
+ * là nơi thực thi chặn làm bài.
  */
+export const DESKTOP_TEST_QUERY =
+  "(min-width: 1024px) and (hover: hover) and (pointer: fine)";
 
-export type ScreenSupport = 'ok' | 'small' | 'phone';
-
-export function getTestScreenSupport(): ScreenSupport {
-  if (typeof window === 'undefined') return 'ok';
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  const isCoarse = typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
-
-  if (w < 768 || (isCoarse && h < 500)) {
-    return 'phone';
-  }
-  if (w < 1024) {
-    return 'small';
-  }
-  return 'ok';
-}
-
-export function subscribeScreenSupport(onChange: (support: ScreenSupport) => void): () => void {
-  if (typeof window === 'undefined') return () => {};
-  let current = getTestScreenSupport();
-  const handler = () => {
-    const next = getTestScreenSupport();
-    if (next !== current) {
-      current = next;
-      onChange(next);
-    }
-  };
-  window.addEventListener('resize', handler, { passive: true });
-  window.addEventListener('orientationchange', handler, { passive: true });
-  return () => {
-    window.removeEventListener('resize', handler);
-    window.removeEventListener('orientationchange', handler);
-  };
+export function canTakeTest(): boolean {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function")
+    return true;
+  return window.matchMedia(DESKTOP_TEST_QUERY).matches;
 }

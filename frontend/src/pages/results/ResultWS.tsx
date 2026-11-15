@@ -1,6 +1,6 @@
 import PageLink from "../../components/navigation/PageLink";
 import { accentForeground } from "../../components/attempts/appearance";
-import LearnerHeader from "../../components/attempts/LearnerHeader";
+import LearnerHeader from "../../components/navigation/LearnerHeader";
 function ResultWS(props: { accent?: string }) {
   const accent = props.accent ?? "#2963CC";
   return (
@@ -21,7 +21,7 @@ function ResultWS(props: { accent?: string }) {
               </PageLink>
               {" / Practice Test 01 / Writing Task 2"}
             </div>
-            <div className="flex justify-between [align-items:flex-end] gap-4">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
                 <h1 className="m-0 [font-size:28px] [line-height:1.25] [letter-spacing:-0.02em] attempt-sans [letter-spacing:-0.015em]">
                   {"Kết quả Writing Task 2"}
@@ -30,7 +30,7 @@ function ResultWS(props: { accent?: string }) {
                   {"Public transport and traffic"}
                 </div>
               </div>
-              <div className="flex [gap:10px]">
+              <div className="flex flex-wrap items-center gap-2.5 self-start md:self-auto">
                 <span className="inline-flex items-center [gap:6px] [height:26px] [padding:0_10px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] [background:var(--attempt-bg-dcede2)] [color:var(--attempt-text-2e6a48)] [font-size:13px] font-semibold whitespace-nowrap">
                   <svg
                     width="14"
@@ -68,54 +68,54 @@ function ResultWS(props: { accent?: string }) {
                 </a>
               </div>
             </div>
-            <div className="flex [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)] overflow-hidden">
-              <div className="[flex:1_1_0] [padding:18px_22px]">
-                <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 divide-[var(--attempt-line-d6d4d0,#D6D4D0)] border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] rounded-[22px] bg-[var(--attempt-bg-ffffff,#FFFFFF)] shadow-sm overflow-hidden">
+              <div className="p-4 sm:p-5 flex flex-col gap-0.5 sm:border-r sm:border-b lg:border-b-0 border-[var(--attempt-line-d6d4d0,#D6D4D0)]">
+                <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
                   {"Điểm Task 2"}
                 </div>
-                <div className="[font-size:28px] font-bold [letter-spacing:-0.02em] [line-height:1.25] font-sans tabular-nums [letter-spacing:-0.015em]">
+                <div className="text-2xl sm:text-[28px] font-bold tracking-tight font-sans tabular-nums text-[var(--attempt-text-352637,#352637)]">
                   {"6.5"}
                 </div>
-                <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
+                <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
                   {"đánh giá cho Task 2, không phải band toàn kỹ năng"}
                 </div>
               </div>
-              <div className="[flex:1_1_0] [padding:18px_22px] [border-left:1.5px_solid_var(--attempt-line-d6d4d0)]">
-                <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
+              <div className="p-4 sm:p-5 flex flex-col gap-0.5 lg:border-r sm:border-b lg:border-b-0 border-[var(--attempt-line-d6d4d0,#D6D4D0)]">
+                <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
                   {"Số từ"}
                 </div>
-                <div className="[font-size:28px] font-bold [letter-spacing:-0.02em] [line-height:1.25] font-sans tabular-nums [letter-spacing:-0.015em]">
+                <div className="text-2xl sm:text-[28px] font-bold tracking-tight font-sans tabular-nums text-[var(--attempt-text-352637,#352637)]">
                   {"271"}
                 </div>
-                <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
+                <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
                   {"yêu cầu từ 250"}
                 </div>
               </div>
-              <div className="[flex:1_1_0] [padding:18px_22px] [border-left:1.5px_solid_var(--attempt-line-d6d4d0)]">
-                <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
+              <div className="p-4 sm:p-5 flex flex-col gap-0.5 sm:border-r border-[var(--attempt-line-d6d4d0,#D6D4D0)]">
+                <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
                   {"Công bố"}
                 </div>
-                <div className="[font-size:28px] font-bold [letter-spacing:-0.02em] [line-height:1.25] font-sans tabular-nums [letter-spacing:-0.015em]">
+                <div className="text-2xl sm:text-[28px] font-bold tracking-tight font-sans tabular-nums text-[var(--attempt-text-352637,#352637)]">
                   {"22/10/2026"}
                 </div>
-                <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
+                <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
                   {"yêu cầu đã dùng 1 lượt miễn phí"}
                 </div>
               </div>
-              <div className="[flex:1_1_0] [padding:18px_22px] [border-left:1.5px_solid_var(--attempt-line-d6d4d0)]">
-                <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
+              <div className="p-4 sm:p-5 flex flex-col gap-0.5">
+                <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
                   {"Nội dung bài"}
                 </div>
-                <div className="[font-size:28px] font-bold [letter-spacing:-0.02em] [line-height:1.25] attempt-sans [letter-spacing:-0.015em]">
+                <div className="text-2xl sm:text-[28px] font-bold tracking-tight text-[var(--attempt-text-352637,#352637)]">
                   {"đến 05/11"}
                 </div>
-                <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
+                <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
                   {"sau đó chỉ còn điểm và nhận xét"}
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap gap-6 items-start">
-              <div className="[flex:1.5_1_420px] min-w-0 flex flex-col gap-6">
+            <div className="flex flex-col lg:flex-row gap-6 items-start">
+              <div className="w-full lg:flex-[1.5] min-w-0 flex flex-col gap-6">
                 <div className="p-6 [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)]">
                   <div className="flex flex-col [gap:14px]">
                     <div className="[font-size:18px] font-semibold">
@@ -145,7 +145,7 @@ function ResultWS(props: { accent?: string }) {
                   </div>
                 </div>
               </div>
-              <div className="[flex:1_1_320px] min-w-0 flex flex-col gap-6">
+              <div className="w-full lg:flex-1 min-w-0 flex flex-col gap-6">
                 <div className="p-6 [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)]">
                   <div className="[font-size:18px] font-semibold [margin-bottom:6px]">
                     {"Điểm theo tiêu chí"}

@@ -15,8 +15,10 @@
 | D11 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, Phần E). | Xác thực JWT tại chỗ bằng JWKS của Supabase và cache hồ sơ người dùng 60 giây trong RAM. Đổi lấy tốc độ xác thực < 1.5ms, chấp nhận độ trễ thu hồi quyền tối đa 60 giây và token cũ còn hạn tối đa 1 giờ. |
 | D12 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, E4). | Kết nối PostgreSQL dùng Supavisor transaction pooler (cổng 6543) cho ứng dụng runtime và DIRECT_URL (cổng 5432) cho Prisma CLI migration. |
 | D13 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, O-B1). | Phía quản lý trên điện thoại (< 768px) chỉ hiện dải cảnh báo khuyến nghị dùng máy tính, giữ bố cục tablet và cuộn ngang trong nội dung, không làm bố cục mobile riêng. |
-| D14 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, O-B2, RS-01..03). | Chặn làm bài thi trên điện thoại trước khi bắt đầu bằng màn che yêu cầu dùng máy tính; máy tính bảng chỉ cảnh báo. Lượt làm đã bắt đầu mà thu nhỏ/xoay màn hình chỉ hiện dải cảnh báo, không che để tránh mất bài. |
+| D14 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, O-B2, RS-01..03); sửa lại bởi D17. | Ban đầu: chặn điện thoại, tablet chỉ cảnh báo. Đã thay bằng D17. |
 | D15 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, O-D1, O-D2). | Lịch sử phiên bản kỹ năng giữ vĩnh viễn mọi bản ARCHIVED, không tự xóa. Khôi phục phiên bản cũ (tạo bản nháp mới từ bản ARCHIVED) lùi sang đợt tiếp theo. |
+| D16 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11 đợt 2, R1). | Một header người học duy nhất ở `frontend/src/components/navigation/LearnerHeader.tsx`, gộp thiết kế responsive 3 mốc (>=1024, 768-1023, <768) với hỗ trợ theme CSS (`--attempt-*`), NotificationBadge và PageLink hash router. Xóa bản thừa ở `components/attempts/LearnerHeader.tsx`. |
+| D17 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11 đợt 2, O-R4). | Giữ `DesktopOnly.tsx` của THuong làm nơi duy nhất thực thi: màn dưới 1024px hoặc cảm ứng không làm bài được, kể cả lượt đã bắt đầu (bị che, nội dung vẫn giữ). `ExamDetail` dùng chung điều kiện (`lib/device.ts`) để chặn trước khi tạo lượt. |
 
 ## Điểm mở trước khi triển khai
 

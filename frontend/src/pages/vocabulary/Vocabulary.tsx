@@ -46,7 +46,7 @@ export default function Vocabulary() {
   }
   return (
     <>
-      <LearnerHeader accent="#2963CC" onAccent="#fff" />
+      <LearnerHeader active="vocab" accent="#2963CC" onAccent="#fff" />
       <section className="vocab-library-banner">
         <div className="vocabulary">
           <nav aria-label="Đường dẫn" className="vocab-breadcrumb">
@@ -58,18 +58,18 @@ export default function Vocabulary() {
         </div>
       </section>
       <main className="vocabulary">
-        <div className="vocab-library-toolbar">
-          <div className="vocab-tabs" role="group" aria-label="Nội dung thư viện">
+        <div className="vocab-library-toolbar flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div className="vocab-tabs w-full sm:w-auto flex justify-center sm:justify-start" role="group" aria-label="Nội dung thư viện">
             <button type="button" aria-pressed={tab === "sets"} onClick={() => switchTab("sets")}>Từ vựng</button>
             <button type="button" aria-pressed={tab === "favorites"} onClick={() => switchTab("favorites")}>Yêu thích</button>
           </div>
-          <label className="vocab-search">
+          <label className="vocab-search w-full sm:w-[320px]">
             <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
             <input type="search" aria-label={searchLabel} placeholder={searchLabel} value={search} onChange={(event) => setSearch(event.target.value)} />
           </label>
         </div>
         {showSets && !visibleSets.length && <p role="status">Không tìm thấy bộ từ phù hợp.</p>}
-        {showSets ? <div className="vocab-sets">
+        {showSets ? <div className="vocab-sets grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
           {visibleSets.map((id) => (
             <VocabularySetCard
               key={id}

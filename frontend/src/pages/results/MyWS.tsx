@@ -15,7 +15,7 @@ function MyWS(props: { accent?: string }) {
         ></LearnerHeader>
         <div className="[background:var(--attempt-bg-fcfbf7)] [min-height:1081px]">
           <main className="[max-width:1280px] [margin:0_auto] [padding:36px_24px_56px] flex flex-col gap-6">
-            <div className="flex justify-between [align-items:flex-end] gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <h1 className="m-0 [font-size:28px] [line-height:1.25] [letter-spacing:-0.02em] attempt-sans [letter-spacing:-0.015em]">
                   {"Bài Writing và Speaking của tôi"}
@@ -26,56 +26,78 @@ function MyWS(props: { accent?: string }) {
                   }
                 </div>
               </div>
-              <div className="flex [gap:10px]">
+              <div className="w-full sm:w-auto flex">
                 <PageLink
                   page="PracticeWS"
-                  className="inline-flex items-center justify-center gap-2 h-11 [padding:0_20px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border [background:var(--attempt-bg-ffffff)] [color:var(--attempt-text-352637)] font-semibold [font-size:14px] no-underline whitespace-nowrap"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                 >
                   {"Luyện Writing, Speaking"}
                 </PageLink>
               </div>
             </div>
-            <div className="flex flex-wrap [gap:14px] items-center">
-              <div className="inline-flex [gap:2px] [padding:3px] [border-radius:10px] [background:var(--attempt-bg-f3f0ea)]">
-                <span className="inline-flex items-center [height:34px] [padding:0_14px] rounded-lg [background:var(--attempt-bg-ffffff)] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [font-size:13px] font-semibold">
-                  {"Tất cả"}
-                </span>
-                <span className="inline-flex items-center [height:34px] [padding:0_14px] rounded-lg [border:1.5px_solid_transparent] [color:var(--attempt-text-706473)] [font-size:13px] font-medium">
-                  {"Writing"}
-                </span>
-                <span className="inline-flex items-center [height:34px] [padding:0_14px] rounded-lg [border:1.5px_solid_transparent] [color:var(--attempt-text-706473)] [font-size:13px] font-medium">
-                  {"Speaking"}
-                </span>
+            <div className="flex flex-col md:flex-row gap-3 md:items-center">
+              {/* Mobile filter (< 768px) */}
+              <div className="md:hidden flex flex-col gap-1.5 w-full">
+                <label htmlFor="ws-status-filter" className="text-xs font-semibold text-[var(--attempt-text-706473,#706473)]">
+                  Trạng thái
+                </label>
+                <select
+                  id="ws-status-filter"
+                  aria-label="Lọc theo trạng thái"
+                  className="h-10 px-3 rounded-xl border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-sm text-[var(--attempt-text-352637,#352637)] font-medium outline-none"
+                >
+                  <option>Mọi trạng thái</option>
+                  <option>Chưa gửi chấm</option>
+                  <option>Chờ phân công</option>
+                  <option>Chờ chấm</option>
+                  <option>Đã có kết quả</option>
+                  <option>Đã hủy</option>
+                </select>
               </div>
-              <div className="inline-flex [gap:2px] [padding:3px] [border-radius:10px] [background:var(--attempt-bg-f3f0ea)]">
-                <span className="inline-flex items-center [height:34px] [padding:0_14px] rounded-lg [background:var(--attempt-bg-ffffff)] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [font-size:13px] font-semibold">
-                  {"Mọi trạng thái"}
-                </span>
-                <span className="inline-flex items-center [height:34px] [padding:0_14px] rounded-lg [border:1.5px_solid_transparent] [color:var(--attempt-text-706473)] [font-size:13px] font-medium">
-                  {"Chưa gửi chấm"}
-                </span>
-                <span className="inline-flex items-center [height:34px] [padding:0_14px] rounded-lg [border:1.5px_solid_transparent] [color:var(--attempt-text-706473)] [font-size:13px] font-medium">
-                  {"Chờ phân công"}
-                </span>
-                <span className="inline-flex items-center [height:34px] [padding:0_14px] rounded-lg [border:1.5px_solid_transparent] [color:var(--attempt-text-706473)] [font-size:13px] font-medium">
-                  {"Chờ chấm"}
-                </span>
-                <span className="inline-flex items-center [height:34px] [padding:0_14px] rounded-lg [border:1.5px_solid_transparent] [color:var(--attempt-text-706473)] [font-size:13px] font-medium">
-                  {"Đã có kết quả"}
-                </span>
-                <span className="inline-flex items-center [height:34px] [padding:0_14px] rounded-lg [border:1.5px_solid_transparent] [color:var(--attempt-text-706473)] [font-size:13px] font-medium">
-                  {"Đã hủy"}
-                </span>
+
+              {/* Desktop segmented filters (>= 768px) */}
+              <div className="hidden md:flex flex-wrap gap-3 items-center overflow-x-auto pb-1">
+                <div className="inline-flex gap-0.5 p-1 rounded-xl bg-[var(--attempt-bg-f3f0ea,#F3F0EA)]">
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg bg-white border border-[var(--attempt-line-d6d4d0,#D6D4D0)] text-xs font-semibold text-[var(--attempt-text-352637,#352637)]">
+                    {"Tất cả"}
+                  </span>
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-352637,#352637)] cursor-pointer">
+                    {"Writing"}
+                  </span>
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-352637,#352637)] cursor-pointer">
+                    {"Speaking"}
+                  </span>
+                </div>
+                <div className="inline-flex gap-0.5 p-1 rounded-xl bg-[var(--attempt-bg-f3f0ea,#F3F0EA)]">
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg bg-white border border-[var(--attempt-line-d6d4d0,#D6D4D0)] text-xs font-semibold text-[var(--attempt-text-352637,#352637)]">
+                    {"Mọi trạng thái"}
+                  </span>
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-352637,#352637)] cursor-pointer">
+                    {"Chưa gửi chấm"}
+                  </span>
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-352637,#352637)] cursor-pointer">
+                    {"Chờ phân công"}
+                  </span>
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-352637,#352637)] cursor-pointer">
+                    {"Chờ chấm"}
+                  </span>
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-352637,#352637)] cursor-pointer">
+                    {"Đã có kết quả"}
+                  </span>
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-352637,#352637)] cursor-pointer">
+                    {"Đã hủy"}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="flex flex-wrap gap-6 items-start">
-              <div className="[flex:1_1_420px] min-w-0 flex flex-col gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+              <div className="w-full flex flex-col gap-6">
                 <div className="[padding:22px] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)]">
                   <div className="flex flex-col gap-3">
                     <div className="[font-size:18px] font-semibold">
                       {"Lượt hỗ trợ chấm còn hiệu lực"}
                     </div>
-                    <div className="flex gap-3 items-start">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="flex-1 [padding:14px] rounded-xl [border:1.5px_solid_var(--attempt-line-d6d4d0)] [background:var(--attempt-bg-dcede2)]">
                         <div className="[font-size:28px] font-bold [color:var(--attempt-text-2e6a48)] font-sans tabular-nums [letter-spacing:-0.015em]">
                           {"1"}
@@ -103,7 +125,7 @@ function MyWS(props: { accent?: string }) {
                   </div>
                 </div>
               </div>
-              <div className="[flex:1_1_320px] min-w-0 flex flex-col gap-6">
+              <div className="w-full flex flex-col gap-6">
                 <div className="[padding:22px] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)]">
                   <div className="flex flex-col [gap:2px]">
                     <div className="[font-size:18px] font-semibold">
@@ -165,7 +187,7 @@ function MyWS(props: { accent?: string }) {
                   {" mới có kết quả hoặc vừa bị hủy"}
                 </span>
               </div>
-              <div className="[overflow-x:auto]">
+              <div className="hidden md:block overflow-x-auto">
                 <table className="w-full [border-collapse:collapse]">
                   <thead>
                     <tr>
@@ -516,6 +538,236 @@ function MyWS(props: { accent?: string }) {
                     </tr>
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile card list (< 768px) */}
+              <div className="md:hidden divide-y divide-[var(--attempt-line-e6e4e0,#E6E4E0)]">
+                {/* Card 1 */}
+                <div className="p-4 flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="font-semibold text-sm text-[var(--attempt-text-352637,#352637)]">
+                        Writing Task 2 · Public transport
+                      </div>
+                      <div className="text-xs text-[var(--attempt-text-706473,#706473)] mt-0.5">
+                        Hoàn thành 20/10 10:05
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] text-xs font-semibold shrink-0">
+                      Writing
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-dcede2,#DCEDE2)] text-[var(--attempt-text-2e6a48,#2E6A48)] font-semibold">
+                      Đã có kết quả · 6.5
+                      <span aria-label="Chưa xem" className="inline-block w-2 h-2 rounded-full bg-[var(--attempt-bg-e5604a,#E5604A)] shrink-0" />
+                    </span>
+                    <span className="text-[var(--attempt-text-706473,#706473)]">Giữ đến 05/11</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <PageLink
+                      page="ResultWS"
+                      className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                    >
+                      Xem kết quả
+                    </PageLink>
+                    <a
+                      href="#"
+                      className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                      </svg>
+                      Tải .docx
+                    </a>
+                  </div>
+                </div>
+
+                {/* Card 2 */}
+                <div className="p-4 flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="font-semibold text-sm text-[var(--attempt-text-352637,#352637)]">
+                        Speaking Part 2 · A skill worth learning
+                      </div>
+                      <div className="text-xs text-[var(--attempt-text-706473,#706473)] mt-0.5">
+                        Hoàn thành 22/10 20:30
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[var(--attempt-bg-e8e4fa,#E8E4FA)] text-[var(--attempt-text-5543b0,#5543B0)] text-xs font-semibold shrink-0">
+                      Speaking
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-dde8fc,#DDE8FC)] text-[var(--attempt-text-2a55b8,#2A55B8)] font-semibold">
+                      Chờ chấm · phân công 22/10 20:40
+                    </span>
+                    <span className="text-[var(--attempt-text-706473,#706473)]">Tạm giữ</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <a
+                      href="#"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M8 5l11 7-11 7z" />
+                      </svg>
+                      Nghe lại
+                    </a>
+                    <a
+                      href="#"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                      </svg>
+                      Tải ghi âm
+                    </a>
+                  </div>
+                </div>
+
+                {/* Card 3 */}
+                <div className="p-4 flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="font-semibold text-sm text-[var(--attempt-text-352637,#352637)]">
+                        Writing Task 1 Academic · Energy use
+                      </div>
+                      <div className="text-xs text-[var(--attempt-text-706473,#706473)] mt-0.5">
+                        Hoàn thành 21/10 08:55
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] text-xs font-semibold shrink-0">
+                      Writing
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] font-semibold">
+                      Chờ phân công · còn 21 giờ
+                    </span>
+                    <span className="text-[var(--attempt-text-706473,#706473)]">Tạm giữ</span>
+                  </div>
+                  <div className="flex gap-2 pt-1">
+                    <a
+                      href="#"
+                      className="w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                      </svg>
+                      Tải .docx
+                    </a>
+                  </div>
+                </div>
+
+                {/* Card 4 */}
+                <div className="p-4 flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="font-semibold text-sm text-[var(--attempt-text-352637,#352637)]">
+                        Speaking Part 3 · Technology
+                      </div>
+                      <div className="text-xs text-[var(--attempt-text-706473,#706473)] mt-0.5">
+                        Hoàn thành 18/10 19:40
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[var(--attempt-bg-e8e4fa,#E8E4FA)] text-[var(--attempt-text-5543b0,#5543B0)] text-xs font-semibold shrink-0">
+                      Speaking
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-fbdcd3,#FBDCD3)] text-[var(--attempt-text-c0412a,#C0412A)] font-semibold">
+                      Đã hủy · đã hoàn 1 bonus
+                      <span aria-label="Chưa xem" className="inline-block w-2 h-2 rounded-full bg-[var(--attempt-bg-e5604a,#E5604A)] shrink-0" />
+                    </span>
+                    <span className="text-[var(--attempt-text-706473,#706473)]">Hạn ban đầu 01/11</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setRequest(true)}
+                      className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border border-[#352637] bg-[#352637] text-white font-semibold text-xs no-underline hover:bg-[#221824]"
+                    >
+                      Gửi lại yêu cầu
+                    </button>
+                    <a
+                      href="#"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                      </svg>
+                      Tải ghi âm
+                    </a>
+                  </div>
+                </div>
+
+                {/* Card 5 */}
+                <div className="p-4 flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="font-semibold text-sm text-[var(--attempt-text-352637,#352637)]">
+                        Writing Task 2 · Online education
+                      </div>
+                      <div className="text-xs text-[var(--attempt-text-706473,#706473)] mt-0.5">
+                        Hoàn thành 22/10 21:15
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] text-xs font-semibold shrink-0">
+                      Writing
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[var(--attempt-line-dddbd7,#DDDBD7)] bg-[var(--attempt-bg-f3f0ea,#F3F0EA)] text-[var(--attempt-text-706473,#706473)] font-semibold">
+                      Đã lưu · chưa gửi chấm
+                    </span>
+                    <span className="text-[var(--attempt-text-706473,#706473)]">Giữ đến 05/11</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setRequest(true)}
+                      className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border border-[#352637] bg-[#352637] text-white font-semibold text-xs no-underline hover:bg-[#221824]"
+                    >
+                      Gửi yêu cầu chấm
+                    </button>
+                    <a
+                      href="#"
+                      className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+                      </svg>
+                      Tải .docx
+                    </a>
+                  </div>
+                </div>
+
+                {/* Card 6 */}
+                <div className="p-4 flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="font-semibold text-sm text-[var(--attempt-text-352637,#352637)]">
+                        Writing Task 1 General · Complaint letter
+                      </div>
+                      <div className="text-xs text-[var(--attempt-text-706473,#706473)] mt-0.5">
+                        Hoàn thành 02/10 09:30
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] text-xs font-semibold shrink-0">
+                      Writing
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[var(--attempt-line-dddbd7,#DDDBD7)] bg-[var(--attempt-bg-f3f0ea,#F3F0EA)] text-[var(--attempt-text-706473,#706473)] font-semibold">
+                      Chưa có điểm
+                    </span>
+                    <span className="text-[var(--attempt-text-706473,#706473)]">Nội dung đã hết hạn 16/10</span>
+                  </div>
+                  <div className="text-xs text-[var(--attempt-text-706473,#706473)] pt-1">
+                    Không mở hoặc tải được
+                  </div>
+                </div>
               </div>
             </div>
           </main>

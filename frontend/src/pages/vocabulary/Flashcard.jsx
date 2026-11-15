@@ -80,7 +80,7 @@ class Flashcard extends React.Component {
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-7 justify-center items-center lg:items-start">
-                <div className="w-full max-w-[500px] p-6 sm:p-8 rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-4">
+                <div className="w-full max-w-[444px] p-6 sm:p-8 rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-4">
                   <div
                     style={styleOf(
                       "display: flex; flex-direction: column; gap: 16px; ",

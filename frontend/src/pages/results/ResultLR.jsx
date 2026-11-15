@@ -48,128 +48,54 @@ class ResultLR extends React.Component {
               <div style={styleOf("font-size:13px;color:#706473")}>
                 {"Kết quả / Practice Test 01 / Reading"}
               </div>
-              <div
-                style={styleOf(
-                  "display: flex; justify-content: space-between; align-items: flex-end; gap: 16px",
-                )}
-              >
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
-                  <h1
-                    style={styleOf(
-                      "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
-                    )}
-                  >
+                  <h1 className="m-0 text-2xl sm:text-[28px] font-bold font-serif leading-tight text-[#352637]">
                     {"Kết quả Reading"}
                   </h1>
-                  <div
-                    style={styleOf(
-                      "font-size: 15px; color: #706473; margin-top: 4px",
-                    )}
-                  >
+                  <div className="text-sm sm:text-base text-[#706473] mt-1">
                     {"Nộp lúc 09:42, 07/10/2026"}
                   </div>
                 </div>
-                <div style={styleOf("display: flex; gap: 10px")}>
+                <div className="flex items-center gap-2.5 w-full sm:w-auto">
                   <a
                     href={"ReadingTest.dc.html"}
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
-                    )}
+                    className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-[1.5px] border-[#D6D4D0] bg-white text-[#352637] font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                   >
                     {"Làm lại"}
                   </a>
                   <a
                     href={"ResultsHistory.dc.html"}
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
-                    )}
+                    className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-[1.5px] border-[#352637] bg-[#352637] text-white font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#221824]"
                   >
                     {"Về lịch sử"}
                   </a>
                 </div>
               </div>
-              <div
-                style={styleOf(
-                  "display: flex; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden",
-                )}
-              >
-                <div style={styleOf("flex: 1 1 0; padding: 18px 22px; ")}>
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"Band"}
-                  </div>
-                  <div
-                    style={styleOf(
-                      "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                    )}
-                  >
-                    {"6.5"}
-                  </div>
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"Reading"}
-                  </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm overflow-hidden divide-y sm:divide-y-0 sm:divide-x divide-[#D6D4D0]">
+                <div className="p-4 sm:p-5 flex flex-col gap-1">
+                  <div className="text-xs sm:text-[13px] text-[#706473]">Band</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-mono text-[#352637]">6.5</div>
+                  <div className="text-xs sm:text-[13px] text-[#706473]">Reading</div>
                 </div>
-                <div
-                  style={styleOf(
-                    "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                  )}
-                >
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"Đúng"}
-                  </div>
-                  <div
-                    style={styleOf(
-                      "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                    )}
-                  >
-                    {"29/40"}
-                  </div>
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"72%"}
-                  </div>
+                <div className="p-4 sm:p-5 flex flex-col gap-1">
+                  <div className="text-xs sm:text-[13px] text-[#706473]">Đúng</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-mono text-[#352637]">29/40</div>
+                  <div className="text-xs sm:text-[13px] text-[#706473]">72%</div>
                 </div>
-                <div
-                  style={styleOf(
-                    "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                  )}
-                >
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"Thời gian"}
-                  </div>
-                  <div
-                    style={styleOf(
-                      "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                    )}
-                  >
-                    {"52:10"}
-                  </div>
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"trên 60 phút"}
-                  </div>
+                <div className="p-4 sm:p-5 flex flex-col gap-1">
+                  <div className="text-xs sm:text-[13px] text-[#706473]">Thời gian</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-mono text-[#352637]">52:10</div>
+                  <div className="text-xs sm:text-[13px] text-[#706473]">trên 60 phút</div>
                 </div>
-                <div
-                  style={styleOf(
-                    "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                  )}
-                >
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"Lần làm"}
-                  </div>
-                  <div
-                    style={styleOf(
-                      "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                    )}
-                  >
-                    {"2"}
-                  </div>
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"điểm tăng 0.5"}
-                  </div>
+                <div className="p-4 sm:p-5 flex flex-col gap-1">
+                  <div className="text-xs sm:text-[13px] text-[#706473]">Lần làm</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-mono text-[#352637]">2</div>
+                  <div className="text-xs sm:text-[13px] text-[#706473]">điểm tăng 0.5</div>
                 </div>
               </div>
-              <div
-                style={styleOf("display:flex;gap:24px;align-items:flex-start")}
-              >
-                <div style={styleOf("flex:1.6 1 0")}>
+              <div className="flex flex-col lg:flex-row gap-6 items-start">
+                <div className="w-full lg:flex-[1.6] min-w-0">
                   <div
                     style={styleOf(
                       "padding: 0px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow:hidden",
@@ -366,20 +292,11 @@ class ResultLR extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div style={styleOf("flex:1 1 0")}>
-                  <div
-                    style={styleOf(
-                      "padding: 22px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
-                    )}
-                  >
-                    <div
-                      style={styleOf(
-                        "display: flex; flex-direction: column; gap: 12px; ",
-                      )}
-                    >
-                      <div style={styleOf("font-size:18px;font-weight:600")}>
-                        {"Theo dạng câu hỏi"}
-                      </div>
+                <div className="w-full lg:flex-1 min-w-0 order-first lg:order-none">
+                  <div className="p-5 sm:p-6 rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-3">
+                    <div className="font-semibold text-lg text-[#352637]">
+                      {"Theo dạng câu hỏi"}
+                    </div>
                       <div
                         style={styleOf(
                           "display: flex; gap: 16px; align-items: center",
@@ -507,7 +424,6 @@ class ResultLR extends React.Component {
                     </div>
                   </div>
                 </div>
-              </div>
             </main>
           </div>
           {"\n"}

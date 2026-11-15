@@ -54,159 +54,57 @@ class ResultWS extends React.Component {
                 </a>
                 {" / Practice Test 01 / Writing Task 2"}
               </div>
-              <div
-                style={styleOf(
-                  "display: flex; justify-content: space-between; align-items: flex-end; gap: 16px",
-                )}
-              >
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3.5">
                 <div>
-                  <h1
-                    style={styleOf(
-                      "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
-                    )}
-                  >
+                  <h1 className="m-0 text-2xl sm:text-[28px] font-bold font-serif leading-tight text-[#352637]">
                     {"Kết quả Writing Task 2"}
                   </h1>
-                  <div
-                    style={styleOf(
-                      "font-size: 15px; color: #706473; margin-top: 4px",
-                    )}
-                  >
+                  <div className="text-sm sm:text-base text-[#706473] mt-1">
                     {"Public transport and traffic"}
                   </div>
                 </div>
-                <div style={styleOf("display: flex; gap: 10px")}>
-                  <span
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; white-space: nowrap",
-                    )}
-                  >
-                    <svg
-                      width={"14"}
-                      height={"14"}
-                      viewBox={"0 0 24 24"}
-                      fill={"none"}
-                      stroke={"currentColor"}
-                      strokeWidth={"2"}
-                      strokeLinecap={"round"}
-                      strokeLinejoin={"round"}
-                      aria-hidden={"true"}
-                    >
-                      <path d={"M5 12.5l4.5 4.5L19 7"}></path>
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <span className="inline-flex items-center gap-1.5 h-7 px-3 rounded-full border border-[#D6D4D0] bg-[#DCEDE2] text-[#2E6A48] text-xs font-semibold whitespace-nowrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M5 12.5l4.5 4.5L19 7" />
                     </svg>
-                    {"Đã có kết quả"}
+                    Đã có kết quả
                   </span>
                   <a
                     href={"#"}
-                    style={styleOf(
-                      "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
-                    )}
+                    className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-full border-[1.5px] border-[#D6D4D0] bg-white text-[#352637] font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                   >
-                    <svg
-                      width={"18"}
-                      height={"18"}
-                      viewBox={"0 0 24 24"}
-                      fill={"none"}
-                      stroke={"currentColor"}
-                      strokeWidth={"2"}
-                      strokeLinecap={"round"}
-                      strokeLinejoin={"round"}
-                      aria-hidden={"true"}
-                    >
-                      <path d={"M12 4v12M7 11l5 5 5-5M4 20h16"}></path>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
                     </svg>
-                    {"Tải .docx"}
+                    Tải .docx
                   </a>
                 </div>
               </div>
-              <div
-                style={styleOf(
-                  "display: flex; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden",
-                )}
-              >
-                <div style={styleOf("flex: 1 1 0; padding: 18px 22px; ")}>
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"Điểm Task 2"}
-                  </div>
-                  <div
-                    style={styleOf(
-                      "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                    )}
-                  >
-                    {"6.5"}
-                  </div>
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"đánh giá cho Task 2, không phải band toàn kỹ năng"}
-                  </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm overflow-hidden divide-y sm:divide-y-0 sm:divide-x divide-[#D6D4D0]">
+                <div className="p-4 sm:p-5 flex flex-col gap-1">
+                  <div className="text-xs sm:text-[13px] text-[#706473]">Điểm Task 2</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-mono text-[#352637]">6.5</div>
+                  <div className="text-xs text-[#706473]">đánh giá cho Task 2, không phải band toàn kỹ năng</div>
                 </div>
-                <div
-                  style={styleOf(
-                    "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                  )}
-                >
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"Số từ"}
-                  </div>
-                  <div
-                    style={styleOf(
-                      "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                    )}
-                  >
-                    {"271"}
-                  </div>
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"yêu cầu từ 250"}
-                  </div>
+                <div className="p-4 sm:p-5 flex flex-col gap-1">
+                  <div className="text-xs sm:text-[13px] text-[#706473]">Số từ</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-mono text-[#352637]">271</div>
+                  <div className="text-xs text-[#706473]">yêu cầu từ 250</div>
                 </div>
-                <div
-                  style={styleOf(
-                    "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                  )}
-                >
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"Công bố"}
-                  </div>
-                  <div
-                    style={styleOf(
-                      "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                    )}
-                  >
-                    {"22/10/2026"}
-                  </div>
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"yêu cầu đã dùng 1 lượt miễn phí"}
-                  </div>
+                <div className="p-4 sm:p-5 flex flex-col gap-1">
+                  <div className="text-xs sm:text-[13px] text-[#706473]">Công bố</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-mono text-[#352637]">22/10/2026</div>
+                  <div className="text-xs text-[#706473]">yêu cầu đã dùng 1 lượt miễn phí</div>
                 </div>
-                <div
-                  style={styleOf(
-                    "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                  )}
-                >
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"Nội dung bài"}
-                  </div>
-                  <div
-                    style={styleOf(
-                      "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
-                    )}
-                  >
-                    {"đến 05/11"}
-                  </div>
-                  <div style={styleOf("font-size: 13px; color: #706473")}>
-                    {"sau đó chỉ còn điểm và nhận xét"}
-                  </div>
+                <div className="p-4 sm:p-5 flex flex-col gap-1">
+                  <div className="text-xs sm:text-[13px] text-[#706473]">Nội dung bài</div>
+                  <div className="text-2xl sm:text-[28px] font-bold font-serif text-[#352637]">đến 05/11</div>
+                  <div className="text-xs text-[#706473]">sau đó chỉ còn điểm và nhận xét</div>
                 </div>
               </div>
-              <div
-                style={styleOf(
-                  "display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start",
-                )}
-              >
-                <div
-                  style={styleOf(
-                    "flex: 1.5 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 24px",
-                  )}
-                >
+              <div className="flex flex-col lg:flex-row gap-6 items-start">
+                <div className="w-full lg:flex-[1.5] min-w-0 flex flex-col gap-6">
                   <div
                     style={styleOf(
                       "padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
@@ -256,11 +154,7 @@ class ResultWS extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div
-                  style={styleOf(
-                    "flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 24px",
-                  )}
-                >
+                <div className="w-full lg:flex-1 min-w-0 flex flex-col gap-6">
                   <div
                     style={styleOf(
                       "padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",

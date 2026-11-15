@@ -84,7 +84,7 @@
 
 - Bản sạch commit `51a31d5`, PostgreSQL 16 chạy 01 mới rồi 05: backend `typecheck`, `build` đạt; frontend `npm run build` đạt; test `exam-rules` + `exams-services` 11/11, `auth` 2/2. Route Quản lý không token trả 401; `/api/exam-sets/<id lạ>` trả 404.
 - Chưa kiểm tra: bấm thử trên trình duyệt, gọi API Quản lý bằng token thật, tải ảnh lên bucket `exam-covers` (cần Supabase thật).
-- Còn lệch, chưa sửa:
+- Còn lệch (đã sửa ngày 15/11, xem PROGRESS 2026-11-14-editor-writing-speaking.md):
   1. `exams-services.test.mjs` ca 3 lỗi `SKILL_NOT_READY` khi DB chưa có thang band Reading Academic; test không tự tạo thang.
   2. `ExamDetail.tsx` vẫn đọc `sessionStorage["ieltspace-learner"]` làm dự phòng khi URL không có `?id=` (kế hoạch yêu cầu bỏ).
   3. Ghi chú danh mục ở trên khác seed của `05_danh_muc_bo_de.sql` (Mock Test, Actual Test, Practice Test, Forecast, Khác).

@@ -25,3 +25,18 @@ Trình duyệt chạy React 18 và Vite 5. Backend là một dịch vụ Node.js
 ## Ranh giới triển khai
 
 Duy trì một backend chia module. Route/controller đọc đầu vào và trả HTTP. Service kiểm tra quyền theo bản ghi, áp dụng quy tắc và mở giao dịch. Lớp truy cập dữ liệu dùng Prisma/SQL. Auth hiện tập trung phần lớn xử lý ở auth.routes.ts. Vercel cho frontend tĩnh và Render cho backend là phương án triển khai. Cần kiểm thử redirect, HTTPS, CORS và cookie với tên miền thực. [Cấu hình Auth của dự án](PROGRESS/2026-11-07-trang-thai-du-an.md#cấu-hình-auth).
+
+## Cấu trúc kết nối CSDL và Hiệu năng (Performance Architecture)
+
+- **Supavisor Pooler & Direct URL**: 
+  - `DATABASE_URL` trỏ vào Supavisor transaction pooler qua cổng 6543 với `pgbouncer=true&connection_limit=5`, phục vụ xử lý đồng thời của Node.js Express.
+  - `DIRECT_URL` trỏ vào PostgreSQL trực tiếp qua cổng 5432 cho Prisma CLI thực thi các câu lệnh DDL migration.
+- **Xác thực JWT tại chỗ (Local JWKS)**:
+  - Middleware `requireAuth` xác thực chữ ký JWT bằng public key từ endpoint JWKS của Supabase (`jose` quản lý cache khóa cục bộ), không gọi HTTP tới Supabase Auth qua mạng.
+  - Hồ sơ người dùng được lưu tạm trong bộ nhớ RAM (`Map<authUserId, {user, expires}>`) với TTL 60 giây, giúp giảm thời gian xác thực từ 250–950ms xuống < 1.5ms mỗi request.
+- **Ghi theo lô (Batch Writes)**:
+  - Sinh UUID v4 trực tiếp tại ứng dụng Node.js và thực hiện chèn dữ liệu theo lô qua Prisma `createMany` (sections → groups → questions → options → answers), giảm từ hàng trăm truy vấn lặp xuống 5 câu lệnh SQL duy nhất.
+- **Quan hệ nạp dữ liệu bằng JOIN (relationLoadStrategy: 'join')**:
+  - Prisma 6 với `previewFeatures = ["relationJoins"]` nạp toàn bộ cây dữ liệu bộ đề và kỹ năng trong một câu truy vấn SQL JOIN đơn lẻ, loại bỏ việc nạp lồng nhiều câu lệnh rời rạc.
+- **Khung giao diện quản trị đáp ứng (StaffLayout)**:
+  - Khung chuẩn hóa `StaffLayout` quản lý thanh bên (Sidebar) co giãn theo breakpoint: mở rộng (≥ 1280px), thu gọn icon (1024–1279px), ngăn kéo phủ overlay khi thao tác nút ☰ (768–1023px) và dải cảnh báo thiết bị (< 768px).

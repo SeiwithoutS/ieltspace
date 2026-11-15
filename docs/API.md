@@ -21,64 +21,70 @@ Base URL local là `http://localhost:3001/api`. Bảng dưới dùng đường d
 
 ## Quản lý bộ đề (Exam Sets)
 
-Các route `/admin/*` yêu cầu quyền ADMIN (`requireRole(['ADMIN'])`). Route công khai `/exam-sets/*` không yêu cầu xác thực.
+Mã A1–A16 và E1–E6 trùng chú thích trong `backend/src/modules/exams/exams.admin.routes.ts`. Các route `/admin/*` yêu cầu quyền ADMIN (`requireAuth`, `requireRole('ADMIN')`). Route công khai `/exam-sets/*` không yêu cầu xác thực. Mọi thao tác ghi trả về `ExamSetAdminDto` của cả bộ đề (trừ A10, A2, A7 của danh mục và nhóm E). Lỗi dạng `{ message, code }`; lỗi kiểm tra đầu vào là 400 `VALIDATION_ERROR` kèm danh sách chi tiết.
 
 ### Danh mục bộ đề (Categories)
 
-| Method và đường dẫn | Người gọi và đầu vào | Thành công | Lỗi cần xử lý |
-|---|---|---|---|
-| GET /admin/categories | Admin, không cần body | 200, danh sách `ExamSetCategoryDto[]` sắp xếp theo order_no | 401, 403 |
-| POST /admin/categories | Admin, body: `{ name, description?, orderNo? }` | 201, `ExamSetCategoryDto` vừa tạo | 400, 401, 403, 409 CATEGORY_NAME_EXISTS |
+| Mã | Method và đường dẫn | Người gọi và đầu vào | Thành công | Lỗi cần xử lý |
+|---|---|---|---|---|
+| A1 | GET /admin/exam-set-categories | Admin | 200, `{ items: CategoryDto[] }` sắp theo `order_no` | 401, 403 |
+| A2 | POST /admin/exam-set-categories | Admin, body: `{ name }` (1–60 ký tự). Tên trùng (không phân biệt hoa thường) thì dùng lại danh mục đó | 201, `CategoryDto` | 400, 401, 403 |
 
 ### Bộ đề phía Quản trị (Admin Exam Sets)
 
 | Mã | Method và đường dẫn | Người gọi và đầu vào | Thành công | Lỗi cần xử lý |
 |---|---|---|---|---|
-| A1 | GET /admin/exam-sets | Admin, query: `status?` (DRAFT/PUBLISHED/HIDDEN), `categoryId?`, `q?` | 200, danh sách `ExamSetAdminDto[]` | 401, 403 |
-| A2 | POST /admin/exam-sets | Admin, body: `{ name, description?, categoryId?, newCategoryName?, coverUrl? }` | 201, `ExamSetAdminDto` vừa tạo | 400, 401, 403, 409 EXAM_SET_NAME_EXISTS |
-| A3 | GET /admin/exam-sets/:id | Admin, param: `id` (UUID) | 200, `ExamSetAdminDto` chi tiết kèm danh sách Tests và kỹ năng | 401, 403, 404 EXAM_SET_NOT_FOUND |
-| A4 | PATCH /admin/exam-sets/:id | Admin, param: `id`, body: `{ name?, description?, categoryId?, newCategoryName?, coverUrl? }` | 200, `ExamSetAdminDto` sau cập nhật | 400, 401, 403, 404, 409 EXAM_SET_NAME_EXISTS |
-| A5 | PUT /admin/exam-sets/:id/cover | Admin, param: `id`, binary body: `image/jpeg, image/png, image/webp` (≤ 5MB) | 200, `ExamSetAdminDto` với `coverUrl` từ Storage | 400, 401, 403, 404, 413, 415 |
-| A6 | POST /admin/exam-sets/:id/publish | Admin, param: `id` | 200, `ExamSetAdminDto` trạng thái PUBLISHED | 401, 403, 404, 409 CANNOT_PUBLISH_EMPTY_SET / NO_PUBLISHED_SKILLS |
-| A7 | POST /admin/exam-sets/:id/hide | Admin, param: `id` | 200, `ExamSetAdminDto` trạng thái HIDDEN | 401, 403, 404, 409 |
-| A8 | DELETE /admin/exam-sets/:id | Admin, param: `id` | 204 No Content | 401, 403, 404, 409 CANNOT_DELETE_PUBLISHED_SET / CANNOT_DELETE_SET_WITH_TESTS / CANNOT_DELETE_SET_WITH_ATTEMPTS |
+| A3 | GET /admin/exam-sets | Admin | 200, `{ items: ExamSetAdminDto[] }` | 401, 403 |
+| A4 | POST /admin/exam-sets | Admin, body: `{ name, description?, categoryId? hoặc newCategoryName?, coverUrl? }` | 201, `ExamSetAdminDto` | 400, 401, 403, 409 EXAM_SET_NAME_EXISTS |
+| A5 | GET /admin/exam-sets/:id | Admin | 200, `ExamSetAdminDto` kèm Test và ô kỹ năng | 401, 403, 404 EXAM_SET_NOT_FOUND |
+| A6 | PATCH /admin/exam-sets/:id | Admin, body: `{ name?, description?, categoryId? hoặc newCategoryName?, coverUrl? }` | 200, `ExamSetAdminDto` | 400, 401, 403, 404, 409 EXAM_SET_NAME_EXISTS |
+| A7 | PUT /admin/exam-sets/:id/cover | Admin, body nhị phân `image/jpeg`, `image/png`, `image/webp` (≤ 5 MB) | 200, `ExamSetAdminDto` với `coverUrl` | 400, 401, 403, 404, 413 COVER_TOO_LARGE, 415 COVER_TYPE, 503 STORAGE_UNAVAILABLE |
+| A8 | POST /admin/exam-sets/:id/publish | Admin | 200, `ExamSetAdminDto` trạng thái PUBLISHED | 401, 403, 404, 409 EXAM_SET_EMPTY / EXAM_SET_NO_PUBLISHED_SKILL / INVALID_STATUS_TRANSITION |
+| A9 | POST /admin/exam-sets/:id/hide | Admin | 200, `ExamSetAdminDto` trạng thái HIDDEN | 401, 403, 404, 409 INVALID_STATUS_TRANSITION |
+| A10 | DELETE /admin/exam-sets/:id | Admin | 204 | 401, 403, 404, 409 EXAM_SET_NOT_DELETABLE |
 
 ### Quản lý Đề thi (Tests) trong bộ
 
 | Mã | Method và đường dẫn | Người gọi và đầu vào | Thành công | Lỗi cần xử lý |
 |---|---|---|---|---|
-| A9 | POST /admin/exam-sets/:id/exams | Admin, param: `id` (examSetId), body: `{ title? }` | 201, `ExamSetAdminDto` sau khi thêm Test | 400, 401, 403, 404 |
-| A10 | PATCH /admin/exams/:examId | Admin, param: `examId`, body: `{ title?, description? }` | 200, `ExamSetAdminDto` sau khi sửa | 400, 401, 403, 404 |
-| A11 | DELETE /admin/exams/:examId | Admin, param: `examId` | 200, `ExamSetAdminDto` sau khi xóa Test và re-index order_no | 401, 403, 404, 409 CANNOT_DELETE_EXAM_PUBLISHED / CANNOT_DELETE_EXAM_WITH_ATTEMPTS |
+| A11 | POST /admin/exam-sets/:id/exams | Admin, body: `{ title? }` (mặc định `Test {số thứ tự}`) | 201, `ExamSetAdminDto` | 400, 401, 403, 404 EXAM_SET_NOT_FOUND |
+| A12 | DELETE /admin/exams/:examId | Admin | 200, `ExamSetAdminDto` sau khi xóa và đánh lại `order_no` | 401, 403, 404 EXAM_NOT_FOUND, 409 EXAM_NOT_DELETABLE |
 
 ### Quản lý Kỹ năng (Exam Skills)
 
 | Mã | Method và đường dẫn | Người gọi và đầu vào | Thành công | Lỗi cần xử lý |
 |---|---|---|---|---|
-| A12 | POST /admin/exams/:examId/skills | Admin, param: `examId`, body: `{ skill, form? }` | 201, `ExamSetAdminDto` sau khi tạo bản nháp DRAFT v1 | 400, 401, 403, 404, 409 DRAFT_ALREADY_EXISTS |
-| A13 | POST /admin/exam-skills/:id/publish | Admin, param: `id` (skillId) | 200, `ExamSetAdminDto` sau khi công khai kỹ năng | 401, 403, 404, 409 SKILL_NOT_READY (kèm reasons) |
-| A14 | POST /admin/exam-skills/:id/hide | Admin, param: `id` | 200, `ExamSetAdminDto` trạng thái HIDDEN | 401, 403, 404, 409 |
-| A15 | POST /admin/exam-skills/:id/show | Admin, param: `id` (kỹ năng đang HIDDEN) | 200, `ExamSetAdminDto` trạng thái PUBLISHED | 401, 403, 404, 409 |
-| A16 | POST /admin/exam-skills/:id/draft | Admin, param: `id` (nhân bản từ PUBLISHED/HIDDEN/ARCHIVED) | 201, `ExamSetAdminDto` với bản DRAFT mới tăng version_number | 401, 403, 404, 409 DRAFT_ALREADY_EXISTS |
+| A13 | POST /admin/exams/:examId/skills | Admin, body: `{ skill, form? }` (`form` bắt buộc với READING/WRITING, rỗng với LISTENING/SPEAKING) | 201, `ExamSetAdminDto` sau khi tạo bản nháp | 400, 401, 403, 404 EXAM_NOT_FOUND, 409 SLOT_EXISTS |
+| A14 | POST /admin/exam-skills/:skillId/hide | Admin | 200, `ExamSetAdminDto` (PUBLISHED sang HIDDEN) | 401, 403, 404 EXAM_SKILL_NOT_FOUND, 409 INVALID_STATUS_TRANSITION |
+| A15 | POST /admin/exam-skills/:skillId/show | Admin | 200, `ExamSetAdminDto` (HIDDEN sang PUBLISHED) | 401, 403, 404, 409 INVALID_STATUS_TRANSITION |
+| A16 | POST /admin/exam-skills/:skillId/publish | Admin. Writing/Speaking kiểm tra theo BR-EXAM-007 và gán quy tắc chấm `FULL_SKILL` mới nhất | 200, `ExamSetAdminDto` (bản cũ sang ARCHIVED) | 401, 403, 404, 409 INVALID_STATUS_TRANSITION, 422 SKILL_NOT_READY kèm danh sách lý do |
 
-### Soạn đề Writing & Speaking (Exam Editor API)
+### Soạn đề Writing và Speaking (Exam Editor)
 
-Các endpoint dưới đây phục vụ màn hình soạn đề Writing và Speaking (`AdminWritingEditor`, `AdminSpeakingEditor`) và thao tác xóa kỹ năng từ `AdminExamSet`:
+Phục vụ `AdminWritingEditor`, `AdminSpeakingEditor` và thao tác xóa kỹ năng ở `AdminExamSet`. E1, E2, E3 chỉ nhận kỹ năng WRITING và SPEAKING (kỹ năng khác trả 400 SKILL_NOT_SUPPORTED). Việc đăng dùng A16.
 
 | Mã | Method và đường dẫn | Người gọi và đầu vào | Thành công | Lỗi cần xử lý |
 |---|---|---|---|---|
-| E1 | GET /admin/exam-skills/:skillId | Admin, param: `skillId` (UUID) | 200, `EditorSkillDto` gồm thông tin kỹ năng, thời lượng, quy tắc chấm, nội dung Writing/Speaking, bộ đề, đề thi và slot | 401, 403, 404 SKILL_NOT_FOUND |
-| E2 | PUT /admin/exam-skills/:skillId/content | Admin, param: `skillId`, body: `{ baseUpdatedAt, writing? | speaking? }` | 200, `EditorSkillDto` sau khi lưu | 400, 401, 403, 404, 409 NOT_A_DRAFT / SKILL_CHANGED (xung đột cập nhật) |
-| E3 | POST /admin/exam-skills/:skillId/draft | Admin, param: `skillId` (tạo bản nháp mới từ PUBLISHED/HIDDEN/ARCHIVED) | 201, `EditorSkillDto` của bản nháp mới (v+1) | 401, 403, 404, 409 DRAFT_ALREADY_EXISTS |
-| E4 | POST /admin/exam-skills/:id/publish | Admin, param: `id` (skillId) | 200, `ExamSetAdminDto` sau khi kiểm tra đủ điều kiện BR-EXAM-007 và gán quy tắc chấm `FULL_SKILL` | 401, 403, 404, 409, 422 SKILL_NOT_READY (kèm reasons) |
-| E5 | PUT /admin/exam-skills/:skillId/images | Admin, param: `skillId`, binary body: `image/jpeg, image/png, image/webp` (≤ 5MB) | 200, `{ url, path }` từ Storage `exam-assets` | 400, 401, 403, 404, 409 NOT_A_DRAFT / NOT_WRITING, 413, 415 |
-| E6 | DELETE /admin/exam-skills/:skillId | Admin, param: `skillId` | 204 No Content (xóa bản nháp DRAFT, ô kỹ năng trở về trống hoặc giữ nguyên bản đang hiển thị) | 401, 403, 404, 409 CANNOT_DELETE_SKILL / CANNOT_DELETE_PUBLISHED_SKILL / CANNOT_DELETE_WITH_ATTEMPTS |
+| E1 | GET /admin/exam-skills/:skillId | Admin | 200, `EditorSkillDto` (kỹ năng, thời lượng, bộ đề, Test, ô kỹ năng, nội dung `writing` hoặc `speaking`; kỹ năng mới trả nội dung mặc định) | 400 SKILL_NOT_SUPPORTED, 401, 403, 404 EXAM_SKILL_NOT_FOUND |
+| E2 | PUT /admin/exam-skills/:skillId/content | Admin, body: `{ baseUpdatedAt, writing }` hoặc `{ baseUpdatedAt, speaking }`; chỉ bản DRAFT | 200, `EditorSkillDto` sau khi lưu | 400, 401, 403, 404, 409 SKILL_NOT_DRAFT / SKILL_CHANGED (`baseUpdatedAt` đã cũ) |
+| E3 | POST /admin/exam-skills/:skillId/draft | Admin, nguồn là bản PUBLISHED hoặc HIDDEN | 201 `EditorSkillDto` của bản sửa mới (`version_number` + 1); 200 nếu ô đã có bản nháp | 400, 401, 403, 404, 409 INVALID_STATUS_TRANSITION |
+| E4 | – | Không có route riêng, dùng A16 | – | – |
+| E5 | PUT /admin/exam-skills/:skillId/images | Admin, body nhị phân `image/jpeg`, `image/png`, `image/webp` (≤ 5 MB), chỉ Writing bản DRAFT | 201, `{ path, url }` trong bucket `exam-assets` | 400 SKILL_NOT_SUPPORTED, 401, 403, 404, 409 SKILL_NOT_DRAFT, 413 IMAGE_TOO_LARGE, 415 IMAGE_TYPE, 503 STORAGE_UNAVAILABLE |
+| E6 | DELETE /admin/exam-skills/:skillId | Admin, chỉ bản DRAFT chưa có lượt làm | 200, `ExamSetAdminDto` (ô về trống, hoặc giữ bản đang hiển thị) | 401, 403, 404, 409 SKILL_NOT_DELETABLE |
+| E7 | GET /admin/exam-skills/:skillId/history | Admin | 200, `SkillHistoryDto` gồm thông tin ô `slot`, danh sách `versions` (sắp xếp theo `versionNumber` giảm dần, có `basedOnVersion`, `isCurrent`, cờ thao tác) và dòng sự kiện `events` từ audit log | 400 SKILL_NOT_SUPPORTED, 401, 403, 404 EXAM_SKILL_NOT_FOUND |
+
+### Hiệu năng và Middleware (Performance & Middleware)
+
+- **Đo thời gian (Server-Timing)**: Mọi phản hồi API trả header `Server-Timing` dạng `total;dur=X, auth;dur=Y, db;dur=Z` cho phép trình duyệt và công cụ kiểm thử đo chính xác thời gian xử lý tổng thể, thời gian xác thực và thời gian truy vấn DB.
+- **Nén dữ liệu (HTTP Compression)**: Middleware `compression` được kích hoạt trên toàn bộ máy chủ với ngưỡng nén 1024 bytes (1KB), giúp giảm kích thước gói tin JSON đề thi và transcript từ hàng trăm KB xuống dưới 20–30KB.
+- **Bộ nhớ đệm phản hồi (Response Cache-Control)**: Route `GET /admin/exam-set-categories` (A1) trả kèm header `Cache-Control: private, max-age=60` nhằm giảm tải truy vấn lặp lại khi người quản lý thao tác danh mục bộ đề.
+- **Xác thực JWT tại chỗ (Local JWKS)**: Token Bearer được xác thực cục bộ bằng public key từ Supabase JWKS kèm bộ nhớ đệm hồ sơ người dùng 60 giây (`Map<userId, {user, expires}>`), giảm chi phí xác thực mạng từ 250–950ms xuống < 1.5ms mỗi request.
 
 ### Bộ đề phía Học viên (Public Learner API)
 
 | Mã | Method và đường dẫn | Người gọi và đầu vào | Thành công | Lỗi cần xử lý |
 |---|---|---|---|---|
-| P1 | GET /exam-sets/:id | Công khai, param: `id` | 200, `ExamSetPublicDto` chỉ chứa tests có kỹ năng PUBLISHED, kèm tối đa 5 bộ đề liên quan cùng danh mục | 404 EXAM_SET_NOT_FOUND (khi không tồn tại hoặc chưa PUBLISHED) |
+| P1 | GET /exam-sets/:id | Công khai | 200, `ExamSetPublicDto` chỉ gồm Test có kỹ năng PUBLISHED, kèm tối đa 5 bộ đề cùng danh mục | 404 EXAM_SET_NOT_FOUND (không tồn tại hoặc chưa PUBLISHED) |
 
 ## Điều kiện trước khi công bố API học tập
 

@@ -2,7 +2,7 @@
 
 ## Phạm vi và trạng thái
 
-- **Mã task:** WSE-00 đến WSE-09 theo kế hoạch [PLAN_EDITOR_WRITING_SPEAKING.md](../PLAN_EDITOR_WRITING_SPEAKING.md).
+- **Mã task:** WSE-00 đến WSE-09 theo kế hoạch `PLAN_EDITOR_WRITING_SPEAKING.md` (đã xóa khỏi repo ngày 15/11 sau khi kiểm tra xong; quy tắc nằm ở BUSINESS_RULES BR-EXAM-007, BR-EXAM-010, API.md mục E1–E6, CSDL.md mục 9).
 - **Mục tiêu:**
   1. Kết nối Editor Writing và Speaking với dữ liệu CSDL thật qua `?skillId=`, hỗ trợ chế độ xem/sửa, tự động tạo bản sửa mới (DRAFT) khi bấm Chỉnh sửa trên bản đã đăng, cơ chế lưu an toàn chống ghi đè đồng thời (`baseUpdatedAt`), và tải ảnh đề thi Writing Task 1 lên Supabase Storage (bucket `exam-assets`).
   2. Triển khai điều kiện sẵn sàng xuất bản đề thi Writing & Speaking (WS-07) và tự động gán quy tắc chấm `FULL_SKILL` phù hợp từ CSDL (`06_quy_tac_cham_ws.sql`).
@@ -110,9 +110,19 @@
 
 ## Tài liệu và cách tái hiện
 
-- Kế hoạch chi tiết: [docs/PLAN_EDITOR_WRITING_SPEAKING.md](../PLAN_EDITOR_WRITING_SPEAKING.md)
 - Danh mục API: [docs/API.md](../API.md)
 - Quy tắc nghiệp vụ: [docs/BUSINESS_RULES.md](../BUSINESS_RULES.md)
 - Cấu trúc CSDL: [docs/csdl/CSDL.md](../csdl/CSDL.md)
 - Bảng công việc: [docs/TASKS.md](../TASKS.md)
 
+## 15/11/2026: kiểm tra theo kế hoạch (Claude)
+
+- Bản sạch commit `580a81e`, PostgreSQL 16 chạy 01 mới, 05, 06: backend `typecheck` và `build` đạt; frontend `tsc --noEmit` và `npm run build` đạt, hai editor và `exam-editor.ts` không dùng `any`.
+- Test: `exam-rules` 8/8, `exam-ws-rules` 7/7, `exam-editor-services` 1/1, `auth` 2/2, `exams-services` 3/3 (sau khi thêm hai thang band Reading Academic và Listening vào DB trống).
+- Đối chiếu code với kế hoạch: đủ route E1–E6, mã lỗi `SKILL_CHANGED`, `SKILL_NOT_DRAFT`, `SKILL_NOT_DELETABLE`, `SKILL_NOT_SUPPORTED`, `IMAGE_TOO_LARGE`; mặc định Speaking 12 + 1 + 2 = 15 phút; Task 1 Academic bắt buộc ảnh; nút Nhập xlsx khóa; Chỉnh sửa trên bản đã đăng tạo bản sửa và `replaceState`; xóa kỹ năng ở editor và menu ô; Hoàn tác sau Tạo.
+- Chưa kiểm tra: bấm thử trên trình duyệt, gọi API bằng token thật, tải ảnh lên bucket `exam-assets` thật (cần Supabase và đăng nhập thật).
+- Còn lệch nhỏ, đã sửa cùng ngày 15/11:
+  1. `docs/API.md` mục Quản lý bộ đề viết lại theo đúng route và mã lỗi trong code (A1–A16, E1–E6, P1; bỏ dòng `/draft` cũ, đường dẫn danh mục là `/admin/exam-set-categories`).
+  2. `ExamDetail.tsx` bỏ phần dự phòng `sessionStorage["ieltspace-learner"]`, chỉ nạp theo `?id=`.
+  3. `exams-services.test.mjs` ca 3 tự tạo thang band Reading Academic khi DB chưa có.
+- Sau khi sửa: `tsc --noEmit`, build backend và frontend đạt; `exam-rules` 8/8, `exam-ws-rules` 7/7, `exams-services` 3/3, `exam-editor-services` 1/1, `auth` 2/2 trên DB trống (01 mới + 05 + 06).

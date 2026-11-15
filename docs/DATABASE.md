@@ -32,4 +32,21 @@ PostgreSQL chứa hồ sơ và dữ liệu nghiệp vụ. Supabase Auth quản l
 
 Ẩn đề hoặc khóa tài khoản giữ nguyên lịch sử, FK và phiên bản đã làm. Xóa tệp hết hạn phải giữ điểm, nhận xét, lịch sử tối thiểu và mốc xóa. Chặn tải ngay ở service trong thời gian chờ xóa vật lý. [BR-CONTENT và BR-AUTH](BUSINESS_RULES.md).
 
+## Tối ưu hóa chỉ mục và kết nối (Index & Connection Pooling)
+
+### 1. Chỉ mục tăng tốc bộ đề (Migration 07)
+Tệp `docs/csdl/07_index_bo_de.sql` bổ sung 8 chỉ mục trên các khóa ngoại và điều kiện lọc thường dùng của hệ thống bộ đề:
+- `idx_exam_skills_exam_id`: Khóa ngoại `exam_skills(exam_id)`.
+- `idx_exam_sections_exam_skill_id`: Khóa ngoại `exam_sections(exam_skill_id)`.
+- `idx_question_groups_section_id`: Khóa ngoại `question_groups(section_id)`.
+- `idx_questions_group_id`: Khóa ngoại `questions(question_group_id)`.
+- `idx_question_options_question_id`: Khóa ngoại `question_options(question_id)`.
+- `idx_skill_attempts_exam_skill_id`: Đếm lượt làm theo kỹ năng `skill_attempts(exam_skill_id)`.
+- `idx_attempts_exam_id_status`: Đếm và lọc lượt làm `attempts(exam_id, status)`.
+- `idx_audit_logs_entity`: Tra cứu dòng thời gian phiên bản `audit_logs(entity_type, entity_id)`.
+
+### 2. Cổng kết nối Supavisor (Connection Pooling)
+- **DATABASE_URL (Transaction mode - cổng 6543)**: Sử dụng chuỗi kết nối qua Supavisor pooler kèm tham số `?pgbouncer=true&connection_limit=5` cho ứng dụng runtime nhằm tối ưu số lượng kết nối đồng thời và giảm độ trễ bắt tay TCP.
+- **DIRECT_URL (Session mode - cổng 5432)**: Dùng kết nối trực tiếp đến PostgreSQL phục vụ Prisma CLI (`prisma migrate`, `prisma db push`) khi cần thay đổi schema DDL.
+
 Bản SQL mới có system_settings theo từ điển bảng trong bản Word. band_scales.exam_type đổi thành form (ACADEMIC/GENERAL, NULL với Listening). Tệp 04 nâng cấp từ 01 cũ chưa theo D08, xem [hướng dẫn SQL](csdl/README.md). Chi tiết ánh xạ dữ liệu và cách chạy thử có trong [hướng dẫn SQL](csdl/README.md).

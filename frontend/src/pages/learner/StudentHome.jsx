@@ -1,4 +1,6 @@
 import { getAccount } from "../../lib/account";
+import { logout } from "../../lib/auth";
+import PageLink from "../../components/navigation/PageLink";
 import LearnerHeader from "../../components/navigation/LearnerHeader";
 import NotificationBadge from "../../components/notifications/NotificationBadge";
 import React from "react";
@@ -22,6 +24,85 @@ class StudentHome extends React.Component {
   static defaultProps = { accent: "#2963CC" };
   render() {
     const v = this.renderVals();
+    const accountNav = {
+      items: [
+        {
+          id: "dashboard",
+          label: "Dashboard",
+          page: "StudentHome",
+          active: true,
+          icon: (
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 11l8-7 8 7v9H4z" />
+              <path d="M10 20v-6h4v6" />
+            </svg>
+          ),
+        },
+        {
+          id: "history",
+          label: "Lịch sử luyện đề",
+          page: "StudentHome",
+          icon: (
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 2" />
+            </svg>
+          ),
+          onClick: () => {
+            const el = document.getElementById("lich-su");
+            el?.scrollIntoView({ behavior: "smooth" });
+          },
+        },
+        {
+          id: "my-ws",
+          label: "Bài Writing và Speaking",
+          page: "MyWS",
+          icon: (
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 5l4 4L8 20H4v-4z" />
+            </svg>
+          ),
+          badge: <span className="w-2 h-2 rounded-full bg-[#E5604A]" aria-label="Chưa xem" />,
+        },
+        {
+          id: "vocab",
+          label: "Từ vựng đã lưu",
+          page: "Vocab",
+          icon: (
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z" />
+              <path d="M12 6v14.5" />
+            </svg>
+          ),
+        },
+        {
+          id: "profile",
+          label: "Hồ sơ cá nhân",
+          page: "Profile",
+          icon: (
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="8" r="3.5" />
+              <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
+              <path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5" />
+            </svg>
+          ),
+        },
+        {
+          id: "logout",
+          label: "Đăng xuất",
+          danger: true,
+          icon: (
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+            </svg>
+          ),
+          onClick: () => {
+            logout();
+          },
+        },
+      ],
+    };
+
     return (
       <>
         {"\n"}
@@ -40,82 +121,18 @@ class StudentHome extends React.Component {
         >
           {"\n"}
           {"\n"}
-          <LearnerHeader active="home" />
+          <LearnerHeader active="home" accountNav={accountNav} />
           {"\n\n"}
           <div
             style={styleOf(
               "background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0",
             )}
           >
-            <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 sm:py-9 pb-16 flex flex-col lg:flex-row gap-6 lg:gap-7">
-              {/* Mobile/Tablet Tab Bar (< 1024px) */}
-              <div className="lg:hidden flex flex-col gap-3">
-                <div className="flex items-center gap-3 p-3 rounded-2xl border-[1.5px] border-[#D6D4D0] bg-white shadow-sm">
-                  <span className="w-10 h-10 rounded-full border-[1.5px] border-[#D6D4D0] bg-[#E8E4FA] text-[#5543B0] flex items-center justify-center font-bold text-sm shrink-0">
-                    MA
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-sm truncate">{getAccount("learner").name}</div>
-                    <div className="text-xs text-[#706473] truncate">{getAccount("learner").email}</div>
-                  </div>
-                </div>
-                <nav className="flex items-center gap-2 overflow-x-auto pb-1 text-sm whitespace-nowrap">
-                  <a
-                    href="#"
-                    className="flex items-center gap-2 px-3.5 h-10 rounded-xl bg-[#E3ECFD] border-[1.5px] border-[#D6D4D0] text-[#352637] font-semibold shrink-0 no-underline"
-                  >
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M4 11l8-7 8 7v9H4z" />
-                      <path d="M10 20v-6h4v6" />
-                    </svg>
-                    Dashboard
-                  </a>
-                  <a
-                    href="#lich-su"
-                    className="flex items-center gap-2 px-3.5 h-10 rounded-xl border-[1.5px] border-[#D6D4D0] bg-white text-[#4B3D4D] font-medium shrink-0 no-underline hover:bg-[#F3F0EA]"
-                  >
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="9" />
-                      <path d="M12 7v5l3 2" />
-                    </svg>
-                    Lịch sử luyện đề
-                  </a>
-                  <a
-                    href="MyWS.dc.html"
-                    className="flex items-center gap-2 px-3.5 h-10 rounded-xl border-[1.5px] border-[#D6D4D0] bg-white text-[#4B3D4D] font-medium shrink-0 no-underline hover:bg-[#F3F0EA]"
-                  >
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M15 5l4 4L8 20H4v-4z" />
-                    </svg>
-                    Bài Writing/Speaking
-                    <span className="w-2 h-2 rounded-full bg-[#E5604A]" aria-label="Chưa xem" />
-                  </a>
-                  <a
-                    href="Vocab.dc.html"
-                    className="flex items-center gap-2 px-3.5 h-10 rounded-xl border-[1.5px] border-[#D6D4D0] bg-white text-[#4B3D4D] font-medium shrink-0 no-underline hover:bg-[#F3F0EA]"
-                  >
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z" />
-                      <path d="M12 6v14.5" />
-                    </svg>
-                    Từ vựng đã lưu
-                  </a>
-                  <a
-                    href="Profile.dc.html"
-                    className="flex items-center gap-2 px-3.5 h-10 rounded-xl border-[1.5px] border-[#D6D4D0] bg-white text-[#4B3D4D] font-medium shrink-0 no-underline hover:bg-[#F3F0EA]"
-                  >
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="9" cy="8" r="3.5" />
-                      <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
-                      <path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5" />
-                    </svg>
-                    Hồ sơ cá nhân
-                  </a>
-                </nav>
-              </div>
+            <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 sm:py-9 pb-16 flex flex-col md:flex-row gap-6 lg:gap-7">
+              
 
               {/* Desktop Sidebar (>= 1024px) */}
-              <aside className="hidden lg:flex lg:w-[248px] lg:flex-none self-start flex-col gap-4">
+              <aside className="hidden md:flex md:w-[220px] lg:w-[248px] md:flex-none self-start flex-col gap-4">
                 <div
                   style={styleOf(
                     "padding: 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; align-items: center; gap: 12px",
@@ -652,7 +669,7 @@ class StudentHome extends React.Component {
                       </span>
                     </div>
                     <div className="relative overflow-x-auto pt-2 pb-1">
-                      <div className="relative h-[210px] min-w-[520px] ml-10">
+                      <div className="relative h-[210px] min-w-[480px] ml-10">
                         <div
                           style={styleOf(
                             "position: absolute; left: 0; right: 0; bottom: 0px; border-top: 1px dashed #E6E4E0",
@@ -955,6 +972,8 @@ class StudentHome extends React.Component {
                       "border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden",
                     )}
                   >
+                    {/* Desktop table */}
+                    <div className="hidden md:block overflow-x-auto">
                     <table
                       style={styleOf(
                         "width: 100%; border-collapse: collapse; font-size: 14px",
@@ -1294,6 +1313,142 @@ class StudentHome extends React.Component {
                         </tr>
                       </tbody>
                     </table>
+                    </div>
+
+                    {/* Mobile card list (< 768px) */}
+                    <div className="md:hidden divide-y divide-[#E6E4E0]">
+                      {/* Item 1 */}
+                      <div className="p-4 flex flex-col gap-2.5">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <div className="font-semibold text-sm text-[#352637]">
+                              Opinion Essay · Public transport
+                            </div>
+                            <div className="text-xs text-[#706473] mt-0.5">
+                              07/10/2026 · 20:43
+                            </div>
+                          </div>
+                          <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[#FBEDBF] text-[#7A5A0E] text-xs font-semibold shrink-0">
+                            Writing
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs pt-1">
+                          <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[#D6D4D0] bg-[#FBEDBF] text-[#7A5A0E] font-semibold">
+                            Đã có kết quả · 6.5
+                          </span>
+                          <span className="text-[#706473]">38:12</span>
+                        </div>
+                        <a
+                          href="#"
+                          className="mt-1 w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M6 3h8l4 4v14H6z" />
+                            <path d="M14 3v4h4M9 12h6M9 16h6" />
+                          </svg>
+                          Xem lại
+                        </a>
+                      </div>
+
+                      {/* Item 2 */}
+                      <div className="p-4 flex flex-col gap-2.5">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <div className="font-semibold text-sm text-[#352637]">
+                              Mock Test Vol 21 · Reading Test 1
+                            </div>
+                            <div className="text-xs text-[#706473] mt-0.5">
+                              06/10/2026 · 10:09
+                            </div>
+                          </div>
+                          <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[#DCEDE2] text-[#2E6A48] text-xs font-semibold shrink-0">
+                            Reading
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs pt-1">
+                          <span className="font-semibold text-sm text-[#352637]">
+                            6.5 <span className="text-xs font-normal text-[#706473]">· 29/40 câu</span>
+                          </span>
+                          <span className="text-[#706473]">52:40</span>
+                        </div>
+                        <a
+                          href="#"
+                          className="mt-1 w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M6 3h8l4 4v14H6z" />
+                            <path d="M14 3v4h4M9 12h6M9 16h6" />
+                          </svg>
+                          Xem lại
+                        </a>
+                      </div>
+
+                      {/* Item 3 */}
+                      <div className="p-4 flex flex-col gap-2.5">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <div className="font-semibold text-sm text-[#352637]">
+                              The kākāpo
+                            </div>
+                            <div className="text-xs text-[#706473] mt-0.5">
+                              05/10/2026 · 09:41
+                            </div>
+                          </div>
+                          <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[#DCEDE2] text-[#2E6A48] text-xs font-semibold shrink-0">
+                            Reading
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs pt-1">
+                          <span className="font-semibold text-sm text-[#352637]">
+                            2/13 <span className="text-xs font-normal text-[#706473]">câu đúng</span>
+                          </span>
+                          <span className="text-[#706473]">00:46</span>
+                        </div>
+                        <a
+                          href="#"
+                          className="mt-1 w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M6 3h8l4 4v14H6z" />
+                            <path d="M14 3v4h4M9 12h6M9 16h6" />
+                          </svg>
+                          Xem lại
+                        </a>
+                      </div>
+
+                      {/* Item 4 */}
+                      <div className="p-4 flex flex-col gap-2.5">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <div className="font-semibold text-sm text-[#352637]">
+                              Mock Test Vol 20 · Listening Test 2
+                            </div>
+                            <div className="text-xs text-[#706473] mt-0.5">
+                              03/10/2026 · 21:15
+                            </div>
+                          </div>
+                          <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-[#DDE8FC] text-[#2A55B8] text-xs font-semibold shrink-0">
+                            Listening
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs pt-1">
+                          <span className="font-semibold text-sm text-[#352637]">
+                            7.0 <span className="text-xs font-normal text-[#706473]">· 31/40 câu</span>
+                          </span>
+                          <span className="text-[#706473]">31:05</span>
+                        </div>
+                        <a
+                          href="#"
+                          className="mt-1 w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M6 3h8l4 4v14H6z" />
+                            <path d="M14 3v4h4M9 12h6M9 16h6" />
+                          </svg>
+                          Xem lại
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </section>
                 <section

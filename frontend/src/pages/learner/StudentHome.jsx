@@ -47,16 +47,75 @@ class StudentHome extends React.Component {
               "background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0",
             )}
           >
-            <div
-              style={styleOf(
-                "max-width: 1200px; margin: 0 auto; padding: 36px 24px 64px; display: flex; gap: 28px",
-              )}
-            >
-              <aside
-                style={styleOf(
-                  "width: 248px; flex: 0 0 248px; align-self: flex-start; display: flex; flex-direction: column; gap: 16px",
-                )}
-              >
+            <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 sm:py-9 pb-16 flex flex-col lg:flex-row gap-6 lg:gap-7">
+              {/* Mobile/Tablet Tab Bar (< 1024px) */}
+              <div className="lg:hidden flex flex-col gap-3">
+                <div className="flex items-center gap-3 p-3 rounded-2xl border-[1.5px] border-[#D6D4D0] bg-white shadow-sm">
+                  <span className="w-10 h-10 rounded-full border-[1.5px] border-[#D6D4D0] bg-[#E8E4FA] text-[#5543B0] flex items-center justify-center font-bold text-sm shrink-0">
+                    MA
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-sm truncate">{getAccount("learner").name}</div>
+                    <div className="text-xs text-[#706473] truncate">{getAccount("learner").email}</div>
+                  </div>
+                </div>
+                <nav className="flex items-center gap-2 overflow-x-auto pb-1 text-sm whitespace-nowrap">
+                  <a
+                    href="#"
+                    className="flex items-center gap-2 px-3.5 h-10 rounded-xl bg-[#E3ECFD] border-[1.5px] border-[#D6D4D0] text-[#352637] font-semibold shrink-0 no-underline"
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 11l8-7 8 7v9H4z" />
+                      <path d="M10 20v-6h4v6" />
+                    </svg>
+                    Dashboard
+                  </a>
+                  <a
+                    href="#lich-su"
+                    className="flex items-center gap-2 px-3.5 h-10 rounded-xl border-[1.5px] border-[#D6D4D0] bg-white text-[#4B3D4D] font-medium shrink-0 no-underline hover:bg-[#F3F0EA]"
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 7v5l3 2" />
+                    </svg>
+                    Lịch sử luyện đề
+                  </a>
+                  <a
+                    href="MyWS.dc.html"
+                    className="flex items-center gap-2 px-3.5 h-10 rounded-xl border-[1.5px] border-[#D6D4D0] bg-white text-[#4B3D4D] font-medium shrink-0 no-underline hover:bg-[#F3F0EA]"
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M15 5l4 4L8 20H4v-4z" />
+                    </svg>
+                    Bài Writing/Speaking
+                    <span className="w-2 h-2 rounded-full bg-[#E5604A]" aria-label="Chưa xem" />
+                  </a>
+                  <a
+                    href="Vocab.dc.html"
+                    className="flex items-center gap-2 px-3.5 h-10 rounded-xl border-[1.5px] border-[#D6D4D0] bg-white text-[#4B3D4D] font-medium shrink-0 no-underline hover:bg-[#F3F0EA]"
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z" />
+                      <path d="M12 6v14.5" />
+                    </svg>
+                    Từ vựng đã lưu
+                  </a>
+                  <a
+                    href="Profile.dc.html"
+                    className="flex items-center gap-2 px-3.5 h-10 rounded-xl border-[1.5px] border-[#D6D4D0] bg-white text-[#4B3D4D] font-medium shrink-0 no-underline hover:bg-[#F3F0EA]"
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="9" cy="8" r="3.5" />
+                      <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
+                      <path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5" />
+                    </svg>
+                    Hồ sơ cá nhân
+                  </a>
+                </nav>
+              </div>
+
+              {/* Desktop Sidebar (>= 1024px) */}
+              <aside className="hidden lg:flex lg:w-[248px] lg:flex-none self-start flex-col gap-4">
                 <div
                   style={styleOf(
                     "padding: 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; align-items: center; gap: 12px",
@@ -231,20 +290,12 @@ class StudentHome extends React.Component {
                   </a>
                 </nav>
               </aside>
-              <div
-                style={styleOf(
-                  "flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 36px",
-                )}
-              >
+              <div className="flex-1 min-w-0 flex flex-col gap-8 md:gap-9">
                 <div>
                   <div style={styleOf("font-size: 13px; color: #706473")}>
                     {"Trang chủ / Dashboard"}
                   </div>
-                  <h1
-                    style={styleOf(
-                      "margin: 6px 0 0; font-size: 32px; line-height: 1.2; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
-                    )}
-                  >
+                  <h1 className="m-0 mt-1.5 text-[28px] md:text-[36px] leading-tight font-bold tracking-tight text-[#352637]" style={{ fontFamily: "'IBM Plex Serif', Georgia, serif" }}>
                     {"Dashboard của bạn"}
                   </h1>
                 </div>
@@ -266,10 +317,10 @@ class StudentHome extends React.Component {
                       {"Kết quả luyện tập"}
                     </h2>
                   </div>
-                  <div style={styleOf("display: flex; gap: 14px")}>
-                    <div
+                  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3.5">
+                    <div className="col-span-2 md:col-span-1 xl:col-span-1"
                       style={styleOf(
-                        "position: relative; flex: 1 1 0; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
+                        "position: relative; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
                       )}
                     >
                       <a
@@ -309,7 +360,7 @@ class StudentHome extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                          "font-size: 28px; font-weight: 700; line-height: 1.2; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
                         )}
                       >
                         {"7.0"}
@@ -317,7 +368,7 @@ class StudentHome extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "position: relative; flex: 1 1 0; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
+                        "position: relative; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
                       )}
                     >
                       <span
@@ -347,7 +398,7 @@ class StudentHome extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                          "font-size: 28px; font-weight: 700; line-height: 1.2; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
                         )}
                       >
                         {"6.0"}
@@ -355,7 +406,7 @@ class StudentHome extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "position: relative; flex: 1 1 0; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
+                        "position: relative; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
                       )}
                     >
                       <span
@@ -386,7 +437,7 @@ class StudentHome extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                          "font-size: 28px; font-weight: 700; line-height: 1.2; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
                         )}
                       >
                         {"12"}
@@ -394,7 +445,7 @@ class StudentHome extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "position: relative; flex: 1 1 0; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
+                        "position: relative; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
                       )}
                     >
                       <span
@@ -433,7 +484,7 @@ class StudentHome extends React.Component {
                     </div>
                     <div
                       style={styleOf(
-                        "position: relative; flex: 1 1 0; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
+                        "position: relative; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
                       )}
                     >
                       <span
@@ -463,7 +514,7 @@ class StudentHome extends React.Component {
                       </div>
                       <div
                         style={styleOf(
-                          "font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                          "font-size: 28px; font-weight: 700; line-height: 1.2; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
                         )}
                       >
                         {"68%"}
@@ -475,11 +526,7 @@ class StudentHome extends React.Component {
                       "padding: 20px 24px 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                     )}
                   >
-                    <div
-                      style={styleOf(
-                        "display: flex; flex-wrap: wrap; gap: 6px; padding-bottom: 16px; border-bottom: 1px solid #E6E4E0",
-                      )}
-                    >
+                    <div className="flex items-center gap-2 overflow-x-auto pb-3 border-b border-[#E6E4E0] text-sm whitespace-nowrap">
                       <span
                         style={styleOf(
                           "display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 10px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-weight: 600; font-size: 14px",
@@ -583,11 +630,7 @@ class StudentHome extends React.Component {
                         {"Speaking"}
                       </span>
                     </div>
-                    <div
-                      style={styleOf(
-                        "display: flex; justify-content: space-between; align-items: flex-end; margin: 18px 0 20px",
-                      )}
-                    >
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 my-4 sm:my-5">
                       <div>
                         <div
                           style={styleOf("font-size: 18px; font-weight: 600")}
@@ -608,8 +651,8 @@ class StudentHome extends React.Component {
                         {"+1.0 so với lần đầu"}
                       </span>
                     </div>
-                    <div style={styleOf("margin-left: 40px")}>
-                      <div style={styleOf("position: relative; height: 210px")}>
+                    <div className="relative overflow-x-auto pt-2 pb-1">
+                      <div className="relative h-[210px] min-w-[520px] ml-10">
                         <div
                           style={styleOf(
                             "position: absolute; left: 0; right: 0; bottom: 0px; border-top: 1px dashed #E6E4E0",
@@ -907,10 +950,9 @@ class StudentHome extends React.Component {
                       {"Xem chi tiết"}
                     </a>
                   </div>
+                  {/* Desktop / Tablet table (>= 768px) */}
                   <div
-                    style={styleOf(
-                      "border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden",
-                    )}
+                    className="hidden md:block rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm overflow-x-auto"
                   >
                     <table
                       style={styleOf(
@@ -1251,6 +1293,80 @@ class StudentHome extends React.Component {
                         </tr>
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* Mobile cards (< 768px) */}
+                  <div className="md:hidden flex flex-col gap-3">
+                    <div className="p-4 rounded-2xl border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-2">
+                      <div className="flex items-center justify-between text-xs text-[#706473]">
+                        <span>07/10/2026 · 20:43</span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-[#FBEDBF] text-[#7A5A0E]">
+                          Writing
+                        </span>
+                      </div>
+                      <div className="font-semibold text-sm text-[#352637]">
+                        Opinion Essay · Public transport
+                      </div>
+                      <div className="flex items-center justify-between pt-2 border-t border-[#F0EEEA]">
+                        <span className="text-xs text-[#7A5A0E] font-semibold bg-[#FBEDBF] px-2 py-0.5 rounded-full border border-[#D6D4D0]">
+                          Đã có kết quả · 6.5
+                        </span>
+                        <a
+                          href="#"
+                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-[#D6D4D0] text-xs font-semibold text-[#352637] no-underline hover:bg-[#F3F0EA]"
+                        >
+                          Xem lại
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-2xl border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-2">
+                      <div className="flex items-center justify-between text-xs text-[#706473]">
+                        <span>06/10/2026 · 10:09</span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-[#DCEDE2] text-[#2E6A48]">
+                          Reading
+                        </span>
+                      </div>
+                      <div className="font-semibold text-sm text-[#352637]">
+                        Mock Test Vol 21 · Reading Test 1
+                      </div>
+                      <div className="flex items-center justify-between pt-2 border-t border-[#F0EEEA]">
+                        <div className="text-xs">
+                          <b className="text-sm font-bold text-[#352637]">6.5</b>{" "}
+                          <span className="text-[#706473]">· 29/40 câu</span>
+                        </div>
+                        <a
+                          href="#"
+                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-[#D6D4D0] text-xs font-semibold text-[#352637] no-underline hover:bg-[#F3F0EA]"
+                        >
+                          Xem lại
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-2xl border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-2">
+                      <div className="flex items-center justify-between text-xs text-[#706473]">
+                        <span>03/10/2026 · 21:15</span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-[#DDE8FC] text-[#2A55B8]">
+                          Listening
+                        </span>
+                      </div>
+                      <div className="font-semibold text-sm text-[#352637]">
+                        Mock Test Vol 20 · Listening Test 2
+                      </div>
+                      <div className="flex items-center justify-between pt-2 border-t border-[#F0EEEA]">
+                        <div className="text-xs">
+                          <b className="text-sm font-bold text-[#352637]">7.0</b>{" "}
+                          <span className="text-[#706473]">· 31/40 câu</span>
+                        </div>
+                        <a
+                          href="#"
+                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-[#D6D4D0] text-xs font-semibold text-[#352637] no-underline hover:bg-[#F3F0EA]"
+                        >
+                          Xem lại
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </section>
                 <section

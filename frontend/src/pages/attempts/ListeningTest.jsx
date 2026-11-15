@@ -1,7 +1,27 @@
 import React from "react";
 import { styleOf, cssText } from "../../lib/styles";
+import { getTestScreenSupport, subscribeScreenSupport } from "../../lib/device";
+import { PhoneTestBlocker, SmallScreenWarningBanner } from "../../components/exams/TestScreenGuard";
+import { navigate } from "../../lib/auth";
 
 class ListeningTest extends React.Component {
+  state = {
+    screenSupport: "ok",
+    hideBanner: false,
+    testStarted: false,
+  };
+  _unsub = null;
+
+  componentDidMount() {
+    this.setState({ screenSupport: getTestScreenSupport() });
+    this._unsub = subscribeScreenSupport((support) => {
+      this.setState({ screenSupport: support });
+    });
+  }
+
+  componentWillUnmount() {
+    if (this._unsub) this._unsub();
+  }
   renderVals() {
     var accent = this.props.accent ?? "#2963CC";
     var h = String(accent).replace("#", "");
@@ -19,8 +39,25 @@ class ListeningTest extends React.Component {
   static defaultProps = { accent: "#2963CC" };
   render() {
     const v = this.renderVals();
+    const { screenSupport, hideBanner, testStarted } = this.state;
+    if (screenSupport === "phone" && !testStarted) {
+      return (
+        <PhoneTestBlocker
+          onBack={() => {
+            if (typeof window !== "undefined" && window.history.length > 1) {
+              window.history.back();
+            } else {
+              navigate("StudentHome");
+            }
+          }}
+        />
+      );
+    }
     return (
       <>
+        {!hideBanner && (screenSupport === "small" || screenSupport === "phone") && (
+          <SmallScreenWarningBanner onDismiss={() => this.setState({ hideBanner: true })} />
+        )}
         {"\n"}
         {"\n"}
         <style>

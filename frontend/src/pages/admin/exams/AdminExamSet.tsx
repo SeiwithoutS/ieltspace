@@ -2,6 +2,7 @@ import React from "react";
 import { styleOf, cssText } from "../../../lib/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar, { Crumb } from "../../../components/navigation/AdminTopbar";
+import StaffLayout from "../../../components/layout/StaffLayout";
 import { navigate } from "../../../lib/auth";
 import {
   getSet,
@@ -1217,43 +1218,15 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         </style>
         {"\n"}
         {"\n"}
-        <div
-          className="app-shell-ancestor"
-          style={styleOf(
-            "font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; font-size: 15px; line-height: 1.6; background: #FCFBF7; min-height: 1000px",
-          )}
+        <StaffLayout
+          active="exams"
+          crumbs={[
+            { label: "Quản lý", page: "AdminHome" },
+            { label: "Bộ đề và đề thi", page: "AdminExams" },
+            { label: this.state.apiSet?.name || "Thông tin bộ đề" },
+          ]}
+          contentClassName="p-4 sm:p-6 md:p-8 flex flex-col gap-6"
         >
-          {"\n"}
-          <div
-            className="app-shell"
-            style={styleOf(
-              "display: flex; flex-wrap: wrap; align-items: stretch; min-height: 900px",
-            )}
-          >
-            <div
-              className="app-sidebar-slot"
-              style={styleOf("display: flex; flex: none; align-self: stretch")}
-            >
-              <AdminSidebar active={"exams"}></AdminSidebar>
-            </div>
-            <div
-              className="app-content"
-              style={styleOf(
-                "flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column",
-              )}
-            >
-              <AdminTopbar
-                crumbs={[
-                  { label: "Quản lý", page: "AdminHome" },
-                  { label: "Bộ đề và đề thi", page: "AdminExams" },
-                  { label: this.state.apiSet?.name || "Thông tin bộ đề" },
-                ]}
-              ></AdminTopbar>
-              <main
-                style={styleOf(
-                  "flex: 1; background: #FAF9F5; padding: 32px 32px 48px; display: flex; flex-direction: column; gap: 24px; min-width: 0",
-                )}
-              >
                 <a
                   href={"#"}
                   onClick={v.back}
@@ -2451,11 +2424,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
                     </div>
                   </>
                 ) : null}
-              </main>
-            </div>
-          </div>
-          {"\n"}
-        </div>
+        </StaffLayout>
         {"\n"}
         <SkillHistoryDrawer
           isOpen={!!this.state.historyOpen}

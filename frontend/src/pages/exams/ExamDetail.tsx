@@ -9,6 +9,8 @@ import {
   type UiLearnerSet,
 } from "../../lib/exam-admin";
 import { navigate } from "../../lib/auth";
+import { ScreenSupportConfirmDialog } from "../../components/exams/TestScreenGuard";
+import { getTestScreenSupport } from "../../lib/device";
 
 type Ev = {
   preventDefault?: () => void;
@@ -43,11 +45,21 @@ type State = {
   related?: Related;
   form?: FormKey;
   toast?: string;
+  screenGuardOpen?: boolean;
+  pendingTestUrl?: string | null;
 };
 
 class ExamDetail extends React.Component<Record<string, unknown>, State> {
   _t?: ReturnType<typeof setTimeout>;
   state: State = {};
+
+  handleStartTest = (targetUrl: string) => {
+    if (getTestScreenSupport() !== "ok") {
+      this.setState({ pendingTestUrl: targetUrl, screenGuardOpen: true });
+    } else {
+      navigate(targetUrl);
+    }
+  };
 
   loadData(id: string) {
     if (!id) return;
@@ -78,23 +90,6 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
     var id = params.get("id");
     if (id) {
       this.loadData(id);
-      return;
-    }
-
-    var got = (function () {
-      try {
-        var o = JSON.parse(
-          sessionStorage.getItem("ieltspace-learner") || "null",
-        );
-        if (o && Date.now() - o.at < 20000) {
-          sessionStorage.removeItem("ieltspace-learner");
-          return o.v;
-        }
-      } catch (err) {}
-      return null;
-    })();
-    if (got) {
-      this.setState({ ext: got });
     }
   }
   componentWillUnmount() {
@@ -228,11 +223,6 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
         e.stopPropagation();
       }
     }
-    function store(k: string, v: unknown) {
-      try {
-        sessionStorage.setItem(k, JSON.stringify({ at: Date.now(), v: v }));
-      } catch (err) {}
-    }
     // đọc ảnh người dùng chọn: kiểm tra loại và dung lượng, đo tỉ lệ để cảnh báo khi lệch xa 3:2
     function readImage(
       e: { target: HTMLInputElement },
@@ -320,7 +310,7 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
             t: t.name,
             pick: function (e?: Ev) {
               stop(e);
-              navigate(startPage + (t.id ? "?examId=" + t.id : ""));
+              self.handleStartTest(startPage + (t.id ? "?examId=" + t.id : ""));
             },
           };
         }
@@ -336,7 +326,7 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
         notFull: nPub < 4,
         pickFull: function (e?: Ev) {
           stop(e);
-          navigate("ListeningTest" + (t.id ? "?examId=" + t.id : ""));
+          self.handleStartTest("ListeningTest" + (t.id ? "?examId=" + t.id : ""));
         },
         cells: SK.map(function (k, i) {
           var v = vs[i];
@@ -356,7 +346,7 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
               "; cursor: pointer",
             pick: function (e?: Ev) {
               stop(e);
-              navigate(pageName + (t.id ? "?examId=" + t.id : ""));
+              self.handleStartTest(pageName + (t.id ? "?examId=" + t.id : ""));
             },
           };
         }),
@@ -1837,6 +1827,17 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
           {"\n"}
         </div>
         {"\n"}
+        <ScreenSupportConfirmDialog
+          isOpen={!!this.state.screenGuardOpen}
+          onConfirm={() => {
+            const url = this.state.pendingTestUrl;
+            this.setState({ screenGuardOpen: false, pendingTestUrl: null });
+            if (url) navigate(url);
+          }}
+          onCancel={() => {
+            this.setState({ screenGuardOpen: false, pendingTestUrl: null });
+          }}
+        />
       </>
     );
   }

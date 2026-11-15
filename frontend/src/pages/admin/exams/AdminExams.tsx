@@ -2,6 +2,7 @@ import React from "react";
 import { styleOf, cssText } from "../../../lib/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar from "../../../components/navigation/AdminTopbar";
+import StaffLayout from "../../../components/layout/StaffLayout";
 import { navigate } from "../../../lib/auth";
 import {
   listCategories,
@@ -105,16 +106,16 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
       self = this;
     var sCats = s.cats || [];
     var CATS: Array<[string, string]> = sCats.length
-        ? sCats.map(function (c): [string, string] {
-            return [c.id, c.name];
-          })
-        : [
-            ["MOCK", "Mock Test"],
-            ["ACTUAL", "Actual Test"],
-            ["PRACTICE", "Practice Test"],
-            ["FORECAST", "Forecast"],
-            ["OTHER", "Khác"],
-          ],
+      ? sCats.map(function (c): [string, string] {
+        return [c.id, c.name];
+      })
+      : [
+        ["MOCK", "Mock Test"],
+        ["ACTUAL", "Actual Test"],
+        ["PRACTICE", "Practice Test"],
+        ["FORECAST", "Forecast"],
+        ["OTHER", "Khác"],
+      ],
       CATN: Record<string, string> = {};
     CATS.forEach(function (x) {
       CATN[x[0]] = x[1];
@@ -171,7 +172,7 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
     function store(k: string, v: unknown) {
       try {
         sessionStorage.setItem(k, JSON.stringify({ at: Date.now(), v: v }));
-      } catch (err) {}
+      } catch (err) { }
     }
     // đọc ảnh người dùng chọn: kiểm tra loại và dung lượng, đo tỉ lệ để cảnh báo khi lệch xa 3:2
     function readImage(
@@ -206,10 +207,10 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
             url,
             Math.abs(q - 1.5) > 0.12
               ? "Ảnh " +
-                  im.width +
-                  " × " +
-                  im.height +
-                  " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
+              im.width +
+              " × " +
+              im.height +
+              " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
               : "",
             true,
           );
@@ -222,7 +223,7 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
       r.readAsDataURL(f);
       try {
         e.target.value = "";
-      } catch (err) {}
+      } catch (err) { }
     }
 
     function vals(t: UiTest, k: SkillKey): Cell[] {
@@ -333,11 +334,11 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
         types: types.length
           ? types
           : [
-              {
-                text: st.tests.length ? "Chỉ L/S" : "Chưa có đề",
-                st: pill("#F3F0EA", "#706473"),
-              },
-            ],
+            {
+              text: st.tests.length ? "Chỉ L/S" : "Chưa có đề",
+              st: pill("#F3F0EA", "#706473"),
+            },
+          ],
         skills: skills.length ? skills : [{ text: "—", st: "color: #706473" }],
         thumbSt:
           "display: flex; align-items: flex-end; flex: none; width: 48px; height: 32px; border-radius: 8px; box-sizing: border-box; overflow: hidden; color: #FFFFFF; box-shadow: 0 1px 3px rgba(53, 38, 55, 0.18); " +
@@ -391,8 +392,8 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
         "display: flex; align-items: flex-end; width: 240px; height: 160px; border-radius: 12px; box-sizing: border-box; overflow: hidden; color: " +
         (cBg
           ? "#FFFFFF; background: " +
-            cBg +
-            "; box-shadow: 0 2px 6px rgba(53,38,55,.12), 0 12px 28px rgba(53,38,55,.12)"
+          cBg +
+          "; box-shadow: 0 2px 6px rgba(53,38,55,.12), 0 12px 28px rgba(53,38,55,.12)"
           : "#706473; background: #FAF9F5; border: 1.5px dashed #C9C2C6"),
       text: !!(!cv.img && cv.art != null && ART[cv.art][2]),
       short: (cName.match(/(Vol|Test|Pack)\s*\S+$/i) || [
@@ -553,13 +554,13 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
         return list.length
           ? list
           : [
-              {
-                label: "Không có danh mục khớp",
-                on: false,
-                st: base + "color: #706473",
-                pick: stop,
-              },
-            ];
+            {
+              label: "Không có danh mục khớp",
+              on: false,
+              st: base + "color: #706473",
+              pick: stop,
+            },
+          ];
       })(),
       closeCreate: function (e: Ev) {
         stop(e);
@@ -620,7 +621,7 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
           if (isNew) {
             try {
               updatedCats = await listCategories();
-            } catch (err) {}
+            } catch (err) { }
           }
           self.setState({
             apiSets: updatedApiSets,
@@ -658,8 +659,8 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
       delText: d
         ? d.tests && d.tests.length
           ? "Bộ đề đang là Bản nháp với " +
-            d.tests.length +
-            " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
+          d.tests.length +
+          " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
           : "Bộ đề chưa có đề nào. Thao tác này không hoàn tác được."
         : "",
       delCancel: function (e: Ev) {
@@ -710,37 +711,11 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
         </style>
         {"\n"}
         {"\n"}
-        <div
-          className="app-shell-ancestor"
-          style={styleOf(
-            "font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; font-size: 15px; line-height: 1.6; background: #FCFBF7; min-height: 900px",
-          )}
+        <StaffLayout
+          active="exams"
+          crumb="Quản lý / Bộ đề và đề thi"
+          contentClassName="p-4 sm:p-6 md:p-8 flex flex-col gap-6"
         >
-          {"\n"}
-          <div
-            className="app-shell"
-            style={styleOf(
-              "display: flex; flex-wrap: wrap; align-items: stretch; min-height: 900px",
-            )}
-          >
-            <div
-              className="app-sidebar-slot"
-              style={styleOf("display: flex; flex: none; align-self: stretch")}
-            >
-              <AdminSidebar active={"exams"}></AdminSidebar>
-            </div>
-            <div
-              className="app-content"
-              style={styleOf(
-                "flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column",
-              )}
-            >
-              <AdminTopbar crumb={"Quản lý / Bộ đề và đề thi"}></AdminTopbar>
-              <main
-                style={styleOf(
-                  "flex: 1; background: #FAF9F5; padding: 32px 32px 48px; display: flex; flex-direction: column; gap: 24px; min-width: 0",
-                )}
-              >
                 <div
                   style={styleOf(
                     "display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap",
@@ -1186,11 +1161,6 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
                     </div>
                   ) : null}
                 </div>
-                <div style={styleOf("font-size: 13px; color: #706473")}>
-                  {
-                    "Chỉ xóa được bộ đề còn là Bản nháp hoặc chưa có đề nào; bộ đề đã công khai chỉ ẩn được (bài đã làm và lượt đang làm vẫn giữ). Mỗi kỹ năng của một đề được đăng riêng khi đủ đáp án (Listening/Reading), tiêu chí (Writing/Speaking) và tệp audio/ảnh."
-                  }
-                </div>
                 {v.createOpen ? (
                   <>
                     <div
@@ -1378,7 +1348,7 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
                                         className={"an-rise"}
                                         style={styleOf(
                                           "font-size: 13px; line-height: 1.45; color: " +
-                                            v.cv.msgColor,
+                                          v.cv.msgColor,
                                         )}
                                       >
                                         {v.cv.msgText}
@@ -1901,11 +1871,7 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
                     </div>
                   </>
                 ) : null}
-              </main>
-            </div>
-          </div>
-          {"\n"}
-        </div>
+        </StaffLayout>
         {"\n"}
       </>
     );

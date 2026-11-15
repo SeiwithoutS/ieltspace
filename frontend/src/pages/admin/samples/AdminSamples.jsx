@@ -2,6 +2,7 @@ import React from "react";
 import { styleOf, cssText } from "../../../lib/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar from "../../../components/navigation/AdminTopbar";
+import StaffLayout from "../../../components/layout/StaffLayout";
 
 class AdminSamples extends React.Component {
   renderVals() {
@@ -524,38 +525,11 @@ class AdminSamples extends React.Component {
         </style>
         {"\n"}
         {"\n"}
-        <div
-          className="app-shell-ancestor"
-          style={styleOf(
-            "font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; font-size: 15px; line-height: 1.6; background: #FCFBF7",
-          )}
+        <StaffLayout
+          active="samples"
+          crumb="Quản lý / Quản lý bài mẫu"
+          contentClassName={`p-4 sm:p-6 md:p-8 flex flex-col gap-6 ${v.modeCls}`}
         >
-          {"\n"}
-          <div
-            className="app-shell"
-            style={styleOf(
-              "display: flex; flex-wrap: wrap; align-items: stretch; min-height: 900px",
-            )}
-          >
-            <div
-              className="app-sidebar-slot"
-              style={styleOf("display: flex; flex: none; align-self: stretch")}
-            >
-              <AdminSidebar active={"samples"}></AdminSidebar>
-            </div>
-            <div
-              className="app-content"
-              style={styleOf(
-                "flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column",
-              )}
-            >
-              <AdminTopbar crumb={"Quản lý / Quản lý bài mẫu"}></AdminTopbar>
-              <main
-                className={v.modeCls}
-                style={styleOf(
-                  "flex: 1; background: #FAF9F5; display: flex; flex-direction: column; min-width: 0",
-                )}
-              >
                 <div
                   style={styleOf(
                     "padding: 32px 32px 48px; display: flex; flex-direction: column; gap: 24px; min-width: 0",
@@ -1434,11 +1408,7 @@ class AdminSamples extends React.Component {
                     </div>
                   </>
                 ) : null}
-              </main>
-            </div>
-          </div>
-          {"\n"}
-        </div>
+        </StaffLayout>
         {"\n"}
       </>
     );

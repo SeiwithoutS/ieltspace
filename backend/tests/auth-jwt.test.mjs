@@ -11,10 +11,14 @@ const {
   getUserCacheSize,
 } = await import('../dist/middleware/auth.js');
 
-const ADMIN_AUTH_ID = '53195590-d6e3-4260-9c17-8a5c1075509e';
-const TEST_PASSWORD = 'TestPassword123!';
+// Tài khoản admin dùng để thử: đặt trong backend/.env, không ghi vào repo.
+const ADMIN_AUTH_ID = process.env.TEST_ADMIN_AUTH_ID;
+const TEST_EMAIL = process.env.TEST_ADMIN_EMAIL;
+const TEST_PASSWORD = process.env.TEST_ADMIN_PASSWORD;
 
-test('Auth JWT & Profile Cache (CT-04 / E1)', async (t) => {
+const missingEnv = !TEST_EMAIL || !TEST_PASSWORD || !ADMIN_AUTH_ID;
+
+test('Auth JWT & Profile Cache (CT-04 / E1)', { skip: missingEnv && 'Thiếu TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD hoặc TEST_ADMIN_AUTH_ID' }, async (t) => {
   // Clear any existing cache
   clearUserCache();
   assert.equal(getUserCacheSize(), 0);
@@ -22,7 +26,7 @@ test('Auth JWT & Profile Cache (CT-04 / E1)', async (t) => {
   // 1. Obtain a valid real Supabase token
   const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY);
   const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-    email: '24520649@gm.uit.edu.vn',
+    email: TEST_EMAIL,
     password: TEST_PASSWORD,
   });
   assert.ifError(authError);

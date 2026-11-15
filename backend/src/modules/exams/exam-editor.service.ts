@@ -145,52 +145,42 @@ export async function getEditorSkill(skillId: string): Promise<EditorSkill> {
 }
 
 /**
- * Helper to delete all sections, groups, and questions of a skill bottom-up.
+ * Xóa toàn bộ nội dung (sections, groups, questions, options, answers) của một kỹ năng
+ * trong MỘT câu SQL và trả về các đường dẫn ảnh/audio cũ để dọn storage sau transaction.
+ * Thay cho 3 truy vấn đọc + 5 truy vấn xóa trước đây (mỗi truy vấn là một vòng mạng tới DB).
+ * Khóa ngoại các bảng con là NO ACTION nên được kiểm ở cuối câu lệnh, xóa cha và con cùng lúc hợp lệ.
  */
-async function deleteSkillSectionsBottomUp(
+async function deleteSkillContent(
   tx: Prisma.TransactionClient,
   skillId: string
-): Promise<void> {
-  const sections = await tx.exam_sections.findMany({
-    where: { exam_skill_id: skillId },
-    select: { id: true },
-  });
-  const secIds = sections.map((s) => s.id);
-  if (secIds.length === 0) return;
-
-  const groups = await tx.question_groups.findMany({
-    where: { section_id: { in: secIds } },
-    select: { id: true },
-  });
-  const grpIds = groups.map((g) => g.id);
-
-  if (grpIds.length > 0) {
-    const questions = await tx.questions.findMany({
-      where: { question_group_id: { in: grpIds } },
-      select: { id: true },
-    });
-    const qIds = questions.map((q) => q.id);
-
-    if (qIds.length > 0) {
-      await tx.question_answers.deleteMany({
-        where: { question_id: { in: qIds } },
-      });
-      await tx.question_options.deleteMany({
-        where: { question_id: { in: qIds } },
-      });
-      await tx.questions.deleteMany({
-        where: { id: { in: qIds } },
-      });
-    }
-
-    await tx.question_groups.deleteMany({
-      where: { id: { in: grpIds } },
-    });
-  }
-
-  await tx.exam_sections.deleteMany({
-    where: { id: { in: secIds } },
-  });
+): Promise<string[]> {
+  const rows = await tx.$queryRaw<Array<{ image_path: string | null; audio_path: string | null }>>`
+    with g as (
+      select qg.id from public.question_groups qg
+      join public.exam_sections s on s.id = qg.section_id
+      where s.exam_skill_id = ${skillId}::uuid
+    ), q as (
+      select id from public.questions where question_group_id in (select id from g)
+    ), da as (
+      delete from public.question_answers where question_id in (select id from q)
+    ), dop as (
+      delete from public.question_options where question_id in (select id from q)
+    ), dq as (
+      delete from public.questions where id in (select id from q)
+    ), dg as (
+      delete from public.question_groups where id in (select id from g)
+      returning image_path, audio_path
+    ), ds as (
+      delete from public.exam_sections where exam_skill_id = ${skillId}::uuid
+      returning image_path, audio_path
+    )
+    select image_path, audio_path from dg
+    union all
+    select image_path, audio_path from ds
+  `;
+  return rows
+    .flatMap((r) => [r.image_path, r.audio_path])
+    .filter((p): p is string => Boolean(p));
 }
 
 /**
@@ -299,22 +289,8 @@ export async function saveSkillContent(
       }
     }
 
-    // Thu thập đường dẫn ảnh cũ để dọn dẹp sau transaction (WS-09)
-    const existingSecs = await tx.exam_sections.findMany({
-      where: { exam_skill_id: skillId },
-      select: { image_path: true, audio_path: true },
-    });
-    const existingGrps = await tx.question_groups.findMany({
-      where: { section: { exam_skill_id: skillId } },
-      select: { image_path: true, audio_path: true },
-    });
-    const collectedPaths = [
-      ...existingSecs.flatMap((s: { image_path: string | null; audio_path: string | null }) => [s.image_path, s.audio_path]),
-      ...existingGrps.flatMap((g: { image_path: string | null; audio_path: string | null }) => [g.image_path, g.audio_path]),
-    ].filter((p): p is string => Boolean(p));
-
-    // Xóa nội dung cũ dưới lên
-    await deleteSkillSectionsBottomUp(tx, skillId);
+    // Xóa nội dung cũ và lấy đường dẫn ảnh cũ để dọn dẹp sau transaction (WS-09)
+    const collectedPaths = await deleteSkillContent(tx, skillId);
 
     let savedSectionsCount = 0;
     let savedQuestionsCount = 0;
@@ -511,31 +487,25 @@ export async function createRevisionDraft(
 
     await lockExamSet(tx, sourceSkill.exam.exam_set_id);
 
-    // WS-05: Nếu ô đã có DRAFT thì trả bản DRAFT đó (200), không tạo thêm
-    const existingDraft = await tx.exam_skills.findFirst({
+    // Một truy vấn cho cả ô: tìm DRAFT có sẵn (WS-05) và version_number lớn nhất
+    const slotRows = await tx.exam_skills.findMany({
       where: {
         exam_id: sourceSkill.exam_id,
         skill: sourceSkill.skill,
         form: sourceSkill.form ?? null,
-        status: 'DRAFT',
       },
+      select: { id: true, status: true, version_number: true },
     });
 
+    // WS-05: Nếu ô đã có DRAFT thì trả bản DRAFT đó (200), không tạo thêm
+    const existingDraft = slotRows.find((r) => r.status === 'DRAFT');
     if (existingDraft) {
       const skill = await getEditorSkillInTx(tx, existingDraft.id);
       return { skill, isExisting: true };
     }
 
-    // Tính version_number = max + 1
-    const maxVer = await tx.exam_skills.aggregate({
-      where: {
-        exam_id: sourceSkill.exam_id,
-        skill: sourceSkill.skill,
-        form: sourceSkill.form ?? null,
-      },
-      _max: { version_number: true },
-    });
-    const nextVersion = (maxVer._max.version_number ?? 0) + 1;
+    // version_number = max + 1 trên các dòng còn trong ô, tính cả ARCHIVED (như aggregate cũ)
+    const nextVersion = slotRows.reduce((m, r) => Math.max(m, r.version_number), 0) + 1;
 
     // Tạo bản DRAFT mới
     const newSkill = await tx.exam_skills.create({
@@ -554,6 +524,7 @@ export async function createRevisionDraft(
 
     // Chép toàn bộ sections, question_groups, questions, question_options, question_answers
     const sourceSections = await tx.exam_sections.findMany({
+      relationLoadStrategy: 'join',
       where: { exam_skill_id: sourceSkill.id },
       orderBy: { order_no: 'asc' },
       include: {
@@ -781,22 +752,8 @@ export async function deleteSkill(
     });
     const hadLive = Boolean(liveSkill);
 
-    // Thu thập đường dẫn ảnh/audio để dọn dẹp sau transaction (WS-09)
-    const secPaths = await tx.exam_sections.findMany({
-      where: { exam_skill_id: skillId },
-      select: { image_path: true, audio_path: true },
-    });
-    const grpPaths = await tx.question_groups.findMany({
-      where: { section: { exam_skill_id: skillId } },
-      select: { image_path: true, audio_path: true },
-    });
-    const collectedPaths = [
-      ...secPaths.flatMap((s: { image_path: string | null; audio_path: string | null }) => [s.image_path, s.audio_path]),
-      ...grpPaths.flatMap((g: { image_path: string | null; audio_path: string | null }) => [g.image_path, g.audio_path]),
-    ].filter((p): p is string => Boolean(p));
-
-    // Xóa từ dưới lên: question_answers -> question_options -> questions -> question_groups -> exam_sections
-    await deleteSkillSectionsBottomUp(tx, skillId);
+    // Xóa từ dưới lên trong một câu SQL, lấy đường dẫn ảnh/audio để dọn dẹp sau transaction (WS-09)
+    const collectedPaths = await deleteSkillContent(tx, skillId);
 
     // Xóa exam_skills có điều kiện status = 'DRAFT'
     const delRes = await tx.exam_skills.deleteMany({

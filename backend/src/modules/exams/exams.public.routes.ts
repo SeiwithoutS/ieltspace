@@ -19,6 +19,7 @@ publicExamsRouter.get(
     }
 
     const set = await prisma.exam_sets.findFirst({
+      relationLoadStrategy: 'join',
       where: {
         id: pParam.data.id,
         status: 'PUBLISHED',

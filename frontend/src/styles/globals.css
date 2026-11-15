@@ -150,3 +150,16 @@ button[data-ab]:disabled {
 .bu-dd.is-open .bu-dd-menu {
   display: block !important;
 }
+
+/* Màn hẹp (< 768px): menu thả xuống ở header người học khi đang đóng không được chiếm chỗ,
+   nếu không trang bị cuộn ngang. Khi mở thì canh theo mép phải và không rộng quá màn hình. */
+@media (max-width: 767px) {
+  .bu-dd:not(.is-open):not(:focus-within) .bu-dd-menu {
+    display: none !important;
+  }
+  .bu-dd .bu-dd-menu {
+    left: auto !important;
+    right: 0 !important;
+    max-width: calc(100vw - 32px);
+  }
+}

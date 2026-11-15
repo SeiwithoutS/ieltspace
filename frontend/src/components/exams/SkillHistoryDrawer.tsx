@@ -44,36 +44,28 @@ function formatTime(iso: string): string {
   }
 }
 
+const BADGE_BASE =
+  'inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-semibold leading-[18px] whitespace-nowrap';
+
 function getStatusBadge(status: SkillHistoryVersion['status']) {
   switch (status) {
     case 'DRAFT':
-      return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">
-          Đang soạn
-        </span>
-      );
+      return <span className={`${BADGE_BASE} bg-[#FBEDBF] text-[#7A5A0E]`}>Đang soạn</span>;
     case 'PUBLISHED':
-      return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-          Đang đăng
-        </span>
-      );
+      return <span className={`${BADGE_BASE} bg-[#DCEDE2] text-[#2E6A48]`}>Đang đăng</span>;
     case 'HIDDEN':
-      return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
-          Đang ẩn
-        </span>
-      );
+      return <span className={`${BADGE_BASE} bg-[#F3F0EA] text-[#706473]`}>Đang ẩn</span>;
     case 'ARCHIVED':
-      return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 border border-gray-200">
-          Đã lưu trữ
-        </span>
-      );
+      return <span className={`${BADGE_BASE} bg-[#F3F1EC] text-[#8A818C]`}>Đã lưu trữ</span>;
     default:
       return null;
   }
 }
+
+type TabKey = 'versions' | 'events';
+
+const FOCUS_RING =
+  'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2963CC]/30 focus-visible:ring-offset-0';
 
 export const SkillHistoryDrawer: React.FC<SkillHistoryDrawerProps> = ({
   isOpen,
@@ -81,10 +73,20 @@ export const SkillHistoryDrawer: React.FC<SkillHistoryDrawerProps> = ({
   skillId,
   onSelectVersion,
 }) => {
-  const [tab, setTab] = useState<'versions' | 'events'>('versions');
+  const [tab, setTab] = useState<TabKey>('versions');
   const [data, setData] = useState<SkillHistoryDto | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [entered, setEntered] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setEntered(false);
+      return;
+    }
+    const raf = requestAnimationFrame(() => setEntered(true));
+    return () => cancelAnimationFrame(raf);
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen || !skillId) {
@@ -128,11 +130,28 @@ export const SkillHistoryDrawer: React.FC<SkillHistoryDrawerProps> = ({
     }
   }
 
+  const tabs: { key: TabKey; label: string; count: number | null }[] = [
+    { key: 'versions', label: 'Phiên bản', count: data ? data.versions.length : null },
+    { key: 'events', label: 'Hoạt động', count: data ? data.events.length : null },
+  ];
+
+  const onTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    e.preventDefault();
+    const next: TabKey = tab === 'versions' ? 'events' : 'versions';
+    setTab(next);
+    document.getElementById(`skill-history-tab-${next}`)?.focus();
+  };
+
+  const emptyText = 'text-[14px] text-[#706473] text-center py-12';
+
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+    <div className="fixed inset-0 z-[60] overflow-hidden">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+        className={`fixed inset-0 bg-[#352637]/35 transition-opacity duration-200 motion-reduce:transition-none ${
+          entered ? 'opacity-100' : 'opacity-0'
+        }`}
         onClick={onClose}
         aria-hidden="true"
       />
@@ -142,16 +161,19 @@ export const SkillHistoryDrawer: React.FC<SkillHistoryDrawerProps> = ({
           role="dialog"
           aria-modal="true"
           aria-label="Lịch sử phiên bản"
-          className="w-screen max-w-[420px] bg-white shadow-2xl flex flex-col h-full text-slate-800"
+          className={`w-screen md:w-[400px] bg-white shadow-[-8px_0_32px_rgba(53,38,55,0.14)] flex flex-col h-full text-[#352637] font-['Inter','Be_Vietnam_Pro',system-ui,sans-serif] transform transition-transform duration-200 ease-out motion-reduce:transition-none ${
+            entered ? 'translate-x-0' : 'translate-x-full'
+          }`}
         >
           {/* Header */}
-          <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/80">
-            <div className="flex items-center gap-2">
+          <div className="px-5 py-4 border-0 border-b border-solid border-[#ECEAE5] flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
               <svg
-                className="w-5 h-5 text-slate-600"
+                className="w-5 h-5 text-[#706473] flex-none"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -160,67 +182,82 @@ export const SkillHistoryDrawer: React.FC<SkillHistoryDrawerProps> = ({
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <h2 className="text-base font-bold text-slate-900">
+              <h2 className="m-0 text-[18px] leading-6 font-semibold text-[#352637] truncate">
                 Lịch sử phiên bản
               </h2>
             </div>
             <button
+              type="button"
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition-colors"
+              className={`flex-none w-9 h-9 inline-flex items-center justify-center rounded-[10px] border-0 font-[inherit] bg-transparent p-0 text-[#706473] cursor-pointer transition-colors hover:bg-[#F6F4EF] hover:text-[#352637] ${FOCUS_RING}`}
               aria-label="Đóng"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
 
           {/* Tabs */}
-          <div className="flex border-b border-slate-200 px-5 bg-white text-sm font-semibold">
-            <button
-              onClick={() => setTab('versions')}
-              className={`py-3 mr-6 border-b-2 transition-colors flex items-center gap-1.5 ${
-                tab === 'versions'
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
+          <div className="px-5 pt-4">
+            <div
+              role="tablist"
+              aria-label="Lịch sử phiên bản"
+              className="flex gap-1 p-1 rounded-[12px] bg-[#F6F4EF]"
             >
-              <span>Phiên bản</span>
-              {data && (
-                <span className="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600">
-                  {data.versions.length}
-                </span>
-              )}
-            </button>
-            <button
-              onClick={() => setTab('events')}
-              className={`py-3 border-b-2 transition-colors flex items-center gap-1.5 ${
-                tab === 'events'
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              <span>Hoạt động</span>
-              {data && (
-                <span className="text-xs px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600">
-                  {data.events.length}
-                </span>
-              )}
-            </button>
+              {tabs.map((t) => {
+                const active = tab === t.key;
+                return (
+                  <button
+                    key={t.key}
+                    id={`skill-history-tab-${t.key}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    aria-controls="skill-history-panel"
+                    tabIndex={active ? 0 : -1}
+                    onClick={() => setTab(t.key)}
+                    onKeyDown={onTabKeyDown}
+                    className={`flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-[9px] border-0 font-[inherit] text-[14px] cursor-pointer transition-colors ${FOCUS_RING} ${
+                      active
+                        ? 'bg-white text-[#352637] font-semibold shadow-[0_1px_2px_rgba(53,38,55,0.12)]'
+                        : 'bg-transparent text-[#706473] font-medium hover:text-[#352637]'
+                    }`}
+                  >
+                    <span>{t.label}</span>
+                    {t.count !== null && (
+                      <span
+                        className={`min-w-[20px] px-1.5 rounded-full text-[12px] leading-[18px] font-semibold text-center ${
+                          active ? 'bg-[#E3ECFD] text-[#2257B8]' : 'bg-[#E7E4DD] text-[#706473]'
+                        }`}
+                      >
+                        {t.count}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-5">
+          <div
+            id="skill-history-panel"
+            role="tabpanel"
+            aria-labelledby={`skill-history-tab-${tab}`}
+            className="flex-1 min-h-0 overflow-y-auto px-5 py-4"
+          >
             {loading ? (
-              <div className="flex flex-col items-center justify-center h-48 text-slate-500">
-                <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin mb-3" />
-                <p className="text-sm">Đang tải lịch sử...</p>
+              <div className="flex flex-col items-center justify-center h-48 text-[#706473]">
+                <div className="w-7 h-7 border-[3px] border-solid border-[#2963CC] border-t-transparent rounded-full animate-spin mb-3 motion-reduce:animate-none" />
+                <p className="m-0 text-[14px]">Đang tải lịch sử...</p>
               </div>
             ) : error ? (
-              <div className="p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-sm">
-                <p className="font-semibold mb-1">Lỗi tải dữ liệu</p>
-                <p>{error}</p>
+              <div className="flex flex-col items-center text-center py-10 px-2">
+                <p className="m-0 mb-1 text-[15px] font-semibold text-[#C0412A]">Lỗi tải dữ liệu</p>
+                <p className="m-0 text-[14px] text-[#C0412A]">{error}</p>
                 <button
+                  type="button"
                   onClick={() => {
                     if (skillId) {
                       setLoading(true);
@@ -236,88 +273,111 @@ export const SkillHistoryDrawer: React.FC<SkillHistoryDrawerProps> = ({
                         });
                     }
                   }}
-                  className="mt-3 px-3 py-1.5 rounded bg-rose-600 text-white font-medium text-xs hover:bg-rose-700 transition"
+                  className={`mt-4 h-9 px-4 rounded-full font-[inherit] border-[1.5px] border-solid border-[#D6D4D0] bg-white text-[13px] font-semibold text-[#352637] cursor-pointer transition-colors hover:bg-[#F6F4EF] ${FOCUS_RING}`}
                 >
                   Thử lại
                 </button>
               </div>
             ) : tab === 'versions' ? (
-              <div className="space-y-3">
+              <div className="flex flex-col gap-3">
+                {(data?.versions.length ?? 0) === 0 && (
+                  <p className={`m-0 ${emptyText}`}>Chưa có phiên bản nào.</p>
+                )}
                 {data?.versions.map((ver) => {
                   const isCurrent = ver.isCurrent;
+                  const selectable = !!onSelectVersion && !isCurrent;
+                  const meta: string[] = [`Tạo ngày ${formatFullDate(ver.createdAt)}`];
+                  if (ver.createdBy?.name) meta.push(`bởi ${ver.createdBy.name}`);
+                  if (ver.basedOnVersion != null) meta.push(`tạo từ phiên bản ${ver.basedOnVersion}`);
                   return (
                     <div
                       key={ver.id}
+                      role={selectable ? 'button' : undefined}
+                      tabIndex={selectable ? 0 : undefined}
                       onClick={() => {
                         if (onSelectVersion && !isCurrent) {
                           onSelectVersion(ver.id);
                         }
                       }}
-                      className={`p-4 rounded-xl border transition-all ${
+                      onKeyDown={(e) => {
+                        if (selectable && (e.key === 'Enter' || e.key === ' ')) {
+                          e.preventDefault();
+                          onSelectVersion?.(ver.id);
+                        }
+                      }}
+                      className={`px-4 py-3.5 rounded-[14px] border-[1.5px] border-solid transition-colors ${FOCUS_RING} ${
                         isCurrent
-                          ? 'border-indigo-400 bg-indigo-50/50 shadow-sm ring-1 ring-indigo-300'
-                          : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm cursor-pointer'
+                          ? 'border-[#2963CC]/40 bg-[#F4F7FE]'
+                          : `border-[#ECEAE5] bg-white ${
+                              selectable ? 'cursor-pointer hover:border-[#D6D4D0] hover:bg-[#FCFBF7]' : ''
+                            }`
                       }`}
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-slate-900 text-base">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 flex-wrap min-w-0">
+                          <span className="text-[15px] leading-6 font-semibold text-[#352637]">
                             Phiên bản {ver.versionNumber}
                           </span>
                           {getStatusBadge(ver.status)}
                         </div>
                         {isCurrent && (
-                          <span className="text-[11px] font-bold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">
+                          <span className="flex-none inline-flex items-center px-2 py-0.5 rounded-full border border-solid border-[#2963CC] bg-transparent text-[12px] leading-[16px] font-semibold text-[#2963CC] whitespace-nowrap">
                             Đang mở
                           </span>
                         )}
                       </div>
-
-                      <div className="text-xs text-slate-500 space-y-1">
-                        <div>
-                          Tạo ngày {formatFullDate(ver.createdAt)}
-                          {ver.createdBy?.name ? ` · bởi ${ver.createdBy.name}` : ''}
-                        </div>
-                        {ver.basedOnVersion != null && (
-                          <div className="text-indigo-600 font-medium">
-                            ↳ Tạo từ phiên bản {ver.basedOnVersion}
-                          </div>
-                        )}
-                        {ver.publishedAt && (
-                          <div className="text-emerald-700">
-                            Đã đăng: {formatFullDate(ver.publishedAt)}
-                          </div>
-                        )}
+                      <div className="mt-1.5 text-[13px] leading-5 text-[#706473]">
+                        {meta.map((m, i) => (
+                          <React.Fragment key={i}>
+                            {i > 0 && <span className="mx-1.5 text-[#B9B4BB]" aria-hidden="true">·</span>}
+                            <span>{m}</span>
+                          </React.Fragment>
+                        ))}
                       </div>
+                      {ver.publishedAt && (
+                        <div className="mt-0.5 text-[13px] leading-5 text-[#2E7D4F]">
+                          Đã đăng: {formatFullDate(ver.publishedAt)}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="flex flex-col gap-6">
                 {Object.keys(groupedEvents).length === 0 ? (
-                  <p className="text-sm text-slate-500 text-center py-8">
-                    Chưa có nhật ký hoạt động nào.
-                  </p>
+                  <p className={`m-0 ${emptyText}`}>Chưa có nhật ký hoạt động nào.</p>
                 ) : (
                   Object.entries(groupedEvents).map(([day, evts]) => (
                     <div key={day}>
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                      <h3 className="m-0 mb-3 text-[12px] leading-4 font-semibold uppercase tracking-[0.06em] text-[#706473]">
                         {day}
                       </h3>
-                      <div className="border-l-2 border-slate-200 ml-2 space-y-4 pl-4">
-                        {evts.map((evt, idx) => (
-                          <div key={idx} className="relative text-xs">
-                            <span className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-slate-300 ring-4 ring-white" />
-                            <div className="font-semibold text-slate-800">
-                              {evt.summary}
+                      <div className="ml-[5px]">
+                        {evts.map((evt, idx) => {
+                          const last = idx === evts.length - 1;
+                          return (
+                            <div key={idx} className={`relative pl-5 ${last ? '' : 'pb-4'}`}>
+                              {!last && (
+                                <span className="absolute left-[4px] top-4 bottom-[-2px] w-[1.5px] bg-[#ECEAE5]" aria-hidden="true" />
+                              )}
+                              <span
+                                className="absolute left-0 top-[6px] w-[10px] h-[10px] rounded-full bg-white border-2 border-solid border-[#2963CC]"
+                                aria-hidden="true"
+                              />
+                              <div className="text-[14px] leading-5 text-[#352637]">{evt.summary}</div>
+                              <div className="mt-0.5 text-[12px] leading-4 text-[#706473]">
+                                <span>{formatTime(evt.at)}</span>
+                                {evt.actor?.name && (
+                                  <>
+                                    <span className="mx-1.5 text-[#B9B4BB]" aria-hidden="true">·</span>
+                                    <span>{evt.actor.name}</span>
+                                  </>
+                                )}
+                              </div>
                             </div>
-                            <div className="text-slate-400 mt-0.5 flex items-center gap-2">
-                              <span>{formatTime(evt.at)}</span>
-                              {evt.actor?.name && <span>· {evt.actor.name}</span>}
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   ))

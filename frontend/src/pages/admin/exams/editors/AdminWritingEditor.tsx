@@ -1662,6 +1662,13 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
     }
 
     const v = this.renderVals();
+    const s = this.state;
+    const self = this;
+    const skill = s.skill;
+    const dirty = !!s.editing && JSON.stringify(s.base || s.ex) !== JSON.stringify(s.ex);
+    const ask = (title: string, sub: string, run: () => Promise<void> | void, goText = "Xóa") => {
+      self.setState({ confirm: { title: title, sub: sub, goText: goText, run: run }, confirmRun: run, snack: null });
+    };
     return (
       <>
         {"\n"}

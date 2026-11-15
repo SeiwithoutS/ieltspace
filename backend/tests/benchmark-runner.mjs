@@ -6,9 +6,11 @@ import { addTest } from '../dist/modules/exams/exam-tests.service.js';
 import { createSkill } from '../dist/modules/exams/exam-skills.service.js';
 import { getEditorSkill, saveSkillContent, deleteSkill } from '../dist/modules/exams/exam-editor.service.js';
 
-const ADMIN_AUTH_ID = '53195590-d6e3-4260-9c17-8a5c1075509e';
-const ADMIN_USER_ID = 'f8c7ad11-e1f5-411b-b962-13717ef31913';
-const TEST_PASSWORD = 'TestPassword123!';
+// Tài khoản admin dùng để thử: đặt trong backend/.env, không ghi vào repo.
+const ADMIN_AUTH_ID = process.env.TEST_ADMIN_AUTH_ID;
+const ADMIN_USER_ID = process.env.TEST_ADMIN_USER_ID;
+const TEST_EMAIL = process.env.TEST_ADMIN_EMAIL;
+const TEST_PASSWORD = process.env.TEST_ADMIN_PASSWORD;
 
 function median(values) {
   if (values.length === 0) return 0;
@@ -40,7 +42,7 @@ function parseServerTiming(header) {
 async function getAccessToken() {
   const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY);
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: '24520649@gm.uit.edu.vn',
+    email: TEST_EMAIL,
     password: TEST_PASSWORD,
   });
   if (error || !data?.session?.access_token) {
@@ -50,6 +52,9 @@ async function getAccessToken() {
 }
 
 async function run() {
+  if (!TEST_EMAIL || !TEST_PASSWORD || !ADMIN_AUTH_ID || !ADMIN_USER_ID) {
+    throw new Error('Đặt TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD, TEST_ADMIN_AUTH_ID, TEST_ADMIN_USER_ID trong backend/.env trước khi chạy benchmark.');
+  }
   console.log('--- STARTING BENCHMARK RUN ---');
   const token = await getAccessToken();
   console.log('Authenticated as Admin');

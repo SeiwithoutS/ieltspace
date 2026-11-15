@@ -134,9 +134,9 @@ export async function verifyAccessToken(accessToken: string): Promise<string> {
     }
 
     return payload.sub;
-  } catch (err: any) {
+  } catch (err: unknown) {
     // If token expired, throw immediately without remote fallback
-    if (err?.code === "ERR_JWT_EXPIRED") {
+    if ((err as { code?: string } | null)?.code === "ERR_JWT_EXPIRED") {
       throw new HttpError(
         401,
         "INVALID_TOKEN",
@@ -149,7 +149,9 @@ export async function verifyAccessToken(accessToken: string): Promise<string> {
       try {
         const secret = new TextEncoder().encode(process.env.SUPABASE_JWT_SECRET);
         const { payload } = await jwtVerify(accessToken, secret, {
+          issuer: `${env.SUPABASE_URL}/auth/v1`,
           audience: "authenticated",
+          algorithms: ["HS256"],
         });
         if (payload.sub) {
           return payload.sub;

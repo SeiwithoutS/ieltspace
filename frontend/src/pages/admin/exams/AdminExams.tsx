@@ -128,9 +128,9 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
         ["S", "Speaking", "#E8E4FA", "#5543B0"],
       ],
       SST: Record<UiSet["status"], Palette> = {
-        pub: ["Công khai", "#DCEDE2", "#2E6A48"],
-        draft: ["Bản nháp", "#FBEDBF", "#7A5A0E"],
-        hidden: ["Đã ẩn", "#F3F0EA", "#706473"],
+        PUBLISHED: ["Công khai", "#DCEDE2", "#2E6A48"],
+        DRAFT: ["Bản nháp", "#FBEDBF", "#7A5A0E"],
+        HIDDEN: ["Đã ẩn", "#F3F0EA", "#706473"],
       },
       TY: Record<FormKey, Palette> = {
         A: ["Academic", "#DFF1F4", "#1F6A78"],
@@ -306,7 +306,7 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
         canDel =
           st.canDelete !== undefined
             ? st.canDelete
-            : st.status === "draft" || !st.tests.length;
+            : st.status === "DRAFT" || !st.tests.length;
       var types = (["A", "G"] as FormKey[])
         .filter(function (c) {
           return has(st, c);
@@ -469,9 +469,9 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
       fSts: segItems(
         [
           ["all", "Mọi trạng thái"],
-          ["pub", "Công khai"],
-          ["draft", "Bản nháp"],
-          ["hidden", "Đã ẩn"],
+          ["PUBLISHED", "Công khai"],
+          ["DRAFT", "Bản nháp"],
+          ["HIDDEN", "Đã ẩn"],
         ],
         fS,
         "fS",

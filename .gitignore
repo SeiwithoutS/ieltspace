@@ -20,6 +20,7 @@ coverage/
 .vscode/
 .vercel/
 /_local/
+/.agents/
 .cache/
 .temp/
 .tmp/

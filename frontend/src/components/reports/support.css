@@ -1,6 +1,6 @@
 .support-shell,
 .support-panel {
-  font-family: "Inter", "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.6;
   color: var(--support-text);
@@ -52,7 +52,7 @@ html.dark .support-panel {
   color: var(--support-accent);
 }
 .support-panel h1 {
-  font-family: "IBM Plex Serif", Georgia, serif;
+  font-family: var(--font-serif);
   font-size: 28px;
   line-height: 1.25;
   letter-spacing: -0.015em;
@@ -86,7 +86,7 @@ html.dark .support-panel {
   font-size: 13px;
 }
 .support-stat h2 {
-  font-family: "IBM Plex Serif", Georgia, serif;
+  font-family: var(--font-serif);
   font-size: 32px;
   color: var(--support-text);
   margin: 12px 0 0;

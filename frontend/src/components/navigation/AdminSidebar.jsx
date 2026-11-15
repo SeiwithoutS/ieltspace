@@ -46,6 +46,7 @@ class AdminSidebar extends React.Component {
       "users",
       "exams",
       "samples",
+      "vocabulary",
       "grading",
       "notifications",
       "profile",
@@ -441,6 +442,10 @@ class AdminSidebar extends React.Component {
                       </span>
                     </>
                   ) : null}
+                </a>
+                <a href="#AdminVocabulary" title="Quản lý từ vựng" aria-label="Quản lý từ vựng" style={styleOf(v.st.vocabulary)}>
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M3 5c3-1 6-1 9 1 3-2 6-2 9-1v14c-3-1-6-1-9 1-3-2-6-2-9-1zM12 6v14"/></svg>
+                  {v.open && <span>Quản lý từ vựng</span>}
                 </a>
                 <a
                   href={"AdminGrading.dc.html"}

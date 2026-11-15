@@ -40,3 +40,7 @@ Duy trì một backend chia module. Route/controller đọc đầu vào và tr�
   - Prisma 6 với `previewFeatures = ["relationJoins"]` nạp toàn bộ cây dữ liệu bộ đề và kỹ năng trong một câu truy vấn SQL JOIN đơn lẻ, loại bỏ việc nạp lồng nhiều câu lệnh rời rạc.
 - **Khung giao diện quản trị đáp ứng (StaffLayout)**:
   - Khung chuẩn hóa `StaffLayout` quản lý thanh bên (Sidebar) co giãn theo breakpoint: mở rộng (≥ 1280px), thu gọn icon (1024–1279px), ngăn kéo phủ overlay khi thao tác nút ☰ (768–1023px) và dải cảnh báo thiết bị (< 768px).
+
+## Luồng làm bài — cập nhật 14/11/2026
+
+Các thư mục frontend/src/pages/attempts, pages/results và components/attempts đã chuyển sang TSX. AttemptSession nhận snapshot qua callback đã định kiểu trong types.ts. parseAttemptDraft kiểm tra nháp trên trình duyệt trước khi cấp initialState cho trang. Dữ liệu mẫu được tập trung trong data/attempt-samples.ts. DesktopOnly kiểm tra điều kiện hiển thị tại đầu vào bốn trang làm bài; Popup dùng native dialog và nhận trạng thái desktop qua context.

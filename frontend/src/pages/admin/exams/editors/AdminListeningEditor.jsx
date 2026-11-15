@@ -47,7 +47,7 @@ class AdminListeningEditor extends React.Component {
             sessionStorage.removeItem("ieltspace-editor-import");
             return o.v;
           }
-        } catch (err) {}
+      } catch (err) { }
         return null;
       })(),
       P0 = this.props || {};

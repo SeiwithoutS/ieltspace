@@ -76,7 +76,7 @@ export async function getEditorSkillInTx(
   }
 
   // Find slot siblings in the same exam
-  const siblingSkills = await tx.exam_skills.findMany({
+  const siblingSkills = await (tx as any).exam_skills.findMany({
     where: {
       exam_id: skill.exam_id,
       skill: skill.skill,
@@ -85,18 +85,21 @@ export async function getEditorSkillInTx(
     select: {
       id: true,
       status: true,
+      version_number: true,
     },
   });
 
-  const draft = siblingSkills.find((s) => s.status === 'DRAFT');
+  const draft = siblingSkills.find((s: any) => s.status === 'DRAFT');
   const live = siblingSkills.find(
-    (s) => s.status === 'PUBLISHED' || s.status === 'HIDDEN'
+    (s: any) => s.status === 'PUBLISHED' || s.status === 'HIDDEN'
   );
 
   const slot = {
     liveId: live?.id ?? null,
     liveStatus: (live ? (live.status as 'PUBLISHED' | 'HIDDEN') : null),
+    liveVersion: live?.version_number ?? null,
     draftId: draft?.id ?? null,
+    draftVersion: draft?.version_number ?? null,
   };
 
   let writing: WritingContent | null = null;
@@ -313,6 +316,9 @@ export async function saveSkillContent(
     // Xóa nội dung cũ dưới lên
     await deleteSkillSectionsBottomUp(tx, skillId);
 
+    let savedSectionsCount = 0;
+    let savedQuestionsCount = 0;
+
     // Ghi nội dung mới (E2: Batch write)
     if (skill.skill === 'WRITING' && input.writing) {
       const rows = writingToRows(input.writing);
@@ -330,6 +336,7 @@ export async function saveSkillContent(
       if (sectionInserts.length > 0) {
         await tx.exam_sections.createMany({ data: sectionInserts });
       }
+      savedSectionsCount = sectionInserts.length;
     } else if (skill.skill === 'SPEAKING' && input.speaking) {
       const rows = speakingToRows(input.speaking);
       const sectionInserts: Prisma.exam_sectionsCreateManyInput[] = [];
@@ -380,6 +387,8 @@ export async function saveSkillContent(
       if (questionInserts.length > 0) {
         await tx.questions.createMany({ data: questionInserts });
       }
+      savedSectionsCount = sectionInserts.length;
+      savedQuestionsCount = questionInserts.length;
     }
 
     // Cập nhật duration_minutes và trigger updated_at (WS-02)
@@ -402,10 +411,14 @@ export async function saveSkillContent(
     });
 
     // WS-12: Audit log
-    const changeData =
-      skill.skill === 'WRITING'
+    const changeData = {
+      ...(skill.skill === 'WRITING'
         ? { taskCount: input.writing?.tasks.length ?? 0 }
-        : { partCount: 3 };
+        : { partCount: 3 }),
+      version: skill.version_number,
+      sections: savedSectionsCount,
+      questions: savedQuestionsCount,
+    };
 
     await writeAudit(tx, {
       actorId,
@@ -659,7 +672,12 @@ export async function createRevisionDraft(
       action: 'EXAM_SKILL_DRAFT_CREATE',
       entityType: 'EXAM_SKILL',
       entityId: newSkill.id,
-      changeData: { fromId: sourceSkill.id, version: nextVersion },
+      changeData: {
+        fromId: sourceSkill.id,
+        fromSkillId: sourceSkill.id,
+        fromVersion: sourceSkill.version_number,
+        version: nextVersion,
+      },
     });
 
     const skill = await getEditorSkillInTx(tx, newSkill.id);
@@ -800,6 +818,7 @@ export async function deleteSkill(
       entityType: 'EXAM_SKILL',
       entityId: skillId,
       changeData: {
+        examId: skill.exam_id,
         skill: skill.skill,
         form: skill.form,
         version: skill.version_number,

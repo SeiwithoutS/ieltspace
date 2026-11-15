@@ -1,6 +1,5 @@
 import { apiFetch } from './api';
 import type { ExamSetAdmin } from './exam-admin';
-export { deleteSkill, publishSkill } from './exam-admin';
 
 export type WritingTask = {
   prompt: string;
@@ -50,7 +49,9 @@ export type EditorSkill = {
   slot: {
     liveId: string | null;
     liveStatus: 'PUBLISHED' | 'HIDDEN' | null;
+    liveVersion: number | null;
     draftId: string | null;
+    draftVersion: number | null;
   };
   writing: WritingContent | null;
   speaking: SpeakingContent | null;
@@ -230,4 +231,39 @@ export function fromSpeakingEditorState(state: SpeakingEditorState): SpeakingCon
     },
   };
 }
+
+export type SkillHistoryVersion = {
+  id: string;
+  versionNumber: number;
+  status: 'DRAFT' | 'PUBLISHED' | 'HIDDEN' | 'ARCHIVED';
+  createdAt: string;
+  createdBy: { id: string; name: string } | null;
+  publishedAt: string | null;
+  updatedAt: string;
+  basedOnVersion: number | null;
+  isCurrent: boolean;
+};
+
+export type SkillHistoryEvent = {
+  at: string;
+  action: string;
+  version: number | null;
+  actor: { name: string } | null;
+  summary: string;
+};
+
+export type SkillHistoryDto = {
+  slot: {
+    examId: string;
+    skill: string;
+    form: string | null;
+  };
+  versions: SkillHistoryVersion[];
+  events: SkillHistoryEvent[];
+};
+
+export async function getSkillHistory(skillId: string): Promise<SkillHistoryDto> {
+  return apiFetch<SkillHistoryDto>(`/admin/exam-skills/${skillId}/history`);
+}
+
 

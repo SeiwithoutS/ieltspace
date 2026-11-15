@@ -4,20 +4,20 @@ import { styleOf, cssText } from "../../../../lib/styles";
 import AdminSidebar from "../../../../components/navigation/AdminSidebar";
 import AdminTopbar, { Crumb } from "../../../../components/navigation/AdminTopbar";
 import { navigate } from "../../../../lib/auth";
-import { errorInfo } from "../../../../lib/exam-admin";
+import { errorInfo, fmtDate, deleteSkill, publishSkill } from "../../../../lib/exam-admin";
 import { ApiError } from "../../../../lib/api";
 import {
   getEditorSkill,
   saveSkillContent,
   createRevisionDraft,
-  deleteSkill,
-  publishSkill,
   toSpeakingEditorState,
   fromSpeakingEditorState,
   type EditorSkill,
   type SpeakingEditorState,
   type SpeakingEditorItem,
 } from "../../../../lib/exam-editor";
+import SkillHistoryDrawer from "../../../../components/exams/SkillHistoryDrawer";
+import { versionMessages } from "../../../../lib/version-messages";
 
 type Ev = React.SyntheticEvent | null | undefined;
 
@@ -50,6 +50,7 @@ type State = {
   toast: string;
   imp: string | null;
   impSet: string | null;
+  historyOpen: boolean;
 };
 
 
@@ -88,6 +89,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
     toast: "",
     imp: null,
     impSet: null,
+    historyOpen: false,
   };
 
   componentDidMount() {
@@ -177,6 +179,9 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         t: 0,
         hist: [],
       });
+      if (skill) {
+        document.title = versionMessages.tabTitle("Speaking", skill.versionNumber);
+      }
     } catch {
       if (this._mounted) {
         this.setState({ loading: false, notFound: true });
@@ -1330,7 +1335,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         (GTF && KIND === "write"
           ? "background: #FCE6D6; color: #9A4A17"
           : "background: #DFF1F4; color: #1F6A78"),
-      modeText: editing ? "Đang chỉnh sửa" : "Chỉ xem",
+      modeText: editing ? versionMessages.modeEditing(skill?.versionNumber || 1) : versionMessages.modeViewing,
       modeSt:
         CHIP +
         "; " +
@@ -1354,6 +1359,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         ((s.hist || []).length
           ? "color: #352637; cursor: pointer"
           : "color: #B5ADB7; cursor: default; pointer-events: none"),
+      canEdit: !editing && skill && skill.status !== "ARCHIVED",
       canPublish: !editing && skill && skill.status === "DRAFT",
       canDelete: !editing && skill && skill.status === "DRAFT",
       deleteLabel: skill?.slot?.liveId ? "Bỏ bản sửa" : "Xóa kỹ năng",
@@ -1362,13 +1368,10 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         stop(e);
         if (!skill) return;
         var hadLive = Boolean(skill.slot.liveId);
+        var conf = versionMessages.confirmDiscardDraft(skill.versionNumber, skill.slot?.liveVersion);
         ask(
-          hadLive
-            ? "Bỏ bản sửa Speaking của " + skill.exam.title + "?"
-            : "Xóa Speaking của " + skill.exam.title + "?",
-          hadLive
-            ? "Bản đang hiển thị với người học giữ nguyên. Các thay đổi đã lưu trong bản sửa sẽ bị xóa vĩnh viễn."
-            : "Kỹ năng đang soạn, chưa đăng lần nào. Nội dung đã soạn sẽ bị xóa vĩnh viễn, ô trở về trống để tạo lại.",
+          conf.title,
+          conf.text,
           async function () {
             try {
               await deleteSkill(skill.id);
@@ -1381,31 +1384,45 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
               self.setState({ toast: errorInfo(err).message || "Không thể xóa kỹ năng." });
             }
           },
-          hadLive ? "Bỏ bản sửa" : "Xóa kỹ năng"
+          conf.goText
         );
       },
       startEdit: async function (e: Ev) {
         stop(e);
         if (!skill) return;
+        if (skill.status === "ARCHIVED") return;
         if (skill.status !== "DRAFT") {
-          try {
-            var rev = await createRevisionDraft(skill.id);
-            window.history.replaceState(null, "", "#AdminSpeakingEditor?skillId=" + rev.id);
-            var newEx = toSpeakingEditorState(rev);
-            self.setState({
-              skillId: rev.id,
-              skill: rev,
-              ex: newEx,
-              base: JSON.parse(JSON.stringify(newEx)),
-              editing: true,
-              hist: [],
-              lastTag: null,
-              issues: null,
-              snack: "Đã tạo bản sửa. Người học vẫn thấy bản đang đăng cho tới khi bạn đăng bản này.",
-            });
-          } catch (err) {
-            self.setState({ toast: errorInfo(err).message || "Không thể tạo bản sửa." });
-          }
+          var conf = versionMessages.confirmCreateDraft(
+            (skill.versionNumber || 1) + 1,
+            skill.versionNumber || 1
+          );
+          ask(
+            conf.title,
+            conf.text,
+            async function () {
+              try {
+                var rev = await createRevisionDraft(skill.id);
+                window.history.replaceState(null, "", "#AdminSpeakingEditor?skillId=" + rev.id);
+                var newEx = toSpeakingEditorState(rev);
+                self.setState({
+                  skillId: rev.id,
+                  skill: rev,
+                  ex: newEx,
+                  base: JSON.parse(JSON.stringify(newEx)),
+                  editing: true,
+                  hist: [],
+                  lastTag: null,
+                  issues: null,
+                  snack: rev.id === skill.slot?.draftId
+                    ? versionMessages.noticeReopenDraft(rev.versionNumber)
+                    : versionMessages.noticeCreatedDraft(rev.versionNumber, skill.versionNumber),
+                });
+              } catch (err) {
+                self.setState({ toast: errorInfo(err).message || "Không thể tạo bản sửa." });
+              }
+            },
+            conf.goText
+          );
         } else {
           self.setState({
             editing: true,
@@ -1436,7 +1453,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
             lastTag: null,
             leave: false,
             snack: null,
-            toast: "Đã lưu các thay đổi của đề.",
+            toast: versionMessages.noticeSavedDraft(saved.versionNumber, Boolean(saved.slot?.liveId)),
           });
         } catch (err) {
           self.setState({
@@ -1512,14 +1529,8 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         }
       },
       pubOpen: !!s.pubAsk,
-      pubSub:
-        "“" +
-        ex.title +
-        "” đã đủ " +
-        NI +
-        " " +
-        UNIT.toLowerCase() +
-        ". Sau khi đăng, học viên sẽ thấy đề trong thư viện; sửa đề khi đã có người làm sẽ tạo phiên bản mới.",
+      pubTitle: versionMessages.confirmPublish(skill?.versionNumber || 1, skill?.slot?.liveVersion).title,
+      pubSub: versionMessages.confirmPublish(skill?.versionNumber || 1, skill?.slot?.liveVersion).text,
       pubCancel: function (e: Ev) {
         stop(e);
         self.setState({ pubAsk: false });
@@ -1538,7 +1549,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
             base: JSON.parse(JSON.stringify(newEx)),
             editing: false,
             hist: [],
-            toast: "Đề đã được đăng.",
+            toast: versionMessages.noticePublished(skill.versionNumber, skill.slot?.liveVersion),
           });
         } catch (err) {
           var info = errorInfo(err);
@@ -1707,6 +1718,77 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                   "flex: 1; display: flex; flex-direction: column; background: #FAF9F5; min-width: 0",
                 )}
               >
+                {skill && (
+                  <div
+                    style={styleOf(
+                      skill.status === "ARCHIVED"
+                        ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap"
+                        : skill.status === "HIDDEN"
+                        ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
+                        : skill.status === "DRAFT"
+                        ? "background: #EFF6FF; border-bottom: 1.5px solid #BFDBFE; color: #1E40AF; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
+                        : "display: none"
+                    )}
+                  >
+                    {skill.status === "ARCHIVED" ? (
+                      <>
+                        <div style={styleOf("display: flex; align-items: center; gap: 8px")}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4" />
+                          </svg>
+                          <span>
+                            {versionMessages.bannerArchived(
+                              skill.versionNumber,
+                              fmtDate(skill.publishedAt || skill.updatedAt)
+                            )}
+                          </span>
+                        </div>
+                        {(skill.slot.draftId || skill.slot.liveId) && (
+                          <a
+                            href="#"
+                            onClick={function (e) {
+                              e.preventDefault();
+                              navigate(
+                                "AdminSpeakingEditor?skillId=" +
+                                  (skill.slot.draftId || skill.slot.liveId)
+                              );
+                            }}
+                            style={styleOf(
+                              "font-weight: 600; color: #1E40AF; text-decoration: underline; cursor: pointer; white-space: nowrap"
+                            )}
+                          >
+                            Mở bản hiện tại →
+                          </a>
+                        )}
+                      </>
+                    ) : skill.status === "HIDDEN" ? (
+                      <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22" />
+                        </svg>
+                        <span>{versionMessages.bannerHidden(skill.versionNumber)}</span>
+                      </>
+                    ) : skill.status === "DRAFT" ? (
+                      <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="16" x2="12" y2="12" />
+                          <line x1="12" y1="8" x2="12.01" y2="8" />
+                        </svg>
+                        <span>
+                          {skill.slot.liveId
+                            ? versionMessages.bannerDraftWithLive(
+                                skill.versionNumber,
+                                skill.slot.liveVersion || (skill.versionNumber - 1),
+                                skill.slot.liveVersion || 1,
+                                skill.slot.liveStatus || "PUBLISHED"
+                              )
+                            : versionMessages.bannerDraftFirst(skill.versionNumber)}
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
+                )}
                 <div
                   style={styleOf(
                     "display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 16px 24px; border-bottom: 1.5px solid #D6D4D0; background: #FCFBF7",
@@ -1781,6 +1863,31 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                       </span>
                       <span style={styleOf(v.modeSt)}>{v.modeText}</span>
                       <span style={styleOf(v.counterSt)}>{v.counter}</span>
+                      <button
+                        type="button"
+                        onClick={function () {
+                          self.setState({ historyOpen: true });
+                        }}
+                        style={styleOf(
+                          "display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1px solid #D6D4D0; background: #FFFFFF; font-size: 12px; font-weight: 600; color: #5B4E5F; cursor: pointer; text-decoration: none;"
+                        )}
+                        title="Xem lịch sử các phiên bản"
+                      >
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>Lịch sử</span>
+                      </button>
                     </div>
                   </div>
                   <div
@@ -1844,28 +1951,30 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                           </svg>
                           {" Nhập từ xlsx"}
                         </button>
-                        <a
-                          href={"#"}
-                          onClick={v.startEdit}
-                          style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
-                          )}
-                        >
-                          <svg
-                            width={"16"}
-                            height={"16"}
-                            viewBox={"0 0 24 24"}
-                            fill={"none"}
-                            stroke={"currentColor"}
-                            strokeWidth={"2"}
-                            strokeLinecap={"round"}
-                            strokeLinejoin={"round"}
-                            aria-hidden={"true"}
+                        {v.canEdit ? (
+                          <a
+                            href={"#"}
+                            onClick={v.startEdit}
+                            style={styleOf(
+                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
+                            )}
                           >
-                            <path d={"M15 5l4 4L8 20H4v-4z"}></path>
-                          </svg>
-                          {" Chỉnh sửa"}
-                        </a>
+                            <svg
+                              width={"16"}
+                              height={"16"}
+                              viewBox={"0 0 24 24"}
+                              fill={"none"}
+                              stroke={"currentColor"}
+                              strokeWidth={"2"}
+                              strokeLinecap={"round"}
+                              strokeLinejoin={"round"}
+                              aria-hidden={"true"}
+                            >
+                              <path d={"M15 5l4 4L8 20H4v-4z"}></path>
+                            </svg>
+                            {" Chỉnh sửa"}
+                          </a>
+                        ) : null}
                         {v.canPublish ? (
                           <a
                             href={"#"}
@@ -3148,28 +3257,30 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
                                   "display: flex; gap: 10px; flex-wrap: wrap; justify-content: center",
                                 )}
                               >
-                                <a
-                                  href={"#"}
-                                  onClick={v.startEdit}
-                                  style={styleOf(
-                                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
-                                  )}
-                                >
-                                  <svg
-                                    width={"16"}
-                                    height={"16"}
-                                    viewBox={"0 0 24 24"}
-                                    fill={"none"}
-                                    stroke={"currentColor"}
-                                    strokeWidth={"2"}
-                                    strokeLinecap={"round"}
-                                    strokeLinejoin={"round"}
-                                    aria-hidden={"true"}
+                                {v.canEdit ? (
+                                  <a
+                                    href={"#"}
+                                    onClick={v.startEdit}
+                                    style={styleOf(
+                                      "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
+                                    )}
                                   >
-                                    <path d={"M15 5l4 4L8 20H4v-4z"}></path>
-                                  </svg>
-                                  {" Soạn ngay"}
-                                </a>
+                                    <svg
+                                      width={"16"}
+                                      height={"16"}
+                                      viewBox={"0 0 24 24"}
+                                      fill={"none"}
+                                      stroke={"currentColor"}
+                                      strokeWidth={"2"}
+                                      strokeLinecap={"round"}
+                                      strokeLinejoin={"round"}
+                                      aria-hidden={"true"}
+                                    >
+                                      <path d={"M15 5l4 4L8 20H4v-4z"}></path>
+                                    </svg>
+                                    {" Soạn ngay"}
+                                  </a>
+                                ) : null}
                                 <button
                                   type="button"
                                   disabled={true}
@@ -3582,6 +3693,29 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
           {"\n"}
         </div>
         {"\n"}
+        <SkillHistoryDrawer
+          isOpen={s.historyOpen}
+          onClose={function () {
+            self.setState({ historyOpen: false });
+          }}
+          skillId={skill ? skill.id : null}
+          onSelectVersion={function (versionId) {
+            if (s.editing && dirty) {
+              ask(
+                "Rời trang khi chưa lưu thay đổi?",
+                "Các thay đổi bạn vừa chỉnh sửa sẽ bị mất nếu chuyển phiên bản.",
+                function () {
+                  self.setState({ historyOpen: false });
+                  navigate("AdminSpeakingEditor?skillId=" + versionId);
+                },
+                "Rời đi"
+              );
+            } else {
+              self.setState({ historyOpen: false });
+              navigate("AdminSpeakingEditor?skillId=" + versionId);
+            }
+          }}
+        />
       </>
     );
   }

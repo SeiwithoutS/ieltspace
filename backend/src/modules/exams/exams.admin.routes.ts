@@ -38,6 +38,7 @@ import {
   uploadSkillImage,
   deleteSkill,
 } from './exam-editor.service.js';
+import { getSkillHistory } from './exam-history.service.js';
 import { toCategoryDto } from './exams.mapper.js';
 import { prisma } from '../../lib/prisma.js';
 
@@ -414,6 +415,20 @@ adminExamsRouter.delete(
 
     const set = await deleteSkill(pParam.data.skillId, req.appUser?.id);
     res.json(set);
+  })
+);
+
+// E7: GET /admin/exam-skills/:skillId/history
+adminExamsRouter.get(
+  '/exam-skills/:skillId/history',
+  asyncHandler(async (req, res) => {
+    const pParam = skillIdParamSchema.safeParse(req.params);
+    if (!pParam.success) {
+      throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
+    }
+
+    const history = await getSkillHistory(pParam.data.skillId);
+    res.json(history);
   })
 );
 

@@ -83,6 +83,13 @@ test('2. Exam Sets: create, duplicate name, lock, audit (QB-01, QB-02)', async (
 });
 
 test('3. Test lifecycle: addTest, slots, createSkill, publish conditions (QB-04, QB-07, QB-08, QB-09)', async () => {
+  // Đăng Reading cần thang band: DB trống thì tự tạo, DB đã có thì giữ nguyên.
+  await prisma.$executeRaw`
+    insert into public.band_scales(name, skill, form, version, conversion_rules)
+    select 'Test scale', 'READING', 'ACADEMIC', 1, '[]'::jsonb
+    where not exists (
+      select 1 from public.band_scales where skill = 'READING' and form = 'ACADEMIC'
+    )`;
   const setName = `Set Full Flow ${Date.now()}`;
   const set = await createExamSet(
     {

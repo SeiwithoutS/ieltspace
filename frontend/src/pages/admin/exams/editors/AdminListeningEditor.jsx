@@ -4950,7 +4950,7 @@ class AdminListeningEditor extends React.Component {
       editing: editing,
       viewing: !editing,
       modeCls: editing ? "" : "ro",
-      modeText: editing ? "Đang chỉnh sửa" : "Chỉ xem",
+      modeText: editing ? "Đang chỉnh sửa phiên bản 1 (bản nháp)" : "Chỉ xem",
       examPath: "Mock Test 2026 Vol 4 · Listening " + GT[0],
       typeText: GT[0],
       typeTitle: "Hình thức " + GT[0] + (GT[3] ? ": " + GT[3] : ""),

@@ -25,6 +25,7 @@ import {
   type UiSet,
   type UiTest,
 } from "../../../lib/exam-admin";
+import SkillHistoryDrawer from "../../../components/exams/SkillHistoryDrawer";
 
 type Ev = React.SyntheticEvent | null | undefined;
 type SkillKey = "L" | "R" | "W" | "S";
@@ -92,6 +93,9 @@ type State = {
   undoAction: UndoAction | null;
   toastLink: string | null;
   delSkillTarget: DelSkillTarget | null;
+  historySkillId: string | null;
+  historyOpen: boolean;
+  historyEditorPage: string | null;
 };
 
 const SLOT_KEYS: Record<string, SlotKey> = {
@@ -145,6 +149,9 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
     undoAction: null,
     toastLink: null,
     delSkillTarget: null,
+    historySkillId: null,
+    historyOpen: false,
+    historyEditorPage: null,
   };
   _key?: (e: KeyboardEvent) => void;
   _scr?: () => void;
@@ -595,6 +602,23 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
               st: "display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; color: #B25E00; background: #FFF7ED; cursor: default; user-select: none; pointer-events: none; box-sizing: border-box",
               href: "#",
               act: stop,
+            });
+          }
+          if (slot && (slot.draftId || slot.liveId)) {
+            const histId = slot.draftId || slot.liveId;
+            items.push({
+              label: "Xem lịch sử",
+              st: MI + "color: #352637",
+              href: "#",
+              act: function (e: Ev) {
+                stop(e);
+                self.setState({
+                  menu: null,
+                  historySkillId: histId,
+                  historyOpen: true,
+                  historyEditorPage: EDITORS[k[0]],
+                });
+              },
             });
           }
           if (v === "draft" && !(slot && slot.liveId && slot.draftId)) {
@@ -2433,6 +2457,18 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           {"\n"}
         </div>
         {"\n"}
+        <SkillHistoryDrawer
+          isOpen={!!this.state.historyOpen}
+          onClose={() => {
+            this.setState({ historyOpen: false });
+          }}
+          skillId={this.state.historySkillId}
+          onSelectVersion={(versionId) => {
+            this.setState({ historyOpen: false });
+            var page = this.state.historyEditorPage || "AdminWritingEditor";
+            navigate(page + "?skillId=" + versionId);
+          }}
+        />
       </>
     );
   }

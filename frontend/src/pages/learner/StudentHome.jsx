@@ -950,9 +950,10 @@ class StudentHome extends React.Component {
                       {"Xem chi tiết"}
                     </a>
                   </div>
-                  {/* Desktop / Tablet table (>= 768px) */}
                   <div
-                    className="hidden md:block rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm overflow-x-auto"
+                    style={styleOf(
+                      "border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden",
+                    )}
                   >
                     <table
                       style={styleOf(
@@ -1293,80 +1294,6 @@ class StudentHome extends React.Component {
                         </tr>
                       </tbody>
                     </table>
-                  </div>
-
-                  {/* Mobile cards (< 768px) */}
-                  <div className="md:hidden flex flex-col gap-3">
-                    <div className="p-4 rounded-2xl border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-2">
-                      <div className="flex items-center justify-between text-xs text-[#706473]">
-                        <span>07/10/2026 · 20:43</span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-[#FBEDBF] text-[#7A5A0E]">
-                          Writing
-                        </span>
-                      </div>
-                      <div className="font-semibold text-sm text-[#352637]">
-                        Opinion Essay · Public transport
-                      </div>
-                      <div className="flex items-center justify-between pt-2 border-t border-[#F0EEEA]">
-                        <span className="text-xs text-[#7A5A0E] font-semibold bg-[#FBEDBF] px-2 py-0.5 rounded-full border border-[#D6D4D0]">
-                          Đã có kết quả · 6.5
-                        </span>
-                        <a
-                          href="#"
-                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-[#D6D4D0] text-xs font-semibold text-[#352637] no-underline hover:bg-[#F3F0EA]"
-                        >
-                          Xem lại
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="p-4 rounded-2xl border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-2">
-                      <div className="flex items-center justify-between text-xs text-[#706473]">
-                        <span>06/10/2026 · 10:09</span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-[#DCEDE2] text-[#2E6A48]">
-                          Reading
-                        </span>
-                      </div>
-                      <div className="font-semibold text-sm text-[#352637]">
-                        Mock Test Vol 21 · Reading Test 1
-                      </div>
-                      <div className="flex items-center justify-between pt-2 border-t border-[#F0EEEA]">
-                        <div className="text-xs">
-                          <b className="text-sm font-bold text-[#352637]">6.5</b>{" "}
-                          <span className="text-[#706473]">· 29/40 câu</span>
-                        </div>
-                        <a
-                          href="#"
-                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-[#D6D4D0] text-xs font-semibold text-[#352637] no-underline hover:bg-[#F3F0EA]"
-                        >
-                          Xem lại
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="p-4 rounded-2xl border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-2">
-                      <div className="flex items-center justify-between text-xs text-[#706473]">
-                        <span>03/10/2026 · 21:15</span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-[#DDE8FC] text-[#2A55B8]">
-                          Listening
-                        </span>
-                      </div>
-                      <div className="font-semibold text-sm text-[#352637]">
-                        Mock Test Vol 20 · Listening Test 2
-                      </div>
-                      <div className="flex items-center justify-between pt-2 border-t border-[#F0EEEA]">
-                        <div className="text-xs">
-                          <b className="text-sm font-bold text-[#352637]">7.0</b>{" "}
-                          <span className="text-[#706473]">· 31/40 câu</span>
-                        </div>
-                        <a
-                          href="#"
-                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-[#D6D4D0] text-xs font-semibold text-[#352637] no-underline hover:bg-[#F3F0EA]"
-                        >
-                          Xem lại
-                        </a>
-                      </div>
-                    </div>
                   </div>
                 </section>
                 <section

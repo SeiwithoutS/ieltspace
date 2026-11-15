@@ -74,14 +74,26 @@ export type WritingEditorState = {
   items: [WritingEditorTask, WritingEditorTask];
 };
 
+export type SpeakingPartQs = {
+  kind: 'qs';
+  instr: string;
+  qs: string[];
+};
+
+export type SpeakingPartCue = {
+  kind: 'cue';
+  prep: string;
+  speak: string;
+  text: string;
+  cue?: string;
+};
+
+export type SpeakingPart = SpeakingPartQs | SpeakingPartCue;
+
 export type SpeakingEditorState = {
   title: string;
   tot: string;
-  items: [
-    { instr: string; qs: string[] },
-    { prep: string; speak: string; text: string },
-    { instr: string; qs: string[] },
-  ];
+  items: [SpeakingPartQs, SpeakingPartCue, SpeakingPartQs];
 };
 
 // API Functions
@@ -183,15 +195,19 @@ export function toSpeakingEditorState(skill: EditorSkill): SpeakingEditorState {
     tot: sp?.p13Minutes != null ? String(sp.p13Minutes) : '12',
     items: [
       {
+        kind: 'qs',
         instr: sp?.part1?.instruction ?? 'Two or three complex sentences for each answer.',
         qs: sp?.part1?.questions ? [...sp.part1.questions] : [],
       },
       {
+        kind: 'cue',
         prep: sp?.part2?.prepMinutes != null ? String(sp.part2.prepMinutes) : '1',
         speak: sp?.part2?.speakMinutes != null ? String(sp.part2.speakMinutes) : '2',
         text: sp?.part2?.cueCard || '',
+        cue: sp?.part2?.cueCard || '',
       },
       {
+        kind: 'qs',
         instr: sp?.part3?.instruction ?? 'Four or five complex sentences for each answer.',
         qs: sp?.part3?.questions ? [...sp.part3.questions] : [],
       },

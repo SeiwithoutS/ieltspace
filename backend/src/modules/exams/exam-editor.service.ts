@@ -29,7 +29,7 @@ export async function getEditorSkillInTx(
   tx: Prisma.TransactionClient | typeof prisma,
   skillId: string
 ): Promise<EditorSkill> {
-  const skill = await (tx as any).exam_skills.findUnique({
+  const skill = await tx.exam_skills.findUnique({
     where: { id: skillId },
     relationLoadStrategy: 'join',
     include: {
@@ -76,7 +76,7 @@ export async function getEditorSkillInTx(
   }
 
   // Find slot siblings in the same exam
-  const siblingSkills = await (tx as any).exam_skills.findMany({
+  const siblingSkills = await tx.exam_skills.findMany({
     where: {
       exam_id: skill.exam_id,
       skill: skill.skill,

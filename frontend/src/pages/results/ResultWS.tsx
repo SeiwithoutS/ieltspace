@@ -1,6 +1,6 @@
 import PageLink from "../../components/navigation/PageLink";
 import { accentForeground } from "../../components/attempts/appearance";
-import LearnerHeader from "../../components/attempts/LearnerHeader";
+import LearnerHeader from "../../components/navigation/LearnerHeader";
 function ResultWS(props: { accent?: string }) {
   const accent = props.accent ?? "#2963CC";
   return (

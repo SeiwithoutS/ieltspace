@@ -2,7 +2,7 @@ import PageLink from "../../components/navigation/PageLink";
 import { accentForeground } from "../../components/attempts/appearance";
 import Popup from "../../components/attempts/Popup";
 import React from "react";
-import LearnerHeader from "../../components/attempts/LearnerHeader";
+import LearnerHeader from "../../components/navigation/LearnerHeader";
 function MyWS(props: { accent?: string }) {
   const [request, setRequest] = React.useState(false);
   const accent = props.accent ?? "#2963CC";

@@ -2,7 +2,7 @@ import { VocabularySetCard } from "../../components/vocabulary/VocabularySetCard
 import PageLink from "../../components/navigation/PageLink";
 import { WordNote } from "../../components/vocabulary/WordNote";
 import { useState } from "react";
-import LearnerHeader from "../../components/attempts/LearnerHeader";
+import LearnerHeader from "../../components/navigation/LearnerHeader";
 import { getAuthUser } from "../../lib/auth";
 import { loadWords, topics, type Topic } from "../../data/vocabulary";
 import { WordCard } from "../../components/vocabulary/WordCard";

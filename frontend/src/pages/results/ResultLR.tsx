@@ -2,7 +2,7 @@ import PageLink from "../../components/navigation/PageLink";
 import { accentForeground } from "../../components/attempts/appearance";
 import { sampleResults } from "../../data/attempt-samples";
 import React from "react";
-import LearnerHeader from "../../components/attempts/LearnerHeader";
+import LearnerHeader from "../../components/navigation/LearnerHeader";
 function ResultLR(props: { accent?: string; cheDo?: string; kyNang?: string }) {
   function renderVals() {
     const P = props;

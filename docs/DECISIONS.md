@@ -18,6 +18,7 @@
 | D14 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, O-B2, RS-01..03). | Chặn làm bài thi trên điện thoại trước khi bắt đầu bằng màn che yêu cầu dùng máy tính; máy tính bảng chỉ cảnh báo. Lượt làm đã bắt đầu mà thu nhỏ/xoay màn hình chỉ hiện dải cảnh báo, không che để tránh mất bài. |
 | D15 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, O-D1, O-D2). | Lịch sử phiên bản kỹ năng giữ vĩnh viễn mọi bản ARCHIVED, không tự xóa. Khôi phục phiên bản cũ (tạo bản nháp mới từ bản ARCHIVED) lùi sang đợt tiếp theo. |
 | D16 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11 đợt 2, R1). | Một header người học duy nhất ở `frontend/src/components/navigation/LearnerHeader.tsx`, gộp thiết kế responsive 3 mốc (>=1024, 768-1023, <768) với hỗ trợ theme CSS (`--attempt-*`), NotificationBadge và PageLink hash router. Xóa bản thừa ở `components/attempts/LearnerHeader.tsx`. |
+| D17 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11 đợt 2, R8). | `frontend/src/components/attempts/DesktopOnly.tsx` là nơi duy nhất thực thi RS-01..RS-03: chặn Phone (< 768px) trước khi bắt đầu, cảnh báo Tablet (768–1023px hoặc cảm ứng) có nút "Vẫn tiếp tục", và không bao giờ ẩn/chặn lượt làm đang diễn ra (chỉ hiện dải cảnh báo nhỏ khi đổi cỡ cửa sổ). |
 
 ## Điểm mở trước khi triển khai
 

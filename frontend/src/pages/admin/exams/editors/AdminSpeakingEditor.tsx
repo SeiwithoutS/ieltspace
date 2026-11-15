@@ -811,6 +811,12 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       F.imgErr = !!s.imgErr;
       F.imgErrText = s.imgErr || "";
       F.pickImg = function (e) {
+        if (!s.editing) {
+          try {
+            e.target.value = "";
+          } catch (err) {}
+          return;
+        }
         var f = e && e.target && e.target.files && e.target.files[0];
         if (!f) {
           return;
@@ -844,6 +850,9 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
       };
       F.delImg = function (e) {
         stop(e);
+        if (!s.editing) {
+          return;
+        }
         if (!im) {
           return;
         }

@@ -605,6 +605,12 @@ class AdminSampleWriting extends React.Component {
     F.imgErr = !!s.imgErr;
     F.imgErrText = s.imgErr || "";
     F.pickImg = function (e) {
+      if (!editing) {
+        try {
+          e.target.value = "";
+        } catch (err) {}
+        return;
+      }
       var f = e && e.target && e.target.files && e.target.files[0];
       if (!f) {
         return;
@@ -638,6 +644,9 @@ class AdminSampleWriting extends React.Component {
     };
     F.delImg = function (e) {
       stop(e);
+      if (!editing) {
+        return;
+      }
       if (!im) {
         return;
       }
@@ -1787,9 +1796,15 @@ class AdminSampleWriting extends React.Component {
                                     </span>
                                   </div>
                                   <label
-                                    className={"eo"}
+                                    aria-disabled={!v.editing}
+                                    tabIndex={v.editing ? 0 : -1}
                                     style={styleOf(
-                                      "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; height: 34px; cursor: pointer",
+                                      "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; border: 1.5px solid #D6D4D0; background: " +
+                                        (v.editing ? "#FFFFFF" : "#F6F4EF") +
+                                        "; color: " +
+                                        (v.editing ? "#352637" : "#706473") +
+                                        "; cursor: " +
+                                        (v.editing ? "pointer" : "not-allowed"),
                                     )}
                                   >
                                     <svg
@@ -2093,9 +2108,15 @@ class AdminSampleWriting extends React.Component {
                                     </span>
                                   </div>
                                   <label
-                                    className={"eo"}
+                                    aria-disabled={!v.editing}
+                                    tabIndex={v.editing ? 0 : -1}
                                     style={styleOf(
-                                      "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; height: 34px; cursor: pointer",
+                                      "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; border: 1.5px solid #D6D4D0; background: " +
+                                        (v.editing ? "#FFFFFF" : "#F6F4EF") +
+                                        "; color: " +
+                                        (v.editing ? "#352637" : "#706473") +
+                                        "; cursor: " +
+                                        (v.editing ? "pointer" : "not-allowed"),
                                     )}
                                   >
                                     <svg
@@ -2116,6 +2137,7 @@ class AdminSampleWriting extends React.Component {
                                     {" Thay ảnh"}
                                     <input
                                       type={"file"}
+                                      disabled={!v.editing}
                                       accept={"image/png,image/jpeg,image/webp"}
                                       onChange={v.F.pickImg}
                                       style={styleOf("display: none")}
@@ -2124,11 +2146,13 @@ class AdminSampleWriting extends React.Component {
                                   <a
                                     href={"#"}
                                     className={"eo"}
-                                    onClick={v.F.delImg}
+                                    aria-disabled={!v.editing}
+                                    tabIndex={v.editing ? 0 : -1}
+                                    onClick={v.editing ? v.F.delImg : function(e) { e.preventDefault(); }}
                                     title={"Xóa ảnh"}
                                     aria-label={"Xóa ảnh"}
                                     style={styleOf(
-                                      "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                      "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: " + (v.editing ? "#C0412A" : "#D6D4D0") + "; text-decoration: none; cursor: " + (v.editing ? "pointer" : "not-allowed"),
                                     )}
                                   >
                                     <svg
@@ -2153,44 +2177,54 @@ class AdminSampleWriting extends React.Component {
                             {v.F.noImg ? (
                               <>
                                 <label
+                                  aria-disabled={!v.editing}
+                                  tabIndex={v.editing ? 0 : -1}
                                   style={styleOf(
-                                    "display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 22px 16px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #706473; cursor: pointer; text-align: center",
+                                    "display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 22px 16px; border-radius: 12px; border: 1.5px dashed " + (v.editing ? "#8E8392" : "#D6D4D0") + "; background: " + (v.editing ? "#FFFFFF" : "#FAF9F5") + "; color: #706473; cursor: " + (v.editing ? "pointer" : "not-allowed") + "; text-align: center",
                                   )}
                                 >
-                                  <span
-                                    style={styleOf(
-                                      "display: flex; color: #2257B8",
-                                    )}
-                                  >
-                                    <svg
-                                      width={"22"}
-                                      height={"22"}
-                                      viewBox={"0 0 24 24"}
-                                      fill={"none"}
-                                      stroke={"currentColor"}
-                                      strokeWidth={"2"}
-                                      strokeLinecap={"round"}
-                                      strokeLinejoin={"round"}
-                                      aria-hidden={"true"}
-                                    >
-                                      <path
-                                        d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
-                                      ></path>
-                                    </svg>
-                                  </span>
-                                  <span
-                                    style={styleOf(
-                                      "font-weight: 600; color: #352637",
-                                    )}
-                                  >
-                                    {"Tải ảnh đề bài lên"}
-                                  </span>
-                                  <span style={styleOf("font-size: 13px")}>
-                                    {"JPG, PNG hoặc WebP, tối đa 5 MB."}
-                                  </span>
+                                  {v.editing ? (
+                                    <>
+                                      <span
+                                        style={styleOf(
+                                          "display: flex; color: #2257B8",
+                                        )}
+                                      >
+                                        <svg
+                                          width={"22"}
+                                          height={"22"}
+                                          viewBox={"0 0 24 24"}
+                                          fill={"none"}
+                                          stroke={"currentColor"}
+                                          strokeWidth={"2"}
+                                          strokeLinecap={"round"}
+                                          strokeLinejoin={"round"}
+                                          aria-hidden={"true"}
+                                        >
+                                          <path
+                                            d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
+                                          ></path>
+                                        </svg>
+                                      </span>
+                                      <span
+                                        style={styleOf(
+                                          "font-weight: 600; color: #352637",
+                                        )}
+                                      >
+                                        {"Tải ảnh đề bài lên"}
+                                      </span>
+                                      <span style={styleOf("font-size: 13px")}>
+                                        {"JPG, PNG hoặc WebP, tối đa 5 MB."}
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <span style={styleOf("font-weight: 500; color: #706473; padding: 6px 0")}>
+                                      {"Chưa có ảnh đề bài"}
+                                    </span>
+                                  )}
                                   <input
                                     type={"file"}
-                                    className={"eo"}
+                                    disabled={!v.editing}
                                     accept={"image/png,image/jpeg,image/webp"}
                                     onChange={v.F.pickImg}
                                     style={styleOf("display: none")}

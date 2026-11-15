@@ -141,8 +141,8 @@ frontend/
             AdminSpeakingEditor.jsx
             AdminWritingEditor.jsx
             QuestionCards.jsx
-          AdminExamSet.jsx
-          AdminExams.jsx
+          AdminExamSet.tsx
+          AdminExams.tsx
         grading/
           AdminGrading.jsx
         reports/
@@ -166,7 +166,7 @@ frontend/
         Register.jsx
         ResetPassword.jsx
       exams/
-        ExamDetail.jsx
+        ExamDetail.tsx
         FullTests.jsx
       grading/
         TeacherGrade.jsx
@@ -259,7 +259,7 @@ README.md
 - Trang công khai: pages/public/Main.jsx.
 - Dashboard người học: pages/learner/StudentHome.jsx, StudentLanding.jsx.
 - Hồ sơ: pages/account/Profile.jsx, StaffProfile.jsx, AvatarMenu.jsx.
-- Thư viện đề: pages/exams/FullTests.jsx, ExamDetail.jsx.
+- Thư viện đề: pages/exams/FullTests.jsx, ExamDetail.tsx.
 - Luyện tập: pages/practice/PracticeLibrary.jsx, PracticeWS.jsx.
 - Làm bài: pages/attempts/{ReadingTest,ListeningTest,WritingTest,SpeakingTest,SubmitDialogs}.jsx; components/exams/QuestionCard.jsx.
 - Kết quả: pages/results/ResultLR.jsx, ResultWS.jsx, MyWS.jsx.

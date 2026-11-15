@@ -65,7 +65,7 @@ Hệ quả: đăng lại một kỹ năng thì bản cũ chuyển ARCHIVED (thê
 
 - CSDL theo D08–D10: viết lại `docs/csdl/01_tao_cau_truc_moi.sql` (39 bảng) và `04_nang_cap_tu_01.sql`; cập nhật `CSDL.md`, `DATABASE.md`, `DECISIONS.md` (D08–D10), `csdl/README.md`, BR-EXAM-001/002.
 - Canvas (bản 333): thẻ luyện ở Main, StudentLanding, PracticeLibrary ghi "Bộ đề · Test N · Kỹ năng", 40 câu, kèm Academic/General; tên bộ đề thống nhất với AdminExams (Mock Test 2026 Vol 1–4, Actual Test Quý 3/2025–Quý 2/2026), bỏ "Full 4 kỹ năng" khỏi tên; AdminExams có chọn Danh mục khi tạo bộ đề và hiện danh mục dưới tên; AdminExamSet chặn xóa Test đã đăng.
-- Code: cùng các thay đổi đó ở `Main.jsx`, `StudentLanding.jsx`, `PracticeLibrary.jsx`, `FullTests.jsx`, `AdminExams.jsx`, `AdminExamSet.jsx`, chữ menu Listening/Reading ở 18 trang.
+- Code: cùng các thay đổi đó ở `Main.jsx`, `StudentLanding.jsx`, `PracticeLibrary.jsx`, `FullTests.jsx`, `AdminExams.tsx`, `AdminExamSet.tsx`, chữ menu Listening/Reading ở 18 trang.
 
 ## Kiểm tra và bằng chứng
 

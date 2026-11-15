@@ -2,6 +2,7 @@ import React from "react";
 import { styleOf, cssText } from "../../../lib/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar from "../../../components/navigation/AdminTopbar";
+import StaffLayout from "../../../components/layout/StaffLayout";
 
 class AdminGrading extends React.Component {
   renderVals() {
@@ -32,40 +33,12 @@ class AdminGrading extends React.Component {
         </style>
         {"\n"}
         {"\n"}
-        <div
-          className="app-shell-ancestor"
-          style={styleOf(
-            "font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; background: #FCFBF7; font-size: 15px; line-height: 1.6; min-height: 1320px",
-          )}
+        <StaffLayout
+          active="grading"
+          crumb="Quản lý / Theo dõi hỗ trợ chấm"
+          contentClassName="p-4 sm:p-6 md:p-8 flex flex-col gap-6"
         >
-          {"\n"}
           <div
-            className="app-shell"
-            style={styleOf(
-              "display: flex; flex-wrap: wrap; align-items: stretch; min-height: inherit",
-            )}
-          >
-            <div
-              className="app-sidebar-slot"
-              style={styleOf("display: flex; flex: none; align-self: stretch")}
-            >
-              <AdminSidebar active={"grading"}></AdminSidebar>
-            </div>
-            <div
-              className="app-content"
-              style={styleOf(
-                "flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column",
-              )}
-            >
-              <AdminTopbar
-                crumb={"Quản lý / Theo dõi hỗ trợ chấm"}
-              ></AdminTopbar>
-              <main
-                style={styleOf(
-                  "flex: 1; background: #FAF9F5; padding: 36px 32px 48px; display: flex; flex-direction: column; gap: 24px",
-                )}
-              >
-                <div
                   style={styleOf(
                     "display: flex; justify-content: space-between; align-items: flex-end; gap: 16px",
                   )}
@@ -1144,11 +1117,7 @@ class AdminGrading extends React.Component {
                     </table>
                   </div>
                 </div>
-              </main>
-            </div>
-          </div>
-          {"\n"}
-        </div>
+        </StaffLayout>
         {"\n"}
       </>
     );

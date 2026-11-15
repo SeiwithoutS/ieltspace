@@ -586,6 +586,10 @@ class AdminSampleSpeaking extends React.Component {
         audioErr: !!bad,
         audioErrText: bad || "",
         pickAudio: function (e) {
+          if (!editing) {
+            try { e.target.value = ""; } catch (err) {}
+            return;
+          }
           var f = e && e.target && e.target.files && e.target.files[0];
           if (!f) {
             return;
@@ -620,6 +624,7 @@ class AdminSampleSpeaking extends React.Component {
         },
         delAudio: function (e) {
           stop(e);
+          if (!editing) return;
           if (!a) {
             return;
           }
@@ -812,6 +817,23 @@ class AdminSampleSpeaking extends React.Component {
     var iss = s.issues || [];
     var CHIP_OK = CHIP + "; background: #DCEDE2; color: #2E6A48";
     return {
+      crumbs: [
+        { label: "Quản lý", page: "AdminHome" },
+        { label: "Bài mẫu", page: "AdminSamples" },
+        { label: "Speaking" },
+      ],
+      onNavigate: function (go) {
+        if (dirty) {
+          ask(
+            "Rời khỏi trang bài mẫu?",
+            "Các thay đổi chưa lưu sẽ bị mất. Bạn có chắc muốn rời đi?",
+            go,
+            "Rời đi"
+          );
+        } else {
+          go();
+        }
+      },
       F: F,
       viewing: !editing,
       editing: editing,
@@ -1005,7 +1027,8 @@ class AdminSampleSpeaking extends React.Component {
               )}
             >
               <AdminTopbar
-                crumb={"Quản lý / Quản lý bài mẫu / Soạn bài mẫu Speaking"}
+                crumbs={v.crumbs}
+                onNavigate={v.onNavigate}
               ></AdminTopbar>
               <main
                 className={v.modeCls}
@@ -2128,48 +2151,58 @@ class AdminSampleSpeaking extends React.Component {
                               {v.F.au2.noAudio ? (
                                 <>
                                   <label
-                                    className={"eo"}
+                                    aria-disabled={!v.editing}
+                                    tabIndex={v.editing ? 0 : -1}
                                     style={styleOf(
-                                      "display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #706473; cursor: pointer",
+                                      "display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed " + (v.editing ? "#8E8392" : "#D6D4D0") + "; background: " + (v.editing ? "#FFFFFF" : "#FAF9F5") + "; color: #706473; cursor: " + (v.editing ? "pointer" : "not-allowed"),
                                     )}
                                   >
-                                    <span
-                                      style={styleOf(
-                                        "display: flex; color: #2257B8",
-                                      )}
-                                    >
-                                      <svg
-                                        width={"16"}
-                                        height={"16"}
-                                        viewBox={"0 0 24 24"}
-                                        fill={"none"}
-                                        stroke={"currentColor"}
-                                        strokeWidth={"2"}
-                                        strokeLinecap={"round"}
-                                        strokeLinejoin={"round"}
-                                        aria-hidden={"true"}
-                                      >
-                                        <path
-                                          d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
-                                        ></path>
-                                      </svg>
-                                    </span>
-                                    <span>
-                                      <span
-                                        style={styleOf(
-                                          "font-weight: 600; color: #352637",
-                                        )}
-                                      >
-                                        {"Tải audio lên"}
-                                      </span>{" "}
-                                      <span
-                                        style={styleOf("font-size: 13px")}
-                                      >
-                                        {"MP3, M4A hoặc WAV, tối đa 20 MB."}
+                                    {v.editing ? (
+                                      <>
+                                        <span
+                                          style={styleOf(
+                                            "display: flex; color: #2257B8",
+                                          )}
+                                        >
+                                          <svg
+                                            width={"16"}
+                                            height={"16"}
+                                            viewBox={"0 0 24 24"}
+                                            fill={"none"}
+                                            stroke={"currentColor"}
+                                            strokeWidth={"2"}
+                                            strokeLinecap={"round"}
+                                            strokeLinejoin={"round"}
+                                            aria-hidden={"true"}
+                                          >
+                                            <path
+                                              d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
+                                            ></path>
+                                          </svg>
+                                        </span>
+                                        <span>
+                                          <span
+                                            style={styleOf(
+                                              "font-weight: 600; color: #352637",
+                                            )}
+                                          >
+                                            {"Tải audio lên"}
+                                          </span>{" "}
+                                          <span
+                                            style={styleOf("font-size: 13px")}
+                                          >
+                                            {"MP3, M4A hoặc WAV, tối đa 20 MB."}
+                                          </span>
+                                        </span>
+                                      </>
+                                    ) : (
+                                      <span style={styleOf("font-weight: 500; font-size: 14px; color: #706473")}>
+                                        {"Chưa có ghi âm"}
                                       </span>
-                                    </span>
+                                    )}
                                     <input
                                       type={"file"}
+                                      disabled={!v.editing}
                                       accept={
                                         "audio/mpeg,audio/mp4,audio/wav,audio/x-m4a,.mp3,.m4a,.wav"
                                       }
@@ -2441,54 +2474,64 @@ class AdminSampleSpeaking extends React.Component {
                                     {it.noAudio ? (
                                       <>
                                         <label
-                                          className={"eo"}
+                                          aria-disabled={!v.editing}
+                                          tabIndex={v.editing ? 0 : -1}
                                           style={styleOf(
-                                            "display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed #8E8392; background: #FFFFFF; color: #706473; cursor: pointer",
+                                            "display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; border: 1.5px dashed " + (v.editing ? "#8E8392" : "#D6D4D0") + "; background: " + (v.editing ? "#FFFFFF" : "#FAF9F5") + "; color: #706473; cursor: " + (v.editing ? "pointer" : "not-allowed"),
                                           )}
                                         >
-                                          <span
-                                            style={styleOf(
-                                              "display: flex; color: #2257B8",
-                                            )}
-                                          >
-                                            <svg
-                                              width={"16"}
-                                              height={"16"}
-                                              viewBox={"0 0 24 24"}
-                                              fill={"none"}
-                                              stroke={"currentColor"}
-                                              strokeWidth={"2"}
-                                              strokeLinecap={"round"}
-                                              strokeLinejoin={"round"}
-                                              aria-hidden={"true"}
-                                            >
-                                              <path
-                                                d={
-                                                  "M12 16V4M7 9l5-5 5 5M4 20h16"
-                                                }
-                                              ></path>
-                                            </svg>
-                                          </span>
-                                          <span>
-                                            <span
-                                              style={styleOf(
-                                                "font-weight: 600; color: #352637",
-                                              )}
-                                            >
-                                              {"Tải audio lên"}
-                                            </span>{" "}
-                                            <span
-                                              style={styleOf(
-                                                "font-size: 13px",
-                                              )}
-                                            >
-                                              {
-                                                "MP3, M4A hoặc WAV, tối đa 20 MB."
-                                              }
+                                          {v.editing ? (
+                                            <>
+                                              <span
+                                                style={styleOf(
+                                                  "display: flex; color: #2257B8",
+                                                )}
+                                              >
+                                                <svg
+                                                  width={"16"}
+                                                  height={"16"}
+                                                  viewBox={"0 0 24 24"}
+                                                  fill={"none"}
+                                                  stroke={"currentColor"}
+                                                  strokeWidth={"2"}
+                                                  strokeLinecap={"round"}
+                                                  strokeLinejoin={"round"}
+                                                  aria-hidden={"true"}
+                                                >
+                                                  <path
+                                                    d={
+                                                      "M12 16V4M7 9l5-5 5 5M4 20h16"
+                                                    }
+                                                  ></path>
+                                                </svg>
+                                              </span>
+                                              <span>
+                                                <span
+                                                  style={styleOf(
+                                                    "font-weight: 600; color: #352637",
+                                                  )}
+                                                >
+                                                  {"Tải audio lên"}
+                                                </span>{" "}
+                                                <span
+                                                  style={styleOf(
+                                                    "font-size: 13px",
+                                                  )}
+                                                >
+                                                  {
+                                                    "MP3, M4A hoặc WAV, tối đa 20 MB."
+                                                  }
+                                                </span>
+                                              </span>
+                                            </>
+                                          ) : (
+                                            <span style={styleOf("font-weight: 500; font-size: 14px; color: #706473")}>
+                                              {"Chưa có ghi âm"}
                                             </span>
-                                          </span>
+                                          )}
                                           <input
                                             type={"file"}
+                                            disabled={!v.editing}
                                             accept={
                                               "audio/mpeg,audio/mp4,audio/wav,audio/x-m4a,.mp3,.m4a,.wav"
                                             }

@@ -2,8 +2,8 @@
 
 ## Phạm vi và trạng thái
 
-- **Mã task:** QLBD-00 đến QLBD-14 (thuộc phạm vi [Kế hoạch Quản lý bộ đề](../PLAN_QUAN_LY_BO_DE.md)).
-- **Mục tiêu:** Xây dựng trọn vẹn luồng Quản lý bộ đề từ Cơ sở dữ liệu, API Backend (A1–A16, P1) đến Giao diện Frontend (`AdminExams.jsx`, `AdminExamSet.jsx`, `ExamDetail.jsx`).
+- **Mã task:** QLBD-00 đến QLBD-14 (kế hoạch triển khai `PLAN_QUAN_LY_BO_DE.md` đã xóa khỏi repo ngày 14/11 sau khi kiểm tra xong; quy tắc nằm ở BUSINESS_RULES BR-EXAM-001..009, route ở API.md và `exams.admin.routes.ts`).
+- **Mục tiêu:** Xây dựng trọn vẹn luồng Quản lý bộ đề từ Cơ sở dữ liệu, API Backend (A1–A16, P1) đến Giao diện Frontend (`AdminExams.tsx`, `AdminExamSet.tsx`, `ExamDetail.tsx`).
 - **Trạng thái:** **HOÀN THÀNH TOÀN BỘ (100%)**. Đã kiểm thử unit test, kiểm tra kiểu dữ liệu (TypeScript) và build thành công ở cả Backend và Frontend.
 
 ## Công việc đã thực hiện
@@ -34,9 +34,9 @@
 4. **Frontend Integration:**
    - Xây dựng HTTP client [frontend/src/lib/api.ts](../../frontend/src/lib/api.ts): tự động gắn token, xử lý refresh token khi gặp 401, quản lý lỗi `ApiError`.
    - Xây dựng API SDK [frontend/src/lib/exam-admin.ts](../../frontend/src/lib/exam-admin.ts): hàm gọi A1–A16 và P1, các hàm chuyển đổi mô hình dữ liệu `toUiSet`, `toLearnerSet`, `toUiTest`, `slotUi`, `fmtDate`.
-   - Kết nối [AdminExams.jsx](../../frontend/src/pages/admin/exams/AdminExams.jsx): tải danh sách thật từ API, Combobox lọc/tạo danh mục mới tức thì, upload/xem trước ảnh bìa, tạo và xóa bộ đề với phản hồi người dùng.
-   - Kết nối [AdminExamSet.jsx](../../frontend/src/pages/admin/exams/AdminExamSet.jsx): hiển thị chi tiết bộ đề theo ID từ URL, thêm/xóa Test, menu thao tác kỹ năng cố định viewport, công khai/ẩn bộ đề, xử lý điều kiện chặn đăng theo đúng quy tắc.
-   - Kết nối [ExamDetail.jsx](../../frontend/src/pages/exams/ExamDetail.jsx): hiển thị dữ liệu bộ đề học viên thực tế từ API công khai, áp dụng Quyết định O4 (kỹ năng đang soạn hiển thị “—” thay vì lộ nhãn “Đang cập nhật”), hiển thị tối đa 5 bộ đề liên quan cùng danh mục, chuyển hướng làm bài thi thực tế.
+   - Kết nối [AdminExams.tsx](../../frontend/src/pages/admin/exams/AdminExams.tsx): tải danh sách thật từ API, Combobox lọc/tạo danh mục mới tức thì, upload/xem trước ảnh bìa, tạo và xóa bộ đề với phản hồi người dùng.
+   - Kết nối [AdminExamSet.tsx](../../frontend/src/pages/admin/exams/AdminExamSet.tsx): hiển thị chi tiết bộ đề theo ID từ URL, thêm/xóa Test, menu thao tác kỹ năng cố định viewport, công khai/ẩn bộ đề, xử lý điều kiện chặn đăng theo đúng quy tắc.
+   - Kết nối [ExamDetail.tsx](../../frontend/src/pages/exams/ExamDetail.tsx): hiển thị dữ liệu bộ đề học viên thực tế từ API công khai, áp dụng Quyết định O4 (kỹ năng đang soạn hiển thị “—” thay vì lộ nhãn “Đang cập nhật”), hiển thị tối đa 5 bộ đề liên quan cùng danh mục, chuyển hướng làm bài thi thực tế.
 
 5. **Đồng bộ tài liệu:**
    - Cập nhật [docs/API.md](../API.md): ghi nhận đầy đủ 17 API mới (A1–A16 và P1) kèm payload, mã trạng thái và mã lỗi nghiệp vụ.
@@ -55,7 +55,7 @@
 | `cd backend; npm run typecheck` | Local Node.js v20 | Đạt. 0 lỗi typecheck TypeScript (NodeNext). |
 | `cd backend; npm run build` | Local Node.js v20 | Đạt. Biên dịch toàn bộ tsc sang thư mục `dist/` thành công. |
 | `cd frontend; npm run build` | Local Node.js v20 | Đạt. `tsc --noEmit && vite build` hoàn tất không có lỗi, tạo bundle `dist/` hoàn chỉnh. |
-| Kiểm tra menu thao tác kỹ năng (`AdminExamSet.jsx`) | Trình duyệt Chrome / Vite dev | Đạt. Menu hành động kỹ năng (`x.menuSt`) hiển thị nổi bằng tọa độ `position: fixed` bên ngoài bảng, không bị lọt/cắt trong container cuộn của bảng, tự lật lên/xuống và đóng khi cuộn. |
+| Kiểm tra menu thao tác kỹ năng (`AdminExamSet.tsx`) | Trình duyệt Chrome / Vite dev | Đạt. Menu hành động kỹ năng (`x.menuSt`) hiển thị nổi bằng tọa độ `position: fixed` bên ngoài bảng, không bị lọt/cắt trong container cuộn của bảng, tự lật lên/xuống và đóng khi cuộn. |
 | Padding và giao diện menu kỹ năng | Trình duyệt Chrome / Vite dev | Đạt. Menu dùng `width: max-content` với `min-width: 240px`, padding 12px cân đối, không còn tràn mép phải; dòng "Đăng trong editor..." được render dạng thẻ tĩnh vô hiệu hóa không có hiệu ứng hover. |
 | Kiểm tra tạo kỹ năng Listening & Speaking | Local API + Vite dev | Đạt. Khắc phục lỗi truyền nhầm `form: "ACADEMIC"` khi `c = null`. Listening và Speaking được gửi đúng `form: null`, tạo kỹ năng (Đang soạn) thành công không bị từ chối nghiệp vụ. |
 
@@ -70,8 +70,22 @@
 
 ## Tài liệu và cách tái hiện
 
-- Kế hoạch triển khai chi tiết: [docs/PLAN_QUAN_LY_BO_DE.md](../PLAN_QUAN_LY_BO_DE.md)
 - Danh mục API: [docs/API.md](../API.md)
 - Từ điển CSDL: [docs/csdl/CSDL.md](../csdl/CSDL.md)
 - Quy tắc nghiệp vụ: [docs/BUSINESS_RULES.md](../BUSINESS_RULES.md)
 
+## 14/11/2026: chuyển sang TSX theo RULES
+
+- AdminExams, AdminExamSet, ExamDetail đổi từ .jsx sang .tsx, gõ kiểu thật cho state, sự kiện, dữ liệu API (không dùng `any`), giữ nguyên giao diện, URL và API.
+- `lib/exam-admin.ts` xuất thêm kiểu `Cell`, `FormCells`, `UiTest`, `UiSet`, `UiLearnerTest`, `UiLearnerSet` và hàm `errorInfo`.
+- Kiểm tra: `tsc --noEmit` và `npm run build` đạt. Các trang .jsx khác chưa chuyển, sẽ chuyển theo từng luồng.
+
+## 14/11/2026: kiểm tra theo kế hoạch (Claude)
+
+- Bản sạch commit `51a31d5`, PostgreSQL 16 chạy 01 mới rồi 05: backend `typecheck`, `build` đạt; frontend `npm run build` đạt; test `exam-rules` + `exams-services` 11/11, `auth` 2/2. Route Quản lý không token trả 401; `/api/exam-sets/<id lạ>` trả 404.
+- Chưa kiểm tra: bấm thử trên trình duyệt, gọi API Quản lý bằng token thật, tải ảnh lên bucket `exam-covers` (cần Supabase thật).
+- Còn lệch (đã sửa ngày 15/11, xem PROGRESS 2026-11-14-editor-writing-speaking.md):
+  1. `exams-services.test.mjs` ca 3 lỗi `SKILL_NOT_READY` khi DB chưa có thang band Reading Academic; test không tự tạo thang.
+  2. `ExamDetail.tsx` vẫn đọc `sessionStorage["ieltspace-learner"]` làm dự phòng khi URL không có `?id=` (kế hoạch yêu cầu bỏ).
+  3. Ghi chú danh mục ở trên khác seed của `05_danh_muc_bo_de.sql` (Mock Test, Actual Test, Practice Test, Forecast, Khác).
+  4. API.md đánh số A1–A16 khác chú thích trong `exams.admin.routes.ts` và ghi route `/exam-skills/:id/draft` chưa có (sẽ làm ở PLAN_EDITOR_WRITING_SPEAKING, E3).

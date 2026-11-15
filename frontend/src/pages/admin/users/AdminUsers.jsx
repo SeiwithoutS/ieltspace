@@ -2,6 +2,7 @@ import React from "react";
 import { styleOf, cssText } from "../../../lib/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar from "../../../components/navigation/AdminTopbar";
+import StaffLayout from "../../../components/layout/StaffLayout";
 
 class AdminUsers extends React.Component {
   componentDidMount() {
@@ -652,37 +653,11 @@ class AdminUsers extends React.Component {
         </style>
         {"\n"}
         {"\n"}
-        <div
-          className="app-sidebar-slot"
-          style={styleOf(
-            "font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; position: relative; min-height: 100%; background: #FCFBF7; font-size: 15px; line-height: 1.6; min-height: 1240px",
-          )}
+        <StaffLayout
+          active="users"
+          crumb="Quản lý / Người dùng"
+          contentClassName="p-4 sm:p-6 md:p-8 flex flex-col gap-6"
         >
-          {"\n"}
-          <div
-            className="app-shell"
-            style={styleOf(
-              "display: flex; flex-wrap: wrap; align-items: stretch; min-height: inherit",
-            )}
-          >
-            <div
-              className="app-sidebar-slot"
-              style={styleOf("display: flex; flex: none; align-self: stretch")}
-            >
-              <AdminSidebar active={"users"}></AdminSidebar>
-            </div>
-            <div
-              className="app-content"
-              style={styleOf(
-                "flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column",
-              )}
-            >
-              <AdminTopbar crumb={"Quản lý / Người dùng"}></AdminTopbar>
-              <main
-                style={styleOf(
-                  "flex: 1; background: #FAF9F5; padding: 36px 32px 48px; display: flex; flex-direction: column; gap: 24px",
-                )}
-              >
                 <div
                   style={styleOf(
                     "display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap",
@@ -1356,10 +1331,7 @@ class AdminUsers extends React.Component {
                     }
                   </span>
                 </div>
-              </main>
-            </div>
-          </div>
-          {"\n"}
+        </StaffLayout>
           {v.hasSel ? (
             <>
               <div
@@ -2222,7 +2194,6 @@ class AdminUsers extends React.Component {
               </div>
             </>
           ) : null}
-        </div>
         {"\n"}
       </>
     );

@@ -8,6 +8,7 @@ import { env } from "../../config.js";
 import { createAuthClient } from "../../lib/supabase.js";
 import {
   findActiveUser,
+  invalidateUserCache,
   requireAuth,
 } from "../../middleware/auth.js";
 import { asyncHandler, HttpError } from "../../utils/http.js";
@@ -245,6 +246,7 @@ authRouter.post(
     }
 
     try {
+      invalidateUserCache(data.user.id);
       const user = await findActiveUser(data.user.id);
 
       setRefreshCookie(res, data.session.refresh_token);
@@ -306,6 +308,7 @@ authRouter.post(
     }
 
     try {
+      invalidateUserCache(data.user.id);
       const user = await findActiveUser(data.user.id);
 
       // Refresh token có thể được xoay vòng.
@@ -367,6 +370,9 @@ authRouter.post(
       res.status(204).send();
       return;
     }
+
+    // Xóa hồ sơ đang lưu tạm của người dùng này (cache 60 giây trong requireAuth).
+    invalidateUserCache(data.session.user.id);
 
     // Giữ token mới để có thể thử lại nếu signOut lỗi.
     setRefreshCookie(res, data.session.refresh_token);

@@ -13,7 +13,10 @@ export type AuditAction =
   | 'EXAM_SKILL_CREATE'
   | 'EXAM_SKILL_HIDE'
   | 'EXAM_SKILL_SHOW'
-  | 'EXAM_SKILL_PUBLISH';
+  | 'EXAM_SKILL_PUBLISH'
+  | 'EXAM_SKILL_SAVE'
+  | 'EXAM_SKILL_DRAFT_CREATE'
+  | 'EXAM_SKILL_DELETE';
 
 export type AuditEntityType =
   | 'EXAM_SET'

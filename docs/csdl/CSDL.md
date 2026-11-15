@@ -89,3 +89,37 @@ Bộ đề → Test → kỹ năng (theo phiên bản) → phần → nhóm → 
 Người học → lượt làm → bài theo kỹ năng → câu trả lời hoặc nội dung nộp. Lượt hỗ trợ → yêu cầu chấm → phiếu → điểm tiêu chí. Một bài có tối đa một yêu cầu đang hoạt động. Một lượt chỉ dùng một lần. Mỗi yêu cầu hủy đủ điều kiện chỉ hoàn một bonus.
 
 Từ vựng dùng bộ từ, yêu thích và ghi chú cá nhân. Mỗi thẻ chỉ tính một lần trong một phiên. Hoạt động học và thông báo có khóa chống trùng. Xem [mô hình và chính sách lưu](../DATABASE.md) cùng [hướng dẫn chạy SQL](README.md).
+
+## Định dạng lưu trữ nội dung Writing & Speaking trong `exam_sections`
+
+Từ ngày 14/11/2026, nội dung đề Writing và Speaking được lưu trữ có cấu trúc trong bảng `exam_sections` theo quy tắc:
+
+### Writing (kỹ năng `WRITING`, form `ACADEMIC` hoặc `GENERAL`)
+- Kỹ năng gồm đúng 2 phần (`section_type = 'TASK'`, `order_no` = 1 và 2).
+- Thời lượng kỹ năng: cố định 60 phút (`duration_minutes = 60`).
+- **Task 1 (`order_no = 1`)**:
+  - `content`: `{"prompt": "...", "imageUrl": "https://...", "imagePath": "..."}`
+  - `image_path`: Đường dẫn ảnh trong Supabase Storage bucket `exam-assets` (với Academic, bắt buộc phải có ảnh đề bài; General không có ảnh).
+  - `config`: `{"minWords": 150, "suggestedMinutes": 20}`.
+- **Task 2 (`order_no = 2`)**:
+  - `content`: `{"prompt": "..."}`
+  - `config`: `{"minWords": 250, "suggestedMinutes": 40}`.
+
+### Speaking (kỹ năng `SPEAKING`, form `NULL`)
+- Kỹ năng gồm đúng 3 phần (`section_type = 'PART'`, `order_no` = 1, 2, 3).
+- Thời lượng kỹ năng: lưu tổng thời gian Part 1 và Part 3 vào `duration_minutes` (từ 1–60 phút, mặc định 15 phút).
+- **Part 1 (`order_no = 1`)**:
+  - `instruction`: Hướng dẫn của Part 1.
+  - `content`: `{"questions": ["Câu hỏi 1", "Câu hỏi 2", ...]}` (tối thiểu 1 câu hỏi).
+  - `config`: `{"minQuestions": 1}`.
+- **Part 2 (`order_no = 2`)**:
+  - `instruction`: Hướng dẫn của Part 2 ("Prepare for ... minute then speak for ... minute.").
+  - `content`: `{"cueCard": "Nội dung thẻ đề..."}` (Markdown).
+  - `config`: `{"preparationMinutes": 1, "speakingMinutes": 2}`.
+- **Part 3 (`order_no = 3`)**:
+  - `instruction`: Hướng dẫn của Part 3.
+  - `content`: `{"questions": ["Câu hỏi 1", "Câu hỏi 2", ...]}` (tối thiểu 1 câu hỏi).
+  - `config`: `{"minQuestions": 1}`.
+
+### Quy tắc chấm và rubric chuẩn (`grading_rules` & `rubric_criteria`)
+- Khởi tạo qua tệp [06_quy_tac_cham_ws.sql](06_quy_tac_cham_ws.sql): 4 quy tắc chấm phạm vi `FULL_SKILL` (Writing AC, Writing GT, Speaking AC, Speaking GT) và 16 tiêu chí rubric theo chuẩn IELTS (TR/TA, CC, LR, GRA cho Writing; FC, LR, GRA, PR cho Speaking). Khi xuất bản (publish) kỹ năng Writing/Speaking, hệ thống tự động gán đúng `grading_rule_id` tương ứng.

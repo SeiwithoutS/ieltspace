@@ -12,6 +12,11 @@
 | D08 | Trọng Phúc chốt 13/11 (rà luồng đăng đề, PROGRESS/2026-11-13). Thay phần “form ở phần thi” của D02. | Đơn vị đăng và phiên bản là exam_skills theo Test + kỹ năng + form. Bỏ exam_versions và exams.status. attempts trỏ exams, skill_attempts trỏ bản kỹ năng đã làm. band_scales.exam_type đổi thành form. |
 | D09 | Trọng Phúc chốt 13/11. Giữ chốt 09/11. | Thẻ luyện ở Landing và thư viện theo kỹ năng là một kỹ năng của một Test (ví dụ “Vol 4 · Test 1 · Reading · 40 câu”), lấy từ exam_skills PUBLISHED. Chọn Passage/Section/Task/Part trong hộp Bắt đầu. Không có bảng bài luyện riêng. |
 | D10 | Trọng Phúc chốt 13/11. | exam_sets thêm category và published_at. FullTests nhóm theo category, “Bộ đề cùng loại” lọc theo category, “Mới” dựa trên published_at. |
+| D11 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, Phần E). | Xác thực JWT tại chỗ bằng JWKS của Supabase và cache hồ sơ người dùng 60 giây trong RAM. Đổi lấy tốc độ xác thực < 1.5ms, chấp nhận độ trễ thu hồi quyền tối đa 60 giây và token cũ còn hạn tối đa 1 giờ. |
+| D12 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, E4). | Kết nối PostgreSQL dùng Supavisor transaction pooler (cổng 6543) cho ứng dụng runtime và DIRECT_URL (cổng 5432) cho Prisma CLI migration. |
+| D13 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, O-B1). | Phía quản lý trên điện thoại (< 768px) chỉ hiện dải cảnh báo khuyến nghị dùng máy tính, giữ bố cục tablet và cuộn ngang trong nội dung, không làm bố cục mobile riêng. |
+| D14 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, O-B2, RS-01..03). | Chặn làm bài thi trên điện thoại trước khi bắt đầu bằng màn che yêu cầu dùng máy tính; máy tính bảng chỉ cảnh báo. Lượt làm đã bắt đầu mà thu nhỏ/xoay màn hình chỉ hiện dải cảnh báo, không che để tránh mất bài. |
+| D15 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, O-D1, O-D2). | Lịch sử phiên bản kỹ năng giữ vĩnh viễn mọi bản ARCHIVED, không tự xóa. Khôi phục phiên bản cũ (tạo bản nháp mới từ bản ARCHIVED) lùi sang đợt tiếp theo. |
 
 ## Điểm mở trước khi triển khai
 

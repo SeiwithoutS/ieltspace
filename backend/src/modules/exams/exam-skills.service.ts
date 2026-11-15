@@ -146,7 +146,7 @@ export async function hideSkill(
       action: 'EXAM_SKILL_HIDE',
       entityType: 'EXAM_SKILL',
       entityId: skillId,
-      changeData: { before: 'PUBLISHED', after: 'HIDDEN' },
+      changeData: { before: 'PUBLISHED', after: 'HIDDEN', version: skill.version_number },
     });
 
     return loadExamSetAdmin(tx, skill.exam.exam_set_id);
@@ -197,7 +197,7 @@ export async function showSkill(
       action: 'EXAM_SKILL_SHOW',
       entityType: 'EXAM_SKILL',
       entityId: skillId,
-      changeData: { before: 'HIDDEN', after: 'PUBLISHED' },
+      changeData: { before: 'HIDDEN', after: 'PUBLISHED', version: skill.version_number },
     });
 
     return loadExamSetAdmin(tx, skill.exam.exam_set_id);
@@ -270,6 +270,7 @@ export async function publishSkill(
         const latestRule = await tx.grading_rules.findFirst({
           where: {
             skill: skill.skill,
+            assessment_scope: 'FULL_SKILL',
           },
           orderBy: { version: 'desc' },
         });
@@ -297,6 +298,16 @@ export async function publishSkill(
     }
 
     // QB-11:
+    // Tìm live hiện tại (PUBLISHED hoặc HIDDEN) để lưu vào audit log
+    const oldLive = await tx.exam_skills.findFirst({
+      where: {
+        exam_id: skill.exam_id,
+        skill: skill.skill,
+        form: skill.form ?? null,
+        status: { in: ['PUBLISHED', 'HIDDEN'] },
+      },
+    });
+
     // 1. Chuyển live hiện tại (PUBLISHED hoặc HIDDEN) sang ARCHIVED
     await tx.exam_skills.updateMany({
       where: {
@@ -326,7 +337,12 @@ export async function publishSkill(
       action: 'EXAM_SKILL_PUBLISH',
       entityType: 'EXAM_SKILL',
       entityId: skillId,
-      changeData: { before: 'DRAFT', after: 'PUBLISHED' },
+      changeData: {
+        before: 'DRAFT',
+        after: 'PUBLISHED',
+        version: skill.version_number,
+        oldVersion: oldLive?.version_number ?? null,
+      },
     });
 
     return loadExamSetAdmin(tx, skill.exam.exam_set_id);

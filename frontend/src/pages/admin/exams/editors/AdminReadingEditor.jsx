@@ -3098,6 +3098,7 @@ class AdminReadingEditor extends React.Component {
             ? "repeating-linear-gradient(45deg, #EEF3FD 0 12px, #E3ECFD 12px 24px)"
             : "#FAF9F5";
         G.upload = act(function (g) {
+          if (!editing) return;
           g.img = g.img === SAMPLE ? "so-do-moi.png" : SAMPLE;
         });
         // nhãn số đặt trên hình (m[0], m[1] theo % khung), m[2], m[3] là điểm mũi tên chỉ tới (không có thì nhãn nằm ngay trên hình)
@@ -4570,6 +4571,18 @@ class AdminReadingEditor extends React.Component {
       noPassage: !NP,
     };
     var R0 = {
+      onNavigate: function (go) {
+        if (dirty) {
+          ask(
+            "Rời khỏi trang soạn đề?",
+            "Các thay đổi chưa lưu sẽ bị mất. Bạn có chắc muốn rời đi?",
+            go,
+            "Rời đi"
+          );
+        } else {
+          go();
+        }
+      },
       examTitle: ex.title,
       tabs: tabs,
       missing: missing,
@@ -4765,7 +4778,7 @@ class AdminReadingEditor extends React.Component {
       editing: editing,
       viewing: !editing,
       modeCls: editing ? "" : "ro",
-      modeText: editing ? "Đang chỉnh sửa" : "Chỉ xem",
+      modeText: editing ? "Đang chỉnh sửa phiên bản 1 (bản nháp)" : "Chỉ xem",
       examPath: "Mock Test 2026 Vol 4 · Reading " + GT[0],
       typeText: GT[0],
       typeTitle: "Hình thức " + GT[0] + (GT[3] ? ": " + GT[3] : ""),
@@ -4923,6 +4936,7 @@ class AdminReadingEditor extends React.Component {
             >
               <AdminTopbar
                 crumb={"Quản lý / Bộ đề và đề thi / Soạn đề Reading"}
+                onNavigate={v.onNavigate}
               ></AdminTopbar>
               <main
                 className={v.modeCls}
@@ -10647,10 +10661,16 @@ class AdminReadingEditor extends React.Component {
                                                   </span>
                                                   <a
                                                     className={"eo"}
+                                                    aria-disabled={!v.editing}
+                                                    tabIndex={v.editing ? 0 : -1}
                                                     href={"#"}
-                                                    onClick={v.G.upload}
+                                                    onClick={v.editing ? v.G.upload : function(e) { e.preventDefault(); }}
                                                     style={styleOf(
-                                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: " +
+                                                        (v.editing ? "#706473" : "#9A8F9C") +
+                                                        "; text-decoration: none; cursor: " +
+                                                        (v.editing ? "pointer" : "not-allowed") +
+                                                        "; white-space: nowrap",
                                                     )}
                                                   >
                                                     <svg
@@ -10822,7 +10842,9 @@ class AdminReadingEditor extends React.Component {
                                                         </svg>
                                                         <span>
                                                           {
-                                                            "Chưa có hình. Bấm Tải ảnh lên (PNG, JPG, tối đa 5 MB)."
+                                                            v.editing
+                                                              ? "Chưa có hình. Bấm Tải ảnh lên (PNG, JPG, tối đa 5 MB)."
+                                                              : "Chưa có ảnh đề bài"
                                                           }
                                                         </span>
                                                       </div>

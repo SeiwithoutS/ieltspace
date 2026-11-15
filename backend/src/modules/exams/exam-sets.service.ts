@@ -23,18 +23,23 @@ export async function lockExamSet(tx: Prisma.TransactionClient, id: string): Pro
 }
 
 export async function loadExamSetAdmin(
-  tx: Prisma.TransactionClient,
+  tx: Prisma.TransactionClient | typeof prisma,
   id: string
 ): Promise<ExamSetAdminDto> {
-  const set = await tx.exam_sets.findUnique({
+  const set = await (tx as any).exam_sets.findUnique({
     where: { id },
+    relationLoadStrategy: 'join',
     include: {
       category: true,
       exams: {
         include: {
           skills: true,
           _count: {
-            select: { attempts: true },
+            select: {
+              attempts: {
+                where: { status: 'COMPLETED' },
+              },
+            },
           },
         },
       },
@@ -45,65 +50,44 @@ export async function loadExamSetAdmin(
     throw new HttpError(404, 'EXAM_SET_NOT_FOUND', 'Không tìm thấy bộ đề.');
   }
 
-  const attemptCounts = await tx.$queryRaw<Array<{ exam_id: string; count: bigint }>>`
-    select exam_id, count(*)::bigint as count
-    from public.attempts
-    where exam_id in (select id from public.exams where exam_set_id = ${id}::uuid)
-      and status = 'COMPLETED'
-    group by exam_id
-  `;
-
-  const countMap = new Map<string, number>();
-  for (const row of attemptCounts) {
-    countMap.set(row.exam_id, Number(row.count));
-  }
-
-  return toExamSetAdminDto(set as unknown as ExamSetWithRelations, countMap);
+  return toExamSetAdminDto(set as unknown as ExamSetWithRelations);
 }
 
 export async function listExamSets(): Promise<ExamSetAdminDto[]> {
-  const sets = await prisma.exam_sets.findMany({
+  const sets = await (prisma as any).exam_sets.findMany({
+    relationLoadStrategy: 'join',
     include: {
       category: true,
       exams: {
         include: {
           skills: true,
           _count: {
-            select: { attempts: true },
+            select: {
+              attempts: {
+                where: { status: 'COMPLETED' },
+              },
+            },
           },
         },
       },
     },
   });
 
-  const attemptCounts = await prisma.$queryRaw<Array<{ exam_id: string; count: bigint }>>`
-    select exam_id, count(*)::bigint as count
-    from public.attempts
-    where status = 'COMPLETED'
-    group by exam_id
-  `;
-
-  const countMap = new Map<string, number>();
-  for (const row of attemptCounts) {
-    countMap.set(row.exam_id, Number(row.count));
-  }
-
-  const items = sets.map((s) =>
-    toExamSetAdminDto(s as unknown as ExamSetWithRelations, countMap)
+  const items = sets.map((s: any) =>
+    toExamSetAdminDto(s as unknown as ExamSetWithRelations)
   );
 
   // Mới cập nhật trước theo max(updatedAt)
   items.sort(
-    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    (a: ExamSetAdminDto, b: ExamSetAdminDto) =>
+      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   );
 
   return items;
 }
 
 export async function getExamSet(id: string): Promise<ExamSetAdminDto> {
-  return prisma.$transaction(async (tx) => {
-    return loadExamSetAdmin(tx, id);
-  });
+  return loadExamSetAdmin(prisma, id);
 }
 
 export type CreateSetInput = {

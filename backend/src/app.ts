@@ -1,12 +1,17 @@
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
 import { authRouter } from './modules/auth/auth.routes.js';
 import express from 'express';
 import cors from 'cors';
 import { env } from './config/env.js';
 import { routes } from './routes.js';
 import { errorHandler } from './middleware/error-handler.js';
+import { serverTiming } from './middleware/server-timing.js';
+
 export const app = express();
 app.disable('x-powered-by');
+app.use(serverTiming);
+app.use(compression({ threshold: 1024 }));
 app.use(cors({ origin: env.frontendUrl, credentials: true }));
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());

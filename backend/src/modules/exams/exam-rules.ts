@@ -1,3 +1,11 @@
+import {
+  sectionsToWriting,
+  sectionsToSpeaking,
+  type WritingContent,
+  type SpeakingContent,
+  type RawSection,
+} from './exam-content.mapper.js';
+
 export type SlotKey =
   | 'LISTENING'
   | 'READING_ACADEMIC'
@@ -153,37 +161,152 @@ export function defaultDuration(skill: string): number {
     case 'WRITING':
       return 60;
     case 'SPEAKING':
-      return 14;
+      return 15;
     default:
       return 60;
   }
+}
+
+export function canDeleteSkill(input: {
+  status: string;
+  attemptCount: number;
+}): boolean {
+  return input.status === 'DRAFT' && input.attemptCount === 0;
+}
+
+export function speakingDuration(c: {
+  p13Minutes?: number | null;
+  part2?: { prepMinutes?: number | null; speakMinutes?: number | null } | null;
+}): number | null {
+  const p13 = c.p13Minutes;
+  const prep = c.part2?.prepMinutes;
+  const speak = c.part2?.speakMinutes;
+  if (
+    typeof p13 === 'number' &&
+    Number.isInteger(p13) &&
+    p13 > 0 &&
+    typeof prep === 'number' &&
+    Number.isInteger(prep) &&
+    prep > 0 &&
+    typeof speak === 'number' &&
+    Number.isInteger(speak) &&
+    speak > 0
+  ) {
+    return p13 + prep + speak;
+  }
+  return null;
+}
+
+export function validateWritingReady(
+  content: WritingContent | null,
+  form?: string | null
+): string[] {
+  const issues: string[] = [];
+  const tasks = content?.tasks || [];
+  if (tasks.length < 2) {
+    issues.push('Kỹ năng Writing phải có đủ 2 Task.');
+    return issues;
+  }
+
+  const t1 = tasks[0];
+  if (!t1?.prompt || t1.prompt.trim().length === 0) {
+    issues.push('Task 1 chưa có yêu cầu (đề bài).');
+  }
+  if (form === 'ACADEMIC' && (!t1?.imagePath || t1.imagePath.trim().length === 0)) {
+    issues.push('Task 1 chưa có ảnh đề.');
+  }
+
+  const t2 = tasks[1];
+  if (!t2?.prompt || t2.prompt.trim().length === 0) {
+    issues.push('Task 2 chưa có yêu cầu (đề bài).');
+  }
+
+  return issues;
+}
+
+export function validateSpeakingReady(
+  content: SpeakingContent | null
+): string[] {
+  const issues: string[] = [];
+  if (!content) {
+    issues.push('Kỹ năng Speaking chưa có nội dung.');
+    return issues;
+  }
+
+  // Part 1
+  const p1Qs = content.part1?.questions || [];
+  if (p1Qs.length === 0 || !p1Qs.some((q) => q && q.trim().length > 0)) {
+    issues.push('Part 1 chưa có câu hỏi nào.');
+  } else if (p1Qs.some((q) => !q || q.trim().length === 0)) {
+    issues.push('Part 1 có câu hỏi để trống, hãy nhập hoặc xóa.');
+  }
+
+  // p13Minutes
+  const p13 = content.p13Minutes;
+  if (typeof p13 !== 'number' || !Number.isInteger(p13) || p13 < 1 || p13 > 60) {
+    issues.push('Thời gian tổng Part 1 và Part 3 cần là số phút từ 1 đến 60.');
+  }
+
+  // Part 2
+  const cueCard = content.part2?.cueCard;
+  if (!cueCard || cueCard.trim().length === 0) {
+    issues.push('Part 2 chưa có nội dung thẻ đề.');
+  }
+  const prep = content.part2?.prepMinutes;
+  const speak = content.part2?.speakMinutes;
+  if (
+    typeof prep !== 'number' ||
+    !Number.isInteger(prep) ||
+    prep < 1 ||
+    typeof speak !== 'number' ||
+    !Number.isInteger(speak) ||
+    speak < 1
+  ) {
+    issues.push('Part 2 cần số phút chờ chuẩn bị và số phút nói (số nguyên từ 1).');
+  }
+
+  // Part 3
+  const p3Qs = content.part3?.questions || [];
+  if (p3Qs.length === 0 || !p3Qs.some((q) => q && q.trim().length > 0)) {
+    issues.push('Part 3 chưa có câu hỏi nào.');
+  } else if (p3Qs.some((q) => !q || q.trim().length === 0)) {
+    issues.push('Part 3 có câu hỏi để trống, hãy nhập hoặc xóa.');
+  }
+
+  return issues;
 }
 
 export type SkillValidationTarget = {
   id?: string;
   skill: string;
   form?: string | null;
-  sections: Array<{
-    id?: string;
-    title: string | null;
-    section_type: string;
-    audio_path?: string | null;
-    groups?: Array<{
-      id?: string;
-      questions?: Array<{
-        id?: string;
-        answer?: {
-          accepted_answers?: unknown;
-        } | null;
-      }>;
-    }>;
-  }>;
+  sections: RawSection[];
+  writingContent?: WritingContent | null;
+  speakingContent?: SpeakingContent | null;
 };
 
 export function validateSkillReady(skill: SkillValidationTarget): {
   ready: boolean;
   reasons: string[];
 } {
+  if (skill.skill === 'WRITING') {
+    const content = skill.writingContent || sectionsToWriting(skill.sections);
+    const reasons = validateWritingReady(content, skill.form);
+    return {
+      ready: reasons.length === 0,
+      reasons,
+    };
+  }
+
+  if (skill.skill === 'SPEAKING') {
+    const content = skill.speakingContent || sectionsToSpeaking(skill.sections);
+    const reasons = validateSpeakingReady(content);
+    return {
+      ready: reasons.length === 0,
+      reasons,
+    };
+  }
+
   const reasons: string[] = [];
 
   if (!skill.sections || skill.sections.length === 0) {
@@ -216,7 +339,7 @@ export function validateSkillReady(skill: SkillValidationTarget): {
         for (const g of groups) {
           const questions = g.questions || [];
           for (const q of questions) {
-            if (!q.answer || !q.answer.accepted_answers) {
+            if (!q.answer || !(q.answer as { accepted_answers?: unknown }).accepted_answers) {
               missingAnswerCount++;
             }
           }

@@ -621,6 +621,13 @@ class AdminListeningEditor extends React.Component {
       };
     }
     function auFile(e) {
+      var editing = s.editing == null ? false || !!INIT.edit : !!s.editing;
+      if (!editing) {
+        try {
+          e.target.value = "";
+        } catch (err) {}
+        return;
+      }
       var f = e.target.files && e.target.files[0];
       try {
         e.target.value = "";
@@ -3215,6 +3222,7 @@ class AdminListeningEditor extends React.Component {
             ? "repeating-linear-gradient(45deg, #EEF3FD 0 12px, #E3ECFD 12px 24px)"
             : "#FAF9F5";
         G.upload = act(function (g) {
+          if (!editing) return;
           g.img = g.img === SAMPLE ? "so-do-moi.png" : SAMPLE;
         });
         G.mapImg = cg.img === "ban-do-trung-tam.png";
@@ -4735,6 +4743,18 @@ class AdminListeningEditor extends React.Component {
       noPassage: !NP,
     };
     var R0 = {
+      onNavigate: function (go) {
+        if (dirty) {
+          ask(
+            "Rời khỏi trang soạn đề?",
+            "Các thay đổi chưa lưu sẽ bị mất. Bạn có chắc muốn rời đi?",
+            go,
+            "Rời đi"
+          );
+        } else {
+          go();
+        }
+      },
       examTitle: ex.title,
       tabs: tabs,
       missing: missing,
@@ -4930,7 +4950,7 @@ class AdminListeningEditor extends React.Component {
       editing: editing,
       viewing: !editing,
       modeCls: editing ? "" : "ro",
-      modeText: editing ? "Đang chỉnh sửa" : "Chỉ xem",
+      modeText: editing ? "Đang chỉnh sửa phiên bản 1 (bản nháp)" : "Chỉ xem",
       examPath: "Mock Test 2026 Vol 4 · Listening " + GT[0],
       typeText: GT[0],
       typeTitle: "Hình thức " + GT[0] + (GT[3] ? ": " + GT[3] : ""),
@@ -5108,6 +5128,7 @@ class AdminListeningEditor extends React.Component {
       aPick: auFile,
       aSample: function (e) {
         stop(e);
+        if (!editing) return;
         upd(
           function (n, p) {
             p.audio = {
@@ -5121,6 +5142,7 @@ class AdminListeningEditor extends React.Component {
       },
       aDel: function (e) {
         stop(e);
+        if (!editing) return;
         if (!AU) {
           return;
         }
@@ -5202,6 +5224,7 @@ class AdminListeningEditor extends React.Component {
             >
               <AdminTopbar
                 crumb={"Quản lý / Bộ đề và đề thi / Soạn đề Listening"}
+                onNavigate={v.onNavigate}
               ></AdminTopbar>
               <main
                 className={v.modeCls}
@@ -6992,9 +7015,14 @@ class AdminListeningEditor extends React.Component {
                                           {v.aMeta}
                                         </span>
                                         <label
-                                          className={"eo"}
+                                          aria-disabled={!v.editing}
+                                          tabIndex={v.editing ? 0 : -1}
                                           style={styleOf(
-                                            "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; position: relative; overflow: hidden",
+                                            "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: " +
+                                              (v.editing ? "#706473" : "#9A8F9C") +
+                                              "; text-decoration: none; cursor: " +
+                                              (v.editing ? "pointer" : "not-allowed") +
+                                              "; white-space: nowrap; position: relative; overflow: hidden",
                                           )}
                                         >
                                           <svg
@@ -7015,22 +7043,29 @@ class AdminListeningEditor extends React.Component {
                                           {" Thay tệp"}
                                           <input
                                             type={"file"}
+                                            disabled={!v.editing}
                                             accept={".mp3,.wav,.m4a,audio/*"}
                                             onChange={v.aPick}
                                             aria-label={"Chọn tệp ghi âm khác"}
                                             style={styleOf(
-                                              "position: absolute; inset: 0; opacity: 0; cursor: pointer",
+                                              "position: absolute; inset: 0; opacity: 0; cursor: " +
+                                                (v.editing ? "pointer" : "not-allowed"),
                                             )}
                                           />
                                         </label>
                                         <a
                                           href={"#"}
                                           className={"eo"}
-                                          onClick={v.aDel}
+                                          aria-disabled={!v.editing}
+                                          tabIndex={v.editing ? 0 : -1}
+                                          onClick={v.editing ? v.aDel : function(e) { e.preventDefault(); }}
                                           aria-label={"Xóa ghi âm"}
                                           title={"Xóa ghi âm"}
                                           style={styleOf(
-                                            "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                            "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: " +
+                                              (v.editing ? "#C0412A" : "#D6D4D0") +
+                                              "; text-decoration: none; cursor: " +
+                                              (v.editing ? "pointer" : "not-allowed"),
                                           )}
                                         >
                                           <svg
@@ -7058,66 +7093,94 @@ class AdminListeningEditor extends React.Component {
                                 {v.aNo ? (
                                   <>
                                     <label
-                                      className={"eo"}
+                                      aria-disabled={!v.editing}
+                                      tabIndex={v.editing ? 0 : -1}
                                       style={styleOf(
-                                        "position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 104px; padding: 12px; text-align: center; border-radius: 12px; border: 1.5px dashed #C9C2C6; background: #FAF9F5; cursor: pointer",
+                                        "position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 104px; padding: 12px; text-align: center; border-radius: 12px; border: 1.5px dashed #C9C2C6; background: #FAF9F5; cursor: " +
+                                          (v.editing ? "pointer" : "not-allowed"),
                                       )}
                                     >
-                                      <span style={styleOf("color: #2257B8")}>
-                                        <svg
-                                          width={"26"}
-                                          height={"26"}
-                                          viewBox={"0 0 24 24"}
-                                          fill={"none"}
-                                          stroke={"currentColor"}
-                                          strokeWidth={"1.8"}
-                                          strokeLinecap={"round"}
-                                          strokeLinejoin={"round"}
-                                          aria-hidden={"true"}
+                                      {v.editing ? (
+                                        <>
+                                          <span style={styleOf("color: #2257B8")}>
+                                            <svg
+                                              width={"26"}
+                                              height={"26"}
+                                              viewBox={"0 0 24 24"}
+                                              fill={"none"}
+                                              stroke={"currentColor"}
+                                              strokeWidth={"1.8"}
+                                              strokeLinecap={"round"}
+                                              strokeLinejoin={"round"}
+                                              aria-hidden={"true"}
+                                            >
+                                              <path d={"M9 18V6l11-2v12"}></path>
+                                              <circle
+                                                cx={"6"}
+                                                cy={"18"}
+                                                r={"3"}
+                                              ></circle>
+                                              <circle
+                                                cx={"17"}
+                                                cy={"16"}
+                                                r={"3"}
+                                              ></circle>
+                                            </svg>
+                                          </span>
+                                          <span
+                                            style={styleOf(
+                                              "font-weight: 600; font-size: 14px",
+                                            )}
+                                          >
+                                            {"Tải ghi âm Section " + v.pNo + " lên"}
+                                          </span>
+                                          <span
+                                            style={styleOf(
+                                              "font-size: 13px; color: #706473",
+                                            )}
+                                          >
+                                            {"MP3, WAV hoặc M4A, tối đa 50 MB"}
+                                          </span>
+                                        </>
+                                      ) : (
+                                        <span
+                                          style={styleOf(
+                                            "font-weight: 500; font-size: 14px; color: #706473",
+                                          )}
                                         >
-                                          <path d={"M9 18V6l11-2v12"}></path>
-                                          <circle
-                                            cx={"6"}
-                                            cy={"18"}
-                                            r={"3"}
-                                          ></circle>
-                                          <circle
-                                            cx={"17"}
-                                            cy={"16"}
-                                            r={"3"}
-                                          ></circle>
-                                        </svg>
-                                      </span>
-                                      <span
-                                        style={styleOf(
-                                          "font-weight: 600; font-size: 14px",
-                                        )}
-                                      >
-                                        {"Tải ghi âm Section " + v.pNo + " lên"}
-                                      </span>
-                                      <span
-                                        style={styleOf(
-                                          "font-size: 13px; color: #706473",
-                                        )}
-                                      >
-                                        {"MP3, WAV hoặc M4A, tối đa 50 MB"}
-                                      </span>
+                                          {"Chưa có ghi âm"}
+                                        </span>
+                                      )}
                                       <input
                                         type={"file"}
+                                        disabled={!v.editing}
                                         accept={".mp3,.wav,.m4a,audio/*"}
                                         onChange={v.aPick}
                                         aria-label={"Chọn tệp ghi âm"}
                                         style={styleOf(
-                                          "position: absolute; inset: 0; opacity: 0; cursor: pointer",
+                                          "position: absolute; inset: 0; opacity: 0; cursor: " +
+                                            (v.editing ? "pointer" : "not-allowed"),
                                         )}
                                       />
                                     </label>
                                     <a
                                       href={"#"}
                                       className={"eo"}
-                                      onClick={v.aSample}
+                                      aria-disabled={!v.editing}
+                                      tabIndex={v.editing ? 0 : -1}
+                                      onClick={
+                                        v.editing
+                                          ? v.aSample
+                                          : function (e) {
+                                              e.preventDefault();
+                                            }
+                                      }
                                       style={styleOf(
-                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; align-self: flex-start",
+                                        "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: " +
+                                          (v.editing ? "#706473" : "#D6D4D0") +
+                                          "; text-decoration: none; cursor: " +
+                                          (v.editing ? "pointer" : "not-allowed") +
+                                          "; white-space: nowrap; align-self: flex-start",
                                       )}
                                     >
                                       {"Dùng tệp ví dụ"}
@@ -11173,10 +11236,16 @@ class AdminListeningEditor extends React.Component {
                                                   </span>
                                                   <a
                                                     className={"eo"}
+                                                    aria-disabled={!v.editing}
+                                                    tabIndex={v.editing ? 0 : -1}
                                                     href={"#"}
-                                                    onClick={v.G.upload}
+                                                    onClick={v.editing ? v.G.upload : function(e) { e.preventDefault(); }}
                                                     style={styleOf(
-                                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap",
+                                                      "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: " +
+                                                        (v.editing ? "#706473" : "#9A8F9C") +
+                                                        "; text-decoration: none; cursor: " +
+                                                        (v.editing ? "pointer" : "not-allowed") +
+                                                        "; white-space: nowrap",
                                                     )}
                                                   >
                                                     <svg
@@ -11592,7 +11661,9 @@ class AdminListeningEditor extends React.Component {
                                                         </svg>
                                                         <span>
                                                           {
-                                                            "Chưa có hình. Bấm Tải ảnh lên (PNG, JPG, tối đa 5 MB)."
+                                                            v.editing
+                                                              ? "Chưa có hình. Bấm Tải ảnh lên (PNG, JPG, tối đa 5 MB)."
+                                                              : "Chưa có ảnh đề bài"
                                                           }
                                                         </span>
                                                       </div>

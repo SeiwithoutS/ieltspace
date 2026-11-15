@@ -68,7 +68,7 @@ function ResultWS(props: { accent?: string }) {
                 </a>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 divide-[var(--attempt-line-d6d4d0,#D6D4D0)] border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] rounded-[22px] bg-[var(--attempt-bg-ffffff,#FFFFFF)] shadow-sm overflow-hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 divide-[var(--attempt-line-d6d4d0,#D6D4D0)] border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] rounded-[22px] bg-[var(--attempt-bg-ffffff,#FFFFFF)] shadow-sm overflow-hidden">
               <div className="p-4 sm:p-5 flex flex-col gap-0.5 sm:border-r sm:border-b lg:border-b-0 border-[var(--attempt-line-d6d4d0,#D6D4D0)]">
                 <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
                   {"Điểm Task 2"}

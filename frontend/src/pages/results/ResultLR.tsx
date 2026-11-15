@@ -115,19 +115,19 @@ function ResultLR(props: { accent?: string; cheDo?: string; kyNang?: string }) {
               <div className="flex gap-2.5 w-full sm:w-auto">
                 <a
                   href={v.retryHref}
-                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                 >
                   {"Làm lại"}
                 </a>
                 <PageLink
                   page="StudentHome"
-                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-[1.5px] border-[#352637] bg-[#352637] text-white font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#221824]"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-solid border-[1.5px] border-[#352637] bg-[#352637] text-white font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#221824]"
                 >
                   {"Về lịch sử"}
                 </PageLink>
               </div>
             </div>
-            <div className="grid grid-cols-1 min-[400px]:grid-cols-3 divide-y min-[400px]:divide-y-0 min-[400px]:divide-x divide-[var(--attempt-line-d6d4d0,#D6D4D0)] border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] rounded-[22px] bg-[var(--attempt-bg-ffffff,#FFFFFF)] shadow-sm overflow-hidden">
+            <div className="grid grid-cols-1 min-[400px]:grid-cols-3 divide-y min-[400px]:divide-y-0 min-[400px]:divide-x divide-[var(--attempt-line-d6d4d0,#D6D4D0)] border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] rounded-[22px] bg-[var(--attempt-bg-ffffff,#FFFFFF)] shadow-sm overflow-hidden">
               {(v.stats || []).map((st, index) => (
                 <div key={index} className="p-4 sm:p-5 flex flex-col gap-0.5">
                   <div className="text-xs sm:text-[13px] text-[var(--attempt-text-706473,#706473)]">
@@ -150,13 +150,13 @@ function ResultLR(props: { accent?: string; cheDo?: string; kyNang?: string }) {
                   </div>
                   {(v.rows || []).map((r, index) => (
                     <React.Fragment key={index}>
-                      <div className="flex flex-col gap-2 p-4 sm:p-5 border-t border-[var(--attempt-line-e6e4e0,#E6E4E0)] first:border-t-0">
+                      <div className="flex flex-col gap-2 p-4 sm:p-5 border-0 border-solid border-t border-[var(--attempt-line-e6e4e0,#E6E4E0)] first:border-t-0">
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-bold text-sm sm:text-base text-[var(--attempt-text-352637,#352637)]">
                             {"Câu " + r.n}
                           </span>
                           {r.ok ? (
-                            <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-dcede2,#DCEDE2)] text-[var(--attempt-text-2e6a48,#2E6A48)] text-xs font-semibold whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-dcede2,#DCEDE2)] text-[var(--attempt-text-2e6a48,#2E6A48)] text-xs font-semibold whitespace-nowrap">
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                 <path d="M5 12.5l4.5 4.5L19 7" />
                               </svg>
@@ -164,7 +164,7 @@ function ResultLR(props: { accent?: string; cheDo?: string; kyNang?: string }) {
                             </span>
                           ) : null}
                           {r.wrong ? (
-                            <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-fbdcd3,#FBDCD3)] text-[var(--attempt-text-c0412a,#C0412A)] text-xs font-semibold whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-fbdcd3,#FBDCD3)] text-[var(--attempt-text-c0412a,#C0412A)] text-xs font-semibold whitespace-nowrap">
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                 <path d="M6 6l12 12M18 6L6 18" />
                               </svg>

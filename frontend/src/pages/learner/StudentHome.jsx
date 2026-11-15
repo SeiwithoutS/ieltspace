@@ -334,8 +334,8 @@ class StudentHome extends React.Component {
                       {"Kết quả luyện tập"}
                     </h2>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3.5">
-                    <div className="col-span-2 md:col-span-1 xl:col-span-1"
+                  <div className="grid grid-cols-2 md:grid-cols-6 xl:grid-cols-5 gap-3.5">
+                    <div className="col-span-2 md:col-span-2 xl:col-span-1"
                       style={styleOf(
                         "position: relative; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
                       )}
@@ -383,7 +383,7 @@ class StudentHome extends React.Component {
                         {"7.0"}
                       </div>
                     </div>
-                    <div
+                    <div className="col-span-1 md:col-span-2 xl:col-span-1"
                       style={styleOf(
                         "position: relative; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
                       )}
@@ -421,7 +421,7 @@ class StudentHome extends React.Component {
                         {"6.0"}
                       </div>
                     </div>
-                    <div
+                    <div className="col-span-1 md:col-span-2 xl:col-span-1"
                       style={styleOf(
                         "position: relative; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
                       )}
@@ -460,7 +460,7 @@ class StudentHome extends React.Component {
                         {"12"}
                       </div>
                     </div>
-                    <div
+                    <div className="col-span-1 md:col-span-3 xl:col-span-1"
                       style={styleOf(
                         "position: relative; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
                       )}
@@ -499,7 +499,7 @@ class StudentHome extends React.Component {
                         {"86 từ"}
                       </div>
                     </div>
-                    <div
+                    <div className="col-span-1 md:col-span-3 xl:col-span-1"
                       style={styleOf(
                         "position: relative; min-width: 0; padding: 18px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center",
                       )}
@@ -543,7 +543,7 @@ class StudentHome extends React.Component {
                       "padding: 20px 24px 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                     )}
                   >
-                    <div className="flex items-center gap-2 overflow-x-auto pb-3 border-b border-[#E6E4E0] text-sm whitespace-nowrap">
+                    <div className="flex items-center gap-2 overflow-x-auto pb-3 border-0 border-solid border-b border-[#E6E4E0] text-sm whitespace-nowrap">
                       <span
                         style={styleOf(
                           "display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 10px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #DDE8FC; color: #2A55B8; font-weight: 600; font-size: 14px",
@@ -669,7 +669,7 @@ class StudentHome extends React.Component {
                       </span>
                     </div>
                     <div className="relative overflow-x-auto pt-2 pb-1">
-                      <div className="relative h-[210px] min-w-[480px] ml-10">
+                      <div className="relative h-[210px] min-w-[300px] ml-10">
                         <div
                           style={styleOf(
                             "position: absolute; left: 0; right: 0; bottom: 0px; border-top: 1px dashed #E6E4E0",
@@ -973,7 +973,7 @@ class StudentHome extends React.Component {
                     )}
                   >
                     {/* Desktop table */}
-                    <div className="hidden md:block overflow-x-auto">
+                    <div className="hidden lg:block overflow-x-auto">
                     <table
                       style={styleOf(
                         "width: 100%; border-collapse: collapse; font-size: 14px",
@@ -1316,7 +1316,7 @@ class StudentHome extends React.Component {
                     </div>
 
                     {/* Mobile card list (< 768px) */}
-                    <div className="md:hidden divide-y divide-[#E6E4E0]">
+                    <div className="lg:hidden divide-y divide-[#E6E4E0]">
                       {/* Item 1 */}
                       <div className="p-4 flex flex-col gap-2.5">
                         <div className="flex items-start justify-between gap-2">
@@ -1333,14 +1333,14 @@ class StudentHome extends React.Component {
                           </span>
                         </div>
                         <div className="flex items-center justify-between text-xs pt-1">
-                          <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[#D6D4D0] bg-[#FBEDBF] text-[#7A5A0E] font-semibold">
+                          <span className="inline-flex items-center h-6 px-2.5 rounded-full border-solid border border-[#D6D4D0] bg-[#FBEDBF] text-[#7A5A0E] font-semibold">
                             Đã có kết quả · 6.5
                           </span>
                           <span className="text-[#706473]">38:12</span>
                         </div>
                         <a
                           href="#"
-                          className="mt-1 w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                          className="mt-1 w-full box-border inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border-solid border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                         >
                           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M6 3h8l4 4v14H6z" />
@@ -1373,7 +1373,7 @@ class StudentHome extends React.Component {
                         </div>
                         <a
                           href="#"
-                          className="mt-1 w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                          className="mt-1 w-full box-border inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border-solid border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                         >
                           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M6 3h8l4 4v14H6z" />
@@ -1406,7 +1406,7 @@ class StudentHome extends React.Component {
                         </div>
                         <a
                           href="#"
-                          className="mt-1 w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                          className="mt-1 w-full box-border inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border-solid border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                         >
                           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M6 3h8l4 4v14H6z" />
@@ -1439,7 +1439,7 @@ class StudentHome extends React.Component {
                         </div>
                         <a
                           href="#"
-                          className="mt-1 w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                          className="mt-1 w-full box-border inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border-solid border border-[#D6D4D0] bg-white text-[#352637] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                         >
                           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M6 3h8l4 4v14H6z" />

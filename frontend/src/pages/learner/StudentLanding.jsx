@@ -79,7 +79,7 @@ class StudentLanding extends React.Component {
               </div>
               {"\n"}
               <div className="flex flex-col md:flex-row gap-5 items-stretch">
-                <div className="flex-1 md:flex-[1.7] min-w-0 p-6 sm:p-9 md:p-10 rounded-[26px] border-[1.5px] border-[#352637] bg-[#352637] text-white flex flex-col gap-3.5">
+                <div className="flex-1 md:flex-[1.7] min-w-0 p-6 sm:p-9 md:p-10 rounded-[26px] border-solid border-[1.5px] border-[#352637] bg-[#352637] text-white flex flex-col gap-3.5">
                   {"\n"}
                   <div
                     style={styleOf(
@@ -127,7 +127,7 @@ class StudentLanding extends React.Component {
                   <div className="mt-auto pt-2.5 flex flex-col sm:flex-row gap-3">
                     <a
                       href={"#"}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-[1.5px] border-[#D6D4D0] font-semibold text-sm no-underline whitespace-nowrap"
+                      className="w-full box-border sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-solid border-[1.5px] border-[#D6D4D0] font-semibold text-sm no-underline whitespace-nowrap"
                       style={{ background: v.accent, color: v.onAccent }}
                     >
                       {"Làm tiếp bài dở"}
@@ -146,14 +146,14 @@ class StudentLanding extends React.Component {
                     </a>
                     <a
                       href={"#"}
-                      className="w-full sm:w-auto inline-flex items-center justify-center h-11 px-5 rounded-xl border-[1.5px] border-white text-white font-semibold text-sm no-underline whitespace-nowrap hover:bg-white/10"
+                      className="w-full box-border sm:w-auto inline-flex items-center justify-center h-11 px-5 rounded-xl border-solid border-[1.5px] border-white text-white font-semibold text-sm no-underline whitespace-nowrap hover:bg-white/10"
                     >
                       {"Chọn đề mới"}
                     </a>
                   </div>
                 </div>
                 {"\n"}
-                <div className="flex-1 min-w-0 p-6 rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-3.5">
+                <div className="flex-1 min-w-0 p-6 rounded-[22px] border-solid border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-3.5">
                   {"\n"}
                   <div
                     style={styleOf(

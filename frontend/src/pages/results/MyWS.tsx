@@ -29,7 +29,7 @@ function MyWS(props: { accent?: string }) {
               <div className="w-full sm:w-auto flex">
                 <PageLink
                   page="PracticeWS"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-sm no-underline whitespace-nowrap hover:bg-[#F3F0EA]"
                 >
                   {"Luyện Writing, Speaking"}
                 </PageLink>
@@ -44,7 +44,7 @@ function MyWS(props: { accent?: string }) {
                 <select
                   id="ws-status-filter"
                   aria-label="Lọc theo trạng thái"
-                  className="h-10 px-3 rounded-xl border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-sm text-[var(--attempt-text-352637,#352637)] font-medium outline-none"
+                  className="h-10 px-3 rounded-xl border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-sm text-[var(--attempt-text-352637,#352637)] font-medium outline-none"
                 >
                   <option>Mọi trạng thái</option>
                   <option>Chưa gửi chấm</option>
@@ -58,7 +58,7 @@ function MyWS(props: { accent?: string }) {
               {/* Desktop segmented filters (>= 768px) */}
               <div className="hidden md:flex flex-wrap gap-3 items-center overflow-x-auto pb-1">
                 <div className="inline-flex gap-0.5 p-1 rounded-xl bg-[var(--attempt-bg-f3f0ea,#F3F0EA)]">
-                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg bg-white border border-[var(--attempt-line-d6d4d0,#D6D4D0)] text-xs font-semibold text-[var(--attempt-text-352637,#352637)]">
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg bg-white border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] text-xs font-semibold text-[var(--attempt-text-352637,#352637)]">
                     {"Tất cả"}
                   </span>
                   <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-352637,#352637)] cursor-pointer">
@@ -69,7 +69,7 @@ function MyWS(props: { accent?: string }) {
                   </span>
                 </div>
                 <div className="inline-flex gap-0.5 p-1 rounded-xl bg-[var(--attempt-bg-f3f0ea,#F3F0EA)]">
-                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg bg-white border border-[var(--attempt-line-d6d4d0,#D6D4D0)] text-xs font-semibold text-[var(--attempt-text-352637,#352637)]">
+                  <span className="inline-flex items-center h-8 px-3.5 rounded-lg bg-white border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] text-xs font-semibold text-[var(--attempt-text-352637,#352637)]">
                     {"Mọi trạng thái"}
                   </span>
                   <span className="inline-flex items-center h-8 px-3.5 rounded-lg text-xs font-medium text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-352637,#352637)] cursor-pointer">
@@ -558,7 +558,7 @@ function MyWS(props: { accent?: string }) {
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-dcede2,#DCEDE2)] text-[var(--attempt-text-2e6a48,#2E6A48)] font-semibold">
+                    <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-dcede2,#DCEDE2)] text-[var(--attempt-text-2e6a48,#2E6A48)] font-semibold">
                       Đã có kết quả · 6.5
                       <span aria-label="Chưa xem" className="inline-block w-2 h-2 rounded-full bg-[var(--attempt-bg-e5604a,#E5604A)] shrink-0" />
                     </span>
@@ -567,13 +567,13 @@ function MyWS(props: { accent?: string }) {
                   <div className="flex flex-wrap gap-2 pt-1">
                     <PageLink
                       page="ResultWS"
-                      className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                     >
                       Xem kết quả
                     </PageLink>
                     <a
                       href="#"
-                      className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
@@ -599,7 +599,7 @@ function MyWS(props: { accent?: string }) {
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-dde8fc,#DDE8FC)] text-[var(--attempt-text-2a55b8,#2A55B8)] font-semibold">
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-dde8fc,#DDE8FC)] text-[var(--attempt-text-2a55b8,#2A55B8)] font-semibold">
                       Chờ chấm · phân công 22/10 20:40
                     </span>
                     <span className="text-[var(--attempt-text-706473,#706473)]">Tạm giữ</span>
@@ -607,7 +607,7 @@ function MyWS(props: { accent?: string }) {
                   <div className="flex flex-wrap gap-2 pt-1">
                     <a
                       href="#"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M8 5l11 7-11 7z" />
@@ -616,7 +616,7 @@ function MyWS(props: { accent?: string }) {
                     </a>
                     <a
                       href="#"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
@@ -642,7 +642,7 @@ function MyWS(props: { accent?: string }) {
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] font-semibold">
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] font-semibold">
                       Chờ phân công · còn 21 giờ
                     </span>
                     <span className="text-[var(--attempt-text-706473,#706473)]">Tạm giữ</span>
@@ -650,7 +650,7 @@ function MyWS(props: { accent?: string }) {
                   <div className="flex gap-2 pt-1">
                     <a
                       href="#"
-                      className="w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      className="w-full inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
@@ -676,7 +676,7 @@ function MyWS(props: { accent?: string }) {
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-fbdcd3,#FBDCD3)] text-[var(--attempt-text-c0412a,#C0412A)] font-semibold">
+                    <span className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-fbdcd3,#FBDCD3)] text-[var(--attempt-text-c0412a,#C0412A)] font-semibold">
                       Đã hủy · đã hoàn 1 bonus
                       <span aria-label="Chưa xem" className="inline-block w-2 h-2 rounded-full bg-[var(--attempt-bg-e5604a,#E5604A)] shrink-0" />
                     </span>
@@ -686,13 +686,13 @@ function MyWS(props: { accent?: string }) {
                     <button
                       type="button"
                       onClick={() => setRequest(true)}
-                      className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border border-[#352637] bg-[#352637] text-white font-semibold text-xs no-underline hover:bg-[#221824]"
+                      className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border-solid border border-[#352637] bg-[#352637] text-white font-semibold text-xs no-underline hover:bg-[#221824]"
                     >
                       Gửi lại yêu cầu
                     </button>
                     <a
                       href="#"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
@@ -718,7 +718,7 @@ function MyWS(props: { accent?: string }) {
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[var(--attempt-line-dddbd7,#DDDBD7)] bg-[var(--attempt-bg-f3f0ea,#F3F0EA)] text-[var(--attempt-text-706473,#706473)] font-semibold">
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border-solid border border-[var(--attempt-line-dddbd7,#DDDBD7)] bg-[var(--attempt-bg-f3f0ea,#F3F0EA)] text-[var(--attempt-text-706473,#706473)] font-semibold">
                       Đã lưu · chưa gửi chấm
                     </span>
                     <span className="text-[var(--attempt-text-706473,#706473)]">Giữ đến 05/11</span>
@@ -727,13 +727,13 @@ function MyWS(props: { accent?: string }) {
                     <button
                       type="button"
                       onClick={() => setRequest(true)}
-                      className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border border-[#352637] bg-[#352637] text-white font-semibold text-xs no-underline hover:bg-[#221824]"
+                      className="flex-1 inline-flex items-center justify-center h-9 px-4 rounded-full border-solid border border-[#352637] bg-[#352637] text-white font-semibold text-xs no-underline hover:bg-[#221824]"
                     >
                       Gửi yêu cầu chấm
                     </button>
                     <a
                       href="#"
-                      className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
+                      className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[var(--attempt-text-352637,#352637)] font-semibold text-xs no-underline hover:bg-[#F3F0EA]"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
@@ -759,7 +759,7 @@ function MyWS(props: { accent?: string }) {
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border border-[var(--attempt-line-dddbd7,#DDDBD7)] bg-[var(--attempt-bg-f3f0ea,#F3F0EA)] text-[var(--attempt-text-706473,#706473)] font-semibold">
+                    <span className="inline-flex items-center h-6 px-2.5 rounded-full border-solid border border-[var(--attempt-line-dddbd7,#DDDBD7)] bg-[var(--attempt-bg-f3f0ea,#F3F0EA)] text-[var(--attempt-text-706473,#706473)] font-semibold">
                       Chưa có điểm
                     </span>
                     <span className="text-[var(--attempt-text-706473,#706473)]">Nội dung đã hết hạn 16/10</span>

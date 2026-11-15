@@ -68,9 +68,8 @@ class StudentLanding extends React.Component {
                   <span>{"Chào mừng quay lại"}</span>
                 </div>
                 <h1
-                  style={styleOf(
-                    "margin: 12px 0 0; font-size: 40px; line-height: 1.2; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
-                  )}
+                  className="m-0 mt-3 text-[34px] md:text-[44px] leading-tight font-bold tracking-tight text-[#352637]"
+                  style={{ fontFamily: "'IBM Plex Serif', Georgia, serif" }}
                 >
                   {"Học một chút, tiến xa hơn."}
                 </h1>
@@ -79,17 +78,8 @@ class StudentLanding extends React.Component {
                 </p>
               </div>
               {"\n"}
-              <div
-                style={styleOf(
-                  "display: flex; gap: 20px; align-items: stretch",
-                )}
-              >
-                {"\n"}
-                <div
-                  style={styleOf(
-                    "flex: 1.7 1 0; padding: 36px 40px; border-radius: 26px; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; display: flex; flex-direction: column; gap: 14px",
-                  )}
-                >
+              <div className="flex flex-col md:flex-row gap-5 items-stretch">
+                <div className="flex-1 md:flex-[1.7] min-w-0 p-6 sm:p-9 md:p-10 rounded-[26px] border-[1.5px] border-[#352637] bg-[#352637] text-white flex flex-col gap-3.5">
                   {"\n"}
                   <div
                     style={styleOf(
@@ -134,20 +124,11 @@ class StudentLanding extends React.Component {
                     )}
                   ></div>
                   {"\n"}
-                  <div
-                    style={styleOf(
-                      "margin-top: auto; padding-top: 10px; display: flex; gap: 12px; flex-wrap: wrap",
-                    )}
-                  >
+                  <div className="mt-auto pt-2.5 flex flex-col sm:flex-row gap-3">
                     <a
                       href={"#"}
-                      style={styleOf(
-                        "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
-                          v.accent +
-                          "; color: " +
-                          v.onAccent +
-                          "; font-weight: 600; text-decoration: none; white-space: nowrap",
-                      )}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border-[1.5px] border-[#D6D4D0] font-semibold text-sm no-underline whitespace-nowrap"
+                      style={{ background: v.accent, color: v.onAccent }}
                     >
                       {"Làm tiếp bài dở"}
                       <svg
@@ -165,20 +146,14 @@ class StudentLanding extends React.Component {
                     </a>
                     <a
                       href={"#"}
-                      style={styleOf(
-                        "display: inline-flex; align-items: center; height: 46px; padding: 0 20px; border-radius: 10px; border: 1.5px solid #FFFFFF; box-sizing: border-box; color: #FFFFFF; font-weight: 600; text-decoration: none",
-                      )}
+                      className="w-full sm:w-auto inline-flex items-center justify-center h-11 px-5 rounded-xl border-[1.5px] border-white text-white font-semibold text-sm no-underline whitespace-nowrap hover:bg-white/10"
                     >
                       {"Chọn đề mới"}
                     </a>
                   </div>
                 </div>
                 {"\n"}
-                <div
-                  style={styleOf(
-                    "flex: 1 1 0; padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 14px",
-                  )}
-                >
+                <div className="flex-1 min-w-0 p-6 rounded-[22px] border-[1.5px] border-[#D6D4D0] bg-white shadow-sm flex flex-col gap-3.5">
                   {"\n"}
                   <div
                     style={styleOf(
@@ -528,7 +503,7 @@ class StudentLanding extends React.Component {
               {"\n"}
               <div
                 style={styleOf(
-                  "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                  "flex: 0 0 260px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                 )}
               >
                 <div
@@ -612,7 +587,7 @@ class StudentLanding extends React.Component {
               {"\n"}
               <div
                 style={styleOf(
-                  "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                  "flex: 0 0 260px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                 )}
               >
                 <div
@@ -691,7 +666,7 @@ class StudentLanding extends React.Component {
               {"\n"}
               <div
                 style={styleOf(
-                  "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                  "flex: 0 0 260px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                 )}
               >
                 <div
@@ -770,7 +745,7 @@ class StudentLanding extends React.Component {
               {"\n"}
               <div
                 style={styleOf(
-                  "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                  "flex: 0 0 260px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
                 )}
               >
                 <div

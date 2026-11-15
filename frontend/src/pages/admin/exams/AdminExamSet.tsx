@@ -292,9 +292,9 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         hidden: ["Đã ẩn", "#F3F0EA", "#706473"],
       },
       SST: Record<UiSet["status"], Palette> = {
-        pub: ["Công khai", "#DCEDE2", "#2E6A48"],
-        draft: ["Bản nháp", "#FBEDBF", "#7A5A0E"],
-        hidden: ["Đã ẩn", "#F3F0EA", "#706473"],
+        PUBLISHED: ["Công khai", "#DCEDE2", "#2E6A48"],
+        DRAFT: ["Bản nháp", "#FBEDBF", "#7A5A0E"],
+        HIDDEN: ["Đã ẩn", "#F3F0EA", "#706473"],
       },
       TY: Record<FormKey, Palette> = {
         A: ["Academic", "#DFF1F4", "#1F6A78"],
@@ -333,7 +333,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         art: null,
         img: null,
         short: "",
-        status: "draft",
+        status: "DRAFT",
         updated: "",
         plays: "0",
         desc: "",
@@ -799,7 +799,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
     var canDel =
       SET.canDelete !== undefined
         ? SET.canDelete
-        : status === "draft" || !tests.length,
+        : status === "DRAFT" || !tests.length,
       cfBase: ConfirmBase | null = null;
     function dot(c: string) {
       return (
@@ -811,7 +811,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       cfBase = cnt.pub
         ? {
           title:
-            (status === "hidden" ? "Đăng lại" : "Đăng") +
+            (status === "HIDDEN" ? "Đăng lại" : "Đăng") +
             " bộ đề “" +
             SET.name +
             "”?",
@@ -955,11 +955,11 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         tests.length +
         " đề · cập nhật " +
         (SET.updated || "") +
-        (status === "pub" ? " · " + SET.plays + " lượt làm" : ""),
-      isPub: status === "pub",
-      notPub: status !== "pub" && tests.length > 0,
-      blockPub: status !== "pub" && tests.length === 0,
-      pubLabel: status === "hidden" ? "Đăng lại bộ đề" : "Đăng bộ đề",
+        (status === "PUBLISHED" ? " · " + SET.plays + " lượt làm" : ""),
+      isPub: status === "PUBLISHED",
+      notPub: status !== "PUBLISHED" && tests.length > 0,
+      blockPub: status !== "PUBLISHED" && tests.length === 0,
+      pubLabel: status === "HIDDEN" ? "Đăng lại bộ đề" : "Đăng bộ đề",
       canDel: canDel,
       back: function (e: Ev) {
         stop(e);

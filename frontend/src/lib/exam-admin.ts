@@ -94,7 +94,7 @@ export type UiSet = {
   desc: string;
   cat: string;
   catName: string;
-  status: 'draft' | 'pub' | 'hidden';
+  status: ExamSetAdmin['status'];
   updated: string;
   plays: string;
   canDelete: boolean;
@@ -338,13 +338,6 @@ export function toUiTest(t: ExamAdmin): UiTest {
   };
 }
 
-// API trả PUBLISHED, giao diện dùng 'pub'. Không dùng toLowerCase vì 'published' không khớp.
-const SET_STATUS_UI: Record<ExamSetAdmin['status'], UiSet['status']> = {
-  DRAFT: 'draft',
-  PUBLISHED: 'pub',
-  HIDDEN: 'hidden',
-};
-
 export function toUiSet(s: ExamSetAdmin): UiSet {
   let art: number | null = null;
   let img: string | null = null;
@@ -367,7 +360,7 @@ export function toUiSet(s: ExamSetAdmin): UiSet {
     desc: s.description || '',
     cat: s.category?.id || '',
     catName: s.category?.name || '',
-    status: SET_STATUS_UI[s.status] ?? 'draft',
+    status: s.status,
     updated: fmtDate(s.updatedAt),
     plays: (s.attemptCount || 0).toLocaleString('vi-VN'),
     canDelete: s.canDelete ?? true,

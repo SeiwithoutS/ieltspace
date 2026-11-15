@@ -2,7 +2,7 @@
 import React from "react";
 import { styleOf, cssText } from "../../../../lib/styles";
 import AdminSidebar from "../../../../components/navigation/AdminSidebar";
-import AdminTopbar from "../../../../components/navigation/AdminTopbar";
+import AdminTopbar, { Crumb } from "../../../../components/navigation/AdminTopbar";
 import { navigate } from "../../../../lib/auth";
 import { errorInfo } from "../../../../lib/exam-admin";
 import { ApiError } from "../../../../lib/api";
@@ -1289,7 +1289,27 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         });
       },
     };
+    const crumbs: Crumb[] = [
+      { label: "Quản lý", page: "AdminHome" },
+      { label: "Bộ đề và đề thi", page: "AdminExams" },
+      ...(skill && skill.set ? [{ label: skill.set.name, page: "AdminExamSet", params: { id: skill.set.id } }] : []),
+      { label: "Soạn đề Speaking" },
+    ];
+    const onNavigate = (go: () => void) => {
+      if (dirty) {
+        ask(
+          "Rời khỏi trang soạn đề?",
+          "Các thay đổi chưa lưu sẽ bị mất. Bạn có chắc muốn rời đi?",
+          go,
+          "Rời đi"
+        );
+      } else {
+        go();
+      }
+    };
     var R0 = {
+      crumbs: crumbs,
+      onNavigate: onNavigate,
       impVals: 0,
       examTitle: skill?.exam?.title || ex.title,
       examPath: skill ? skill.set.name + " · Speaking" : "Mock Test 2026 Vol 4 · Speaking",
@@ -1597,7 +1617,13 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         <div className="flex h-screen bg-[#F6F4EF]">
           <AdminSidebar active="AdminExams" />
           <div className="flex-1 flex flex-col min-w-0">
-            <AdminTopbar crumb="Quản lý / Bộ đề và đề thi / Soạn đề Speaking" />
+            <AdminTopbar
+              crumbs={[
+                { label: "Quản lý", page: "AdminHome" },
+                { label: "Bộ đề và đề thi", page: "AdminExams" },
+                { label: "Soạn đề Speaking" },
+              ]}
+            />
             <div className="flex-1 flex items-center justify-center">
               <p className="text-[#706473] text-base font-medium">Đang tải đề…</p>
             </div>
@@ -1611,7 +1637,13 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
         <div className="flex h-screen bg-[#F6F4EF]">
           <AdminSidebar active="AdminExams" />
           <div className="flex-1 flex flex-col min-w-0">
-            <AdminTopbar crumb="Quản lý / Bộ đề và đề thi / Soạn đề Speaking" />
+            <AdminTopbar
+              crumbs={[
+                { label: "Quản lý", page: "AdminHome" },
+                { label: "Bộ đề và đề thi", page: "AdminExams" },
+                { label: "Soạn đề Speaking" },
+              ]}
+            />
             <div className="flex-1 flex flex-col items-center justify-center gap-4">
               <p className="text-[#352637] text-lg font-semibold">Không tìm thấy kỹ năng</p>
               <p className="text-[#706473] text-sm">Kỹ năng không tồn tại hoặc đã bị xóa.</p>
@@ -1666,7 +1698,8 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
               )}
             >
               <AdminTopbar
-                crumb={"Quản lý / Bộ đề và đề thi / Soạn đề Speaking"}
+                crumbs={v.crumbs}
+                onNavigate={v.onNavigate}
               ></AdminTopbar>
               <main
                 className={v.modeCls}

@@ -4743,6 +4743,18 @@ class AdminListeningEditor extends React.Component {
       noPassage: !NP,
     };
     var R0 = {
+      onNavigate: function (go) {
+        if (dirty) {
+          ask(
+            "Rời khỏi trang soạn đề?",
+            "Các thay đổi chưa lưu sẽ bị mất. Bạn có chắc muốn rời đi?",
+            go,
+            "Rời đi"
+          );
+        } else {
+          go();
+        }
+      },
       examTitle: ex.title,
       tabs: tabs,
       missing: missing,
@@ -5212,6 +5224,7 @@ class AdminListeningEditor extends React.Component {
             >
               <AdminTopbar
                 crumb={"Quản lý / Bộ đề và đề thi / Soạn đề Listening"}
+                onNavigate={v.onNavigate}
               ></AdminTopbar>
               <main
                 className={v.modeCls}

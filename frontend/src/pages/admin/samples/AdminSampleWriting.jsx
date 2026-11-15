@@ -838,6 +838,23 @@ class AdminSampleWriting extends React.Component {
     var iss = s.issues || [];
     var CHIP_OK = CHIP + "; background: #DCEDE2; color: #2E6A48";
     return {
+      crumbs: [
+        { label: "Quản lý", page: "AdminHome" },
+        { label: "Bài mẫu", page: "AdminSamples" },
+        { label: "Writing" },
+      ],
+      onNavigate: function (go) {
+        if (dirty) {
+          ask(
+            "Rời khỏi trang bài mẫu?",
+            "Các thay đổi chưa lưu sẽ bị mất. Bạn có chắc muốn rời đi?",
+            go,
+            "Rời đi"
+          );
+        } else {
+          go();
+        }
+      },
       F: F,
       viewing: !editing,
       editing: editing,
@@ -1031,7 +1048,8 @@ class AdminSampleWriting extends React.Component {
               )}
             >
               <AdminTopbar
-                crumb={"Quản lý / Quản lý bài mẫu / Soạn bài mẫu Writing"}
+                crumbs={v.crumbs}
+                onNavigate={v.onNavigate}
               ></AdminTopbar>
               <main
                 className={v.modeCls}

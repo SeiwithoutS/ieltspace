@@ -1,7 +1,7 @@
 import React from "react";
 import { styleOf, cssText } from "../../../lib/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
-import AdminTopbar from "../../../components/navigation/AdminTopbar";
+import AdminTopbar, { Crumb } from "../../../components/navigation/AdminTopbar";
 import { navigate } from "../../../lib/auth";
 import {
   getSet,
@@ -1219,7 +1219,11 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
               )}
             >
               <AdminTopbar
-                crumb={"Quản lý / Bộ đề và đề thi / Thông tin bộ đề"}
+                crumbs={[
+                  { label: "Quản lý", page: "AdminHome" },
+                  { label: "Bộ đề và đề thi", page: "AdminExams" },
+                  { label: this.state.apiSet?.name || "Thông tin bộ đề" },
+                ]}
               ></AdminTopbar>
               <main
                 style={styleOf(

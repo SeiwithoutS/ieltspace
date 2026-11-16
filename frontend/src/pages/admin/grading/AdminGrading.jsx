@@ -36,7 +36,7 @@ class AdminGrading extends React.Component {
         <StaffLayout
           active="grading"
           crumb="Quản lý / Theo dõi hỗ trợ chấm"
-          contentClassName="p-4 sm:p-6 md:p-8 flex flex-col gap-6"
+          contentClassName="p-4 sm:p-6 md:p-8 flex flex-col gap-6 [&>*]:shrink-0"
         >
           <div
                   style={styleOf(
@@ -607,7 +607,7 @@ class AdminGrading extends React.Component {
                         }
                       </div>
                     </div>
-                    {"None"}
+                    {null}
                   </div>
                   <div style={styleOf("overflow-x: auto")}>
                     <table
@@ -911,7 +911,7 @@ class AdminGrading extends React.Component {
                         }
                       </div>
                     </div>
-                    {"None"}
+                    {null}
                   </div>
                   <div style={styleOf("overflow-x: auto")}>
                     <table

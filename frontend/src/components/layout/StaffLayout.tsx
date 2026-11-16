@@ -66,7 +66,7 @@ export default function StaffLayout({
   const SidebarComp = role === 'TEACHER' ? TeacherSidebar : AdminSidebar;
 
   return (
-    <div className="min-h-screen bg-[#FCFBF7] text-[#352637] flex flex-col font-sans">
+    <div className="h-dvh min-h-0 overflow-hidden bg-[#FCFBF7] text-[#352637] flex flex-col font-sans">
       {/* Mobile warning banner (< 768px) */}
       {isMobile && !bannerDismissed && (
         <aside
@@ -106,7 +106,7 @@ export default function StaffLayout({
       {/* Main shell: flex row for desktop, drawer overlay for mobile/tablet */}
       <div className="flex flex-1 items-stretch min-h-0 relative">
         {/* Desktop inline sidebar (>= 1024px) */}
-        <aside className="hidden lg:flex flex-none align-self-stretch" aria-label="Thanh điều hướng chính">
+        <aside className="hidden lg:flex flex-none min-h-0 overflow-hidden" aria-label="Thanh điều hướng chính">
           <SidebarComp active={active} collapsed={isTablet} />
         </aside>
 
@@ -141,7 +141,7 @@ export default function StaffLayout({
         )}
 
         {/* Content column */}
-        <div className="flex-1 min-w-0 flex flex-col bg-[#FAF9F5]">
+        <div className="flex-1 min-w-0 min-h-0 overflow-hidden flex flex-col bg-[#FAF9F5]">
           <AdminTopbar
             crumbs={crumbs}
             crumb={crumb}
@@ -149,7 +149,7 @@ export default function StaffLayout({
             onNavigate={onNavigate}
             onToggleSidebar={() => setDrawerOpen((prev) => !prev)}
           />
-          <main className={`flex-1 min-w-0 ${contentClassName}`} style={contentStyle}>
+          <main className={`flex-1 min-w-0 min-h-0 overflow-y-auto overscroll-contain ${contentClassName}`} style={contentStyle}>
             {children}
           </main>
         </div>

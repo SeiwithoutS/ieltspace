@@ -3,18 +3,17 @@ import { useState } from "react";
 export function WordNote({ word, value, onSave }: {
   word: string;
   value: string;
-  onSave: (note: string) => void;
+  onSave: (note: string) => Promise<boolean>;
 }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
   return <div className="word-note">
-    {editing ? <form onSubmit={(event) => {
+    {editing ? <form onSubmit={async (event) => {
       event.preventDefault();
-      onSave(draft);
-      setEditing(false);
+      if (await onSave(draft)) setEditing(false);
     }}>
       <label>Ghi chú cho {word}
-        <textarea autoFocus value={draft} onChange={(event) => setDraft(event.target.value)} />
+        <textarea maxLength={4000} autoFocus value={draft} onChange={(event) => setDraft(event.target.value)} />
       </label>
       <div className="word-tools">
         <button className="word-primary" type="submit">Lưu ghi chú</button>

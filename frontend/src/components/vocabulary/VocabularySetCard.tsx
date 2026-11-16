@@ -1,7 +1,8 @@
-import type { Topic, Word } from "../../data/vocabulary";
+import type { Word } from "../../data/vocabulary";
 
 type VocabularySetCardProps = {
-  topic: Topic;
+  topic: string;
+  cover?: string;
   title: string;
   index: number;
   entries: readonly Word[];
@@ -9,13 +10,13 @@ type VocabularySetCardProps = {
 };
 
 export function VocabularySetCard({
-  topic, title, index, entries, onOpen,
+  topic, title, cover, index, entries, onOpen,
 }: VocabularySetCardProps) {
   return (
     <article className="vocab-set" data-topic={topic}>
       <div className="set-cover">
         <small>VOCABULARY / {String(index).padStart(2, "0")}</small>
-        <strong lang="en">{topic}</strong>
+        {cover ? <img src={cover} alt="" className="set-cover-image" /> : <strong>{title}</strong>}
       </div>
       <div className="set-body">
         <small>{entries.length} từ</small>

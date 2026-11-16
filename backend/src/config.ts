@@ -1,5 +1,9 @@
-import "dotenv/config";
+import { config as loadEnv } from "dotenv";
+import { fileURLToPath } from "node:url";
 import { z } from "zod";
+
+// Resolve backend/.env independently of the terminal's working directory.
+loadEnv({ path: fileURLToPath(new URL("../.env", import.meta.url)) });
 
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3001),
@@ -19,6 +23,11 @@ const envSchema = z.object({
   STORAGE_BUCKET_EXAM_ASSETS: z.string().default("exam-assets"),
 
   DATABASE_URL: z.string().min(1),
+  MW_LEARNERS_KEY: z.string().optional(),
+  MW_DICTIONARY_KEY: z.string().optional(),
+  MW_DICTIONARY_PRODUCT: z.enum(["collegiate"]).optional(),
+  PIXABAY_API_KEY: z.string().optional(),
+  UNSPLASH_ACCESS_KEY: z.string().optional(),
 
   COOKIE_SAME_SITE: z
       .enum(["lax", "strict", "none"])

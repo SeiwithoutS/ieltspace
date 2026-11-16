@@ -44,3 +44,21 @@ Duy trì một backend chia module. Route/controller đọc đầu vào và tr�
 ## Luồng làm bài — cập nhật 14/11/2026
 
 Các thư mục frontend/src/pages/attempts, pages/results và components/attempts đã chuyển sang TSX. AttemptSession nhận snapshot qua callback đã định kiểu trong types.ts. parseAttemptDraft kiểm tra nháp trên trình duyệt trước khi cấp initialState cho trang. Dữ liệu mẫu được tập trung trong data/attempt-samples.ts. DesktopOnly kiểm tra điều kiện hiển thị tại đầu vào bốn trang làm bài; Popup dùng native dialog và nhận trạng thái desktop qua context.
+
+## Phân hệ từ vựng — thiết lập và kiến trúc ngày 16/11/2026
+
+### Đường đi của dữ liệu hiện tại
+
+Người quản lý tạo bộ → thêm từ hoặc nhập CSV/XLSX → tra ảnh và audio → xem trước → lưu nháp hoặc công bố. React giữ dữ liệu đang sửa trong state. Lớp dữ liệu ghi danh mục, nháp và bản công bố vào localStorage. Trang người học trên cùng trình duyệt đọc bản công bố; sao và ghi chú được lưu theo tài khoản. Đổi thiết bị hiện chưa đồng bộ được bộ từ.
+
+| Thành phần | File chính và trách nhiệm |
+|---|---|
+| Danh mục và thông tin bộ | `frontend/src/pages/vocabulary/SetDirectory.tsx` tạo/sửa tên, bìa, mô tả, tìm và mở bộ. |
+| Editor và import | `AdminVocabulary.tsx` điều phối tra media tự động, tìm lại theo lựa chọn, lưu và công bố. `frontend/src/lib/vocabulary-import.ts` đọc CSV/XLSX, giới hạn 5 MB và 500 từ. |
+| Dữ liệu và thư viện | `frontend/src/data/vocabulary.ts` đọc/ghi bộ cục bộ. `Vocabulary.tsx` hiển thị bộ công khai. `components/vocabulary/WordCard.tsx` phát audio và sử dụng giọng hệ thống phù hợp khi thiếu bản ghi. |
+
+### Nguồn ảnh và audio — sau cập nhật 16/11/2026
+
+React gọi Express qua client xác thực để tra Free Dictionary + Merriam và Unsplash + Pixabay. Backend kiểm tra ADMIN, chuẩn hóa ứng viên, giới hạn request và cache. Dropdown cho chọn nguồn audio; bấm hình chọn ảnh từ máy. Media API đã viết và kiểm thử mô phỏng; key Merriam/Pixabay/Unsplash chưa cấu hình trong môi trường kiểm tra. Bộ từ vẫn lưu localStorage, chưa có API ghi PostgreSQL.
+
+Chi tiết thiết lập key, luồng dữ liệu, file liên quan, cache, giới hạn và các bước tích hợp Supabase nằm trong [Kiến trúc và thiết lập từ vựng](KIEN_TRUC_TU_VUNG.md). Kế hoạch import ở [kế hoạch từ vựng](KE_HOACH_IMPORT_TU_VUNG.md); cấu hình CSDL ở [hướng dẫn Supabase](HUONG_DAN_SUPABASE_TU_VUNG.md).

@@ -4,6 +4,8 @@ export const topics = {
   technology: "Công nghệ",
 };
 export type Topic = keyof typeof topics;
+export type AudioCandidate = { url: string; source: string; accent?: "US" | "UK" | "AU" };
+export type ImageCandidate = { id: string; url: string; source: string; credit: string; creditUrl: string };
 export interface Word {
   id: string;
   word: string;
@@ -14,6 +16,12 @@ export interface Word {
   translation: string;
   image: string;
   audio: string;
+  audioUs?: string;
+  audioUk?: string;
+  audioCandidates?: AudioCandidate[];
+  imageCandidates?: ImageCandidate[];
+  imageCredit?: { source: string; name: string; url: string };
+  mediaMessage?: string;
 }
 const seeds: Record<Topic, string[][]> = {
   environment: [
@@ -134,7 +142,7 @@ export function sampleWords(topic: Topic): Word[] {
     }),
   );
 }
-export function loadWords(topic: Topic, draft = false): Word[] {
+export function loadWords(topic: string, draft = false): Word[] {
   try {
     const raw = localStorage.getItem(
       "vocab:" + (draft ? "draft:" : "live:") + topic,
@@ -151,11 +159,53 @@ export function loadWords(topic: Topic, draft = false): Word[] {
         return words;
     }
   } catch {}
-  return draft ? loadWords(topic) : sampleWords(topic);
+  if (draft) return loadWords(topic);
+  return Object.prototype.hasOwnProperty.call(topics, topic) ? sampleWords(topic as Topic) : [];
 }
-export function storeWords(topic: Topic, words: Word[], draft: boolean) {
+export function storeWords(topic: string, words: Word[], draft: boolean) {
   localStorage.setItem(
     "vocab:" + (draft ? "draft:" : "live:") + topic,
     JSON.stringify(words),
   );
+}
+
+export interface VocabularySet {
+  id: string;
+  title: string;
+  cover: string;
+  description?: string;
+}
+
+const catalogKey = "vocab:sets:v1";
+
+export function getVocabularySets(): VocabularySet[] {
+  const defaults = Object.entries(topics).map(([id, title]) => ({ id, title, cover: "" }));
+  const raw = localStorage.getItem(catalogKey);
+  return raw ? JSON.parse(raw) : defaults;
+}
+
+export function saveSetDetails(set: VocabularySet) {
+  const sets = getVocabularySets();
+  const index = sets.findIndex((item) => item.id === set.id);
+  if (index < 0) sets.unshift(set);
+  else sets[index] = set;
+  localStorage.setItem(catalogKey, JSON.stringify(sets));
+}
+
+export function isPublished(id: string) {
+  return !isHidden(id) && (Object.prototype.hasOwnProperty.call(topics, id) || localStorage.getItem("vocab:live:" + id) !== null);
+}
+
+export function isHidden(id: string) {
+  return localStorage.getItem("vocab:hidden:" + id) === "1";
+}
+
+export function setHidden(id: string, hidden: boolean) {
+  if (hidden) localStorage.setItem("vocab:hidden:" + id, "1");
+  else localStorage.removeItem("vocab:hidden:" + id);
+}
+
+export function deleteSet(id: string) {
+  localStorage.setItem(catalogKey, JSON.stringify(getVocabularySets().filter(set => set.id !== id)));
+  for (const key of ["draft", "live", "hidden"]) localStorage.removeItem("vocab:" + key + ":" + id);
 }

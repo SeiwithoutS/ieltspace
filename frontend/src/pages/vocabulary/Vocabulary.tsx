@@ -1,35 +1,51 @@
 import { VocabularySetCard } from "../../components/vocabulary/VocabularySetCard";
 import PageLink from "../../components/navigation/PageLink";
 import { WordNote } from "../../components/vocabulary/WordNote";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LearnerHeader from "../../components/navigation/LearnerHeader";
 import { getAuthUser } from "../../lib/auth";
-import { loadWords, topics, type Topic } from "../../data/vocabulary";
+import { apiFetch } from "../../lib/api";
+import type { Word, VocabularySet } from "../../data/vocabulary";
 import { WordCard } from "../../components/vocabulary/WordCard";
 import "./vocabulary.css";
 export default function Vocabulary() {
-  const [topic, setTopic] = useState<Topic | null>(null),
+  const [topic, setTopic] = useState<string | null>(null),
     [search, setSearch] = useState(""),
     [tab, setTab] = useState<"sets" | "favorites">("sets");
-  const key = "vocab:personal:" + getAuthUser()?.id;
-  const [notes, setNotes] = useState<
-    Record<string, { fav: boolean; note: string }>
-  >(() => {
+  const userId = getAuthUser()?.id;
+  const [notes,setNotes] = useState<Record<string,{fav:boolean;note:string}>>({});
+  const [personalError,setPersonalError] = useState("");
+  const [ready,setReady] = useState(false);
+  const [personalRetry,setPersonalRetry] = useState(0);
+  useEffect(() => {
+    let active = true;
+    setReady(false); setNotes({}); setPersonalError("");
+    if (userId) apiFetch<{records:{id:string;fav:boolean;note:string}[]}>("/vocabulary/sets/me/personal")
+      .then(({records}) => { if (active) { setNotes(Object.fromEntries(records.map(row => [row.id,row]))); setReady(true); } })
+      .catch(error => { if (active) setPersonalError(error.message); });
+    return () => { active = false; };
+  },[userId,personalRetry]);
+  async function update(id:string, patch:{fav:boolean}|{note:string}) {
     try {
-      return JSON.parse(localStorage.getItem(key) ?? "{}");
-    } catch {
-      return {};
-    }
-  });
-  function update(id: string, patch: { fav?: boolean; note?: string }) {
-    const next = {
-      ...notes,
-      [id]: { ...(notes[id] ?? { fav: false, note: "" }), ...patch },
-    };
-    localStorage.setItem(key, JSON.stringify(next));
-    setNotes(next);
+      const saved = await apiFetch<typeof patch>(`/vocabulary/sets/me/personal/${id}`,{method:"PATCH",json:patch});
+      setNotes(current => ({...current,[id]:{...(current[id] ?? {fav:false,note:""}),...saved}}));
+      setPersonalError(""); return true;
+    } catch (error) { setPersonalError(error instanceof Error ? error.message : "Không lưu được dữ liệu cá nhân."); return false; }
   }
-  const topicIds = Object.keys(topics) as Topic[];
+  const [sets,setSets] = useState<(VocabularySet & {words:Word[]})[]>([]);
+  const [state,setState] = useState("Đang tải bộ từ…");
+  const [retry,setRetry] = useState(0);
+  useEffect(() => {
+    let active = true;
+    setState("Đang tải bộ từ…");
+    apiFetch<{sets:(VocabularySet & {words:Word[]})[]}>("/vocabulary/sets")
+      .then(result => { if (active) { setSets(result.sets); setState(""); } })
+      .catch(error => { if (active) setState(error.message || "Không tải được thư viện."); });
+    return () => { active = false; };
+  },[retry]);
+  const loadWords = (id:string) => sets.find(set => set.id === id)?.words ?? [];
+  const topicIds = sets.map((set) => set.id);
+  const topics = Object.fromEntries(sets.map((set) => [set.id, set.title]));
   const query = search.trim().toLocaleLowerCase("vi");
   const matches = (text: string) => text.toLocaleLowerCase("vi").includes(query);
   const showSets = tab === "sets" && topic === null;
@@ -68,13 +84,16 @@ export default function Vocabulary() {
             <input type="search" aria-label={searchLabel} placeholder={searchLabel} value={search} onChange={(event) => setSearch(event.target.value)} />
           </label>
         </div>
-        {showSets && !visibleSets.length && <p role="status">Không tìm thấy bộ từ phù hợp.</p>}
-        {showSets ? <div className="vocab-sets grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
+        {personalError && <p role="alert">{personalError} <button onClick={() => setPersonalRetry(n => n+1)}>Tải lại</button></p>}
+        {state && <p role="status">{state} {state !== "Đang tải bộ từ…" && <button onClick={() => setRetry(n => n+1)}>Thử lại</button>}</p>}
+        {!state && showSets && !visibleSets.length && <p role="status">Không tìm thấy bộ từ phù hợp.</p>}
+        {showSets ? <div className="vocab-sets">
           {visibleSets.map((id) => (
             <VocabularySetCard
               key={id}
               topic={id}
               title={topics[id]}
+              cover={sets.find((set) => set.id === id)?.cover}
               index={topicIds.indexOf(id) + 1}
               entries={loadWords(id)}
               onOpen={() => { setTopic(id); setSearch(""); window.scrollTo(0, 0); }}
@@ -84,8 +103,8 @@ export default function Vocabulary() {
         {topic && <div className="word-tools"><button onClick={() => { setTopic(null); setSearch(""); }}>← Tất cả bộ từ</button></div>}
         <h2>{topic ? topics[topic] : "Từ yêu thích"} <small>· {words.length} từ</small></h2>
         {words.map((w) => (
-          <WordCard key={w.id} entry={w} favorite={!!notes[w.id]?.fav} onFavorite={()=>update(w.id,{fav:!notes[w.id]?.fav})}>
-            <WordNote word={w.word} value={notes[w.id]?.note ?? ""} onSave={(note) => update(w.id, { note })} />
+          <WordCard key={w.id} entry={w} favorite={!!notes[w.id]?.fav} onFavorite={ready ? ()=>void update(w.id,{fav:!notes[w.id]?.fav}) : undefined}>
+            {ready && <WordNote word={w.word} value={notes[w.id]?.note ?? ""} onSave={(note) => update(w.id, { note })} />}
           </WordCard>
         ))}
         {!words.length && <p>{tab === "favorites" && !search ? "Bạn chưa lưu từ yêu thích nào. Mở một bộ từ và bấm ngôi sao để lưu." : "Không có từ phù hợp."}</p>}

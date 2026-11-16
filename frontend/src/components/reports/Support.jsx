@@ -1,8 +1,7 @@
 import { useAccount } from "../../lib/account";
 import React, { useState } from "react";
 import "./support.css";
-import AdminSidebar from "../navigation/AdminSidebar";
-import AdminTopbar from "../navigation/AdminTopbar";
+import StaffLayout from "../layout/StaffLayout";
 const key = "ieltspace-support";
 const read = () => {
   try {
@@ -190,16 +189,9 @@ export default function Support({ admin = false }) {
     </section>
   );
   return admin ? (
-    <div
-      className="app-shell support-shell"
-      style={{ display: "flex", height: "100vh" }}
-    >
-      <AdminSidebar active="reports" />
-      <main className="app-content" style={{ flex: 1, overflow: "auto" }}>
-        <AdminTopbar crumb="Quản lý / Báo cáo & phản hồi" />
-        {content}
-      </main>
-    </div>
+    <StaffLayout active="reports" crumb="Quản lý / Báo cáo & phản hồi" contentClassName="support-shell">
+      {content}
+    </StaffLayout>
   ) : (
     content
   );

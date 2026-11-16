@@ -934,7 +934,7 @@ class AdminSamples extends React.Component {
                                               "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
                                             )}
                                           >
-                                            {"Mở"}
+                                            {"Mở ›"}
                                           </a>
                                           <a
                                             href={"#"}
@@ -942,7 +942,7 @@ class AdminSamples extends React.Component {
                                             title={"Xóa bài mẫu"}
                                             aria-label={"Xóa bài mẫu"}
                                             style={styleOf(
-                                              "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                              "flex: none; width: 34px; height: 34px; border: 1px solid #F1B3A3; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
                                             )}
                                           >
                                             <svg
@@ -1102,7 +1102,7 @@ class AdminSamples extends React.Component {
                                               "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
                                             )}
                                           >
-                                            {"Mở"}
+                                            {"Mở ›"}
                                           </a>
                                           <a
                                             href={"#"}
@@ -1110,7 +1110,7 @@ class AdminSamples extends React.Component {
                                             title={"Xóa bài mẫu"}
                                             aria-label={"Xóa bài mẫu"}
                                             style={styleOf(
-                                              "flex: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
+                                              "flex: none; width: 34px; height: 34px; border: 1px solid #F1B3A3; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #C0412A; text-decoration: none; cursor: pointer",
                                             )}
                                           >
                                             <svg

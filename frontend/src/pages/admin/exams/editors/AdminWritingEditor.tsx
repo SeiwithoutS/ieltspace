@@ -28,8 +28,6 @@ type ConfirmData = {
   run?: (() => Promise<void> | void) | null;
 };
 
-type ImportFileItem = [string, number, string, (string | null)?];
-
 type State = {
   skillId: string | null;
   loading: boolean;
@@ -53,12 +51,6 @@ type State = {
   imp: string | null;
   impSet: string | null;
   historyOpen: boolean;
-  impF?: ImportFileItem[];
-  impP?: number;
-  impN?: number;
-  impSaw?: boolean;
-  impDrag?: boolean;
-  impErr?: string;
 };
 
 type WritingFormItem = {
@@ -69,7 +61,7 @@ type WritingFormItem = {
   noContent?: boolean;
   isTask1?: boolean;
   prompt?: string;
-  setPrompt?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  setPrompt?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   promptSt?: string;
   promptNote?: string;
   fixedNote?: string;
@@ -89,157 +81,47 @@ type WritingFormItem = {
   belowLine?: string;
   wordLine?: string;
   showImg?: boolean;
+  // speaking compat
+  edId?: string;
+  text?: string;
+  setText?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  fmtB?: (e?: Ev) => void;
+  fmtI?: (e?: Ev) => void;
+  fmtH?: (e?: Ev) => void;
+  fmtL?: (e?: Ev) => void;
+  isCue?: boolean;
+  isQ?: boolean;
+  hasInstr?: boolean;
+  qCount?: number;
+  tot?: number | string;
+  setTot?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  totSt?: string;
+  qlist?: Array<{
+    n: number;
+    lab: string;
+    delLab: string;
+    v: string;
+    set: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    del: (e?: Ev) => void;
+  }>;
+  addQ?: (e?: Ev) => void;
+  pq?: Array<{ n: number; v: string }>;
+  instr?: string;
+  setInstr?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  prep?: number | string;
+  speak?: number | string;
+  setPrep?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setSpeak?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  prepSt?: string;
+  speakSt?: string;
+  edLabel?: string;
+  edHint?: string;
+  ph?: string;
+  pv?: Array<{ li: boolean; segs: Array<{ t: string; st: string }>; st: string }>;
+  countNote?: string;
 };
 
 type MdLine = { li: boolean; segs: Array<{ t: string; st: string }>; st: string };
-
-type ImportCheckItem = {
-  text: string;
-  color: string;
-  cls: string;
-  icon: string;
-  iconSt: string;
-};
-
-type ImportStatItem = {
-  n: string;
-  label: string;
-};
-
-type ImportPreviewItem = {
-  title: string;
-  sub: string;
-  groups: string[];
-};
-
-type ImportFileDisplay = {
-  name: string;
-  size: string;
-  icon: string;
-  iconSt: string;
-  rm: (e?: Ev) => void;
-};
-
-type WritingTabItem = {
-  name: string;
-  range: string;
-  on: boolean;
-  sub: string;
-  pick: (e?: Ev) => void;
-  st: string;
-};
-
-type WritingIssueItem = {
-  text: string;
-  go?: (e?: Ev) => void;
-};
-
-interface WritingView {
-  crumbs: Crumb[];
-  onNavigate: (go: () => void) => void;
-  examTitle: string;
-  examPath: string;
-  typeText: string;
-  typeTitle: string;
-  typeSt: string;
-  modeText: string;
-  modeSt: string;
-  counter: string;
-  counterSt: string;
-  viewing: boolean;
-  editing: boolean;
-  modeCls: string;
-  tabs: WritingTabItem[];
-  F: WritingFormItem;
-  dirtyText: string;
-  dirtyColor: string;
-  undo: (e?: Ev) => void;
-  undoSt: string;
-
-  canEdit: boolean | null;
-  canPublish: boolean | null;
-  canDelete: boolean | null;
-  deleteLabel: string;
-  confirmGoText: string;
-  deleteSkillAction: (e?: Ev) => void;
-  startEdit: (e?: Ev) => Promise<void>;
-  saveEdit: (e?: Ev) => Promise<void>;
-  cancelEdit: (e?: Ev) => void;
-  leaveOpen: boolean;
-  leaveSub: string;
-  stayEdit: (e?: Ev) => void;
-  discardEdit: (e?: Ev) => void;
-  publish: (e?: Ev) => Promise<void>;
-  pubOpen: boolean;
-  pubTitle: string;
-  pubSub: string;
-  pubCancel: (e?: Ev) => void;
-  pubOk: (e?: Ev) => Promise<void>;
-
-  hasIssues: boolean;
-  issueHead: string;
-  closeIssues: () => void;
-  issues: WritingIssueItem[];
-
-  confirmOpen: boolean;
-  confirmTitle: string;
-  confirmSub: string;
-  confirmCancel: (e?: Ev) => void;
-  confirmOk: (e?: Ev) => void;
-  snackOpen: boolean;
-  snack: string;
-  hideSnack: (e?: Ev) => void;
-  toast: boolean;
-  toastText: string;
-  hideToast: (e?: Ev) => void;
-  preview: (e?: Ev) => void;
-
-  impOn: boolean;
-  impPick: boolean;
-  impRun: boolean;
-  impBroken: boolean;
-  impBad: boolean;
-  impOk: boolean;
-  impSub: string;
-  impOpen: (e?: Ev) => void;
-  impClose: (e?: Ev) => void;
-  impKeep: (e?: Ev) => void;
-  impDl: () => void;
-  impDropSt: string;
-  impDragOver: (e?: Ev) => void;
-  impDragLeave: () => void;
-  impDrop: (e: React.DragEvent<HTMLElement>) => void;
-  impPickFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  impFiles: ImportFileDisplay[];
-  impErr: boolean;
-  impErrText: string;
-  impReplace: boolean;
-  impReplaceText: string;
-  impSampleText: string;
-  impSample: (e?: Ev) => void;
-  impNoX: boolean;
-  impCheckSt: string;
-  impCheck: (e?: Ev) => void;
-  impX: string;
-  impChecks: ImportCheckItem[];
-  impBack: (e?: Ev) => void;
-  impErrN: string;
-  impRows: Array<{ sheet: string; row: number; col: number; text: string }>;
-  impTitle: string;
-  impForm: string;
-  impStats: ImportStatItem[];
-  impPrev: ImportPreviewItem[];
-  impWarns: string[];
-  impReplaceNote: string;
-  impApply: (e?: Ev) => void;
-
-  skill: EditorSkill | null;
-  dirty: boolean;
-  ask: (title: string, sub: string, run: () => Promise<void> | void, goText?: string) => void;
-  historyOpen: boolean;
-  openHistory: () => void;
-  closeHistory: () => void;
-}
 
 
 class AdminWritingEditor extends React.Component<Record<string, unknown>, State> {
@@ -247,7 +129,6 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
   _undo?: (e?: Ev) => void;
   _it?: Array<ReturnType<typeof setTimeout>>;
   _mounted = false;
-  _impFile?: File | Blob | null;
 
   state: State = {
     skillId: null,
@@ -376,13 +257,15 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
       }
     }
   };
-renderVals(): WritingView {
+  renderVals() {
     var me = this,
       s = me.state,
       self = me,
       PR = (me.props as Record<string, unknown>) || {},
+      KIND = "write",
       UNIT = "Task",
-      NAME = "Writing";
+      NAME = "Writing",
+      DEF = "Đủ 2 task";
     var skill = s.skill;
     var FIXQ = {
       AC: [
@@ -415,11 +298,7 @@ renderVals(): WritingView {
     };
     var GTF = skill ? skill.form === "GENERAL" : PR.loaiDe === "General Training",
       FIX = GTF ? FIXQ.GT : FIXQ.AC;
-    type WritingFixture = {
-      title: string;
-      items: [WritingEditorTask, WritingEditorTask];
-    };
-    var FULL: WritingFixture = GTF
+    var FULL = GTF
       ? {
         title: "Practice Test 05",
         items: [
@@ -454,20 +333,20 @@ renderVals(): WritingView {
           },
         ],
       },
-      EMPTY: WritingFixture = {
+      EMPTY = {
         title: "Practice Test 02",
         items: [
           { prompt: "", img: null },
           { prompt: "", img: null },
         ],
       };
-    function variant(): WritingFixture {
+    function variant() {
       var t = PR.trangThai;
       if (t === "Đề mới tạo") {
         return EMPTY;
       }
       if (t === "Mới có Part 1" || t === "Mới có Task 1") {
-        var n: WritingFixture = JSON.parse(JSON.stringify(FULL));
+        var n = JSON.parse(JSON.stringify(FULL));
         n.title = "Practice Test 03";
         for (var i = 1; i < n.items.length; i++) {
           n.items[i] = JSON.parse(JSON.stringify(EMPTY.items[i]));
@@ -484,8 +363,8 @@ renderVals(): WritingView {
       dirty = editing && JSON.stringify(base) !== JSON.stringify(ex),
       nChange = (s.hist || []).length;
     function stop(e?: Ev) {
-      if (e && (e as React.SyntheticEvent).preventDefault) {
-        (e as React.SyntheticEvent).preventDefault();
+      if (e && e.preventDefault) {
+        e.preventDefault();
       }
     }
     function clone<T>(o: T): T {
@@ -556,28 +435,29 @@ renderVals(): WritingView {
     me._undo = undo;
     var CHIP =
       "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600";
-    var num = function (v: unknown): number {
-      return /^\d+$/.test(String(v || "").trim()) ? parseInt(String(v), 10) : 0;
+    var num = function (v) {
+      return /^\d+$/.test(String(v || "").trim()) ? parseInt(v, 10) : 0;
     };
-    var inp = function (bad?: boolean): string {
+    var inp = function (bad) {
       return (
         "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC" +
         (bad ? "; border-color: #C0412A; background: #FDF3F0" : "")
       );
     };
-    function plural(n: number, w: string): string {
+    function plural(n, w) {
       return n + " " + w + (n === 1 ? "" : "s");
     }
-    function lines(t?: string): string[] {
+    // ---- nội dung từng mục
+    function lines(t) {
       return String(t || "").split("\n");
     }
-    function qCount(t?: string): number {
+    function qCount(t) {
       return lines(t).filter(function (l) {
         var x = l.trim();
         return x && !/^#{1,3} /.test(x);
       }).length;
     }
-    function groupCount(t?: string): number {
+    function groupCount(t) {
       var g = 0,
         inG = false;
       lines(t).forEach(function (l) {
@@ -592,8 +472,14 @@ renderVals(): WritingView {
       });
       return g;
     }
-    function isEmptyItem(it: WritingEditorTask): boolean {
-      return !String(it.prompt || "").trim() && !it.img;
+    function isEmptyItem(it) {
+      return KIND === "speak"
+        ? it.qs
+          ? !it.qs.some(function (q) {
+            return String(q).trim();
+          })
+          : !String(it.text || "").trim()
+        : !String(it.prompt || "").trim() && !it.img;
     }
     function segsOf(l: string): Array<{ t: string; st: string }> {
       var segs: Array<{ t: string; st: string }> = [];
@@ -641,6 +527,7 @@ renderVals(): WritingView {
       });
     }
     var it = ex.items[ti];
+    // ---- lỗi khi đăng
     function allIssues(): Array<{ t?: number; text: string }> {
       var out: Array<{ t?: number; text: string }> = [];
       ex.items.forEach(function (x, i) {
@@ -654,17 +541,26 @@ renderVals(): WritingView {
       });
       return out;
     }
-    var tabs: WritingTabItem[] = ex.items.map(function (x, i) {
-      var on = i === ti;
-      var sub = isEmptyItem(x)
-        ? "chưa nhập"
-        : FIX[i].mins + " phút · " + FIX[i].words + " từ";
+    var tabs = ex.items.map(function (x, i) {
+      var on = i === ti,
+        sub;
+      if (KIND === "speak") {
+        sub = isEmptyItem(x)
+          ? "chưa nhập"
+          : i === 1
+            ? num(x.prep) + " + " + num(x.speak) + " phút"
+            : x.qs.length + " câu";
+      } else {
+        sub = isEmptyItem(x)
+          ? "chưa nhập"
+          : FIX[i].mins + " phút · " + FIX[i].words + " từ";
+      }
       return {
         name: UNIT + " " + (i + 1),
         range: sub,
         on: on,
         sub: on ? "#706473" : "#706473",
-        pick: function (e?: Ev) {
+        pick: function (e) {
           stop(e);
           self.setState({ t: i });
         },
@@ -678,13 +574,11 @@ renderVals(): WritingView {
     var done = ex.items.filter(function (x) {
       return !isEmptyItem(x);
     }).length;
-
-    var t1 = ti === 0;
-    var im = it.img;
+    // ---- biểu mẫu của mục đang mở
     var F: WritingFormItem = {
       name: UNIT + " " + (ti + 1),
-      empty: isEmptyItem(it) && !editing,
-      clear: function (e?: Ev) {
+      empty: isEmptyItem(it),
+      clear: function (e) {
         stop(e);
         if (isEmptyItem(it)) {
           return;
@@ -697,44 +591,219 @@ renderVals(): WritingView {
           function () {
             upd(
               function (x) {
-                x.prompt = "";
-                x.img = null;
+                if (KIND === "speak") {
+                  if (x.qs) {
+                    x.qs = [];
+                  } else {
+                    x.text = "";
+                  }
+                } else {
+                  x.prompt = "";
+                  x.img = null;
+                }
               },
               {
+                confirm: null,
                 snack: "Đã xóa nội dung " + UNIT + " " + (ti + 1) + ".",
               },
             );
           },
         );
       },
-      emptyText: isEmptyItem(it)
-        ? editing
-          ? UNIT + " này chưa có nội dung, nhập bên dưới."
-          : UNIT + " này chưa có nội dung. Bấm Soạn ngay để bắt đầu."
-        : "",
-      noContent: isEmptyItem(it),
-      isTask1: t1,
-      prompt: it.prompt || "",
-      setPrompt: setter(function (x, v) {
+    };
+    F.emptyText = isEmptyItem(it)
+      ? editing
+        ? UNIT + " này chưa có nội dung, nhập bên dưới."
+        : UNIT + " này chưa có nội dung. Bấm Soạn ngay để bắt đầu."
+      : "";
+    F.empty = isEmptyItem(it) && !editing;
+    F.noContent = isEmptyItem(it);
+    if (KIND === "speak") {
+      var edId =
+        me._edId ||
+        (me._edId = "soan-" + Math.random().toString(36).slice(2, 8));
+      F.edId = edId;
+      F.text = it.text || "";
+      F.setText = setter(function (x, v) {
+        x.text = v;
+      });
+      var edit = function (fn) {
+        return function (e) {
+          stop(e);
+          var el = document.getElementById(edId),
+            v = it.text || "",
+            a = v.length,
+            b = v.length;
+          if (el) {
+            v = el.value;
+            a = el.selectionStart;
+            b = el.selectionEnd;
+          }
+          var r = fn(v, a, b);
+          upd(function (x) {
+            x.text = r;
+          });
+        };
+      };
+      var wrap = function (m, ph) {
+        return edit(function (v, a, b) {
+          return v.slice(0, a) + m + (v.slice(a, b) || ph) + m + v.slice(b);
+        });
+      };
+      var pre = function (p) {
+        return edit(function (v, a, b) {
+          var st = v.lastIndexOf("\n", a - 1) + 1,
+            en = v.indexOf("\n", b);
+          if (en < 0) {
+            en = v.length;
+          }
+          var blk = v.slice(st, en).split("\n"),
+            all = blk.every(function (l) {
+              return l.indexOf(p) === 0;
+            });
+          blk = blk.map(function (l) {
+            var c = l.replace(/^(#{1,3} |- |• )/, "");
+            return all ? c : p + c;
+          });
+          return v.slice(0, st) + blk.join("\n") + v.slice(en);
+        });
+      };
+      F.fmtB = wrap("**", "chữ đậm");
+      F.fmtI = wrap("*", "chữ nghiêng");
+      F.fmtH = pre("## ");
+      F.fmtL = pre("- ");
+      F.isCue = ti === 1;
+      F.isQ = ti !== 1;
+      F.hasInstr = ti !== 1;
+      var qs = it.qs || [];
+      F.qCount = qs.length;
+      F.tot = ex.tot || "";
+      F.setTot = function (e) {
+        var v = e.target.value;
+        upd(
+          function (x, n) {
+            n.tot = v;
+          },
+          null,
+          "tot",
+        );
+      };
+      F.totSt = inp(!num(ex.tot) || num(ex.tot) > 60);
+      F.qlist = qs.map(function (q, i) {
+        return {
+          n: i + 1,
+          lab: "Câu hỏi " + (i + 1),
+          delLab: "Xóa câu " + (i + 1),
+          v: q,
+          set: function (e) {
+            var v = e.target.value;
+            upd(
+              function (x) {
+                x.qs[i] = v;
+              },
+              null,
+              "q" + i,
+            );
+          },
+          del: function (e) {
+            stop(e);
+            upd(
+              function (x) {
+                x.qs.splice(i, 1);
+              },
+              { snack: "Đã xóa câu " + (i + 1) + "." },
+            );
+          },
+        };
+      });
+      F.addQ = function (e) {
+        stop(e);
+        upd(function (x) {
+          x.qs.push("");
+        });
+      };
+      F.pq = qs
+        .filter(function (q) {
+          return String(q).trim();
+        })
+        .map(function (q, i) {
+          return { n: i + 1, v: q };
+        });
+      F.instr = it.instr || "";
+      F.setInstr = setter(function (x, v) {
+        x.instr = v;
+      });
+      F.prep = it.prep || "";
+      F.speak = it.speak || "";
+      F.setPrep = setter(function (x, v) {
+        x.prep = v;
+      });
+      F.setSpeak = setter(function (x, v) {
+        x.speak = v;
+      });
+      F.prepSt = inp(String(it.prep || "").trim() !== "" && !num(it.prep));
+      F.speakSt = inp(String(it.speak || "").trim() !== "" && !num(it.speak));
+      F.edLabel =
+        ti === 1
+          ? "Thẻ đề (nội dung người học đọc để chuẩn bị)"
+          : ti === 0
+            ? "Câu hỏi Part 1"
+            : "Câu hỏi Part 3";
+      F.edHint =
+        ti === 1
+          ? "## tiêu đề là dòng đề chính; - là gạch đầu dòng; **đậm**, *nghiêng*."
+          : "Mỗi dòng một câu hỏi. Dòng trống để tách thành nhóm chủ đề. ## đặt tên cho nhóm (không tính là câu).";
+      F.ph =
+        ti === 1
+          ? "## Describe ...\nYou should say:\n- ..."
+          : "Do you like to travel?\nWhat kind of places have you visited?";
+      var head =
+        ti === 1
+          ? "Prepare for " +
+          plural(num(it.prep) || 1, "minute") +
+          " then speak for " +
+          plural(num(it.speak) || 2, "minute") +
+          "."
+          : String(it.instr || "").trim() || "...";
+      F.headLine = "PART " + (ti + 1) + " – " + head;
+      F.pv = ti === 1 ? mdLines(it.text) : [];
+      F.countNote =
+        ti === 1
+          ? "Thẻ đề: người học có " +
+          (num(it.prep) || 1) +
+          " phút chuẩn bị rồi nói " +
+          (num(it.speak) || 2) +
+          " phút."
+          : qs.length +
+          " câu hỏi. Người học xem từng câu một và ghi âm trả lời; tổng thời gian Part 1 và 3 là " +
+          (num(ex.tot) || "…") +
+          " phút.";
+    } else {
+      var t1 = ti === 0;
+      F.isTask1 = t1;
+      F.prompt = it.prompt || "";
+      F.setPrompt = setter(function (x, v) {
         x.prompt = v;
-      }),
-      promptSt: "",
-      promptNote: "Hiện trong khung, chữ đậm nghiêng như đề thi thật. Dòng trống tách đoạn.",
-      fixedNote:
+      });
+      F.promptSt = "";
+      F.promptNote =
+        "Hiện trong khung, chữ đậm nghiêng như đề thi thật. Dòng trống tách đoạn.";
+      F.fixedNote =
         "Cố định theo Task: " +
         FIX[ti].mins +
         " phút, tối thiểu " +
         FIX[ti].words +
-        " từ, và dòng dưới khung. Bạn chỉ nhập nội dung đề bài.",
-      hasImg: !!im,
-      noImg: !im,
-      imgUrl: im ? im.url : "",
-      imgName: im ? im.name : "",
-      imgSize: im ? im.size : "",
-      showImg: !!(im && im.url),
-      imgErr: !!s.imgErr,
-      imgErrText: s.imgErr || "",
-      pickImg: async function (e: React.ChangeEvent<HTMLInputElement>) {
+        " từ, và dòng dưới khung. Bạn chỉ nhập nội dung đề bài.";
+      var im = it.img;
+      F.hasImg = !!im;
+      F.noImg = !im;
+      F.imgUrl = im ? im.url : "";
+      F.imgName = im ? im.name : "";
+      F.imgSize = im ? im.size : "";
+      F.showImg = !!(im && im.url);
+      F.imgErr = !!s.imgErr;
+      F.imgErrText = s.imgErr || "";
+      F.pickImg = async function (e: React.ChangeEvent<HTMLInputElement>) {
         if (!s.editing) {
           try {
             e.target.value = "";
@@ -742,7 +811,7 @@ renderVals(): WritingView {
           return;
         }
         var f = e && e.target && e.target.files && e.target.files[0];
-        if (!f || !skill) {
+        if (!f) {
           return;
         }
         if (!/^image\/(png|jpeg|webp)$/.test(f.type)) {
@@ -753,16 +822,16 @@ renderVals(): WritingView {
           self.setState({ imgErr: "Dung lượng ảnh tối đa là 5 MB." });
           return;
         }
-        const file = f;
+        if (!skill) return;
         try {
-          var res = await uploadSkillImage(skill.id, file);
+          var res = await uploadSkillImage(skill.id, f);
           var size =
-            file.size >= 1048576
-              ? (file.size / 1048576).toFixed(1).replace(".", ",") + " MB"
-              : Math.max(1, Math.round(file.size / 1024)) + " KB";
+            f.size >= 1048576
+              ? (f.size / 1048576).toFixed(1).replace(".", ",") + " MB"
+              : Math.max(1, Math.round(f.size / 1024)) + " KB";
           upd(
             function (x) {
-              x.img = { name: file.name, size: size, url: res.url, path: res.path };
+              x.img = { name: f.name, size: size, url: res.url, path: res.path };
             },
             { imgErr: "", snack: "Đã tải ảnh lên." }
           );
@@ -772,8 +841,8 @@ renderVals(): WritingView {
         try {
           e.target.value = "";
         } catch (err) { }
-      },
-      delImg: function (e?: Ev) {
+      };
+      F.delImg = function (e) {
         stop(e);
         if (!s.editing) {
           return;
@@ -795,12 +864,13 @@ renderVals(): WritingView {
             );
           },
         );
-      },
-      headLine: "WRITING TASK " + (ti + 1),
-      timeLine: "You should spend about " + FIX[ti].mins + " minutes on this task.",
-      wordLine: "Write at least " + FIX[ti].words + " words.",
-      belowLine: FIX[ti].below,
-      paras: String(it.prompt || "")
+      };
+      F.headLine = "WRITING TASK " + (ti + 1);
+      F.timeLine =
+        "You should spend about " + FIX[ti].mins + " minutes on this task.";
+      F.wordLine = "Write at least " + FIX[ti].words + " words.";
+      F.belowLine = FIX[ti].below;
+      F.paras = String(it.prompt || "")
         .split(/\n\s*\n/)
         .map(function (p) {
           return p.trim();
@@ -808,68 +878,105 @@ renderVals(): WritingView {
         .filter(Boolean)
         .map(function (p) {
           return { t: p };
-        }),
-      noPrompt: !String(it.prompt || "").trim(),
-    };
+        });
+      F.noPrompt = !F.paras.length;
+    }
     var iss = s.issues || [];
     var CHIP_OK = CHIP + "; background: #DCEDE2; color: #2E6A48",
       CHIP_WARN = CHIP + "; background: #FBEDBF; color: #7A5A0E";
 
-    // ---- Nhập từ xlsx
+    // ---- Nhập từ xlsx: chọn tệp, kiểm tra, xem trước, đổ vào đề ở chế độ Chỉnh sửa
     var impF = s.impF || [],
       impX = impF.filter(function (f) {
         return f[2] === "xlsx";
-      })[0];
-    var IMP_SAMPLE: ImportFileItem[] = GTF
-      ? [["practice_test_05.xlsx", 7680, "xlsx"]]
+      })[0],
+      SPK = KIND === "speak";
+    var IMP_SAMPLE = SPK
+      ? [["practice_test_01.xlsx", 9216, "xlsx"]]
+      : GTF
+        ? [["practice_test_05.xlsx", 7680, "xlsx"]]
+        : [
+          ["practice_test_01.xlsx", 7680, "xlsx"],
+          ["radio-tv-audiences-1992.jpg", 30720, "img"],
+        ];
+    var IMP_FIXED = [
+      [
+        SPK ? "practice_test_01_da_sua.xlsx" : "practice_test_01_da_sua.xlsx",
+        9216,
+        "xlsx",
+      ],
+    ].concat(IMP_SAMPLE.slice(1));
+    var IMP_ERR = SPK
+      ? [
+        [
+          "Part1",
+          "6",
+          "question",
+          "Dòng 6 trống giữa danh sách câu hỏi. Điền câu hỏi hoặc xóa dòng.",
+        ],
+        [
+          "Part2",
+          "2",
+          "prep_minutes",
+          'Cần là số nguyên từ 1, tệp ghi "một phút".',
+        ],
+        [
+          "De_thi",
+          "2",
+          "part13_minutes",
+          "Cần là số phút từ 1 đến 60, tệp ghi 0.",
+        ],
+      ]
       : [
-        ["practice_test_01.xlsx", 7680, "xlsx"],
-        ["radio-tv-audiences-1992.jpg", 30720, "img"],
+        [
+          "Tasks",
+          "3",
+          "prompt",
+          "Task 2 chưa có yêu cầu (đề bài). Nhập nội dung cột prompt.",
+        ],
+        [
+          "De_thi",
+          "2",
+          "exam_form",
+          '"Academic Training" không hợp lệ. Dùng Academic hoặc General Training.',
+        ],
+        [
+          "Tasks",
+          "2",
+          "image_file",
+          "Không thấy radio-tv-audiences-1992.jpg trong các tệp đã chọn. Chọn kèm ảnh hoặc sửa tên.",
+        ],
       ];
-    var IMP_FIXED_ITEM: ImportFileItem = ["practice_test_01_da_sua.xlsx", 9216, "xlsx"];
-    var IMP_FIXED: ImportFileItem[] = [IMP_FIXED_ITEM].concat(IMP_SAMPLE.slice(1));
-    var IMP_ERR: Array<[string, string, string, string]> = [
-      [
-        "Tasks",
-        "3",
-        "prompt",
-        "Task 2 chưa có yêu cầu (đề bài). Nhập nội dung cột prompt.",
-      ],
-      [
-        "De_thi",
-        "2",
-        "exam_form",
-        '"Academic Training" không hợp lệ. Dùng Academic hoặc General Training.',
-      ],
-      [
-        "Tasks",
-        "2",
-        "image_file",
-        "Không thấy radio-tv-audiences-1992.jpg trong các tệp đã chọn. Chọn kèm ảnh hoặc sửa tên.",
-      ],
-    ];
-    var IMP_CHECKS: string[] = [
-      "Đọc tệp và 2 sheet theo mẫu",
-      "Trường bắt buộc và kiểu dữ liệu",
-      "Đề bài Task 1 và Task 2 đã nhập",
-      "Hình thức đề khớp loại đề đang mở",
-      "Ảnh khớp cột image_file",
-    ];
-    function kbs(n: number): string {
+    var IMP_CHECKS = SPK
+      ? [
+        "Đọc tệp và 4 sheet theo mẫu",
+        "Trường bắt buộc và kiểu dữ liệu",
+        "Câu hỏi Part 1 và Part 3 không trống",
+        "Thời gian chờ, nói và tổng là số phút hợp lệ",
+        "Thẻ đề Part 2 có nội dung",
+      ]
+      : [
+        "Đọc tệp và 2 sheet theo mẫu",
+        "Trường bắt buộc và kiểu dữ liệu",
+        "Đề bài Task 1 và Task 2 đã nhập",
+        "Hình thức đề khớp loại đề đang mở",
+        "Ảnh khớp cột image_file",
+      ];
+    function kbs(n) {
       return n >= 1048576
         ? (n / 1048576).toFixed(1).replace(".", ",") + " MB"
         : Math.max(1, Math.round(n / 1024)) + " KB";
     }
-    function impAdd(list: FileList | File[]) {
+    function impAdd(list) {
       var nf = impF.slice(),
-        bad: string[] = [];
+        bad = [];
       for (var i = 0; i < list.length; i++) {
         var f = list[i],
           e = (f.name.split(".").pop() || "").toLowerCase(),
           k =
             e === "xlsx"
               ? "xlsx"
-              : /^(png|jpe?g|webp)$/.test(e)
+              : !SPK && /^(png|jpe?g|webp)$/.test(e)
                 ? "img"
                 : "";
         if (!k) {
@@ -890,11 +997,12 @@ renderVals(): WritingView {
         impErr: bad.length
           ? "Không nhận " +
           bad.join(", ") +
-          ": chỉ nhận .xlsx và ảnh .png/.jpg/.webp."
+          ": chỉ nhận " +
+          (SPK ? ".xlsx." : ".xlsx và ảnh .png/.jpg/.webp.")
           : "",
       });
     }
-    function impRun(broken: boolean) {
+    function impRun(broken) {
       (me._it || []).forEach(clearTimeout);
       me._it = [];
       var na = (s.impN || 0) + 1,
@@ -943,7 +1051,7 @@ renderVals(): WritingView {
         ex.title +
         " · 1 tệp chứa cả đề " +
         NAME,
-      impOpen: function (e?: Ev) {
+      impOpen: function (e) {
         stop(e);
         self.setState({
           imp: "pick",
@@ -954,14 +1062,14 @@ renderVals(): WritingView {
           confirm: null,
         });
       },
-      impClose: function (e?: Ev) {
+      impClose: function (e) {
         stop(e);
         (me._it || []).forEach(clearTimeout);
         self.setState({ imp: null });
       },
-      impKeep: function (e?: Ev) {
-        if (e && (e as React.SyntheticEvent).stopPropagation) {
-          (e as React.SyntheticEvent).stopPropagation();
+      impKeep: function (e) {
+        if (e && e.stopPropagation) {
+          e.stopPropagation();
         }
       },
       impDl: function () {
@@ -975,7 +1083,7 @@ renderVals(): WritingView {
         (s.impDrag
           ? "border: 2px dashed #2963CC; background: #EEF3FD"
           : "border: 1.5px dashed #C9C2C6; background: #FAF9F5"),
-      impDragOver: function (e?: Ev) {
+      impDragOver: function (e) {
         stop(e);
         if (!s.impDrag) {
           self.setState({ impDrag: true });
@@ -984,17 +1092,17 @@ renderVals(): WritingView {
       impDragLeave: function () {
         self.setState({ impDrag: false });
       },
-      impDrop: function (e: React.DragEvent<HTMLElement>) {
+      impDrop: function (e) {
         stop(e);
         impAdd((e.dataTransfer && e.dataTransfer.files) || []);
       },
-      impPickFile: function (e: React.ChangeEvent<HTMLInputElement>) {
+      impPickFile: function (e) {
         impAdd(e.target.files || []);
         try {
           e.target.value = "";
         } catch (err) { }
       },
-      impFiles: impF.map(function (f, i): ImportFileDisplay {
+      impFiles: impF.map(function (f, i) {
         return {
           name: f[0],
           size: kbs(f[1]),
@@ -1004,7 +1112,7 @@ renderVals(): WritingView {
             (f[2] === "xlsx"
               ? "background: #DCEDE2; color: #2E6A48"
               : "background: #FBEDBF; color: #7A5A0E"),
-          rm: function (e?: Ev) {
+          rm: function (e) {
             stop(e);
             var nf = impF.slice();
             nf.splice(i, 1);
@@ -1016,9 +1124,11 @@ renderVals(): WritingView {
       impErrText: s.impErr || "",
       impReplace: impHas,
       impReplaceText:
-        "Đề đang có nội dung. Nhập sẽ thay toàn bộ 2 Task; có thể hoàn tác ngay sau khi nhập.",
+        "Đề đang có nội dung. Nhập sẽ thay toàn bộ " +
+        (SPK ? "3 Part" : "2 Task") +
+        "; có thể hoàn tác ngay sau khi nhập.",
       impSampleText: s.impSaw ? "Dùng tệp ví dụ đã sửa lỗi" : "Dùng tệp ví dụ",
-      impSample: function (e?: Ev) {
+      impSample: function (e) {
         stop(e);
         self.setState({ impF: s.impSaw ? IMP_FIXED : IMP_SAMPLE, impErr: "" });
       },
@@ -1026,7 +1136,7 @@ renderVals(): WritingView {
       impCheckSt: impX
         ? "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF"
         : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; background: #F3F0EA; border-color: #E6E4E0; color: #706473; cursor: not-allowed",
-      impCheck: function (e?: Ev) {
+      impCheck: function (e) {
         stop(e);
         if (!impX) {
           self.setState({ impErr: "Cần đúng 1 tệp .xlsx theo mẫu." });
@@ -1035,10 +1145,8 @@ renderVals(): WritingView {
         if (impX[3] === "real" && me._impFile && window.FileReader) {
           var r = new FileReader();
           r.onload = function () {
-            if (r.result instanceof ArrayBuffer) {
-              var b = new Uint8Array(r.result);
-              impRun(!(b[0] === 0x50 && b[1] === 0x4b));
-            }
+            var b = new Uint8Array(r.result);
+            impRun(!(b[0] === 0x50 && b[1] === 0x4b));
           };
           r.onerror = function () {
             impRun(true);
@@ -1049,7 +1157,7 @@ renderVals(): WritingView {
         }
       },
       impX: impX ? impX[0] : "",
-      impChecks: IMP_CHECKS.map(function (c, i): ImportCheckItem {
+      impChecks: IMP_CHECKS.map(function (c, i) {
         var dn = i < impP,
           on = i === impP;
         return {
@@ -1066,38 +1174,67 @@ renderVals(): WritingView {
                 : "border: 1.5px solid #E6E4E0"),
         };
       }),
-      impBack: function (e?: Ev) {
+      impBack: function (e) {
         stop(e);
         self.setState({ imp: "pick", impF: [], impErr: "" });
       },
       impErrN: IMP_ERR.length + " lỗi",
       impRows: IMP_ERR.map(function (r) {
-        return { sheet: r[0], row: parseInt(r[1], 10) || 0, col: parseInt(r[2], 10) || 0, text: r[3] };
+        return { sheet: r[0], row: r[1], col: r[2], text: r[3] };
       }),
       impTitle: FULL.title,
-      impForm: GTF ? "General Training" : "Academic",
-      impStats: [
-        { n: "2", label: "task" },
-        {
-          n:
-            String(
-              FULL.items.filter(function (x) {
-                return x.img;
-              }).length,
-            ) +
-            "/" +
-            String(
-              FULL.items.filter(function (x) {
-                return x.img;
-              }).length,
-            ),
-          label: "ảnh khớp",
-        },
-        { n: String(FIX[0].words), label: "từ tối thiểu Task 1" },
-        { n: String(FIX[1].words), label: "từ tối thiểu Task 2" },
-      ],
-      impPrev: FULL.items.map(function (x, k): ImportPreviewItem {
+      impForm: SPK
+        ? FULL.tot + " phút cho Part 1 và 3"
+        : GTF
+          ? "General Training"
+          : "Academic",
+      impStats: SPK
+        ? [
+          { n: "3", label: "part" },
+          { n: String(FULL.items[0].qs.length), label: "câu Part 1" },
+          { n: String(FULL.items[2].qs.length), label: "câu Part 3" },
+          {
+            n: FULL.items[1].prep + " + " + FULL.items[1].speak,
+            label: "phút Part 2",
+          },
+        ]
+        : [
+          { n: "2", label: "task" },
+          {
+            n:
+              String(
+                FULL.items.filter(function (x) {
+                  return x.img;
+                }).length,
+              ) +
+              "/" +
+              String(
+                FULL.items.filter(function (x) {
+                  return x.img;
+                }).length,
+              ),
+            label: "ảnh khớp",
+          },
+          { n: String(FIX[0].words), label: "từ tối thiểu Task 1" },
+          { n: String(FIX[1].words), label: "từ tối thiểu Task 2" },
+        ],
+      impPrev: FULL.items.map(function (x, k) {
         var nm = UNIT + " " + (k + 1);
+        if (SPK) {
+          return k === 1
+            ? {
+              title: nm,
+              sub: "thẻ đề",
+              groups: [x.prep + " phút chờ", x.speak + " phút nói"],
+            }
+            : {
+              title: nm,
+              sub: x.qs.length + " câu hỏi",
+              groups: x.qs.slice(0, 3).map(function (q) {
+                return q.length > 28 ? q.slice(0, 26) + "…" : q;
+              }),
+            };
+        }
         return {
           title: nm,
           sub: x.prompt.split("\n")[0].slice(0, 46) + "…",
@@ -1108,18 +1245,25 @@ renderVals(): WritingView {
           ],
         };
       }),
-      impWarns: [
-        GTF
-          ? "Task 1 là thư: kiểm tra các ý cần viết trong đề bài."
-          : "Task 1: kiểm tra ảnh biểu đồ hiển thị đúng và đủ nét.",
-      ],
+      impWarns: SPK
+        ? [
+          "Part 2: xem lại thẻ đề ở bản xem trước, kiểm tra các gạch đầu dòng.",
+        ]
+        : [
+          GTF
+            ? "Task 1 là thư: kiểm tra các ý cần viết trong đề bài."
+            : "Task 1: kiểm tra ảnh biểu đồ hiển thị đúng và đủ nét.",
+        ],
       impReplaceNote:
         (impHas ? "Nội dung hiện tại sẽ được thay. " : "") +
         "Đề chuyển sang chế độ Chỉnh sửa, chưa lưu: xem lại rồi bấm Lưu, hoặc Hoàn tác.",
-      impApply: function (e?: Ev) {
+      impApply: function (e) {
         stop(e);
         var n = clone(ex);
-        n.items = [clone(FULL.items[0]), clone(FULL.items[1])];
+        n.items = clone(FULL.items);
+        if (SPK) {
+          n.tot = FULL.tot;
+        }
         self.setState({
           ex: n,
           t: 0,
@@ -1130,45 +1274,54 @@ renderVals(): WritingView {
           issues: null,
           imp: null,
           toast: "",
-          snack: "Đã nhập 2 Task từ tệp mẫu.",
+          snack:
+            "Đã nhập " +
+            (SPK ? "3 Part" : "2 Task") +
+            " từ " +
+            (impX ? impX[0] : "tệp xlsx") +
+            ". Bấm Lưu để giữ.",
         });
       },
     };
-
-    var crumbs: Crumb[] = [
+    const crumbs: Crumb[] = [
       { label: "Quản lý", page: "AdminHome" },
       { label: "Bộ đề và đề thi", page: "AdminExams" },
-      {
-        label: skill?.exam?.title || ex.title,
-        page: skill ? "AdminExamSet?id=" + skill.set.id : "AdminExams",
-      },
-      { label: NAME },
+      ...(skill && skill.set ? [{ label: skill.set.name, page: "AdminExamSet", params: { id: skill.set.id } }] : []),
+      { label: "Soạn đề Writing" },
     ];
-    var onNavigate = function (go: () => void) {
+    const onNavigate = (go: () => void) => {
       if (dirty) {
         ask(
-          "Rời trang khi chưa lưu?",
-          "Nội dung đang soạn sẽ bị mất nếu bạn rời đi bây giờ.",
+          "Rời khỏi trang soạn đề?",
+          "Các thay đổi chưa lưu sẽ bị mất. Bạn có chắc muốn rời đi?",
           go,
-          "Rời đi",
+          "Rời đi"
         );
       } else {
         go();
       }
     };
-    var R0: WritingView = {
-      ...impVals,
+    var R0 = {
       crumbs: crumbs,
       onNavigate: onNavigate,
+      impVals: 0,
       examTitle: skill?.exam?.title || ex.title,
       examPath: skill ? skill.set.name + " · Writing" : "Mock Test 2026 Vol 4 · Writing",
-      typeText: GTF ? "General Training" : "Academic",
-      typeTitle: "Writing có đề riêng cho Academic và General Training: Task 1 " +
-        (GTF ? "là thư" : "mô tả biểu đồ, bảng, sơ đồ hoặc bản đồ"),
+      typeText:
+        KIND === "speak"
+          ? "Dùng chung Academic và General Training"
+          : GTF
+            ? "General Training"
+            : "Academic",
+      typeTitle:
+        KIND === "speak"
+          ? "Speaking dùng chung cho Academic và General Training"
+          : "Writing có đề riêng cho Academic và General Training: Task 1 " +
+          (GTF ? "là thư" : "mô tả biểu đồ, bảng, sơ đồ hoặc bản đồ"),
       typeSt:
         CHIP +
         "; " +
-        (GTF
+        (GTF && KIND === "write"
           ? "background: #FCE6D6; color: #9A4A17"
           : "background: #DFF1F4; color: #1F6A78"),
       modeText: editing ? versionMessages.modeEditing(skill?.versionNumber || 1) : versionMessages.modeViewing,
@@ -1200,22 +1353,21 @@ renderVals(): WritingView {
       canDelete: !editing && skill && skill.status === "DRAFT",
       deleteLabel: skill?.slot?.liveId ? "Bỏ bản sửa" : "Xóa kỹ năng",
       confirmGoText: s.confirm?.goText || "Xóa",
-      deleteSkillAction: function (e?: Ev) {
+      deleteSkillAction: function (e: Ev) {
         stop(e);
         if (!skill) return;
-        var currentSkill = skill;
-        var hadLive = Boolean(currentSkill.slot.liveId);
-        var conf = versionMessages.confirmDiscardDraft(currentSkill.versionNumber, currentSkill.slot?.liveVersion);
+        var hadLive = Boolean(skill.slot.liveId);
+        var conf = versionMessages.confirmDiscardDraft(skill.versionNumber, skill.slot?.liveVersion);
         ask(
           conf.title,
           conf.text,
           async function () {
             try {
-              await deleteSkill(currentSkill.id);
-              if (hadLive && currentSkill.slot.liveId) {
-                navigate("AdminWritingEditor?skillId=" + currentSkill.slot.liveId);
+              await deleteSkill(skill.id);
+              if (hadLive && skill.slot.liveId) {
+                navigate("AdminWritingEditor?skillId=" + skill.slot.liveId);
               } else {
-                navigate("AdminExamSet?id=" + currentSkill.set.id);
+                navigate("AdminExamSet?id=" + skill.set.id);
               }
             } catch (err) {
               self.setState({ toast: errorInfo(err).message || "Không thể xóa kỹ năng." });
@@ -1224,22 +1376,21 @@ renderVals(): WritingView {
           conf.goText
         );
       },
-      startEdit: async function (e?: Ev) {
+      startEdit: async function (e: Ev) {
         stop(e);
         if (!skill) return;
-        var currentSkill = skill;
-        if (currentSkill.status === "ARCHIVED") return;
-        if (currentSkill.status !== "DRAFT") {
+        if (skill.status === "ARCHIVED") return;
+        if (skill.status !== "DRAFT") {
           var conf = versionMessages.confirmCreateDraft(
-            (currentSkill.versionNumber || 1) + 1,
-            currentSkill.versionNumber || 1
+            (skill.versionNumber || 1) + 1,
+            skill.versionNumber || 1
           );
           ask(
             conf.title,
             conf.text,
             async function () {
               try {
-                var rev = await createRevisionDraft(currentSkill.id);
+                var rev = await createRevisionDraft(skill.id);
                 window.history.replaceState(null, "", "#AdminWritingEditor?skillId=" + rev.id);
                 var newEx = toWritingEditorState(rev);
                 self.setState({
@@ -1251,9 +1402,9 @@ renderVals(): WritingView {
                   hist: [],
                   lastTag: null,
                   issues: null,
-                  snack: rev.id === currentSkill.slot?.draftId
+                  snack: rev.id === skill.slot?.draftId
                     ? versionMessages.noticeReopenDraft(rev.versionNumber)
-                    : versionMessages.noticeCreatedDraft(rev.versionNumber, currentSkill.versionNumber),
+                    : versionMessages.noticeCreatedDraft(rev.versionNumber, skill.versionNumber),
                 });
               } catch (err) {
                 self.setState({ toast: errorInfo(err).message || "Không thể tạo bản sửa." });
@@ -1272,15 +1423,14 @@ renderVals(): WritingView {
           });
         }
       },
-      saveEdit: async function (e?: Ev) {
+      saveEdit: async function (e: Ev) {
         stop(e);
         if (!skill || self.state.saving) return;
-        var currentSkill = skill;
         self.setState({ saving: true });
         try {
           var content = fromWritingEditorState(ex);
-          var saved = await saveSkillContent(currentSkill.id, {
-            baseUpdatedAt: currentSkill.updatedAt,
+          var saved = await saveSkillContent(skill.id, {
+            baseUpdatedAt: skill.updatedAt,
             writing: content,
           });
           self.setState({
@@ -1301,7 +1451,7 @@ renderVals(): WritingView {
           });
         }
       },
-      cancelEdit: function (e?: Ev) {
+      cancelEdit: function (e: Ev) {
         stop(e);
         if (dirty) {
           self.setState({ leave: true });
@@ -1314,11 +1464,11 @@ renderVals(): WritingView {
         "Bạn có " +
         Math.max(nChange, 1) +
         " thay đổi chưa lưu trong đề này. Chọn Không lưu thì đề quay về bản đã lưu gần nhất.",
-      stayEdit: function (e?: Ev) {
+      stayEdit: function (e: Ev) {
         stop(e);
         self.setState({ leave: false });
       },
-      discardEdit: function (e?: Ev) {
+      discardEdit: function (e: Ev) {
         stop(e);
         self.setState({
           ex: base || ex,
@@ -1332,7 +1482,7 @@ renderVals(): WritingView {
           toast: "Đã bỏ các thay đổi chưa lưu.",
         });
       },
-      publish: async function (e?: Ev) {
+      publish: async function (e: Ev) {
         stop(e);
         var li = allIssues();
         if (li.length) {
@@ -1341,12 +1491,11 @@ renderVals(): WritingView {
         }
         if (editing && dirty) {
           if (!skill || self.state.saving) return;
-          var currentSkill = skill;
           self.setState({ saving: true });
           try {
             var content = fromWritingEditorState(ex);
-            var saved = await saveSkillContent(currentSkill.id, {
-              baseUpdatedAt: currentSkill.updatedAt,
+            var saved = await saveSkillContent(skill.id, {
+              baseUpdatedAt: skill.updatedAt,
               writing: content,
             });
             self.setState({
@@ -1371,18 +1520,17 @@ renderVals(): WritingView {
       pubOpen: !!s.pubAsk,
       pubTitle: versionMessages.confirmPublish(skill?.versionNumber || 1, skill?.slot?.liveVersion).title,
       pubSub: versionMessages.confirmPublish(skill?.versionNumber || 1, skill?.slot?.liveVersion).text,
-      pubCancel: function (e?: Ev) {
+      pubCancel: function (e: Ev) {
         stop(e);
         self.setState({ pubAsk: false });
       },
-      pubOk: async function (e?: Ev) {
+      pubOk: async function (e: Ev) {
         stop(e);
         if (!skill) return;
-        var currentSkill = skill;
         self.setState({ pubAsk: false });
         try {
-          await publishSkill(currentSkill.id);
-          var refreshed = await getEditorSkill(currentSkill.id);
+          await publishSkill(skill.id);
+          var refreshed = await getEditorSkill(skill.id);
           var newEx = toWritingEditorState(refreshed);
           self.setState({
             skill: refreshed,
@@ -1390,7 +1538,7 @@ renderVals(): WritingView {
             base: JSON.parse(JSON.stringify(newEx)),
             editing: false,
             hist: [],
-            toast: versionMessages.noticePublished(currentSkill.versionNumber, currentSkill.slot?.liveVersion),
+            toast: versionMessages.noticePublished(skill.versionNumber, skill.slot?.liveVersion),
           });
         } catch (err) {
           var info = errorInfo(err);
@@ -1405,28 +1553,29 @@ renderVals(): WritingView {
           }
         }
       },
-      hasIssues: !!iss.length,
-      issueHead: "Chưa thể đăng đề: còn " + iss.length + " điểm cần sửa",
-      closeIssues: function () {
+      hasIssues: iss.length > 0,
+      issueHead: "Chưa đăng được: " + iss.length + " lỗi cần sửa",
+      closeIssues: function (e) {
+        stop(e);
         self.setState({ issues: null });
       },
       issues: iss.map(function (i) {
         return {
           text: i.text,
-          go: function (e?: Ev) {
+          go: function (e) {
             stop(e);
-            self.setState({ t: i.t ?? 0 });
+            self.setState({ t: i.t });
           },
         };
       }),
       confirmOpen: !!s.confirm,
       confirmTitle: s.confirm ? s.confirm.title : "",
       confirmSub: s.confirm ? s.confirm.sub : "",
-      confirmCancel: function (e?: Ev) {
+      confirmCancel: function (e) {
         stop(e);
         self.setState({ confirm: null });
       },
-      confirmOk: function (e?: Ev) {
+      confirmOk: function (e) {
         stop(e);
         if (s.confirmRun) {
           s.confirmRun();
@@ -1434,17 +1583,17 @@ renderVals(): WritingView {
       },
       snackOpen: !!s.snack,
       snack: s.snack || "",
-      hideSnack: function (e?: Ev) {
+      hideSnack: function (e) {
         stop(e);
         self.setState({ snack: null });
       },
       toast: !!s.toast,
       toastText: s.toast || "",
-      hideToast: function (e?: Ev) {
+      hideToast: function (e) {
         stop(e);
         self.setState({ toast: "" });
       },
-      preview: function (e?: Ev) {
+      preview: function (e) {
         stop(e);
         self.setState({
           toast:
@@ -1453,17 +1602,11 @@ renderVals(): WritingView {
             " của người học (bản mẫu chưa nối màn này).",
         });
       },
-      skill: s.skill,
-      dirty: dirty,
-      ask: ask,
-      historyOpen: s.historyOpen,
-      openHistory: function () {
-        self.setState({ historyOpen: true });
-      },
-      closeHistory: function () {
-        self.setState({ historyOpen: false });
-      },
     };
+    delete R0.impVals;
+    for (var ik in impVals) {
+      R0[ik] = impVals[ik];
+    }
     return R0;
   }
 
@@ -1518,6 +1661,13 @@ renderVals(): WritingView {
     }
 
     const v = this.renderVals();
+    const s = this.state;
+    const self = this;
+    const skill = s.skill;
+    const dirty = !!s.editing && JSON.stringify(s.base || s.ex) !== JSON.stringify(s.ex);
+    const ask = (title: string, sub: string, run: () => Promise<void> | void, goText = "Xóa") => {
+      self.setState({ confirm: { title: title, sub: sub, goText: goText, run: run }, confirmRun: run, snack: null });
+    };
     return (
       <>
         {"\n"}
@@ -1564,19 +1714,19 @@ renderVals(): WritingView {
                   "flex: 1; display: flex; flex-direction: column; background: #FAF9F5; min-width: 0",
                 )}
               >
-                {v.skill && (
+                {skill && (
                   <div
                     style={styleOf(
-                      v.skill.status === "ARCHIVED"
+                      skill.status === "ARCHIVED"
                         ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap"
-                        : v.skill.status === "HIDDEN"
+                        : skill.status === "HIDDEN"
                           ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
-                          : v.skill.status === "DRAFT"
+                          : skill.status === "DRAFT"
                             ? "background: #EFF6FF; border-bottom: 1.5px solid #BFDBFE; color: #1E40AF; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
                             : "display: none"
                     )}
                   >
-                    {v.skill.status === "ARCHIVED" ? (
+                    {skill.status === "ARCHIVED" ? (
                       <>
                         <div style={styleOf("display: flex; align-items: center; gap: 8px")}>
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -1584,19 +1734,19 @@ renderVals(): WritingView {
                           </svg>
                           <span>
                             {versionMessages.bannerArchived(
-                              v.skill.versionNumber,
-                              fmtDate(v.skill.publishedAt || v.skill.updatedAt)
+                              skill.versionNumber,
+                              fmtDate(skill.publishedAt || skill.updatedAt)
                             )}
                           </span>
                         </div>
-                        {(v.skill?.slot?.draftId || v.skill?.slot?.liveId) && (
+                        {(skill.slot.draftId || skill.slot.liveId) && (
                           <a
                             href="#"
                             onClick={function (e) {
                               e.preventDefault();
                               navigate(
                                 "AdminWritingEditor?skillId=" +
-                                (v.skill?.slot?.draftId || v.skill?.slot?.liveId)
+                                (skill.slot.draftId || skill.slot.liveId)
                               );
                             }}
                             style={styleOf(
@@ -1607,14 +1757,14 @@ renderVals(): WritingView {
                           </a>
                         )}
                       </>
-                    ) : v.skill.status === "HIDDEN" ? (
+                    ) : skill.status === "HIDDEN" ? (
                       <>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22" />
                         </svg>
-                        <span>{versionMessages.bannerHidden(v.skill.versionNumber)}</span>
+                        <span>{versionMessages.bannerHidden(skill.versionNumber)}</span>
                       </>
-                    ) : v.skill.status === "DRAFT" ? (
+                    ) : skill.status === "DRAFT" ? (
                       <>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <circle cx="12" cy="12" r="10" />
@@ -1622,14 +1772,14 @@ renderVals(): WritingView {
                           <line x1="12" y1="8" x2="12.01" y2="8" />
                         </svg>
                         <span>
-                          {v.skill.slot.liveId
+                          {skill.slot.liveId
                             ? versionMessages.bannerDraftWithLive(
-                              v.skill.versionNumber,
-                              v.skill.slot.liveVersion || (v.skill.versionNumber - 1),
-                              v.skill.slot.liveVersion || 1,
-                              v.skill.slot.liveStatus || "PUBLISHED"
+                              skill.versionNumber,
+                              skill.slot.liveVersion || (skill.versionNumber - 1),
+                              skill.slot.liveVersion || 1,
+                              skill.slot.liveStatus || "PUBLISHED"
                             )
-                            : versionMessages.bannerDraftFirst(v.skill.versionNumber)}
+                            : versionMessages.bannerDraftFirst(skill.versionNumber)}
                         </span>
                       </>
                     ) : null}
@@ -1645,7 +1795,7 @@ renderVals(): WritingView {
                       href={"#"}
                       onClick={function (e) {
                         e.preventDefault();
-                        navigate(v.skill ? "AdminExamSet?id=" + v.skill.set.id : "AdminExams");
+                        navigate(skill ? "AdminExamSet?id=" + skill.set.id : "AdminExams");
                       }}
                       style={styleOf("display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: #706473; text-decoration: none; cursor: pointer")}
                     >
@@ -1712,7 +1862,7 @@ renderVals(): WritingView {
                       <button
                         type="button"
                         onClick={function () {
-                          v.openHistory();
+                          self.setState({ historyOpen: true });
                         }}
                         style={styleOf(
                           "display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 10px; border-radius: 999px; border: 1px solid #D6D4D0; background: #FFFFFF; font-size: 12px; font-weight: 600; color: #5B4E5F; cursor: pointer; text-decoration: none;"
@@ -3479,22 +3629,24 @@ renderVals(): WritingView {
         </div>
         {"\n"}
         <SkillHistoryDrawer
-          isOpen={v.historyOpen}
-          onClose={v.closeHistory}
-          skillId={v.skill ? v.skill.id : null}
+          isOpen={s.historyOpen}
+          onClose={function () {
+            self.setState({ historyOpen: false });
+          }}
+          skillId={skill ? skill.id : null}
           onSelectVersion={function (versionId) {
-            if (v.editing && v.dirty) {
-              v.ask(
+            if (s.editing && dirty) {
+              ask(
                 "Rời trang khi chưa lưu thay đổi?",
                 "Các thay đổi bạn vừa chỉnh sửa sẽ bị mất nếu chuyển phiên bản.",
                 function () {
-                  v.closeHistory();
+                  self.setState({ historyOpen: false });
                   navigate("AdminWritingEditor?skillId=" + versionId);
                 },
                 "Rời đi"
               );
             } else {
-              v.closeHistory();
+              self.setState({ historyOpen: false });
               navigate("AdminWritingEditor?skillId=" + versionId);
             }
           }}

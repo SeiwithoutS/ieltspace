@@ -581,3 +581,69 @@ export function allIssues(
 
   return out;
 }
+
+/**
+ * Kiểm tra xem một nhóm câu hỏi đã có dữ liệu do người dùng nhập hay chưa.
+ * Dùng để cảnh báo xác nhận khi đổi dạng câu hỏi.
+ */
+export function groupHasData(g: LrGroupState): boolean {
+  if (!g) return false;
+
+  if (g.body && g.body.trim().length > 0) return true;
+
+  if (
+    g.items &&
+    g.items.length > 0 &&
+    g.items.some(
+      (item) =>
+        (item.q && item.q.trim().length > 0) ||
+        (item.text && item.text.trim().length > 0) ||
+        (item.ans !== undefined &&
+          item.ans !== null &&
+          String(item.ans).trim().length > 0 &&
+          String(item.ans) !== '-1') ||
+        (item.opts && item.opts.length > 0 && item.opts.some((o) => o && o.trim().length > 0))
+    )
+  ) {
+    return true;
+  }
+
+  if (g.opts && g.opts.length > 0 && g.opts.some((o) => o && o.trim().length > 0)) {
+    return true;
+  }
+
+  if (g.marks && g.marks.length > 0) return true;
+
+  if (g.nodes && g.nodes.length > 0 && g.nodes.some((n) => n.text && n.text.trim().length > 0)) {
+    return true;
+  }
+
+  if (
+    g.rows &&
+    g.rows.length > 0 &&
+    g.rows.some((row) => row.some((cell) => cell && cell.trim().length > 0))
+  ) {
+    return true;
+  }
+
+  if (g.texts && g.texts.length > 0 && g.texts.some((t) => t && t.trim().length > 0)) {
+    return true;
+  }
+
+  if (
+    g.ans &&
+    g.ans.length > 0 &&
+    g.ans.some(
+      (a) => a !== undefined && a !== null && String(a).trim().length > 0 && String(a) !== '-1'
+    )
+  ) {
+    return true;
+  }
+
+  if (g.steps && g.steps.length > 0 && g.steps.some((s) => s && s.trim().length > 0)) {
+    return true;
+  }
+
+  return false;
+}
+

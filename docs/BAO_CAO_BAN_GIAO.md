@@ -106,7 +106,7 @@ frontend/
         RegisterForm.jsx
         auth.css
       exams/
-        QuestionCard.jsx
+        QuestionCard.jsx (đã xóa 19/11, chuyển sang components/exams/lr-editor/cards/)
       navigation/
         AdminSidebar.jsx
         AdminTopbar.jsx
@@ -140,7 +140,7 @@ frontend/
             AdminReadingEditor.jsx
             AdminSpeakingEditor.jsx
             AdminWritingEditor.jsx
-            QuestionCards.jsx
+            QuestionCards.jsx (đã xóa 19/11)
           AdminExamSet.tsx
           AdminExams.tsx
         grading/
@@ -261,12 +261,12 @@ README.md
 - Hồ sơ: pages/account/Profile.jsx, StaffProfile.jsx, AvatarMenu.jsx.
 - Thư viện đề: pages/exams/FullTests.jsx, ExamDetail.tsx.
 - Luyện tập: pages/practice/PracticeLibrary.jsx, PracticeWS.jsx.
-- Làm bài: pages/attempts/{ReadingTest,ListeningTest,WritingTest,SpeakingTest,SubmitDialogs}.jsx; components/exams/QuestionCard.jsx.
+- Làm bài: pages/attempts/{ReadingTest,ListeningTest,WritingTest,SpeakingTest,SubmitDialogs}.jsx; components/attempts/QuestionControls.tsx.
 - Kết quả: pages/results/ResultLR.jsx, ResultWS.jsx, MyWS.jsx.
 - Từ vựng: pages/vocabulary/Vocab.jsx, Flashcard.jsx.
 - Bài mẫu: pages/samples/SampleLibrary.jsx, SampleWriting.jsx, SampleSpeaking.jsx.
 - Giáo viên: pages/grading/TeacherHome.jsx, TeacherQueue.jsx, TeacherGrade.jsx, TeacherHistory.jsx.
-- Quản lý: pages/admin/dashboard, users, reports, grading, samples, exams. Nhóm exams/editors chứa editor từng kỹ năng và QuestionCards.
+- Quản lý: pages/admin/dashboard, users, reports, grading, samples, exams. Nhóm exams/editors chứa editor từng kỹ năng.
 - Thông báo/hỗ trợ: pages/notifications, components/notifications, components/reports.
 
 Ngoài Auth, những nhóm màn hình trên chủ yếu là prototype; không suy ra đã lưu Supabase chỉ vì có nút lưu hoặc hiển thị điểm.

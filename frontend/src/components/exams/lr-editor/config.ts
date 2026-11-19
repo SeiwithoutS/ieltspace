@@ -1,5 +1,11 @@
 import type { LrQuestionType } from '../../../lib/lr-editor/types.ts';
 
+export {
+  LR_TYPE_GROUPS,
+  type LrTypeGroupId,
+  type LrTypeGroupDef,
+} from '../../../lib/lr-editor/constants.ts';
+
 export type LrSkillConfig = {
   sectionName: string;
   sectionCount: number;

@@ -16,6 +16,7 @@ import ExplainPanel from './ExplainPanel.tsx';
 import PublishIssues from './PublishIssues.tsx';
 import TypePicker from './TypePicker.tsx';
 import TranscribeModal from './TranscribeModal.tsx';
+import GroupTypeSwitcher from './GroupTypeSwitcher.tsx';
 import { LR_CONFIG } from './config.ts';
 
 import GapCard from './cards/GapCard.tsx';
@@ -50,8 +51,9 @@ import {
   groupIssues,
   numberQuestions,
   formatQuestionRange,
+  groupHasData,
 } from '../../../lib/lr-editor/pure.ts';
-import { typeName } from '../../../lib/lr-editor/constants.ts';
+import { typeName, COMBO_TYPE_LABELS } from '../../../lib/lr-editor/constants.ts';
 import type {
   LrContent,
   LrEditorState,
@@ -111,6 +113,11 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
   const [showTypePicker, setShowTypePicker] = useState(false);
   const [showHistoryDrawer, setShowHistoryDrawer] = useState(false);
   const [confirmDeleteGroup, setConfirmDeleteGroup] = useState<number | null>(null);
+  const [confirmChangeType, setConfirmChangeType] = useState<{
+    groupIndex: number;
+    nextType: LrQuestionType;
+    keep?: { body?: string; limit?: number | null };
+  } | null>(null);
   const [confirmPublish, setConfirmPublish] = useState(false);
   const [confirmDeleteSkill, setConfirmDeleteSkill] = useState(false);
   const [leavePendingGo, setLeavePendingGo] = useState<(() => void) | null>(null);
@@ -365,6 +372,95 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
     setConfirmDeleteGroup(null);
   }
 
+  // Đổi dạng câu hỏi trong cùng nhóm (GQ-02)
+  function handleChangeType(
+    gIdx: number,
+    nextType: LrQuestionType,
+    keep?: { body?: string; limit?: number | null }
+  ) {
+    const p = ex.passages[activePassage];
+    if (!p || !p.groups || !p.groups[gIdx]) return;
+    const curr = p.groups[gIdx];
+
+    if (curr.type === nextType) return;
+    // GQ-06: nhóm đang là MATCH_ENDING mà chọn MATCH_FEATURE (mục gộp) thì không làm gì
+    if (curr.type === 'MATCH_ENDING' && nextType === 'MATCH_FEATURE') return;
+
+    // Kiểm tra xem nhóm có dữ liệu không
+    let hasData = false;
+    if (keep?.body !== undefined) {
+      // Đổi Summary COMP <-> BOX: giữ body, chỉ cảnh báo nếu có đáp án/từ vựng khác ngoài body
+      if (curr.type === 'SUMMARY_BOX') {
+        hasData = Boolean(
+          (curr.opts && curr.opts.length > 0) ||
+          (curr.ans && curr.ans.length > 0 && curr.ans.some((a) => a !== undefined && a !== null && String(a) !== '-1'))
+        );
+      } else {
+        hasData = Boolean(
+          (curr.ans && curr.ans.length > 0 && curr.ans.some((a) => a && String(a).trim().length > 0)) ||
+          (curr.alt && curr.alt.length > 0 && curr.alt.some((a) => a && a.trim().length > 0))
+        );
+      }
+    } else {
+      hasData = groupHasData(curr);
+    }
+
+    if (hasData) {
+      setConfirmChangeType({ groupIndex: gIdx, nextType, keep });
+    } else {
+      applyChangeType(gIdx, nextType, keep);
+    }
+  }
+
+  function applyChangeType(
+    gIdx: number,
+    nextType: LrQuestionType,
+    keep?: { body?: string; limit?: number | null }
+  ) {
+    updateState((draft) => {
+      const p = draft.passages[activePassage];
+      if (!p || !p.groups || !p.groups[gIdx]) return;
+      const curr = p.groups[gIdx];
+
+      const newGroup: LrGroupState = {
+        id: curr.id,
+        orderNo: curr.orderNo,
+        type: nextType,
+        instr: null,
+        title: null,
+        limit: keep?.limit !== undefined ? keep.limit : null,
+        items: [],
+        body: keep?.body !== undefined ? keep.body : undefined,
+      };
+
+      if (nextType === 'SUMMARY_BOX') {
+        newGroup.opts = [];
+        newGroup.sel = [];
+        newGroup.ans = [];
+        newGroup.limit = -1;
+      } else if (nextType === 'SUMMARY_COMP') {
+        if (newGroup.limit == null || newGroup.limit < 0) {
+          newGroup.limit = 2;
+        }
+      } else if (nextType === 'MCQ_SINGLE') {
+        newGroup.items = [{ q: '', opts: ['', '', '', ''], ans: null }];
+      } else if (nextType === 'MCQ_MULTI') {
+        newGroup.pick = 2;
+        newGroup.opts = ['', '', '', '', ''];
+        newGroup.ans = [];
+      } else if (nextType === 'TFNG' || nextType === 'YNNG') {
+        newGroup.items = [{ q: '', ans: null }];
+      }
+
+      newGroup.instr = autoInstr(newGroup, p, activePassage);
+      p.groups[gIdx] = newGroup;
+    });
+
+    setConfirmChangeType(null);
+    setActiveGroup(gIdx);
+  }
+
+
   // Speech-to-text application (LRE-07c)
   function handleApplyTranscription(
     newParas: Array<{ label: string; text: string; startSec: number }>
@@ -496,18 +592,18 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
   const explainCtx =
     rightTab === 'e'
       ? {
-          rows: expRows,
-          selected: selectedRow,
-          onSelectPara: (pi: number) => {
-            if (selectedRow) applyExplainRow(selectedRow, { para: pi });
-          },
-          onAddKey: (t: string) => {
-            if (selectedRow && !selectedRow.keys.includes(t)) {
-              applyExplainRow(selectedRow, { keys: [...selectedRow.keys, t] });
-            }
-          },
-          onSelectQuestion: (idx: number) => setEq(idx),
-        }
+        rows: expRows,
+        selected: selectedRow,
+        onSelectPara: (pi: number) => {
+          if (selectedRow) applyExplainRow(selectedRow, { para: pi });
+        },
+        onAddKey: (t: string) => {
+          if (selectedRow && !selectedRow.keys.includes(t)) {
+            applyExplainRow(selectedRow, { keys: [...selectedRow.keys, t] });
+          }
+        },
+        onSelectQuestion: (idx: number) => setEq(idx),
+      }
       : undefined;
 
   const crumbs: Crumb[] = [
@@ -697,11 +793,10 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
                 <button
                   type="button"
                   onClick={() => setRightTab('q')}
-                  className={`px-3 py-1 rounded-[9px] text-[13px] font-semibold border border-solid ${
-                    rightTab === 'q'
+                  className={`px-3 py-1 rounded-[9px] text-[13px] font-semibold border border-solid ${rightTab === 'q'
                       ? 'bg-white border-[#D6D4D0] shadow-sm text-[#352637]'
                       : 'border-transparent text-[#706473]'
-                  }`}
+                    }`}
                 >
                   Câu hỏi{' '}
                   <span className="font-normal text-[#706473]">
@@ -713,11 +808,10 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
                 <button
                   type="button"
                   onClick={() => setRightTab('e')}
-                  className={`px-3 py-1 rounded-[9px] text-[13px] font-semibold border border-solid ${
-                    rightTab === 'e'
+                  className={`px-3 py-1 rounded-[9px] text-[13px] font-semibold border border-solid ${rightTab === 'e'
                       ? 'bg-white border-[#D6D4D0] shadow-sm text-[#352637]'
                       : 'border-transparent text-[#706473]'
-                  }`}
+                    }`}
                 >
                   Giải thích{' '}
                   <span className="ml-1 text-[12px] px-2 py-0.5 rounded-full bg-[#FBEBB0] text-[#5A4300]">
@@ -731,11 +825,10 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
                   type="button"
                   onClick={handleUndo}
                   disabled={history.length === 0}
-                  className={`inline-flex items-center gap-1.5 h-9 px-4 rounded-full border border-solid text-[13px] font-semibold ${
-                    history.length > 0
+                  className={`inline-flex items-center gap-1.5 h-9 px-4 rounded-full border border-solid text-[13px] font-semibold ${history.length > 0
                       ? 'border-[#D6D4D0] bg-white text-[#352637] hover:bg-[#F3F0EA]'
                       : 'border-[#E5E0D8] text-[#A89CA8] cursor-not-allowed'
-                  }`}
+                    }`}
                 >
                   ← Hoàn tác
                 </button>
@@ -765,9 +858,8 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
                     return (
                       <div
                         key={gIdx}
-                        className={`rounded-2xl bg-white border border-solid ${
-                          open ? 'border-[#2963CC] border-2' : 'border-[#E5E0D8]'
-                        }`}
+                        className={`rounded-2xl bg-white border border-solid ${open ? 'border-[#2963CC] border-2' : 'border-[#E5E0D8]'
+                          }`}
                       >
                         <div className="flex items-center gap-3 px-4 py-3">
                           {mode === 'edit' && (
@@ -796,250 +888,266 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
                               </button>
                             </div>
                           )}
-                          <button
-                            type="button"
-                            onClick={() => setActiveGroup(open ? -1 : gIdx)}
-                            className="flex-1 min-w-0 flex items-center gap-3 text-left"
-                          >
-                            <span className="text-[14px] font-semibold text-[#352637] shrink-0">
-                              {c > 0
-                                ? formatQuestionRange(currentGroupStartNum, currentGroupStartNum + c - 1)
-                                : `Nhóm ${gIdx + 1}`}
-                            </span>
-                            <span className="text-[15px] font-semibold text-[#352637] truncate">
-                              {typeName(g.type, isReading)}
-                            </span>
-                            {gIss.length > 0 && (
-                              <span
-                                className="w-2 h-2 rounded-full bg-[#C0412A] shrink-0"
-                                title={`${gIss.length} vấn đề cần sửa`}
-                              />
+                              <div className="flex-1 min-w-0 flex items-center gap-3 text-left">
+                                <span
+                                  onClick={() => setActiveGroup(open ? -1 : gIdx)}
+                                  className="text-[14px] font-semibold text-[#352637] shrink-0 cursor-pointer hover:text-[#2963CC]"
+                                >
+                                  {c > 0
+                                    ? formatQuestionRange(currentGroupStartNum, currentGroupStartNum + c - 1)
+                                    : `Nhóm ${gIdx + 1}`}
+                                </span>
+                                <GroupTypeSwitcher
+                                  currentType={g.type}
+                                  allowedTypes={cfg.allowedTypes}
+                                  readOnly={mode === 'view'}
+                                  isReading={isReading}
+                                  onSelectType={(nextType) => handleChangeType(gIdx, nextType)}
+                                />
+                                {gIss.length > 0 && (
+                                  <span
+                                    onClick={() => setActiveGroup(open ? -1 : gIdx)}
+                                    className="w-2 h-2 rounded-full bg-[#C0412A] shrink-0 cursor-pointer"
+                                    title={`${gIss.length} vấn đề cần sửa`}
+                                  />
+                                )}
+                            </div>
+                            {mode === 'edit' && (
+                              <button
+                                type="button"
+                                onClick={() => setConfirmDeleteGroup(gIdx)}
+                                className="p-1.5 text-[#C0412A] hover:bg-[#FDF3F0] rounded-lg"
+                                title="Xóa nhóm này"
+                              >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
                             )}
-                          </button>
-                          {mode === 'edit' && (
                             <button
                               type="button"
-                              onClick={() => setConfirmDeleteGroup(gIdx)}
-                              className="p-1.5 text-[#C0412A] hover:bg-[#FDF3F0] rounded-lg"
-                              title="Xóa nhóm này"
+                              onClick={() => setActiveGroup(open ? -1 : gIdx)}
+                              className="p-1.5 text-[#706473] hover:bg-[#F3F0EA] rounded-lg"
+                              title={open ? 'Thu gọn' : 'Mở rộng'}
                             >
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              <svg
+                                className={`w-4 h-4 transition-transform ${open ? '' : 'rotate-180'}`}
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                               </svg>
                             </button>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => setActiveGroup(open ? -1 : gIdx)}
-                            className="p-1.5 text-[#706473] hover:bg-[#F3F0EA] rounded-lg"
-                            title={open ? 'Thu gọn' : 'Mở rộng'}
-                          >
-                            <svg
-                              className={`w-4 h-4 transition-transform ${open ? '' : 'rotate-180'}`}
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                            </svg>
-                          </button>
                         </div>
                         {open && (
                           <div className="px-5 pb-5 space-y-4">
 
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <label className="block text-[11px] font-bold text-[#706473] uppercase tracking-wider">
-                        Lời hướng dẫn (Instruction)
-                      </label>
-                      {mode === 'edit' && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            updateState((draft) => {
-                              const g = draft.passages[activePassage]?.groups[activeGroup];
-                              if (g) {
-                                g.instr = autoInstr(g, draft.passages[activePassage], activePassage);
-                              }
-                            });
-                          }}
-                          className="text-[11px] font-semibold text-[#2963CC] hover:underline"
-                        >
-                          Tự động điền theo chuẩn Cambridge
-                        </button>
-                      )}
-                    </div>
-                    <textarea
-                      rows={2}
-                      value={currentGroup.instr || ''}
-                      disabled={mode === 'view'}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        updateState((draft) => {
-                          const g = draft.passages[activePassage]?.groups[activeGroup];
-                          if (g) g.instr = val;
-                        });
-                      }}
-                      placeholder="Nhập lời hướng dẫn cho thí sinh..."
-                      className="w-full text-[13px] border border-[#D6D4D0] rounded-xl p-2.5 text-[#352637] placeholder-[#A89CA8] focus:outline-hidden focus:border-[#2963CC] resize-none"
-                    />
-                  </div>
+                            <div className="space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <label className="block text-[11px] font-bold text-[#706473] uppercase tracking-wider">
+                                  Lời hướng dẫn (Instruction)
+                                </label>
+                                {mode === 'edit' && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      updateState((draft) => {
+                                        const g = draft.passages[activePassage]?.groups[activeGroup];
+                                        if (g) {
+                                          g.instr = autoInstr(g, draft.passages[activePassage], activePassage);
+                                        }
+                                      });
+                                    }}
+                                    className="text-[11px] font-semibold text-[#2963CC] hover:underline"
+                                  >
+                                    Tự động điền theo chuẩn Cambridge
+                                  </button>
+                                )}
+                              </div>
+                              <textarea
+                                rows={2}
+                                value={currentGroup.instr || ''}
+                                disabled={mode === 'view'}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  updateState((draft) => {
+                                    const g = draft.passages[activePassage]?.groups[activeGroup];
+                                    if (g) g.instr = val;
+                                  });
+                                }}
+                                placeholder="Nhập lời hướng dẫn cho thí sinh..."
+                                className="w-full text-[13px] border border-[#D6D4D0] rounded-xl p-2.5 text-[#352637] placeholder-[#A89CA8] focus:outline-hidden focus:border-[#2963CC] resize-none"
+                              />
+                            </div>
 
-                  {/* Specific Question Card by Type */}
-                  <div className="pt-1">
-                    {(currentGroup.type === 'SENTENCE_COMP' ||
-                      currentGroup.type === 'SHORT_ANSWER') && (
-                      <GapCard
-                        group={currentGroup}
-                        passage={currentPassage}
-                        passageIndex={activePassage}
-                        groupStartNum={currentGroupStartNum}
-                        readOnly={mode === 'view'}
-                        onChange={(updater) => {
-                          updateState((draft) => {
-                            const g = draft.passages[activePassage]?.groups[activeGroup];
-                            if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
-                          });
-                        }}
-                      />
-                    )}
+                            {/* Specific Question Card by Type */}
+                            <div className="pt-1">
+                              {(currentGroup.type === 'SENTENCE_COMP' ||
+                                currentGroup.type === 'SHORT_ANSWER') && (
+                                  <GapCard
+                                    group={currentGroup}
+                                    passage={currentPassage}
+                                    passageIndex={activePassage}
+                                    groupStartNum={currentGroupStartNum}
+                                    readOnly={mode === 'view'}
+                                    onChange={(updater) => {
+                                      updateState((draft) => {
+                                        const g = draft.passages[activePassage]?.groups[activeGroup];
+                                        if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
+                                      });
+                                    }}
+                                  />
+                                )}
 
-                    {(currentGroup.type === 'SUMMARY_COMP' ||
-                      currentGroup.type === 'NOTE_COMP') && (
-                      <BlankTextCard
-                        group={currentGroup}
-                        passage={currentPassage}
-                        passageIndex={activePassage}
-                        groupStartNum={currentGroupStartNum}
-                        readOnly={mode === 'view'}
-                        onChange={(updater) => {
-                          updateState((draft) => {
-                            const g = draft.passages[activePassage]?.groups[activeGroup];
-                            if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
-                          });
-                        }}
-                      />
-                    )}
+                              {(currentGroup.type === 'SUMMARY_COMP' ||
+                                currentGroup.type === 'NOTE_COMP') && (
+                                  <BlankTextCard
+                                    group={currentGroup}
+                                    passage={currentPassage}
+                                    passageIndex={activePassage}
+                                    groupStartNum={currentGroupStartNum}
+                                    readOnly={mode === 'view'}
+                                    onChange={(updater) => {
+                                      updateState((draft) => {
+                                        const g = draft.passages[activePassage]?.groups[activeGroup];
+                                        if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
+                                      });
+                                    }}
+                                    onChangeType={(nextType) =>
+                                      handleChangeType(gIdx, nextType, {
+                                        body: currentGroup.body,
+                                        limit: currentGroup.limit,
+                                      })
+                                    }
+                                  />
+                                )}
 
-                    {currentGroup.type === 'SUMMARY_BOX' && (
-                      <WordBankCard
-                        group={currentGroup}
-                        passage={currentPassage}
-                        passageIndex={activePassage}
-                        groupStartNum={currentGroupStartNum}
-                        readOnly={mode === 'view'}
-                        onChange={(updater) => {
-                          updateState((draft) => {
-                            const g = draft.passages[activePassage]?.groups[activeGroup];
-                            if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
-                          });
-                        }}
-                      />
-                    )}
+                              {currentGroup.type === 'SUMMARY_BOX' && (
+                                <WordBankCard
+                                  group={currentGroup}
+                                  passage={currentPassage}
+                                  passageIndex={activePassage}
+                                  groupStartNum={currentGroupStartNum}
+                                  readOnly={mode === 'view'}
+                                  onChange={(updater) => {
+                                    updateState((draft) => {
+                                      const g = draft.passages[activePassage]?.groups[activeGroup];
+                                      if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
+                                    });
+                                  }}
+                                  onChangeType={(nextType) =>
+                                    handleChangeType(gIdx, nextType, {
+                                      body: currentGroup.body,
+                                      limit: currentGroup.limit,
+                                    })
+                                  }
+                                />
+                              )}
 
-                    {currentGroup.type === 'TABLE_COMP' && (
-                      <TableCard
-                        group={currentGroup}
-                        passage={currentPassage}
-                        passageIndex={activePassage}
-                        groupStartNum={currentGroupStartNum}
-                        readOnly={mode === 'view'}
-                        onChange={(updater) => {
-                          updateState((draft) => {
-                            const g = draft.passages[activePassage]?.groups[activeGroup];
-                            if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
-                          });
-                        }}
-                      />
-                    )}
+                              {currentGroup.type === 'TABLE_COMP' && (
+                                <TableCard
+                                  group={currentGroup}
+                                  passage={currentPassage}
+                                  passageIndex={activePassage}
+                                  groupStartNum={currentGroupStartNum}
+                                  readOnly={mode === 'view'}
+                                  onChange={(updater) => {
+                                    updateState((draft) => {
+                                      const g = draft.passages[activePassage]?.groups[activeGroup];
+                                      if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
+                                    });
+                                  }}
+                                />
+                              )}
 
-                    {currentGroup.type === 'FLOW_COMP' && (
-                      <FlowCard
-                        group={currentGroup}
-                        passage={currentPassage}
-                        passageIndex={activePassage}
-                        groupStartNum={currentGroupStartNum}
-                        readOnly={mode === 'view'}
-                        skillId={skillId || undefined}
-                        onChange={(updater) => {
-                          updateState((draft) => {
-                            const g = draft.passages[activePassage]?.groups[activeGroup];
-                            if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
-                          });
-                        }}
-                      />
-                    )}
+                              {currentGroup.type === 'FLOW_COMP' && (
+                                <FlowCard
+                                  group={currentGroup}
+                                  passage={currentPassage}
+                                  passageIndex={activePassage}
+                                  groupStartNum={currentGroupStartNum}
+                                  readOnly={mode === 'view'}
+                                  skillId={skillId || undefined}
+                                  onChange={(updater) => {
+                                    updateState((draft) => {
+                                      const g = draft.passages[activePassage]?.groups[activeGroup];
+                                      if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
+                                    });
+                                  }}
+                                />
+                              )}
 
-                    {currentGroup.type === 'DIAGRAM_COMP' && (
-                      <DiagramCard
-                        group={currentGroup}
-                        passage={currentPassage}
-                        passageIndex={activePassage}
-                        groupStartNum={currentGroupStartNum}
-                        readOnly={mode === 'view'}
-                        skillId={skillId || undefined}
-                        onChange={(updater) => {
-                          updateState((draft) => {
-                            const g = draft.passages[activePassage]?.groups[activeGroup];
-                            if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
-                          });
-                        }}
-                      />
-                    )}
+                              {currentGroup.type === 'DIAGRAM_COMP' && (
+                                <DiagramCard
+                                  group={currentGroup}
+                                  passage={currentPassage}
+                                  passageIndex={activePassage}
+                                  groupStartNum={currentGroupStartNum}
+                                  readOnly={mode === 'view'}
+                                  skillId={skillId || undefined}
+                                  onChange={(updater) => {
+                                    updateState((draft) => {
+                                      const g = draft.passages[activePassage]?.groups[activeGroup];
+                                      if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
+                                    });
+                                  }}
+                                />
+                              )}
 
-                    {(currentGroup.type === 'MATCH_HEADING' ||
-                      currentGroup.type === 'MATCH_INFO' ||
-                      currentGroup.type === 'MATCH_ENDING' ||
-                      currentGroup.type === 'MATCH_FEATURE') && (
-                      <MatchCard
-                        group={currentGroup}
-                        passage={currentPassage}
-                        passageIndex={activePassage}
-                        groupStartNum={currentGroupStartNum}
-                        readOnly={mode === 'view'}
-                        onChange={(updater) => {
-                          updateState((draft) => {
-                            const g = draft.passages[activePassage]?.groups[activeGroup];
-                            if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
-                          });
-                        }}
-                      />
-                    )}
+                              {(currentGroup.type === 'MATCH_HEADING' ||
+                                currentGroup.type === 'MATCH_INFO' ||
+                                currentGroup.type === 'MATCH_ENDING' ||
+                                currentGroup.type === 'MATCH_FEATURE') && (
+                                  <MatchCard
+                                    group={currentGroup}
+                                    passage={currentPassage}
+                                    passageIndex={activePassage}
+                                    groupStartNum={currentGroupStartNum}
+                                    readOnly={mode === 'view'}
+                                    onChange={(updater) => {
+                                      updateState((draft) => {
+                                        const g = draft.passages[activePassage]?.groups[activeGroup];
+                                        if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
+                                      });
+                                    }}
+                                  />
+                                )}
 
-                    {(currentGroup.type === 'MCQ_SINGLE' ||
-                      currentGroup.type === 'MCQ_MULTI') && (
-                      <McqCard
-                        group={currentGroup}
-                        passage={currentPassage}
-                        passageIndex={activePassage}
-                        groupStartNum={currentGroupStartNum}
-                        readOnly={mode === 'view'}
-                        onChange={(updater) => {
-                          updateState((draft) => {
-                            const g = draft.passages[activePassage]?.groups[activeGroup];
-                            if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
-                          });
-                        }}
-                      />
-                    )}
+                              {(currentGroup.type === 'MCQ_SINGLE' ||
+                                currentGroup.type === 'MCQ_MULTI') && (
+                                  <McqCard
+                                    group={currentGroup}
+                                    passage={currentPassage}
+                                    passageIndex={activePassage}
+                                    groupStartNum={currentGroupStartNum}
+                                    readOnly={mode === 'view'}
+                                    onChange={(updater) => {
+                                      updateState((draft) => {
+                                        const g = draft.passages[activePassage]?.groups[activeGroup];
+                                        if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
+                                      });
+                                    }}
+                                  />
+                                )}
 
-                    {(currentGroup.type === 'YNNG' ||
-                      currentGroup.type === 'TFNG') && (
-                      <JudgeCard
-                        group={currentGroup}
-                        passage={currentPassage}
-                        passageIndex={activePassage}
-                        groupStartNum={currentGroupStartNum}
-                        readOnly={mode === 'view'}
-                        onChange={(updater) => {
-                          updateState((draft) => {
-                            const g = draft.passages[activePassage]?.groups[activeGroup];
-                            if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
-                          });
-                        }}
-                      />
-                    )}
-                  </div>
+                              {(currentGroup.type === 'YNNG' ||
+                                currentGroup.type === 'TFNG') && (
+                                  <JudgeCard
+                                    group={currentGroup}
+                                    passage={currentPassage}
+                                    passageIndex={activePassage}
+                                    groupStartNum={currentGroupStartNum}
+                                    readOnly={mode === 'view'}
+                                    onChange={(updater) => {
+                                      updateState((draft) => {
+                                        const g = draft.passages[activePassage]?.groups[activeGroup];
+                                        if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
+                                      });
+                                    }}
+                                  />
+                                )}
+                            </div>
                           </div>
                         )}
                       </div>
@@ -1108,6 +1216,28 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
           setSkillId(vId);
           loadSkill(vId);
         }}
+      />
+
+      <ConfirmDialog
+        isOpen={confirmChangeType !== null}
+        title={`Đổi sang ${confirmChangeType
+            ? COMBO_TYPE_LABELS[confirmChangeType.nextType] || confirmChangeType.nextType
+            : ''
+          }?`}
+        message="Dữ liệu của dạng hiện tại trong thẻ sẽ bị xóa và thay bằng thẻ của dạng đã chọn. Bạn vẫn có thể hoàn tác sau đó."
+        isDanger={true}
+        confirmText="Đổi dạng"
+        cancelText="Hủy bỏ"
+        onConfirm={() => {
+          if (confirmChangeType) {
+            applyChangeType(
+              confirmChangeType.groupIndex,
+              confirmChangeType.nextType,
+              confirmChangeType.keep
+            );
+          }
+        }}
+        onCancel={() => setConfirmChangeType(null)}
       />
 
       <ConfirmDialog

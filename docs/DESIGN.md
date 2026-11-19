@@ -176,13 +176,13 @@ Canvas xếp theo role: **Khách và xác thực → Người học → Giáo vi
 | Giáo viên | Chấm bài | TeacherHome, TeacherQueue, TeacherGrade, TeacherHistory, StaffProfile |
 | Quản lý | Tổng quan, người dùng, chấm | AdminHome, AdminUsers, AdminGrading |
 | | Bộ đề, đề thi | AdminExams, AdminExamSet, Admin{Reading,Listening,Writing,Speaking}Editor |
-| | Thẻ câu hỏi | QuestionCards, QuestionCard |
+| | Thẻ câu hỏi | components/exams/lr-editor/cards/* |
 | | Bài mẫu | AdminSamples, AdminSampleWriting, AdminSampleSpeaking |
 
 Giải thích từng trang và liên kết: `docs/ui/trang-va-lien-ket.md`.
 
 ### Editor đề và bài mẫu
-- Reading: split editor (Doc + board); Listening: 4 section, ghi âm, transcript có mốc giờ, Map Labelling; Writing: 2 Task, ảnh đề Task 1, Academic/General; Speaking: 3 Part. Thẻ câu hỏi có 16 dạng (`QuestionCards`).
+- Reading: split editor (Doc + board); Listening: 4 section, ghi âm, transcript có mốc giờ, Map Labelling; Writing: 2 Task, ảnh đề Task 1, Academic/General; Speaking: 3 Part. Thẻ câu hỏi có 16 dạng (`lr-editor/cards/*`).
 - Bài mẫu: một editor cho mỗi kỹ năng; Writing một editor cho Task 1 và 2; **Speaking một editor cho cả Part 1, 2, 3**, mỗi mục có câu hỏi, câu trả lời mẫu, audio riêng. Ảnh bìa chỉ hiện ở thẻ, không nằm trong nội dung bài mẫu.
 - **Luôn mở ở chế độ Chỉ xem** (ngoại lệ: "Thêm bài mẫu" vào thẳng Chỉnh sửa). Chỉ xem: chip "Chỉ xem", dải sky-soft có icon khóa, ô nhập thành khối nền surface-2 không viền, nút thêm/xóa nhỏ ẩn (lớp `.eo`); thanh trên có Nhập từ xlsx, **Chỉnh sửa**, Đăng. Chỉnh sửa: chip "Đang chỉnh sửa", thanh trên có trạng thái thay đổi, Hoàn tác, **Hủy** (destructive), **Lưu**. Hủy khi còn thay đổi hỏi Tiếp tục sửa / Không lưu / Lưu.
 - Trang bài mẫu của Người học: breadcrumbs, mục lục scrollspy bên trái, nội dung bên phải; Speaking chia mục theo Part, mỗi câu hỏi một thẻ có audio.
@@ -246,7 +246,7 @@ ExamDetail ghép chữ cái, tên kỹ năng và cặp màu. Giữ cả ký hi�
 - **Form Auth.** Hai cột bằng nhau, form rộng tối đa 400 px. Khoảng cách giữa các cụm 18 px, giữa trường 14 px, giữa nhãn và ô 6 px. Ô nhập cao 44 px, bo 12 px. Nút cao tối thiểu 44 px, bo tròn 999 px. Hộp thông báo bo 10 px. Thẻ Auth dùng bóng nhẹ `0 4px 24px #3526370b`.
 - **Màn hình hẹp hoặc thấp.** Auth chuyển một cột và ẩn hero ở chiều rộng ≤900 px. Khi rộng ≥901 px nhưng cao ≤760 px, form thu còn tối đa 350 px và điều khiển chính còn 40 px. Đây là breakpoint riêng của Auth. Với trang nhân viên, kiểm tra menu, bảng và cuộn trong vùng nội dung ở kích thước mục tiêu.
 - **Khung làm việc.** app-shell cao 100dvh, sidebar giữ chiều rộng, app-content cuộn. Dùng lại AdminSidebar, TeacherSidebar, AdminTopbar, NotificationBadge và AccountMenu khi mở rộng màn hình cùng vai trò.
-- **Thẻ đề.** Ảnh bìa theo tỷ lệ 3:2 đã ghi trong rà soát 10/11. Giữ tên bộ đề bằng chữ và dùng nhãn truy cập cho ảnh/nút. Dùng QuestionCard cho cấu trúc câu hỏi tương ứng.
+- **Thẻ đề.** Ảnh bìa theo tỷ lệ 3:2 đã ghi trong rà soát 10/11. Giữ tên bộ đề bằng chữ và dùng nhãn truy cập cho ảnh/nút. Dùng các component thẻ câu hỏi cho cấu trúc câu hỏi tương ứng.
 
 ### Phản hồi và khả năng tiếp cận
 

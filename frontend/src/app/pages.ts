@@ -1,4 +1,4 @@
-import {lazy} from "react";
+import { lazy } from "react";
 
 export const pages = {
   AdminReports: lazy(() => import("../pages/admin/reports/AdminReports")),
@@ -48,6 +48,5 @@ export const pages = {
   AdminSamples: lazy(() => import("../pages/admin/samples/AdminSamples")),
   AdminSampleWriting: lazy(() => import("../pages/admin/samples/AdminSampleWriting")),
   AdminSampleSpeaking: lazy(() => import("../pages/admin/samples/AdminSampleSpeaking")),
-  QuestionCards: lazy(() => import("../pages/admin/exams/editors/QuestionCards")),
 };
 export type PageName = keyof typeof pages;

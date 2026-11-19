@@ -638,7 +638,6 @@ test('groupOfType and comboOptions categorize 5 groups accurately', () => {
 
   // Group 3: Table / Diagram
   assert.equal(groupOfType('TABLE_COMP'), 'table-diagram');
-  assert.equal(groupOfType('FLOW_COMP'), 'table-diagram');
   assert.equal(groupOfType('DIAGRAM_COMP'), 'table-diagram');
 
   // Group 4: Matching

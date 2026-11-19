@@ -98,6 +98,7 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | GQ-06 | Gộp Matching Features + Sentence Endings ở giao diện | GQ-01 | MATCH_ENDING hiển thị như MATCH_FEATURE trong combo, chọn từ dạng khác ra MATCH_FEATURE, nhóm đang là MATCH_ENDING bấm lại không làm gì. |
 | GQ-07 | Kiểm thử hồi quy và kiểm tra CSS | GQ-01..06 | Build và typecheck cả frontend & backend đạt 100%, 9/9 unit tests FE và 14/14 unit tests BE pass. |
 | GQ-09 | Xóa bản QuestionCard và QuestionCards cũ (đã chốt 19/11) | GQ-07 | Xóa QuestionCard.jsx, QuestionCards.jsx, gỡ dòng route lazy trong pages.ts; cập nhật BAO_CAO_BAN_GIAO và DESIGN.md. |
-| GQ-08 | Báo cáo tiến độ cập nhật thẻ câu hỏi theo 5 nhóm | GQ-00..09 | Hoàn thành biên bản tiến độ docs/PROGRESS/2026-11-19-the-cau-hoi-gop.md. |
+| GQ-10 | Xóa Flow-chart riêng và gộp vào Diagram (đã chốt 19/11) | GQ-01..09 | Xóa FlowCard.tsx, mã FLOW_COMP ở FE & BE; gộp vào DIAGRAM_COMP nhãn 'Diagram / Map / Flow-chart Completion'; kiểm tra CSDL có 0 nhóm lưu FLOW_COMP; build và tests 100% pass. |
+| GQ-08 | Báo cáo tiến độ cập nhật thẻ câu hỏi theo 5 nhóm | GQ-00..10 | Hoàn thành biên bản tiến độ docs/PROGRESS/2026-11-19-the-cau-hoi-gop.md và docs/PROGRESS/2026-11-19-type-picker-gon.md. |
 
 Khi nhận một dòng liên quan nhiều kỹ năng, thực hiện và kiểm tra từng kỹ năng bằng fixture riêng. Với API mới, cập nhật [hợp đồng](API.md) cùng thay đổi phía gọi và phía phục vụ.

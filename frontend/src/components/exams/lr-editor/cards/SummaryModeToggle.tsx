@@ -27,7 +27,7 @@ export function SummaryModeToggle({ group, readOnly = false, onChangeMode }: Sum
           }}
           className={`${base} ${!isBox ? on : off}`}
         >
-          Điền đáp án (không có danh sách từ)
+          Điền đáp án
         </button>
         <button
           type="button"
@@ -37,7 +37,7 @@ export function SummaryModeToggle({ group, readOnly = false, onChangeMode }: Sum
           }}
           className={`${base} ${isBox ? on : off}`}
         >
-          Có danh sách từ (Word list)
+          Có danh sách từ
         </button>
       </div>
     </div>

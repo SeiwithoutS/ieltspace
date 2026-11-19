@@ -360,7 +360,7 @@ function checkLrGroupReady(
 
   const prefix = `${secPrefix} ${secIdx + 1} · ${rangeText} · ${typeLabel}: `;
 
-  if (g.type === 'DIAGRAM_COMP' || (g.type === 'FLOW_COMP' && g.config?.mode === 'image')) {
+  if (g.type === 'DIAGRAM_COMP') {
     if (!g.image || !g.image.path || g.image.path.trim().length === 0) {
       issues.push(`${prefix}chưa tải hình sơ đồ.`);
     }

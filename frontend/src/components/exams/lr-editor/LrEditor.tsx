@@ -23,7 +23,6 @@ import GapCard from './cards/GapCard.tsx';
 import BlankTextCard from './cards/BlankTextCard.tsx';
 import WordBankCard from './cards/WordBankCard.tsx';
 import TableCard from './cards/TableCard.tsx';
-import FlowCard from './cards/FlowCard.tsx';
 import DiagramCard from './cards/DiagramCard.tsx';
 import MatchCard from './cards/MatchCard.tsx';
 import McqCard from './cards/McqCard.tsx';
@@ -1061,22 +1060,6 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
                                 />
                               )}
 
-                              {currentGroup.type === 'FLOW_COMP' && (
-                                <FlowCard
-                                  group={currentGroup}
-                                  passage={currentPassage}
-                                  passageIndex={activePassage}
-                                  groupStartNum={currentGroupStartNum}
-                                  readOnly={mode === 'view'}
-                                  skillId={skillId || undefined}
-                                  onChange={(updater) => {
-                                    updateState((draft) => {
-                                      const g = draft.passages[activePassage]?.groups[activeGroup];
-                                      if (g) applyGroupUpdate(g, updater, draft.passages[activePassage], activePassage);
-                                    });
-                                  }}
-                                />
-                              )}
 
                               {currentGroup.type === 'DIAGRAM_COMP' && (
                                 <DiagramCard

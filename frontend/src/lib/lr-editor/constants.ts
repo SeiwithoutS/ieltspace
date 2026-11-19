@@ -52,13 +52,6 @@ export const TYPES: LrTypeTuple[] = [
     2,
   ],
   [
-    'FLOW_COMP',
-    'Flow-chart Completion',
-    'flow',
-    'Complete the flow-chart below. Choose {L} from the passage for each answer.',
-    0,
-  ],
-  [
     'DIAGRAM_COMP',
     'Diagram Labelling',
     'diagram',
@@ -97,7 +90,7 @@ export const TYPES: LrTypeTuple[] = [
     'MCQ_SINGLE',
     'MCQ - Single Answer',
     'mcq1',
-    'Choose the correct letter, A, B, C or D.',
+    'Choose the correct answer',
     -1,
   ],
   [
@@ -118,7 +111,7 @@ export const TYPES: LrTypeTuple[] = [
     'TFNG',
     'True/False/Not Given',
     'judge',
-    'Do the following statements agree with the information given in the passage? Write TRUE, FALSE or NOT GIVEN.',
+    'Choose TRUE if the statement agrees with the information given in the text, choose FALSE if the statement contradicts the information, or choose NOT GIVEN if there is no information on this.',
     -1,
   ],
 ];
@@ -130,8 +123,7 @@ export const LR_QUESTION_TYPE_NAMES: Record<LrQuestionType, string> = {
   NOTE_COMP: 'Note Completion',
   SUMMARY_BOX: 'Summary Completion (Box)',
   TABLE_COMP: 'Table Completion',
-  FLOW_COMP: 'Flow-chart Completion',
-  DIAGRAM_COMP: 'Diagram Labelling',
+  DIAGRAM_COMP: 'Diagram / Map / Flow-chart Completion',
   MATCH_HEADING: 'Matching Headings',
   MATCH_INFO: 'Matching Information',
   MATCH_ENDING: 'Matching Sentence Endings',
@@ -155,7 +147,6 @@ export const FORMLABEL: Record<string, string> = {
   text: '2. Đoạn văn có chỗ trống',
   bank: '3. Đoạn văn và khung từ',
   table: '4. Bảng',
-  flow: '4. Sơ đồ',
   diagram: '5. Hình có nhãn',
   match: '6. Ghép với danh sách',
   mcq1: '7. Trắc nghiệm',
@@ -238,7 +229,7 @@ export interface LrTypeGroupDef {
 export const LR_TYPE_GROUPS: LrTypeGroupDef[] = [
   { id: 'blank-sentence', label: 'Câu có chỗ trống', types: ['SENTENCE_COMP', 'SHORT_ANSWER'] },
   { id: 'blank-passage', label: 'Đoạn văn có chỗ trống', types: ['SUMMARY_COMP', 'NOTE_COMP'] },
-  { id: 'table-diagram', label: 'Bảng và sơ đồ', types: ['TABLE_COMP', 'FLOW_COMP', 'DIAGRAM_COMP'] },
+  { id: 'table-diagram', label: 'Bảng và sơ đồ', types: ['TABLE_COMP', 'DIAGRAM_COMP'] },
   { id: 'matching', label: 'Ghép với danh sách', types: ['MATCH_HEADING', 'MATCH_INFO', 'MATCH_FEATURE'] },
   { id: 'choice', label: 'Trắc nghiệm', types: ['MCQ_SINGLE', 'MCQ_MULTI', 'TFNG', 'YNNG'] },
 ];
@@ -250,8 +241,7 @@ export const COMBO_TYPE_LABELS: Record<LrQuestionType, string> = {
   NOTE_COMP: 'Note Completion',
   SUMMARY_BOX: 'Summary Completion',
   TABLE_COMP: 'Table Completion',
-  FLOW_COMP: 'Flow-chart Completion',
-  DIAGRAM_COMP: 'Diagram / Map Labelling',
+  DIAGRAM_COMP: 'Diagram / Map / Flow-chart Completion',
   MATCH_HEADING: 'Matching Headings',
   MATCH_INFO: 'Matching Information',
   MATCH_ENDING: 'Matching Features / Sentence Endings',

@@ -1,5 +1,6 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import Popup from "../../components/attempts/Popup";
+import { StaffDataTable } from "../../components/shared/StaffDataTable";
 import { type VocabularySet } from "../../data/vocabulary";
 import { listAdminVocabularySets, createVocabularySet, deleteVocabularySet, type DatabaseVocabularySet } from "../../lib/vocabulary-api";
 
@@ -15,16 +16,43 @@ const coverChoices = [
   ),
 }));
 
-interface Props {
-  onOpen: (set: VocabularySet) => void;
-  onSave?: (set: VocabularySet) => void;
+type SetStatus = DatabaseVocabularySet["status"];
+
+const statusLabels: Record<SetStatus, string> = {
+  PUBLISHED: "Công khai",
+  DRAFT: "Bản nháp",
+  HIDDEN: "Đã ẩn",
+};
+const statusOptions = ["", "PUBLISHED", "DRAFT", "HIDDEN"] as const;
+
+export function VocabularySetStatus({ status }: { status: SetStatus }) {
+  return <span className="vocab-status" data-status={status}>{statusLabels[status]}</span>;
 }
 
-export function SetDirectory({ onOpen }: Props) {
+export function VocabularyStats({ stats }: { stats: readonly (readonly [string, number | string])[] }) {
+  return (
+    <dl className="vocab-stats">
+      {stats.map(([label, count]) => <div key={label}><dt>{label}</dt><dd>{count}</dd></div>)}
+    </dl>
+  );
+}
+
+export function VocabularySearch({ label, placeholder, value, onSearch }: {
+  label: string; placeholder: string; value: string; onSearch: (value: string) => void;
+}) {
+  return (
+    <label className="vocab-search">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
+      <input aria-label={label} type="search" placeholder={placeholder} value={value} onChange={event => onSearch(event.target.value)} />
+    </label>
+  );
+}
+
+export function SetDirectory({ onOpen }: { onOpen: (set: VocabularySet) => void }) {
   const [deleting, setDeleting] = useState<VocabularySet | null>(null);
-  const [status, setStatus] = useState("Tất cả");
+  const [status, setStatus] = useState<SetStatus | "">("");
   const [query, setQuery] = useState("");
-  const [editing, setEditing] = useState<VocabularySet | null>(null);
+  const [creating, setCreating] = useState(false);
   const [records, setRecords] = useState<DatabaseVocabularySet[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -37,56 +65,102 @@ export function SetDirectory({ onOpen }: Props) {
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
   }, [reload]);
-  const sets = records.map(set => ({ ...set, count: set.wordCount ?? 0, published: set.status === "PUBLISHED" }));
-  const published = sets.filter(set => set.published).length;
-  const statusOf = (id: string) => records.find(set => set.id === id)?.status === "HIDDEN" ? "Đã ẩn" : records.find(set => set.id === id)?.status === "PUBLISHED" ? "Công khai" : "Bản nháp";
-  const visible = sets.filter(set => (status === "Tất cả" || status === statusOf(set.id)) && set.title.toLocaleLowerCase("vi").includes(query.trim().toLocaleLowerCase("vi")));
+  const normalizedQuery = query.trim().toLocaleLowerCase("vi");
+  const visible = records.filter(set => (!status || status === set.status) && set.title.toLocaleLowerCase("vi").includes(normalizedQuery));
+  const stats = [
+    ["Tổng bộ từ", records.length],
+    ["Tổng số từ", records.reduce((total, set) => total + (set.wordCount ?? 0), 0)],
+    ["Công khai", records.filter(set => set.status === "PUBLISHED").length],
+    ["Bản nháp", records.filter(set => set.status === "DRAFT").length],
+    ["Đã ẩn", records.filter(set => set.status === "HIDDEN").length],
+  ] as const;
 
   return <>
-    <header className="vocab-hero">
+    <header className="vocab-page-header">
       <div><h1>Quản lý bộ từ vựng</h1><p>Nhập từ, quản lý nội dung và công bố bộ từ cho người học.</p></div>
-      <button className="word-primary" onClick={() => { setEditing({ id: "", title: "", cover: "" }); }}>＋ Tạo bộ từ</button>
+      <button type="button" className="vocab-button vocab-button-primary" onClick={() => setCreating(true)} aria-haspopup="dialog">＋ Tạo bộ từ</button>
     </header>
-    <dl className="set-stats">
-      {Object.entries({ "Tổng bộ từ": sets.length, "Tổng số từ": sets.reduce((n, set) => n + set.count, 0), "Đã công bố": published, "Bản nháp": sets.filter(set => statusOf(set.id) === "Bản nháp").length, "Đã ẩn": sets.filter(set => set.status === "HIDDEN").length }).map(([label, count]) =>
-        <div key={label}><dt>{label}</dt><dd>{count}</dd></div>)}
-    </dl>
-    {editing && <SetForm initial={editing} onSave={async set => { const result = await createVocabularySet(set); setRecords(current => [result.set, ...current]); setQuery(""); setStatus("Tất cả"); }} close={() => setEditing(null)} />}
+    <VocabularyStats stats={stats.map(([label, count]) => [label, loading || (error && !records.length) ? "—" : count])} />
+    {creating && <SetForm initial={{ id: "", title: "", cover: "" }} onSave={async set => {
+      const result = await createVocabularySet(set);
+      setRecords(current => [result.set, ...current]);
+      setQuery("");
+      setStatus("");
+      setError("");
+    }} close={() => setCreating(false)} />}
     {deleting && <Popup title="Xóa bộ từ" onCancel={() => setDeleting(null)}>
-      <div className="vocabulary set-modal"><h2>Xóa bộ “{deleting.title}”?</h2>
+      <div className="vocabulary vocab-set-dialog vocab-delete-dialog"><h2>Xóa bộ “{deleting.title}”?</h2>
       <p>Bộ nháp này sẽ bị xóa khỏi database. Bộ đã công bố không thể xóa tại bước này.</p>
-      <div className="word-tools"><button autoFocus onClick={() => setDeleting(null)}>Hủy</button>
-      <button disabled={removing} onClick={async () => {
+      <div className="vocab-dialog-actions"><button type="button" className="vocab-button" autoFocus onClick={() => setDeleting(null)}>Hủy</button>
+      <button type="button" className="vocab-button vocab-button-danger" disabled={removing} onClick={async () => {
         setRemoving(true);
         try { await deleteVocabularySet(deleting.id); setRecords(items => items.filter(item => item.id !== deleting.id)); setDeleting(null); }
         catch (error) { setError(error instanceof Error ? error.message : "Không xóa được bộ."); setDeleting(null); }
         finally { setRemoving(false); }
       }}>Xóa bộ từ</button></div></div>
     </Popup>}
-    <div className="word-tools"><input aria-label="Tìm bộ từ theo tên" type="search" placeholder="Tìm bộ từ theo tên…" value={query} onChange={e => setQuery(e.target.value)} />
-      <div className="vocab-tabs set-filters">{["Tất cả", "Công khai", "Bản nháp", "Đã ẩn"].map(label => <button key={label} aria-pressed={label === status} onClick={() => setStatus(label)}>{label}</button>)}</div>
+    <section className="vocab-panel" aria-labelledby="vocab-filter-title">
+      <div className="vocab-section-heading">
+        <h2 id="vocab-filter-title">Tìm và lọc bộ từ</h2>
+        {(query || status) && <button type="button" className="vocab-button" onClick={() => { setQuery(""); setStatus(""); }}>Xóa bộ lọc</button>}
       </div>
-    {loading && <p role="status">Đang tải danh sách từ database…</p>}
-    {error && <p role="alert">{error} <button onClick={() => setReload(value => value + 1)}>Thử lại</button></p>}
-    <section className="word-library"><h2>Danh sách bộ từ</h2>
-      <div className="set-directory">
-        <table><thead><tr>{["Tên bộ từ", "Số từ", "Trạng thái", "Thao tác"].map(label => <th scope="col" key={label}>{label}</th>)}</tr></thead>
-        <tbody>{visible.map(set => <tr key={set.id}><td><div className="set-row-title">
-          {set.cover ? <img src={set.cover} alt="" className="directory-cover" /> : <span className="directory-cover">{set.title.slice(0, 1)}</span>}
-          <strong>{set.title}</strong></div></td><td>{set.count}</td><td>
-          <span className="set-status" data-public={set.published}>{statusOf(set.id)}</span></td><td><div className="set-actions">
-          <button onClick={() => onOpen(set)}>Mở ›</button>
-          <button className="delete-set" aria-label={"Xóa bộ " + set.title} title="Xóa bộ từ" onClick={() => setDeleting(set)}>
-            <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15"/></svg>
-          </button>
-        </div></td></tr>)}</tbody></table>
-        {!loading && !error && !visible.length && <p>Không tìm thấy bộ từ.</p>}
+      <div className="vocab-filter-row">
+        <VocabularySearch label="Tìm bộ từ theo tên" placeholder="Tìm theo tên bộ từ" value={query} onSearch={setQuery} />
+        <div className="vocab-tabs vocab-admin-tabs" role="group" aria-label="Trạng thái bộ từ">
+          {statusOptions.map(option => <button type="button" key={option} aria-pressed={option === status} onClick={() => setStatus(option)}>{option ? statusLabels[option] : "Tất cả"}</button>)}
+        </div>
       </div>
+    </section>
+
+    {error && <div className="vocab-feedback flex flex-wrap items-center justify-between gap-3" role="alert">
+      <span>{error}</span>
+      <button type="button" className="vocab-button" onClick={() => setReload(value => value + 1)}>Tải lại danh sách</button>
+    </div>}
+    <section className="vocab-panel" aria-labelledby="vocab-list-title" aria-busy={loading}>
+      <div className="vocab-section-heading">
+        <h2 id="vocab-list-title">Danh sách bộ từ</h2>
+        {!loading && <small role="status">{visible.length} bộ từ</small>}
+      </div>
+      {loading ? <p className="vocab-empty" role="status">Đang tải danh sách…</p> : (
+        <StaffDataTable className="vocab-directory-table" label="Bảng danh sách bộ từ">
+          <thead><tr>{["Tên bộ từ", "Số từ", "Trạng thái", "Thao tác"].map(label => <th scope="col" key={label}>{label}</th>)}</tr></thead>
+          <tbody>
+            {visible.map(set => <tr key={set.id}>
+              <td>
+                <div className="flex items-center gap-3">
+                  <VocabularySetCover set={set} />
+                  <strong className="break-words">{set.title}</strong>
+                </div>
+              </td>
+              <td className="tabular-nums">{set.wordCount ?? 0}</td>
+              <td><VocabularySetStatus status={set.status} /></td>
+              <td>
+                <div className="flex items-center justify-end gap-2">
+                  <button type="button" className="vocab-button" aria-label={`Mở bộ ${set.title}`} onClick={() => onOpen(set)}>Mở <span aria-hidden="true">›</span></button>
+                  <button type="button" className="vocab-button vocab-button-icon vocab-button-danger" aria-label={`Xóa bộ ${set.title}`}
+                    title={set.status === "DRAFT" ? "Xóa bộ từ" : "Chỉ xóa được bộ từ ở trạng thái bản nháp"} disabled={set.status !== "DRAFT"} onClick={() => setDeleting(set)}>
+                    <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>)}
+            {!visible.length && <tr><td className="vocab-empty" colSpan={4}>
+              {error ? "Chưa tải được danh sách." : query || status ? "Không có bộ từ phù hợp với bộ lọc." : "Chưa có bộ từ nào."}
+            </td></tr>}
+          </tbody>
+        </StaffDataTable>
+      )}
     </section>
   </>;
 }
 
+export function VocabularySetCover({ set }: { set: VocabularySet }) {
+  return set.cover ? <img src={set.cover} alt="" className="vocab-set-cover" /> :
+    <span className="vocab-set-cover" aria-hidden="true">{set.title.slice(0, 1)}</span>;
+}
+
 export function SetForm({ initial, onSave, close }: { initial: VocabularySet; onSave: (set: VocabularySet) => void | Promise<void>; close: () => void }) {
+  const coverInput = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(initial);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -107,14 +181,15 @@ export function SetForm({ initial, onSave, close }: { initial: VocabularySet; on
   }
 
   return <Popup title={editing.id ? "Sửa bộ từ" : "Tạo bộ từ mới"} onCancel={close}>
-    <form className="vocabulary set-modal" onSubmit={submit}>
-      <button type="button" className="modal-close" aria-label="Đóng" onClick={close}>×</button>
+    <form className="vocabulary vocab-set-dialog" onSubmit={submit}>
+      <button type="button" className="vocab-button vocab-button-icon vocab-dialog-close" aria-label="Đóng" onClick={close}>×</button>
       <h2>{editing.id ? "Sửa bộ từ" : "Tạo bộ từ"}</h2>
       <p>{editing.id ? "Cập nhật thông tin bộ từ." : "Bộ mới ở trạng thái Bản nháp. Thêm từ sau khi tạo bộ."}</p>
       <div className="set-form-grid"><div>
         <div className="cover-preview">{editing.cover ? <img src={editing.cover} alt="Ảnh bìa" /> : "Ảnh bìa ngang 3:2"}</div>
-        <label>Hoặc tải ảnh bìa<input type="file" accept="image/png,image/jpeg,image/webp" onChange={async e => {
+        <input ref={coverInput} type="file" hidden accept="image/png,image/jpeg,image/webp" onChange={e => {
           const file = e.target.files?.[0];
+          e.target.value = "";
           if (!file) return;
           if (!["image/png", "image/jpeg", "image/webp"].includes(file.type) || file.size > 1024 * 1024) {
             setError("Chọn ảnh JPG, PNG hoặc WebP tối đa 1 MB."); return;
@@ -123,19 +198,20 @@ export function SetForm({ initial, onSave, close }: { initial: VocabularySet; on
           reader.onload = () => { setEditing(current => current === editing ? { ...current, cover: String(reader.result) } : current); setError(""); };
           reader.onerror = () => setError("Chưa đọc được ảnh.");
           reader.readAsDataURL(file);
-        }} /></label>
+        }} />
+        <button type="button" className="vocab-button vocab-upload-cover" onClick={() => coverInput.current?.click()}>Tải ảnh bìa lên</button>
         <div className="cover-options">{coverChoices.map(choice =>
           <button type="button" key={choice.name} aria-label={"Chọn bìa " + choice.name}
             aria-pressed={editing.cover === choice.url} onClick={() => setEditing({ ...editing, cover: choice.url })}>
             <img src={choice.url} alt="" />
           </button>)}</div><small>JPG, PNG hoặc WebP, tối đa 1 MB.</small>
       </div><div className="word-fields">
-        <label>Tên bộ từ<input required maxLength={80} autoFocus value={editing.title} onChange={e => setEditing({ ...editing, title: e.target.value })} /></label>
+        <label>Tên bộ từ<input required maxLength={80} autoFocus placeholder="Ví dụ: Từ vựng chủ đề Môi trường" value={editing.title} onChange={e => setEditing({ ...editing, title: e.target.value })} /></label>
         <label>URL ảnh bìa<input type="url" placeholder="https://…" value={editing.cover.startsWith("data:") ? "" : editing.cover} onChange={e => setEditing({ ...editing, cover: e.target.value })} /></label>
 
         <label>Mô tả (không bắt buộc)<textarea value={editing.description ?? ""} onChange={e => setEditing({ ...editing, description: e.target.value })} /></label>
       </div></div>
-      {error && <p role="alert">{error}</p>}
-      <div className="word-tools"><button type="button" onClick={close}>Hủy</button><button disabled={saving} className="word-primary">{editing.id ? "Lưu thay đổi" : "＋ Tạo bộ từ"}</button></div>
+      {error && <p role="alert" className="vocab-feedback">{error}</p>}
+      <div className="vocab-dialog-actions"><button type="button" className="vocab-button" onClick={close}>Hủy</button><button type="submit" disabled={saving} className="vocab-button vocab-button-primary">{saving ? "Đang lưu…" : editing.id ? "Lưu thay đổi" : "＋ Tạo bộ từ"}</button></div>
     </form></Popup>;
 }

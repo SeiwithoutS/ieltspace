@@ -1,0 +1,36 @@
+.staff-data-table {
+  min-width: 0;
+  overflow: auto;
+  border: 1px solid var(--staff-table-border, #d6d4d0);
+  border-radius: 12px;
+  background: var(--staff-table-surface, #fff);
+}
+
+.staff-data-table:focus-visible {
+  outline: 2px solid var(--staff-table-focus, #2963cc);
+  outline-offset: 2px;
+}
+
+.staff-data-table > table {
+  width: 100%;
+  border-spacing: 0;
+  text-align: start;
+}
+
+.staff-data-table > table > :is(thead, tbody) > tr > :is(th, td) {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--staff-table-border, #d6d4d0);
+  text-align: start;
+}
+
+.staff-data-table > table > thead > tr > th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--staff-table-header, #f3f0ea);
+  font-weight: 600;
+}
+
+.staff-data-table > table > tbody > tr:last-child > td {
+  border-bottom: 0;
+}

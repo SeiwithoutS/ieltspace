@@ -1,6 +1,4 @@
 import type { Word } from "../data/vocabulary";
-export const csvHeader =
-  "word,meaning_vi,part_of_speech,phonetic,example_en,example_vi";
 function csvRows(text: string) {
   const rows: string[][] = [];
   let row: string[] = [],

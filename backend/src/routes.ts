@@ -4,8 +4,10 @@ import { createVocabularyAdminRouter, createVocabularyLibraryRouter } from './mo
 import { vocabularyMediaRouter } from './modules/vocabulary/media.routes.js';
 import { adminExamsRouter } from './modules/exams/exams.admin.routes.js';
 import { publicExamsRouter } from './modules/exams/exams.public.routes.js';
+import { createSamplesPublicRouter } from './modules/samples/samples.routes.js';
 
 export const routes = Router();
+routes.use('/samples', createSamplesPublicRouter(prisma));
 routes.use('/vocabulary/sets', createVocabularyLibraryRouter(prisma));
 routes.use('/admin/vocabulary/sets', createVocabularyAdminRouter(prisma));
 routes.use('/admin/vocabulary/media', vocabularyMediaRouter);

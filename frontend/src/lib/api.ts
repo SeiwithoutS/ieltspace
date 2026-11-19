@@ -31,6 +31,7 @@ function isTokenExpiringSoon(token: string): boolean {
 
 export type ApiFetchOptions = {
   method?: string;
+  auth?: boolean;
   json?: unknown;
   body?: BodyInit | null;
   headers?: Record<string, string>;
@@ -42,9 +43,10 @@ export async function apiFetch<T = any>(
   retried = false
 ): Promise<T> {
   const method = options.method || 'GET';
+  const authenticated = options.auth !== false;
   const headers: Record<string, string> = { ...options.headers };
 
-  let token = getAccessToken();
+  let token = authenticated ? getAccessToken() : '';
   if (token && isTokenExpiringSoon(token) && !retried) {
     try {
       await refresh();
@@ -73,13 +75,13 @@ export async function apiFetch<T = any>(
       method,
       headers,
       body,
-      credentials: 'include',
+      credentials: authenticated ? 'include' : 'omit',
     });
   } catch (_netErr) {
     throw new ApiError(0, 'NETWORK_ERROR', 'Không thể kết nối. Vui lòng thử lại.');
   }
 
-  if (res.status === 401 && !retried) {
+  if (authenticated && res.status === 401 && !retried) {
     try {
       await refresh();
       return await apiFetch<T>(path, options, true);

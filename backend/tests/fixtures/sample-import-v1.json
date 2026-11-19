@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "fileName": "sample-answers-v1.xlsx",
+  "sheets": {
+    "Writing": [
+      ["sample_key", "title", "sample_type", "form", "topic", "band", "source", "writing_type", "prompt", "outline_intro", "outline", "essay", "translation"],
+      ["W001", "Phương tiện đi học", "WRITING_TASK_1_ACADEMIC", "ACADEMIC", "Giáo dục", "8", "Ví dụ IELTSpace", "bar", "The bar chart compares how students at one college travelled to class in 2015 and 2025. Summarise the main features and make comparisons where relevant.", "Giới thiệu xu hướng chung.", "- Các phương tiện giảm\n- Các phương tiện tăng", "The chart compares how students travelled to class in 2015 and 2025.\n\nOverall, bus travel became more common, while the share of students arriving by car declined.", "Biểu đồ so sánh phương tiện đi học của sinh viên năm 2015 và 2025.\n\nNhìn chung, lượng sinh viên đi xe buýt tăng, còn tỷ lệ đi ô tô giảm."]
+    ],
+    "Speaking": [
+      ["sample_key", "title", "sample_type", "topic", "band", "source", "outline_intro", "outline", "item_order", "question", "answer"],
+      ["S001", "My neighbourhood", "SPEAKING_PART_1", "Nơi ở", "7.5", "Ví dụ IELTSpace", "Trả lời trực tiếp và thêm ví dụ.", "- Vị trí\n- Điều yêu thích", "1", "What is your neighbourhood like?", "It is quiet and close to the city centre. There is a small market at the end of my street."],
+      ["S001", "My neighbourhood", "SPEAKING_PART_1", "Nơi ở", "7.5", "Ví dụ IELTSpace", "Trả lời trực tiếp và thêm ví dụ.", "- Vị trí\n- Điều yêu thích", "2", "What do you like most about it?", "I like the public garden because it gives me somewhere to read outdoors.\nI usually go there on Sunday mornings."]
+    ]
+  }
+}

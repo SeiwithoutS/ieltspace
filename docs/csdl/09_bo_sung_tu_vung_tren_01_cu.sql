@@ -25,6 +25,44 @@ begin
   end if;
 end $$;
 
+-- API dùng ON CONFLICT (user_id, vocabulary_id) cho sao và ghi chú.
+-- Bản xuất schema có thể không liệt kê unique index. Kiểm tra catalog thực
+-- tế để tái sử dụng index đang có hoặc bổ sung khi thiếu.
+do $$
+declare
+  target_table text;
+  target_index text;
+  target_relation regclass;
+  has_immediate_index boolean;
+  has_deferred_index boolean;
+begin
+  foreach target_table in array array['favorite_vocabularies', 'vocabulary_notes']
+  loop
+    target_relation := to_regclass(format('public.%I', target_table));
+    select coalesce(bool_or(i.indimmediate), false),
+           coalesce(bool_or(not i.indimmediate), false)
+      into has_immediate_index, has_deferred_index
+      from pg_index i
+      where i.indrelid = target_relation
+        and i.indisunique and i.indisvalid
+        and i.indpred is null and i.indexprs is null
+        and i.indnkeyatts = 2
+        and (
+          select array_agg(a.attname::text order by a.attname::text)
+          from unnest(i.indkey::smallint[]) with ordinality as k(attnum, position)
+          join pg_attribute a on a.attrelid = i.indrelid and a.attnum = k.attnum
+          where k.position <= i.indnkeyatts
+        ) = array['user_id', 'vocabulary_id'];
+    if has_deferred_index then
+      raise exception 'Bảng % có UNIQUE hoãn kiểm tra theo cặp người–từ. Đối chiếu trước khi dùng ON CONFLICT.', target_table;
+    end if;
+    if not has_immediate_index then
+      target_index := target_table || '_user_vocab_uniq';
+      execute format('create unique index %I on public.%I (user_id, vocabulary_id)', target_index, target_table);
+    end if;
+  end loop;
+end $$;
+
 create table public.vocabulary_set_drafts (
   set_id uuid primary key references public.vocabulary_sets(id),
   revision integer not null default 0 check (revision >= 0),

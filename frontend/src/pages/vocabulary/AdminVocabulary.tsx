@@ -1,18 +1,29 @@
 import { apiFetch } from "../../lib/api";
+import Popup from "../../components/attempts/Popup";
 import StaffLayout from "../../components/layout/StaffLayout";
-import { SetDirectory, SetForm } from "./SetDirectory";
+import { SetDirectory, SetForm, VocabularySearch, VocabularySetCover, VocabularySetStatus, VocabularyStats } from "./SetDirectory";
 import { useEffect, useRef, useState } from "react";
-import {
-  type VocabularySet,
-
-  type Word,
-} from "../../data/vocabulary";
-import { importWords, csvHeader } from "../../lib/vocabulary-import";
+import type { VocabularySet, Word } from "../../data/vocabulary";
+import { importWords } from "../../lib/vocabulary-import";
 import { WordCard } from "../../components/vocabulary/WordCard";
-import "./vocabulary.css";
-import { getVocabularyDraft, saveVocabularyDraft, updateVocabularySet } from "../../lib/vocabulary-api";
+import { getVocabularyDraft, saveVocabularyDraft, updateVocabularySet, type DatabaseVocabularySet } from "../../lib/vocabulary-api";
 import { findVocabularyMedia } from "../../lib/vocabulary-media";
 import { WordMediaEditor } from "../../components/vocabulary/WordMediaEditor";
+import { VisibilityIcon } from "../../components/shared/VisibilityIcon";
+import { canNavigate, registerNavigationGuard } from "../../lib/navigation-guard";
+import "./vocabulary.css";
+import "./admin-vocabulary.css";
+
+const mediaFields = ["image", "audio"] as const;
+type ImportPhase = "reading" | "saving" | "lookup" | "saving-media";
+
+async function lookupMedia(entry: Word, field: typeof mediaFields[number]): Promise<Partial<Word>> {
+  try {
+    return await findVocabularyMedia(entry.word, field);
+  } catch {
+    return { mediaMessage: "Chưa tra được media. Kiểm tra đăng nhập, backend và cấu hình API key." };
+  }
+}
 
 function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: VocabularySet) => void }) {
   const [editingInfo, setEditingInfo] = useState(false);
@@ -24,38 +35,109 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false);
   const file = useRef<HTMLInputElement>(null);
+  const savedWords = useRef<Word[]>([]);
+  const importPhase = useRef<ImportPhase | null>(null);
+  const importJob = useRef<AbortController | null>(null);
+  useEffect(() => () => importJob.current?.abort(), []);
+
+  useEffect(() => {
+    const unregister = registerNavigationGuard(() => {
+      if (importPhase.current === "lookup") {
+        return window.confirm("Danh sách từ đã lưu. Rời trang sẽ dừng phần tra ảnh và audio còn lại. Bạn muốn rời đi?");
+      }
+      if (busy || importPhase.current) {
+        window.alert("Đang xử lý bộ từ. Hãy đợi thao tác hoàn tất trước khi rời trang.");
+        return false;
+      }
+      return words === savedWords.current || window.confirm("Bộ từ có thay đổi chưa lưu. Bạn muốn rời trang?");
+    });
+    function beforeUnload(event: BeforeUnloadEvent) {
+      if (importPhase.current === "lookup") return;
+      if (busy || importPhase.current || words !== savedWords.current) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    }
+    window.addEventListener("beforeunload", beforeUnload);
+    return () => {
+      unregister();
+      window.removeEventListener("beforeunload", beforeUnload);
+    };
+  }, [busy, words]);
+
   async function fillMissingMedia(entry: Word) {
     if (!entry.word.trim()) return;
-    await Promise.all((["image", "audio"] as const).map(async field => {
+    await Promise.all(mediaFields.map(async field => {
       if (entry[field]) return;
-      try {
-        const patch = await findVocabularyMedia(entry.word, field);
-        setWords(items => items.map(item =>
-          item.id === entry.id && item.word === entry.word && !item[field]
-            ? { ...item, ...patch } : item));
-      } catch {
-        setWords(items => items.map(item => item.id === entry.id && item.word === entry.word ? { ...item, mediaMessage: "Chưa tra được media. Kiểm tra đăng nhập, backend và cấu hình API key." } : item));
-      }
+      const patch = await lookupMedia(entry, field);
+      setWords(items => items.map(item =>
+        item.id === entry.id && item.word === entry.word && !item[field]
+          ? { ...item, ...patch } : item));
     }));
   }
+
   async function upload(f?: File) {
-    if (!f) return;
+    if (!f || busy || importPhase.current || revision === null) return;
+    const job = new AbortController();
+    const { signal } = job;
+    importJob.current = job;
+    importPhase.current = "reading";
     setBusy(true);
+    setMessage("Đang đọc tệp từ vựng…");
     try {
       const next = await importWords(f);
+      if (signal.aborted) return;
+      if (words.length && !window.confirm(`Thay ${words.length} từ đang chỉnh sửa bằng ${next.length} từ trong tệp và lưu bản nháp?`)) {
+        setMessage("");
+        return;
+      }
       setChosen([]);
       setWords(next);
-      setMessage("Đang tìm ảnh và audio cho các từ vừa nhập…");
-      const queue = next.values();
+      importPhase.current = "saving";
+      setMessage(`Đang lưu ${next.length} từ vào bản nháp…`);
+      const saved = await saveVocabularyDraft(topic, revision, next);
+      if (signal.aborted) return;
+      savedWords.current = next;
+      setRevision(saved.revision);
+
+      importPhase.current = "lookup";
+      setMessage(`Đã lưu ${next.length} từ vào bản nháp. Đang tìm ảnh và audio…`);
+      const queue = next.entries();
+      const enriched = [...next];
       await Promise.all(Array.from({ length: Math.min(4, next.length) }, async () => {
-        for (const entry of queue) await fillMissingMedia(entry);
+        for (const [index, entry] of queue) {
+          if (signal.aborted) break;
+          const [image, audio] = await Promise.all(mediaFields.map(field => lookupMedia(entry, field)));
+          enriched[index] = { ...entry, ...image, ...audio, mediaMessage: [image.mediaMessage, audio.mediaMessage].filter(Boolean).join(" ") };
+        }
       }));
-      setMessage(
-        "Đã đọc " + next.length + " từ. Kiểm tra nội dung trước khi lưu.",
-      );
+      if (signal.aborted) return;
+
+      setWords(enriched);
+      const hasTemporaryImages = enriched.some(word => word.image.startsWith("data:"));
+      const draftWithMedia = hasTemporaryImages
+        ? enriched.map(word => word.image.startsWith("data:") ? { ...word, image: "", imageCredit: undefined } : word)
+        : enriched;
+      if (draftWithMedia.some(word => word.image || word.audio)) {
+        importPhase.current = "saving-media";
+        const result = await saveVocabularyDraft(topic, saved.revision, draftWithMedia);
+        if (signal.aborted) return;
+        setRevision(result.revision);
+      }
+      savedWords.current = draftWithMedia;
+      setMessage(`Đã lưu bản nháp ${next.length} từ và hoàn tất tra ảnh, audio. ${hasTemporaryImages
+        ? "Ảnh tạm chỉ dùng để xem trước. Hãy thay bằng URL HTTPS hoặc bỏ ảnh trước khi lưu tiếp."
+        : "Kiểm tra nội dung trước khi công bố."}`);
     } catch (e) {
-      setMessage(e instanceof Error ? e.message : "Không đọc được file.");
+      if (signal.aborted) return;
+      const detail = e instanceof Error ? e.message : "Thao tác không thành công.";
+      const context = importPhase.current === "saving-media"
+        ? "Danh sách từ đã lưu. Chưa lưu được kết quả tra ảnh và audio."
+        : importPhase.current === "saving" ? "Chưa lưu được danh sách vào bản nháp." : "Không đọc được tệp.";
+      setMessage(`${context} ${detail}`);
     } finally {
+      importPhase.current = null;
+      importJob.current = null;
       setBusy(false);
       if (file.current) file.current.value = "";
     }
@@ -66,12 +148,12 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
   const [reload, setReload] = useState(0);
   useEffect(() => {
     let active = true; setLoading(true); setLoadError(""); setRevision(null);
-    getVocabularyDraft(topic).then(result => { if (active) { setStatus(result.set.status); setWords(result.words); setRevision(result.revision); } })
+    getVocabularyDraft(topic).then(result => { if (active) { savedWords.current = result.words; setStatus(result.set.status); setWords(result.words); setRevision(result.revision); } })
       .catch(error => { if (active) setLoadError(error instanceof Error ? error.message : "Không tải được bản nháp."); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
   }, [topic, reload]);
-  const [status,setStatus] = useState("DRAFT");
+  const [status, setStatus] = useState<DatabaseVocabularySet["status"]>("DRAFT");
   async function saveDraft(publish = false) {
     if (busy || revision === null) return;
     setBusy(true); setMessage("");
@@ -79,6 +161,7 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
       if (words.some(word => !word.word.trim() || !word.meaning.trim())) throw new Error("Mỗi mục cần có từ và nghĩa tiếng Việt.");
       if (words.some(word => word.image.startsWith("data:"))) throw new Error("Ảnh máy/Pixabay cần upload lên Storage trước khi lưu DB. Ở bước lưu nháp này, thay bằng URL HTTPS hoặc xóa ảnh đó.");
       const result = await saveVocabularyDraft(topic, revision, words);
+      savedWords.current = words;
       setRevision(result.revision);
       if (publish) { await publication("publish", result.revision); return; }
       setMessage(`Đã lưu ${result.wordCount} từ vào database, bản nháp ${result.revision}.`);
@@ -88,13 +171,15 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
   async function publication(action: "publish" | "hide" | "show", version: number) {
     setBusy(true);
     try {
-      const result = await apiFetch<{status:string;revision:number}>(`/admin/vocabulary/sets/${topic}/publication`, {method:"POST",json:{action,revision:version}});
+      const result = await apiFetch<{status: DatabaseVocabularySet["status"]; revision: number}>(`/admin/vocabulary/sets/${topic}/publication`, {method:"POST",json:{action,revision:version}});
       setStatus(result.status); setRevision(result.revision);
       setMessage(action === "hide" ? "Đã ẩn khỏi thư viện." : "Bộ từ đã hiển thị trong thư viện người học.");
     } catch (error) { setMessage(error instanceof Error ? error.message : "Chưa cập nhật được trạng thái."); }
     finally { setBusy(false); }
   }
   const [chosen, setChosen] = useState<string[]>([]);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const wordListHeading = useRef<HTMLHeadingElement>(null);
   const [target, setTarget] = useState("both");
   async function refreshMedia() {
     const selectedWords = words.filter(word => chosen.includes(word.id) && word.word.trim());
@@ -130,54 +215,105 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
         (filter === "image" && !w.image) ||
         (filter === "audio" && !w.audio)),
   );
-  if (loading) return <p role="status">Đang tải bản nháp từ database…</p>;
-  if (loadError) return <p role="alert">{loadError} <button onClick={() => setReload(value => value + 1)}>Thử lại</button></p>;
+  const chosenIds = new Set(chosen);
+  const hiddenChosenCount = chosenIds.size - visible.filter(word => chosenIds.has(word.id)).length;
+
+  function removeChosenWords() {
+    if (busy || !chosenIds.size) return;
+    setWords(current => current.filter(word => !chosenIds.has(word.id)));
+    setChosen([]);
+    setConfirmingDelete(false);
+    setMessage(`Đã xóa ${chosenIds.size} từ khỏi danh sách đang chỉnh sửa. Bấm Lưu để lưu thay đổi.`);
+    requestAnimationFrame(() => wordListHeading.current?.focus({ preventScroll: true }));
+  }
+
+  if (loading) return <p className="vocab-panel vocab-empty" role="status">Đang tải bản nháp…</p>;
+  if (loadError) return (
+    <div className="vocab-feedback flex flex-wrap items-center justify-between gap-3" role="alert">
+      {loadError} <button type="button" className="vocab-button" onClick={() => setReload(value => value + 1)}>Thử lại</button>
+    </div>
+  );
+  const visibilityLabel = status === "HIDDEN" ? "Hiện lại bộ từ" : "Ẩn bộ từ";
   return (
     <>
-      <p className="word-feedback">Bấm Lưu bản nháp để ghi từ vào database. Bấm Công bố để cập nhật thư viện người học.</p>
-      <button disabled={busy} onClick={() => setEditingInfo(true)}>Thông tin bộ từ</button>
       {editingInfo && <SetForm initial={set} close={() => setEditingInfo(false)} onSave={async updated => {
         if (revision === null) throw new Error("Chưa tải được bản nháp.");
         const result = await updateVocabularySet({ ...updated, status: "DRAFT", revision });
         setRevision(result.revision); onSetUpdate(updated);
       }} />}
-      <header className="set-detail-head">
-        {set.cover ? <img src={set.cover} alt="" /> : <span className="directory-cover">{set.title.slice(0, 1)}</span>}
-        <div><h1>{set.title}</h1><small>{words.length} từ · {status === "PUBLISHED" ? "Công khai" : status === "HIDDEN" ? "Đã ẩn" : "Bản nháp"}</small>{set.description && <p>{set.description}</p>}</div>
-      <div className="word-tools">
-        <button aria-label={preview ? "Quay lại chỉnh sửa" : "Xem trước"} title={preview ? "Quay lại chỉnh sửa" : "Xem trước"} onClick={() => setPreview(!preview)}>
-          {preview ? "Quay lại chỉnh sửa" : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>}
-        </button>
-        {!preview && (
-          <>
-            <button onClick={() => {
-              setSearch("");
-              setFilter("all");
-              setWords((items) => [{ id: crypto.randomUUID(), word: "", meaning: "", pos: "", phonetic: "", example: "", translation: "", image: "", audio: "" }, ...items]);
-            }}>＋ Thêm từ vựng</button>
-            <button disabled={busy} onClick={() => saveDraft()}>
-              Lưu bản nháp
+      {confirmingDelete && (
+        <Popup title="Xóa từ đã chọn" onCancel={() => setConfirmingDelete(false)}>
+          <div className="vocabulary vocab-set-dialog vocab-delete-dialog">
+            <h2>Xóa {chosenIds.size} từ đã chọn?</h2>
+            {hiddenChosenCount > 0 && <p>Trong số này có {hiddenChosenCount} từ nằm ngoài bộ lọc hiện tại.</p>}
+            <p>Các từ sẽ được bỏ khỏi danh sách đang chỉnh sửa. Bấm Lưu để lưu thay đổi.</p>
+            <div className="vocab-dialog-actions">
+              <button type="button" className="vocab-button" autoFocus onClick={() => setConfirmingDelete(false)}>Hủy</button>
+              <button type="button" className="vocab-button vocab-button-danger" onClick={removeChosenWords}>Xóa từ</button>
+            </div>
+          </div>
+        </Popup>
+      )}
+      <header className="vocab-page-header vocab-detail-header">
+        <div className="flex items-start gap-4 min-w-0">
+          <VocabularySetCover set={set} />
+          <div className="min-w-0">
+            <h1>{set.title}</h1>
+            <div className="flex flex-wrap items-center gap-2">
+              <VocabularySetStatus status={status} />
+              <small>{words.length} từ</small>
+            </div>
+            {set.description && <p>{set.description}</p>}
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" className="vocab-button" onClick={() => setPreview(!preview)}>
+            {preview ? "Quay lại chỉnh sửa" : "Xem trước"}
+          </button>
+          {!preview && <button type="button" className="vocab-button" disabled={busy} onClick={() => setEditingInfo(true)}>Thông tin bộ từ</button>}
+        </div>
+      </header>
+      {!preview && (
+        <section className="vocab-panel vocab-edit-toolbar" aria-label="Thao tác bộ từ">
+          <button type="button" className="vocab-button" disabled={busy} onClick={() => {
+            setSearch("");
+            setFilter("all");
+            setWords(items => [{ id: crypto.randomUUID(), word: "", meaning: "", pos: "", phonetic: "", example: "", translation: "", image: "", audio: "" }, ...items]);
+          }}>＋ Thêm từ vựng</button>
+          <div className="flex flex-wrap gap-2">
+            {status !== "DRAFT" && <button type="button" className="vocab-button vocab-button-icon" disabled={busy || revision === null}
+              aria-label={visibilityLabel} title={visibilityLabel}
+              onClick={() => revision !== null && publication(status === "HIDDEN" ? "show" : "hide", revision)}>
+              <VisibilityIcon visible={status === "PUBLISHED"} />
+            </button>}
+            <button type="button" className="vocab-button" disabled={busy} onClick={() => saveDraft()}>Lưu</button>
+            <button type="button" className="vocab-button vocab-button-primary" disabled={busy || !words.length} onClick={() => saveDraft(true)}>
+              Công bố
             </button>
-            <button className="word-primary" disabled={busy || !words.length} onClick={() => saveDraft(true)}>Công bố</button>
-            {status !== "DRAFT" && <button disabled={busy || revision === null} onClick={() => revision !== null && publication(status === "HIDDEN" ? "show" : "hide",revision)}>{status === "HIDDEN" ? "Hiện lại bộ từ" : "Ẩn bộ từ"}</button>}
-          </>
-        )}
-      </div></header>
+          </div>
+        </section>
+      )}
+      {message && <p role="status" className="vocab-feedback">{message}</p>}
       {!preview && (
         <section
-          className="word-import"
+          className="vocab-panel vocab-edit-toolbar vocab-import-panel"
+          aria-labelledby="vocab-import-title"
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
             e.preventDefault();
             if (!busy) void upload(e.dataTransfer.files[0]);
           }}
         >
-          <h2>Nhập bộ từ vựng</h2>
-          <p>
-            Kéo thả Excel (.xlsx) hoặc CSV để thay danh sách đang chỉnh sửa. Tối
-            đa 5 MB, 500 từ.
-          </p>
-          <div className="word-tools">
+          <div className="flex items-start gap-3">
+            <span className="vocab-import-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg>
+            </span>
+            <div>
+              <h2 id="vocab-import-title">Nhập từ vựng từ tệp</h2>
+              <p>Chọn hoặc kéo thả Excel (.xlsx) hay CSV. Hệ thống lưu bản nháp rồi tra ảnh và audio. Tối đa 5 MB, 500 từ.</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
             <input
               ref={file}
               type="file"
@@ -185,86 +321,87 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
               accept=".xlsx,.csv"
               onChange={(e) => void upload(e.target.files?.[0])}
             />
-            <button disabled={busy} onClick={() => file.current?.click()}>
-              {busy ? "Đang đọc…" : "Chọn file"}
+            <button type="button" className="vocab-button" disabled={busy} onClick={() => file.current?.click()}>
+              Chọn tệp
             </button>
             <a
-              download="mau-tu-vung.csv"
-              href={
-                "data:text/csv;charset=utf-8," +
-                encodeURIComponent(
-                  "\uFEFF" +
-                    csvHeader +
-                    "\r\nforest,khu rừng,danh từ,/ˈfɒrɪst/,Forests protect wildlife.,Rừng bảo vệ động vật hoang dã.",
-                )
-              }
+              className="vocab-button" download
+              href={`${import.meta.env.BASE_URL}templates/mau-tu-vung.xlsx`}
             >
-              Tải mẫu CSV
+              Tải Excel mẫu
             </a>
           </div>
         </section>
       )}
-      {message && <p role="status" className="word-feedback">{message}</p>}
-      <section className="word-library"><h2>
-        {set.title} <small>· {words.length} từ</small>
-      </h2>
+      <section className="min-w-0 grid gap-4" aria-labelledby="vocab-word-list-title">
+      <div className="vocab-section-heading">
+        <h2 id="vocab-word-list-title" ref={wordListHeading} tabIndex={-1}>{preview ? "Xem trước danh sách từ" : "Danh sách từ vựng"}</h2>
+        <small>{preview ? words.length : visible.length} từ</small>
+      </div>
       {!preview && (
         <>
-          <dl className="media-counts">{[
-            ["Đủ ảnh và audio",words.filter(w=>w.image && w.audio).length],
-            ["Thiếu ảnh",words.filter(w=>!w.image).length],
-            ["Thiếu audio",words.filter(w=>!w.audio).length]
-          ].map(([label,count])=><div key={label}><dt>{label}</dt><dd>{count}</dd></div>)}</dl>
-          <div className="word-tools">
-            <input
-              aria-label="Tìm mục từ"
-              placeholder="Tìm từ hoặc nghĩa…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <select
-              aria-label="Lọc trạng thái media"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-            >
-              <option value="all">Mọi trạng thái</option>
-              <option value="ready">Đủ ảnh và audio</option>
-              <option value="image">Thiếu ảnh</option>
-              <option value="audio">Thiếu audio</option>
-            </select>
+          <VocabularyStats stats={[
+            ["Đủ ảnh và audio", words.filter(word => word.image && word.audio).length],
+            ["Thiếu ảnh", words.filter(word => !word.image).length],
+            ["Thiếu audio", words.filter(word => !word.audio).length],
+          ]} />
+          <div className="vocab-panel vocab-word-toolbar">
+            <div className="vocab-filter-row">
+              <VocabularySearch label="Tìm mục từ" placeholder="Tìm từ hoặc nghĩa…" value={search} onSearch={setSearch} />
+              <select aria-label="Lọc trạng thái media" value={filter} onChange={event => setFilter(event.target.value)}>
+                <option value="all">Mọi trạng thái</option>
+                <option value="ready">Đủ ảnh và audio</option>
+                <option value="image">Thiếu ảnh</option>
+                <option value="audio">Thiếu audio</option>
+              </select>
+            </div>
+            <fieldset className="vocab-edit-toolbar vocab-bulk-toolbar" aria-label="Thao tác với các từ đã chọn" disabled={busy}>
+              <label className="vocab-select-word">
+                <input type="checkbox" checked={words.length > 0 && words.every(word => chosenIds.has(word.id))}
+                  onChange={event => setChosen(event.target.checked ? words.map(word => word.id) : [])} />
+                Chọn tất cả ({words.length})
+              </label>
+              <div className="flex flex-wrap items-center gap-2">
+                <select aria-label="Media cần tìm lại" value={target} onChange={event => setTarget(event.target.value)}>
+                  <option value="both">Ảnh và audio</option>
+                  <option value="image">Chỉ ảnh</option>
+                  <option value="audio">Chỉ audio</option>
+                </select>
+                <button className="vocab-button" type="button" disabled={!chosen.length} onClick={refreshMedia}>Tìm lại URL ({chosen.length} từ)</button>
+                <button type="button" className="vocab-button vocab-button-danger" disabled={!chosen.length} onClick={() => setConfirmingDelete(true)}>
+                  Xóa từ đã chọn{chosen.length > 0 && ` (${chosen.length})`}
+                </button>
+              </div>
+            </fieldset>
           </div>
         </>
       )}
-      {!preview && <fieldset className="bulk-media" disabled={busy}>
-        <legend>Tìm lại media</legend>
-        <label><input type="checkbox" checked={words.length > 0 && words.every(word => chosen.includes(word.id))}
-          onChange={event => setChosen(event.target.checked ? words.map(word => word.id) : [])} /> Chọn tất cả ({words.length})</label>
-        <select aria-label="Media cần tìm lại" value={target} onChange={event => setTarget(event.target.value)}>
-          <option value="both">Ảnh và audio</option><option value="image">Chỉ ảnh</option><option value="audio">Chỉ audio</option>
-        </select>
-        <button type="button" disabled={!chosen.length} onClick={refreshMedia}>Tìm lại URL ({chosen.length} từ)</button>
-      </fieldset>}
       {(preview ? words : visible).map((w) => (
-        <div key={w.id} className="vocab-editor-row">
-          {!preview && <label className="select-word"><input type="checkbox" disabled={busy} checked={chosen.includes(w.id)}
+        <div key={w.id} className="vocab-panel vocab-editor-row">
+          {!preview && <label className="vocab-select-word"><input type="checkbox" disabled={busy} checked={chosenIds.has(w.id)}
             onChange={event => setChosen(ids => event.target.checked ? [...ids, w.id] : ids.filter(id => id !== w.id))} /> Chọn {w.word || "từ mới"}</label>}
-          <WordCard entry={w} onImageChange={preview ? undefined : patch => setWords(current => current.map(item => item.id === w.id ? { ...item, ...patch } : item))} />
-          {!preview && (
-            <WordMediaEditor
-              onWordEntered={fillMissingMedia}
-              entry={w}
-              onChange={(patch) =>
-                setWords((prev) =>
-                  prev.map((item) =>
-                    item.id === w.id ? { ...item, ...patch } : item,
-                  ),
-                )
-              }
-            />
-          )}
+          <fieldset className="m-0 min-w-0 border-0 p-0" disabled={busy}>
+            <WordCard entry={w} onImageChange={preview ? undefined : patch => setWords(current => current.map(item => item.id === w.id ? { ...item, ...patch } : item))} />
+            {!preview && (
+              <WordMediaEditor
+                onWordEntered={fillMissingMedia}
+                entry={w}
+                onChange={(patch) =>
+                  setWords((prev) =>
+                    prev.map((item) =>
+                      item.id === w.id ? { ...item, ...patch } : item,
+                    ),
+                  )
+                }
+              />
+            )}
+          </fieldset>
         </div>
       ))}
-      {!preview && !visible.length && <p>Không có mục từ phù hợp.</p>}</section>
+      {!(preview ? words.length : visible.length) && (
+        <p className="vocab-panel vocab-empty">{words.length ? "Không có mục từ phù hợp." : "Bộ từ này chưa có từ nào."}</p>
+      )}
+      </section>
     </>
   );
 }
@@ -272,9 +409,9 @@ export default function AdminVocabulary() {
   const [selected, setSelected] = useState<VocabularySet | null>(null);
   return (
     <StaffLayout active="vocabulary" crumb="Quản lý / Từ vựng" contentClassName="vocab-admin">
-        <div className="vocabulary">
+        <div className="vocabulary vocab-admin-content">
           {selected ? <>
-            <button onClick={() => setSelected(null)}>← Danh sách bộ từ</button>
+            <button type="button" className="vocab-button vocab-back" onClick={() => { if (canNavigate()) setSelected(null); }}>← Danh sách bộ từ</button>
 
             <Editor key={selected.id} set={selected} onSetUpdate={setSelected} />
           </> : <SetDirectory onOpen={setSelected} />}

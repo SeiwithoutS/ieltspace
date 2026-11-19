@@ -268,7 +268,7 @@ export default function LearnerHeader({
                 className="w-80 p-1.5 border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] rounded-2xl bg-[var(--attempt-bg-ffffff,#FFFFFF)] shadow-lg flex flex-col gap-0.5"
               >
                 <PageLink
-                  page="SampleWriting"
+                  page="SampleLibrary" query="sampleType=WRITING_TASK_1_ACADEMIC"
                   className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline transition-colors"
                 >
                   <span className="w-9 h-9 rounded-lg bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] flex items-center justify-center shrink-0">
@@ -282,7 +282,7 @@ export default function LearnerHeader({
                   </span>
                 </PageLink>
                 <PageLink
-                  page="SampleWriting"
+                  page="SampleLibrary" query="sampleType=WRITING_TASK_1_GENERAL"
                   className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline transition-colors"
                 >
                   <span className="w-9 h-9 rounded-lg bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] flex items-center justify-center shrink-0">
@@ -297,7 +297,7 @@ export default function LearnerHeader({
                   </span>
                 </PageLink>
                 <PageLink
-                  page="SampleWriting"
+                  page="SampleLibrary" query="sampleType=WRITING_TASK_2"
                   className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline transition-colors"
                 >
                   <span className="w-9 h-9 rounded-lg bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] flex items-center justify-center shrink-0">
@@ -311,7 +311,7 @@ export default function LearnerHeader({
                   </span>
                 </PageLink>
                 <PageLink
-                  page="SampleSpeaking"
+                  page="SampleLibrary" query="skill=SPEAKING"
                   className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline transition-colors"
                 >
                   <span className="w-9 h-9 rounded-lg bg-[var(--attempt-bg-e8e4fa,#E8E4FA)] text-[var(--attempt-text-5543b0,#5543B0)] flex items-center justify-center shrink-0">
@@ -421,7 +421,7 @@ export default function LearnerHeader({
             </PageLink>
             <div className="bu-dd-menu absolute top-full left-0 pt-2 z-30">
               <div role="menu" className="w-80 p-1.5 border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] rounded-2xl bg-[var(--attempt-bg-ffffff,#FFFFFF)] shadow-lg flex flex-col gap-0.5">
-                <PageLink page="SampleWriting" className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline">
+                <PageLink page="SampleLibrary" query="sampleType=WRITING_TASK_1_ACADEMIC" className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline">
                   <span className="w-9 h-9 rounded-lg bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] flex items-center justify-center shrink-0">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg>
                   </span>
@@ -430,7 +430,7 @@ export default function LearnerHeader({
                     <span className="text-[13px] text-[var(--attempt-text-706473,#706473)]">Mô tả biểu đồ, bảng, bản đồ, quy trình</span>
                   </span>
                 </PageLink>
-                <PageLink page="SampleWriting" className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline">
+                <PageLink page="SampleLibrary" query="sampleType=WRITING_TASK_1_GENERAL" className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline">
                   <span className="w-9 h-9 rounded-lg bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] flex items-center justify-center shrink-0">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
                   </span>
@@ -439,7 +439,7 @@ export default function LearnerHeader({
                     <span className="text-[13px] text-[var(--attempt-text-706473,#706473)]">Bài mẫu viết thư</span>
                   </span>
                 </PageLink>
-                <PageLink page="SampleWriting" className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline">
+                <PageLink page="SampleLibrary" query="sampleType=WRITING_TASK_2" className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline">
                   <span className="w-9 h-9 rounded-lg bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] flex items-center justify-center shrink-0">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 5l4 4L8 20H4v-4z" /></svg>
                   </span>
@@ -448,7 +448,7 @@ export default function LearnerHeader({
                     <span className="text-[13px] text-[var(--attempt-text-706473,#706473)]">Bài mẫu bài luận</span>
                   </span>
                 </PageLink>
-                <PageLink page="SampleSpeaking" className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline">
+                <PageLink page="SampleLibrary" query="skill=SPEAKING" className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline">
                   <span className="w-9 h-9 rounded-lg bg-[var(--attempt-bg-e8e4fa,#E8E4FA)] text-[var(--attempt-text-5543b0,#5543B0)] flex items-center justify-center shrink-0">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>
                   </span>
@@ -903,28 +903,28 @@ export default function LearnerHeader({
                   {samplesOpen && (
                     <div className="p-2 pt-0 flex flex-col gap-1 border-0 border-solid border-t border-[#F0EEEA]">
                       <PageLink
-                        page="SampleWriting"
+                        page="SampleLibrary" query="sampleType=WRITING_TASK_1_ACADEMIC"
                         onClick={closeMobile}
                         className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
                       >
                         Writing Task 1 Academic
                       </PageLink>
                       <PageLink
-                        page="SampleWriting"
+                        page="SampleLibrary" query="sampleType=WRITING_TASK_1_GENERAL"
                         onClick={closeMobile}
                         className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
                       >
                         Writing Task 1 General
                       </PageLink>
                       <PageLink
-                        page="SampleWriting"
+                        page="SampleLibrary" query="sampleType=WRITING_TASK_2"
                         onClick={closeMobile}
                         className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
                       >
                         Writing Task 2
                       </PageLink>
                       <PageLink
-                        page="SampleSpeaking"
+                        page="SampleLibrary" query="skill=SPEAKING"
                         onClick={closeMobile}
                         className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
                       >

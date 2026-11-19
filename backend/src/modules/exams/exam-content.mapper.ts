@@ -7,7 +7,6 @@ export type LrQuestionType =
   | 'NOTE_COMP'
   | 'SUMMARY_BOX'
   | 'TABLE_COMP'
-  | 'FLOW_COMP'
   | 'DIAGRAM_COMP'
   | 'MATCH_HEADING'
   | 'MATCH_INFO'
@@ -25,8 +24,7 @@ export const LR_QUESTION_TYPE_NAMES: Record<LrQuestionType, string> = {
   NOTE_COMP: 'Note Completion',
   SUMMARY_BOX: 'Summary Completion (Box)',
   TABLE_COMP: 'Table Completion',
-  FLOW_COMP: 'Flow-chart Completion',
-  DIAGRAM_COMP: 'Diagram Labelling',
+  DIAGRAM_COMP: 'Diagram / Map / Flow-chart Completion',
   MATCH_HEADING: 'Matching Headings',
   MATCH_INFO: 'Matching Information',
   MATCH_ENDING: 'Matching Sentence Endings',

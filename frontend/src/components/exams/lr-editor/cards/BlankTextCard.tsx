@@ -1,5 +1,6 @@
 import React from 'react';
 import NoteBody from './NoteBody.tsx';
+import { SummaryModeToggle } from './SummaryModeToggle.tsx';
 import type { LrGroupState, LrPassageState } from '../../../../lib/lr-editor/types.ts';
 import { blanks, limOf, overLimit, parseAlt } from '../../../../lib/lr-editor/pure.ts';
 import { LIM } from '../../../../lib/lr-editor/constants.ts';
@@ -11,6 +12,7 @@ export type CardProps = {
   groupStartNum: number;
   readOnly?: boolean;
   onChange: (updater: (draft: LrGroupState) => void) => void;
+  onChangeType?: (nextType: 'SUMMARY_COMP' | 'SUMMARY_BOX') => void;
 };
 
 export default function BlankTextCard({
@@ -19,6 +21,7 @@ export default function BlankTextCard({
   groupStartNum,
   readOnly = false,
   onChange,
+  onChangeType,
 }: CardProps) {
   const bodyText = group.body || '';
   const blankCount = blanks(bodyText);
@@ -51,6 +54,14 @@ export default function BlankTextCard({
 
   return (
     <div className="space-y-4">
+      {group.type === 'SUMMARY_COMP' && onChangeType && (
+        <SummaryModeToggle
+          group={group}
+          readOnly={readOnly}
+          onChangeMode={(nextType) => onChangeType(nextType)}
+        />
+      )}
+
       {/* Top Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-[#FAF9F7] px-3.5 py-2.5 rounded-xl border border-[#E5E0D8]">
         <div className="flex items-center gap-2">

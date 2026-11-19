@@ -5,7 +5,6 @@ export type LrQuestionType =
   | 'NOTE_COMP'
   | 'SUMMARY_BOX'
   | 'TABLE_COMP'
-  | 'FLOW_COMP'
   | 'DIAGRAM_COMP'
   | 'MATCH_HEADING'
   | 'MATCH_INFO'
@@ -87,18 +86,6 @@ export type LrPatch = {
   deleteGroupIds?: string[];
 };
 
-export type LrFlowNode = {
-  id: string;
-  row: number;
-  text: string;
-  side?: boolean;
-};
-
-export type LrFlowFrame = {
-  row: number;
-  caption: string;
-};
-
 export type LrDiagramMark = [number, number] | [number, number, number, number] | { x: number; y: number };
 
 export type LrGroupExplanation = {
@@ -135,10 +122,6 @@ export type LrGroupState = {
   rows?: string[][];
   hd?: boolean[][];
   sp?: Array<Array<[number, number] | 0>>;
-  nodes?: LrFlowNode[];
-  edges?: Array<[string, string]>;
-  frames?: LrFlowFrame[];
-  steps?: string[];
   opts?: string[];
   pick?: number;
   oneUse?: boolean;

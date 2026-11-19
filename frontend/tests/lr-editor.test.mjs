@@ -10,6 +10,7 @@ import {
   isNum,
   numberQuestions,
   allIssues,
+  groupHasData,
 } from '../src/lib/lr-editor/pure.ts';
 
 import {
@@ -21,6 +22,11 @@ import {
   diffLrContent,
   applySavedIds,
 } from '../src/lib/lr-editor/diff.ts';
+
+import {
+  groupOfType,
+  comboOptions,
+} from '../src/lib/lr-editor/constants.ts';
 
 const READING_FULL = {
   title: 'Practice Test 01',
@@ -619,3 +625,66 @@ test('applySavedIds correctly assigns backend IDs to newly created groups', () =
   const updatedState = applySavedIds(clientState, savedSkill);
   assert.equal(updatedState.passages[0].groups[0].id, 'newly-assigned-db-uuid');
 });
+
+test('groupOfType and comboOptions categorize 5 groups accurately', () => {
+  // Group 1: Sentence
+  assert.equal(groupOfType('SENTENCE_COMP'), 'blank-sentence');
+  assert.equal(groupOfType('SHORT_ANSWER'), 'blank-sentence');
+
+  // Group 2: Passage
+  assert.equal(groupOfType('SUMMARY_COMP'), 'blank-passage');
+  assert.equal(groupOfType('NOTE_COMP'), 'blank-passage');
+  assert.equal(groupOfType('SUMMARY_BOX'), 'blank-passage');
+
+  // Group 3: Table / Diagram
+  assert.equal(groupOfType('TABLE_COMP'), 'table-diagram');
+  assert.equal(groupOfType('DIAGRAM_COMP'), 'table-diagram');
+
+  // Group 4: Matching
+  assert.equal(groupOfType('MATCH_HEADING'), 'matching');
+  assert.equal(groupOfType('MATCH_INFO'), 'matching');
+  assert.equal(groupOfType('MATCH_FEATURE'), 'matching');
+  assert.equal(groupOfType('MATCH_ENDING'), 'matching');
+
+  // Group 5: Choice
+  assert.equal(groupOfType('MCQ_SINGLE'), 'choice');
+  assert.equal(groupOfType('MCQ_MULTI'), 'choice');
+  assert.equal(groupOfType('TFNG'), 'choice');
+  assert.equal(groupOfType('YNNG'), 'choice');
+
+  // Reading options for Matching
+  const readingMatchOpts = comboOptions('MATCH_FEATURE');
+  assert.equal(readingMatchOpts.length, 3);
+  assert.equal(readingMatchOpts[0].type, 'MATCH_HEADING');
+  assert.equal(readingMatchOpts[2].label, 'Matching Features / Sentence Endings');
+
+  // Listening options for Matching: only MATCH_FEATURE allowed
+  const listeningAllowed = ['NOTE_COMP', 'SUMMARY_COMP', 'MATCH_FEATURE', 'MCQ_SINGLE'];
+  const listeningMatchOpts = comboOptions('MATCH_FEATURE', listeningAllowed);
+  assert.equal(listeningMatchOpts.length, 1);
+  assert.equal(listeningMatchOpts[0].type, 'MATCH_FEATURE');
+});
+
+test('groupHasData detects empty vs non-empty groups correctly', () => {
+  // Empty groups
+  assert.equal(groupHasData({ type: 'SENTENCE_COMP', instr: null, items: [] }), false);
+  assert.equal(groupHasData({ type: 'SUMMARY_COMP', instr: null, body: '', items: [] }), false);
+  assert.equal(groupHasData({ type: 'MCQ_SINGLE', instr: null, items: [{ q: '', opts: ['', ''] }] }), false);
+
+  // Group with text in body
+  assert.equal(groupHasData({ type: 'SUMMARY_COMP', instr: null, body: 'Some text with ___' }), true);
+
+  // Group with items / answers
+  assert.equal(
+    groupHasData({ type: 'SENTENCE_COMP', instr: null, items: [{ text: 'Question', ans: 'answer' }] }),
+    true
+  );
+
+  // Group with options
+  assert.equal(groupHasData({ type: 'SUMMARY_BOX', instr: null, opts: ['word1', 'word2'] }), true);
+
+  // Group with marks
+  assert.equal(groupHasData({ type: 'DIAGRAM_COMP', instr: null, marks: [{ x: 10, y: 20 }] }), true);
+});
+
+

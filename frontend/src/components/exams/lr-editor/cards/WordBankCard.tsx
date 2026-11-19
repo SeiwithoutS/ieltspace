@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import NoteBody from './NoteBody.tsx';
+import { SummaryModeToggle } from './SummaryModeToggle.tsx';
 import type { LrGroupState, LrPassageState } from '../../../../lib/lr-editor/types.ts';
 import { blanks } from '../../../../lib/lr-editor/pure.ts';
 import { LET } from '../../../../lib/lr-editor/constants.ts';
@@ -12,6 +13,7 @@ export type CardProps = {
   groupStartNum: number;
   readOnly?: boolean;
   onChange: (updater: (draft: LrGroupState) => void) => void;
+  onChangeType?: (nextType: 'SUMMARY_COMP' | 'SUMMARY_BOX') => void;
 };
 
 export default function WordBankCard({
@@ -20,6 +22,7 @@ export default function WordBankCard({
   groupStartNum,
   readOnly = false,
   onChange,
+  onChangeType,
 }: CardProps) {
   const [newWord, setNewWord] = useState('');
   const bodyText = group.body || '';
@@ -79,6 +82,14 @@ export default function WordBankCard({
 
   return (
     <div className="space-y-4">
+      {onChangeType && (
+        <SummaryModeToggle
+          group={group}
+          readOnly={readOnly}
+          onChangeMode={(nextType) => onChangeType(nextType)}
+        />
+      )}
+
       {/* Top action */}
       <div className="flex items-center justify-between bg-[#FAF9F7] px-3.5 py-2.5 rounded-xl border border-[#E5E0D8]">
         <div className="text-[12px] text-[#706473]">

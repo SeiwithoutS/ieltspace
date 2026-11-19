@@ -25,7 +25,15 @@ export const errorHandler: ErrorRequestHandler = (error, _req, res, next) => {
     return;
   }
   const bad = error instanceof SyntaxError && 'status' in error && error.status === 400;
-  console.error('Request failed:', error instanceof Error ? error.name : 'Unknown error');
+  const prismaCode =
+    typeof error === 'object' && error !== null && 'code' in error && typeof error.code === 'string'
+      ? ` [${error.code}]`
+      : '';
+  console.error(
+    'Request failed:',
+    error instanceof Error ? error.name : 'Unknown error',
+    prismaCode,
+  );
   res.status(bad ? 400 : 500).json({
     message: bad ? 'JSON không hợp lệ.' : 'Lỗi máy chủ. Vui lòng thử lại.',
   });

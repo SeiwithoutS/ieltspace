@@ -444,10 +444,11 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
             "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
             : "border: 1.5px solid #D6D4D0"),
         canImp: true,
+        impDisabled: true,
         impHref: "#",
         imp: function (e: Ev) {
           stop(e);
-          navigate(EDITORS[k[0]]);
+          // O-L3: Khóa nút Nhập xlsx trong khi nâng cấp định dạng
         },
         pick: function (e: Ev) {
           stop(e);
@@ -1734,13 +1735,11 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
                                 href={t.impHref}
                                 onClick={t.imp}
                                 title={
-                                  "Tạo đề " +
-                                  t.label +
-                                  " mới và nhập cả đề từ file xlsx trong editor"
+                                  "Đang nâng cấp định dạng xlsx cho kỹ năng này"
                                 }
-                                className={"press"}
+                                aria-disabled={"true"}
                                 style={styleOf(
-                                  "margin-left: auto; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap",
+                                  "margin-left: auto; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #E5E0D8; background: #F3F0EA; color: #8E8392; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; cursor: not-allowed",
                                 )}
                               >
                                 <svg

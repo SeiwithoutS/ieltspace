@@ -163,11 +163,12 @@ model attempts {
 }
 
 model band_scales {
-  id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name    String
-  skill   String
-  form    String?
-  version Int
+  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String
+  skill            String
+  form             String?
+  version          Int
+  conversion_rules Json
 }
 
 model grading_rules {

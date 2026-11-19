@@ -77,5 +77,17 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | RT-07 | Định kiểu hoàn chỉnh AdminWritingEditor, gỡ bỏ @ts-nocheck | WSE-06 | Bỏ @ts-nocheck, khai báo State, WritingView, dọn dead code Speaking, 0 any/as any/@ts-ignore, tsc 0 lỗi. |
 | RT-08 | Định kiểu hoàn chỉnh AdminSpeakingEditor với SpeakingPart union, gỡ bỏ @ts-nocheck | WSE-07 | Bỏ @ts-nocheck, union SpeakingPartQs \| SpeakingPartCue, dọn dead code Writing, bỏ (tx as any) ở backend, tsc 0 lỗi. |
 | RT-09 | Cập nhật tài liệu: PROGRESS, DESIGN, RULES, TASKS, DECISIONS, BUSINESS_RULES | RT-01..08 | Hoàn tất báo cáo tiến độ và đồng bộ quy chuẩn thiết kế, quy tắc responsive, quyết định kiến trúc. |
+| LRE-00 | Nâng cấp CSDL thang band LR (10) và cập nhật Prisma schema | DB-01, QLBD-01 | Tệp 10_thang_band_lr.sql khởi tạo 3 thang điểm chuẩn Cambridge (0–40 sang band 0.0–9.0); schema.prisma có conversion_rules Json; prisma:generate và typecheck đạt. |
+| LRE-01 | Quy tắc biên tập và chuyển đổi nội dung LR (exam-content.mapper, exam-rules) | LRE-00 | 5/5 tests node:test đạt; mapper DB ↔ DTO không mất dữ liệu cho 16 dạng câu hỏi, validateReadingReady & validateListeningReady kiểm tra đủ 40 câu liên tục và file audio. |
+| LRE-02 | Storage tệp âm thanh và hình ảnh cho đề thi (supabase-storage) | LRE-00 | 5/5 tests node:test đạt; upload/detect MP3/WAV/M4A (≤50MB), upload ảnh sơ đồ, downloadObject và createSignedUrl an toàn. |
+| LRE-03 | Dịch vụ biên tập kỹ năng Listening/Reading (exam-editor.service.ts) | LRE-01, LRE-02 | Hoàn thành saveLrPatch lưu vi sai tối thiểu, gán band_scale_id khi publish, dọn dẹp uploads và dọn storage mồ côi. |
+| LRE-04 | Endpoints quản trị biên tập đề L/R (E8, E9) và schemas | LRE-03 | Route E8 tải audio, E9 dọn dẹp uploads mồ côi; schemas zod kiểm tra tham số, body và giới hạn kích thước. |
+| LRE-05 | Thư viện Frontend L/R (lib/lr-editor/*, diff.ts, pure.ts, converters.ts) | LRE-04 | 7/7 tests node:test đạt; pure functions, numbering 40 câu, tính bản vá vi sai tối thiểu diffLrContent, applySavedIds. |
+| LRE-06 | Gộp Editor Shell và 9 Question Cards (components/exams/lr-editor/*) | LRE-05 | Xóa 2 file JSX cũ >25,000 dòng; tách bộ editor-shell dùng chung cho cả W/S; 9 card câu hỏi xử lý đầy đủ 16 dạng. |
+| LRE-07 | Nối API cho LrEditor.tsx, hai trang vỏ mỏng AdminReading/ListeningEditor | LRE-06 | AdminReadingEditor.tsx và AdminListeningEditor.tsx kết nối API thật, hỗ trợ bản vá vi sai, lưu/đăng/xóa, cảnh báo rời trang UnsavedGuard. |
+| LRE-07b | Chuẩn hóa AdminWritingEditor sang bộ editor-shell dùng chung | LRE-07 | AdminWritingEditor.tsx rút gọn từ 3,659 dòng xuống 430 dòng, 0 lỗi TypeScript, dùng chung EditorTopbar, VersionBanner, Dialogs. |
+| LRE-07c | Tự động sinh transcript qua Speech-to-Text Groq Whisper (E10, E11, TranscribeModal) | LRE-07 | 4/4 tests node:test đạt; mô hình whisper-large-v3-turbo trả đoạn có mốc [mm:ss], hàng đợi job in-memory, modal xem trước và áp dụng an toàn. |
+| LRE-08 | Khóa nút Nhập xlsx L/R tại AdminExamSet và trong Editor | LRE-06 | Nút Nhập xlsx ở đầu cột L/R khóa aria-disabled kèm tooltip thông báo đang nâng cấp định dạng. |
+| LRE-09 | Cập nhật tài liệu kỹ thuật và báo cáo tiến độ L/R | LRE-00..08 | Cập nhật API.md, BUSINESS_RULES.md, CSDL.md, csdl/README.md, TASKS.md và biên bản tiến độ 2026-11-19-editor-listening-reading.md. |
 
 Khi nhận một dòng liên quan nhiều kỹ năng, thực hiện và kiểm tra từng kỹ năng bằng fixture riêng. Với API mới, cập nhật [hợp đồng](API.md) cùng thay đổi phía gọi và phía phục vụ.

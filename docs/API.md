@@ -59,19 +59,23 @@ Mã A1–A16 và E1–E6 trùng chú thích trong `backend/src/modules/exams/exa
 | A15 | POST /admin/exam-skills/:skillId/show | Admin | 200, `ExamSetAdminDto` (HIDDEN sang PUBLISHED) | 401, 403, 404, 409 INVALID_STATUS_TRANSITION |
 | A16 | POST /admin/exam-skills/:skillId/publish | Admin. Writing/Speaking kiểm tra theo BR-EXAM-007 và gán quy tắc chấm `FULL_SKILL` mới nhất | 200, `ExamSetAdminDto` (bản cũ sang ARCHIVED) | 401, 403, 404, 409 INVALID_STATUS_TRANSITION, 422 SKILL_NOT_READY kèm danh sách lý do |
 
-### Soạn đề Writing và Speaking (Exam Editor)
+### Soạn đề thi 4 kỹ năng (Exam Editor)
 
-Phục vụ `AdminWritingEditor`, `AdminSpeakingEditor` và thao tác xóa kỹ năng ở `AdminExamSet`. E1, E2, E3 chỉ nhận kỹ năng WRITING và SPEAKING (kỹ năng khác trả 400 SKILL_NOT_SUPPORTED). Việc đăng dùng A16.
+Phục vụ `AdminWritingEditor`, `AdminSpeakingEditor`, `AdminReadingEditor`, `AdminListeningEditor` và thao tác xóa kỹ năng ở `AdminExamSet`. Hỗ trợ cả 4 kỹ năng: WRITING, SPEAKING, READING, LISTENING. Việc đăng dùng A16.
 
 | Mã | Method và đường dẫn | Người gọi và đầu vào | Thành công | Lỗi cần xử lý |
 |---|---|---|---|---|
-| E1 | GET /admin/exam-skills/:skillId | Admin | 200, `EditorSkillDto` (kỹ năng, thời lượng, bộ đề, Test, ô kỹ năng, nội dung `writing` hoặc `speaking`; kỹ năng mới trả nội dung mặc định) | 400 SKILL_NOT_SUPPORTED, 401, 403, 404 EXAM_SKILL_NOT_FOUND |
-| E2 | PUT /admin/exam-skills/:skillId/content | Admin, body: `{ baseUpdatedAt, writing }` hoặc `{ baseUpdatedAt, speaking }`; chỉ bản DRAFT | 200, `EditorSkillDto` sau khi lưu | 400, 401, 403, 404, 409 SKILL_NOT_DRAFT / SKILL_CHANGED (`baseUpdatedAt` đã cũ) |
+| E1 | GET /admin/exam-skills/:skillId | Admin | 200, `EditorSkillDto` (kỹ năng, thời lượng, bộ đề, Test, ô kỹ năng, nội dung `writing`, `speaking`, `reading` hoặc `listening`; kỹ năng mới trả nội dung mặc định) | 401, 403, 404 EXAM_SKILL_NOT_FOUND |
+| E2 | PUT /admin/exam-skills/:skillId/content | Admin, body: `{ baseUpdatedAt, writing }`, `{ baseUpdatedAt, speaking }`, `{ baseUpdatedAt, reading }` hoặc `{ baseUpdatedAt, listening }` (chỉ gửi 1 trong 4 nội dung; L/R hỗ trợ bản vá vi sai `LrPatch`); chỉ bản DRAFT | 200, `EditorSkillDto` sau khi lưu | 400, 401, 403, 404, 409 SKILL_NOT_DRAFT / SKILL_CHANGED (`baseUpdatedAt` đã cũ) |
 | E3 | POST /admin/exam-skills/:skillId/draft | Admin, nguồn là bản PUBLISHED hoặc HIDDEN | 201 `EditorSkillDto` của bản sửa mới (`version_number` + 1); 200 nếu ô đã có bản nháp | 400, 401, 403, 404, 409 INVALID_STATUS_TRANSITION |
 | E4 | – | Không có route riêng, dùng A16 | – | – |
-| E5 | PUT /admin/exam-skills/:skillId/images | Admin, body nhị phân `image/jpeg`, `image/png`, `image/webp` (≤ 5 MB), chỉ Writing bản DRAFT | 201, `{ path, url }` trong bucket `exam-assets` | 400 SKILL_NOT_SUPPORTED, 401, 403, 404, 409 SKILL_NOT_DRAFT, 413 IMAGE_TOO_LARGE, 415 IMAGE_TYPE, 503 STORAGE_UNAVAILABLE |
+| E5 | PUT /admin/exam-skills/:skillId/images | Admin, body nhị phân `image/jpeg`, `image/png`, `image/webp` (≤ 5 MB), bản DRAFT của Writing, Reading hoặc Listening | 201, `{ path, url }` trong bucket `exam-assets` | 400 SKILL_NOT_SUPPORTED, 401, 403, 404, 409 SKILL_NOT_DRAFT, 413 IMAGE_TOO_LARGE, 415 IMAGE_TYPE, 503 STORAGE_UNAVAILABLE |
 | E6 | DELETE /admin/exam-skills/:skillId | Admin, chỉ bản DRAFT chưa có lượt làm | 200, `ExamSetAdminDto` (ô về trống, hoặc giữ bản đang hiển thị) | 401, 403, 404, 409 SKILL_NOT_DELETABLE |
-| E7 | GET /admin/exam-skills/:skillId/history | Admin | 200, `SkillHistoryDto` gồm thông tin ô `slot`, danh sách `versions` (sắp xếp theo `versionNumber` giảm dần, có `basedOnVersion`, `isCurrent`, cờ thao tác) và dòng sự kiện `events` từ audit log | 400 SKILL_NOT_SUPPORTED, 401, 403, 404 EXAM_SKILL_NOT_FOUND |
+| E7 | GET /admin/exam-skills/:skillId/history | Admin | 200, `SkillHistoryDto` gồm thông tin ô `slot`, danh sách `versions` (sắp xếp theo `versionNumber` giảm dần, có `basedOnVersion`, `isCurrent`, cờ thao tác) và dòng sự kiện `events` từ audit log | 401, 403, 404 EXAM_SKILL_NOT_FOUND |
+| E8 | PUT /admin/exam-skills/:skillId/audio | Admin, body nhị phân `audio/mpeg`, `audio/wav`, `audio/m4a` (≤ 50 MB), chỉ Listening bản DRAFT | 201, `{ path, url, sizeBytes }` trong bucket `exam-assets` | 400 SKILL_NOT_SUPPORTED, 401, 403, 404, 409 SKILL_NOT_DRAFT, 413 AUDIO_TOO_LARGE, 415 AUDIO_TYPE, 503 STORAGE_UNAVAILABLE |
+| E9 | POST /admin/exam-skills/:skillId/uploads/discard | Admin, body `{ paths: string[] }`, chỉ dọn tệp thuộc `exam-skills/:skillId/` | 200, `{ removedCount: number }` | 400 VALIDATION_ERROR, 401, 403, 404 |
+| E10 | POST /admin/exam-skills/:skillId/sections/:orderNo/transcribe | Admin, body `{ audioPath: string }`, chỉ Listening bản DRAFT, giới hạn tần suất 20 lần/giờ/người quản lý | 202, `{ jobId: string }` | 400 SKILL_NOT_SUPPORTED, 401, 403, 404, 409 SKILL_NOT_DRAFT, 429 RATE_LIMIT_EXCEEDED, 503 TRANSCRIBE_UNAVAILABLE |
+| E11 | GET /admin/transcriptions/:jobId | Admin (đúng người tạo job) | 200, `{ status: 'processing' \| 'done' \| 'error', paragraphs?: [...], message?: string }` | 401, 403 FORBIDDEN, 404 JOB_NOT_FOUND |
 
 ### Hiệu năng và Middleware (Performance & Middleware)
 

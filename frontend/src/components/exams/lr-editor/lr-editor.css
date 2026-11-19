@@ -1,0 +1,72 @@
+/* Tailwind preflight đang tắt (corePlugins.preflight = false) nên vùng editor L/R
+   cần tự đặt lại nền: border-box, đường viền liền nét, nút/ô nhập kế thừa font.
+   :where() giữ độ ưu tiên = 0 để các lớp Tailwind vẫn thắng. */
+:where(.lr-editor-root) *,
+:where(.lr-editor-root) *::before,
+:where(.lr-editor-root) *::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e0d8;
+}
+:where(.lr-editor-root) button,
+:where(.lr-editor-root) input,
+:where(.lr-editor-root) select,
+:where(.lr-editor-root) textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+:where(.lr-editor-root) button {
+  cursor: pointer;
+  text-align: center;
+}
+:where(.lr-editor-root) button:disabled {
+  cursor: not-allowed;
+}
+:where(.lr-editor-root) h1,
+:where(.lr-editor-root) h2,
+:where(.lr-editor-root) h3,
+:where(.lr-editor-root) h4,
+:where(.lr-editor-root) p {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+:where(.lr-editor-root) input,
+:where(.lr-editor-root) textarea {
+  min-width: 0;
+}
+:where(.lr-editor-root) textarea {
+  resize: vertical;
+}
+:where(.lr-editor-root) img,
+:where(.lr-editor-root) svg {
+  display: block;
+  vertical-align: middle;
+}
+:where(.lr-editor-root) ::placeholder {
+  color: #a89ca8;
+  opacity: 1;
+}
+
+/* Scrollbar mảnh (quy ước UI) */
+.lr-editor-root * {
+  scrollbar-width: thin;
+  scrollbar-color: #cfc9c0 transparent;
+}
+.lr-editor-root *::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.lr-editor-root *::-webkit-scrollbar-thumb {
+  background: #cfc9c0;
+  border-radius: 999px;
+}
+.lr-editor-root *::-webkit-scrollbar-track {
+  background: transparent;
+}

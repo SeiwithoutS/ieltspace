@@ -221,6 +221,9 @@ export async function publishSkill(
               include: {
                 questions: {
                   include: {
+                    options: {
+                      orderBy: { order_no: 'asc' },
+                    },
                     answer: true,
                   },
                 },

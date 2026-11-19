@@ -1,4 +1,5 @@
 import express, { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import { requireAuth, requireRole } from '../../middleware/auth.js';
 import { asyncHandler, HttpError } from '../../utils/http.js';
 import {
@@ -11,6 +12,10 @@ import {
   addTestSchema,
   createSkillSchema,
   saveSkillContentSchema,
+  discardUploadsSchema,
+  transcribeParamSchema,
+  transcribeBodySchema,
+  transcriptionJobParamSchema,
   formatZodError,
 } from './exams.schemas.js';
 import { listCategories, findOrCreateCategory } from './categories.service.js';
@@ -36,9 +41,15 @@ import {
   saveSkillContent,
   createRevisionDraft,
   uploadSkillImage,
+  uploadSkillAudio,
+  discardUploads,
   deleteSkill,
 } from './exam-editor.service.js';
 import { getSkillHistory } from './exam-history.service.js';
+import {
+  startTranscriptionJob,
+  getTranscriptionJob,
+} from './transcription-jobs.service.js';
 import { toCategoryDto } from './exams.mapper.js';
 import { prisma } from '../../lib/prisma.js';
 
@@ -431,5 +442,128 @@ adminExamsRouter.get(
     res.json(history);
   })
 );
+
+// E8: PUT /admin/exam-skills/:skillId/audio
+adminExamsRouter.put(
+  '/exam-skills/:skillId/audio',
+  (req, res, next) => {
+    express.raw({
+      type: ['audio/mpeg', 'audio/wav', 'audio/x-wav', 'audio/mp4', 'audio/x-m4a'],
+      limit: '50mb',
+    })(req, res, (err) => {
+      if (err) {
+        if (
+          (err as { type?: string; status?: number }).type === 'entity.too.large' ||
+          (err as { type?: string; status?: number }).status === 413
+        ) {
+          return next(
+            new HttpError(
+              413,
+              'AUDIO_TOO_LARGE',
+              'Ghi âm tối đa 50 MB. Nén lại (MP3 128 kbps) rồi tải lên.'
+            )
+          );
+        }
+        return next(err);
+      }
+      next();
+    });
+  },
+  asyncHandler(async (req, res) => {
+    const pParam = skillIdParamSchema.safeParse(req.params);
+    if (!pParam.success) {
+      throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
+    }
+
+    if (!Buffer.isBuffer(req.body) || req.body.length === 0) {
+      throw new HttpError(400, 'VALIDATION_ERROR', 'Tệp ghi âm không hợp lệ.');
+    }
+
+    const contentType = req.headers['content-type'] || 'audio/mpeg';
+    const uploaded = await uploadSkillAudio(
+      pParam.data.skillId,
+      req.body,
+      contentType
+    );
+    res.status(201).json(uploaded);
+  })
+);
+
+// E9: POST /admin/exam-skills/:skillId/uploads/discard
+adminExamsRouter.post(
+  '/exam-skills/:skillId/uploads/discard',
+  asyncHandler(async (req, res) => {
+    const pParam = skillIdParamSchema.safeParse(req.params);
+    if (!pParam.success) {
+      throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
+    }
+
+    const parsed = discardUploadsSchema.safeParse(req.body);
+    if (!parsed.success) {
+      const errs = formatZodError(parsed.error);
+      throw new HttpError(400, 'VALIDATION_ERROR', errs[0]?.message || 'Danh sách tệp không hợp lệ.', errs);
+    }
+
+    const result = await discardUploads(pParam.data.skillId, parsed.data.paths);
+    res.json(result);
+  })
+);
+
+const transcribeLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 20,
+  keyGenerator: (req) => req.appUser?.id || req.ip || 'admin',
+  message: {
+    code: 'RATE_LIMIT_EXCEEDED',
+    message: 'Bạn đã đạt giới hạn 20 lần tạo transcript mỗi giờ. Vui lòng thử lại sau.',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// E10: POST /admin/exam-skills/:skillId/sections/:orderNo/transcribe
+adminExamsRouter.post(
+  '/exam-skills/:skillId/sections/:orderNo/transcribe',
+  transcribeLimiter,
+  asyncHandler(async (req, res) => {
+    const pParam = transcribeParamSchema.safeParse(req.params);
+    if (!pParam.success) {
+      const errs = formatZodError(pParam.error);
+      throw new HttpError(400, 'VALIDATION_ERROR', errs[0]?.message || 'Tham số không hợp lệ.', errs);
+    }
+
+    const pBody = transcribeBodySchema.safeParse(req.body);
+    if (!pBody.success) {
+      const errs = formatZodError(pBody.error);
+      throw new HttpError(400, 'VALIDATION_ERROR', errs[0]?.message || 'Dữ liệu không hợp lệ.', errs);
+    }
+
+    const actorId = req.appUser!.id;
+    const result = await startTranscriptionJob({
+      actorId,
+      skillId: pParam.data.skillId,
+      orderNo: pParam.data.orderNo,
+      audioPath: pBody.data.audioPath,
+    });
+
+    res.status(202).json(result);
+  })
+);
+
+// E11: GET /admin/transcriptions/:jobId
+adminExamsRouter.get(
+  '/transcriptions/:jobId',
+  asyncHandler(async (req, res) => {
+    const pParam = transcriptionJobParamSchema.safeParse(req.params);
+    if (!pParam.success) {
+      throw new HttpError(400, 'VALIDATION_ERROR', 'Mã tác vụ không hợp lệ.');
+    }
+
+    const actorId = req.appUser!.id;
+    const result = getTranscriptionJob(pParam.data.jobId, actorId);
+    res.json(result);
+  })
+);
+
 
 

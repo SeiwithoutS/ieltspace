@@ -9,19 +9,27 @@ import {
   type EditorSkill,
   type WritingContent,
   type SpeakingContent,
+  type LrContent,
+  type LrGroup,
+  type LrSection,
+  type LrAsset,
   type RawSection,
   sectionsToWriting,
   sectionsToSpeaking,
+  sectionsToLr,
   writingToRows,
   speakingToRows,
 } from './exam-content.mapper.js';
-import { speakingDuration } from './exam-rules.js';
+import { speakingDuration, checkLrNumbering } from './exam-rules.js';
 import {
   uploadSkillImage as supabaseUploadSkillImage,
+  uploadSkillAudio as supabaseUploadSkillAudio,
   publicUrl,
   removeObjects,
   listObjectPaths,
 } from '../../integrations/storage/supabase-storage.js';
+import type { LrPatch } from './exams.schemas.js';
+export type { LrPatch };
 
 /**
  * Helper to build EditorSkill inside or outside a transaction.
@@ -56,6 +64,12 @@ export async function getEditorSkillInTx(
             include: {
               questions: {
                 orderBy: { order_no: 'asc' },
+                include: {
+                  options: {
+                    orderBy: { order_no: 'asc' },
+                  },
+                  answer: true,
+                },
               },
             },
           },
@@ -68,11 +82,16 @@ export async function getEditorSkillInTx(
     throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
   }
 
-  if (skill.skill !== 'WRITING' && skill.skill !== 'SPEAKING') {
+  if (
+    skill.skill !== 'WRITING' &&
+    skill.skill !== 'SPEAKING' &&
+    skill.skill !== 'READING' &&
+    skill.skill !== 'LISTENING'
+  ) {
     throw new HttpError(
       400,
       'SKILL_NOT_SUPPORTED',
-      'Chỉ hỗ trợ kỹ năng Writing hoặc Speaking.'
+      'Kỹ năng không được hỗ trợ.'
     );
   }
 
@@ -105,6 +124,8 @@ export async function getEditorSkillInTx(
 
   let writing: WritingContent | null = null;
   let speaking: SpeakingContent | null = null;
+  let reading: LrContent | null = null;
+  let listening: LrContent | null = null;
 
   if (skill.skill === 'WRITING') {
     writing = sectionsToWriting(skill.sections as RawSection[], (path) =>
@@ -112,11 +133,19 @@ export async function getEditorSkillInTx(
     );
   } else if (skill.skill === 'SPEAKING') {
     speaking = sectionsToSpeaking(skill.sections as RawSection[]);
+  } else if (skill.skill === 'READING') {
+    reading = sectionsToLr(skill.sections as RawSection[], 'READING', (path) =>
+      publicUrl(path)
+    );
+  } else if (skill.skill === 'LISTENING') {
+    listening = sectionsToLr(skill.sections as RawSection[], 'LISTENING', (path) =>
+      publicUrl(path)
+    );
   }
 
   return {
     id: skill.id,
-    skill: skill.skill as 'WRITING' | 'SPEAKING',
+    skill: skill.skill as 'LISTENING' | 'READING' | 'WRITING' | 'SPEAKING',
     form: skill.form as 'ACADEMIC' | 'GENERAL' | null,
     status: skill.status as 'DRAFT' | 'PUBLISHED' | 'HIDDEN' | 'ARCHIVED',
     versionNumber: skill.version_number,
@@ -135,6 +164,8 @@ export async function getEditorSkillInTx(
     slot,
     writing,
     speaking,
+    reading,
+    listening,
   };
 }
 
@@ -155,7 +186,7 @@ async function deleteSkillContent(
   tx: Prisma.TransactionClient,
   skillId: string
 ): Promise<string[]> {
-  const rows = await tx.$queryRaw<Array<{ image_path: string | null; audio_path: string | null }>>`
+  const rows = await tx.$queryRaw<Array<{ p: string | null }>>`
     with g as (
       select qg.id from public.question_groups qg
       join public.exam_sections s on s.id = qg.section_id
@@ -173,15 +204,479 @@ async function deleteSkillContent(
       returning image_path, audio_path
     ), ds as (
       delete from public.exam_sections where exam_skill_id = ${skillId}::uuid
-      returning image_path, audio_path
+      returning image_path, audio_path, content
     )
-    select image_path, audio_path from dg
+    select image_path as p from dg where image_path is not null
     union all
-    select image_path, audio_path from ds
+    select audio_path as p from dg where audio_path is not null
+    union all
+    select image_path as p from ds where image_path is not null
+    union all
+    select audio_path as p from ds where audio_path is not null
+    union all
+    select jsonb_array_elements(content->'images')->>'path' as p from ds where jsonb_typeof(content->'images') = 'array'
   `;
-  return rows
-    .flatMap((r) => [r.image_path, r.audio_path])
-    .filter((p): p is string => Boolean(p));
+  return rows.map((r) => r.p).filter((p): p is string => Boolean(p));
+}
+
+export async function assertSkillAssetPath(
+  tx: Prisma.TransactionClient | typeof prisma,
+  assetPath: string,
+  targetSkill: { exam_id: string; skill: string; form?: string | null }
+): Promise<void> {
+  const p = assetPath.trim();
+  if (!p.startsWith('exam-skills/')) {
+    throw new HttpError(400, 'VALIDATION_ERROR', 'Đường dẫn tệp không hợp lệ.');
+  }
+  const parts = p.split('/');
+  const sourceSkillId = parts[1];
+  if (!sourceSkillId) {
+    throw new HttpError(400, 'VALIDATION_ERROR', 'Đường dẫn tệp không hợp lệ.');
+  }
+
+  const sourceSkill = await tx.exam_skills.findUnique({
+    where: { id: sourceSkillId },
+    select: { exam_id: true, skill: true, form: true },
+  });
+
+  if (
+    !sourceSkill ||
+    sourceSkill.exam_id !== targetSkill.exam_id ||
+    sourceSkill.skill !== targetSkill.skill ||
+    sourceSkill.form !== (targetSkill.form ?? null)
+  ) {
+    throw new HttpError(
+      400,
+      'VALIDATION_ERROR',
+      'Đường dẫn tệp không thuộc về đề thi này.'
+    );
+  }
+}
+
+export async function collectUsedPaths(
+  tx: Prisma.TransactionClient | typeof prisma,
+  paths: string[]
+): Promise<Set<string>> {
+  if (paths.length === 0) return new Set();
+  const rows = await tx.$queryRaw<Array<{ p: string | null }>>`
+    select distinct p from (
+      select image_path as p from public.exam_sections where image_path = any(${paths})
+      union
+      select audio_path as p from public.exam_sections where audio_path = any(${paths})
+      union
+      select image_path as p from public.question_groups where image_path = any(${paths})
+      union
+      select jsonb_array_elements(content->'images')->>'path' as p
+      from public.exam_sections
+      where jsonb_typeof(content->'images') = 'array'
+    ) t where p = any(${paths})
+  `;
+  return new Set(rows.map((r) => r.p).filter((p): p is string => Boolean(p)));
+}
+
+export async function cleanupOrphans(
+  tx: Prisma.TransactionClient | typeof prisma,
+  paths: string[]
+): Promise<number> {
+  if (paths.length === 0) return 0;
+  const used = await collectUsedPaths(tx, paths);
+  const orphans = paths.filter((p) => !used.has(p));
+  if (orphans.length > 0) {
+    await removeObjects(orphans);
+  }
+  return orphans.length;
+}
+
+async function saveLrPatch(
+  tx: Prisma.TransactionClient,
+  skill: { id: string; skill: string; form?: string | null; version_number: number; duration_minutes: number; exam: { id: string } },
+  patch: LrPatch,
+  skillType: 'READING' | 'LISTENING',
+  actorId?: string | null
+): Promise<{ updatedSkill: EditorSkill; oldPaths: string[] }> {
+  const expectedSections = skillType === 'READING' ? 3 : 4;
+  for (const s of patch.sections || []) {
+    if (s.orderNo < 1 || s.orderNo > expectedSections) {
+      throw new HttpError(400, 'VALIDATION_ERROR', `${skillType === 'READING' ? 'Passage' : 'Section'} ${s.orderNo} không hợp lệ.`);
+    }
+    if (s.paragraphs && s.paragraphs.length > 30) {
+      throw new HttpError(400, 'VALIDATION_ERROR', `Mỗi phần tối đa 30 đoạn.`);
+    }
+    for (const p of s.paragraphs || []) {
+      if (p.text && p.text.length > 5000) {
+        throw new HttpError(400, 'VALIDATION_ERROR', `Đoạn văn vượt quá 5.000 ký tự.`);
+      }
+    }
+    if (s.images && s.images.length > 5) {
+      throw new HttpError(400, 'VALIDATION_ERROR', `Mỗi phần tối đa 5 ảnh.`);
+    }
+    for (const img of s.images || []) {
+      if (img.caption && img.caption.length > 300) {
+        throw new HttpError(400, 'VALIDATION_ERROR', `Chú thích ảnh vượt quá 300 ký tự.`);
+      }
+      if (img.path) {
+        await assertSkillAssetPath(tx, img.path, { exam_id: skill.exam.id, skill: skill.skill, form: skill.form });
+      }
+    }
+    if (s.audio) {
+      if (skillType !== 'LISTENING') {
+        throw new HttpError(400, 'VALIDATION_ERROR', 'Chỉ kỹ năng Listening mới hỗ trợ ghi âm.');
+      }
+      if (s.audio.path) {
+        await assertSkillAssetPath(tx, s.audio.path, { exam_id: skill.exam.id, skill: skill.skill, form: skill.form });
+      }
+    }
+  }
+
+  for (const ug of patch.upsertGroups || []) {
+    if (ug.questions && ug.questions.length > 60) {
+      throw new HttpError(400, 'VALIDATION_ERROR', `Mỗi nhóm tối đa 60 câu hỏi.`);
+    }
+    if (ug.image?.path) {
+      await assertSkillAssetPath(tx, ug.image.path, { exam_id: skill.exam.id, skill: skill.skill, form: skill.form });
+    }
+    if (ug.config && JSON.stringify(ug.config).length > 50 * 1024) {
+      throw new HttpError(400, 'VALIDATION_ERROR', `Cấu hình nhóm vượt quá 50 KB.`);
+    }
+    if (ug.content && JSON.stringify(ug.content).length > 50 * 1024) {
+      throw new HttpError(400, 'VALIDATION_ERROR', `Nội dung nhóm vượt quá 50 KB.`);
+    }
+    for (const q of ug.questions || []) {
+      if (q.accepted && q.accepted.length > 10) {
+        throw new HttpError(400, 'VALIDATION_ERROR', `Mỗi câu tối đa 10 đáp án chấp nhận.`);
+      }
+      for (const a of q.accepted || []) {
+        if (a && a.length > 200) {
+          throw new HttpError(400, 'VALIDATION_ERROR', `Đáp án vượt quá 200 ký tự.`);
+        }
+      }
+      if (q.options && q.options.length > 26) {
+        throw new HttpError(400, 'VALIDATION_ERROR', `Tối đa 26 lựa chọn.`);
+      }
+    }
+  }
+
+  const existingSecs = await tx.exam_sections.findMany({
+    where: { exam_skill_id: skill.id },
+    orderBy: { order_no: 'asc' },
+  });
+  const sectionIdMap = new Map<number, string>();
+  for (let i = 1; i <= expectedSections; i++) {
+    let s = existingSecs.find((sec) => sec.order_no === i);
+    if (!s) {
+      const secId = crypto.randomUUID();
+      const secType = skillType === 'READING' ? 'PASSAGE' : 'SECTION';
+      s = await tx.exam_sections.create({
+        data: {
+          id: secId,
+          exam_skill_id: skill.id,
+          order_no: i,
+          title: '',
+          section_type: secType,
+          instruction: null,
+          content: skillType === 'READING'
+            ? { paragraphs: [{ label: 'A', text: '' }, { label: 'B', text: '' }, { label: 'C', text: '' }], images: [] }
+            : { images: [] },
+          transcript: [],
+          config: {},
+          audio_path: null,
+          image_path: null,
+        },
+      });
+    }
+    sectionIdMap.set(i, s.id);
+  }
+
+  const collectedOldPaths: string[] = [];
+  for (const sPatch of patch.sections || []) {
+    const secId = sectionIdMap.get(sPatch.orderNo);
+    if (!secId) continue;
+    const existing = existingSecs.find((s) => s.id === secId);
+    const updateData: Prisma.exam_sectionsUpdateInput = {};
+
+    if (sPatch.title !== undefined) {
+      updateData.title = sPatch.title;
+    }
+
+    if (skillType === 'READING') {
+      const curContent = (existing?.content as Record<string, any>) || {};
+      const newParagraphs = sPatch.paragraphs !== undefined
+        ? sPatch.paragraphs.map((p) => ({ label: p.label, text: p.text }))
+        : (curContent.paragraphs || []);
+      const newImages = sPatch.images !== undefined
+        ? sPatch.images.map((img) => ({ path: img.path, caption: img.caption, name: img.name }))
+        : (curContent.images || []);
+      updateData.content = { paragraphs: newParagraphs, images: newImages };
+    } else {
+      if (sPatch.paragraphs !== undefined) {
+        updateData.transcript = sPatch.paragraphs.map((p) => ({
+          label: p.label,
+          text: p.text,
+          startSec: p.startSec,
+        }));
+      }
+      if (sPatch.images !== undefined) {
+        updateData.content = {
+          images: sPatch.images.map((img) => ({ path: img.path, caption: img.caption, name: img.name })),
+        };
+      }
+      if (sPatch.audio !== undefined) {
+        if (sPatch.audio) {
+          updateData.audio_path = sPatch.audio.path;
+          updateData.config = {
+            audio: {
+              name: sPatch.audio.name,
+              sizeBytes: sPatch.audio.sizeBytes,
+              durationSec: sPatch.audio.durationSec,
+            },
+          };
+        } else {
+          if (existing?.audio_path) {
+            collectedOldPaths.push(existing.audio_path);
+          }
+          updateData.audio_path = null;
+          updateData.config = {};
+        }
+      }
+    }
+
+    await tx.exam_sections.update({
+      where: { id: secId },
+      data: updateData,
+    });
+  }
+
+  if (patch.deleteGroupIds && patch.deleteGroupIds.length > 0) {
+    const grpsToDelete = await tx.question_groups.findMany({
+      where: {
+        id: { in: patch.deleteGroupIds },
+        section: { exam_skill_id: skill.id },
+      },
+      select: { id: true, image_path: true, audio_path: true },
+    });
+    if (grpsToDelete.length !== patch.deleteGroupIds.length) {
+      throw new HttpError(400, 'VALIDATION_ERROR', 'Nhóm câu hỏi cần xóa không thuộc về kỹ năng này.');
+    }
+    for (const g of grpsToDelete) {
+      if (g.image_path) collectedOldPaths.push(g.image_path);
+      if (g.audio_path) collectedOldPaths.push(g.audio_path);
+    }
+
+    const qIds = await tx.questions.findMany({
+      where: { question_group_id: { in: patch.deleteGroupIds } },
+      select: { id: true },
+    });
+    const qIdList = qIds.map((q) => q.id);
+    if (qIdList.length > 0) {
+      await tx.question_answers.deleteMany({ where: { question_id: { in: qIdList } } });
+      await tx.question_options.deleteMany({ where: { question_id: { in: qIdList } } });
+      await tx.questions.deleteMany({ where: { id: { in: qIdList } } });
+    }
+    await tx.question_groups.deleteMany({ where: { id: { in: patch.deleteGroupIds } } });
+  }
+
+  await tx.$executeRaw`
+    update public.question_groups
+    set order_no = order_no + 1000
+    where section_id in (select id from public.exam_sections where exam_skill_id = ${skill.id}::uuid)
+  `;
+  await tx.$executeRaw`
+    update public.questions
+    set order_no = order_no + 1000
+    where question_group_id in (
+      select qg.id from public.question_groups qg
+      join public.exam_sections s on s.id = qg.section_id
+      where s.exam_skill_id = ${skill.id}::uuid
+    )
+  `;
+
+  for (const mg of patch.moveGroups || []) {
+    const targetSecId = sectionIdMap.get(mg.sectionOrderNo);
+    if (!targetSecId) continue;
+    const oldGrp = await tx.question_groups.findFirst({
+      where: { id: mg.id, section: { exam_skill_id: skill.id } },
+      select: { id: true, question_from: true, question_to: true },
+    });
+    if (!oldGrp) {
+      throw new HttpError(400, 'VALIDATION_ERROR', 'Không tìm thấy nhóm câu hỏi cần di chuyển.');
+    }
+    const delta = (mg.questionFrom ?? 0) - (oldGrp.question_from ?? 0);
+    const newQuestionTo = mg.questionTo !== undefined ? mg.questionTo : (oldGrp.question_to !== null ? oldGrp.question_to + delta : null);
+
+    await tx.question_groups.update({
+      where: { id: mg.id },
+      data: {
+        section_id: targetSecId,
+        order_no: mg.orderNo,
+        question_from: mg.questionFrom,
+        question_to: newQuestionTo,
+      },
+    });
+
+    if (delta !== 0) {
+      await tx.$executeRaw`
+        update public.questions
+        set number_from = number_from + ${delta},
+            number_to = number_to + ${delta}
+        where question_group_id = ${mg.id}::uuid
+      `;
+    }
+  }
+
+  for (const ug of patch.upsertGroups || []) {
+    const targetSecId = sectionIdMap.get(ug.sectionOrderNo);
+    if (!targetSecId) continue;
+    const grpConfig = {
+      ...ug.config,
+      ...(ug.image?.name ? { imageName: ug.image.name } : {}),
+    };
+
+    let groupId = ug.id;
+    if (!groupId) {
+      groupId = crypto.randomUUID();
+      await tx.question_groups.create({
+        data: {
+          id: groupId,
+          section_id: targetSecId,
+          order_no: ug.orderNo,
+          question_type: ug.type,
+          question_from: ug.questionFrom,
+          question_to: ug.questionTo,
+          instruction: ug.instruction || null,
+          title: ug.title ?? null,
+          image_path: ug.image?.path || null,
+          config: grpConfig,
+          content: ug.content || {},
+        },
+      });
+    } else {
+      const existingGrp = await tx.question_groups.findUnique({
+        where: { id: groupId },
+        select: { id: true, image_path: true },
+      });
+      if (existingGrp?.image_path && existingGrp.image_path !== ug.image?.path) {
+        collectedOldPaths.push(existingGrp.image_path);
+      }
+      await tx.question_groups.update({
+        where: { id: groupId },
+        data: {
+          section_id: targetSecId,
+          order_no: ug.orderNo,
+          question_type: ug.type,
+          question_from: ug.questionFrom,
+          question_to: ug.questionTo,
+          instruction: ug.instruction || null,
+          title: ug.title ?? null,
+          image_path: ug.image?.path || null,
+          config: grpConfig,
+          content: ug.content || {},
+        },
+      });
+
+      await tx.question_answers.deleteMany({ where: { question: { question_group_id: groupId } } });
+      await tx.question_options.deleteMany({ where: { question: { question_group_id: groupId } } });
+      await tx.questions.deleteMany({ where: { question_group_id: groupId } });
+    }
+
+    // Ghi theo lô: Supabase ở xa nên mỗi truy vấn tốn ~200ms, ghi từng câu sẽ vượt thời gian giao dịch.
+    const sortedQs = (ug.questions || []).slice().sort((a, b) => a.numberFrom - b.numberFrom);
+    if (sortedQs.length > 0) {
+      const qRows: Prisma.questionsCreateManyInput[] = [];
+      const optRows: Prisma.question_optionsCreateManyInput[] = [];
+      const ansRows: Prisma.question_answersCreateManyInput[] = [];
+      sortedQs.forEach((q, qIdx) => {
+        const qId = crypto.randomUUID();
+        const count = Math.max(1, q.numberTo - q.numberFrom + 1);
+        qRows.push({
+          id: qId,
+          question_group_id: groupId,
+          order_no: qIdx + 1,
+          question_type: ug.type,
+          number_from: q.numberFrom,
+          number_to: q.numberTo,
+          answer_count: count,
+          max_score: count,
+          content: q.content || {},
+          explanation: { items: (q.notes || []).map((note) => ({ note })) },
+        });
+        (q.options || []).forEach((opt, optIdx) => {
+          optRows.push({
+            id: crypto.randomUUID(),
+            question_id: qId,
+            order_no: optIdx + 1,
+            label: opt.label,
+            content: opt.text,
+          });
+        });
+        ansRows.push({
+          id: crypto.randomUUID(),
+          question_id: qId,
+          accepted_answers: q.accepted || [],
+          matching_rule: q.matching || { kind: 'TEXT' },
+          evidence: {
+            items: (q.evidence || []).map((ev) => ({
+              para: ev.para,
+              label: ev.label,
+              keys: ev.keys || [],
+            })),
+          },
+        });
+      });
+      await tx.questions.createMany({ data: qRows });
+      if (optRows.length > 0) await tx.question_options.createMany({ data: optRows });
+      await tx.question_answers.createMany({ data: ansRows });
+    }
+  }
+
+  await tx.$executeRaw`
+    update public.question_groups
+    set order_no = order_no - 1000
+    where section_id in (select id from public.exam_sections where exam_skill_id = ${skill.id}::uuid)
+      and order_no >= 1000
+  `;
+  await tx.$executeRaw`
+    update public.questions
+    set order_no = order_no - 1000
+    where question_group_id in (
+      select qg.id from public.question_groups qg
+      join public.exam_sections s on s.id = qg.section_id
+      where s.exam_skill_id = ${skill.id}::uuid
+    )
+    and order_no >= 1000
+  `;
+
+  const updatedSkill = await getEditorSkillInTx(tx, skill.id);
+  const currentContent = skillType === 'READING' ? updatedSkill.reading : updatedSkill.listening;
+  if (currentContent) {
+    checkLrNumbering(currentContent, skillType);
+  }
+
+  await tx.exam_skills.update({
+    where: { id: skill.id },
+    data: {
+      duration_minutes: skillType === 'LISTENING' ? 40 : skill.duration_minutes,
+      updated_at: new Date(),
+    },
+  });
+
+  const changeData = {
+    version: skill.version_number,
+    sectionsModified: patch.sections?.length ?? 0,
+    groupsUpserted: patch.upsertGroups?.length ?? 0,
+    groupsMoved: patch.moveGroups?.length ?? 0,
+    groupsDeleted: patch.deleteGroupIds?.length ?? 0,
+  };
+  await writeAudit(tx, {
+    actorId: actorId ?? null,
+    action: 'EXAM_SKILL_SAVE',
+    entityType: 'EXAM_SKILL',
+    entityId: skill.id,
+    changeData,
+    reason: `Lưu nội dung kỹ năng ${skillType}`,
+  });
+
+  const finalSkill = await getEditorSkillInTx(tx, skill.id);
+  return { updatedSkill: finalSkill, oldPaths: collectedOldPaths };
 }
 
 /**
@@ -193,6 +688,8 @@ export async function saveSkillContent(
     baseUpdatedAt: string;
     writing?: WritingContent;
     speaking?: SpeakingContent;
+    reading?: LrPatch;
+    listening?: LrPatch;
   },
   actorId?: string | null
 ): Promise<EditorSkill> {
@@ -210,11 +707,16 @@ export async function saveSkillContent(
       throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
     }
 
-    if (skill.skill !== 'WRITING' && skill.skill !== 'SPEAKING') {
+    if (
+      skill.skill !== 'WRITING' &&
+      skill.skill !== 'SPEAKING' &&
+      skill.skill !== 'READING' &&
+      skill.skill !== 'LISTENING'
+    ) {
       throw new HttpError(
         400,
         'SKILL_NOT_SUPPORTED',
-        'Chỉ hỗ trợ kỹ năng Writing hoặc Speaking.'
+        'Kỹ năng không được hỗ trợ.'
       );
     }
 
@@ -241,7 +743,21 @@ export async function saveSkillContent(
       );
     }
 
-    // WS-04 & validate input theo kỹ năng
+    if (skill.skill === 'READING') {
+      if (!input.reading) {
+        throw new HttpError(400, 'VALIDATION_ERROR', 'Thiếu nội dung Reading.');
+      }
+      return saveLrPatch(tx, skill, input.reading, 'READING', actorId);
+    }
+
+    if (skill.skill === 'LISTENING') {
+      if (!input.listening) {
+        throw new HttpError(400, 'VALIDATION_ERROR', 'Thiếu nội dung Listening.');
+      }
+      return saveLrPatch(tx, skill, input.listening, 'LISTENING', actorId);
+    }
+
+    // WS-04 & validate input theo kỹ năng (Writing / Speaking)
     if (skill.skill === 'WRITING') {
       if (!input.writing) {
         throw new HttpError(400, 'VALIDATION_ERROR', 'Thiếu nội dung Writing.');
@@ -407,38 +923,12 @@ export async function saveSkillContent(
 
     const refreshed = await getEditorSkillInTx(tx, skillId);
     return { updatedSkill: refreshed, oldPaths: collectedPaths };
-  });
+  }, { timeout: 60000, maxWait: 10000 });
 
-  // WS-09: Dọn dẹp ảnh mồ côi ngoài transaction
+  // WS-09 & LR-09: Dọn dẹp tệp mồ côi ngoài transaction
   if (oldPaths.length > 0) {
     try {
-      const remainingSecs = await prisma.exam_sections.findMany({
-        where: {
-          OR: [
-            { image_path: { in: oldPaths } },
-            { audio_path: { in: oldPaths } },
-          ],
-        },
-        select: { image_path: true, audio_path: true },
-      });
-      const remainingGrps = await prisma.question_groups.findMany({
-        where: {
-          OR: [
-            { image_path: { in: oldPaths } },
-            { audio_path: { in: oldPaths } },
-          ],
-        },
-        select: { image_path: true, audio_path: true },
-      });
-      const stillUsed = new Set([
-        ...remainingSecs.flatMap((s: { image_path: string | null; audio_path: string | null }) => [s.image_path, s.audio_path]),
-        ...remainingGrps.flatMap((g: { image_path: string | null; audio_path: string | null }) => [g.image_path, g.audio_path]),
-      ].filter((p): p is string => Boolean(p)));
-
-      const orphaned = oldPaths.filter((p: string) => !stillUsed.has(p));
-      if (orphaned.length > 0) {
-        await removeObjects(orphaned);
-      }
+      await cleanupOrphans(prisma, oldPaths);
     } catch (cleanupErr) {
       console.warn('Storage cleanup warning after save:', cleanupErr);
     }
@@ -467,14 +957,6 @@ export async function createRevisionDraft(
 
     if (!sourceSkill) {
       throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
-    }
-
-    if (sourceSkill.skill !== 'WRITING' && sourceSkill.skill !== 'SPEAKING') {
-      throw new HttpError(
-        400,
-        'SKILL_NOT_SUPPORTED',
-        'Chỉ hỗ trợ kỹ năng Writing hoặc Speaking.'
-      );
     }
 
     // WS-05: Nguồn phải là PUBLISHED hoặc HIDDEN
@@ -658,7 +1140,7 @@ export async function createRevisionDraft(
 }
 
 /**
- * E5: Tải ảnh đề cho Writing (Task 1).
+ * E5: Tải ảnh đề cho Writing (Task 1), Reading hoặc Listening (ảnh bài đọc, sơ đồ/bản đồ).
  */
 export async function uploadSkillImage(
   skillId: string,
@@ -674,11 +1156,15 @@ export async function uploadSkillImage(
     throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
   }
 
-  if (skill.skill !== 'WRITING') {
+  if (
+    skill.skill !== 'WRITING' &&
+    skill.skill !== 'READING' &&
+    skill.skill !== 'LISTENING'
+  ) {
     throw new HttpError(
       400,
       'SKILL_NOT_SUPPORTED',
-      'Chỉ tải ảnh cho kỹ năng Writing.'
+      'Kỹ năng không được hỗ trợ tải ảnh.'
     );
   }
 
@@ -692,27 +1178,94 @@ export async function uploadSkillImage(
 
   const uploaded = await supabaseUploadSkillImage(skillId, buffer, contentType);
 
-  // Mỗi lần chọn ảnh tạo một tệp mới. Dọn các tệp cũ của kỹ năng này đã được tải lên
-  // nhưng chưa từng được lưu vào đề (ảnh thay trước khi bấm Lưu), tránh trùng bản trên Storage.
-  try {
-    const existing = await listObjectPaths(`exam-skills/${skillId}`);
-    const candidates = existing.filter((p) => p !== uploaded.path);
-    if (candidates.length > 0) {
-      const used = await prisma.exam_sections.findMany({
-        where: { image_path: { in: candidates } },
-        select: { image_path: true },
-      });
-      const usedSet = new Set(used.map((r: { image_path: string | null }) => r.image_path));
-      const orphaned = candidates.filter((p) => !usedSet.has(p));
-      if (orphaned.length > 0) {
-        await removeObjects(orphaned);
+  // Chỉ dọn dẹp tức thì cho kỹ năng WRITING (LR-09c).
+  // Với READING/LISTENING, người dùng tải nhiều ảnh/hình sơ đồ; nếu thoát mà Không lưu thì E9 sẽ dọn.
+  if (skill.skill === 'WRITING') {
+    try {
+      const existing = await listObjectPaths(`exam-skills/${skillId}`);
+      const candidates = existing.filter((p) => p !== uploaded.path && !p.includes('/audio/'));
+      if (candidates.length > 0) {
+        await cleanupOrphans(prisma, candidates);
       }
+    } catch (cleanupErr) {
+      console.warn('Storage cleanup warning after upload:', cleanupErr);
     }
-  } catch (cleanupErr) {
-    console.warn('Storage cleanup warning after upload:', cleanupErr);
   }
 
   return uploaded;
+}
+
+/**
+ * E8: Tải ghi âm cho Listening.
+ */
+export async function uploadSkillAudio(
+  skillId: string,
+  buffer: Buffer,
+  contentType: string
+): Promise<{ path: string; url: string; sizeBytes: number }> {
+  const skill = await prisma.exam_skills.findUnique({
+    where: { id: skillId },
+    select: { id: true, skill: true, status: true },
+  });
+
+  if (!skill) {
+    throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
+  }
+
+  if (skill.skill !== 'LISTENING') {
+    throw new HttpError(
+      400,
+      'SKILL_NOT_SUPPORTED',
+      'Chỉ tải ghi âm cho kỹ năng Listening.'
+    );
+  }
+
+  if (skill.status !== 'DRAFT') {
+    throw new HttpError(
+      409,
+      'SKILL_NOT_DRAFT',
+      'Chỉ tải ghi âm cho bản đang soạn.'
+    );
+  }
+
+  return supabaseUploadSkillAudio(skillId, buffer, contentType);
+}
+
+/**
+ * E9: Dọn các tệp đã tải trong phiên sửa mà không bấm Lưu.
+ */
+export async function discardUploads(
+  skillId: string,
+  paths: string[]
+): Promise<{ removed: number }> {
+  const skill = await prisma.exam_skills.findUnique({
+    where: { id: skillId },
+    select: { id: true, status: true },
+  });
+
+  if (!skill) {
+    throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Không tìm thấy kỹ năng.');
+  }
+
+  if (skill.status !== 'DRAFT') {
+    throw new HttpError(409, 'SKILL_NOT_DRAFT', 'Chỉ dọn tệp cho bản đang soạn.');
+  }
+
+  if (!Array.isArray(paths) || paths.length === 0) {
+    return { removed: 0 };
+  }
+
+  const prefix = `exam-skills/${skillId}/`;
+  const validPaths = paths
+    .map((p) => String(p).trim())
+    .filter((p) => p.startsWith(prefix));
+
+  if (validPaths.length === 0) {
+    return { removed: 0 };
+  }
+
+  const removed = await cleanupOrphans(prisma, validPaths);
+  return { removed };
 }
 
 /**
@@ -810,36 +1363,10 @@ export async function deleteSkill(
     return { examSet: setAdmin, oldPaths: collectedPaths };
   });
 
-  // WS-09: Dọn dẹp storage mồ côi
+  // WS-09 & LR-09: Dọn dẹp storage mồ côi
   if (oldPaths.length > 0) {
     try {
-      const remainingSecs = await prisma.exam_sections.findMany({
-        where: {
-          OR: [
-            { image_path: { in: oldPaths } },
-            { audio_path: { in: oldPaths } },
-          ],
-        },
-        select: { image_path: true, audio_path: true },
-      });
-      const remainingGrps = await prisma.question_groups.findMany({
-        where: {
-          OR: [
-            { image_path: { in: oldPaths } },
-            { audio_path: { in: oldPaths } },
-          ],
-        },
-        select: { image_path: true, audio_path: true },
-      });
-      const stillUsed = new Set([
-        ...remainingSecs.flatMap((s: { image_path: string | null; audio_path: string | null }) => [s.image_path, s.audio_path]),
-        ...remainingGrps.flatMap((g: { image_path: string | null; audio_path: string | null }) => [g.image_path, g.audio_path]),
-      ].filter((p): p is string => Boolean(p)));
-
-      const orphaned = oldPaths.filter((p: string) => !stillUsed.has(p));
-      if (orphaned.length > 0) {
-        await removeObjects(orphaned);
-      }
+      await cleanupOrphans(prisma, oldPaths);
     } catch (cleanupErr) {
       console.warn('Storage cleanup warning after skill deletion:', cleanupErr);
     }

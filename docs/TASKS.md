@@ -2,10 +2,14 @@
 
 Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột “Xong khi” là điều kiện để nghiệm thu từng việc. Kết quả thực chạy ghi theo mã task trong thư mục PROGRESS.
 
+[Kế hoạch và kết quả sáu đợt người học](PROGRESS/2026-11-20-tong-ket.md#kế-hoạch-và-kết-quả-sáu-đợt-người-học)
+
 | Mã | Công việc | Phụ thuộc | Xong khi |
 |---|---|---|---|
 | AUTH-01 | Kiểm thử đăng ký, xác minh và recovery bằng email thật trên môi trường thử | SMTP, template và redirect đã cấu hình | Đăng nhập trước/sau xác minh đúng kết quả, link recovery chỉ dùng một lần, đăng nhập được bằng mật khẩu mới. |
 | AUTH-02 | Kiểm thử Google và khôi phục phiên | Provider và callback đã cấu hình | Tài khoản mới có hồ sơ Người học, tài khoản khóa bị từ chối, F5 khôi phục đúng người, URL frontend không chứa token. |
+| PROFILE-01 | Hồ sơ và ảnh đại diện người học | Hồ sơ Auth, bucket ảnh riêng tư | Đọc/sửa đúng tài khoản, tên và ảnh đồng bộ với menu, tải lại và dùng thiết bị khác. Người học chỉ ghi dữ liệu của mình. |
+| PROFILE-02 | Đổi mật khẩu trong hồ sơ người học | Auth, email khôi phục | Xác thực lại mật khẩu hiện tại, đăng nhập lại bằng mật khẩu mới, tài khoản Google có luồng thiết lập bằng email đã xác minh. |
 | DB-01 | Đối chiếu schema thực tế và lập baseline | Quyền đọc DB thử | Có danh sách bảng, khóa, sai lệch và kế hoạch migration giữ được dữ liệu hiện hữu. |
 | DB-02 | Chốt hai điểm mô hình còn mở | DB-01, DECISIONS | Ghi nguồn xác nhận về khóa chọn thang Reading và nơi lưu tham số. |
 | EXAM-01 | Tạo schema bộ đề đến câu hỏi và bản nháp | DB-01 | Hai thao tác đồng thời vẫn chỉ tạo một nháp. Một đề có cả hai form ở phần tương ứng. |
@@ -24,7 +28,7 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | USER-01 | Xử lý thu hồi quyền chấm | GRADE-02, GRADE-03 | Dừng nhận mới vẫn giữ bài đang giao. Quản lý hủy có lý do khi giáo viên không thể hoàn thành. |
 | VOC-01 | Lưu từ yêu thích và ghi chú | DB-01 | Hai người ghi chú cùng từ độc lập. Bấm yêu thích lặp không tạo bản sao. |
 | VOC-02 | Hoàn tất phiên flashcard | VOC-01 | Tập nhỏ ôn hết vẫn hợp lệ. Ôn lại một thẻ nhiều lần không tăng số thẻ khác nhau. |
-| STAT-01 | Tổng hợp lịch sử và streak | ATT-02, VOC-02 | Một attempt chỉ sinh một hoạt động. Band và tỷ lệ bài luyện hiển thị riêng. |
+| STAT-01 | Tổng hợp lịch sử và chuỗi đăng nhập | ATT-02, VOC-02 | Một attempt chỉ sinh một hoạt động. Tiến độ phiên và chuỗi đăng nhập hiển thị riêng. Điểm danh tối đa một lần mỗi ngày Việt Nam. Band và tỷ lệ bài luyện hiển thị riêng. |
 | NOTIF-01 | Lưu và đọc thông báo theo sự kiện | GRADE-02, GRADE-03 | Retry không tạo trùng. Chỉ người nhận đọc/đánh dấu đã xem. |
 | SAMPLE-01 | Nối quản trị và thư viện bài mẫu | DB-01 | Quản lý lưu bài nháp, khách chỉ xem được bài công khai. |
 | GOAL-01 | Lưu lịch sử mục tiêu và hiển thị tiến độ ngày | STAT-01 | Đổi mục tiêu sinh mốc hiệu lực mới. Mở thông điệp hằng ngày không tăng streak. |

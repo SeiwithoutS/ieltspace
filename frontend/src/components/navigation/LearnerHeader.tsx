@@ -3,6 +3,7 @@ import PageLink from './PageLink';
 import type { PageName } from '../../app/pages';
 import NotificationBadge from '../notifications/NotificationBadge';
 import { useAccount } from '../../lib/auth/account';
+import AvatarContent from '../account/AvatarContent';
 import { getAuthUser, logout } from '../../lib/auth/auth';
 
 export type LearnerNavKey = 'exams' | 'samples' | 'vocab' | 'flashcard' | 'home';
@@ -37,7 +38,7 @@ export default function LearnerHeader({
 }: LearnerHeaderProps) {
   const isGuest = guest !== undefined ? guest : !getAuthUser();
   const account = useAccount('learner');
-  const initials = account.initials || 'MA';
+  const initials = account.initials;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [examsOpen, setExamsOpen] = useState(false);
   const [samplesOpen, setSamplesOpen] = useState(false);
@@ -47,6 +48,11 @@ export default function LearnerHeader({
   // Close mobile drawer on Escape and lock body scroll when open
   useEffect(() => {
     if (!mobileOpen) return;
+    const desktop = window.matchMedia('(min-width: 768px)');
+    if (desktop.matches) {
+      setMobileOpen(false);
+      return;
+    }
     const origOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
@@ -59,11 +65,16 @@ export default function LearnerHeader({
         menuBtnRef.current?.focus();
       }
     };
+    const handleDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) setMobileOpen(false);
+    };
     document.addEventListener('keydown', handleKeyDown);
+    desktop.addEventListener('change', handleDesktop);
 
     return () => {
       document.body.style.overflow = origOverflow;
       document.removeEventListener('keydown', handleKeyDown);
+      desktop.removeEventListener('change', handleDesktop);
     };
   }, [mobileOpen]);
 
@@ -554,7 +565,7 @@ export default function LearnerHeader({
                 style={{ border: `2px solid ${accent}` }}
               >
                 <span className="w-9 h-9 rounded-full border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-e8e4fa,#E8E4FA)] text-[var(--attempt-text-5543b0,#5543B0)] flex items-center justify-center font-bold text-xs">
-                  {initials}
+                  <AvatarContent avatar={account.avatar} initials={initials} />
                 </span>
               </PageLink>
             </div>
@@ -594,7 +605,7 @@ export default function LearnerHeader({
                 style={{ border: `2px solid ${accent}` }}
               >
                 <span className="w-8 h-8 rounded-full border-solid border-[1.5px] border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-e8e4fa,#E8E4FA)] text-[var(--attempt-text-5543b0,#5543B0)] flex items-center justify-center font-bold text-xs">
-                  {initials}
+                  <AvatarContent avatar={account.avatar} initials={initials} />
                 </span>
               </PageLink>
             </>
@@ -680,14 +691,14 @@ export default function LearnerHeader({
                   {/* User profile card */}
                   <div className="flex items-center gap-3 p-2.5 rounded-xl bg-[var(--attempt-bg-ffffff,#FFFFFF)] border-solid border border-[var(--attempt-line-e6e4e0,#E6E4E0)] mb-1">
                     <span className="w-10 h-10 rounded-full bg-[var(--attempt-bg-e8e4fa,#E8E4FA)] text-[var(--attempt-text-5543b0,#5543B0)] flex items-center justify-center font-bold text-sm shrink-0 border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)]">
-                      {initials}
+                      <AvatarContent avatar={account.avatar} initials={initials} />
                     </span>
                     <div className="flex flex-col min-w-0">
                       <span className="font-semibold text-sm text-[var(--attempt-text-352637,#352637)] truncate">
                         {account.name || 'Học viên'}
                       </span>
                       <span className="text-xs text-[var(--attempt-text-706473,#706473)] truncate">
-                        {account.email || 'learner@ieltspace.edu.vn'}
+                        {account.email}
                       </span>
                     </div>
                   </div>

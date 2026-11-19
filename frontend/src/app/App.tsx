@@ -20,6 +20,7 @@ const publicSamplePages: readonly PageName[] = ["SampleLibrary", "SampleWriting"
 const publicLibraryPages: readonly PageName[] = [
  ...publicSamplePages, "FullTests", "ExamDetail", "PracticeLibrary", "PracticeWS", "Vocab",
 ];
+const learnerStudyPages: readonly PageName[] = ['Profile', 'Flashcard', 'StudentLanding', 'StudentHome'];
 function resolve(name: string): PageName { name=name.split('?')[0]; return (aliases[name] || name) in pages ? (aliases[name] || name) as PageName : 'Main'; }
 export default function App() {
  const auth=useAuth();
@@ -144,6 +145,7 @@ export default function App() {
  const publicPage=isPublicLibraryPage||['Main','Login','Register','ForgotPassword','CheckEmail','ResetPassword'].includes(page);
  const denied =
   (!auth.user && !publicPage) ||
+  (auth.user?.role !== 'LEARNER' && learnerStudyPages.includes(page)) ||
   (auth.user?.role !== 'ADMIN' && /^(Admin|Question)/.test(page)) ||
   (auth.user?.role !== 'TEACHER' && /^Teacher/.test(page)) ||
   (auth.user?.role === 'LEARNER' && page === 'StaffProfile');

@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type RealtimeClientOptions } from '@supabase/supabase-js';
+import WebSocket from 'ws';
 import { env } from '../../config.js';
 import { HttpError } from '../../utils/http.js';
 
@@ -13,6 +14,7 @@ export function getStorageClient() {
   }
 
   return createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+    realtime: { transport: WebSocket as unknown as RealtimeClientOptions['transport'] },
     auth: {
       persistSession: false,
       autoRefreshToken: false,

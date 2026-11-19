@@ -8,7 +8,7 @@ PostgreSQL chứa hồ sơ và dữ liệu nghiệp vụ. Supabase Auth quản l
 
 | Miền | Quan hệ chính và ý nghĩa |
 |---|---|
-| Người dùng | users → teacher_permissions theo giáo viên và kỹ năng (max_pending, is_accepting, status, last_assigned_at). study_goals giữ lịch sử mục tiêu qua effective_from. Theme lưu phía trình duyệt. |
+| Người dùng | users → teacher_permissions theo giáo viên và kỹ năng (max_pending, is_accepting, status, last_assigned_at). study_goals giữ lịch sử mục tiêu qua effective_from. learner_checkins có khóa (user_id, checkin_date), sinh ngày Việt Nam từ checked_in_at và được truy cập qua backend. Theme lưu phía trình duyệt. |
 | Đề | exam_set_categories → exam_sets → exams → exam_skills → exam_sections → question_groups → questions. exam_set_categories phân loại động bộ đề. exam_sets liên kết category_id, có cover_url, name (UNIQUE), status, published_at, updated_at (tự cập nhật qua trigger). question_options lưu phương án riêng từng câu, question_answers giữ accepted_answers, matching_rule và evidence. Thứ tự Test dựa trên order_no. |
 | Cấu trúc kỹ năng | exam_skills là đơn vị đăng và phiên bản (D08): exam_id, skill, form, version_number, status, thời lượng. form bắt buộc với Reading/Writing, rỗng với Listening/Speaking. PASSAGE lưu danh sách đoạn có nhãn, SECTION có audio_path và transcript có mốc thời gian, TASK/PART có config riêng. |
 | Nhóm câu | question_from/to xác định dải số hiển thị của nhóm. questions.number_from/to và answer_count biểu diễn một câu chiếm nhiều số. Cấu hình nhóm chứa phương án dùng chung và giới hạn từ. evidence có nhãn đoạn hoặc transcript và cụm từ khóa. |

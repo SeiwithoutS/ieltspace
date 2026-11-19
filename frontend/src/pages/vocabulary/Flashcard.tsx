@@ -7,8 +7,9 @@ import { FlashcardStudy, type StudySession } from "../../components/vocabulary/F
 import type { Word } from "../../data/vocabulary";
 import { useAuth } from "../../lib/auth/auth";
 import {
-  clockLabel, readFlashcardHistory, saveFlashcardResult, wordsToReview, type FlashcardResult,
+  clockLabel, wordsToReview, type FlashcardResult, type FlashcardSubmission,
 } from "../../lib/vocabulary/flashcard-history";
+import { useFlashcardHistory } from "../../lib/vocabulary/use-flashcard-history";
 import { getPersonalVocabulary, usePublishedVocabulary } from "../../lib/vocabulary/vocabulary-library";
 import "./vocabulary.css";
 import "./flashcard.css";
@@ -44,7 +45,7 @@ function selectCards(source: FlashcardSource, { count, shuffle }: FlashcardSetti
 
 export default function Flashcard({ vocabularySetId }: { vocabularySetId?: string }) {
   const { user } = useAuth();
-  return user && <FlashcardWorkspace userId={user.id} vocabularySetId={vocabularySetId} />;
+  return user && <FlashcardWorkspace key={user.id} userId={user.id} vocabularySetId={vocabularySetId} />;
 }
 
 function FlashcardWorkspace({ userId, vocabularySetId }: { userId: string; vocabularySetId?: string }) {
@@ -54,8 +55,8 @@ function FlashcardWorkspace({ userId, vocabularySetId }: { userId: string; vocab
   const [favoriteRequest, setFavoriteRequest] = useState(0);
   const [tab, setTab] = useState<Tab>("sources");
   const [stage, setStage] = useState<Stage | null>(null);
-  const [history, setHistory] = useState<FlashcardResult[]>([]);
-  const [historyError, setHistoryError] = useState("");
+  const syncHistory = useFlashcardHistory(userId);
+  const history = syncHistory.items;
   const [sessionFilter, setSessionFilter] = useState("");
   const [unchecked, setUnchecked] = useState<string[]>([]);
 
@@ -68,24 +69,17 @@ function FlashcardWorkspace({ userId, vocabularySetId }: { userId: string; vocab
     return () => { active = false; };
   }, [favoriteRequest]);
 
-  useEffect(() => {
-    try {
-      setHistory(readFlashcardHistory(userId));
-    } catch {
-      setHistoryError("Không đọc được lịch sử ôn trên trình duyệt này.");
-    }
-  }, [userId]);
-
   const wordsById = new Map(sets.flatMap((set) => set.words).map((word) => [word.id, word]));
   const sourceFromLibrary = vocabularySetId ? sets.find((set) => set.id === vocabularySetId) : undefined;
   const favorites = favoriteIds ? [...new Set(favoriteIds)].flatMap((id) => wordsById.get(id) ?? []) : [];
   const sessionWords = (result: FlashcardResult) => wordsToReview([result], wordsById);
   const availableSessions = history.filter((result) => sessionWords(result).length);
   const selectedSession = availableSessions.find((result) => result.id === sessionFilter);
-  const forgotten = selectedSession ? sessionWords(selectedSession) : wordsToReview(history, wordsById);
+  const forgotten = selectedSession ? sessionWords(selectedSession)
+    : (syncHistory.stats?.forgottenIds ?? []).flatMap(id => wordsById.get(id) ?? []);
   const checked = forgotten.filter((word) => !unchecked.includes(word.id));
   const requestedStage: Stage = stage ?? (sourceFromLibrary?.words.length
-    ? { kind: "setup", source: { title: sourceFromLibrary.title, words: withoutDuplicates(sourceFromLibrary.words) } }
+    ? { kind: "setup", source: { title: sourceFromLibrary.title, words: withoutDuplicates(sourceFromLibrary.words), source: { type: 'SET', setId: sourceFromLibrary.id } } }
     : { kind: "home" });
 
   function prepare(source: FlashcardSource) {
@@ -98,23 +92,13 @@ function FlashcardWorkspace({ userId, vocabularySetId }: { userId: string; vocab
     if (!words.length) return;
     setStage({ kind: "study", session: {
       ...source, words, minutes: settings.minutes, startedAt: Date.now(),
-      id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      id: crypto.randomUUID(),
     } });
     window.scrollTo(0, 0);
   }
 
-  function persist(result: FlashcardResult) {
-    try {
-      saveFlashcardResult(userId, result);
-      setHistory(readFlashcardHistory(userId));
-      setHistoryError("");
-    } catch {
-      setHistoryError("Không lưu được phiên ôn trên trình duyệt này.");
-    }
-  }
-
-  function finish(result: FlashcardResult) {
-    if (result.reviews.length) persist(result);
+  function finish(result: FlashcardSubmission) {
+    if (result.reviews.length) syncHistory.save(result);
     setStage({ kind: "result", result });
     window.scrollTo(0, 0);
   }
@@ -144,7 +128,11 @@ function FlashcardWorkspace({ userId, vocabularySetId }: { userId: string; vocab
         </div>
       </header>
       <main className="vocabulary flash-workspace">
-        {historyError && <p className="flash-error" role="alert">{historyError}</p>}
+        {syncHistory.pendingCount > 0 && <p role="status" className="flash-muted">
+          {syncHistory.syncing ? 'Đang đồng bộ phiên ôn…' : `${syncHistory.pendingCount} phiên ôn đang chờ đồng bộ.`}
+          {!syncHistory.syncing && <> <button type="button" onClick={() => void syncHistory.sync()}>Thử gửi lại</button></>}
+        </p>}
+        {syncHistory.syncError && <p className="flash-error" role="alert">Chưa đồng bộ được phiên ôn. {syncHistory.syncError}</p>}
         {loading && <p role="status">Đang tải bộ từ…</p>}
         {error && <p role="alert">{error} <button type="button" onClick={retry}>Thử lại</button></p>}
         {!loading && !error && <>
@@ -167,11 +155,10 @@ function FlashcardWorkspace({ userId, vocabularySetId }: { userId: string; vocab
                   <div><dt>Đã nhớ</dt><dd>{remembered}</dd></div>
                   <div><dt>Chưa nhớ</dt><dd>{result.reviews.length - remembered}</dd></div>
                 </dl>
-                {!historyError && !!result.reviews.length && <p className="flash-muted">Các thẻ đã đánh giá được lưu trên trình duyệt này.</p>}
+                {!!result.reviews.length && !syncHistory.isPending(result.id) && <p className="flash-muted">Phiên ôn đã được lưu vào tài khoản.</p>}
                 <div className="flex flex-wrap gap-3">
                   <button type="button" onClick={() => goHome("history")}>Về lịch sử ôn</button>
-                  {!!retryWords.length && <button type="button" className="vocab-primary" onClick={() => prepare({ title: "Từ chưa nhớ", words: retryWords })}>Ôn lại từ chưa nhớ</button>}
-                  {historyError && !!result.reviews.length && <button type="button" onClick={() => persist(result)}>Thử lưu lại</button>}
+                  {!!retryWords.length && <button type="button" className="vocab-primary" onClick={() => prepare({ title: "Từ chưa nhớ", words: retryWords, source: { type: 'REVIEW' } })}>Ôn lại từ chưa nhớ</button>}
                 </div>
               </section>
             );
@@ -185,13 +172,13 @@ function FlashcardWorkspace({ userId, vocabularySetId }: { userId: string; vocab
               <h2>Chọn nguồn từ vựng</h2>
               {favoritesError && <p role="alert">Không tải được từ yêu thích. <button type="button" onClick={() => setFavoriteRequest((count) => count + 1)}>Thử lại</button></p>}
               <div className="flash-grid">
-                <button type="button" className="flash-source" disabled={!favorites.length} onClick={() => prepare({ title: "Từ yêu thích", words: favorites })}>
+                <button type="button" className="flash-source" disabled={!favorites.length} onClick={() => prepare({ title: "Từ yêu thích", words: favorites, source: { type: 'FAVORITES' } })}>
                   <FlashcardIcon />
                   <span><strong>Từ yêu thích</strong><small>{favoriteIds === null ? (favoritesError ? "Chưa tải được" : "Đang tải…") : `${favorites.length} từ đã lưu`}</small></span>
                   <span aria-hidden="true">›</span>
                 </button>
                 {sets.filter((set) => set.words.length).map((set) => (
-                  <button type="button" className="flash-source" key={set.id} onClick={() => prepare(set)}>
+                  <button type="button" className="flash-source" key={set.id} onClick={() => prepare({ ...set, source: { type: 'SET', setId: set.id } })}>
                     <FlashcardIcon />
                     <span><strong>{set.title}</strong><small>{withoutDuplicates(set.words).length} từ</small></span>
                     <span aria-hidden="true">›</span>
@@ -200,8 +187,15 @@ function FlashcardWorkspace({ userId, vocabularySetId }: { userId: string; vocab
               </div>
               {!sets.length && <p className="flash-muted">Thư viện chưa có bộ từ để ôn.</p>}
             </section>}
+            {tab !== "sources" && syncHistory.historyError && <p role="alert">{syncHistory.historyError} <button type="button" onClick={() => void syncHistory.load()}>Thử tải lại</button></p>}
+            {tab !== "sources" && syncHistory.loading && <p role="status">Đang tải lịch sử ôn…</p>}
             {tab === "history" && <section className="flash-panel">
               <h2>Lịch sử ôn</h2>
+              {syncHistory.stats && <dl className="flash-summary">
+                <div><dt>Phiên đã lưu</dt><dd>{syncHistory.stats.sessions}</dd></div>
+                <div><dt>Từ đã ôn</dt><dd>{syncHistory.stats.reviewedWords}</dd></div>
+                <div><dt>Từ chưa nhớ</dt><dd>{syncHistory.stats.forgottenIds.length}</dd></div>
+              </dl>}
               {history.length ? <ul className="flash-list">
                 {history.map((result) => {
                   const replay = sessionWords(result);
@@ -211,10 +205,18 @@ function FlashcardWorkspace({ userId, vocabularySetId }: { userId: string; vocab
                       <p className="flash-muted">{dateLabel.format(result.finishedAt)} · {clockLabel(result.elapsedSeconds)}</p>
                       <small>{result.reviews.length}/{result.cardCount} thẻ đã đánh giá · {result.reviews.filter((review) => !review.remembered).length} chưa nhớ</small>
                     </div>
-                    {!!replay.length && <button type="button" onClick={() => prepare({ title: `Ôn lại · ${result.title}`, words: replay })}>Ôn lại từ chưa nhớ</button>}
+                    {!!replay.length && <button type="button" onClick={() => prepare({ title: 'Ôn lại từ chưa nhớ', words: replay, source: { type: 'REVIEW' } })}>Ôn lại từ chưa nhớ</button>}
                   </li>;
                 })}
-              </ul> : <p className="flash-muted">Bạn chưa có phiên ôn trên trình duyệt này.</p>}
+              </ul> : !syncHistory.loading && !syncHistory.historyError && <p className="flash-muted">Tài khoản chưa có phiên ôn đã lưu.</p>}
+              {syncHistory.cursor && <button type="button" disabled={syncHistory.loading} onClick={() => void syncHistory.load(syncHistory.cursor ?? undefined)}>Xem thêm phiên</button>}
+              {!!syncHistory.localHistory.length && <details>
+                <summary>Lịch sử cũ trên thiết bị này ({syncHistory.localHistory.length} phiên)</summary>
+                <ul className="flash-list">{syncHistory.localHistory.map(result => <li key={result.id}>
+                  {result.title} · {dateLabel.format(result.finishedAt)} · {result.reviews.length} thẻ đã đánh giá
+                  {!!sessionWords(result).length && <> <button type="button" onClick={() => prepare({ title: 'Ôn lại từ chưa nhớ', words: sessionWords(result), source: { type: 'REVIEW' } })}>Ôn lại</button></>}
+                </li>)}</ul>
+              </details>}
             </section>}
             {tab === "forgotten" && <section className="flash-panel">
               <div className="flex flex-wrap items-end justify-between gap-4">
@@ -239,8 +241,8 @@ function FlashcardWorkspace({ userId, vocabularySetId }: { userId: string; vocab
                     </label>
                   </li>)}
                 </ul>
-                <button type="button" className="vocab-primary" disabled={!checked.length} onClick={() => prepare({ title: "Từ chưa nhớ", words: checked })}>Ôn {checked.length} từ đã chọn</button>
-              </> : <p className="flash-muted">Chưa có từ cần ôn lại.</p>}
+                <button type="button" className="vocab-primary" disabled={!checked.length} onClick={() => prepare({ title: "Từ chưa nhớ", words: checked, source: { type: 'REVIEW' } })}>Ôn {checked.length} từ đã chọn</button>
+              </> : !syncHistory.loading && !syncHistory.historyError && <p className="flash-muted">Chưa có từ cần ôn lại.</p>}
             </section>}
           </>}
         </>}

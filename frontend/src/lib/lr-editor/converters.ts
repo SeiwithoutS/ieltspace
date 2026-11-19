@@ -1,5 +1,5 @@
 import { LET, TYPE_MAP } from './constants.ts';
-import { blanks, cnt, formOf, normFlow, normTbl, parseAlt, flowSeq, flowOf, tblCells } from './pure.ts';
+import { blanks, cnt, formOf, normTbl, parseAlt, tblCells } from './pure.ts';
 import type {
   LrAsset,
   LrContent,
@@ -100,9 +100,6 @@ export function toLrState(skill: EditorSkill): LrEditorState {
         rows: Array.isArray(cntObj.rows) ? (cntObj.rows as string[][]) : undefined,
         hd: Array.isArray(cfg.hd) ? (cfg.hd as boolean[][]) : undefined,
         sp: Array.isArray(cfg.sp) ? (cfg.sp as LrGroupState['sp']) : undefined,
-        nodes: Array.isArray(cfg.nodes) ? (cfg.nodes as LrGroupState['nodes']) : undefined,
-        edges: Array.isArray(cfg.edges) ? (cfg.edges as Array<[string, string]>) : undefined,
-        frames: Array.isArray(cfg.frames) ? (cfg.frames as LrGroupState['frames']) : undefined,
         opts: Array.isArray(cfg.opts) ? (cfg.opts as string[]) : undefined,
         pick: typeof cfg.pick === 'number' ? cfg.pick : undefined,
         oneUse: typeof cfg.oneUse === 'boolean' ? cfg.oneUse : undefined,
@@ -153,7 +150,7 @@ export function toLrState(skill: EditorSkill): LrEditorState {
           };
         });
         grpState.items = items;
-      } else if (f === 'text' || f === 'table' || f === 'flow' || f === 'diagram' || f === 'bank') {
+      } else if (f === 'text' || f === 'table' || f === 'diagram' || f === 'bank') {
         grpState.ans = questions.map((q) => {
           const first = q.accepted?.[0] ?? '';
           if (f === 'bank' && /^\d+$/.test(first)) {
@@ -284,8 +281,6 @@ export function fromLrState(
       // Ensure normalized structures
       if (f === 'table') {
         normTbl(g);
-      } else if (f === 'flow') {
-        normFlow(g);
       }
 
       // Group image
@@ -312,9 +307,6 @@ export function fromLrState(
       if (g.texts) config.texts = g.texts;
       if (g.hd) config.hd = g.hd;
       if (g.sp) config.sp = g.sp;
-      if (g.nodes) config.nodes = g.nodes;
-      if (g.edges) config.edges = g.edges;
-      if (g.frames) config.frames = g.frames;
       if (g.opts) config.opts = g.opts;
       // cnt() mặc định 2 khi chưa chọn; ghi rõ để backend kiểm tra số câu khớp
       if (f === 'mcqN') config.pick = g.pick || 2;
@@ -422,7 +414,7 @@ export function fromLrState(
           });
         }
       } else {
-        // text, table, flow, diagram, bank
+        // text, table, diagram, bank
         const ansList = g.ans || [];
         const altList = g.alt || [];
         const expList = g.exp || [];

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { LrAsset, LrGroupState } from '../../../../lib/lr-editor/types.ts';
 import { LET } from '../../../../lib/lr-editor/constants.ts';
 import ImageUploader from '../../editor-shell/ImageUploader.tsx';
+import ConfirmDialog from '../../editor-shell/ConfirmDialog.tsx';
 import { uploadSkillImage } from '../../../../lib/exam-editor.ts';
 
 type ModeToggleProps = {
@@ -12,14 +13,14 @@ type ModeToggleProps = {
 
 /** Chọn biến thể của Plan/Map/Diagram Labelling. */
 export function DiagramModeToggle({ group, readOnly = false, onChange }: ModeToggleProps) {
+  const [confirmPending, setConfirmPending] = useState<'labels' | 'letters' | null>(null);
   const letters = group.mode === 'letters';
   const base =
     'px-3 py-1.5 rounded-[9px] text-[13px] font-semibold border border-solid text-left';
   const on = 'bg-white border-[#D6D4D0] shadow-sm text-[#352637]';
   const off = 'border-transparent text-[#706473] hover:text-[#352637]';
 
-  function setMode(next: 'labels' | 'letters') {
-    if (readOnly) return;
+  function applyMode(next: 'labels' | 'letters') {
     onChange((g) => {
       if (next === 'letters') {
         g.mode = 'letters';
@@ -29,6 +30,42 @@ export function DiagramModeToggle({ group, readOnly = false, onChange }: ModeTog
         delete g.mode;
       }
     });
+    setConfirmPending(null);
+  }
+
+  function handleModeClick(next: 'labels' | 'letters') {
+    if (readOnly) return;
+    const currentIsLetters = group.mode === 'letters';
+    if ((next === 'letters' && currentIsLetters) || (next === 'labels' && !currentIsLetters)) {
+      return;
+    }
+
+    // Kiểm tra xem kiểu hiện tại có dữ liệu cần cảnh báo hay không (GQ-05)
+    let hasData = false;
+    if (currentIsLetters) {
+      hasData = Boolean(
+        (group.opts && group.opts.length > 5) ||
+        (group.items &&
+          group.items.length > 0 &&
+          group.items.some((it) => (it.q && it.q.trim().length > 0) || it.ans != null))
+      );
+    } else {
+      hasData = Boolean(
+        (group.marks && group.marks.length > 0) ||
+        (group.texts && group.texts.length > 0) ||
+        (group.ans &&
+          group.ans.length > 0 &&
+          group.ans.some(
+            (a) => a !== undefined && a !== null && String(a).trim() !== '' && String(a) !== '-1'
+          ))
+      );
+    }
+
+    if (hasData) {
+      setConfirmPending(next);
+    } else {
+      applyMode(next);
+    }
   }
 
   return (
@@ -38,20 +75,33 @@ export function DiagramModeToggle({ group, readOnly = false, onChange }: ModeTog
         <button
           type="button"
           disabled={readOnly}
-          onClick={() => setMode('labels')}
+          onClick={() => handleModeClick('labels')}
           className={`${base} ${!letters ? on : off}`}
         >
-          Đặt nhãn số lên hình (điền đáp án)
+          Điền đáp án
         </button>
         <button
           type="button"
           disabled={readOnly}
-          onClick={() => setMode('letters')}
+          onClick={() => handleModeClick('letters')}
           className={`${base} ${letters ? on : off}`}
         >
           Hình có sẵn chữ cái (chọn chữ cho từng câu)
         </button>
       </div>
+
+      <ConfirmDialog
+        isOpen={confirmPending !== null}
+        title={`Đổi kiểu hình sang ${confirmPending === 'letters' ? 'Hình có sẵn chữ cái' : 'Đặt nhãn số lên hình'}?`}
+        message="Dữ liệu nhãn và đáp án hiện tại của hình sẽ bị thay đổi. Bạn vẫn có thể hoàn tác sau đó."
+        confirmText="Đổi kiểu hình"
+        cancelText="Hủy bỏ"
+        isDanger={true}
+        onConfirm={() => {
+          if (confirmPending) applyMode(confirmPending);
+        }}
+        onCancel={() => setConfirmPending(null)}
+      />
     </div>
   );
 }
@@ -210,11 +260,10 @@ export default function MapLettersCard({
               onChange={(e) =>
                 updateItem(idx, { ans: e.target.value === '' ? null : parseInt(e.target.value, 10) })
               }
-              className={`w-24 h-10 px-2 text-[14px] rounded-xl font-semibold ${
-                typeof it.ans === 'number'
-                  ? 'border border-solid border-[#2963CC] bg-[#E3ECFD] text-[#2963CC]'
-                  : field
-              }`}
+              className={`w-24 h-10 px-2 text-[14px] rounded-xl font-semibold ${typeof it.ans === 'number'
+                ? 'border border-solid border-[#2963CC] bg-[#E3ECFD] text-[#2963CC]'
+                : field
+                }`}
             >
               <option value="">Chữ…</option>
               {opts.map((_, oIdx) => (

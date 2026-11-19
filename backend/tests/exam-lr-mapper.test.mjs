@@ -27,13 +27,13 @@ test('emptyLrContent generates correct default structure', () => {
   assert.equal(l.sections[0].audio, null);
 });
 
-test('LR DB ↔ DTO round-trip lossless for 16 question types', () => {
-  const all16Types = Object.keys(LR_QUESTION_TYPE_NAMES);
-  assert.equal(all16Types.length, 16);
+test('LR DB ↔ DTO round-trip lossless for 15 question types', () => {
+  const all15Types = Object.keys(LR_QUESTION_TYPE_NAMES);
+  assert.equal(all15Types.length, 15);
 
-  // Construct a comprehensive LrContent covering all 16 types
+  // Construct a comprehensive LrContent covering all 15 types
   let currentQNum = 1;
-  const groups = all16Types.map((type, idx) => {
+  const groups = all15Types.map((type, idx) => {
     const isMcqMulti = type === 'MCQ_MULTI';
     const pick = isMcqMulti ? 2 : 1;
     const numFrom = currentQNum;
@@ -104,9 +104,9 @@ test('LR DB ↔ DTO round-trip lossless for 16 question types', () => {
   // 1. Convert DTO -> Rows
   const rows = lrToRows(originalContent, 'READING', 'test-skill-id');
   assert.equal(rows.sections.length, 3);
-  assert.equal(rows.groups.length, 16);
-  assert.equal(rows.questions.length, 16);
-  assert.equal(rows.answers.length, 16);
+  assert.equal(rows.groups.length, 15);
+  assert.equal(rows.questions.length, 15);
+  assert.equal(rows.answers.length, 15);
 
   // 2. Mock nesting of DB rows as Prisma would return
   const mockDbSections = rows.sections.map((sec) => {

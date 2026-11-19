@@ -123,3 +123,41 @@ Từ ngày 14/11/2026, nội dung đề Writing và Speaking được lưu trữ
 
 ### Quy tắc chấm và rubric chuẩn (`grading_rules` & `rubric_criteria`)
 - Khởi tạo qua tệp [06_quy_tac_cham_ws.sql](06_quy_tac_cham_ws.sql): 4 quy tắc chấm phạm vi `FULL_SKILL` (Writing AC, Writing GT, Speaking AC, Speaking GT) và 16 tiêu chí rubric theo chuẩn IELTS (TR/TA, CC, LR, GRA cho Writing; FC, LR, GRA, PR cho Speaking). Khi xuất bản (publish) kỹ năng Writing/Speaking, hệ thống tự động gán đúng `grading_rule_id` tương ứng.
+
+## Định dạng lưu trữ nội dung Reading & Listening
+
+Từ ngày 19/11/2026, nội dung đề thi Reading và Listening được lưu trữ trực tiếp vào các bảng quan hệ theo thiết kế chuẩn CSDL:
+
+### 1. Phân cấp Sections & Passages (`exam_sections`)
+- **Reading**: Gồm đúng 3 passage (`section_type = 'PASSAGE'`, `order_no = 1..3`).
+  - `duration_minutes`: 60 phút.
+  - `content`: Lưu `paragraphs: [{ label: 'A', text: '...' }]` và `images: [{ path, url, caption }]`.
+- **Listening**: Gồm đúng 4 section (`section_type = 'SECTION'`, `order_no = 1..4`).
+  - `duration_minutes`: 40 phút (30 phút làm bài + 10 phút chuyển đáp án).
+  - `audio_path`: Đường dẫn file ghi âm trong bucket `exam-assets` (`exam-skills/:skillId/audio/:uuid.ext`).
+  - `audio_duration_seconds`: Thời lượng tệp ghi âm tính bằng giây.
+  - `transcript_raw`: Văn bản transcript đầy đủ kèm mốc thời gian `[mm:ss]` cho từng câu/đoạn.
+  - `transcript_structured`: Lưu các đoạn thoại có mốc thời gian và nhãn đoạn.
+
+### 2. Nhóm câu hỏi (`question_groups`)
+- Thuộc một section qua `exam_section_id`, thứ tự `order_no` bắt đầu từ 1 trong mỗi section.
+- `question_type`: Một trong 16 dạng câu hỏi chuẩn IELTS:
+  - Điền từ: `SENTENCE_COMP`, `SHORT_ANSWER`, `SUMMARY_COMP`, `NOTE_COMP`, `TABLE_COMP`, `FLOW_COMP`, `DIAGRAM_COMP`.
+  - Nối: `MATCH_HEADING`, `MATCH_INFO`, `MATCH_ENDING`, `MATCH_FEATURE`.
+  - Trắc nghiệm: `MCQ_SINGLE`, `MCQ_MULTI`, `SUMMARY_BOX`.
+  - Đúng/Sai: `TFNG`, `YNNG`.
+- `question_from`, `question_to`: Dải câu hỏi liên tục trong đề (tổng cộng 1–40).
+- `instruction`: Câu hướng dẫn hiển thị cho thí sinh (tự sinh hoặc tùy chỉnh).
+- `config`: Chứa giới hạn từ (`limit`), tùy chọn dạng lưới/bảng (`cols`, `rows`, `headers`), hình ảnh sơ đồ (`imagePath`, `markers`).
+- `content`: Lưu danh sách các bước (`steps`), từ khóa tóm tắt (`summary`), ngân hàng từ (`wordBank`), hoặc các câu chọn.
+
+### 3. Câu hỏi và đáp án (`questions`, `question_options`, `question_answers`)
+- Mỗi câu hỏi tương ứng 1 số câu từ 1 đến 40 (`order_no`, `number_from`, `number_to`).
+- Riêng `MCQ_MULTI` (ví dụ chọn 2 đáp án) được lưu thành 1 dòng câu hỏi với `answer_count = 2`, chiếm dải số câu tương ứng (ví dụ câu 14–15).
+- Lựa chọn A/B/C/D lưu trong `question_options` (`order_no`, `content: { text: "..." }`).
+- Đáp án đúng và biến thể chấp nhận lưu trong `question_answers` (`accepted_answers: ["answer1", "answer2"]`).
+- Giải thích và vị trí đoạn chứng cứ lưu trong `question_answers.explanation` và `evidence`.
+
+### 4. Thang điểm Band chuẩn (`band_scales`)
+- Khởi tạo qua tệp [10_thang_band_lr.sql](10_thang_band_lr.sql): 3 thang quy đổi chuẩn IELTS cho Listening, Reading Academic và Reading General.
+- Cột `conversion_rules`: Cấu trúc JSON chứa bảng quy đổi số câu đúng (0–40) sang band điểm từ 0.0 đến 9.0 (bước nhảy 0.5 band). Khi xuất bản (publish) kỹ năng Reading/Listening, hệ thống tự động gán đúng `band_scale_id`.

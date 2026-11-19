@@ -1,4 +1,5 @@
 import React from "react";
+import { TOAST_MS } from "../../../../lib/toast";
 import { styleOf, cssText } from "../../../../lib/styles";
 import AdminSidebar from "../../../../components/navigation/AdminSidebar";
 import AdminTopbar, { Crumb } from "../../../../components/navigation/AdminTopbar";
@@ -337,7 +338,19 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
     this.initFromUrl();
   }
 
+  _toastT: ReturnType<typeof setTimeout> | undefined;
+
+  componentDidUpdate(_p: unknown, prev: { toast: string }) {
+    if (this.state.toast && this.state.toast !== prev.toast) {
+      clearTimeout(this._toastT);
+      this._toastT = setTimeout(() => {
+        if (this._mounted) this.setState({ toast: "" });
+      }, TOAST_MS);
+    }
+  }
+
   componentWillUnmount() {
+    clearTimeout(this._toastT);
     this._mounted = false;
     if (this._key) {
       document.removeEventListener("keydown", this._key);

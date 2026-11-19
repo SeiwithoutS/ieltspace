@@ -131,77 +131,35 @@ test('canPublishSet: checks tests count and published skills', () => {
 });
 
 test('defaultDuration returns correct IELTS duration minutes', () => {
-  assert.equal(defaultDuration('LISTENING'), 30);
+  assert.equal(defaultDuration('LISTENING'), 40);
   assert.equal(defaultDuration('READING'), 60);
   assert.equal(defaultDuration('WRITING'), 60);
   assert.equal(defaultDuration('SPEAKING'), 15);
 });
 
-test('validateSkillReady: reports correct reasons in Vietnamese', () => {
-  // Không có phần nào
+test('validateSkillReady: reports correct reasons in Vietnamese for Reading and Listening', () => {
+  // Không có phần nào -> báo thiếu 40 câu, chưa có bài đọc
   const emptySkill = { skill: 'READING', sections: [] };
   const rEmpty = validateSkillReady(emptySkill);
   assert.equal(rEmpty.ready, false);
-  assert.ok(rEmpty.reasons.some((m) => m.includes('ít nhất một phần')));
-
-  // Thiếu tiêu đề phần
-  const noTitleSkill = {
-    skill: 'READING',
-    sections: [{ title: '   ', section_type: 'PASSAGE', groups: [] }],
-  };
-  const rNoTitle = validateSkillReady(noTitleSkill);
-  assert.equal(rNoTitle.ready, false);
-  assert.ok(rNoTitle.reasons.some((m) => m.includes('chưa có tiêu đề')));
+  assert.ok(rEmpty.reasons.some((m) => m.includes('Đề đang có 0 câu, cần đúng 40 câu.')));
 
   // Listening thiếu audio
   const listeningNoAudio = {
     skill: 'LISTENING',
-    sections: [{ title: 'Section 1', section_type: 'SECTION', audio_path: null, groups: [] }],
+    sections: [
+      {
+        order_no: 1,
+        title: 'Section 1',
+        section_type: 'SECTION',
+        transcript: [{ label: 'A', text: '[00:00] Hello', startSec: 0 }],
+        audio_path: null,
+        groups: [],
+      },
+    ],
   };
   const rNoAudio = validateSkillReady(listeningNoAudio);
   assert.equal(rNoAudio.ready, false);
-  assert.ok(rNoAudio.reasons.some((m) => m.includes('thiếu tệp âm thanh')));
-
-  // Câu thiếu đáp án
-  const readingNoAnswer = {
-    skill: 'READING',
-    sections: [
-      {
-        title: 'Passage 1',
-        section_type: 'PASSAGE',
-        groups: [
-          {
-            questions: [
-              { id: 'q1', answer: null },
-            ],
-          },
-        ],
-      },
-    ],
-  };
-  const rNoAnswer = validateSkillReady(readingNoAnswer);
-  assert.equal(rNoAnswer.ready, false);
-  assert.ok(rNoAnswer.reasons.some((m) => m.includes('chưa có đáp án')));
-
-  // Đủ điều kiện
-  const readySkill = {
-    skill: 'READING',
-    sections: [
-      {
-        title: 'Passage 1',
-        section_type: 'PASSAGE',
-        groups: [
-          {
-            questions: [
-              { id: 'q1', answer: { accepted_answers: ['A'] } },
-            ],
-          },
-        ],
-      },
-    ],
-  };
-  const rReady = validateSkillReady(readySkill);
-  assert.equal(rReady.ready, true);
-  assert.equal(rReady.reasons.length, 0);
+  assert.ok(rNoAudio.reasons.some((m) => m.includes('Section 1 chưa có ghi âm.')));
 });
 

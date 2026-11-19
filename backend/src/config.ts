@@ -23,6 +23,7 @@ const envSchema = z.object({
   STORAGE_BUCKET_EXAM_ASSETS: z.string().default("exam-assets"),
 
   DATABASE_URL: z.string().min(1),
+  GROQ_API_KEY: z.string().optional(),
   MW_LEARNERS_KEY: z.string().optional(),
   MW_DICTIONARY_KEY: z.string().optional(),
   MW_DICTIONARY_PRODUCT: z.enum(["collegiate"]).optional(),

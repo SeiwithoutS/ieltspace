@@ -77,4 +77,8 @@ So số dòng với trước nâng cấp. Với DB chỉ chứa bảng IELTSpace
 
 Ngày 14/11: [06_quy_tac_cham_ws.sql](06_quy_tac_cham_ws.sql) khởi tạo 4 bộ quy tắc chấm `grading_rules` chuẩn IELTS với phạm vi `assessment_scope = 'FULL_SKILL'` và bảng `rubric_criteria` với 16 tiêu chí rubric (Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy cho Writing; Fluency & Coherence, Lexical Resource, Grammatical Range & Accuracy, Pronunciation cho Speaking).
 
+### Khởi tạo thang điểm Band Reading & Listening (10)
+
+Ngày 19/11: [10_thang_band_lr.sql](10_thang_band_lr.sql) khởi tạo 3 thang quy đổi band điểm chuẩn Cambridge cho Listening, Reading Academic và Reading General trong bảng `band_scales` (phiên bản 1). Bảng cấu trúc `conversion_rules` dạng JSON lưu các khoảng điểm số câu đúng (0–40) tương ứng với band điểm từ 0.0 đến 9.0.
+
 [Từ điển bảng](CSDL.md).

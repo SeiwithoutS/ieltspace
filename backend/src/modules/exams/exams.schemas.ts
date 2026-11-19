@@ -142,6 +142,92 @@ export const createSkillSchema = z
     }
   );
 
+export const lrAssetSchema = z.object({
+  path: z.string(),
+  name: z.string(),
+  url: z.string().nullable().optional(),
+});
+
+export const lrSectionPatchSchema = z.object({
+  orderNo: z.number().int().min(1).max(4),
+  title: z.string().max(300).optional(),
+  paragraphs: z
+    .array(
+      z.object({
+        label: z.string().max(20),
+        text: z.string().max(5000),
+        startSec: z.number().nullable().optional().default(null),
+      })
+    )
+    .max(30)
+    .optional(),
+  images: z
+    .array(
+      lrAssetSchema.extend({
+        caption: z.string().max(300).default(''),
+      })
+    )
+    .max(5)
+    .optional(),
+  audio: lrAssetSchema
+    .extend({
+      sizeBytes: z.number(),
+      durationSec: z.number(),
+    })
+    .nullable()
+    .optional(),
+});
+
+export const lrQuestionSchema = z.object({
+  numberFrom: z.number().int(),
+  numberTo: z.number().int(),
+  content: z.record(z.any()).default({}),
+  options: z.array(z.object({ label: z.string(), text: z.string() })).max(26).default([]),
+  accepted: z.array(z.string().max(200)).max(10).default([]),
+  matching: z.object({ kind: z.enum(['TEXT', 'CHOICE', 'MULTI']), limit: z.number().nullable().optional() }).default({ kind: 'TEXT' }),
+  evidence: z.array(z.object({ para: z.number().nullable().optional(), label: z.string().nullable().optional(), keys: z.array(z.string()) })).default([]),
+  notes: z.array(z.string()).default([]),
+});
+
+export const lrGroupSchema = z.object({
+  id: z.string().nullable().optional(),
+  type: z.string(),
+  instruction: z.string().max(500).default(''),
+  title: z.string().nullable().optional(),
+  questionFrom: z.number().nullable().optional(),
+  questionTo: z.number().nullable().optional(),
+  image: lrAssetSchema.nullable().optional(),
+  config: z.record(z.any()).default({}),
+  content: z.record(z.any()).default({}),
+  questions: z.array(lrQuestionSchema).max(60).default([]),
+});
+
+export const lrPatchSchema = z.object({
+  sections: z.array(lrSectionPatchSchema).optional(),
+  moveGroups: z
+    .array(
+      z.object({
+        id: z.string(),
+        sectionOrderNo: z.number().int().min(1).max(4),
+        orderNo: z.number().int().min(1),
+        questionFrom: z.number().int().nullable().optional(),
+        questionTo: z.number().int().nullable().optional(),
+      })
+    )
+    .optional(),
+  upsertGroups: z
+    .array(
+      lrGroupSchema.extend({
+        sectionOrderNo: z.number().int().min(1).max(4),
+        orderNo: z.number().int().min(1),
+      })
+    )
+    .optional(),
+  deleteGroupIds: z.array(z.string()).optional(),
+});
+
+export type LrPatch = z.infer<typeof lrPatchSchema>;
+
 export const saveSkillContentSchema = z
   .object({
     baseUpdatedAt: z.string().min(1, 'baseUpdatedAt không được để trống.'),
@@ -181,13 +267,36 @@ export const saveSkillContentSchema = z
         }),
       })
       .optional(),
+    reading: lrPatchSchema.optional(),
+    listening: lrPatchSchema.optional(),
   })
   .refine(
-    (data) => Boolean(data.writing) || Boolean(data.speaking),
+    (data) => {
+      const keys = [data.writing, data.speaking, data.reading, data.listening].filter(Boolean);
+      return keys.length === 1;
+    },
     {
-      message: 'Phải cung cấp nội dung writing hoặc speaking.',
+      message: 'Phải cung cấp đúng một trong các nội dung: writing, speaking, reading hoặc listening.',
       path: ['writing'],
     }
   );
+
+export const discardUploadsSchema = z.object({
+  paths: z.array(z.string().min(1)).max(50, 'Tối đa 50 tệp mỗi lần dọn.'),
+});
+
+export const transcribeParamSchema = z.object({
+  skillId: z.string().uuid('Mã kỹ năng không hợp lệ.'),
+  orderNo: z.coerce.number().int().min(1).max(4, 'Section phải từ 1 đến 4.'),
+});
+
+export const transcribeBodySchema = z.object({
+  audioPath: z.string().min(1, 'audioPath không được để trống.'),
+});
+
+export const transcriptionJobParamSchema = z.object({
+  jobId: z.string().uuid('Mã tác vụ không hợp lệ.'),
+});
+
 
 

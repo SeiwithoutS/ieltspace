@@ -1,5 +1,7 @@
-import { apiFetch } from './api';
+import { apiFetch, ApiError } from './api';
+import { getAccessToken } from './auth';
 import type { ExamSetAdmin } from './exam-admin';
+import type { LrContent, LrPatch } from './lr-editor/types';
 
 export type WritingTask = {
   prompt: string;
@@ -30,7 +32,7 @@ export type SpeakingContent = {
 
 export type EditorSkill = {
   id: string;
-  skill: 'WRITING' | 'SPEAKING';
+  skill: 'WRITING' | 'SPEAKING' | 'READING' | 'LISTENING';
   form: 'ACADEMIC' | 'GENERAL' | null;
   status: 'DRAFT' | 'PUBLISHED' | 'HIDDEN' | 'ARCHIVED';
   versionNumber: number;
@@ -55,6 +57,8 @@ export type EditorSkill = {
   };
   writing: WritingContent | null;
   speaking: SpeakingContent | null;
+  reading: LrContent | null;
+  listening: LrContent | null;
 };
 
 export type WritingEditorImage = {
@@ -107,11 +111,76 @@ export async function saveSkillContent(
     baseUpdatedAt: string;
     writing?: WritingContent;
     speaking?: SpeakingContent;
+    reading?: LrPatch;
+    listening?: LrPatch;
   }
 ): Promise<EditorSkill> {
   return apiFetch<EditorSkill>(`/admin/exam-skills/${skillId}/content`, {
     method: 'PUT',
     json: input,
+  });
+}
+
+export function uploadSkillAudio(
+  skillId: string,
+  file: File,
+  onProgress?: (pct: number) => void
+): Promise<{ path: string; url: string; sizeBytes: number }> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const cleanPath = `/admin/exam-skills/${skillId}/audio`;
+    const envObj = (import.meta as { env?: Record<string, string> }).env;
+    const base = (envObj?.VITE_API_URL || 'http://localhost:3001/api').replace(/\/$/, '');
+    xhr.open('PUT', `${base}${cleanPath}`);
+    xhr.setRequestHeader('Content-Type', file.type || 'audio/mpeg');
+
+    const token = getAccessToken();
+    if (token) {
+      xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+    }
+
+    if (xhr.upload && onProgress) {
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const pct = Math.round((event.loaded / event.total) * 100);
+          onProgress(pct);
+        }
+      };
+    }
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const data = JSON.parse(xhr.responseText) as { path: string; url: string; sizeBytes: number };
+          resolve(data);
+        } catch {
+          reject(new ApiError(xhr.status, 'PARSE_ERROR', 'Phản hồi không hợp lệ từ máy chủ.'));
+        }
+      } else {
+        try {
+          const data = JSON.parse(xhr.responseText) as { code?: string; message?: string; details?: unknown };
+          reject(new ApiError(xhr.status, data.code || 'API_ERROR', data.message || 'Lỗi tải tệp âm thanh.', data.details));
+        } catch {
+          reject(new ApiError(xhr.status, 'API_ERROR', `Lỗi tải tệp âm thanh (${xhr.status}).`));
+        }
+      }
+    };
+
+    xhr.onerror = () => {
+      reject(new ApiError(0, 'NETWORK_ERROR', 'Không thể kết nối. Vui lòng thử lại.'));
+    };
+
+    xhr.send(file);
+  });
+}
+
+export async function discardUploads(
+  skillId: string,
+  paths: string[]
+): Promise<{ removed: number }> {
+  return apiFetch<{ removed: number }>(`/admin/exam-skills/${skillId}/uploads/discard`, {
+    method: 'POST',
+    json: { paths },
   });
 }
 
@@ -281,5 +350,32 @@ export type SkillHistoryDto = {
 export async function getSkillHistory(skillId: string): Promise<SkillHistoryDto> {
   return apiFetch<SkillHistoryDto>(`/admin/exam-skills/${skillId}/history`);
 }
+
+export type TranscriptionJobResult = {
+  status: 'processing' | 'done' | 'error';
+  paragraphs?: Array<{ label: string; startSec: number; text: string }>;
+  message?: string;
+};
+
+export async function startTranscription(
+  skillId: string,
+  orderNo: number,
+  audioPath: string
+): Promise<{ jobId: string }> {
+  return apiFetch<{ jobId: string }>(
+    `/admin/exam-skills/${skillId}/sections/${orderNo}/transcribe`,
+    {
+      method: 'POST',
+      json: { audioPath },
+    }
+  );
+}
+
+export async function getTranscriptionJob(
+  jobId: string
+): Promise<TranscriptionJobResult> {
+  return apiFetch<TranscriptionJobResult>(`/admin/transcriptions/${jobId}`);
+}
+
 
 

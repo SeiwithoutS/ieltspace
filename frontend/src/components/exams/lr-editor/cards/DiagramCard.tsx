@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
-import type { LrAsset, LrGroupState, LrPassageState } from '../../../../lib/lr-editor/types.ts';
-import { limOf, overLimit, parseAlt } from '../../../../lib/lr-editor/pure.ts';
-import { LIM } from '../../../../lib/lr-editor/constants.ts';
+import type { LrAsset, LrGroupState, LrPassageState } from '../../../../lib/exams/lr-editor/types.ts';
+import { limOf, overLimit, parseAlt } from '../../../../lib/exams/lr-editor/pure.ts';
+import { LIM } from '../../../../lib/exams/lr-editor/constants.ts';
 import MapLettersCard, { DiagramModeToggle } from './MapLettersCard.tsx';
 import ImageUploader from '../../editor-shell/ImageUploader.tsx';
-import { uploadSkillImage } from '../../../../lib/exam-editor.ts';
+import { uploadSkillImage } from '../../../../lib/exams/exam-editor.ts';
 
 export type CardProps = {
   group: LrGroupState;

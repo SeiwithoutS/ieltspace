@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { navigate } from "../../lib/auth";
+import { navigate } from "../../lib/auth/auth";
 
 export const DesktopContext = createContext(true);
 const desktopQuery =

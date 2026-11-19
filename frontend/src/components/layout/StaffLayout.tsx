@@ -66,13 +66,13 @@ export default function StaffLayout({
   const SidebarComp = role === 'TEACHER' ? TeacherSidebar : AdminSidebar;
 
   return (
-    <div className="h-dvh min-h-0 overflow-hidden bg-[#FCFBF7] text-[#352637] flex flex-col font-sans">
+    <div className="h-dvh min-h-0 overflow-hidden bg-[var(--attempt-bg-fcfbf7,#FCFBF7)] text-[var(--attempt-text-352637,#352637)] flex flex-col font-sans">
       {/* Mobile warning banner (< 768px) */}
       {isMobile && !bannerDismissed && (
         <aside
           role="status"
           aria-live="polite"
-          className="bg-[#FFF7ED] border-b border-[#FED7AA] px-4 py-2 text-xs text-[#9A4A17] flex items-center justify-between z-30 flex-none"
+          className="staff-device-warning bg-[#FFF7ED] border-b border-[#FED7AA] px-4 py-2 text-xs text-[#9A4A17] flex items-center justify-between z-30 flex-none"
         >
           <div className="flex items-center gap-2">
             <svg
@@ -120,11 +120,11 @@ export default function StaffLayout({
               aria-hidden="true"
             />
             {/* Drawer panel */}
-            <div className="relative z-10 h-full max-w-[280px] shadow-2xl flex flex-col bg-[#FCFBF7]">
-              <div className="flex justify-end p-2 bg-[#FCFBF7] border-b border-[#E6E4E0]">
+            <div className="relative z-10 h-full max-w-[280px] shadow-2xl flex flex-col bg-[var(--attempt-bg-fcfbf7,#FCFBF7)]">
+              <div className="flex justify-end p-2 bg-[var(--attempt-bg-fcfbf7,#FCFBF7)] border-b border-[var(--attempt-line-e6e4e0,#E6E4E0)]">
                 <button
                   onClick={() => setDrawerOpen(false)}
-                  className="p-1.5 rounded-lg text-[#706473] hover:bg-[#F3F0EA]"
+                  className="p-1.5 rounded-lg text-[var(--attempt-text-706473,#706473)] hover:bg-[var(--attempt-bg-f3f0ea,#F3F0EA)]"
                   aria-label="Đóng thanh điều hướng"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -141,7 +141,7 @@ export default function StaffLayout({
         )}
 
         {/* Content column */}
-        <div className="flex-1 min-w-0 min-h-0 overflow-hidden flex flex-col bg-[#FAF9F5]">
+        <div className="flex-1 min-w-0 min-h-0 overflow-hidden flex flex-col bg-[var(--attempt-bg-faf9f5,#FAF9F5)]">
           <AdminTopbar
             crumbs={crumbs}
             crumb={crumb}

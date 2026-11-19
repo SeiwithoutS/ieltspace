@@ -31,18 +31,18 @@ import JudgeCard from './cards/JudgeCard.tsx';
 import {
   toLrState,
   fromLrState,
-} from '../../../lib/lr-editor/converters.ts';
+} from '../../../lib/exams/lr-editor/converters.ts';
 import {
   diffLrContent,
   applySavedIds,
-} from '../../../lib/lr-editor/diff.ts';
+} from '../../../lib/exams/lr-editor/diff.ts';
 import {
   explainRows,
   applyExplain,
   explainProgress,
   type ExplainPatch,
   type ExplainRow,
-} from '../../../lib/lr-editor/explain.ts';
+} from '../../../lib/exams/lr-editor/explain.ts';
 import {
   allIssues,
   autoInstr,
@@ -51,15 +51,15 @@ import {
   numberQuestions,
   formatQuestionRange,
   groupHasData,
-} from '../../../lib/lr-editor/pure.ts';
-import { typeName, COMBO_TYPE_LABELS } from '../../../lib/lr-editor/constants.ts';
+} from '../../../lib/exams/lr-editor/pure.ts';
+import { typeName, COMBO_TYPE_LABELS } from '../../../lib/exams/lr-editor/constants.ts';
 import type {
   LrContent,
   LrEditorState,
   LrGroupState,
   LrPassageState,
   LrQuestionType,
-} from '../../../lib/lr-editor/types.ts';
+} from '../../../lib/exams/lr-editor/types.ts';
 
 import {
   getEditorSkill,
@@ -67,10 +67,10 @@ import {
   createRevisionDraft,
   discardUploads,
   type EditorSkill,
-} from '../../../lib/exam-editor.ts';
-import { deleteSkill, publishSkill } from '../../../lib/exam-admin.ts';
-import { navigate } from '../../../lib/auth.ts';
-import { TOAST_MS } from '../../../lib/toast';
+} from '../../../lib/exams/exam-editor.ts';
+import { deleteSkill, publishSkill } from '../../../lib/exams/exam-admin.ts';
+import { navigate } from '../../../lib/auth/auth.ts';
+import { TOAST_MS } from '../../../lib/shared/toast';
 
 export type LrEditorProps = {
   skill: 'READING' | 'LISTENING';

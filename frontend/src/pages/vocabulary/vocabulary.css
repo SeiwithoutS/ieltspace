@@ -18,6 +18,36 @@
   --soft: #223147;
 }
 
+.vocab-detail-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.vocab-detail-header h2 { margin: 0; overflow-wrap: anywhere; }
+.vocab-detail-header small { color: var(--muted); font-weight: 500; }
+.vocabulary a.vocab-primary,
+.vocabulary button.vocab-primary:not([aria-pressed]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  background: #352637;
+  color: #fff;
+  border: 1px solid #352637;
+  border-radius: 999px;
+  font: 600 14px/1.4 var(--font-sans), sans-serif;
+  text-decoration: none;
+}
+.vocabulary .vocab-primary:hover:not(:disabled) { background: #4b3d4d; }
+.dark .vocabulary .vocab-primary { background: #e0e9fe; border-color: #e0e9fe; color: #222a38; }
+.dark .vocabulary .vocab-primary:hover:not(:disabled) { background: #f0f4ff; }
+
 .vocab-hero {
   display: flex; align-items: center; justify-content: space-between;
   gap: 16px; flex-wrap: wrap; padding: 0 0 20px;

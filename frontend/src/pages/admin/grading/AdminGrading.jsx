@@ -1,5 +1,5 @@
 import React from "react";
-import { styleOf, cssText } from "../../../lib/styles";
+import { styleOf, cssText } from "../../../lib/shared/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar from "../../../components/navigation/AdminTopbar";
 import StaffLayout from "../../../components/layout/StaffLayout";

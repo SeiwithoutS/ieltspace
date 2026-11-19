@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { sampleApi } from "../../lib/sample-api";
-import type { SampleMediaRef, SampleMediaScope } from "../../lib/sample-media-types";
+import { sampleApi } from "../../lib/samples/sample-api";
+import type { SampleMediaRef, SampleMediaScope } from "../../lib/samples/sample-media-types";
 
 interface Props {
   sampleId?: string;

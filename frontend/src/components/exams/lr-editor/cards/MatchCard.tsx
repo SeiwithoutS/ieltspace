@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import type { LrGroupState, LrPassageState } from '../../../../lib/lr-editor/types.ts';
-import { LET, ROM } from '../../../../lib/lr-editor/constants.ts';
+import type { LrGroupState, LrPassageState } from '../../../../lib/exams/lr-editor/types.ts';
+import { LET, ROM } from '../../../../lib/exams/lr-editor/constants.ts';
 import { splitList } from './splitList';
 
 export type CardProps = {

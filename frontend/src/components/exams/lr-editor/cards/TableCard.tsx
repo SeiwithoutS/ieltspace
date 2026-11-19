@@ -1,7 +1,7 @@
 import React from 'react';
-import type { LrGroupState, LrPassageState } from '../../../../lib/lr-editor/types.ts';
-import { blanks, limOf, normTbl, overLimit, parseAlt, tblCells, tblOf } from '../../../../lib/lr-editor/pure.ts';
-import { LIM } from '../../../../lib/lr-editor/constants.ts';
+import type { LrGroupState, LrPassageState } from '../../../../lib/exams/lr-editor/types.ts';
+import { blanks, limOf, normTbl, overLimit, parseAlt, tblCells, tblOf } from '../../../../lib/exams/lr-editor/pure.ts';
+import { LIM } from '../../../../lib/exams/lr-editor/constants.ts';
 
 export type CardProps = {
   group: LrGroupState;

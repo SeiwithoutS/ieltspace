@@ -1,9 +1,9 @@
 import React from "react";
-import { styleOf, cssText } from "../../../lib/styles";
+import { styleOf, cssText } from "../../../lib/shared/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar, { Crumb } from "../../../components/navigation/AdminTopbar";
 import StaffLayout from "../../../components/layout/StaffLayout";
-import { navigate } from "../../../lib/auth";
+import { navigate } from "../../../lib/auth/auth";
 import {
   getSet,
   createTest,
@@ -25,9 +25,9 @@ import {
   type SlotKey,
   type UiSet,
   type UiTest,
-} from "../../../lib/exam-admin";
+} from "../../../lib/exams/exam-admin";
 import SkillHistoryDrawer from "../../../components/exams/SkillHistoryDrawer";
-import { TOAST_MS } from "../../../lib/toast";
+import { TOAST_MS } from "../../../lib/shared/toast";
 
 type Ev = React.SyntheticEvent | null | undefined;
 type SkillKey = "L" | "R" | "W" | "S";

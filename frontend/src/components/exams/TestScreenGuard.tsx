@@ -2,7 +2,7 @@ import React from "react";
 
 /**
  * Hộp thoại chặn khi bấm "Bắt đầu" trên màn không đủ điều kiện làm bài (RS-02).
- * Dùng chung điều kiện với DesktopOnly (lib/device.ts), nên người học không
+ * Dùng chung điều kiện với DesktopOnly (lib/shared/device.ts), nên người học không
  * phải qua hai hộp thoại liên tiếp.
  */
 export function DesktopRequiredDialog({

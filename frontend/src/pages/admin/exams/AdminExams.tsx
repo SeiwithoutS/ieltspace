@@ -1,10 +1,10 @@
 import React from "react";
-import { TOAST_MS } from "../../../lib/toast";
-import { styleOf, cssText } from "../../../lib/styles";
+import { TOAST_MS } from "../../../lib/shared/toast";
+import { styleOf, cssText } from "../../../lib/shared/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar from "../../../components/navigation/AdminTopbar";
 import StaffLayout from "../../../components/layout/StaffLayout";
-import { navigate } from "../../../lib/auth";
+import { navigate } from "../../../lib/auth/auth";
 import {
   listCategories,
   listSets,
@@ -18,7 +18,7 @@ import {
   type UiSet,
   type UiTest,
   type Cell,
-} from "../../../lib/exam-admin";
+} from "../../../lib/exams/exam-admin";
 
 type Ev = React.SyntheticEvent | null | undefined;
 type SkillKey = "L" | "R" | "W" | "S";

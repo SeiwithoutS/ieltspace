@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 globalThis.location = { pathname: '/reset-password', hash: '#token_hash=synthetic&type=recovery' };
 let replacement;
 globalThis.history = { replaceState: (_state, _title, url) => { replacement = url; } };
-const { parseAuthLink, takeRecoveryToken, emailCallback } = await import('../src/lib/auth-links.ts');
+const { parseAuthLink, takeRecoveryToken, emailCallback } = await import('../src/lib/auth/auth-links.ts');
 test('new recovery template opens reset and removes the secret fragment', () => {
  assert.equal(emailCallback.page, 'ResetPassword');
  assert.equal(replacement, '/reset-password#ResetPassword');

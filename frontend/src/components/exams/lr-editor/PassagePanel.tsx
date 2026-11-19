@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import type { LrEditorState, LrPassageState } from '../../../lib/lr-editor/types.ts';
-import { LET } from '../../../lib/lr-editor/constants.ts';
-import type { ExplainRow } from '../../../lib/lr-editor/explain.ts';
+import type { LrEditorState, LrPassageState } from '../../../lib/exams/lr-editor/types.ts';
+import { LET } from '../../../lib/exams/lr-editor/constants.ts';
+import type { ExplainRow } from '../../../lib/exams/lr-editor/explain.ts';
 import AutoTextarea from './AutoTextarea.tsx';
 import ImageUploader from '../editor-shell/ImageUploader.tsx';
-import { uploadSkillImage } from '../../../lib/exam-editor.ts';
+import { uploadSkillImage } from '../../../lib/exams/exam-editor.ts';
 
 export type PassagePanelProps = {
   ex: LrEditorState;

@@ -1,7 +1,7 @@
 import React from 'react';
 import AutoTextarea from './AutoTextarea.tsx';
-import type { ExplainRow } from '../../../lib/lr-editor/explain.ts';
-import type { LrEditorState, LrPassageState } from '../../../lib/lr-editor/types.ts';
+import type { ExplainRow } from '../../../lib/exams/lr-editor/explain.ts';
+import type { LrEditorState, LrPassageState } from '../../../lib/exams/lr-editor/types.ts';
 
 export type TranscriptPanelProps = {
   ex: LrEditorState;

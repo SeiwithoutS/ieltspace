@@ -1,7 +1,7 @@
 import { AudioFields } from "./AudioFields";
 import { useRef, useState } from "react";
 import type { Word } from "../../data/vocabulary";
-import { findVocabularyMedia, selectVocabularyImage } from "../../lib/vocabulary-media";
+import { findVocabularyMedia, selectVocabularyImage } from "../../lib/vocabulary/vocabulary-media";
 
 export function WordMediaEditor({ entry, onChange, onWordEntered }: {
   entry: Word; onChange: (change: Partial<Word>) => void; onWordEntered: (word: Word) => void;

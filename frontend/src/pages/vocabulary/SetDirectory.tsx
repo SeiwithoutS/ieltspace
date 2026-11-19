@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import Popup from "../../components/attempts/Popup";
 import { StaffDataTable } from "../../components/shared/StaffDataTable";
 import { type VocabularySet } from "../../data/vocabulary";
-import { listAdminVocabularySets, createVocabularySet, deleteVocabularySet, type DatabaseVocabularySet } from "../../lib/vocabulary-api";
+import { listAdminVocabularySets, createVocabularySet, deleteVocabularySet, type DatabaseVocabularySet } from "../../lib/vocabulary/vocabulary-api";
 
 const coverChoices = [
   ["Tím", "#4338a4", "#6764c4"],

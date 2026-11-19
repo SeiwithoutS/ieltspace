@@ -56,7 +56,7 @@ Khối minh họa (bìa khi chưa có ảnh thật): `#BFD8F7` xanh trời · `#
 
 ### Tối
 
-Chốt nền `#202125` (xám lạnh) ngày 30/10; xem trước ở `docs/ui/bang-mau-toi-v3.html`. Lớp `dark` trên `<html>`, lưu ở `localStorage 'ieltspace-app'`, nút bật tắt có thuộc tính `data-theme-toggle`. Bản tối cho từng màn làm sau khi chốt bản sáng. Ánh xạ từng mã màu ở `frontend/src/lib/dark-palette.json`; `cssText`/`styleOf` tự đổi khi render. **Màu mới dùng trong style inline phải có trong file này**, nếu không sẽ giữ màu sáng.
+Chốt nền `#202125` (xám lạnh) ngày 30/10; xem trước ở `docs/ui/bang-mau-toi-v3.html`. Lớp `dark` trên `<html>`, lưu ở `localStorage 'ieltspace-app'`, nút bật tắt có thuộc tính `data-theme-toggle`. Bản tối cho từng màn làm sau khi chốt bản sáng. Ánh xạ từng mã màu ở `frontend/src/assets/theme/dark-palette.json`; `cssText`/`styleOf` tự đổi khi render. **Màu mới dùng trong style inline phải có trong file này**, nếu không sẽ giữ màu sáng.
 
 | Token | Giá trị |
 |---|---|
@@ -143,6 +143,7 @@ Thẻ số liệu nghiêng (bo 26, số 40px, xoay -6°, 3°, -2°, 5°); FAQ ac
 
 ### Khung trang
 - **Khách / Người học:** top nav "Thư viện đề · Thư viện bài mẫu · Thư viện từ vựng" + Đăng nhập (Khách), hoặc thêm "Flashcard của tôi" + avatar (Người học). Avatar mở menu: tiến độ/dashboard, hồ sơ, cài đặt. Không có chip streak trên nav.
+- **Flashcard:** nút “Ôn bằng flashcard” nằm trong bộ từ với tài khoản đã đăng nhập. Trang Flashcard dùng banner và tab của thư viện từ vựng, gồm Chọn bộ ôn, Lịch sử ôn và Từ chưa nhớ. Mọi nguồn đi qua cùng form thiết lập số thẻ và thời gian. Trong phiên ôn, người học lật thẻ rồi chọn “Chưa nhớ” hoặc “Đã nhớ”.
 - **Quản lý:** AdminSidebar + AdminTopbar (xem "Màn Quản lý").
 - **Giáo viên:** chưa chuyển sang khuôn sidebar/topbar chung (còn hoãn).
 - Thông báo và Hồ sơ Giáo viên/Quản lý: một artboard nhiều biến thể trên canvas; khi code tách route riêng theo vai trò.
@@ -185,7 +186,7 @@ Giải thích từng trang và liên kết: `docs/ui/trang-va-lien-ket.md`.
 - Reading: split editor (Doc + board); Listening: 4 section, ghi âm, transcript có mốc giờ, Map Labelling; Writing: 2 Task, ảnh đề Task 1, Academic/General; Speaking: 3 Part. Thẻ câu hỏi có 16 dạng (`lr-editor/cards/*`).
 - Bài mẫu: một editor cho mỗi kỹ năng; Writing một editor cho Task 1 và 2; **Speaking một editor cho cả Part 1, 2, 3**, mỗi mục có câu hỏi, câu trả lời mẫu, audio riêng. Ảnh bìa chỉ hiện ở thẻ, không nằm trong nội dung bài mẫu.
 - **Luôn mở ở chế độ Chỉ xem** (ngoại lệ: "Thêm bài mẫu" vào thẳng Chỉnh sửa). Chỉ xem: chip "Chỉ xem", dải sky-soft có icon khóa, ô nhập thành khối nền surface-2 không viền, nút thêm/xóa nhỏ ẩn (lớp `.eo`); thanh trên có Nhập từ xlsx, **Chỉnh sửa**, Đăng. Chỉnh sửa: chip "Đang chỉnh sửa", thanh trên có trạng thái thay đổi, Hoàn tác, **Hủy** (destructive), **Lưu**. Hủy khi còn thay đổi hỏi Tiếp tục sửa / Không lưu / Lưu.
-- Trang bài mẫu của Người học: breadcrumbs, mục lục scrollspy bên trái, nội dung bên phải; Speaking chia mục theo Part, mỗi câu hỏi một thẻ có audio.
+- Thư viện bài mẫu của Người học dùng banner chuyển màu ngang toàn trang. Thanh lọc trên danh sách gồm tab kỹ năng, loại bài và ô tìm tiêu đề hoặc chủ đề trong phạm vi đã chọn. Danh sách chia theo nhóm Writing Task 1 General, Writing Task 1 Academic, Writing Task 2 và Speaking. Chi tiết bài có breadcrumb, nội dung bên trái và mục lục theo vị trí cuộn bên phải trên desktop. Ảnh bìa nằm trên thẻ thư viện, ảnh đề và audio nằm trong bài.
 
 ### Màn làm bài (chốt 09/11/2026)
 Màn: StartTestDialog, ReadingTest, ListeningTest, WritingTest, SpeakingTest (chờ draft), SubmitDialogs. Chưa có trong `pages.ts`/code, canvas bản 237 là mẫu.
@@ -256,7 +257,7 @@ AuthFields gắn input vào label. GoogleButton khóa thao tác lặp, đặt ar
 
 Theo [quy tắc nghiệp vụ](BUSINESS_RULES.md), hiển thị số đúng/tổng và tỷ lệ ở bài luyện L/R, ghi “band tham khảo” khi bài đủ điều kiện. W/S chưa chấm ghi “Chưa có điểm”. Nêu rõ Task/Part nếu chỉ đánh giá một phần. Hiển thị hạn tải theo mốc backend trả về. Khi quá hạn, bỏ thao tác tải nhưng vẫn trình bày điểm và nhận xét đã công bố. Đây là tiêu chí khi nối dữ liệu thật cho các màn hình kết quả.
 
-Đối chiếu trực tiếp [CSS Auth](../frontend/src/components/auth/auth.css), [AuthFields](../frontend/src/components/auth/AuthFields.jsx), [khung trang và theme](../frontend/src/assets/css/app.css), [font](../frontend/src/styles/fonts.css), [ánh xạ màu](../frontend/src/lib/styles.ts) và [chi tiết bộ đề](../frontend/src/pages/exams/ExamDetail.tsx).
+Đối chiếu trực tiếp [CSS Auth](../frontend/src/components/auth/auth.css), [AuthFields](../frontend/src/components/auth/AuthFields.jsx), [khung trang và theme](../frontend/src/assets/css/app.css), [font](../frontend/src/styles/fonts.css), [ánh xạ màu](../frontend/src/lib/shared/styles.ts) và [chi tiết bộ đề](../frontend/src/pages/exams/ExamDetail.tsx).
 
 Trong mục 7, ghi chú về các màn làm bài phản ánh thời điểm chốt thiết kế. Hiện [danh sách trang](../frontend/src/app/pages.ts) đã khai báo ReadingTest, ListeningTest, WritingTest và SpeakingTest. Việc khai báo trang chỉ xác nhận có giao diện trong mã nguồn.
 

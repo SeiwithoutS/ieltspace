@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { FormEvent } from "react";
 import StaffLayout from "../../../components/layout/StaffLayout";
-import { ApiError } from "../../../lib/api";
-import { sampleApi } from "../../../lib/sample-api";
+import { ApiError } from "../../../lib/shared/api";
+import { sampleApi } from "../../../lib/samples/sample-api";
 import SampleImportPanel, { sampleTemplateUrl } from "./SampleImportPanel";
 import "./admin-samples.css";
 

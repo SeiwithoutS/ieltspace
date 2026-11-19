@@ -8,9 +8,9 @@ import {
 
 import SampleMediaPreview from "../../../components/samples/SampleMediaPreview";
 import { VisibilityIcon } from "../../../components/shared/VisibilityIcon";
-import type { SampleAssetKind, SampleMediaRef } from "../../../lib/sample-media-types";
+import type { SampleAssetKind, SampleMediaRef } from "../../../lib/samples/sample-media-types";
 import StaffLayout from "../../../components/layout/StaffLayout";
-import { sampleApi } from "../../../lib/sample-api";
+import { sampleApi } from "../../../lib/samples/sample-api";
 import {
   SAMPLE_BANDS,
   SAMPLE_STATUS_LABELS,
@@ -23,16 +23,16 @@ import {
   sampleErrorMessages,
   wordCount,
   writingTypeOptions,
-} from "../../../lib/sample-editor";
-import { registerNavigationGuard } from "../../../lib/navigation-guard";
-import { replaceSampleEditorHash } from "../../../lib/sample-navigation";
+} from "../../../lib/samples/sample-editor";
+import { registerNavigationGuard } from "../../../lib/shared/navigation-guard";
+import { replaceSampleEditorHash } from "../../../lib/samples/sample-navigation";
 import type {
   AdminSampleDetail,
   SampleDocumentV1,
   SampleEditorPageProps,
   SamplePublicationRequest,
   SampleSkill,
-} from "../../../lib/sample-types";
+} from "../../../lib/samples/sample-types";
 
 import "./admin-samples.css";
 

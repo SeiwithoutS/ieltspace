@@ -4,5 +4,6 @@ import App from './app/App';
 import './styles/fonts.css';
 import './input.css';
 import './assets/css/app.css';
+import './components/attempts/attempt-theme.css';
 import './styles/motion.css';
 createRoot(document.getElementById('root')!).render(<App />);

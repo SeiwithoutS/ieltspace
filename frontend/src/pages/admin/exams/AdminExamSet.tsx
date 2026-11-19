@@ -27,6 +27,7 @@ import {
   type UiTest,
 } from "../../../lib/exam-admin";
 import SkillHistoryDrawer from "../../../components/exams/SkillHistoryDrawer";
+import { TOAST_MS } from "../../../lib/toast";
 
 type Ev = React.SyntheticEvent | null | undefined;
 type SkillKey = "L" | "R" | "W" | "S";
@@ -381,7 +382,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       self.setState(st as Pick<State, keyof State>);
       me._t = setTimeout(function () {
         self.setState({ toast: "", undoAction: null });
-      }, 5000);
+      }, TOAST_MS);
     }
     function pill(c: FormKey, h?: number) {
       return (

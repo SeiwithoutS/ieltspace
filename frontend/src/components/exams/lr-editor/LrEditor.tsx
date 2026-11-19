@@ -69,6 +69,7 @@ import {
 } from '../../../lib/exam-editor.ts';
 import { deleteSkill, publishSkill } from '../../../lib/exam-admin.ts';
 import { navigate } from '../../../lib/auth.ts';
+import { TOAST_MS } from '../../../lib/toast';
 
 export type LrEditorProps = {
   skill: 'READING' | 'LISTENING';
@@ -114,6 +115,11 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
   const [confirmDeleteSkill, setConfirmDeleteSkill] = useState(false);
   const [leavePendingGo, setLeavePendingGo] = useState<(() => void) | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), TOAST_MS);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   // Audio seek state for Listening
   const [seekAudioSec, setSeekAudioSec] = useState<number | null>(null);
@@ -271,7 +277,6 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
       setEx(updatedEx);
       setBaseline(newBase);
       setToast('Đã lưu thay đổi thành công.');
-      setTimeout(() => setToast(null), 3000);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Lưu thay đổi thất bại.';
       alert(msg);
@@ -288,7 +293,6 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
       const res = await publishSkill(skillId);
       setConfirmPublish(false);
       setToast('Đề thi đã được đăng thành công.');
-      setTimeout(() => setToast(null), 4000);
       await loadSkill(skillId);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Đăng đề thất bại.';

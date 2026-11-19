@@ -1,4 +1,5 @@
 import React from "react";
+import { TOAST_MS } from "../../../lib/toast";
 import { styleOf, cssText } from "../../../lib/styles";
 import AdminSidebar from "../../../components/navigation/AdminSidebar";
 import AdminTopbar from "../../../components/navigation/AdminTopbar";
@@ -264,7 +265,7 @@ class AdminExams extends React.Component<Record<string, unknown>, State> {
       self.setState(st as Pick<State, keyof State>);
       me._t = setTimeout(function () {
         me.setState({ toast: "" });
-      }, 4200);
+      }, TOAST_MS);
     }
     var sets = SETS,
       q = (s.q || "").trim().toLowerCase(),

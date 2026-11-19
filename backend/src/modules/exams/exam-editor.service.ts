@@ -295,6 +295,14 @@ async function saveLrPatch(
   actorId?: string | null
 ): Promise<{ updatedSkill: EditorSkill; oldPaths: string[] }> {
   const expectedSections = skillType === 'READING' ? 3 : 4;
+  // Mỗi truy vấn tới Supabase tốn ~200ms: chỉ kiểm tra 1 lần cho mỗi kỹ năng nguồn của đường dẫn tệp.
+  const checkedSources = new Set<string>();
+  const checkAsset = async (p: string) => {
+    const src = p.trim().split('/')[1] ?? p;
+    if (checkedSources.has(src) && p.trim().startsWith('exam-skills/')) return;
+    await assertSkillAssetPath(tx, p, { exam_id: skill.exam.id, skill: skill.skill, form: skill.form });
+    checkedSources.add(src);
+  };
   for (const s of patch.sections || []) {
     if (s.orderNo < 1 || s.orderNo > expectedSections) {
       throw new HttpError(400, 'VALIDATION_ERROR', `${skillType === 'READING' ? 'Passage' : 'Section'} ${s.orderNo} không hợp lệ.`);
@@ -315,7 +323,7 @@ async function saveLrPatch(
         throw new HttpError(400, 'VALIDATION_ERROR', `Chú thích ảnh vượt quá 300 ký tự.`);
       }
       if (img.path) {
-        await assertSkillAssetPath(tx, img.path, { exam_id: skill.exam.id, skill: skill.skill, form: skill.form });
+        await checkAsset(img.path);
       }
     }
     if (s.audio) {
@@ -323,7 +331,7 @@ async function saveLrPatch(
         throw new HttpError(400, 'VALIDATION_ERROR', 'Chỉ kỹ năng Listening mới hỗ trợ ghi âm.');
       }
       if (s.audio.path) {
-        await assertSkillAssetPath(tx, s.audio.path, { exam_id: skill.exam.id, skill: skill.skill, form: skill.form });
+        await checkAsset(s.audio.path);
       }
     }
   }
@@ -333,7 +341,7 @@ async function saveLrPatch(
       throw new HttpError(400, 'VALIDATION_ERROR', `Mỗi nhóm tối đa 60 câu hỏi.`);
     }
     if (ug.image?.path) {
-      await assertSkillAssetPath(tx, ug.image.path, { exam_id: skill.exam.id, skill: skill.skill, form: skill.form });
+      await checkAsset(ug.image.path);
     }
     if (ug.config && JSON.stringify(ug.config).length > 50 * 1024) {
       throw new HttpError(400, 'VALIDATION_ERROR', `Cấu hình nhóm vượt quá 50 KB.`);
@@ -361,31 +369,32 @@ async function saveLrPatch(
     orderBy: { order_no: 'asc' },
   });
   const sectionIdMap = new Map<number, string>();
+  const newSecRows: Prisma.exam_sectionsCreateManyInput[] = [];
   for (let i = 1; i <= expectedSections; i++) {
-    let s = existingSecs.find((sec) => sec.order_no === i);
-    if (!s) {
-      const secId = crypto.randomUUID();
-      const secType = skillType === 'READING' ? 'PASSAGE' : 'SECTION';
-      s = await tx.exam_sections.create({
-        data: {
-          id: secId,
-          exam_skill_id: skill.id,
-          order_no: i,
-          title: '',
-          section_type: secType,
-          instruction: null,
-          content: skillType === 'READING'
-            ? { paragraphs: [{ label: 'A', text: '' }, { label: 'B', text: '' }, { label: 'C', text: '' }], images: [] }
-            : { images: [] },
-          transcript: [],
-          config: {},
-          audio_path: null,
-          image_path: null,
-        },
-      });
+    const s = existingSecs.find((sec) => sec.order_no === i);
+    if (s) {
+      sectionIdMap.set(i, s.id);
+      continue;
     }
-    sectionIdMap.set(i, s.id);
+    const secId = crypto.randomUUID();
+    newSecRows.push({
+      id: secId,
+      exam_skill_id: skill.id,
+      order_no: i,
+      title: '',
+      section_type: skillType === 'READING' ? 'PASSAGE' : 'SECTION',
+      instruction: null,
+      content: skillType === 'READING'
+        ? { paragraphs: [{ label: 'A', text: '' }, { label: 'B', text: '' }, { label: 'C', text: '' }], images: [] }
+        : { images: [] },
+      transcript: [],
+      config: {},
+      audio_path: null,
+      image_path: null,
+    });
+    sectionIdMap.set(i, secId);
   }
+  if (newSecRows.length > 0) await tx.exam_sections.createMany({ data: newSecRows });
 
   const collectedOldPaths: string[] = [];
   for (const sPatch of patch.sections || []) {
@@ -475,28 +484,34 @@ async function saveLrPatch(
     await tx.question_groups.deleteMany({ where: { id: { in: patch.deleteGroupIds } } });
   }
 
-  await tx.$executeRaw`
-    update public.question_groups
-    set order_no = order_no + 1000
-    where section_id in (select id from public.exam_sections where exam_skill_id = ${skill.id}::uuid)
-  `;
-  await tx.$executeRaw`
-    update public.questions
-    set order_no = order_no + 1000
-    where question_group_id in (
-      select qg.id from public.question_groups qg
-      join public.exam_sections s on s.id = qg.section_id
-      where s.exam_skill_id = ${skill.id}::uuid
-    )
-  `;
+  const groupsChange = (patch.upsertGroups?.length ?? 0) > 0 || (patch.moveGroups?.length ?? 0) > 0;
+  if (groupsChange) {
+    await tx.$executeRaw`
+      update public.question_groups
+      set order_no = order_no + 1000
+      where section_id in (select id from public.exam_sections where exam_skill_id = ${skill.id}::uuid)
+    `;
+    await tx.$executeRaw`
+      update public.questions
+      set order_no = order_no + 1000
+      where question_group_id in (
+        select qg.id from public.question_groups qg
+        join public.exam_sections s on s.id = qg.section_id
+        where s.exam_skill_id = ${skill.id}::uuid
+      )
+    `;
+  }
 
+  const movedOld = (patch.moveGroups?.length ?? 0) > 0
+    ? await tx.question_groups.findMany({
+        where: { id: { in: patch.moveGroups!.map((m) => m.id) }, section: { exam_skill_id: skill.id } },
+        select: { id: true, question_from: true, question_to: true },
+      })
+    : [];
   for (const mg of patch.moveGroups || []) {
     const targetSecId = sectionIdMap.get(mg.sectionOrderNo);
     if (!targetSecId) continue;
-    const oldGrp = await tx.question_groups.findFirst({
-      where: { id: mg.id, section: { exam_skill_id: skill.id } },
-      select: { id: true, question_from: true, question_to: true },
-    });
+    const oldGrp = movedOld.find((g) => g.id === mg.id);
     if (!oldGrp) {
       throw new HttpError(400, 'VALIDATION_ERROR', 'Không tìm thấy nhóm câu hỏi cần di chuyển.');
     }
@@ -523,132 +538,115 @@ async function saveLrPatch(
     }
   }
 
-  for (const ug of patch.upsertGroups || []) {
+  // Ghi theo lô: Supabase ở xa nên mỗi truy vấn tốn ~200ms. Gom toàn bộ nhóm đổi vào vài truy vấn.
+  const upserts = patch.upsertGroups || [];
+  const existingIds = upserts.map((u) => u.id).filter((x): x is string => Boolean(x));
+  const existingImgs = existingIds.length > 0
+    ? await tx.question_groups.findMany({ where: { id: { in: existingIds } }, select: { id: true, image_path: true } })
+    : [];
+  const newGroupRows: Prisma.question_groupsCreateManyInput[] = [];
+  const qRows: Prisma.questionsCreateManyInput[] = [];
+  const optRows: Prisma.question_optionsCreateManyInput[] = [];
+  const ansRows: Prisma.question_answersCreateManyInput[] = [];
+
+  if (existingIds.length > 0) {
+    await tx.question_answers.deleteMany({ where: { question: { question_group_id: { in: existingIds } } } });
+    await tx.question_options.deleteMany({ where: { question: { question_group_id: { in: existingIds } } } });
+    await tx.questions.deleteMany({ where: { question_group_id: { in: existingIds } } });
+  }
+
+  for (const ug of upserts) {
     const targetSecId = sectionIdMap.get(ug.sectionOrderNo);
     if (!targetSecId) continue;
     const grpConfig = {
       ...ug.config,
       ...(ug.image?.name ? { imageName: ug.image.name } : {}),
     };
+    const groupData = {
+      section_id: targetSecId,
+      order_no: ug.orderNo,
+      question_type: ug.type,
+      question_from: ug.questionFrom,
+      question_to: ug.questionTo,
+      instruction: ug.instruction || null,
+      title: ug.title ?? null,
+      image_path: ug.image?.path || null,
+      config: grpConfig,
+      content: ug.content || {},
+    };
 
     let groupId = ug.id;
     if (!groupId) {
       groupId = crypto.randomUUID();
-      await tx.question_groups.create({
-        data: {
-          id: groupId,
-          section_id: targetSecId,
-          order_no: ug.orderNo,
-          question_type: ug.type,
-          question_from: ug.questionFrom,
-          question_to: ug.questionTo,
-          instruction: ug.instruction || null,
-          title: ug.title ?? null,
-          image_path: ug.image?.path || null,
-          config: grpConfig,
-          content: ug.content || {},
-        },
-      });
+      newGroupRows.push({ id: groupId, ...groupData });
     } else {
-      const existingGrp = await tx.question_groups.findUnique({
-        where: { id: groupId },
-        select: { id: true, image_path: true },
-      });
-      if (existingGrp?.image_path && existingGrp.image_path !== ug.image?.path) {
-        collectedOldPaths.push(existingGrp.image_path);
-      }
-      await tx.question_groups.update({
-        where: { id: groupId },
-        data: {
-          section_id: targetSecId,
-          order_no: ug.orderNo,
-          question_type: ug.type,
-          question_from: ug.questionFrom,
-          question_to: ug.questionTo,
-          instruction: ug.instruction || null,
-          title: ug.title ?? null,
-          image_path: ug.image?.path || null,
-          config: grpConfig,
-          content: ug.content || {},
-        },
-      });
-
-      await tx.question_answers.deleteMany({ where: { question: { question_group_id: groupId } } });
-      await tx.question_options.deleteMany({ where: { question: { question_group_id: groupId } } });
-      await tx.questions.deleteMany({ where: { question_group_id: groupId } });
+      const oldImg = existingImgs.find((g) => g.id === groupId)?.image_path;
+      if (oldImg && oldImg !== ug.image?.path) collectedOldPaths.push(oldImg);
+      await tx.question_groups.update({ where: { id: groupId }, data: groupData });
     }
 
-    // Ghi theo lô: Supabase ở xa nên mỗi truy vấn tốn ~200ms, ghi từng câu sẽ vượt thời gian giao dịch.
     const sortedQs = (ug.questions || []).slice().sort((a, b) => a.numberFrom - b.numberFrom);
-    if (sortedQs.length > 0) {
-      const qRows: Prisma.questionsCreateManyInput[] = [];
-      const optRows: Prisma.question_optionsCreateManyInput[] = [];
-      const ansRows: Prisma.question_answersCreateManyInput[] = [];
-      sortedQs.forEach((q, qIdx) => {
-        const qId = crypto.randomUUID();
-        const count = Math.max(1, q.numberTo - q.numberFrom + 1);
-        qRows.push({
-          id: qId,
-          question_group_id: groupId,
-          order_no: qIdx + 1,
-          question_type: ug.type,
-          number_from: q.numberFrom,
-          number_to: q.numberTo,
-          answer_count: count,
-          max_score: count,
-          content: q.content || {},
-          explanation: { items: (q.notes || []).map((note) => ({ note })) },
-        });
-        (q.options || []).forEach((opt, optIdx) => {
-          optRows.push({
-            id: crypto.randomUUID(),
-            question_id: qId,
-            order_no: optIdx + 1,
-            label: opt.label,
-            content: opt.text,
-          });
-        });
-        ansRows.push({
+    sortedQs.forEach((q, qIdx) => {
+      const qId = crypto.randomUUID();
+      const count = Math.max(1, q.numberTo - q.numberFrom + 1);
+      qRows.push({
+        id: qId,
+        question_group_id: groupId!,
+        order_no: qIdx + 1,
+        question_type: ug.type,
+        number_from: q.numberFrom,
+        number_to: q.numberTo,
+        answer_count: count,
+        max_score: count,
+        content: q.content || {},
+        explanation: { items: (q.notes || []).map((note) => ({ note })) },
+      });
+      (q.options || []).forEach((opt, optIdx) => {
+        optRows.push({
           id: crypto.randomUUID(),
           question_id: qId,
-          accepted_answers: q.accepted || [],
-          matching_rule: q.matching || { kind: 'TEXT' },
-          evidence: {
-            items: (q.evidence || []).map((ev) => ({
-              para: ev.para,
-              label: ev.label,
-              keys: ev.keys || [],
-            })),
-          },
+          order_no: optIdx + 1,
+          label: opt.label,
+          content: opt.text,
         });
       });
-      await tx.questions.createMany({ data: qRows });
-      if (optRows.length > 0) await tx.question_options.createMany({ data: optRows });
-      await tx.question_answers.createMany({ data: ansRows });
-    }
+      ansRows.push({
+        id: crypto.randomUUID(),
+        question_id: qId,
+        accepted_answers: q.accepted || [],
+        matching_rule: q.matching || { kind: 'TEXT' },
+        evidence: {
+          items: (q.evidence || []).map((ev) => ({
+            para: ev.para,
+            label: ev.label,
+            keys: ev.keys || [],
+          })),
+        },
+      });
+    });
   }
+  if (newGroupRows.length > 0) await tx.question_groups.createMany({ data: newGroupRows });
+  if (qRows.length > 0) await tx.questions.createMany({ data: qRows });
+  if (optRows.length > 0) await tx.question_options.createMany({ data: optRows });
+  if (ansRows.length > 0) await tx.question_answers.createMany({ data: ansRows });
 
-  await tx.$executeRaw`
-    update public.question_groups
-    set order_no = order_no - 1000
-    where section_id in (select id from public.exam_sections where exam_skill_id = ${skill.id}::uuid)
+  if (groupsChange) {
+    await tx.$executeRaw`
+      update public.question_groups
+      set order_no = order_no - 1000
+      where section_id in (select id from public.exam_sections where exam_skill_id = ${skill.id}::uuid)
+        and order_no >= 1000
+    `;
+    await tx.$executeRaw`
+      update public.questions
+      set order_no = order_no - 1000
+      where question_group_id in (
+        select qg.id from public.question_groups qg
+        join public.exam_sections s on s.id = qg.section_id
+        where s.exam_skill_id = ${skill.id}::uuid
+      )
       and order_no >= 1000
-  `;
-  await tx.$executeRaw`
-    update public.questions
-    set order_no = order_no - 1000
-    where question_group_id in (
-      select qg.id from public.question_groups qg
-      join public.exam_sections s on s.id = qg.section_id
-      where s.exam_skill_id = ${skill.id}::uuid
-    )
-    and order_no >= 1000
-  `;
-
-  const updatedSkill = await getEditorSkillInTx(tx, skill.id);
-  const currentContent = skillType === 'READING' ? updatedSkill.reading : updatedSkill.listening;
-  if (currentContent) {
-    checkLrNumbering(currentContent, skillType);
+    `;
   }
 
   await tx.exam_skills.update({
@@ -658,6 +656,12 @@ async function saveLrPatch(
       updated_at: new Date(),
     },
   });
+
+  const finalSkill = await getEditorSkillInTx(tx, skill.id);
+  const currentContent = skillType === 'READING' ? finalSkill.reading : finalSkill.listening;
+  if (currentContent) {
+    checkLrNumbering(currentContent, skillType);
+  }
 
   const changeData = {
     version: skill.version_number,
@@ -675,7 +679,6 @@ async function saveLrPatch(
     reason: `Lưu nội dung kỹ năng ${skillType}`,
   });
 
-  const finalSkill = await getEditorSkillInTx(tx, skill.id);
   return { updatedSkill: finalSkill, oldPaths: collectedOldPaths };
 }
 

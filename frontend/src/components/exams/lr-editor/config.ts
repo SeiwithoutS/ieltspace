@@ -1,10 +1,10 @@
-import type { LrQuestionType } from '../../../lib/lr-editor/types.ts';
+import type { LrQuestionType } from '../../../lib/exams/lr-editor/types.ts';
 
 export {
   LR_TYPE_GROUPS,
   type LrTypeGroupId,
   type LrTypeGroupDef,
-} from '../../../lib/lr-editor/constants.ts';
+} from '../../../lib/exams/lr-editor/constants.ts';
 
 export type LrSkillConfig = {
   sectionName: string;

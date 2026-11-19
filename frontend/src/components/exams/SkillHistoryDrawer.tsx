@@ -4,7 +4,7 @@ import {
   type SkillHistoryDto,
   type SkillHistoryVersion,
   type SkillHistoryEvent,
-} from '../../lib/exam-editor';
+} from '../../lib/exams/exam-editor';
 
 export type SkillHistoryDrawerProps = {
   isOpen: boolean;

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import type { LrPassageAudio, LrPassageState } from '../../../lib/lr-editor/types.ts';
-import { uploadSkillAudio } from '../../../lib/exam-editor.ts';
+import type { LrPassageAudio, LrPassageState } from '../../../lib/exams/lr-editor/types.ts';
+import { uploadSkillAudio } from '../../../lib/exams/exam-editor.ts';
 
 export type AudioPanelProps = {
   passage: LrPassageState;

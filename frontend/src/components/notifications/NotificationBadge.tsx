@@ -1,5 +1,5 @@
 import React from "react";
-import { useNotifications } from "../../lib/notifications";
+import { useNotifications } from "../../lib/notifications/notifications";
 export default function NotificationBadge(
   props: React.HTMLAttributes<HTMLSpanElement>,
 ) {

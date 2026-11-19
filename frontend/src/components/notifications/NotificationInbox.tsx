@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNotifications } from "../../lib/notifications";
-import { type Role } from "../../lib/account";
-import { styleOf } from "../../lib/styles";
+import { useNotifications } from "../../lib/notifications/notifications";
+import { type Role } from "../../lib/auth/account";
+import { styleOf } from "../../lib/shared/styles";
 export default function NotificationInbox({ role }: { role: Role }) {
   const { items, unread, markAll, markRead } = useNotifications(role);
   const [filter, setFilter] = useState("all");

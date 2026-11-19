@@ -55,7 +55,7 @@ Authorization: Bearer <access_token>
 }
 ```
 
-Phản hồi admin theo kiểu `AdminSampleDetail` trong [hợp đồng v1](../frontend/src/lib/sample-types.ts). Với nháp mới, `revision=1`, `status=DRAFT`, `publishedRevision=null`, `publishedAt=null`, `hasUnpublishedChanges=true` và `document` là tài liệu đã validate. Khi chỉnh, gửi toàn bộ document cùng revision mới nhất. Phát hành nội dung đã lưu bằng `{"revision":1,"action":"PUBLISH"}` nếu đang ở revision 1. UI lưu nội dung đang sửa trước khi gửi yêu cầu công bố.
+Phản hồi admin theo kiểu `AdminSampleDetail` trong [hợp đồng v1](../frontend/src/lib/samples/sample-types.ts). Với nháp mới, `revision=1`, `status=DRAFT`, `publishedRevision=null`, `publishedAt=null`, `hasUnpublishedChanges=true` và `document` là tài liệu đã validate. Khi chỉnh, gửi toàn bộ document cùng revision mới nhất. Phát hành nội dung đã lưu bằng `{"revision":1,"action":"PUBLISH"}` nếu đang ở revision 1. UI lưu nội dung đang sửa trước khi gửi yêu cầu công bố.
 
 Lưu nháp sau khi đã công bố giữ snapshot cũ. HIDE tăng revision và loại bài khỏi thư viện. RESTORE tăng revision và hiện lại đúng snapshot gần nhất, giữ ngày công bố. `hasUnpublishedChanges` so sánh nội dung, nên riêng HIDE hoặc RESTORE không làm xuất hiện thay đổi nháp.
 

@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import PageLink from './PageLink';
 import type { PageName } from '../../app/pages';
 import NotificationBadge from '../notifications/NotificationBadge';
-import { useAccount } from '../../lib/account';
-import { getAuthUser, logout } from '../../lib/auth';
+import { useAccount } from '../../lib/auth/account';
+import { getAuthUser, logout } from '../../lib/auth/auth';
 
 export type LearnerNavKey = 'exams' | 'samples' | 'vocab' | 'flashcard' | 'home';
 
@@ -335,9 +335,9 @@ export default function LearnerHeader({
           </PageLink>
 
           {/* Flashcard của tôi */}
-          <PageLink page="Flashcard" className={navItemClass(active === 'flashcard')}>
+          {!isGuest && <PageLink page="Flashcard" className={navItemClass(active === 'flashcard')}>
             Flashcard của tôi
-          </PageLink>
+          </PageLink>}
         </nav>
 
         {/* Tablet Nav (768px - 1023px) */}
@@ -489,7 +489,7 @@ export default function LearnerHeader({
                   </span>
                   Thư viện từ vựng
                 </PageLink>
-                <PageLink
+                {!isGuest && <PageLink
                   page="Flashcard"
                   className="flex items-center gap-3 p-2.5 rounded-xl text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F6F4EF)] no-underline font-medium text-sm"
                 >
@@ -500,7 +500,7 @@ export default function LearnerHeader({
                     </svg>
                   </span>
                   Flashcard của tôi
-                </PageLink>
+                </PageLink>}
               </div>
             </div>
           </div>
@@ -650,7 +650,7 @@ export default function LearnerHeader({
                 type="button"
                 onClick={closeMobile}
                 aria-label="Đóng menu điều hướng"
-                className="w-9 h-9 rounded-lg border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white flex items-center justify-center text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F3F0EA)]"
+                className="w-9 h-9 rounded-lg border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-ffffff,#FFFFFF)] flex items-center justify-center text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F3F0EA)]"
               >
                 <svg
                   width="18"
@@ -678,15 +678,15 @@ export default function LearnerHeader({
                     Tài khoản của tôi
                   </div>
                   {/* User profile card */}
-                  <div className="flex items-center gap-3 p-2.5 rounded-xl bg-white border-solid border border-[#E6E4E0] mb-1">
-                    <span className="w-10 h-10 rounded-full bg-[#E8E4FA] text-[#5543B0] flex items-center justify-center font-bold text-sm shrink-0 border-solid border border-[#D6D4D0]">
+                  <div className="flex items-center gap-3 p-2.5 rounded-xl bg-[var(--attempt-bg-ffffff,#FFFFFF)] border-solid border border-[var(--attempt-line-e6e4e0,#E6E4E0)] mb-1">
+                    <span className="w-10 h-10 rounded-full bg-[var(--attempt-bg-e8e4fa,#E8E4FA)] text-[var(--attempt-text-5543b0,#5543B0)] flex items-center justify-center font-bold text-sm shrink-0 border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)]">
                       {initials}
                     </span>
                     <div className="flex flex-col min-w-0">
-                      <span className="font-semibold text-sm text-[#352637] truncate">
+                      <span className="font-semibold text-sm text-[var(--attempt-text-352637,#352637)] truncate">
                         {account.name || 'Học viên'}
                       </span>
-                      <span className="text-xs text-[#706473] truncate">
+                      <span className="text-xs text-[var(--attempt-text-706473,#706473)] truncate">
                         {account.email || 'learner@ieltspace.edu.vn'}
                       </span>
                     </div>
@@ -705,10 +705,10 @@ export default function LearnerHeader({
                           }}
                           className={`flex items-center justify-between p-2.5 rounded-xl text-sm font-medium no-underline transition-colors ${
                             item.danger
-                              ? 'text-[#C0412A] bg-transparent hover:bg-[#FBDCD3]/40'
+                              ? 'text-[var(--attempt-text-c0412a,#C0412A)] bg-transparent hover:bg-[var(--attempt-bg-fbdcd3,#FBDCD3)]/40'
                               : item.active
-                              ? 'bg-[#E3ECFD] text-[#2963CC] font-semibold'
-                              : 'text-[#352637] bg-transparent hover:bg-white'
+                              ? 'bg-[var(--attempt-bg-e3ecfd,#E3ECFD)] text-[var(--attempt-text-2963cc,#2963CC)] font-semibold'
+                              : 'text-[var(--attempt-text-352637,#352637)] bg-transparent hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)]'
                           }`}
                         >
                           <span className="flex items-center gap-2.5">
@@ -727,10 +727,10 @@ export default function LearnerHeader({
                           }}
                           className={`w-full flex items-center justify-between p-2.5 rounded-xl text-sm font-medium transition-colors text-left border-0 cursor-pointer ${
                             item.danger
-                              ? 'text-[#C0412A] bg-transparent hover:bg-[#FBDCD3]/40'
+                              ? 'text-[var(--attempt-text-c0412a,#C0412A)] bg-transparent hover:bg-[var(--attempt-bg-fbdcd3,#FBDCD3)]/40'
                               : item.active
-                              ? 'bg-[#E3ECFD] text-[#2963CC] font-semibold'
-                              : 'text-[#352637] bg-transparent hover:bg-white'
+                              ? 'bg-[var(--attempt-bg-e3ecfd,#E3ECFD)] text-[var(--attempt-text-2963cc,#2963CC)] font-semibold'
+                              : 'text-[var(--attempt-text-352637,#352637)] bg-transparent hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)]'
                           }`}
                         >
                           <span className="flex items-center gap-2.5">
@@ -746,7 +746,7 @@ export default function LearnerHeader({
                       <PageLink
                         page="StudentHome"
                         onClick={closeMobile}
-                        className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[#352637] hover:bg-white no-underline font-medium"
+                        className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)] no-underline font-medium"
                       >
                         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M4 11l8-7 8 7v9H4z" />
@@ -756,7 +756,7 @@ export default function LearnerHeader({
                       <PageLink
                         page="MyWS"
                         onClick={closeMobile}
-                        className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[#352637] hover:bg-white no-underline font-medium"
+                        className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)] no-underline font-medium"
                       >
                         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M15 5l4 4L8 20H4v-4z" />
@@ -766,7 +766,7 @@ export default function LearnerHeader({
                       <PageLink
                         page="Profile"
                         onClick={closeMobile}
-                        className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[#352637] hover:bg-white no-underline font-medium"
+                        className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)] no-underline font-medium"
                       >
                         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <circle cx="12" cy="8" r="4" />
@@ -780,7 +780,7 @@ export default function LearnerHeader({
                           logout();
                           closeMobile();
                         }}
-                        className="w-full flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[#C0412A] hover:bg-[#FBDCD3]/40 font-medium text-left border-0 bg-transparent cursor-pointer"
+                        className="w-full flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-c0412a,#C0412A)] hover:bg-[var(--attempt-bg-fbdcd3,#FBDCD3)]/40 font-medium text-left border-0 bg-transparent cursor-pointer"
                       >
                         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
@@ -799,12 +799,12 @@ export default function LearnerHeader({
                 </div>
 
                 {/* Accordion 1: Thư viện đề */}
-                <div className="rounded-xl border-solid border border-[#E6E4E0] bg-white overflow-hidden">
+                <div className="rounded-xl border-solid border border-[var(--attempt-line-e6e4e0,#E6E4E0)] bg-[var(--attempt-bg-ffffff,#FFFFFF)] overflow-hidden">
                   <button
                     type="button"
                     onClick={() => setExamsOpen((v) => !v)}
                     aria-expanded={examsOpen}
-                    className="w-full flex items-center justify-between p-3.5 text-left font-semibold text-sm text-[#352637] hover:bg-[#F6F4EF] border-0 bg-transparent cursor-pointer"
+                    className="w-full flex items-center justify-between p-3.5 text-left font-semibold text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] border-0 bg-transparent cursor-pointer"
                   >
                     <span className="flex items-center gap-2.5">
                       <span className="w-7 h-7 rounded-lg bg-[var(--attempt-bg-e3ecfd,#E3ECFD)] text-[var(--attempt-text-2963cc,#2963CC)] flex items-center justify-center">
@@ -834,35 +834,35 @@ export default function LearnerHeader({
                       <PageLink
                         page="FullTests"
                         onClick={closeMobile}
-                        className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
+                        className="p-2.5 rounded-lg text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] no-underline font-medium"
                       >
                         IELTS Full Tests
                       </PageLink>
                       <PageLink
                         page="PracticeLibrary"
                         onClick={closeMobile}
-                        className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
+                        className="p-2.5 rounded-lg text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] no-underline font-medium"
                       >
                         IELTS Listening Practice
                       </PageLink>
                       <PageLink
                         page="PracticeLibrary"
                         onClick={closeMobile}
-                        className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
+                        className="p-2.5 rounded-lg text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] no-underline font-medium"
                       >
                         IELTS Reading Practice
                       </PageLink>
                       <PageLink
                         page="PracticeWS"
                         onClick={closeMobile}
-                        className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
+                        className="p-2.5 rounded-lg text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] no-underline font-medium"
                       >
                         IELTS Writing Practice
                       </PageLink>
                       <PageLink
                         page="PracticeWS"
                         onClick={closeMobile}
-                        className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
+                        className="p-2.5 rounded-lg text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] no-underline font-medium"
                       >
                         IELTS Speaking Practice
                       </PageLink>
@@ -871,12 +871,12 @@ export default function LearnerHeader({
                 </div>
 
                 {/* Accordion 2: Thư viện bài mẫu */}
-                <div className="rounded-xl border-solid border border-[#E6E4E0] bg-white overflow-hidden">
+                <div className="rounded-xl border-solid border border-[var(--attempt-line-e6e4e0,#E6E4E0)] bg-[var(--attempt-bg-ffffff,#FFFFFF)] overflow-hidden">
                   <button
                     type="button"
                     onClick={() => setSamplesOpen((v) => !v)}
                     aria-expanded={samplesOpen}
-                    className="w-full flex items-center justify-between p-3.5 text-left font-semibold text-sm text-[#352637] hover:bg-[#F6F4EF] border-0 bg-transparent cursor-pointer"
+                    className="w-full flex items-center justify-between p-3.5 text-left font-semibold text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] border-0 bg-transparent cursor-pointer"
                   >
                     <span className="flex items-center gap-2.5">
                       <span className="w-7 h-7 rounded-lg bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] flex items-center justify-center">
@@ -905,28 +905,28 @@ export default function LearnerHeader({
                       <PageLink
                         page="SampleLibrary" query="sampleType=WRITING_TASK_1_ACADEMIC"
                         onClick={closeMobile}
-                        className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
+                        className="p-2.5 rounded-lg text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] no-underline font-medium"
                       >
                         Writing Task 1 Academic
                       </PageLink>
                       <PageLink
                         page="SampleLibrary" query="sampleType=WRITING_TASK_1_GENERAL"
                         onClick={closeMobile}
-                        className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
+                        className="p-2.5 rounded-lg text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] no-underline font-medium"
                       >
                         Writing Task 1 General
                       </PageLink>
                       <PageLink
                         page="SampleLibrary" query="sampleType=WRITING_TASK_2"
                         onClick={closeMobile}
-                        className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
+                        className="p-2.5 rounded-lg text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] no-underline font-medium"
                       >
                         Writing Task 2
                       </PageLink>
                       <PageLink
                         page="SampleLibrary" query="skill=SPEAKING"
                         onClick={closeMobile}
-                        className="p-2.5 rounded-lg text-sm text-[#352637] hover:bg-[#F6F4EF] no-underline font-medium"
+                        className="p-2.5 rounded-lg text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)] no-underline font-medium"
                       >
                         Speaking Part 1, 2, 3
                       </PageLink>
@@ -938,8 +938,8 @@ export default function LearnerHeader({
                 <PageLink
                   page="Vocab"
                   onClick={closeMobile}
-                  className={`flex items-center gap-2.5 p-3.5 rounded-xl border-solid border border-[#E6E4E0] bg-white text-sm font-semibold no-underline ${
-                    active === 'vocab' ? 'bg-[#E3ECFD] border-[#D6D4D0] text-[#352637]' : 'text-[#352637] hover:bg-[#F6F4EF]'
+                  className={`flex items-center gap-2.5 p-3.5 rounded-xl border-solid border border-[var(--attempt-line-e6e4e0,#E6E4E0)] bg-[var(--attempt-bg-ffffff,#FFFFFF)] text-sm font-semibold no-underline ${
+                    active === 'vocab' ? 'bg-[var(--attempt-bg-e3ecfd,#E3ECFD)] border-[var(--attempt-line-d6d4d0,#D6D4D0)] text-[var(--attempt-text-352637,#352637)]' : 'text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)]'
                   }`}
                 >
                   <span className="w-7 h-7 rounded-lg bg-[var(--attempt-bg-dcede2,#DCEDE2)] text-[var(--attempt-text-2e6a48,#2E6A48)] flex items-center justify-center">
@@ -952,11 +952,11 @@ export default function LearnerHeader({
                 </PageLink>
 
                 {/* Direct Link: Flashcard của tôi */}
-                <PageLink
+                {!isGuest && <PageLink
                   page="Flashcard"
                   onClick={closeMobile}
-                  className={`flex items-center gap-2.5 p-3.5 rounded-xl border-solid border border-[#E6E4E0] bg-white text-sm font-semibold no-underline ${
-                    active === 'flashcard' ? 'bg-[#E3ECFD] border-[#D6D4D0] text-[#352637]' : 'text-[#352637] hover:bg-[#F6F4EF]'
+                  className={`flex items-center gap-2.5 p-3.5 rounded-xl border-solid border border-[var(--attempt-line-e6e4e0,#E6E4E0)] bg-[var(--attempt-bg-ffffff,#FFFFFF)] text-sm font-semibold no-underline ${
+                    active === 'flashcard' ? 'bg-[var(--attempt-bg-e3ecfd,#E3ECFD)] border-[var(--attempt-line-d6d4d0,#D6D4D0)] text-[var(--attempt-text-352637,#352637)]' : 'text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f6f4ef,#F6F4EF)]'
                   }`}
                 >
                   <span className="w-7 h-7 rounded-lg bg-[var(--attempt-bg-fbedbf,#FBEDBF)] text-[var(--attempt-text-7a5a0e,#7A5A0E)] flex items-center justify-center">
@@ -966,16 +966,16 @@ export default function LearnerHeader({
                     </svg>
                   </span>
                   Flashcard của tôi
-                </PageLink>
+                </PageLink>}
               </div>
 
               {/* Guest buttons */}
               {isGuest && (
-                <div className="flex flex-col gap-2 pt-2 border-0 border-solid border-t border-[#E6E4E0]">
+                <div className="flex flex-col gap-2 pt-2 border-0 border-solid border-t border-[var(--attempt-line-e6e4e0,#E6E4E0)]">
                   <PageLink
                     page="Register"
                     onClick={closeMobile}
-                    className="w-full h-11 flex items-center justify-center rounded-xl border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-white text-[#352637] font-semibold text-sm no-underline"
+                    className="w-full h-11 flex items-center justify-center rounded-xl border-solid border border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-ffffff,#FFFFFF)] text-[var(--attempt-text-352637,#352637)] font-semibold text-sm no-underline"
                   >
                     Đăng ký
                   </PageLink>

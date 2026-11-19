@@ -1,4 +1,3 @@
-import SampleMediaPreview from "../../components/samples/SampleMediaPreview";
 import {
   Fragment,
   useEffect,
@@ -6,8 +5,10 @@ import {
   type ReactNode,
 } from "react";
 import LearnerHeader from "../../components/navigation/LearnerHeader";
-import { ApiError } from "../../lib/api";
-import { sampleApi } from "../../lib/sample-api";
+import PageLink from "../../components/navigation/PageLink";
+import { useAuth } from "../../lib/auth/auth";
+import { ApiError } from "../../lib/shared/api";
+import { sampleApi } from "../../lib/samples/sample-api";
 import {
   countSampleWords,
   readSampleQuery,
@@ -15,13 +16,14 @@ import {
   sampleTypeLabels,
   type PublicSampleDetail,
   type PublicSamplePageProps,
-} from "../../lib/sample-public";
+} from "../../lib/samples/sample-public";
 import "./samples.css";
 
-export function SampleShell({ children }: { children: ReactNode }) {
+export function SampleShell({ children, banner }: { children: ReactNode; banner?: ReactNode }) {
   return (
     <div className="samples-page">
       <LearnerHeader active="samples" />
+      {banner}
       <main className="samples-container">{children}</main>
     </div>
   );
@@ -400,7 +402,10 @@ export function SampleDetailLayout({
   children: ReactNode;
 }) {
   const document = sample.document;
+  const { user } = useAuth();
   const query = readSampleQuery(sampleQuery);
+  const skill = document.skill === "WRITING" ? "Writing" : "Speaking";
+  const typeLabel = sampleTypeLabels[document.sampleType];
 
   const sections: TocSection[] = [
     { id: "de-bai", label: "Đề bài" },
@@ -424,19 +429,22 @@ export function SampleDetailLayout({
   return (
     <>
       <nav className="samples-breadcrumb" aria-label="Breadcrumb">
-        <a href={sampleLibraryHref(query)}>← Về thư viện bài mẫu</a>
+        <PageLink page={user ? "StudentLanding" : "Main"}>Trang chủ</PageLink>
+        <span aria-hidden="true">›</span>
+        <a href={sampleLibraryHref(query)}>Thư viện bài mẫu</a>
+        <span aria-hidden="true">›</span>
+        <a href={sampleLibraryHref({ skill: document.skill, sampleType: document.sampleType })}>{typeLabel}</a>
+        <span aria-hidden="true">›</span>
         <span aria-current="page">{document.title}</span>
       </nav>
 
       <div className="samples-detail-grid">
         <article className="samples-article">
           <header className="samples-detail-header">
-            <div className="samples-chips">
+            <div className="samples-chips" data-skill={document.skill}>
+              <span className="samples-chip samples-skill-chip">{skill}</span>
               <span className="samples-chip">
-                {sampleTypeLabels[document.sampleType]}
-              </span>
-              <span className="samples-chip">
-                Band {document.band.toFixed(1)}
+                {document.skill === "WRITING" ? (document.sampleType === "WRITING_TASK_2" ? "Task 2" : "Task 1") : `Part ${document.part}`}
               </span>
               {document.skill === "WRITING" && (
                 <span className="samples-chip">
@@ -445,6 +453,7 @@ export function SampleDetailLayout({
                     : "General Training"}
                 </span>
               )}
+              {document.topic && <span className="samples-chip">{document.topic}</span>}
             </div>
 
             <h1>{document.title}</h1>
@@ -453,13 +462,13 @@ export function SampleDetailLayout({
               {[
                 document.topic,
                 document.source,
-                `${wordCount} từ bài mẫu`,
+                `Band ${document.band.toFixed(1)}`,
+                `${wordCount} từ`,
+                ...(document.skill === "WRITING" ? [`~${Math.max(1, Math.round(wordCount / 200))} phút đọc`] : []),
               ]
                 .filter(Boolean)
                 .join(" · ")}
             </p>
-
-            <SampleMediaPreview sampleId={sample.id} media={document.cover} scope="public" label="Ảnh bìa bài mẫu" />
           </header>
 
           {children}
@@ -469,7 +478,7 @@ export function SampleDetailLayout({
           <SampleToc sections={sections} />
 
           <div className="samples-panel">
-            <h2>Luyện tập {document.skill === "WRITING" ? "Writing" : "Speaking"}</h2>
+            <h2>Luyện tập {skill}</h2>
             <p>
               Bài mẫu được xem công khai. Bạn cần đăng nhập để luyện tập và
               lưu bài.

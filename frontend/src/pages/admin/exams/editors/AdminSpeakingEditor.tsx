@@ -1,11 +1,11 @@
 import React from "react";
-import { TOAST_MS } from "../../../../lib/toast";
-import { styleOf, cssText } from "../../../../lib/styles";
+import { TOAST_MS } from "../../../../lib/shared/toast";
+import { styleOf, cssText } from "../../../../lib/shared/styles";
 import AdminSidebar from "../../../../components/navigation/AdminSidebar";
 import AdminTopbar, { Crumb } from "../../../../components/navigation/AdminTopbar";
-import { navigate } from "../../../../lib/auth";
-import { errorInfo, fmtDate, deleteSkill, publishSkill } from "../../../../lib/exam-admin";
-import { ApiError } from "../../../../lib/api";
+import { navigate } from "../../../../lib/auth/auth";
+import { errorInfo, fmtDate, deleteSkill, publishSkill } from "../../../../lib/exams/exam-admin";
+import { ApiError } from "../../../../lib/shared/api";
 import {
   getEditorSkill,
   saveSkillContent,
@@ -17,9 +17,9 @@ import {
   type SpeakingPart,
   type SpeakingPartQs,
   type SpeakingPartCue,
-} from "../../../../lib/exam-editor";
+} from "../../../../lib/exams/exam-editor";
 import SkillHistoryDrawer from "../../../../components/exams/SkillHistoryDrawer";
-import { versionMessages } from "../../../../lib/version-messages";
+import { versionMessages } from "../../../../lib/exams/version-messages";
 
 type Ev = React.SyntheticEvent | null | undefined;
 
@@ -1585,7 +1585,7 @@ renderVals(): SpeakingView {
   render() {
     if (this.state.loading) {
       return (
-        <div className="flex h-screen bg-[#F6F4EF]">
+        <div className="flex h-screen bg-[var(--attempt-bg-f6f4ef,#F6F4EF)]">
           <AdminSidebar active="AdminExams" />
           <div className="flex-1 flex flex-col min-w-0">
             <AdminTopbar
@@ -1596,7 +1596,7 @@ renderVals(): SpeakingView {
               ]}
             />
             <div className="flex-1 flex items-center justify-center">
-              <p className="text-[#706473] text-base font-medium">Đang tải đề…</p>
+              <p className="text-[var(--attempt-text-706473,#706473)] text-base font-medium">Đang tải đề…</p>
             </div>
           </div>
         </div>
@@ -1605,7 +1605,7 @@ renderVals(): SpeakingView {
 
     if (this.state.notFound || !this.state.skill) {
       return (
-        <div className="flex h-screen bg-[#F6F4EF]">
+        <div className="flex h-screen bg-[var(--attempt-bg-f6f4ef,#F6F4EF)]">
           <AdminSidebar active="AdminExams" />
           <div className="flex-1 flex flex-col min-w-0">
             <AdminTopbar
@@ -1616,8 +1616,8 @@ renderVals(): SpeakingView {
               ]}
             />
             <div className="flex-1 flex flex-col items-center justify-center gap-4">
-              <p className="text-[#352637] text-lg font-semibold">Không tìm thấy kỹ năng</p>
-              <p className="text-[#706473] text-sm">Kỹ năng không tồn tại hoặc đã bị xóa.</p>
+              <p className="text-[var(--attempt-text-352637,#352637)] text-lg font-semibold">Không tìm thấy kỹ năng</p>
+              <p className="text-[var(--attempt-text-706473,#706473)] text-sm">Kỹ năng không tồn tại hoặc đã bị xóa.</p>
               <button
                 type="button"
                 onClick={() => navigate("AdminExams")}

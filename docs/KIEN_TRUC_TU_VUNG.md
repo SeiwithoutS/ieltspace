@@ -44,7 +44,7 @@ Bước tiếp theo: upload Storage, transaction công bố sang bảng từ/li�
 ### File và kiểm chứng của bước lưu nháp
 
 - Thêm `backend/src/modules/vocabulary/vocabulary.routes.ts`: danh sách, tạo, đọc nháp, lưu revision, sửa metadata, xóa nháp.
-- Thêm `frontend/src/lib/vocabulary-api.ts`; nối `SetDirectory.tsx` và `AdminVocabulary.tsx` vào API.
+- Thêm `frontend/src/lib/vocabulary/vocabulary-api.ts`; nối `SetDirectory.tsx` và `AdminVocabulary.tsx` vào API.
 - Sửa `backend/src/routes.ts`, `config.ts`, `media.routes.ts`, `WordMediaEditor.tsx` đúng phạm vi từ vựng/đọc key.
 - Typecheck/backend build/frontend build qua. 10 kiểm thử validation/Auth/media qua.
 - Test tích hợp dev `vocabulary-db.integration.mjs`: thực thi handler tạo/lưu/đọc/sửa với SQL thật, kiểm tra revision conflict, không ghi bảng công bố, luôn rollback bộ thử; qua. Đây không phải kiểm thử toàn bộ UI qua trình duyệt đăng nhập. Chưa kiểm thử trực quan dropdown.
@@ -225,7 +225,7 @@ API đọc tạo signed URL ngắn hạn khi caller được phép xem bộ; Pos
 
 ### 6. Frontend phải nối lại
 
-- Tạo `frontend/src/lib/vocabulary-api.ts` dùng apiFetch chung, định kiểu dữ liệu và chuyển tên cột DB sang UI.
+- Tạo `frontend/src/lib/vocabulary/vocabulary-api.ts` dùng apiFetch chung, định kiểu dữ liệu và chuyển tên cột DB sang UI.
 - SetDirectory tải danh mục qua GET; tạo bộ phải đợi POST thành công rồi dùng UUID backend trả về.
 - AdminVocabulary tải draft theo ID; nút Lưu gọi PUT, Công bố gọi POST; chỉ báo thành công khi server xác nhận.
 - Import file → preview → sửa lỗi → confirm → tải lại dữ liệu DB. Upload ảnh riêng, không gửi base64 dài trong danh sách từ. Lỗi media không làm mất từ đã nhập.
@@ -264,7 +264,7 @@ Nguồn đối chiếu: [Supabase + Prisma](https://supabase.com/docs/guides/dat
 |---|---|
 | backend/src/modules/vocabulary/media.routes.ts | Xác thực, kiểm tra quyền, gọi/chuẩn hóa nguồn, cache và chọn ảnh. |
 | backend/src/config.ts, .env.example, routes.ts | Khai báo key tùy chọn và mount API. |
-| frontend/src/lib/vocabulary-media.ts | Client tra/chọn media, ưu tiên nguồn, giãn request. |
+| frontend/src/lib/vocabulary/vocabulary-media.ts | Client tra/chọn media, ưu tiên nguồn, giãn request. |
 | frontend/src/components/vocabulary/WordMediaEditor.tsx | Các trường nội dung, dropdown audio, gợi ý ảnh, tìm lại. |
 | frontend/src/components/vocabulary/WordImage.tsx | Card ảnh, chọn file, ghi nguồn ảnh. |
 | frontend/src/components/vocabulary/WordCard.tsx | Dùng ảnh chung, phát bản ghi hoặc giọng thiết bị. |

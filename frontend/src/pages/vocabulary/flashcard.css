@@ -1,0 +1,88 @@
+.flash-workspace {
+  --flash-panel: #faf9f5;
+  --flash-remember-bg: #dceddf;
+  --flash-remember-ink: #24543d;
+  --flash-forgot-bg: #fbefcf;
+  --flash-forgot-ink: #654b14;
+}
+.dark .flash-workspace {
+  --flash-panel: #242529;
+  --flash-remember-bg: #253d33;
+  --flash-remember-ink: #c8efdb;
+  --flash-forgot-bg: #423721;
+  --flash-forgot-ink: #ffe3a2;
+}
+.flash-tabs { flex-wrap: wrap; max-width: 100%; box-sizing: border-box; margin-bottom: 20px; }
+.flash-workspace .flash-tabs button { padding-inline: clamp(10px, 2vw, 20px); }
+.flash-panel {
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
+}
+.flash-panel h2, .flash-study h2 {
+  margin: 0 0 8px;
+  font: 600 clamp(20px, 3vw, 26px)/1.24 var(--font-serif), serif;
+  overflow-wrap: anywhere;
+}
+.flash-panel p, .flash-study p { margin: 0; }
+.flash-panel > p + .flash-grid { margin-top: 14px; }
+.flash-muted { color: var(--muted); line-height: 1.55; }
+.flash-error { margin: 0 0 16px; color: var(--flash-forgot-ink); }
+.flash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px; }
+.vocabulary.flash-workspace button.flash-source {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  text-align: left;
+  background: var(--flash-panel);
+}
+.flash-source > svg { box-sizing: content-box; padding: 9px; border-radius: 10px; background: var(--soft); }
+.flash-source strong, .flash-check strong { display: block; overflow-wrap: anywhere; }
+.flash-source small, .flash-check small { display: block; margin-top: 3px; color: var(--muted); }
+.flash-workspace button { min-height: 44px; }
+.flash-workspace button:disabled { cursor: not-allowed; }
+.flash-workspace button:not(:disabled):not(.vocab-primary):hover { border-color: var(--ink); }
+.flash-setup, .flash-study { display: grid; gap: 16px; max-width: 640px; }
+.flash-setup h2, .flash-study h2 { margin: 0; }
+.flash-setup .vocab-primary, .flash-study .flash-back { justify-self: start; }
+.vocabulary.flash-workspace button.flash-back { width: fit-content; padding-inline: 0; background: transparent; border-color: transparent; color: var(--ink); }
+.flash-field { display: grid; gap: 6px; font-weight: 600; }
+.flash-field :is(select, input) { width: 100%; min-height: 44px; }
+.flash-check { display: flex; gap: 9px; align-items: center; min-height: 44px; cursor: pointer; }
+.flash-workspace .flash-check input { width: 18px; height: 18px; margin: 0; flex: none; accent-color: #2963cc; }
+.flash-progress { display: block; width: 100%; height: 8px; accent-color: #2963cc; }
+.flash-timer {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--soft);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.vocabulary.flash-workspace button.flash-card-face {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  text-align: center;
+  gap: 10px;
+  min-height: clamp(224px, 40vh, 305px);
+  padding: 20px clamp(16px, 5vw, 42px);
+  background: var(--soft);
+  border-radius: 24px;
+  overflow-wrap: anywhere;
+}
+.flash-card-face strong { font: 650 clamp(26px, 5vw, 40px)/1.2 var(--font-serif), serif; }
+.flash-face-label { color: var(--muted); font-size: 13px; }
+.flash-example { font-size: 15px; line-height: 1.55; }
+.flash-flip-label { margin-top: 8px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.vocabulary.flash-workspace button.flash-forgot { background: var(--flash-forgot-bg); color: var(--flash-forgot-ink); font-weight: 600; }
+.vocabulary.flash-workspace button.flash-remembered { background: var(--flash-remember-bg); color: var(--flash-remember-ink); font-weight: 600; }
+.flash-list { list-style: none; padding: 0; margin: 12px 0 0; }
+.flash-list-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 0; border-top: 1px solid var(--line); }
+.flash-list-row p { margin: 3px 0; }
+.flash-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.flash-summary div { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--flash-panel); }
+.flash-summary dt { color: var(--muted); font-size: 12px; }
+.flash-summary dd { margin: 4px 0 0; font-weight: 650; font-size: clamp(16px, 4vw, 22px); }

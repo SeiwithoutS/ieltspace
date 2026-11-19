@@ -1,0 +1,2452 @@
+import LearnerHeader from "../../components/navigation/LearnerHeader";
+import { styleOf, cssText, getAccentColors } from "../../lib/shared/styles";
+
+export default function Main({ accent }: { accent?: string }) {
+  const v = getAccentColors(accent);
+  return (
+    <>
+      {"\n"}
+      {"\n"}
+      <style>
+        {cssText(
+          "\nbody{margin:0;background:#FCFBF7}\na{color:#2963CC}a:hover{color:#2257B8}\n.bu-dd-menu{display:none}.bu-dd:hover .bu-dd-menu,.bu-dd:focus-within .bu-dd-menu{display:block}.bu-dd:hover > a{background:#F3F0EA}\n",
+        )}
+      </style>
+      {"\n"}
+      {"\n"}
+      <div
+        style={styleOf(
+          "font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: #352637; background: #FCFBF7; font-size: 15px; line-height: 1.6",
+        )}
+      >
+        {"\n\n"}
+        {"\n"}
+        <LearnerHeader guest={true} />
+        {"\n\n"}
+        {"\n"}
+        <div
+          style={styleOf(
+            "background: linear-gradient(135deg, #E3ECFD 0%, #E6F3EC 100%); border-bottom: 1.5px solid #D6D4D0",
+          )}
+        >
+          {"\n"}
+          <section
+            id={"top"}
+            style={styleOf(
+              "max-width: 1200px; margin: 0 auto; padding: 52px 24px 44px; display: flex; flex-wrap: wrap; align-items: center; gap: 40px 56px",
+            )}
+          >
+            {"\n"}
+            <div style={styleOf("flex: 1 1 460px; min-width: 0")}>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473",
+                )}
+              >
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "width: 8px; height: 8px; border-radius: 50%; background: " +
+                      v.accent,
+                  )}
+                ></span>
+                {"\n"}
+                <span>{"Luyện đề IELTS · 4 kỹ năng"}</span>
+                {"\n"}
+              </div>
+              {"\n"}
+              <h1
+                style={styleOf(
+                  "margin: 16px 0 0; font-size: 48px; line-height: 1.15; font-weight: 700; letter-spacing: -0.025em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"Mỗi ngày một đề, band tăng từng bước."}
+              </h1>
+              {"\n"}
+              <p
+                style={styleOf(
+                  "margin: 18px 0 0; font-size: 18px; color: #4B3D4D; max-width: 50ch",
+                )}
+              >
+                {
+                  "Đề Listening và Reading chấm ngay khi nộp. Bài Writing và Speaking được lưu lại; khi cần, bạn gửi yêu cầu để giáo viên chấm theo 4 tiêu chí IELTS (mỗi tuần 1 lượt miễn phí)."
+                }
+              </p>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px",
+                )}
+              >
+                {"\n"}
+                <a
+                  href={"#dang-ky"}
+                  style={styleOf(
+                    "display: flex; align-items: center; height: 46px; padding: 0 20px; border-radius: 10px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font-weight: 600; text-decoration: none",
+                  )}
+                >
+                  {"Đăng ký miễn phí"}
+                </a>
+                {"\n"}
+                <a
+                  href={"#bo-de"}
+                  style={styleOf(
+                    "display: flex; align-items: center; height: 46px; padding: 0 20px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; text-decoration: none",
+                  )}
+                >
+                  {"Xem thư viện đề"}
+                </a>
+                {"\n"}
+              </div>
+              {"\n"}
+              <p
+                style={styleOf(
+                  "margin: 16px 0 0; font-size: 14px; color: #706473",
+                )}
+              >
+                {"Đã có tài khoản? "}
+                <a
+                  href={"#dang-nhap"}
+                  style={styleOf("font-weight: 600; text-decoration: none")}
+                >
+                  {"Đăng nhập"}
+                </a>
+              </p>
+              {"\n"}
+            </div>
+            {"\n\n"}
+            <div
+              style={styleOf(
+                "flex: 1 1 460px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 14px; border-radius: 26px; background: rgba(255, 255, 255, 0.6); border: 1.5px solid #D6D4D0",
+              )}
+            >
+              {"\n"}
+              <a
+                href={"#bo-de"}
+                style={styleOf(
+                  "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 12px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                )}
+              >
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "width: 42px; height: 42px; border-radius: 10px; background: #DDE8FC; color: #2A55B8; display: flex; align-items: center; justify-content: center; margin-bottom: 6px",
+                  )}
+                >
+                  <svg
+                    width={"24"}
+                    height={"24"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={"currentColor"}
+                    strokeWidth={"1.8"}
+                    strokeLinejoin={"round"}
+                  >
+                    <path d={"M4 14v-2a8 8 0 0 1 16 0v2"}></path>
+                    <rect
+                      x={"3"}
+                      y={"13.5"}
+                      width={"4.5"}
+                      height={"7"}
+                      rx={"1.6"}
+                    ></rect>
+                    <rect
+                      x={"16.5"}
+                      y={"13.5"}
+                      width={"4.5"}
+                      height={"7"}
+                      rx={"1.6"}
+                    ></rect>
+                  </svg>
+                </span>
+                {"\n"}
+                <span style={styleOf("font-size: 18px; font-weight: 700")}>
+                  {"Listening"}
+                </span>
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "font-size: 13px; line-height: 1.45; color: #706473",
+                  )}
+                >
+                  {"4 section, 40 câu, audio phát một lần như thi thật."}
+                </span>
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "margin-top: auto; padding-top: 8px; font-size: 13px; font-weight: 600; color: #2A55B8",
+                  )}
+                >
+                  {"128 đề"}
+                </span>
+                {"\n"}
+              </a>
+              {"\n"}
+              <a
+                href={"#bo-de"}
+                style={styleOf(
+                  "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 12px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                )}
+              >
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "width: 42px; height: 42px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center; margin-bottom: 6px",
+                  )}
+                >
+                  <svg
+                    width={"24"}
+                    height={"24"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={"currentColor"}
+                    strokeWidth={"1.8"}
+                    strokeLinejoin={"round"}
+                  >
+                    <path
+                      d={
+                        "M12 7c-2-1.5-5-2-8-1.5v12.5c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5.5C17 5 14 5.5 12 7z"
+                      }
+                    ></path>
+                    <path d={"M12 7v12.5"}></path>
+                  </svg>
+                </span>
+                {"\n"}
+                <span style={styleOf("font-size: 18px; font-weight: 700")}>
+                  {"Reading"}
+                </span>
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "font-size: 13px; line-height: 1.45; color: #706473",
+                  )}
+                >
+                  {"3 passage chia đôi màn hình, highlight ngay trên bài."}
+                </span>
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "margin-top: auto; padding-top: 8px; font-size: 13px; font-weight: 600; color: #2E6A48",
+                  )}
+                >
+                  {"142 đề"}
+                </span>
+                {"\n"}
+              </a>
+              {"\n"}
+              <a
+                href={"#bo-de"}
+                style={styleOf(
+                  "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 12px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                )}
+              >
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "width: 42px; height: 42px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center; margin-bottom: 6px",
+                  )}
+                >
+                  <svg
+                    width={"24"}
+                    height={"24"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={"currentColor"}
+                    strokeWidth={"1.8"}
+                    strokeLinejoin={"round"}
+                  >
+                    <path d={"M15.5 4.5l4 4-10 10-5 1 1-5z"}></path>
+                    <path d={"M13.5 6.5l4 4"}></path>
+                  </svg>
+                </span>
+                {"\n"}
+                <span style={styleOf("font-size: 18px; font-weight: 700")}>
+                  {"Writing"}
+                </span>
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "font-size: 13px; line-height: 1.45; color: #706473",
+                  )}
+                >
+                  {"Task 1 và Task 2, đếm từ trực tiếp, gửi giáo viên chấm."}
+                </span>
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "margin-top: auto; padding-top: 8px; font-size: 13px; font-weight: 600; color: #7A5A0E",
+                  )}
+                >
+                  {"96 đề"}
+                </span>
+                {"\n"}
+              </a>
+              {"\n"}
+              <a
+                href={"#bo-de"}
+                style={styleOf(
+                  "display: flex; flex-direction: column; gap: 6px; padding: 18px; min-height: 172px; box-sizing: border-box; border: 1.5px solid #D6D4D0; border-radius: 12px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+                )}
+              >
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "width: 42px; height: 42px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center; margin-bottom: 6px",
+                  )}
+                >
+                  <svg
+                    width={"24"}
+                    height={"24"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={"currentColor"}
+                    strokeWidth={"1.8"}
+                    strokeLinecap={"round"}
+                    strokeLinejoin={"round"}
+                  >
+                    <rect
+                      x={"8.5"}
+                      y={"3.5"}
+                      width={"7"}
+                      height={"11"}
+                      rx={"3.5"}
+                    ></rect>
+                    <path
+                      d={"M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6"}
+                    ></path>
+                  </svg>
+                </span>
+                {"\n"}
+                <span style={styleOf("font-size: 18px; font-weight: 700")}>
+                  {"Speaking"}
+                </span>
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "font-size: 13px; line-height: 1.45; color: #706473",
+                  )}
+                >
+                  {"Ghi âm Part 1–3, cue card Part 2 có 1 phút chuẩn bị."}
+                </span>
+                {"\n"}
+                <span
+                  style={styleOf(
+                    "margin-top: auto; padding-top: 8px; font-size: 13px; font-weight: 600; color: #5543B0",
+                  )}
+                >
+                  {"74 đề"}
+                </span>
+                {"\n"}
+              </a>
+              {"\n"}
+            </div>
+            {"\n"}
+          </section>
+          {"\n"}
+        </div>
+        {"\n\n"}
+        {"\n"}
+        <section
+          style={styleOf(
+            "max-width: 1200px; margin: 0 auto; padding: 28px 24px 12px; display: flex; flex-wrap: wrap; gap: 16px",
+          )}
+        >
+          {"\n"}
+          <div
+            style={styleOf(
+              "flex: 1 1 300px; display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+            )}
+          >
+            {"\n"}
+            <span
+              style={styleOf(
+                "flex: none; width: 36px; height: 36px; border-radius: 10px; background: #DCEDE2; color: #2E6A48; display: flex; align-items: center; justify-content: center; font-weight: 700",
+              )}
+            >
+              {"✓"}
+            </span>
+            {"\n"}
+            <div>
+              <div style={styleOf("font-weight: 600")}>
+                {"Chấm L/R tức thì"}
+              </div>
+              <div style={styleOf("font-size: 14px; color: #706473")}>
+                {"Band, đáp án và lời giải từng câu ngay sau khi nộp."}
+              </div>
+            </div>
+            {"\n"}
+          </div>
+          {"\n"}
+          <div
+            style={styleOf(
+              "flex: 1 1 300px; display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+            )}
+          >
+            {"\n"}
+            <span
+              style={styleOf(
+                "flex: none; width: 36px; height: 36px; border-radius: 10px; background: #FBEDBF; color: #7A5A0E; display: flex; align-items: center; justify-content: center; font-weight: 700",
+              )}
+            >
+              {"9"}
+            </span>
+            {"\n"}
+            <div>
+              <div style={styleOf("font-weight: 600")}>
+                {"Giáo viên chấm W/S"}
+              </div>
+              <div style={styleOf("font-size: 14px; color: #706473")}>
+                {
+                  "Điểm từng tiêu chí IELTS kèm nhận xét, dùng lượt chấm miễn phí hoặc bonus."
+                }
+              </div>
+            </div>
+            {"\n"}
+          </div>
+          {"\n"}
+          <div
+            style={styleOf(
+              "flex: 1 1 300px; display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+            )}
+          >
+            {"\n"}
+            <span
+              style={styleOf(
+                "flex: none; width: 36px; height: 36px; border-radius: 10px; background: #E8E4FA; color: #5543B0; display: flex; align-items: center; justify-content: center; font-weight: 700",
+              )}
+            >
+              {"↗"}
+            </span>
+            {"\n"}
+            <div>
+              <div style={styleOf("font-weight: 600")}>
+                {"Theo dõi tiến độ"}
+              </div>
+              <div style={styleOf("font-size: 14px; color: #706473")}>
+                {"Biểu đồ band theo thời gian, streak và flashcard từ vựng."}
+              </div>
+            </div>
+            {"\n"}
+          </div>
+          {"\n"}
+        </section>
+        <section
+          style={styleOf(
+            "max-width: 1200px; margin: 0 auto; padding: 44px 24px 16px",
+          )}
+        >
+          <div
+            style={styleOf(
+              "display: flex; flex-wrap: wrap; justify-content: center; gap: 20px 8px",
+            )}
+          >
+            <div
+              style={styleOf(
+                "flex: 0 1 220px; min-height: 170px; padding: 26px 22px; box-sizing: border-box; border-radius: 26px; background: #DDE8FC; transform: rotate(-6deg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center",
+              )}
+            >
+              <div
+                style={styleOf(
+                  "font-size: 40px; font-weight: 700; line-height: 1.1; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                )}
+              >
+                {"128+"}
+              </div>
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #4B3D4D; max-width: 170px",
+                )}
+              >
+                {"đề Listening, chấm ngay khi nộp"}
+              </div>
+            </div>
+            <div
+              style={styleOf(
+                "flex: 0 1 220px; min-height: 170px; padding: 26px 22px; box-sizing: border-box; border-radius: 26px; background: #F7C4B6; transform: rotate(3deg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center",
+              )}
+            >
+              <div
+                style={styleOf(
+                  "font-size: 40px; font-weight: 700; line-height: 1.1; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
+                )}
+              >
+                {"1"}
+              </div>
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #4B3D4D; max-width: 170px",
+                )}
+              >
+                {"lượt chấm Writing/Speaking miễn phí mỗi tuần"}
+              </div>
+            </div>
+            <div
+              style={styleOf(
+                "flex: 0 1 220px; min-height: 170px; padding: 26px 22px; box-sizing: border-box; border-radius: 26px; background: #DCEDE2; transform: rotate(-2deg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center",
+              )}
+            >
+              <div
+                style={styleOf(
+                  "font-size: 40px; font-weight: 700; line-height: 1.1; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"72 giờ"}
+              </div>
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #4B3D4D; max-width: 170px",
+                )}
+              >
+                {"tối đa để có giáo viên nhận bài"}
+              </div>
+            </div>
+            <div
+              style={styleOf(
+                "flex: 0 1 220px; min-height: 170px; padding: 26px 22px; box-sizing: border-box; border-radius: 26px; background: #FBEDBF; transform: rotate(5deg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center",
+              )}
+            >
+              <div
+                style={styleOf(
+                  "font-size: 40px; font-weight: 700; line-height: 1.1; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"14 ngày"}
+              </div>
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #4B3D4D; max-width: 170px",
+                )}
+              >
+                {"bài viết, bài nói được giữ để xem lại"}
+              </div>
+            </div>
+          </div>
+        </section>
+        {"\n\n"}
+        {"\n"}
+        <section
+          id={"bo-de"}
+          style={styleOf(
+            "max-width: 1200px; margin: 0 auto; padding: 36px 24px",
+          )}
+        >
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 24px",
+            )}
+          >
+            {"\n"}
+            <div>
+              {"\n"}
+              <h2
+                style={styleOf(
+                  "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.015em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"Bộ đề mới nhất"}
+              </h2>
+              {"\n"}
+              <p style={styleOf("margin: 4px 0 0; color: #706473")}>
+                {
+                  "Mỗi bộ gồm nhiều đề đủ 4 kỹ năng, làm trọn đề hoặc từng kỹ năng."
+                }
+              </p>
+              {"\n"}
+            </div>
+            {"\n"}
+            <a
+              href={"#dang-ky"}
+              style={styleOf(
+                "display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 15px; color: #352637; text-decoration: none",
+              )}
+            >
+              {"Xem thêm "}
+              <svg
+                width={"16"}
+                height={"16"}
+                viewBox={"0 0 24 24"}
+                fill={"none"}
+                stroke={"currentColor"}
+                strokeWidth={"2.2"}
+                strokeLinecap={"round"}
+                strokeLinejoin={"round"}
+              >
+                <path d={"M9 6l6 6-6 6"}></path>
+              </svg>
+            </a>
+            {"\n"}
+          </div>
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; gap: 28px 20px; overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 4px 12px; margin: -4px",
+            )}
+          >
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #BFD8F7",
+                )}
+              ></div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"Mock Test 2026 Vol 4"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
+                )}
+              >
+                <span>{"6 bài test"}</span>
+                <span
+                  aria-hidden={"true"}
+                  style={styleOf(
+                    "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
+                  )}
+                ></span>
+                <span>{"12.4K lượt làm"}</span>
+              </div>
+              <div
+                style={styleOf(
+                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
+                )}
+              >
+                {
+                  "6 đề Listening, Reading, Writing, Speaking theo format thi trên máy"
+                }
+              </div>
+              {"\n"}
+              <a
+                href={"#dang-ky"}
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex; align-items: center; gap: 4px; font-weight: 600; font-size: 15px; color: #2963CC; text-decoration: none",
+                )}
+              >
+                {"Xem bài test "}
+                <svg
+                  width={"16"}
+                  height={"16"}
+                  viewBox={"0 0 24 24"}
+                  fill={"none"}
+                  stroke={"currentColor"}
+                  strokeWidth={"2.2"}
+                  strokeLinecap={"round"}
+                  strokeLinejoin={"round"}
+                >
+                  <path d={"M9 6l6 6-6 6"}></path>
+                </svg>
+              </a>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #F7C4B6",
+                )}
+              ></div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"Actual Test Quý 2/2026"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
+                )}
+              >
+                <span>{"8 bài test"}</span>
+                <span
+                  aria-hidden={"true"}
+                  style={styleOf(
+                    "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
+                  )}
+                ></span>
+                <span>{"21.0K lượt làm"}</span>
+              </div>
+              <div
+                style={styleOf(
+                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
+                )}
+              >
+                {"Tổng hợp từ các kỳ thi tháng 4 đến tháng 6/2026"}
+              </div>
+              {"\n"}
+              <a
+                href={"#dang-ky"}
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex; align-items: center; gap: 4px; font-weight: 600; font-size: 15px; color: #2963CC; text-decoration: none",
+                )}
+              >
+                {"Xem bài test "}
+                <svg
+                  width={"16"}
+                  height={"16"}
+                  viewBox={"0 0 24 24"}
+                  fill={"none"}
+                  stroke={"currentColor"}
+                  strokeWidth={"2.2"}
+                  strokeLinecap={"round"}
+                  strokeLinejoin={"round"}
+                >
+                  <path d={"M9 6l6 6-6 6"}></path>
+                </svg>
+              </a>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5CEF5",
+                )}
+              ></div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"Speaking Forecast T9–T12/2026"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
+                )}
+              >
+                <span>{"42 bài test"}</span>
+                <span
+                  aria-hidden={"true"}
+                  style={styleOf(
+                    "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
+                  )}
+                ></span>
+                <span>{"18.7K lượt làm"}</span>
+              </div>
+              <div
+                style={styleOf(
+                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
+                )}
+              >
+                {"Chủ đề Part 1, 2, 3 dự đoán cho quý cuối năm"}
+              </div>
+              {"\n"}
+              <a
+                href={"#dang-ky"}
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex; align-items: center; gap: 4px; font-weight: 600; font-size: 15px; color: #2963CC; text-decoration: none",
+                )}
+              >
+                {"Xem bài test "}
+                <svg
+                  width={"16"}
+                  height={"16"}
+                  viewBox={"0 0 24 24"}
+                  fill={"none"}
+                  stroke={"currentColor"}
+                  strokeWidth={"2.2"}
+                  strokeLinecap={"round"}
+                  strokeLinejoin={"round"}
+                >
+                  <path d={"M9 6l6 6-6 6"}></path>
+                </svg>
+              </a>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5DECE",
+                )}
+              ></div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"Academic Reading Pack 05"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
+                )}
+              >
+                <span>{"12 bài test"}</span>
+                <span
+                  aria-hidden={"true"}
+                  style={styleOf(
+                    "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
+                  )}
+                ></span>
+                <span>{"9.3K lượt làm"}</span>
+              </div>
+              <div
+                style={styleOf(
+                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
+                )}
+              >
+                {"Passage luyện theo dạng câu hỏi, có lời giải từng câu"}
+              </div>
+              {"\n"}
+              <a
+                href={"#dang-ky"}
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex; align-items: center; gap: 4px; font-weight: 600; font-size: 15px; color: #2963CC; text-decoration: none",
+                )}
+              >
+                {"Xem bài test "}
+                <svg
+                  width={"16"}
+                  height={"16"}
+                  viewBox={"0 0 24 24"}
+                  fill={"none"}
+                  stroke={"currentColor"}
+                  strokeWidth={"2.2"}
+                  strokeLinecap={"round"}
+                  strokeLinejoin={"round"}
+                >
+                  <path d={"M9 6l6 6-6 6"}></path>
+                </svg>
+              </a>
+              {"\n"}
+            </div>
+            {"\n"}
+          </div>
+          {"\n"}
+        </section>
+        {"\n\n"}
+        {"\n"}
+        <section
+          id={"reading"}
+          style={styleOf(
+            "max-width: 1200px; margin: 0 auto; padding: 36px 24px",
+          )}
+        >
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 24px",
+            )}
+          >
+            {"\n"}
+            <div>
+              {"\n"}
+              <h2
+                style={styleOf(
+                  "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.015em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"Luyện IELTS Reading"}
+              </h2>
+              {"\n"}
+              <p style={styleOf("margin: 4px 0 0; color: #706473")}>
+                {
+                  "Mỗi đề là trọn kỹ năng Reading: chọn Practice từng Passage hoặc Real Test 60 phút."
+                }
+              </p>
+              {"\n"}
+            </div>
+            {"\n"}
+            <a
+              href={"#dang-ky"}
+              style={styleOf(
+                "display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 15px; color: #352637; text-decoration: none",
+              )}
+            >
+              {"Xem thêm "}
+              <svg
+                width={"16"}
+                height={"16"}
+                viewBox={"0 0 24 24"}
+                fill={"none"}
+                stroke={"currentColor"}
+                strokeWidth={"2.2"}
+                strokeLinecap={"round"}
+                strokeLinejoin={"round"}
+              >
+                <path d={"M9 6l6 6-6 6"}></path>
+              </svg>
+            </a>
+            {"\n"}
+          </div>
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; gap: 28px 20px; overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 4px 12px; margin: -4px",
+            )}
+          >
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5DECE",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
+                  )}
+                >
+                  {"40 câu"}
+                </span>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"Mock Test 2026 Vol 4 · Test 1 · Reading"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #706473; padding: 0 6px",
+                )}
+              >
+                {"Academic · 3.2K lượt làm"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex",
+                )}
+              >
+                {"\n"}
+                <a
+                  href={"#dang-nhap"}
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-weight: 600; text-decoration: none",
+                  )}
+                >
+                  <svg
+                    width={"20"}
+                    height={"20"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={v.accent}
+                    strokeWidth={"2"}
+                  >
+                    <circle cx={"12"} cy={"12"} r={"9"}></circle>
+                    <path
+                      d={"M10 8.5l5 3.5-5 3.5z"}
+                      fill={v.accent}
+                      strokeLinejoin={"round"}
+                    ></path>
+                  </svg>
+                  {"Làm bài"}
+                  <svg
+                    width={"12"}
+                    height={"12"}
+                    viewBox={"0 0 24 24"}
+                    fill={"#706473"}
+                  >
+                    <path d={"M6 9l6 7 6-7z"}></path>
+                  </svg>
+                </a>
+                {"\n"}
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #BFD8F7",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
+                  )}
+                >
+                  {"40 câu"}
+                </span>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"Mock Test 2026 Vol 4 · Test 4 · Reading"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #706473; padding: 0 6px",
+                )}
+              >
+                {"Academic · 5.6K lượt làm"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex",
+                )}
+              >
+                {"\n"}
+                <a
+                  href={"#dang-nhap"}
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-weight: 600; text-decoration: none",
+                  )}
+                >
+                  <svg
+                    width={"20"}
+                    height={"20"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={v.accent}
+                    strokeWidth={"2"}
+                  >
+                    <circle cx={"12"} cy={"12"} r={"9"}></circle>
+                    <path
+                      d={"M10 8.5l5 3.5-5 3.5z"}
+                      fill={v.accent}
+                      strokeLinejoin={"round"}
+                    ></path>
+                  </svg>
+                  {"Làm bài"}
+                  <svg
+                    width={"12"}
+                    height={"12"}
+                    viewBox={"0 0 24 24"}
+                    fill={"#706473"}
+                  >
+                    <path d={"M6 9l6 7 6-7z"}></path>
+                  </svg>
+                </a>
+                {"\n"}
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #F7C4B6",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
+                  )}
+                >
+                  {"40 câu"}
+                </span>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"Mock Test 2026 Vol 4 · Test 5 · Reading"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #706473; padding: 0 6px",
+                )}
+              >
+                {"Academic · 4.1K lượt làm"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex",
+                )}
+              >
+                {"\n"}
+                <a
+                  href={"#dang-nhap"}
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-weight: 600; text-decoration: none",
+                  )}
+                >
+                  <svg
+                    width={"20"}
+                    height={"20"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={v.accent}
+                    strokeWidth={"2"}
+                  >
+                    <circle cx={"12"} cy={"12"} r={"9"}></circle>
+                    <path
+                      d={"M10 8.5l5 3.5-5 3.5z"}
+                      fill={v.accent}
+                      strokeLinejoin={"round"}
+                    ></path>
+                  </svg>
+                  {"Làm bài"}
+                  <svg
+                    width={"12"}
+                    height={"12"}
+                    viewBox={"0 0 24 24"}
+                    fill={"#706473"}
+                  >
+                    <path d={"M6 9l6 7 6-7z"}></path>
+                  </svg>
+                </a>
+                {"\n"}
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5CEF5",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
+                  )}
+                >
+                  {"40 câu"}
+                </span>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"IELTS CAM Inspired 19 · Test 1 · Reading"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #706473; padding: 0 6px",
+                )}
+              >
+                {"General Training · 2.7K lượt làm"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex",
+                )}
+              >
+                {"\n"}
+                <a
+                  href={"#dang-nhap"}
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-weight: 600; text-decoration: none",
+                  )}
+                >
+                  <svg
+                    width={"20"}
+                    height={"20"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={v.accent}
+                    strokeWidth={"2"}
+                  >
+                    <circle cx={"12"} cy={"12"} r={"9"}></circle>
+                    <path
+                      d={"M10 8.5l5 3.5-5 3.5z"}
+                      fill={v.accent}
+                      strokeLinejoin={"round"}
+                    ></path>
+                  </svg>
+                  {"Làm bài"}
+                  <svg
+                    width={"12"}
+                    height={"12"}
+                    viewBox={"0 0 24 24"}
+                    fill={"#706473"}
+                  >
+                    <path d={"M6 9l6 7 6-7z"}></path>
+                  </svg>
+                </a>
+                {"\n"}
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+          </div>
+          {"\n"}
+        </section>
+        {"\n\n"}
+        {"\n"}
+        <section
+          id={"listening"}
+          style={styleOf(
+            "max-width: 1200px; margin: 0 auto; padding: 36px 24px",
+          )}
+        >
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 24px",
+            )}
+          >
+            {"\n"}
+            <div>
+              {"\n"}
+              <h2
+                style={styleOf(
+                  "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.015em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"Luyện IELTS Listening"}
+              </h2>
+              {"\n"}
+              <p style={styleOf("margin: 4px 0 0; color: #706473")}>
+                {
+                  "Mỗi đề là trọn kỹ năng Listening: chọn Practice từng Section hoặc Real Test, audio phát một lần."
+                }
+              </p>
+              {"\n"}
+            </div>
+            {"\n"}
+            <a
+              href={"#dang-ky"}
+              style={styleOf(
+                "display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 15px; color: #352637; text-decoration: none",
+              )}
+            >
+              {"Xem thêm "}
+              <svg
+                width={"16"}
+                height={"16"}
+                viewBox={"0 0 24 24"}
+                fill={"none"}
+                stroke={"currentColor"}
+                strokeWidth={"2.2"}
+                strokeLinecap={"round"}
+                strokeLinejoin={"round"}
+              >
+                <path d={"M9 6l6 6-6 6"}></path>
+              </svg>
+            </a>
+            {"\n"}
+          </div>
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; gap: 28px 20px; overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 4px 12px; margin: -4px",
+            )}
+          >
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #BFD8F7",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
+                  )}
+                >
+                  {"40 câu"}
+                </span>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"Mock Test 2026 Vol 4 · Test 1 · Listening"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #706473; padding: 0 6px",
+                )}
+              >
+                {"2.8K lượt làm"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex",
+                )}
+              >
+                {"\n"}
+                <a
+                  href={"#dang-nhap"}
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-weight: 600; text-decoration: none",
+                  )}
+                >
+                  <svg
+                    width={"20"}
+                    height={"20"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={v.accent}
+                    strokeWidth={"2"}
+                  >
+                    <circle cx={"12"} cy={"12"} r={"9"}></circle>
+                    <path
+                      d={"M10 8.5l5 3.5-5 3.5z"}
+                      fill={v.accent}
+                      strokeLinejoin={"round"}
+                    ></path>
+                  </svg>
+                  {"Làm bài"}
+                  <svg
+                    width={"12"}
+                    height={"12"}
+                    viewBox={"0 0 24 24"}
+                    fill={"#706473"}
+                  >
+                    <path d={"M6 9l6 7 6-7z"}></path>
+                  </svg>
+                </a>
+                {"\n"}
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5CEF5",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
+                  )}
+                >
+                  {"40 câu"}
+                </span>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"Mock Test 2026 Vol 4 · Test 2 · Listening"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #706473; padding: 0 6px",
+                )}
+              >
+                {"2.1K lượt làm"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex",
+                )}
+              >
+                {"\n"}
+                <a
+                  href={"#dang-nhap"}
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-weight: 600; text-decoration: none",
+                  )}
+                >
+                  <svg
+                    width={"20"}
+                    height={"20"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={v.accent}
+                    strokeWidth={"2"}
+                  >
+                    <circle cx={"12"} cy={"12"} r={"9"}></circle>
+                    <path
+                      d={"M10 8.5l5 3.5-5 3.5z"}
+                      fill={v.accent}
+                      strokeLinejoin={"round"}
+                    ></path>
+                  </svg>
+                  {"Làm bài"}
+                  <svg
+                    width={"12"}
+                    height={"12"}
+                    viewBox={"0 0 24 24"}
+                    fill={"#706473"}
+                  >
+                    <path d={"M6 9l6 7 6-7z"}></path>
+                  </svg>
+                </a>
+                {"\n"}
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5DECE",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
+                  )}
+                >
+                  {"40 câu"}
+                </span>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"Mock Test 2026 Vol 4 · Test 4 · Listening"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #706473; padding: 0 6px",
+                )}
+              >
+                {"3.7K lượt làm"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex",
+                )}
+              >
+                {"\n"}
+                <a
+                  href={"#dang-nhap"}
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-weight: 600; text-decoration: none",
+                  )}
+                >
+                  <svg
+                    width={"20"}
+                    height={"20"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={v.accent}
+                    strokeWidth={"2"}
+                  >
+                    <circle cx={"12"} cy={"12"} r={"9"}></circle>
+                    <path
+                      d={"M10 8.5l5 3.5-5 3.5z"}
+                      fill={v.accent}
+                      strokeLinejoin={"round"}
+                    ></path>
+                  </svg>
+                  {"Làm bài"}
+                  <svg
+                    width={"12"}
+                    height={"12"}
+                    viewBox={"0 0 24 24"}
+                    fill={"#706473"}
+                  >
+                    <path d={"M6 9l6 7 6-7z"}></path>
+                  </svg>
+                </a>
+                {"\n"}
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #F7C4B6",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-size: 14px; font-weight: 600; line-height: 1.4; white-space: nowrap",
+                  )}
+                >
+                  {"40 câu"}
+                </span>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {"IELTS CAM Inspired 19 · Test 1 · Listening"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; color: #706473; padding: 0 6px",
+                )}
+              >
+                {"1.9K lượt làm"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "margin-top: auto; padding: 4px 8px 0; display: flex",
+                )}
+              >
+                {"\n"}
+                <a
+                  href={"#dang-nhap"}
+                  style={styleOf(
+                    "display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 12px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; font-weight: 600; text-decoration: none",
+                  )}
+                >
+                  <svg
+                    width={"20"}
+                    height={"20"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={v.accent}
+                    strokeWidth={"2"}
+                  >
+                    <circle cx={"12"} cy={"12"} r={"9"}></circle>
+                    <path
+                      d={"M10 8.5l5 3.5-5 3.5z"}
+                      fill={v.accent}
+                      strokeLinejoin={"round"}
+                    ></path>
+                  </svg>
+                  {"Làm bài"}
+                  <svg
+                    width={"12"}
+                    height={"12"}
+                    viewBox={"0 0 24 24"}
+                    fill={"#706473"}
+                  >
+                    <path d={"M6 9l6 7 6-7z"}></path>
+                  </svg>
+                </a>
+                {"\n"}
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+          </div>
+          {"\n"}
+        </section>
+        {"\n\n"}
+        {"\n"}
+        <section
+          id={"tu-vung"}
+          style={styleOf(
+            "max-width: 1200px; margin: 0 auto; padding: 36px 24px",
+          )}
+        >
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 24px",
+            )}
+          >
+            {"\n"}
+            <div>
+              {"\n"}
+              <h2
+                style={styleOf(
+                  "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.015em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"Từ vựng mới"}
+              </h2>
+              {"\n"}
+              <p style={styleOf("margin: 4px 0 0; color: #706473")}>
+                {"Từ học thuật theo chủ đề hay gặp trong đề thi gần đây."}
+              </p>
+              {"\n"}
+            </div>
+            {"\n"}
+            <a
+              href={"#dang-ky"}
+              style={styleOf(
+                "display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 15px; color: #352637; text-decoration: none",
+              )}
+            >
+              {"Xem thêm "}
+              <svg
+                width={"16"}
+                height={"16"}
+                viewBox={"0 0 24 24"}
+                fill={"none"}
+                stroke={"currentColor"}
+                strokeWidth={"2.2"}
+                strokeLinecap={"round"}
+                strokeLinejoin={"round"}
+              >
+                <path d={"M9 6l6 6-6 6"}></path>
+              </svg>
+            </a>
+            {"\n"}
+          </div>
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 4px 12px; margin: -4px",
+            )}
+          >
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; display: flex; flex-direction: column; gap: 6px; padding: 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; justify-content: space-between; align-items: center",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #706473",
+                  )}
+                >
+                  {"Environment"}
+                </span>
+                <button
+                  type={"button"}
+                  aria-label={"Lưu từ"}
+                  style={styleOf(
+                    "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; display: flex; align-items: center; justify-content: center",
+                  )}
+                >
+                  <svg
+                    width={"17"}
+                    height={"17"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={"currentColor"}
+                    strokeWidth={"2"}
+                    strokeLinejoin={"round"}
+                  >
+                    <path
+                      d={
+                        "M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"
+                      }
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 22px; font-weight: 700; margin-top: 6px; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"mitigate"}
+              </div>
+              {"\n"}
+              <div style={styleOf("font-size: 13px; color: #706473")}>
+                {"/ˈmɪt.ɪ.ɡeɪt/ · "}
+                <i>{"v"}</i>
+              </div>
+              {"\n"}
+              <div style={styleOf("font-weight: 600")}>
+                {"giảm nhẹ, làm dịu"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 13px; color: #706473; background: #F6F4EF; border-radius: 10px; padding: 10px 12px; margin-top: 8px",
+                )}
+              >
+                {"Planting trees can mitigate the effects of urban heat."}
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; display: flex; flex-direction: column; gap: 6px; padding: 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; justify-content: space-between; align-items: center",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #706473",
+                  )}
+                >
+                  {"Society"}
+                </span>
+                <button
+                  type={"button"}
+                  aria-label={"Lưu từ"}
+                  style={styleOf(
+                    "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; display: flex; align-items: center; justify-content: center",
+                  )}
+                >
+                  <svg
+                    width={"17"}
+                    height={"17"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={"currentColor"}
+                    strokeWidth={"2"}
+                    strokeLinejoin={"round"}
+                  >
+                    <path
+                      d={
+                        "M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"
+                      }
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 22px; font-weight: 700; margin-top: 6px; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"disproportionate"}
+              </div>
+              {"\n"}
+              <div style={styleOf("font-size: 13px; color: #706473")}>
+                {"/ˌdɪs.prəˈpɔː.ʃən.ət/ · "}
+                <i>{"adj"}</i>
+              </div>
+              {"\n"}
+              <div style={styleOf("font-weight: 600")}>
+                {"không cân xứng"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 13px; color: #706473; background: #F6F4EF; border-radius: 10px; padding: 10px 12px; margin-top: 8px",
+                )}
+              >
+                {
+                  "Low-income families spend a disproportionate share on rent."
+                }
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; display: flex; flex-direction: column; gap: 6px; padding: 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; justify-content: space-between; align-items: center",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #706473",
+                  )}
+                >
+                  {"Urban life"}
+                </span>
+                <button
+                  type={"button"}
+                  aria-label={"Lưu từ"}
+                  style={styleOf(
+                    "width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; display: flex; align-items: center; justify-content: center",
+                  )}
+                >
+                  <svg
+                    width={"17"}
+                    height={"17"}
+                    viewBox={"0 0 24 24"}
+                    fill={"none"}
+                    stroke={"currentColor"}
+                    strokeWidth={"2"}
+                    strokeLinejoin={"round"}
+                  >
+                    <path
+                      d={
+                        "M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"
+                      }
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 22px; font-weight: 700; margin-top: 6px; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"infrastructure"}
+              </div>
+              {"\n"}
+              <div style={styleOf("font-size: 13px; color: #706473")}>
+                {"/ˈɪn.frəˌstrʌk.tʃər/ · "}
+                <i>{"n"}</i>
+              </div>
+              {"\n"}
+              <div style={styleOf("font-weight: 600")}>{"cơ sở hạ tầng"}</div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 13px; color: #706473; background: #F6F4EF; border-radius: 10px; padding: 10px 12px; margin-top: 8px",
+                )}
+              >
+                {"Rural areas still lack basic digital infrastructure."}
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+          </div>
+          {"\n"}
+        </section>
+        {"\n\n"}
+        {"\n"}
+        <section
+          id={"bai-mau"}
+          style={styleOf(
+            "max-width: 1200px; margin: 0 auto; padding: 36px 24px",
+          )}
+        >
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 24px",
+            )}
+          >
+            {"\n"}
+            <div>
+              {"\n"}
+              <h2
+                style={styleOf(
+                  "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.015em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"Bài mẫu"}
+              </h2>
+              {"\n"}
+              <p style={styleOf("margin: 4px 0 0; color: #706473")}>
+                {
+                  "Bài mẫu band 7.5+ theo đề thi thật, kèm dàn ý và mạch ý tưởng."
+                }
+              </p>
+              {"\n"}
+            </div>
+            {"\n"}
+            <a
+              href={"#dang-ky"}
+              style={styleOf(
+                "display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 15px; color: #352637; text-decoration: none",
+              )}
+            >
+              {"Xem thêm "}
+              <svg
+                width={"16"}
+                height={"16"}
+                viewBox={"0 0 24 24"}
+                fill={"none"}
+                stroke={"currentColor"}
+                strokeWidth={"2.2"}
+                strokeLinecap={"round"}
+                strokeLinejoin={"round"}
+              >
+                <path d={"M9 6l6 6-6 6"}></path>
+              </svg>
+            </a>
+            {"\n"}
+          </div>
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; gap: 28px 20px; overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 4px 12px; margin: -4px",
+            )}
+          >
+            {"\n"}
+            <a
+              href={"#dang-ky"}
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #F7C4B6",
+                )}
+              ></div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {
+                  "Writing Task 1 · Line graph · Topic Museum Visitors & bài mẫu band 8.0"
+                }
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
+                )}
+              >
+                {
+                  "[Quý 3/2026] Đề thi thật IELTS Writing Task 1, dạng Line graph, chủ đề lượng khách tham quan ba bảo tàng giai đoạn 2010–2025."
+                }
+              </div>
+              {"\n"}
+            </a>
+            {"\n"}
+            <a
+              href={"#dang-ky"}
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #BFD8F7",
+                )}
+              ></div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {
+                  "Writing Task 1 · Map · Topic Library Redevelopment & bài mẫu band 8.0"
+                }
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
+                )}
+              >
+                {
+                  "[Quý 3/2026] Đề thi thật IELTS Writing Task 1, dạng Map, chủ đề cải tạo thư viện thị trấn trước và sau năm 2020."
+                }
+              </div>
+              {"\n"}
+            </a>
+            {"\n"}
+            <a
+              href={"#dang-ky"}
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5CEF5",
+                )}
+              ></div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {
+                  "Writing Task 1 · Bar chart · Topic Household Energy & bài mẫu band 7.5"
+                }
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
+                )}
+              >
+                {
+                  "[Quý 3/2026] Đề thi thật IELTS Writing Task 1, dạng Bar chart, chủ đề mức tiêu thụ năng lượng hộ gia đình ở năm quốc gia."
+                }
+              </div>
+              {"\n"}
+            </a>
+            {"\n"}
+            <a
+              href={"#dang-ky"}
+              style={styleOf(
+                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
+              )}
+            >
+              {"\n"}
+              <div
+                style={styleOf(
+                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5DECE",
+                )}
+              ></div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
+                )}
+              >
+                {
+                  "Writing Task 2 · Topic Education (Free University) & bài mẫu band 8.0"
+                }
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
+                )}
+              >
+                {
+                  "[Quý 3/2026] Đề thi thật IELTS Writing Task 2, dạng Discuss both views, chủ đề miễn học phí đại học cho mọi sinh viên."
+                }
+              </div>
+              {"\n"}
+            </a>
+            {"\n"}
+          </div>
+          {"\n"}
+        </section>
+        {"\n\n"}
+        {"\n"}
+        <section
+          id={"faq"}
+          style={styleOf(
+            "max-width: 820px; margin: 0 auto; padding: 36px 24px 24px; display: flex; flex-direction: column; gap: 12px",
+          )}
+        >
+          <h2
+            style={styleOf(
+              "margin: 0 0 12px; font-size: 32px; text-align: center; letter-spacing: -0.02em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+            )}
+          >
+            {"Câu hỏi thường gặp"}
+          </h2>
+          <details
+            style={styleOf(
+              "border: 1.5px solid #D6D4D0; border-radius: 26px; background: #FBDCD3; padding: 0 22px",
+            )}
+          >
+            <summary
+              style={styleOf(
+                "display: flex; align-items: center; gap: 14px; min-height: 56px; cursor: pointer; font-weight: 600; font-size: 15px; list-style: none",
+              )}
+            >
+              <span style={styleOf("font-size: 13px; color: #706473")}>
+                {"01"}
+              </span>
+              <span style={styleOf("flex: 1")}>
+                {"Lượt chấm miễn phí hoạt động thế nào?"}
+              </span>
+              <span style={styleOf("color: #706473")}>{"▾"}</span>
+            </summary>
+            <div
+              style={styleOf(
+                "padding: 0 0 18px 34px; color: #4B3D4D; font-size: 14px",
+              )}
+            >
+              {
+                "Mỗi tuần, từ 00:00 thứ Hai (giờ Việt Nam), bạn có 1 lượt miễn phí dùng chung cho Writing và Speaking. Lượt không dùng không cộng dồn sang tuần sau."
+              }
+            </div>
+          </details>
+          <details
+            style={styleOf(
+              "border: 1.5px solid #D6D4D0; border-radius: 26px; background: #FFFFFF; padding: 0 22px",
+            )}
+          >
+            <summary
+              style={styleOf(
+                "display: flex; align-items: center; gap: 14px; min-height: 56px; cursor: pointer; font-weight: 600; font-size: 15px; list-style: none",
+              )}
+            >
+              <span style={styleOf("font-size: 13px; color: #706473")}>
+                {"02"}
+              </span>
+              <span style={styleOf("flex: 1")}>
+                {"Bao lâu thì có kết quả Writing, Speaking?"}
+              </span>
+              <span style={styleOf("color: #706473")}>{"▾"}</span>
+            </summary>
+            <div
+              style={styleOf(
+                "padding: 0 0 18px 34px; color: #4B3D4D; font-size: 14px",
+              )}
+            >
+              {
+                "Hệ thống tự phân công giáo viên trong tối đa 72 giờ. Quá hạn, yêu cầu tự hủy và bạn được hoàn 1 lượt bonus."
+              }
+            </div>
+          </details>
+          <details
+            style={styleOf(
+              "border: 1.5px solid #D6D4D0; border-radius: 26px; background: #FFFFFF; padding: 0 22px",
+            )}
+          >
+            <summary
+              style={styleOf(
+                "display: flex; align-items: center; gap: 14px; min-height: 56px; cursor: pointer; font-weight: 600; font-size: 15px; list-style: none",
+              )}
+            >
+              <span style={styleOf("font-size: 13px; color: #706473")}>
+                {"03"}
+              </span>
+              <span style={styleOf("flex: 1")}>
+                {"Bài làm của tôi được lưu bao lâu?"}
+              </span>
+              <span style={styleOf("color: #706473")}>{"▾"}</span>
+            </summary>
+            <div
+              style={styleOf(
+                "padding: 0 0 18px 34px; color: #4B3D4D; font-size: 14px",
+              )}
+            >
+              {
+                "Bài Writing và Speaking được giữ 14 ngày từ lúc hoàn thành, hoặc 14 ngày từ lúc công bố kết quả nếu đã gửi chấm. Điểm và nhận xét luôn được giữ."
+              }
+            </div>
+          </details>
+          <details
+            style={styleOf(
+              "border: 1.5px solid #D6D4D0; border-radius: 26px; background: #FFFFFF; padding: 0 22px",
+            )}
+          >
+            <summary
+              style={styleOf(
+                "display: flex; align-items: center; gap: 14px; min-height: 56px; cursor: pointer; font-weight: 600; font-size: 15px; list-style: none",
+              )}
+            >
+              <span style={styleOf("font-size: 13px; color: #706473")}>
+                {"04"}
+              </span>
+              <span style={styleOf("flex: 1")}>
+                {"Luyện Listening có được nghe lại không?"}
+              </span>
+              <span style={styleOf("color: #706473")}>{"▾"}</span>
+            </summary>
+            <div
+              style={styleOf(
+                "padding: 0 0 18px 34px; color: #4B3D4D; font-size: 14px",
+              )}
+            >
+              {
+                "Khi luyện từng phần bạn được nghe lại. Trong bài thi đầy đủ, audio chỉ phát một lần như thi thật."
+              }
+            </div>
+          </details>
+          <details
+            style={styleOf(
+              "border: 1.5px solid #D6D4D0; border-radius: 26px; background: #FFFFFF; padding: 0 22px",
+            )}
+          >
+            <summary
+              style={styleOf(
+                "display: flex; align-items: center; gap: 14px; min-height: 56px; cursor: pointer; font-weight: 600; font-size: 15px; list-style: none",
+              )}
+            >
+              <span style={styleOf("font-size: 13px; color: #706473")}>
+                {"05"}
+              </span>
+              <span style={styleOf("flex: 1")}>
+                {"Tôi có cần xác minh email không?"}
+              </span>
+              <span style={styleOf("color: #706473")}>{"▾"}</span>
+            </summary>
+            <div
+              style={styleOf(
+                "padding: 0 0 18px 34px; color: #4B3D4D; font-size: 14px",
+              )}
+            >
+              {
+                "Có. Bạn cần mở liên kết xác minh trong email trước lần đăng nhập đầu tiên."
+              }
+            </div>
+          </details>
+        </section>
+        <section
+          style={styleOf(
+            "max-width: 1200px; margin: 0 auto; padding: 16px 24px 56px",
+          )}
+        >
+          {"\n"}
+          <div
+            style={styleOf(
+              "display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding: 36px 40px; border: 1.5px solid #352637; border-radius: 26px; background: #352637; color: #FFFFFF; box-shadow: 0 12px 32px rgba(53, 38, 55, 0.18)",
+            )}
+          >
+            {"\n"}
+            <div style={styleOf("flex: 1 1 420px; min-width: 0")}>
+              {"\n"}
+              <h2
+                style={styleOf(
+                  "margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.015em; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
+                )}
+              >
+                {"Bắt đầu với một đề Reading 60 phút."}
+              </h2>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "width: 44px; height: 4px; border-radius: 4px; background: " +
+                    v.accent +
+                    "; margin-top: 14px",
+                )}
+              ></div>
+              {"\n"}
+              <p
+                style={styleOf(
+                  "margin: 12px 0 0; color: #D3C8B6; max-width: 58ch",
+                )}
+              >
+                {
+                  "Tạo tài khoản để làm bài, lưu kết quả, gửi bài Writing, Speaking cho giáo viên chấm và xem band của bạn thay đổi qua từng tuần."
+                }
+              </p>
+              {"\n"}
+            </div>
+            {"\n"}
+            <a
+              href={"#dang-ky"}
+              style={styleOf(
+                "display: flex; align-items: center; height: 46px; padding: 0 20px; border-radius: 10px; border: 1.5px solid #FFFFFF; box-sizing: border-box; background: " +
+                  v.accent +
+                  "; color: " +
+                  v.onAccent +
+                  "; font-weight: 600; text-decoration: none",
+              )}
+            >
+              {"Tạo tài khoản"}
+            </a>
+            {"\n"}
+          </div>
+          {"\n"}
+        </section>
+        {"\n\n"}
+        {"\n"}
+        <footer
+          style={styleOf(
+            "border-top: 1.5px solid #D6D4D0; background: #FAF9F5",
+          )}
+        >
+          {"\n"}
+          <div
+            style={styleOf(
+              "max-width: 1200px; margin: 0 auto; padding: 40px 24px 48px; display: flex; flex-wrap: wrap; gap: 28px",
+            )}
+          >
+            {"\n"}
+            <div style={styleOf("flex: 1.4 1 280px")}>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px",
+                )}
+              >
+                <span
+                  style={styleOf(
+                    "width: 32px; height: 32px; border-radius: 10px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: " +
+                      v.accent +
+                      "; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: " +
+                      v.onAccent,
+                  )}
+                >
+                  {"IS"}
+                </span>
+                <span>{"IELTSpace"}</span>
+              </div>
+              {"\n"}
+              <p
+                style={styleOf(
+                  "margin: 14px 0 0; font-size: 13px; color: #706473; max-width: 36ch",
+                )}
+              >
+                {
+                  "Hệ thống luyện đề IELTS 4 kỹ năng. Đồ án 1, dữ liệu trên trang là dữ liệu mẫu."
+                }
+              </p>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div style={styleOf("flex: 1 1 150px")}>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
+                )}
+              >
+                {"Luyện thi"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; flex-direction: column; gap: 10px; font-size: 14px",
+                )}
+              >
+                <a
+                  href={"#bo-de"}
+                  style={styleOf("color: #4B3D4D; text-decoration: none")}
+                >
+                  {"Thư viện đề"}
+                </a>
+                <a
+                  href={"#tu-vung"}
+                  style={styleOf("color: #4B3D4D; text-decoration: none")}
+                >
+                  {"Thư viện từ vựng"}
+                </a>
+                <a
+                  href={"#bai-mau"}
+                  style={styleOf("color: #4B3D4D; text-decoration: none")}
+                >
+                  {"Bài mẫu"}
+                </a>
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div style={styleOf("flex: 1 1 150px")}>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
+                )}
+              >
+                {"Tài khoản"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; flex-direction: column; gap: 10px; font-size: 14px",
+                )}
+              >
+                <a
+                  href={"#dang-ky"}
+                  style={styleOf("color: #4B3D4D; text-decoration: none")}
+                >
+                  {"Đăng ký"}
+                </a>
+                <a
+                  href={"#dang-nhap"}
+                  style={styleOf("color: #4B3D4D; text-decoration: none")}
+                >
+                  {"Đăng nhập"}
+                </a>
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+            <div style={styleOf("flex: 1 1 150px")}>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #706473; margin-bottom: 14px",
+                )}
+              >
+                {"Hỗ trợ"}
+              </div>
+              {"\n"}
+              <div
+                style={styleOf(
+                  "display: flex; flex-direction: column; gap: 10px; font-size: 14px",
+                )}
+              >
+                <a
+                  href={"#faq"}
+                  style={styleOf("color: #4B3D4D; text-decoration: none")}
+                >
+                  {"Câu hỏi thường gặp"}
+                </a>
+                <a
+                  href={"#lien-he"}
+                  style={styleOf("color: #4B3D4D; text-decoration: none")}
+                >
+                  {"Liên hệ"}
+                </a>
+              </div>
+              {"\n"}
+            </div>
+            {"\n"}
+          </div>
+          {"\n"}
+        </footer>
+        {"\n\n"}
+      </div>
+      {"\n"}
+    </>
+  );
+}

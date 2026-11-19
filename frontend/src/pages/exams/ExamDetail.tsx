@@ -1,17 +1,17 @@
 import NotificationBadge from "../../components/notifications/NotificationBadge";
 import LearnerHeader from "../../components/navigation/LearnerHeader";
 import React from "react";
-import { styleOf, cssText } from "../../lib/styles";
+import { styleOf, cssText } from "../../lib/shared/styles";
 import {
   getPublicSet,
   toLearnerSet,
   type Cell,
   type ExamSetPublic,
   type UiLearnerSet,
-} from "../../lib/exam-admin";
-import { navigate } from "../../lib/auth";
+} from "../../lib/exams/exam-admin";
+import { getAuthUser, navigate } from "../../lib/auth/auth";
 import { DesktopRequiredDialog } from "../../components/exams/TestScreenGuard";
-import { canTakeTest } from "../../lib/device";
+import { canTakeTest } from "../../lib/shared/device";
 
 type Ev = {
   preventDefault?: () => void;
@@ -54,7 +54,9 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
   state: State = {};
 
   handleStartTest = (targetUrl: string) => {
-    if (!canTakeTest()) {
+    if (!getAuthUser()) {
+      navigate("Login");
+    } else if (!canTakeTest()) {
       this.setState({ screenGuardOpen: true });
     } else {
       navigate(targetUrl);
@@ -390,7 +392,7 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
         "; box-shadow: 0 2px 6px rgba(53,38,55,.12), 0 18px 40px rgba(53,38,55,.18)",
       hasStart: !!first,
       startPick: first ? first.pick : stop,
-      startText: first ? "Bắt đầu " + first.t : "",
+      startText: first ? (getAuthUser() ? "Bắt đầu " + first.t : "Đăng nhập để làm bài") : "",
       loading: !!s.loading,
       notFound: !!s.notFound,
       share: function (e?: Ev) {

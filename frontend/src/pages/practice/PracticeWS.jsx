@@ -1,7 +1,7 @@
 import NotificationBadge from "../../components/notifications/NotificationBadge";
 import LearnerHeader from "../../components/navigation/LearnerHeader";
 import React from "react";
-import { styleOf, cssText } from "../../lib/styles";
+import { styleOf, cssText } from "../../lib/shared/styles";
 
 class PracticeWS extends React.Component {
   renderVals() {

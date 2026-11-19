@@ -45,6 +45,12 @@ html.dark textarea,
 html.dark select {
   color-scheme: dark;
 }
+html.dark .staff-device-warning {
+  color: #ffe3a2;
+  background: #352e18;
+  border-color: #65572c;
+}
+html.dark .staff-device-warning button { color: inherit; }
 /* Navigation shells occupy the viewport; their main column owns scrolling. */
 body:has(.app-shell),
 body:has(.app-shell) #root {

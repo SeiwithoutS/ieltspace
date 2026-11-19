@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import type { LrQuestionType } from '../../../lib/lr-editor/types.ts';
-import { LR_TYPE_GROUPS, typeName } from '../../../lib/lr-editor/constants.ts';
+import type { LrQuestionType } from '../../../lib/exams/lr-editor/types.ts';
+import { LR_TYPE_GROUPS, typeName } from '../../../lib/exams/lr-editor/constants.ts';
 
 export type TypePickerProps = {
   isOpen: boolean;

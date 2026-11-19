@@ -1,7 +1,7 @@
 import AdminTopbar from "../../components/navigation/AdminTopbar";
 import TeacherSidebar from "../../components/navigation/TeacherSidebar";
 import React from "react";
-import { styleOf, cssText } from "../../lib/styles";
+import { styleOf, cssText } from "../../lib/shared/styles";
 
 class TeacherGrade extends React.Component {
   renderVals() {

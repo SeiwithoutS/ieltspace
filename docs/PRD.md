@@ -6,7 +6,7 @@ IELTSpace là ứng dụng web cho người học IELTS tại Việt Nam. Ngư�
 
 | Người dùng | Công việc thuộc MVP | Kết quả cần quan sát |
 |---|---|---|
-| Khách | Xem giới thiệu, thư viện công khai và bài mẫu Writing/Speaking. Đăng ký, xác minh email, đăng nhập hoặc khôi phục tài khoản. | Từ nội dung công khai sang thao tác cần lưu bài, hệ thống yêu cầu đăng nhập. |
+| Khách | Xem giới thiệu, bộ đề và từ vựng đã công khai, thư viện bài mẫu Writing/Speaking. Đăng ký, xác minh email, đăng nhập hoặc khôi phục tài khoản. | Khách xem được nội dung công khai. Hệ thống yêu cầu đăng nhập khi bắt đầu làm đề hoặc mở flashcard. |
 | Người học | Quản lý hồ sơ, mục tiêu và giao diện. Chọn bài đầy đủ hoặc luyện theo nhóm câu, Task, Part. Tiếp tục lượt làm dở, nộp bài, xem lời giải và lịch sử. | Bài nộp gắn với đúng phiên bản đề. Kết quả ghi rõ phạm vi đánh giá. |
 | Người học | Tra cứu từ, lưu yêu thích, ghi chú, ôn flashcard. Theo dõi phiên học, streak và thông điệp hằng ngày. | Mỗi người chỉ thấy ghi chú, mục tiêu và tiến độ của mình. |
 | Người học | Lưu, tải bài viết/bản ghi âm, gửi yêu cầu chấm và xem thông báo trong hệ thống. | Xem được trạng thái, hạn nội dung, lượt đã dùng và kết quả sau công bố. |

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { LrGroupState } from '../../../../lib/lr-editor/types.ts';
+import type { LrGroupState } from '../../../../lib/exams/lr-editor/types.ts';
 
 export type SummaryModeToggleProps = {
   group: LrGroupState;

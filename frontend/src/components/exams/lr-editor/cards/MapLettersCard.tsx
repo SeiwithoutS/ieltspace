@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import type { LrAsset, LrGroupState } from '../../../../lib/lr-editor/types.ts';
-import { LET } from '../../../../lib/lr-editor/constants.ts';
+import type { LrAsset, LrGroupState } from '../../../../lib/exams/lr-editor/types.ts';
+import { LET } from '../../../../lib/exams/lr-editor/constants.ts';
 import ImageUploader from '../../editor-shell/ImageUploader.tsx';
 import ConfirmDialog from '../../editor-shell/ConfirmDialog.tsx';
-import { uploadSkillImage } from '../../../../lib/exam-editor.ts';
+import { uploadSkillImage } from '../../../../lib/exams/exam-editor.ts';
 
 type ModeToggleProps = {
   group: LrGroupState;

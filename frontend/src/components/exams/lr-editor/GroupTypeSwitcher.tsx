@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import type { LrQuestionType } from '../../../lib/lr-editor/types.ts';
+import type { LrQuestionType } from '../../../lib/exams/lr-editor/types.ts';
 import {
   typeName,
   comboOptions,
   COMBO_TYPE_LABELS,
-} from '../../../lib/lr-editor/constants.ts';
+} from '../../../lib/exams/lr-editor/constants.ts';
 
 export type GroupTypeSwitcherProps = {
   currentType: LrQuestionType;

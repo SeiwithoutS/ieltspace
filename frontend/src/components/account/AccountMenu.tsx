@@ -1,4 +1,4 @@
-import { useAccount } from "../../lib/account";
+import { useAccount } from "../../lib/auth/account";
 import React, { useEffect } from "react";
 import AccountDropdown from "./AccountDropdown";
 export default function AccountMenu({ onClose }: { onClose: () => void }) {

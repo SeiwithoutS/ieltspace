@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { StaffDataTable } from "../../../components/shared/StaffDataTable";
-import { ApiError } from "../../../lib/api";
-import { sampleApi } from "../../../lib/sample-api";
-import { SAMPLE_TYPE_LABELS, sampleEditorHref } from "../../../lib/sample-editor";
-import { readSampleWorkbook, type SampleImportIssue, type SampleImportPreview, type SampleImportResult, type SampleImportWorkbook } from "../../../lib/sample-import";
-import { registerNavigationGuard } from "../../../lib/navigation-guard";
+import { ApiError } from "../../../lib/shared/api";
+import { sampleApi } from "../../../lib/samples/sample-api";
+import { SAMPLE_TYPE_LABELS, sampleEditorHref } from "../../../lib/samples/sample-editor";
+import { readSampleWorkbook, type SampleImportIssue, type SampleImportPreview, type SampleImportResult, type SampleImportWorkbook } from "../../../lib/samples/sample-import";
+import { registerNavigationGuard } from "../../../lib/shared/navigation-guard";
 
 export const sampleTemplateUrl = `${import.meta.env.BASE_URL}templates/sample-answers-v1.xlsx`;
 

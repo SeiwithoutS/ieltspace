@@ -1,8 +1,8 @@
 import DesktopOnly from "../components/attempts/DesktopOnly";
-import {emailCallback} from '../lib/auth-links';
-import {useAuth,refresh,logout,home,navigate,getAuthUser} from '../lib/auth';
-import { sampleHashReplaced } from "../lib/sample-navigation";
-import { canNavigate } from "../lib/navigation-guard";
+import {emailCallback} from '../lib/auth/auth-links';
+import {useAuth,refresh,logout,home,navigate,getAuthUser} from '../lib/auth/auth';
+import { sampleHashReplaced } from "../lib/samples/sample-navigation";
+import { canNavigate } from "../lib/shared/navigation-guard";
 import React, { useEffect, useState } from 'react';
 import AttemptSession from "../components/attempts/AttemptSession";
 import AccountMenu from '../components/account/AccountMenu';
@@ -17,6 +17,9 @@ sessionStorage.setItem('ieltspace-context', initialContext);
 (window as any).__dcFrom = initialContext;
 const aliases: Record<string, string> = {AvatarMenu:'Profile', ResultsHistory:'StudentHome', QTPractice:'PracticeLibrary', AdminContent:'AdminSamples'};
 const publicSamplePages: readonly PageName[] = ["SampleLibrary", "SampleWriting", "SampleSpeaking"];
+const publicLibraryPages: readonly PageName[] = [
+ ...publicSamplePages, "FullTests", "ExamDetail", "PracticeLibrary", "PracticeWS", "Vocab",
+];
 function resolve(name: string): PageName { name=name.split('?')[0]; return (aliases[name] || name) in pages ? (aliases[name] || name) as PageName : 'Main'; }
 export default function App() {
  const auth=useAuth();
@@ -137,14 +140,20 @@ export default function App() {
   return () => {document.removeEventListener('click',click,true);window.removeEventListener('popstate',pop);window.removeEventListener('hashchange',pop);window.removeEventListener(sampleHashReplaced,syncSavedSample);document.removeEventListener('pointerdown',pointer,true);document.removeEventListener('keydown',key,true);};
  }, []);
  const isPublicSamplePage = publicSamplePages.includes(page);
- const publicPage=isPublicSamplePage||['Main','Login','Register','ForgotPassword','CheckEmail','ResetPassword'].includes(page);
- const denied=(!auth.user&&!publicPage)||(auth.user?.role!=='ADMIN'&&/^(Admin|Question)/.test(page))||(auth.user?.role!=='TEACHER'&&/^Teacher/.test(page));
+ const isPublicLibraryPage = publicLibraryPages.includes(page);
+ const publicPage=isPublicLibraryPage||['Main','Login','Register','ForgotPassword','CheckEmail','ResetPassword'].includes(page);
+ const denied =
+  (!auth.user && !publicPage) ||
+  (auth.user?.role !== 'ADMIN' && /^(Admin|Question)/.test(page)) ||
+  (auth.user?.role !== 'TEACHER' && /^Teacher/.test(page)) ||
+  (auth.user?.role === 'LEARNER' && page === 'StaffProfile');
  useEffect(()=>{if(auth.ready&&denied&&!auth.error)navigate(auth.user?home():'Login');},[auth.ready,auth.user,page,denied,auth.error]);
- if(!auth.ready&&!isPublicSamplePage)return <p role="status">Đang kiểm tra phiên đăng nhập…</p>;
- if(auth.error&&!isPublicSamplePage)return <div role="alert"><p>{auth.error}</p><button onClick={()=>{void refresh().catch(()=>{});}}>Thử lại</button></div>;
+ if(!auth.ready&&!isPublicLibraryPage)return <p role="status">Đang kiểm tra phiên đăng nhập…</p>;
+ if(auth.error&&!isPublicLibraryPage)return <div role="alert"><p>{auth.error}</p><button onClick={()=>{void refresh().catch(()=>{});}}>Thử lại</button></div>;
  if(denied)return <p>Đang chuyển trang…</p>;
  const Page = pages[page];
  const AttemptPage = page === "ReadingTest" || page === "ListeningTest" || page === "WritingTest" || page === "SpeakingTest" ? pages[page] : null;
  const query = new URLSearchParams(routeHash.split("?")[1]);
- return <><React.Suspense fallback={<div role="status" style={{padding:24,fontFamily:"Inter, sans-serif"}}>Đang tải…</div>}>{AttemptPage ? <DesktopOnly key={page}><AttemptSession page={page} Screen={AttemptPage}/></DesktopOnly> : React.createElement(Page as React.ComponentType<any>, {key:page, themeRevision:revision, kyNang:query.get("skill") || undefined, cheDo:query.get("mode") || undefined, sampleId:query.get("id") || undefined, sampleType:query.get("sampleType") || undefined, sampleQuery:isPublicSamplePage ? query.toString() : undefined, callbackNotice:googleNotice || emailCallback?.notice})}</React.Suspense>{menu && <AccountMenu onClose={()=>setMenu(false)} />}</>;
+ const vocabularySetId = query.get("set") ?? undefined;
+ return <><React.Suspense fallback={<div role="status" style={{padding:24,fontFamily:"Inter, sans-serif"}}>Đang tải…</div>}>{AttemptPage ? <DesktopOnly key={page}><AttemptSession page={page} Screen={AttemptPage}/></DesktopOnly> : React.createElement(Page as React.ComponentType<any>, {key:page === "Flashcard" ? `Flashcard:${auth.user?.id ?? ""}:${vocabularySetId ?? ""}` : page, vocabularySetId, themeRevision:revision, kyNang:query.get("skill") || undefined, cheDo:query.get("mode") || undefined, sampleId:query.get("id") || undefined, sampleType:query.get("sampleType") || undefined, sampleQuery:isPublicSamplePage ? query.toString() : undefined, callbackNotice:googleNotice || emailCallback?.notice})}</React.Suspense>{menu && <AccountMenu onClose={()=>setMenu(false)} />}</>;
 }

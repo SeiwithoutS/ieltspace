@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import NoteBody from './NoteBody.tsx';
 import { SummaryModeToggle } from './SummaryModeToggle.tsx';
-import type { LrGroupState, LrPassageState } from '../../../../lib/lr-editor/types.ts';
-import { blanks } from '../../../../lib/lr-editor/pure.ts';
-import { LET } from '../../../../lib/lr-editor/constants.ts';
+import type { LrGroupState, LrPassageState } from '../../../../lib/exams/lr-editor/types.ts';
+import { blanks } from '../../../../lib/exams/lr-editor/pure.ts';
+import { LET } from '../../../../lib/exams/lr-editor/constants.ts';
 import { splitList } from './splitList';
 
 export type CardProps = {

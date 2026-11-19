@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {parseAttemptDraft} from "../src/lib/attempt-draft.ts";
+import {parseAttemptDraft} from "../src/lib/attempts/attempt-draft.ts";
 
 test("restores answers and writing drafts saved by JSX pages",()=>{
  const state={ans:{"1":"A"},flag:[2],texts:{"1":"My first draft"},notes:{"1":"Outline"},task:1,fontPct:110};

@@ -8,7 +8,8 @@ Trình duyệt chạy React 18 và Vite 5. Backend là một dịch vụ Node.js
 |---|---|
 | `frontend/src/main.tsx`, `app/` | Khởi động ứng dụng, chọn trang, điều hướng theo phiên và vai trò. |
 | `frontend/src/pages/`, `components/` | Màn hình theo nghiệp vụ và thành phần dùng lại. Nhiều trang còn dùng dữ liệu mẫu trong trình duyệt. |
-| `frontend/src/lib/`, `styles/` | Gọi Auth, xử lý liên kết email, kiểu giao diện, bảng màu và font. |
+| `frontend/src/lib/` | Logic theo tính năng trong `auth/`, `attempts/`, `exams/`, `notifications/`, `samples/` và `vocabulary/`. Client HTTP và các tiện ích dùng chung nằm trong `shared/`. |
+| `frontend/src/assets/`, `styles/` | Tài nguyên giao diện, gồm bảng màu tối ở `assets/theme/` và CSS dùng chung. |
 | `backend/src/app.ts`, `routes.ts` | CORS, cookie, JSON, mount Auth và health, sau cùng xử lý 404/lỗi. |
 | `backend/src/modules/auth/`, `middleware/`, `lib/` | Route xác thực đang hoạt động, kiểm tra hồ sơ/quyền, kết nối Prisma và Supabase. |
 | `backend/src/modules/`, `jobs/`, `integrations/storage/` | Ranh giới cho exams, attempts, grading, imports và các nghiệp vụ khác. Các thư mục khung chưa chứng minh có chức năng chạy được. |
@@ -54,7 +55,7 @@ Người quản lý tạo bộ → thêm từ hoặc nhập CSV/XLSX → tra ả
 | Thành phần | File chính và trách nhiệm |
 |---|---|
 | Danh mục và thông tin bộ | `frontend/src/pages/vocabulary/SetDirectory.tsx` tạo/sửa tên, bìa, mô tả, tìm và mở bộ. |
-| Editor và import | `AdminVocabulary.tsx` điều phối tra media tự động, tìm lại theo lựa chọn, lưu và công bố. `frontend/src/lib/vocabulary-import.ts` đọc CSV/XLSX, giới hạn 5 MB và 500 từ. |
+| Editor và import | `AdminVocabulary.tsx` điều phối tra media tự động, tìm lại theo lựa chọn, lưu và công bố. `frontend/src/lib/vocabulary/vocabulary-import.ts` đọc CSV/XLSX, giới hạn 5 MB và 500 từ. |
 | Dữ liệu và thư viện | `frontend/src/data/vocabulary.ts` đọc/ghi bộ cục bộ. `Vocabulary.tsx` hiển thị bộ công khai. `components/vocabulary/WordCard.tsx` phát audio và sử dụng giọng hệ thống phù hợp khi thiếu bản ghi. |
 
 ### Nguồn ảnh và audio — sau cập nhật 16/11/2026

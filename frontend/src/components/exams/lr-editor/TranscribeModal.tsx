@@ -3,7 +3,7 @@ import {
   startTranscription,
   getTranscriptionJob,
   type TranscriptionJobResult,
-} from '../../../lib/exam-editor.ts';
+} from '../../../lib/exams/exam-editor.ts';
 
 export type TranscribeModalProps = {
   isOpen: boolean;

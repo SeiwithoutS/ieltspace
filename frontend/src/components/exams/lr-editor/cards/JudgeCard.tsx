@@ -1,5 +1,5 @@
 import React from 'react';
-import type { LrGroupState, LrPassageState } from '../../../../lib/lr-editor/types.ts';
+import type { LrGroupState, LrPassageState } from '../../../../lib/exams/lr-editor/types.ts';
 
 export type CardProps = {
   group: LrGroupState;

@@ -11,22 +11,22 @@ import {
   numberQuestions,
   allIssues,
   groupHasData,
-} from '../src/lib/lr-editor/pure.ts';
+} from '../src/lib/exams/lr-editor/pure.ts';
 
 import {
   fromLrState,
   toLrState,
-} from '../src/lib/lr-editor/converters.ts';
+} from '../src/lib/exams/lr-editor/converters.ts';
 
 import {
   diffLrContent,
   applySavedIds,
-} from '../src/lib/lr-editor/diff.ts';
+} from '../src/lib/exams/lr-editor/diff.ts';
 
 import {
   groupOfType,
   comboOptions,
-} from '../src/lib/lr-editor/constants.ts';
+} from '../src/lib/exams/lr-editor/constants.ts';
 
 const READING_FULL = {
   title: 'Practice Test 01',

@@ -4,14 +4,14 @@ import AttemptConfirmation, {
 } from "./AttemptConfirmation";
 import React, { useEffect, useRef, useState } from "react";
 import StartTestDialog from "./StartTestDialog";
-import { getAuthUser, navigate } from "../../lib/auth";
+import { getAuthUser, navigate } from "../../lib/auth/auth";
 import "./attempt.css";
 
 export { default as Popup } from "./Popup";
 import Popup from "./Popup";
 
 import type { AttemptMode, Snapshot, ScreenProps } from "./types";
-import { parseAttemptDraft } from "../../lib/attempt-draft";
+import { parseAttemptDraft } from "../../lib/attempts/attempt-draft";
 function readDraft(key: string) {
   try {
     return parseAttemptDraft(sessionStorage.getItem(key));

@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes } from "react";
 import type { PageName } from "../../app/pages";
-import { navigate } from "../../lib/auth";
+import { navigate } from "../../lib/auth/auth";
 
 type PageLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & { page: PageName; query?: string };
 

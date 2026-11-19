@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import type { LrGroupState, LrPassageState } from '../../../lib/lr-editor/types.ts';
-import type { ExplainPatch, ExplainRow } from '../../../lib/lr-editor/explain.ts';
-import { explainProgress } from '../../../lib/lr-editor/explain.ts';
-import { formatQuestionRange } from '../../../lib/lr-editor/pure.ts';
-import { typeName } from '../../../lib/lr-editor/constants.ts';
+import type { LrGroupState, LrPassageState } from '../../../lib/exams/lr-editor/types.ts';
+import type { ExplainPatch, ExplainRow } from '../../../lib/exams/lr-editor/explain.ts';
+import { explainProgress } from '../../../lib/exams/lr-editor/explain.ts';
+import { formatQuestionRange } from '../../../lib/exams/lr-editor/pure.ts';
+import { typeName } from '../../../lib/exams/lr-editor/constants.ts';
 
 const LET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 

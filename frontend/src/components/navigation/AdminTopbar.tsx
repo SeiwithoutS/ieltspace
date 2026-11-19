@@ -1,10 +1,10 @@
 import React from 'react';
-import { getAccount } from '../../lib/account';
-import { navigate } from '../../lib/auth';
+import { getAccount } from '../../lib/auth/account';
+import { navigate } from '../../lib/auth/auth';
 import NotificationBadge from '../notifications/NotificationBadge';
 import AccountDropdown from '../account/AccountDropdown';
-import { styleOf, cssText } from '../../lib/styles';
-import { Crumb, parseCrumbString } from '../../lib/breadcrumbs';
+import { styleOf, cssText } from '../../lib/shared/styles';
+import { Crumb, parseCrumbString } from '../../lib/shared/breadcrumbs';
 
 export type { Crumb };
 
@@ -148,7 +148,7 @@ class AdminTopbar extends React.Component<AdminTopbarProps, State> {
                   type="button"
                   onClick={this.props.onToggleSidebar}
                   aria-label="Mở menu quản trị"
-                  className="xl:hidden mr-3 p-1.5 rounded-lg text-[#352637] hover:bg-[#F3F0EA] transition-colors inline-flex items-center justify-center"
+                  className="xl:hidden mr-3 p-1.5 rounded-lg text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-f3f0ea,#F3F0EA)] transition-colors inline-flex items-center justify-center"
                 >
                   <svg
                     width="20"
@@ -170,13 +170,13 @@ class AdminTopbar extends React.Component<AdminTopbarProps, State> {
 
               {/* Breadcrumb đầy đủ cho màn hình máy tính bảng và máy tính (>= 768px) */}
               <nav aria-label="Đường dẫn" className="hidden md:flex items-center min-w-0 text-sm">
-                <ol className="flex items-center flex-wrap gap-1 text-[#706473] list-none p-0 m-0">
+                <ol className="flex items-center flex-wrap gap-1 text-[var(--attempt-text-706473,#706473)] list-none p-0 m-0">
                   {crumbs.map((c, index) => {
                     const isLast = index === crumbs.length - 1;
                     if (isLast) {
                       return (
                         <li key={index} className="flex items-center min-w-0" aria-current="page">
-                          <span className="font-semibold text-[#352637] truncate">{c.label}</span>
+                          <span className="font-semibold text-[var(--attempt-text-352637,#352637)] truncate">{c.label}</span>
                         </li>
                       );
                     }
@@ -186,12 +186,12 @@ class AdminTopbar extends React.Component<AdminTopbarProps, State> {
                           <a
                             href={this.buildHref(c)}
                             onClick={(e) => this.handleCrumbClick(e, c)}
-                            className="text-[#706473] hover:text-[#2963CC] hover:underline focus-visible:underline focus-visible:outline-none transition-colors"
+                            className="text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-2963cc,#2963CC)] hover:underline focus-visible:underline focus-visible:outline-none transition-colors"
                           >
                             {c.label}
                           </a>
                         ) : (
-                          <span className="text-[#706473]">{c.label}</span>
+                          <span className="text-[var(--attempt-text-706473,#706473)]">{c.label}</span>
                         )}
                         <span aria-hidden="true" className="mx-2 text-[#9A8F9C] select-none">
                           /
@@ -210,13 +210,13 @@ class AdminTopbar extends React.Component<AdminTopbarProps, State> {
                       <a
                         href={this.buildHref(parentCrumb)}
                         onClick={(e) => this.handleCrumbClick(e, parentCrumb)}
-                        className="text-[#706473] hover:text-[#2963CC] hover:underline truncate max-w-[120px] inline-flex items-center gap-1 font-medium"
+                        className="text-[var(--attempt-text-706473,#706473)] hover:text-[var(--attempt-text-2963cc,#2963CC)] hover:underline truncate max-w-[120px] inline-flex items-center gap-1 font-medium"
                       >
                         <span aria-hidden="true">‹</span>
                         <span className="truncate">{parentCrumb.label}</span>
                       </a>
                     ) : (
-                      <span className="text-[#706473] truncate max-w-[120px] inline-flex items-center gap-1 font-medium">
+                      <span className="text-[var(--attempt-text-706473,#706473)] truncate max-w-[120px] inline-flex items-center gap-1 font-medium">
                         <span aria-hidden="true">‹</span>
                         <span className="truncate">{parentCrumb.label}</span>
                       </span>
@@ -224,12 +224,12 @@ class AdminTopbar extends React.Component<AdminTopbarProps, State> {
                     <span aria-hidden="true" className="mx-2 text-[#9A8F9C] select-none">
                       /
                     </span>
-                    <span aria-current="page" className="font-semibold text-[#352637] truncate">
+                    <span aria-current="page" className="font-semibold text-[var(--attempt-text-352637,#352637)] truncate">
                       {currentCrumb ? currentCrumb.label : ''}
                     </span>
                   </div>
                 ) : (
-                  <span aria-current="page" className="font-semibold text-[#352637] truncate">
+                  <span aria-current="page" className="font-semibold text-[var(--attempt-text-352637,#352637)] truncate">
                     {currentCrumb ? currentCrumb.label : ''}
                   </span>
                 )}

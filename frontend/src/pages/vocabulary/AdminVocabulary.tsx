@@ -1,16 +1,16 @@
-import { apiFetch } from "../../lib/api";
+import { apiFetch } from "../../lib/shared/api";
 import Popup from "../../components/attempts/Popup";
 import StaffLayout from "../../components/layout/StaffLayout";
 import { SetDirectory, SetForm, VocabularySearch, VocabularySetCover, VocabularySetStatus, VocabularyStats } from "./SetDirectory";
 import { useEffect, useRef, useState } from "react";
 import type { VocabularySet, Word } from "../../data/vocabulary";
-import { importWords } from "../../lib/vocabulary-import";
+import { importWords } from "../../lib/vocabulary/vocabulary-import";
 import { WordCard } from "../../components/vocabulary/WordCard";
-import { getVocabularyDraft, saveVocabularyDraft, updateVocabularySet, type DatabaseVocabularySet } from "../../lib/vocabulary-api";
-import { findVocabularyMedia } from "../../lib/vocabulary-media";
+import { getVocabularyDraft, saveVocabularyDraft, updateVocabularySet, type DatabaseVocabularySet } from "../../lib/vocabulary/vocabulary-api";
+import { findVocabularyMedia } from "../../lib/vocabulary/vocabulary-media";
 import { WordMediaEditor } from "../../components/vocabulary/WordMediaEditor";
 import { VisibilityIcon } from "../../components/shared/VisibilityIcon";
-import { canNavigate, registerNavigationGuard } from "../../lib/navigation-guard";
+import { canNavigate, registerNavigationGuard } from "../../lib/shared/navigation-guard";
 import "./vocabulary.css";
 import "./admin-vocabulary.css";
 

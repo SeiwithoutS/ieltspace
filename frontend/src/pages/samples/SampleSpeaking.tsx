@@ -5,7 +5,7 @@ import {
   sampleDetailHref,
   sampleLibraryHref,
   type PublicSamplePageProps,
-} from "../../lib/sample-public";
+} from "../../lib/samples/sample-public";
 import {
   SampleDetailLayout,
   SampleDetailState,

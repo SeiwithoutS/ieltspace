@@ -26,6 +26,7 @@ export default function AccountMenu({ onClose }: { onClose: () => void }) {
   const v = {
     name: account.name,
     initials: account.initials,
+    avatar: account.avatar,
     email: account.email,
     role: "Người học",
     close: onClose,

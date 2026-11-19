@@ -10,8 +10,10 @@ import {
   findActiveUser,
   invalidateUserCache,
   requireAuth,
+  requireRole,
 } from "../../middleware/auth.js";
 import { asyncHandler, HttpError } from "../../utils/http.js";
+import { profileRouter } from './profile.routes.js';
 
 export const authRouter = Router();
 
@@ -402,6 +404,93 @@ authRouter.get(
     });
   }
 );
+
+const learnerOnly = [requireAuth, requireRole('LEARNER')];
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1).max(128),
+  newPassword: z.string().min(8).max(128),
+}).strict();
+
+async function getPasswordAccount(accessToken: string, authUserId: string | null) {
+  const { data, error } = await createAuthClient().auth.getUser(accessToken);
+  if (error) throwAuthUnavailable(error);
+  if (!data.user || data.user.id !== authUserId) {
+    throw new HttpError(401, 'INVALID_TOKEN', 'Vui lòng đăng nhập lại.');
+  }
+  return data.user;
+}
+
+function usesGoogle(user: Awaited<ReturnType<typeof getPasswordAccount>>) {
+  return user.identities?.some(identity => identity.provider === 'google') === true;
+}
+
+authRouter.get('/me/password-options', ...learnerOnly, asyncHandler(async (req, res) => {
+  const user = await getPasswordAccount(req.accessToken!, req.appUser!.auth_user_id);
+  res.json({ google: usesGoogle(user), canSendSetupEmail: Boolean(user.email && user.email_confirmed_at) });
+}));
+
+authRouter.post('/me/password/setup', recoveryLimiter, ...learnerOnly, asyncHandler(async (req, res) => {
+  const user = await getPasswordAccount(req.accessToken!, req.appUser!.auth_user_id);
+  if (!usesGoogle(user) || !user.email || !user.email_confirmed_at) {
+    throw new HttpError(403, 'PASSWORD_SETUP_UNAVAILABLE', 'Tài khoản hiện chưa thể nhận liên kết thiết lập mật khẩu.');
+  }
+  const { error } = await createAuthClient().auth.resetPasswordForEmail(user.email, {
+    redirectTo: new URL('/reset-password', env.FRONTEND_ORIGIN).toString(),
+  });
+  if (error) {
+    throwAuthUnavailable(error);
+    throw new HttpError(400, 'PASSWORD_SETUP_FAILED', 'Chưa gửi được liên kết. Vui lòng thử lại sau.');
+  }
+  res.status(202).json({ message: 'Hãy kiểm tra email đã xác minh để mở liên kết đặt mật khẩu.' });
+}));
+
+authRouter.post('/me/password', credentialLimiter, ...learnerOnly, asyncHandler(async (req, res) => {
+  const input = changePasswordSchema.safeParse(req.body);
+  if (!input.success) throw new HttpError(400, 'INVALID_PASSWORD', 'Mật khẩu mới phải có từ 8 đến 128 ký tự.');
+  const { currentPassword, newPassword } = input.data;
+  if (currentPassword === newPassword) throw new HttpError(400, 'SAME_PASSWORD', 'Hãy chọn mật khẩu khác mật khẩu hiện tại.');
+  const user = await getPasswordAccount(req.accessToken!, req.appUser!.auth_user_id);
+  if (!user.email || !user.email_confirmed_at) {
+    throw new HttpError(403, 'EMAIL_NOT_VERIFIED', 'Vui lòng xác minh email trước khi đổi mật khẩu.');
+  }
+
+  // A fresh, separate session verifies the current password even if the Auth setting is off.
+  const client = createAuthClient();
+  const { data, error } = await client.auth.signInWithPassword({ email: user.email, password: currentPassword });
+  if (error) throwAuthUnavailable(error);
+  let updated = false;
+  let revoked = false;
+  try {
+    if (error || !data.session || data.user?.id !== user.id) {
+      throw new HttpError(400, 'CURRENT_PASSWORD_INVALID', 'Mật khẩu hiện tại không đúng.');
+    }
+    const result = await client.auth.updateUser({ password: newPassword, current_password: currentPassword });
+    if (result.error) {
+      throwAuthUnavailable(result.error);
+      if (result.error.code === 'invalid_credentials') {
+        throw new HttpError(400, 'CURRENT_PASSWORD_INVALID', 'Mật khẩu hiện tại không đúng.');
+      }
+      throw new HttpError(400, 'PASSWORD_CHANGE_FAILED', 'Chưa đổi được mật khẩu. Hãy kiểm tra yêu cầu độ mạnh mật khẩu.');
+    }
+    updated = true;
+  } finally {
+    if (data.session) {
+      try {
+        const { error: cleanupError } = await client.auth.signOut({ scope: updated ? 'global' : 'local' });
+        revoked = !cleanupError;
+        if (cleanupError) console.warn('Password change session cleanup failed', { code: cleanupError.code, status: cleanupError.status });
+      } catch {
+        console.warn('Password change session cleanup unavailable');
+      }
+    }
+  }
+  clearRefreshCookie(res);
+  res.json({ message: revoked
+    ? 'Đã đổi mật khẩu. Hãy đăng nhập bằng mật khẩu mới.'
+    : 'Đã đổi mật khẩu. Chưa xác nhận thu hồi các phiên cũ. Hãy đăng nhập lại và kiểm tra những thiết bị đang dùng tài khoản.' });
+}));
+
+authRouter.use('/me', profileRouter);
 
 authRouter.post(
   "/google",

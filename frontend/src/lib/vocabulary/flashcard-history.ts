@@ -11,6 +11,9 @@ export type FlashcardResult = {
   reviews: CardReview[];
 };
 
+export type FlashcardOrigin = { type: 'SET'; setId: string } | { type: 'FAVORITES' } | { type: 'REVIEW' };
+export type FlashcardSubmission = FlashcardResult & { source: FlashcardOrigin; cardIds: string[] };
+
 const storageKey = (userId: string) => "ieltspace-flashcards:v1:" + userId;
 
 function isReview(value: unknown): value is CardReview {
@@ -38,9 +41,29 @@ export function readFlashcardHistory(userId: string): FlashcardResult[] {
   return Array.isArray(parsed) ? parsed.filter(isResult).sort((a, b) => b.finishedAt - a.finishedAt) : [];
 }
 
-export function saveFlashcardResult(userId: string, result: FlashcardResult) {
-  const results = readFlashcardHistory(userId);
-  localStorage.setItem(storageKey(userId), JSON.stringify([result, ...results.filter((item) => item.id !== result.id)]));
+const pendingPrefix = (userId: string) => `ieltspace-flashcards:pending:${userId}:`;
+
+export function queueFlashcardResult(userId: string, result: FlashcardSubmission) {
+  localStorage.setItem(pendingPrefix(userId) + result.id, JSON.stringify(result));
+}
+
+export function removePendingResult(userId: string, id: string) {
+  localStorage.removeItem(pendingPrefix(userId) + id);
+}
+
+export function readPendingResults(userId: string): FlashcardSubmission[] {
+  const prefix = pendingPrefix(userId);
+  const results: FlashcardSubmission[] = [];
+  for (let index = 0; index < localStorage.length; index++) {
+    const key = localStorage.key(index);
+    if (!key?.startsWith(prefix)) continue;
+    try {
+      const result: unknown = JSON.parse(localStorage.getItem(key) ?? 'null');
+      if (!isResult(result) || !('source' in result) || !('cardIds' in result)) continue;
+      if (key === prefix + result.id && Array.isArray(result.cardIds)) results.push(result as FlashcardSubmission);
+    } catch { /* A malformed entry does not prevent other sessions from syncing. */ }
+  }
+  return results.sort((first, second) => first.finishedAt - second.finishedAt);
 }
 
 export function wordsToReview(history: readonly FlashcardResult[], words: ReadonlyMap<string, Word>) {

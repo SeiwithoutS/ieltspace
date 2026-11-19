@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { CardReview, FlashcardResult } from "../../lib/vocabulary/flashcard-history";
+import type { CardReview, FlashcardResult, FlashcardSubmission } from "../../lib/vocabulary/flashcard-history";
 import { clockLabel } from "../../lib/vocabulary/flashcard-history";
 import type { FlashcardSource } from "./FlashcardSetup";
 
@@ -11,7 +11,7 @@ export type StudySession = FlashcardSource & {
 
 export function FlashcardStudy({ session, onFinish }: {
   session: StudySession;
-  onFinish: (result: FlashcardResult) => void;
+  onFinish: (result: FlashcardSubmission) => void;
 }) {
   const [reviews, setReviews] = useState<CardReview[]>([]);
   const [flipped, setFlipped] = useState(false);
@@ -28,6 +28,7 @@ export function FlashcardStudy({ session, onFinish }: {
     const finishedAt = Date.now();
     onFinish({
       id: session.id, title: session.title, finishedAt,
+      source: session.source, cardIds: session.words.map(item => item.id),
       elapsedSeconds: Math.max(0, Math.round((finishedAt - session.startedAt) / 1000)),
       cardCount: session.words.length, reason, reviews: evaluated,
     });

@@ -1,5 +1,11 @@
 # Chạy cấu trúc CSDL IELTSpace
 
+Phần mục tiêu và Flashcard dùng [14_learner_study_history.sql](14_learner_study_history.sql) sau khi bảng người học và từ vựng đã có. Tệp tăng dần này lưu metadata của phiên và thêm chỉ mục lịch sử.
+
+Sau migration 14, chạy [15_learner_activity.sql](15_learner_activity.sql) để thêm chỉ mục theo ngày học và bổ sung mỗi phiên Flashcard đủ điều kiện đã lưu thành một hoạt động, kể cả khi chạy lại.
+
+Chạy [16_learner_checkins.sql](16_learner_checkins.sql) trước khi triển khai báo cáo tiến độ có điểm danh. Bảng `learner_checkins` lưu mỗi tài khoản một lượt điểm danh mỗi ngày Việt Nam. Backend đọc bảng qua kết nối PostgreSQL.
+
 **Database đã chạy 01 cũ:** dùng [04_nang_cap_tu_01.sql](04_nang_cap_tu_01.sql) và [05_danh_muc_bo_de.sql](05_danh_muc_bo_de.sql). **Project Supabase mới với schema public trống:** chạy một lần [01_tao_cau_truc_moi.sql](01_tao_cau_truc_moi.sql). Ngày 13/11, cấu trúc đã theo [D08–D10](../DECISIONS.md) và thiết kế Quản lý bộ đề (40 bảng: bổ sung bảng `exam_set_categories`, bỏ exam_versions, kỹ năng có trạng thái và phiên bản, trigger updated_at cho exam_sets và exams, ràng buộc UNIQUE tên bộ đề). Tệp 05 tách riêng bảng danh mục động, thêm 5 danh mục mặc định và chuyển đổi dữ liệu an toàn.
 
 ## Database đang dùng

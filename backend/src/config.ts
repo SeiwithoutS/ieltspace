@@ -5,6 +5,9 @@ import { z } from "zod";
 // Resolve backend/.env independently of the terminal's working directory.
 loadEnv({ path: fileURLToPath(new URL("../.env", import.meta.url)) });
 
+const optionalStorageSetting = z.preprocess(value => value === '' ? undefined : value, z.string().min(1).optional());
+const bucketName = z.string().regex(/^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$/);
+
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3001),
 
@@ -22,6 +25,13 @@ const envSchema = z.object({
   STORAGE_BUCKET_COVERS: z.string().default("exam-covers"),
   STORAGE_BUCKET_EXAM_ASSETS: z.string().default("exam-assets"),
   STORAGE_BUCKET_SAMPLE_ASSETS: z.string().regex(/^[a-z0-9][a-z0-9._-]{0,99}$/).default("sample-assets"),
+  STORAGE_BUCKET_AVATARS: z.string().regex(/^[a-z0-9][a-z0-9._-]{0,99}$/).default("avatars"),
+  AVATAR_STORAGE_PROVIDER: z.enum(['auto', 'supabase', 'r2']).default('auto'),
+  R2_ENDPOINT: optionalStorageSetting,
+  R2_ACCESS_KEY_ID: optionalStorageSetting,
+  R2_SECRET_ACCESS_KEY: optionalStorageSetting,
+  R2_AVATAR_BUCKET: bucketName.default('ieltspace-avatars-dev'),
+  R2_RECORDINGS_BUCKET: bucketName.default('ieltspace-recordings-dev'),
 
   DATABASE_URL: z.string().min(1),
   GROQ_API_KEY: z.string().optional(),
@@ -34,6 +44,17 @@ const envSchema = z.object({
   COOKIE_SAME_SITE: z
       .enum(["lax", "strict", "none"])
       .default("lax"),
+}).superRefine((config, ctx) => {
+  const credentials = [config.R2_ENDPOINT, config.R2_ACCESS_KEY_ID, config.R2_SECRET_ACCESS_KEY];
+  if ((credentials.some(Boolean) || config.AVATAR_STORAGE_PROVIDER === 'r2') && !credentials.every(Boolean)) {
+    ctx.addIssue({ code: 'custom', path: ['R2_ENDPOINT'], message: 'Configure the R2 endpoint and both S3 credentials together.' });
+  }
+  if (config.R2_ENDPOINT && !/^https:\/\/[a-f0-9]{32}(?:\.(?:eu|fedramp))?\.r2\.cloudflarestorage\.com\/?$/i.test(config.R2_ENDPOINT)) {
+    ctx.addIssue({ code: 'custom', path: ['R2_ENDPOINT'], message: 'Use the HTTPS Cloudflare R2 account S3 endpoint.' });
+  }
+  if (config.R2_AVATAR_BUCKET === config.R2_RECORDINGS_BUCKET) {
+    ctx.addIssue({ code: 'custom', path: ['R2_RECORDINGS_BUCKET'], message: 'Use separate buckets for avatars and recordings.' });
+  }
 });
 
 export const env = envSchema.parse(process.env);

@@ -1,9 +1,11 @@
 import React from "react";
 import { styleOf } from "../../lib/shared/styles";
+import AvatarContent from "./AvatarContent";
 
 interface AccountDropdownView {
   close: () => void;
   initials: string;
+  avatar?: string | null;
   name: string;
   email: string;
   role: string;
@@ -32,7 +34,9 @@ export default function AccountDropdown({ v, learner = false }: AccountDropdownP
       <div onClick={v.close} style={styleOf("position: fixed; inset: 0; z-index: 40")} />
       <div role="menu" aria-label="Tài khoản" style={styleOf("position: absolute; right: 0; top: 52px; z-index: 50; width: 288px; box-sizing: border-box; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 16px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 8px; display: flex; flex-direction: column; gap: 2px")}>
         <div style={styleOf("display: flex; gap: 12px; align-items: center; padding: 10px 12px 12px")}>
-          <span style={styleOf("flex: none; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #C5CEF5; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #352637")}>{v.initials}</span>
+          <span style={styleOf("flex: none; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #C5CEF5; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #352637")}>
+            <AvatarContent avatar={v.avatar} initials={v.initials} />
+          </span>
           <div style={styleOf("min-width: 0")}>
             <div style={styleOf("font-weight: 600; font-size: 15px")}>{v.name}</div>
             <div style={styleOf("font-size: 13px; color: #706473; overflow: hidden; text-overflow: ellipsis")}>{v.email}</div>

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { Word } from "../../data/vocabulary";
+import type { FlashcardOrigin } from "../../lib/vocabulary/flashcard-history";
 
-export type FlashcardSource = { title: string; words: Word[] };
+export type FlashcardSource = { title: string; words: Word[]; source: FlashcardOrigin };
 export type FlashcardSettings = { count: number; minutes: number; shuffle: boolean };
 
 export function FlashcardSetup({ source, onStart, onBack }: {
@@ -9,7 +10,7 @@ export function FlashcardSetup({ source, onStart, onBack }: {
   onStart: (settings: FlashcardSettings) => void;
   onBack: () => void;
 }) {
-  const available = source.words.length;
+  const available = Math.min(2000, source.words.length);
   const [count, setCount] = useState(String(Math.min(10, available)));
   const [minutes, setMinutes] = useState(0);
   const [shuffle, setShuffle] = useState(false);

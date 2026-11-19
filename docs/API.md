@@ -19,6 +19,39 @@ Base URL local là `http://localhost:3001/api`. Bảng dưới dùng đường d
 
 **Lỗi.** HttpError trả {message,code}. Zod hoặc JSON hỏng trả 400 {message}. Bộ giới hạn tần suất đăng nhập có dạng {error:{code,message}}. 403 INVALID_ORIGIN khác với 403 PROFILE_NOT_FOUND/ACCOUNT_UNAVAILABLE. Frontend cần xử lý theo trạng thái HTTP và kiểu body thực tế.
 
+### Hồ sơ người học
+
+Đọc hồ sơ bằng `GET /auth/me` hoặc dữ liệu phiên hiện có. Các route bên dưới dùng Bearer và quyền `LEARNER`. Với thao tác ghi, `Origin` phải khớp `FRONTEND_ORIGIN`. `user.id` được xác định từ phiên.
+
+| Method và đường dẫn | Đầu vào | Thành công và lỗi cần xử lý |
+|---|---|---|
+| PATCH /auth/me | `{ displayName }`, 2–100 ký tự sau trim | 200 `{ user }`. 400 tên hoặc trường không hợp lệ. |
+| GET /auth/me/avatar-options | Không có | 200 `{ maxBytes }`. 5 MiB khi ghi lên R2, 2 MiB khi ghi lên Supabase Storage. |
+| PUT /auth/me/avatar | Body nhị phân JPG/PNG, giới hạn theo `avatar-options` | 200 `{ user }`. 413 quá dung lượng, 415 sai định dạng, 503 lỗi Storage. |
+| GET /auth/me/avatar | Không có | 200 `{ url }`, `null` nếu chưa có ảnh của ứng dụng. URL ký hết hạn sau 5 phút. |
+| DELETE /auth/me/avatar | Không có | 200 `{ user }`, đã gỡ ảnh. |
+| GET /auth/me/password-options | Không có | 200 `{ google, canSendSetupEmail }` lấy từ Auth. |
+| POST /auth/me/password | `{ currentPassword, newPassword }`, mật khẩu mới 8–128 ký tự | 200 `{ message }`, xóa refresh cookie và yêu cầu đăng nhập lại. 400 nếu sai mật khẩu hiện tại, mật khẩu trùng hoặc mật khẩu mới bị từ chối. |
+| POST /auth/me/password/setup | Không có | 202 `{ message }` khi Auth tiếp nhận yêu cầu gửi link đặt mật khẩu đến email đã xác minh của tài khoản có Google. 403 khi chưa đủ điều kiện. |
+
+Backend giữ bucket avatar riêng tư. `AVATAR_STORAGE_PROVIDER=auto` dùng R2 cho ảnh mới nếu có `R2_ENDPOINT`, `R2_ACCESS_KEY_ID` và `R2_SECRET_ACCESS_KEY`. Khi chưa cấu hình R2, ảnh mới dùng Supabase Storage và `STORAGE_BUCKET_AVATARS`. `users.avatar_url` giữ khóa đối tượng. Khóa R2 có tiền tố `r2:` để đọc/xóa đúng kho. Giữ cấu hình cũ khi còn ảnh tham chiếu đến kho đó. Tài khoản Google dùng template khôi phục và trang `/reset-password` hiện có. Sau khi đổi mật khẩu, backend yêu cầu thu hồi refresh session toàn cục. Access token cũ có thể còn hiệu lực đến khi hết hạn theo D11.
+
+### Mục tiêu và Flashcard người học
+
+Yêu cầu Bearer, vai trò `LEARNER` và `Origin` hợp lệ đối với POST. Backend truy vấn theo chủ sở hữu từ phiên. Cần [migration 14](csdl/14_learner_study_history.sql) cho metadata và nguồn Flashcard `REVIEW`.
+
+| Method và đường dẫn | Đầu vào | Thành công |
+|---|---|---|
+| GET /learner/goals | Không có | `{ current, history }`, lịch sử 20 bản có hiệu lực gần nhất. |
+| POST /learner/goals | `{ overall, listening, reading, writing, speaking, dailySessions }`. Band nullable, từ 0 đến 9 theo bước 0,5. `dailySessions` là số nguyên dương. | `{ current, history }`. Tạo bản mới với `effectiveFrom` nếu nội dung thay đổi. |
+| POST /learner/flashcards | `{ id, ownerId, title, source, cardIds, reviews, finishedAt, elapsedSeconds, reason }`. `id` là UUID ổn định. `source.type` là `SET` (có `setId`), `FAVORITES` hoặc `REVIEW`. Mỗi đánh giá là `{ wordId, remembered }`. `finishedAt` tính bằng ms Unix. `reason` nhận `completed`, `timeout`, `stopped`. `ownerId` phải trùng phiên đăng nhập để tránh gửi nhầm khi đổi tài khoản. | 201 `{ id }` khi tạo. 200 cùng `id` nếu phiên của người học đã lưu. 409 nếu mã đã thuộc tài khoản khác. |
+| GET /learner/flashcards | `before` tùy chọn (UUID phiên cuối trang trước) | `{ items, nextCursor, stats? }`. Trang đầu trả số phiên, số từ khác nhau đã ôn và ID các từ chưa nhớ theo đánh giá gần nhất. Các trang sau trả danh sách phiên. |
+| GET /learner/progress | Không có | `{ today, nextDayAt, goal, todaySessions, currentStreak, longestStreak, checkedInToday, checkInDays, flashcards }`. `checkInDays` gồm bảy phần tử `{ date, checkedIn }` từ thứ Hai đến Chủ nhật. Ngày và thời điểm nửa đêm kế tiếp lấy theo giờ Việt Nam. `goal` có thể `null`. |
+| POST /learner/check-in | `{ ownerId }` khớp tài khoản người học trong phiên hiện tại. | Ghi một lượt điểm danh cho ngày Việt Nam hiện tại và trả cùng cấu trúc với `GET /learner/progress`. Gửi lại trong ngày trả tiến độ mới nhất và dùng lại lượt điểm danh của ngày đó. |
+| GET /learner/results | `kind=all\|band\|practice`, `skill` tùy chọn, `before` tùy chọn là ID kết quả cuối trang, `limit` 1–25 | `{ items, nextCursor }`. `band` và `accuracy` nullable theo phạm vi kết quả. Bài luyện theo phần hoặc nhóm câu dùng tỷ lệ đúng đã lưu. Band Writing/Speaking toàn kỹ năng chỉ đọc sau công bố. |
+
+`POST /learner/flashcards` ghi một hoạt động hợp lệ trong cùng giao dịch với phiên và thẻ. Ngưỡng là số thẻ khác nhau theo cấu hình (mặc định 10), giảm xuống số thẻ đã chọn nếu tập nhỏ hơn. Tiến độ cộng thêm các lượt làm bài đã hoàn tất theo `attempts.id`, mỗi lượt một lần. Các phiên Flashcard đủ điều kiện đã lưu trước được bổ sung bằng [migration 15](csdl/15_learner_activity.sql). Chuỗi đăng nhập và kỷ lục đọc từ bảng điểm danh được tạo trong [migration 16](csdl/16_learner_checkins.sql).
+
 ## Quản lý bộ đề (Exam Sets)
 
 Mã A1–A16 và E1–E6 trùng chú thích trong `backend/src/modules/exams/exams.admin.routes.ts`. Các route `/admin/*` yêu cầu quyền ADMIN (`requireAuth`, `requireRole('ADMIN')`). Route công khai `/exam-sets/*` không yêu cầu xác thực. Mọi thao tác ghi trả về `ExamSetAdminDto` của cả bộ đề (trừ A10, A2, A7 của danh mục và nhóm E). Lỗi dạng `{ message, code }`; lỗi kiểm tra đầu vào là 400 `VALIDATION_ERROR` kèm danh sách chi tiết.

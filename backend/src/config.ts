@@ -21,6 +21,7 @@ const envSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   STORAGE_BUCKET_COVERS: z.string().default("exam-covers"),
   STORAGE_BUCKET_EXAM_ASSETS: z.string().default("exam-assets"),
+  STORAGE_BUCKET_SAMPLE_ASSETS: z.string().regex(/^[a-z0-9][a-z0-9._-]{0,99}$/).default("sample-assets"),
 
   DATABASE_URL: z.string().min(1),
   GROQ_API_KEY: z.string().optional(),

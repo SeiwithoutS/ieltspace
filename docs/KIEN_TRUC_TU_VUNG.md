@@ -1,8 +1,15 @@
-Ngày tạo: 16/11/2026 · Cập nhật: 16/11/2026
+Ngày tạo: 16/11/2026 · Cập nhật: 19/11/2026
 
 # Kiến trúc và thiết lập từ vựng
 
-## Trạng thái mới nhất: API lưu nháp đã nối (16/11/2026)
+## Nhập tệp và tự lưu bản nháp ngày 19/11/2026
+
+- Quản lý tải [mẫu Excel từ vựng](../frontend/public/templates/mau-tu-vung.xlsx). Sheet đầu chứa dữ liệu, sheet thứ hai hướng dẫn điền từng cột. Bộ đọc vẫn nhận CSV và XLSX có dữ liệu ở sheet đầu.
+- Chọn tệp → đọc và kiểm tra dòng → xác nhận nếu thay danh sách đang sửa → `PUT /api/admin/vocabulary/sets/:id/draft` ghi toàn bộ từ theo revision → tra media → dùng revision mới để lưu các URL tìm được. Bản nháp nằm trong `public.vocabulary_set_drafts.content.words`. Ảnh tạm dạng data URL chỉ hiển thị tại trình chỉnh sửa. Audio và URL ảnh hợp lệ vẫn được gửi lưu.
+- Điều hướng trong ứng dụng được giữ lại khi đang đọc tệp hoặc chờ lần ghi. Sau lần lưu đầu, quản lý có thể xác nhận rời trang trong lúc tra media. Khi mở lại bộ, editor đọc danh sách đã lưu và có thể dùng **Tìm lại URL** cho các mục thiếu.
+- **Lưu** ghi thay đổi vào nháp. **Công bố** cập nhật thư viện từ phiên bản vừa lưu. Mắt mở/nhắm biểu thị trạng thái hiển thị của bộ đã công bố.
+
+## Mốc nối API lưu nháp ngày 16/11/2026
 
 Phần này thay thế mô tả “chỉ localStorage” bên dưới, vốn ghi trạng thái trước khi nối DB.
 

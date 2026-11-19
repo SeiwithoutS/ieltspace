@@ -23,7 +23,9 @@ backend/
     app.ts      Cấu hình Express
     server.ts   Khởi động server
   tests/        Kiểm thử và chẩn đoán chỉ đọc
+    fixtures/   Dữ liệu đầu vào cho kiểm thử
 frontend/
+  public/templates/ Mẫu nhập dữ liệu cho người quản lý
   src/
     app/        Danh sách trang, điều hướng và kiểm tra phiên
     components/ Thành phần giao diện dùng chung
@@ -65,7 +67,7 @@ Mở http://localhost:3000/#Login. Backend chạy http://localhost:3001/api, hea
 
 Chạy `npm run build` trong từng thư mục backend/frontend. Backend production dùng `npm start`; frontend xuất ra `frontend/dist` để triển khai như SPA (cần fallback đường dẫn về index.html).
 
-Schema Prisma hiện là ánh xạ rút gọn để đọc hồ sơ: **không chạy migrate reset, migrate dev hoặc db push bằng schema này trên database hiện có**. Không đưa `.env`, mật khẩu hoặc secret key lên GitHub. Chỉ README gốc được theo dõi; tài liệu Markdown nội bộ được bỏ qua.
+Schema Prisma hiện là ánh xạ rút gọn để đọc hồ sơ: **không chạy migrate reset, migrate dev hoặc db push bằng schema này trên database hiện có**. Không đưa `.env`, mật khẩu hoặc secret key lên GitHub. Thư mục `docs/` chứa tài liệu nội bộ phục vụ bàn giao.
 
 ## Đăng nhập Google
 

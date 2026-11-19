@@ -23,18 +23,28 @@ export function WordMediaEditor({ entry, onChange, onWordEntered }: {
   return <details open={initiallyOpen || undefined} className="word-media-editor">
     <summary>Chỉnh sửa nội dung và media</summary>
     <div className="word-fields">
-      {([["word", "Từ"], ["meaning", "Nghĩa tiếng Việt"], ["phonetic", "Phiên âm"], ["pos", "Từ loại"], ["example", "Ví dụ"], ["translation", "Bản dịch"], ["image", "URL ảnh"]] as const).map(([field, label]) => <label key={field}>{label}
-        <input value={field === "image" && entry.image.startsWith("data:") ? "" : entry[field]}
-          placeholder={field === "image" && entry.image.startsWith("data:") ? "Đang dùng bản ảnh đã tải; nhập URL để thay" : undefined}
+      {([["word", "Từ"], ["meaning", "Nghĩa tiếng Việt"], ["phonetic", "Phiên âm"], ["pos", "Từ loại"]] as const).map(([field, label]) => <label key={field}>{label}
+        <input value={entry[field]}
           onBlur={field === "word" ? () => onWordEntered(entry) : undefined}
-          onChange={event => onChange({ [field]: event.target.value, ...(field === "image" ? { imageCredit: undefined } : {}) })} />
+          onChange={event => onChange({ [field]: event.target.value })} />
       </label>)}
+      <label className="word-field-wide">Ví dụ
+        <textarea value={entry.example} onChange={event => onChange({ example: event.target.value })} />
+      </label>
+      <label className="word-field-wide">Bản dịch
+        <textarea value={entry.translation} onChange={event => onChange({ translation: event.target.value })} />
+      </label>
+      <label className="word-field-wide">URL ảnh
+        <input value={entry.image.startsWith("data:") ? "" : entry.image}
+          placeholder={entry.image.startsWith("data:") ? "Đang dùng ảnh đã tải lên" : undefined}
+          onChange={event => onChange({ image: event.target.value, imageCredit: undefined })} />
+      </label>
       <AudioFields entry={entry} onChange={onChange} />
     </div>
     <div className="word-tools">
-      <button type="button" disabled={busy || !entry.word.trim()} onClick={() => lookup("image")}>Tìm lại ảnh</button>
-      <button type="button" disabled={busy || !entry.word.trim()} onClick={() => lookup("audio")}>Tìm lại audio</button>
-      {entry.image && <button type="button" onClick={() => onChange({ image: "", imageCredit: undefined })}>Bỏ ảnh</button>}
+      <button type="button" className="vocab-button" disabled={busy || !entry.word.trim()} onClick={() => lookup("image")}>Tìm lại ảnh</button>
+      <button type="button" className="vocab-button" disabled={busy || !entry.word.trim()} onClick={() => lookup("audio")}>Tìm lại audio</button>
+      {entry.image && <button type="button" className="vocab-button" onClick={() => onChange({ image: "", imageCredit: undefined })}>Bỏ ảnh</button>}
       <small>Bấm vào hình của từ để tải ảnh từ máy.</small>
     </div>
     {!!entry.imageCandidates?.length && <div className="word-image-options" aria-label="Ảnh gợi ý">

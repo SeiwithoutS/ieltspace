@@ -52,13 +52,6 @@ export const TYPES: LrTypeTuple[] = [
     2,
   ],
   [
-    'FLOW_COMP',
-    'Flow-chart Completion',
-    'flow',
-    'Complete the flow-chart below. Choose {L} from the passage for each answer.',
-    0,
-  ],
-  [
     'DIAGRAM_COMP',
     'Diagram Labelling',
     'diagram',
@@ -97,7 +90,7 @@ export const TYPES: LrTypeTuple[] = [
     'MCQ_SINGLE',
     'MCQ - Single Answer',
     'mcq1',
-    'Choose the correct letter, A, B, C or D.',
+    'Choose the correct answer',
     -1,
   ],
   [
@@ -118,7 +111,7 @@ export const TYPES: LrTypeTuple[] = [
     'TFNG',
     'True/False/Not Given',
     'judge',
-    'Do the following statements agree with the information given in the passage? Write TRUE, FALSE or NOT GIVEN.',
+    'Choose TRUE if the statement agrees with the information given in the text, choose FALSE if the statement contradicts the information, or choose NOT GIVEN if there is no information on this.',
     -1,
   ],
 ];
@@ -130,8 +123,7 @@ export const LR_QUESTION_TYPE_NAMES: Record<LrQuestionType, string> = {
   NOTE_COMP: 'Note Completion',
   SUMMARY_BOX: 'Summary Completion (Box)',
   TABLE_COMP: 'Table Completion',
-  FLOW_COMP: 'Flow-chart Completion',
-  DIAGRAM_COMP: 'Diagram Labelling',
+  DIAGRAM_COMP: 'Diagram / Map / Flow-chart Completion',
   MATCH_HEADING: 'Matching Headings',
   MATCH_INFO: 'Matching Information',
   MATCH_ENDING: 'Matching Sentence Endings',
@@ -155,7 +147,6 @@ export const FORMLABEL: Record<string, string> = {
   text: '2. Đoạn văn có chỗ trống',
   bank: '3. Đoạn văn và khung từ',
   table: '4. Bảng',
-  flow: '4. Sơ đồ',
   diagram: '5. Hình có nhãn',
   match: '6. Ghép với danh sách',
   mcq1: '7. Trắc nghiệm',
@@ -221,3 +212,69 @@ const LISTENING_TYPE_NAMES: Partial<Record<LrQuestionType, string>> = {
 export function typeName(type: LrQuestionType, isReading: boolean): string {
   return (!isReading && LISTENING_TYPE_NAMES[type]) || LR_QUESTION_TYPE_NAMES[type];
 }
+
+export type LrTypeGroupId =
+  | 'blank-sentence'
+  | 'blank-passage'
+  | 'table-diagram'
+  | 'matching'
+  | 'choice';
+
+export interface LrTypeGroupDef {
+  id: LrTypeGroupId;
+  label: string;
+  types: LrQuestionType[];
+}
+
+export const LR_TYPE_GROUPS: LrTypeGroupDef[] = [
+  { id: 'blank-sentence', label: 'Câu có chỗ trống', types: ['SENTENCE_COMP', 'SHORT_ANSWER'] },
+  { id: 'blank-passage', label: 'Đoạn văn có chỗ trống', types: ['SUMMARY_COMP', 'NOTE_COMP'] },
+  { id: 'table-diagram', label: 'Bảng và sơ đồ', types: ['TABLE_COMP', 'DIAGRAM_COMP'] },
+  { id: 'matching', label: 'Ghép với danh sách', types: ['MATCH_HEADING', 'MATCH_INFO', 'MATCH_FEATURE'] },
+  { id: 'choice', label: 'Trắc nghiệm', types: ['MCQ_SINGLE', 'MCQ_MULTI', 'TFNG', 'YNNG'] },
+];
+
+export const COMBO_TYPE_LABELS: Record<LrQuestionType, string> = {
+  SENTENCE_COMP: 'Sentence Completion',
+  SHORT_ANSWER: 'Short Answer',
+  SUMMARY_COMP: 'Summary Completion',
+  NOTE_COMP: 'Note Completion',
+  SUMMARY_BOX: 'Summary Completion',
+  TABLE_COMP: 'Table Completion',
+  DIAGRAM_COMP: 'Diagram / Map / Flow-chart Completion',
+  MATCH_HEADING: 'Matching Headings',
+  MATCH_INFO: 'Matching Information',
+  MATCH_ENDING: 'Matching Features / Sentence Endings',
+  MATCH_FEATURE: 'Matching Features / Sentence Endings',
+  MCQ_SINGLE: 'Multiple Choice (1 đáp án)',
+  MCQ_MULTI: 'Multiple Choice (nhiều đáp án)',
+  TFNG: 'True / False / Not Given',
+  YNNG: 'Yes / No / Not Given',
+};
+
+export function groupOfType(type: LrQuestionType): LrTypeGroupId {
+  if (type === 'SUMMARY_BOX') return 'blank-passage';
+  if (type === 'MATCH_ENDING') return 'matching';
+  for (const g of LR_TYPE_GROUPS) {
+    if (g.types.includes(type)) return g.id;
+  }
+  return 'choice';
+}
+
+export function comboOptions(
+  type: LrQuestionType,
+  allowedTypes?: LrQuestionType[]
+): Array<{ type: LrQuestionType; label: string }> {
+  const grpId = groupOfType(type);
+  const grp = LR_TYPE_GROUPS.find((g) => g.id === grpId);
+  if (!grp) return [{ type, label: COMBO_TYPE_LABELS[type] || type }];
+
+  const typesInGroup = grp.types;
+  const filtered = typesInGroup.filter((t) => !allowedTypes || allowedTypes.includes(t));
+
+  return filtered.map((t) => ({
+    type: t,
+    label: COMBO_TYPE_LABELS[t] || t,
+  }));
+}
+

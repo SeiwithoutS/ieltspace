@@ -1,5 +1,11 @@
 import type { LrQuestionType } from '../../../lib/lr-editor/types.ts';
 
+export {
+  LR_TYPE_GROUPS,
+  type LrTypeGroupId,
+  type LrTypeGroupDef,
+} from '../../../lib/lr-editor/constants.ts';
+
 export type LrSkillConfig = {
   sectionName: string;
   sectionCount: number;
@@ -22,7 +28,6 @@ export const ALL_LR_TYPES: LrQuestionType[] = [
   'NOTE_COMP',
   'SUMMARY_BOX',
   'TABLE_COMP',
-  'FLOW_COMP',
   'DIAGRAM_COMP',
   'MATCH_HEADING',
   'MATCH_INFO',
@@ -34,7 +39,7 @@ export const ALL_LR_TYPES: LrQuestionType[] = [
   'TFNG',
 ];
 
-/** Listening chỉ dùng 11 dạng (canvas 27/10): bỏ Headings, Matching Information, Sentence Endings, TFNG, YNNG. */
+/** Listening chỉ dùng các dạng cho phép: bỏ Headings, Matching Information, Sentence Endings, TFNG, YNNG. */
 export const LISTENING_TYPES: LrQuestionType[] = [
   'NOTE_COMP',
   'SUMMARY_COMP',
@@ -42,7 +47,6 @@ export const LISTENING_TYPES: LrQuestionType[] = [
   'SENTENCE_COMP',
   'SHORT_ANSWER',
   'TABLE_COMP',
-  'FLOW_COMP',
   'DIAGRAM_COMP',
   'MATCH_FEATURE',
   'MCQ_SINGLE',

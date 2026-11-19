@@ -10,8 +10,6 @@ import type {
   LrEditorState,
   LrPassageState,
   LrGroupState,
-  LrFlowNode,
-  LrFlowFrame,
   LrQuestionType,
 } from './types.ts';
 
@@ -68,37 +66,7 @@ export function formOf(g: { type: LrQuestionType; mode?: string }): string {
   const f = TYPE_MAP[g.type]?.form ?? 'gap';
   // Map/Plan có sẵn chữ cái: nối chữ cái với câu như Matching Features
   if (g.type === 'DIAGRAM_COMP' && g.mode === 'letters') return 'match';
-  return f === 'flow' && g.mode === 'image' ? 'diagram' : f;
-}
-
-export function flowOf(g: {
-  nodes?: LrFlowNode[];
-  edges?: Array<[string, string]>;
-  frames?: LrFlowFrame[];
-  steps?: string[];
-}): {
-  nodes: LrFlowNode[];
-  edges: Array<[string, string]>;
-  frames: LrFlowFrame[];
-} {
-  if (g.nodes && g.nodes.length > 0) {
-    return {
-      nodes: g.nodes,
-      edges: g.edges || [],
-      frames: g.frames || [],
-    };
-  }
-  const st = g.steps || [];
-  const nodes: LrFlowNode[] = st.map((t, i) => ({
-    id: 'n' + (i + 1),
-    row: i,
-    text: t,
-  }));
-  const edges: Array<[string, string]> = [];
-  for (let i = 1; i < nodes.length; i++) {
-    edges.push([nodes[i - 1].id, nodes[i].id]);
-  }
-  return { nodes, edges, frames: [] };
+  return f;
 }
 
 export function tblOf(g: {
@@ -200,45 +168,6 @@ export function tblCells(g: {
   return out;
 }
 
-export function normFlow(g: LrGroupState): LrGroupState {
-  const fl = flowOf(g);
-  g.nodes = fl.nodes;
-  g.edges = fl.edges;
-  g.frames = fl.frames;
-  delete g.steps;
-  return g;
-}
-
-export function flowRows(fl: { nodes: LrFlowNode[] }): number {
-  return fl.nodes.reduce((m, n) => Math.max(m, n.row + 1), 0);
-}
-
-export function flowSeq(fl: {
-  nodes: LrFlowNode[];
-  frames: LrFlowFrame[];
-}): Array<{ node?: LrFlowNode; frame?: LrFlowFrame; t: string }> {
-  const out: Array<{ node?: LrFlowNode; frame?: LrFlowFrame; t: string }> = [];
-  const R = flowRows(fl);
-  for (let r = 0; r < R; r++) {
-    fl.nodes.forEach((n) => {
-      if (n.row === r && !n.side) {
-        out.push({ node: n, t: n.text });
-      }
-    });
-    fl.nodes.forEach((n) => {
-      if (n.row === r && n.side) {
-        out.push({ node: n, t: n.text });
-      }
-    });
-    fl.frames.forEach((fr) => {
-      if (fr.row === r) {
-        out.push({ frame: fr, t: fr.caption });
-      }
-    });
-  }
-  return out;
-}
-
 export function cnt(g: LrGroupState, p?: LrPassageState): number {
   const f = formOf(g);
   if (g.type === 'MATCH_HEADING') {
@@ -249,9 +178,6 @@ export function cnt(g: LrGroupState, p?: LrPassageState): number {
   }
   if (f === 'table') {
     return tblCells(g).reduce((a, c) => a + blanks(c), 0);
-  }
-  if (f === 'flow') {
-    return flowSeq(flowOf(g)).reduce((a, x) => a + blanks(x.t), 0);
   }
   if (f === 'diagram') {
     return (g.marks || []).length;
@@ -357,7 +283,7 @@ export function groupIssues(
   }
 
   if (
-    (f === 'text' || f === 'table' || f === 'flow' || f === 'diagram') &&
+    (f === 'text' || f === 'table' || f === 'diagram') &&
     ((g.ans || []).slice(0, c).some((x) => overLimit(x, li)) ||
       (g.alt || []).slice(0, c).some((a) =>
         parseAlt(a).some((x) => overLimit(x, li))
@@ -371,14 +297,14 @@ export function groupIssues(
   }
 
   if (
-    (f === 'text' || f === 'table' || f === 'flow' || f === 'diagram') &&
+    (f === 'text' || f === 'table' || f === 'diagram') &&
     (g.ans || []).slice(0, c).some((x) => !String(x ?? '').trim())
   ) {
     out.push('còn chỗ trống chưa có đáp án');
   }
 
   if (
-    (f === 'text' || f === 'table' || f === 'flow' || f === 'diagram') &&
+    (f === 'text' || f === 'table' || f === 'diagram') &&
     (g.ans || []).length < c
   ) {
     out.push('còn chỗ trống chưa có đáp án');
@@ -581,3 +507,61 @@ export function allIssues(
 
   return out;
 }
+
+/**
+ * Kiểm tra xem một nhóm câu hỏi đã có dữ liệu do người dùng nhập hay chưa.
+ * Dùng để cảnh báo xác nhận khi đổi dạng câu hỏi.
+ */
+export function groupHasData(g: LrGroupState): boolean {
+  if (!g) return false;
+
+  if (g.body && g.body.trim().length > 0) return true;
+
+  if (
+    g.items &&
+    g.items.length > 0 &&
+    g.items.some(
+      (item) =>
+        (item.q && item.q.trim().length > 0) ||
+        (item.text && item.text.trim().length > 0) ||
+        (item.ans !== undefined &&
+          item.ans !== null &&
+          String(item.ans).trim().length > 0 &&
+          String(item.ans) !== '-1') ||
+        (item.opts && item.opts.length > 0 && item.opts.some((o) => o && o.trim().length > 0))
+    )
+  ) {
+    return true;
+  }
+
+  if (g.opts && g.opts.length > 0 && g.opts.some((o) => o && o.trim().length > 0)) {
+    return true;
+  }
+
+  if (g.marks && g.marks.length > 0) return true;
+
+  if (
+    g.rows &&
+    g.rows.length > 0 &&
+    g.rows.some((row) => row.some((cell) => cell && cell.trim().length > 0))
+  ) {
+    return true;
+  }
+
+  if (g.texts && g.texts.length > 0 && g.texts.some((t) => t && t.trim().length > 0)) {
+    return true;
+  }
+
+  if (
+    g.ans &&
+    g.ans.length > 0 &&
+    g.ans.some(
+      (a) => a !== undefined && a !== null && String(a).trim().length > 0 && String(a) !== '-1'
+    )
+  ) {
+    return true;
+  }
+
+  return false;
+}
+

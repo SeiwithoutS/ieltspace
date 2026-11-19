@@ -89,5 +89,16 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | LRE-07c | Tự động sinh transcript qua Speech-to-Text Groq Whisper (E10, E11, TranscribeModal) | LRE-07 | 4/4 tests node:test đạt; mô hình whisper-large-v3-turbo trả đoạn có mốc [mm:ss], hàng đợi job in-memory, modal xem trước và áp dụng an toàn. |
 | LRE-08 | Khóa nút Nhập xlsx L/R tại AdminExamSet và trong Editor | LRE-06 | Nút Nhập xlsx ở đầu cột L/R khóa aria-disabled kèm tooltip thông báo đang nâng cấp định dạng. |
 | LRE-09 | Cập nhật tài liệu kỹ thuật và báo cáo tiến độ L/R | LRE-00..08 | Cập nhật API.md, BUSINESS_RULES.md, CSDL.md, csdl/README.md, TASKS.md và biên bản tiến độ 2026-11-19-editor-listening-reading.md. |
+| GQ-00 | Chuẩn bị và rà soát hiện trạng cho đổi dạng câu hỏi theo 5 nhóm | LRE-07 | Working tree clean, chốt danh sách file và nguyên tắc CSS preflight; 0 any/nocheck. |
+| GQ-01 | Cấu hình 5 nhóm câu hỏi (LR_TYPE_GROUPS, groupOfType, comboOptions) | GQ-00 | 5 nhóm chuẩn (blank-sentence, blank-passage, table-diagram, matching, choice), nhãn combo COMBO_TYPE_LABELS; unit tests đạt 100%. |
+| GQ-02 | Hàm đổi dạng câu hỏi handleChangeType và groupHasData | GQ-01 | Viết groupHasData trong pure.ts, handleChangeType thay thế đúng nhóm câu hỏi, giữ id/orderNo, hỏi xác nhận ConfirmDialog khi có dữ liệu. |
+| GQ-03 | Component GroupTypeSwitcher ở tiêu đề thẻ câu hỏi | GQ-02 | Tạo GroupTypeSwitcher.tsx, chỉ hiện combo ở chế độ Sửa khi nhóm > 1 lựa chọn, đóng bằng click ngoài / Esc, truncate tên dài. |
+| GQ-04 | Toggle gộp Summary Completion (SummaryModeToggle) | GQ-03 | Tạo SummaryModeToggle.tsx ở BlankTextCard (COMP) và WordBankCard (BOX), chuyển đổi COMP <-> BOX giữ body và limit, hỏi xác nhận nếu có dữ liệu khác. |
+| GQ-05 | Xác nhận khi đổi kiểu hình trong DiagramModeToggle | GQ-03 | Cập nhật DiagramModeToggle trong MapLettersCard.tsx: hỏi xác nhận ConfirmDialog khi đã có dữ liệu marks/texts/ans hoặc opts/items. |
+| GQ-06 | Gộp Matching Features + Sentence Endings ở giao diện | GQ-01 | MATCH_ENDING hiển thị như MATCH_FEATURE trong combo, chọn từ dạng khác ra MATCH_FEATURE, nhóm đang là MATCH_ENDING bấm lại không làm gì. |
+| GQ-07 | Kiểm thử hồi quy và kiểm tra CSS | GQ-01..06 | Build và typecheck cả frontend & backend đạt 100%, 9/9 unit tests FE và 14/14 unit tests BE pass. |
+| GQ-09 | Xóa bản QuestionCard và QuestionCards cũ (đã chốt 19/11) | GQ-07 | Xóa QuestionCard.jsx, QuestionCards.jsx, gỡ dòng route lazy trong pages.ts; cập nhật BAO_CAO_BAN_GIAO và DESIGN.md. |
+| GQ-10 | Xóa Flow-chart riêng và gộp vào Diagram (đã chốt 19/11) | GQ-01..09 | Xóa FlowCard.tsx, mã FLOW_COMP ở FE & BE; gộp vào DIAGRAM_COMP nhãn 'Diagram / Map / Flow-chart Completion'; kiểm tra CSDL có 0 nhóm lưu FLOW_COMP; build và tests 100% pass. |
+| GQ-08 | Báo cáo tiến độ cập nhật thẻ câu hỏi theo 5 nhóm | GQ-00..10 | Hoàn thành biên bản tiến độ docs/PROGRESS/2026-11-19-the-cau-hoi-gop.md và docs/PROGRESS/2026-11-19-type-picker-gon.md. |
 
 Khi nhận một dòng liên quan nhiều kỹ năng, thực hiện và kiểm tra từng kỹ năng bằng fixture riêng. Với API mới, cập nhật [hợp đồng](API.md) cùng thay đổi phía gọi và phía phục vụ.

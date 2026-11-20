@@ -41,7 +41,7 @@ Dev `llqylqplgjmvgthynepj` dùng để thử trước. Dự án chính `vnssjipy
 Đợt danh sách và Dashboard dùng bảng hiện có. Không có SQL bổ sung để cài Resend. Xem thứ tự và trường hợp cần áp dụng trên một môi trường mới ở [mục lục SQL](../csdl/README.md).
 
 - **Kho tệp khi xóa tài khoản.** Tác vụ dọn đọc kho gốc của avatar và đường dẫn bản ghi âm. Với bản ghi âm trên R2, backend cần `R2_RECORDINGS_BUCKET` và thông tin kết nối của môi trường tương ứng. Panel cho thử dọn lại khi bước ngoài DB thất bại.
-- **Resend.** Backend local đã có khóa gửi và secret mã bảo mật, dùng địa chỉ gửi thuộc `resend.dev` và `FRONTEND_ORIGIN` localhost. Resend tiếp nhận email thử đến địa chỉ mô phỏng. Để gửi thật, xác minh tên miền, điền `RESEND_API_KEY`, `ADMIN_SECURITY_EMAIL_FROM` và `ADMIN_SECURITY_CODE_SECRET` trên backend của đúng môi trường. Đặt `FRONTEND_ORIGIN` thành URL người nhận mở được. Mã bảo mật và lời mời hiện gửi dạng văn bản. Mẫu HTML cần nối ID template ở backend sau khi công bố trong Resend. Email xác minh đăng ký/khôi phục của Người học đi qua Supabase Auth và có thể cấu hình SMTP riêng. [Hướng dẫn Resend](../HUONG_DAN_RESEND.md) · [Mẫu mã bảo mật](../email-templates/ma-bao-mat.html) · [Mẫu mời nhân sự](../email-templates/loi-moi-nhan-su.html)
+- **Cấu hình email tại thời điểm 20/11.** Dịch vụ gửi mã và lời mời tiếp nhận email thử dạng văn bản. Ngày 21/11, IELTSpace chuyển sang tạo nhân sự trực tiếp và dùng Google Authenticator. Xác minh đăng ký và khôi phục mật khẩu dùng Supabase Auth. [Tổng hợp 21/11](2026-11-21-tong-hop.md#go-bo-resend)
 
 ## Kiểm tra và bằng chứng
 
@@ -83,11 +83,11 @@ Truy vấn chỉ đọc sau khi chạy xác nhận bốn bộ đề thử không
 
 1. Chốt cách thu hồi quyền giữa các tiến trình, sau đó kiểm tra lại khóa/xóa và đổi vai trò khi tài khoản đang mở trên hai phiên.
 2. Chốt phạm vi sửa **Gửi lại email xác minh** và **Hồ sơ nhân sự** trước khi đụng giao diện. Khắc phục thông điệp hằng ngày theo task còn mở.
-3. Cấu hình tên miền gửi Resend cho backend dev. Nghiệm thu mã đến email Quản lý, mời Giáo viên/Quản lý, đặt mật khẩu, đăng nhập đúng vai trò và các ca link cũ, hết hạn hoặc gửi lỗi trước khi áp dụng cho bản chính.
+3. Phương án gửi mã và lời mời qua email tại thời điểm 20/11 đã được thay thế ngày 21/11. Xem [luồng tạo nhân sự hiện hành](2026-11-21-tong-hop.md#tao-nhan-su-va-google-authenticator).
 4. Nghiệm thu các luồng Auth/R2 và Dashboard trên bản triển khai. Chỉ thêm số liệu phiếu hỗ trợ khi có dữ liệu dùng chung để đối chiếu.
 
 ## Tài liệu và cách tái hiện
 
 - Người học. Mở `#Profile`, `#Flashcard` → **Lịch sử ôn**, `#StudentLanding` hoặc `#StudentHome`. So sánh hai phiên trình duyệt, thử F5 và đối chiếu tiến độ trước/sau **Điểm danh**. [Test hồ sơ](../../backend/tests/learner-profile.test.mjs) · [Test học tập](../../backend/tests/learner-study.integration.mjs)
-- Quản lý. Mở **Người dùng**, thử tìm/lọc và chuyển hai tab. Chọn một hàng để xem chi tiết và lịch sử. Với tài khoản thử trên dev, kiểm tra mời, khóa/mở, đổi vai trò và xóa. Mở **Tổng quan hệ thống** để đối chiếu 7 ngày, 30 ngày hoặc một ngày cụ thể. [Test quản trị](../../backend/tests/admin-users.integration.mjs) · [Hướng dẫn Resend](../HUONG_DAN_RESEND.md)
+- Quản lý. Mở **Người dùng**, thử tìm/lọc và chuyển hai tab. Chọn một hàng để xem chi tiết và lịch sử. Với tài khoản thử trên dev, kiểm tra tạo tài khoản, khóa/mở, đổi vai trò và xóa. Mở **Tổng quan hệ thống** để đối chiếu 7 ngày, 30 ngày hoặc một ngày cụ thể. [Test quản trị](../../backend/tests/admin-users.integration.mjs) · [Hướng dẫn Google Authenticator](../HUONG_DAN_GOOGLE_AUTHENTICATOR_SUPABASE.md)
 - [Danh sách công việc](../TASKS.md) · [Hợp đồng API](../API.md) · [Cơ sở dữ liệu](../DATABASE.md) · [Quy chuẩn giao diện](../DESIGN.md) · [Quy tắc kiểm thử](../RULES.md)

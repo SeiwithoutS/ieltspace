@@ -1,20 +1,18 @@
 import { useAccount } from "../../lib/auth/account";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import AccountDropdown from "./AccountDropdown";
-export default function AccountMenu({ onClose }: { onClose: () => void }) {
+export default function AccountMenu({ opener, onClose }: { opener: HTMLElement; onClose: () => void }) {
+  const root = useRef<HTMLDivElement>(null);
+  const close = () => { onClose(); opener.focus(); };
   useEffect(() => {
-    const key = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", key);
-    return () => document.removeEventListener("keydown", key);
-  }, [onClose]);
+    opener.setAttribute("aria-expanded", "true");
+    root.current?.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+    return () => opener.setAttribute("aria-expanded", "false");
+  }, [opener]);
   const account = useAccount("learner");
-  const anchor = document
-    .querySelector('a[href="AvatarMenu.dc.html"]')
-    ?.getBoundingClientRect();
-  const right = anchor ? Math.max(12, window.innerWidth - anchor.right) : 24;
-  const top = anchor ? anchor.bottom - 44 : 24;
+  const anchor = opener.getBoundingClientRect();
+  const right = Math.max(12, window.innerWidth - anchor.right);
+  const top = anchor.bottom - 44;
   const dark = document.documentElement.classList.contains("dark");
   const base =
     "display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 12px;border-radius:8px;font-size:13px;text-decoration:none;cursor:pointer;box-sizing:border-box;";
@@ -29,7 +27,7 @@ export default function AccountMenu({ onClose }: { onClose: () => void }) {
     avatar: account.avatar,
     email: account.email,
     role: "Người học",
-    close: onClose,
+    close,
     isLight: !dark,
     isDark: dark,
     lightStyle: dark ? off : on,
@@ -39,6 +37,21 @@ export default function AccountMenu({ onClose }: { onClose: () => void }) {
   };
   return (
     <div
+      ref={root}
+      onKeyDown={event => {
+        if (event.key === "Escape") {
+          event.preventDefault(); close(); return;
+        }
+        const items = Array.from(root.current?.querySelectorAll<HTMLElement>('[role="menuitem"], [role="menuitemradio"]') ?? []);
+        const index = items.indexOf(document.activeElement as HTMLElement);
+        if (event.key === "Home") items[0]?.focus();
+        else if (event.key === "End") items[items.length - 1]?.focus();
+        else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+          const step = event.key === "ArrowDown" ? 1 : -1;
+          items[(index + step + items.length) % items.length]?.focus();
+        } else return;
+        event.preventDefault();
+      }}
       style={{
         position: "fixed",
         right,

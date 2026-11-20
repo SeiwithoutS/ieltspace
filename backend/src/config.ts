@@ -10,6 +10,7 @@ const bucketName = z.string().regex(/^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$/);
 
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3001),
+  NOTIFICATION_WORKER_ENABLED: z.enum(['true', 'false']).default('true').transform(value => value === 'true'),
 
   NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -22,9 +23,6 @@ const envSchema = z.object({
   SUPABASE_URL: z.string().url(),
   SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
-  ADMIN_SECURITY_CODE_SECRET: z.string().min(32).optional().or(z.literal('')),
-  RESEND_API_KEY: z.string().optional(),
-  ADMIN_SECURITY_EMAIL_FROM: z.string().optional(),
   STORAGE_BUCKET_COVERS: z.string().default("exam-covers"),
   STORAGE_BUCKET_EXAM_ASSETS: z.string().default("exam-assets"),
   STORAGE_BUCKET_SAMPLE_ASSETS: z.string().regex(/^[a-z0-9][a-z0-9._-]{0,99}$/).default("sample-assets"),
@@ -35,6 +33,7 @@ const envSchema = z.object({
   R2_SECRET_ACCESS_KEY: optionalStorageSetting,
   R2_AVATAR_BUCKET: bucketName.default('ieltspace-avatars-dev'),
   R2_RECORDINGS_BUCKET: bucketName.default('ieltspace-recordings-dev'),
+  R2_VOCABULARY_BUCKET: z.preprocess(value => value === '' ? undefined : value, bucketName.optional()),
 
   DATABASE_URL: z.string().min(1),
   GROQ_API_KEY: z.string().optional(),
@@ -57,6 +56,10 @@ const envSchema = z.object({
   }
   if (config.R2_AVATAR_BUCKET === config.R2_RECORDINGS_BUCKET) {
     ctx.addIssue({ code: 'custom', path: ['R2_RECORDINGS_BUCKET'], message: 'Use separate buckets for avatars and recordings.' });
+  }
+  if (config.R2_VOCABULARY_BUCKET &&
+    [config.R2_AVATAR_BUCKET, config.R2_RECORDINGS_BUCKET].includes(config.R2_VOCABULARY_BUCKET)) {
+    ctx.addIssue({ code: 'custom', path: ['R2_VOCABULARY_BUCKET'], message: 'Use a separate vocabulary images bucket.' });
   }
 });
 

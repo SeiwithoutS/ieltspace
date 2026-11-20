@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { VocabularySet, Word } from "../../data/vocabulary";
 import { apiFetch } from "../shared/api";
+import { publishedVocabularyImageUrl } from "./vocabulary-media";
 
 export type PublishedVocabularySet = VocabularySet & { words: Word[] };
 export type PersonalVocabulary = { id: string; fav: boolean; note: string };
@@ -20,7 +21,14 @@ export function usePublishedVocabulary() {
     setLoading(true);
     setError("");
     apiFetch<{ sets: PublishedVocabularySet[] }>("/vocabulary/sets", { auth: false })
-      .then((result) => { if (active) setSets(result.sets); })
+      .then((result) => {
+        if (!active) return;
+        setSets(result.sets.map(set => ({
+          ...set,
+          cover: publishedVocabularyImageUrl(set.cover ?? ""),
+          words: set.words.map(word => ({ ...word, image: publishedVocabularyImageUrl(word.image ?? "") })),
+        })));
+      })
       .catch((failure: unknown) => {
         if (active) setError(failure instanceof Error ? failure.message : "Không tải được thư viện.");
       })

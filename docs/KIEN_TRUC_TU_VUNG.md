@@ -1,6 +1,12 @@
-Ngày tạo: 16/11/2026 · Cập nhật: 19/11/2026
+Ngày tạo 16/11/2026 · Cập nhật 20/11/2026
 
 # Kiến trúc và thiết lập từ vựng
+
+## Ảnh từ vựng trên R2 ngày 20/11/2026
+
+- Dùng `R2_VOCABULARY_BUCKET=ieltspace-vocabpic-dev` trong backend dev. Khi phát hành chính, đặt bucket riêng của môi trường đó và cấp khóa R2 quyền đọc/ghi đúng bucket.
+- Wikipedia → Unsplash → Pixabay là thứ tự tìm ảnh. Giữ URL nguồn đối với Wikipedia/Unsplash. Pixabay hiển thị gợi ý và chỉ chép vào R2 sau khi Quản lý chọn. Ảnh từ máy và ảnh bìa dùng cùng luồng kiểm tra JPG/PNG/WebP tối đa 1 MiB.
+- Nháp lưu tham chiếu ảnh. Quản lý lấy URL ký để xem trước. Thư viện mở ảnh thuộc bản công bố qua URL ứng dụng. Khi lưu thay ảnh trong nháp, bản công bố tiếp tục dùng ảnh cũ. [Hợp đồng API](API.md#ảnh-từ-vựng) · [SQL 22](csdl/22_vocabulary_image_assets.sql) · [Tiến độ đợt 3](PROGRESS/2026-11-20-tong-hop-phan-3.md#anh-tu-vung-r2-dot-3)
 
 ## Nhập tệp và tự lưu bản nháp ngày 19/11/2026
 

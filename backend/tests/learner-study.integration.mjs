@@ -158,6 +158,13 @@ test('Study goals, Flashcard sessions and check-ins persist with independent pro
     await saveScore(other, listening, 'FULL_SKILL', 'COMPLETED', 8, null);
     const results = (await call('/results', 'get', {}, learner)).body.items;
     assert.deepEqual(new Set(results.map(item => item.id)), new Set([bandId, practiceId]));
+    const lr = (await call('/results', 'get', {}, learner, { group: 'LR' })).body.items;
+    assert.deepEqual(new Set(lr.map(item => item.id)), new Set([bandId, practiceId]));
+    const ws = (await call('/results', 'get', {}, learner, { group: 'WS' })).body.items;
+    assert.deepEqual(ws.map(item => [item.id, item.band, item.accuracy]), [[writingId, null, null]]);
+    assert.equal((await call('/results', 'get', {}, other, { group: 'WS' })).body.items.length, 0);
+    assert.equal((await call('/results', 'get', {}, learner, { group: 'WS', kind: 'band' })).body.items.length, 0);
+    assert.equal((await call('/results', 'get', {}, learner, { group: 'WS', before: bandId })).body.items.length, 0);
     assert.deepEqual(results.find(item => item.id === bandId), {
       id: bandId, title: 'Bộ đề thử · Test 1', completedAt: results.find(item => item.id === bandId).completedAt,
       skill: 'LISTENING', form: null, scope: 'FULL_SKILL', band: 0, accuracy: null, correct: null, total: null,
@@ -195,6 +202,45 @@ test('Study goals, Flashcard sessions and check-ins persist with independent pro
     const otherProgress = (await call('/progress', 'get', {}, other)).body;
     assert.equal(otherProgress.todaySessions, 1);
     assert.equal(otherProgress.checkedInToday, false);
+
+    await assert.rejects(call('/dashboard', 'get', {}, learner, { days: '99' }), { code: 'INVALID_DASHBOARD_RANGE' });
+    await db.query(`INSERT INTO public.attempts VALUES ($1,$2,$3,'FULL_SKILL','COMPLETED',now() - interval '9 days')`,
+      [randomUUID(), learner, exam]);
+    await db.query(`INSERT INTO public.attempts VALUES ($1,$2,$3,'FULL_SKILL','COMPLETED',now() + interval '1 hour')`,
+      [randomUUID(), learner, exam]);
+    const weekly = (await call('/dashboard')).body;
+    assert.deepEqual([weekly.practice, weekly.flashcards, weekly.reviewedWords], [3, 3, 12]);
+    assert.deepEqual(weekly.skills, { LISTENING: 2, WRITING: 1 });
+    assert.equal(weekly.days.length, 7);
+    assert.equal(weekly.days.at(-1).date, progress.today);
+    assert.equal(weekly.days.reduce((sum, day) => sum + day.practice, 0), 3);
+    assert.equal(weekly.days.reduce((sum, day) => sum + day.flashcards, 0), 3);
+    const monthly = (await call('/dashboard', 'get', {}, learner, { days: '30' })).body;
+    assert.equal(monthly.days.length, 30);
+    assert.equal(monthly.practice, 4);
+    const otherDashboard = (await call('/dashboard', 'get', {}, other)).body;
+    assert.deepEqual([otherDashboard.practice, otherDashboard.flashcards, otherDashboard.reviewedWords], [1, 0, 0]);
+
+    const calendar = (await call('/activity-calendar')).body;
+    assert.equal(calendar.endDate, progress.today);
+    assert.equal(Date.parse(calendar.endDate) - Date.parse(calendar.startDate), 364 * 86_400_000);
+    assert.equal(calendar.days.reduce((total, day) => total + day.practice, 0), 4);
+    const recentDays = calendar.days.filter(day => day.date >= weekly.days[0].date);
+    assert.equal(recentDays.reduce((total, day) => total + day.flashcards, 0), 2);
+    const otherCalendar = (await call('/activity-calendar', 'get', {}, other)).body;
+    assert.deepEqual(otherCalendar.days.map(day => [day.practice, day.flashcards]), [[1, 0]]);
+    assert.equal(otherCalendar.years.length, 1);
+
+    const previousYear = (await call('/activity-calendar', 'get', {}, learner, { year: '2025' })).body;
+    assert.equal(previousYear.startDate, '2025-01-01');
+    assert.equal(previousYear.endDate, '2025-12-31');
+    assert.deepEqual(previousYear.days, [{ date: '2025-12-31', practice: 0, flashcards: 1 }]);
+    const nextYear = (await call('/activity-calendar', 'get', {}, learner, { year: '2026' })).body;
+    assert.deepEqual(nextYear.days.find(day => day.date === '2026-01-01'), { date: '2026-01-01', practice: 0, flashcards: 1 });
+    assert.ok(calendar.years.includes(2025));
+    assert.equal((await call('/activity-calendar', 'get', {}, learner, { year: '2024' })).body.days.length, 0);
+    await assert.rejects(call('/activity-calendar', 'get', {}, learner, { year: '2199' }), { code: 'INVALID_ACTIVITY_YEAR' });
+    await assert.rejects(call('/activity-calendar', 'get', {}, learner, { year: '2025.5' }), { code: 'INVALID_ACTIVITY_YEAR' });
   } finally {
     await db.close();
   }

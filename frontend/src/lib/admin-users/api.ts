@@ -15,7 +15,7 @@ export const userStatuses = {
 
 export type UserRole = keyof typeof userRoles;
 export type UserStatus = keyof typeof userStatuses;
-type RegistrationSource = 'EMAIL' | 'GOOGLE' | 'INVITE';
+type RegistrationSource = 'EMAIL' | 'GOOGLE' | 'INVITE' | 'STAFF';
 
 export type DirectoryFilters = {
   q: string;
@@ -83,7 +83,7 @@ export type LoginEvent = {
 export type AccountAudit = {
   id: string;
   actorName: string | null;
-  action: 'USER_ROLE_CHANGED' | 'USER_LOCKED' | 'USER_UNLOCKED' | 'USER_DELETED' | 'USER_INVITED' | 'USER_INVITE_REISSUED' | 'USER_INVITE_ACCEPTED';
+  action: 'USER_ROLE_CHANGED' | 'USER_LOCKED' | 'USER_UNLOCKED' | 'USER_DELETED' | 'USER_CREATED' | 'USER_INVITED' | 'USER_INVITE_REISSUED' | 'USER_INVITE_ACCEPTED';
   before: string | null;
   after: string | null;
   reason: string | null;
@@ -105,21 +105,15 @@ export function getAccountHistory(id: string, kind: 'login' | 'admin', page: num
 type MutableStatus = 'ACTIVE' | 'LOCKED';
 export type AccountAction = { previousRole: UserRole; previousStatus: Exclude<UserStatus, 'DELETED'>; reason: string } &
   ({ kind: 'role'; role: UserRole } | { kind: 'status'; status: MutableStatus } | { kind: 'delete' });
-export type StaffInvitation = { fullName: string; email: string } &
+export type StaffAccountInput = { fullName: string; email: string } &
   ({ role: 'ADMIN' } | { role: 'TEACHER'; maxPending: number; writing: boolean; speaking: boolean });
-type SecurityCode = { id: string; code: string };
+export type StaffCredentials = { email: string; temporaryPassword: string };
 
-export function requestAccountCode(userId: string, action: AccountAction) {
-  return apiFetch<{ id: string; expiresInSeconds: number }>(`/admin/users/${encodeURIComponent(userId)}/security-code`, {
-    method: 'POST', json: action,
-  });
-}
-
-export function applyAccountAction(userId: string, action: AccountAction, securityCode?: SecurityCode) {
+export function applyAccountAction(userId: string, action: AccountAction, code?: string) {
   const path = `/admin/users/${encodeURIComponent(userId)}`;
   return apiFetch<{ id: string; role: UserRole; status: UserStatus; changed: boolean; cleanup?: 'PENDING' | 'COMPLETE' }>(
     action.kind === 'delete' ? path : `${path}/${action.kind}`,
-    { method: action.kind === 'delete' ? 'DELETE' : 'PATCH', json: { action, securityCode } },
+    { method: action.kind === 'delete' ? 'DELETE' : 'PATCH', json: { action, code } },
   );
 }
 
@@ -127,10 +121,6 @@ export function retryAccountDeletion(userId: string) {
   return apiFetch<{ cleanup: 'PENDING' | 'COMPLETE' }>(`/admin/users/${encodeURIComponent(userId)}/deletion-retry`, { method: 'POST' });
 }
 
-export function sendStaffInvitation(invitation: StaffInvitation, securityCode?: SecurityCode) {
-  return apiFetch<{ id: string; status: 'INVITED' }>('/admin/users/invitations', { method: 'POST', json: { invitation, securityCode } });
-}
-
-export function requestInvitationCode(invitation: StaffInvitation) {
-  return apiFetch<{ id: string; expiresInSeconds: number }>('/admin/users/invitations/security-code', { method: 'POST', json: invitation });
+export function createStaffAccount(account: StaffAccountInput, code?: string) {
+  return apiFetch<StaffCredentials & { id: string; status: 'ACTIVE' }>('/admin/users/staff', { method: 'POST', json: { account, code } });
 }

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { detectImageExtension } from '../../integrations/storage/supabase-storage.js';
 import { avatarMaxMiB, ownedAvatarReference, putAvatar, removeAvatar, signAvatar } from '../../integrations/storage/avatar-storage.js';
 import { prisma } from '../../lib/prisma.js';
-import { invalidateUserCache, requireAuth, requireRole, userSelect } from '../../middleware/auth.js';
+import { invalidateUserCache, requireFreshAuth, userSelect } from '../../middleware/auth.js';
 import { asyncHandler, HttpError } from '../../utils/http.js';
 
 const maxAvatarBytes = avatarMaxMiB * 1024 * 1024;
@@ -13,7 +13,7 @@ const parseImage = express.raw({ type: avatarTypes, limit: maxAvatarBytes, infla
 const displayNameSchema = z.object({ displayName: z.string().trim().min(2).max(100) }).strict();
 
 export const profileRouter = Router();
-profileRouter.use(requireAuth, requireRole('LEARNER'));
+profileRouter.use(requireFreshAuth);
 
 profileRouter.get('/avatar-options', (_req, res) => {
   res.json({ maxBytes: maxAvatarBytes });
@@ -22,7 +22,7 @@ profileRouter.get('/avatar-options', (_req, res) => {
 function ownProfile(req: Request) {
   const { id, auth_user_id } = req.appUser!;
   if (!auth_user_id) throw new HttpError(403, 'ACCOUNT_UNAVAILABLE', 'Tài khoản không được phép cập nhật hồ sơ.');
-  return { id, auth_user_id, status: 'ACTIVE', role: 'LEARNER' };
+  return { id, auth_user_id, status: 'ACTIVE' };
 }
 
 async function replaceAvatar(req: Request, path: string | null) {
@@ -30,7 +30,7 @@ async function replaceAvatar(req: Request, path: string | null) {
   const { user, previous } = await prisma.$transaction(async tx => {
     const [previous] = await tx.$queryRaw<{ avatar_url: string | null }[]>`
       SELECT avatar_url FROM public.users WHERE id = ${where.id}::uuid
-      AND auth_user_id = ${where.auth_user_id}::uuid AND status = 'ACTIVE' AND role = 'LEARNER'
+      AND auth_user_id = ${where.auth_user_id}::uuid AND status = 'ACTIVE'
       FOR UPDATE`;
     if (!previous) throw new HttpError(403, 'ACCOUNT_UNAVAILABLE', 'Tài khoản không được phép cập nhật hồ sơ.');
     const user = await tx.users.update({ where, data: { avatar_url: path }, select: userSelect });
@@ -39,7 +39,7 @@ async function replaceAvatar(req: Request, path: string | null) {
   if (user.auth_user_id) invalidateUserCache(user.auth_user_id);
   const oldPath = ownedAvatarReference(previous.avatar_url, user.id);
   if (oldPath && oldPath !== path) await removeAvatar(oldPath);
-  return user;
+  return { ...user, must_change_password: req.appUser!.must_change_password };
 }
 
 profileRouter.patch('/', asyncHandler(async (req, res) => {
@@ -49,7 +49,7 @@ profileRouter.patch('/', asyncHandler(async (req, res) => {
   const [user] = await prisma.users.updateManyAndReturn({ where, data: { display_name: input.data.displayName }, select: userSelect });
   if (!user) throw new HttpError(403, 'ACCOUNT_UNAVAILABLE', 'Tài khoản không được phép cập nhật hồ sơ.');
   if (user.auth_user_id) invalidateUserCache(user.auth_user_id);
-  res.json({ user });
+  res.json({ user: { ...user, must_change_password: req.appUser!.must_change_password } });
 }));
 
 profileRouter.get('/avatar', asyncHandler(async (req, res) => {

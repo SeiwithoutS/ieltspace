@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { login, navigate, home } from '../../lib/auth/auth';
+import { login, navigate, home, openEmailVerification, getAuthUser } from '../../lib/auth/auth';
+import { isSupportLogin, supportDestination } from '../../lib/reports/support-navigation';
 import { Field, Notice, GoogleButton } from './AuthFields';
 export default function LoginForm({ callbackNotice }: {
     callbackNotice?: string;
 }) { const [email, setEmail] = useState(''), [password, setPassword] = useState(''), [busy, setBusy] = useState(false), [error, setError] = useState(''); async function submit(e: React.FormEvent<HTMLFormElement>) { e.preventDefault(); if (busy)
     return; setBusy(true); setError(''); try {
+    const support = isSupportLogin();
     await login(email, password);
-    navigate(home());
+    navigate(support ? supportDestination(getAuthUser()?.role) : home());
 }
 catch (e) {
+    if (e instanceof Error && 'code' in e && e.code === 'EMAIL_NOT_VERIFIED') {
+        openEmailVerification(email);
+        return;
+    }
     setError(e instanceof Error ? e.message : 'Thao tác không thành công. Vui lòng thử lại.');
 }
 finally {

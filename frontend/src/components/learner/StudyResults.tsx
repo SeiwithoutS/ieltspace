@@ -1,85 +1,90 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PageLink from '../navigation/PageLink';
-import { getStudyResults, skillNames, type StudyResult, type LearnerSkill, type ResultKind } from '../../lib/learner/study-overview';
-import { learnerMuted, studyPanel } from './StudyProgress';
+import { useStudyResults, resultGroups, skillNames, type StudyResult, type LearnerSkill, type ResultKind } from '../../lib/learner/study-overview';
+import './learner-study.css';
 
 const shortDate = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'short', timeZone: 'Asia/Ho_Chi_Minh' });
 const accuracyFormat = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 2 });
 const scopes: Record<StudyResult['scope'], string> = {
   FULL_EXAM: 'Toàn bài', FULL_SKILL: 'Toàn kỹ năng', SECTION: 'Theo phần', QUESTION_GROUP: 'Theo nhóm câu',
 };
-const control = 'min-h-9 rounded-lg border border-solid border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-transparent px-3 text-inherit';
 
-export default function StudyResults({ recent = false }: { recent?: boolean }) {
-  const [kind, setKind] = useState<ResultKind>(recent ? 'all' : 'band');
+export default function StudyResults({ recent = false, sample }: { recent?: boolean; sample?: readonly StudyResult[] }) {
+  const [kind, setKind] = useState<ResultKind>('all');
   const [skill, setSkill] = useState<LearnerSkill | ''>('');
 
-  return <section id={recent ? 'gan-day' : 'lich-su'} aria-label={recent ? 'Bài làm gần đây' : 'Lịch sử luyện đề'}
-    className={recent ? 'mx-auto max-w-[1200px] px-6 pt-9' : studyPanel}>
+  if (recent) return <section id="gan-day" aria-label="Bài làm gần đây" className="mx-auto max-w-[1200px] px-6 pt-9">
     <div className="flex flex-wrap items-baseline justify-between gap-2">
-      <h2 className="m-0 text-xl font-bold">{recent ? 'Bài làm gần đây' : 'Lịch sử luyện đề'}</h2>
-      {recent && <PageLink page="StudentHome" className="text-sm font-semibold">Mở Dashboard</PageLink>}
+      <h2 className="m-0 text-xl font-bold">Bài làm gần đây</h2>
+      <PageLink page="PracticeHistory" className="text-sm font-semibold">Xem lịch sử luyện tập</PageLink>
     </div>
-    {!recent && <div className="my-3 flex flex-wrap gap-2">
-      <div className="grid gap-1 text-sm"><label htmlFor="learner-result-kind">Loại kết quả</label>
-        <select id="learner-result-kind" className={control} value={kind} onChange={event => setKind(event.currentTarget.value === 'practice' ? 'practice' : 'band')}>
-          <option value="band">Band theo kỹ năng</option>
-          <option value="practice">Tỷ lệ đúng bài luyện</option>
-        </select>
+    <ResultList kind="all" recent />
+  </section>;
+
+  return <section className="learner-study-panel" aria-labelledby="practice-results-title">
+    <div className="learner-study-results-header">
+      <div>
+        <h2 id="practice-results-title">Bài đã hoàn thành</h2>
+        <p className="learner-study-muted">Kết quả hiển thị theo band kỹ năng hoặc tỷ lệ trả lời đúng.</p>
       </div>
-      <div className="grid gap-1 text-sm"><label htmlFor="learner-result-skill">Kỹ năng</label>
-        <select id="learner-result-skill" className={control} value={skill} onChange={event => {
-          const value = event.currentTarget.value;
-          setSkill(Object.prototype.hasOwnProperty.call(skillNames, value) ? value as LearnerSkill : '');
-        }}>
-          <option value="">Tất cả</option>
-          {Object.entries(skillNames).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
-        </select>
+      <div className="learner-study-filters">
+        <label>Kỹ năng
+          <select className="learner-study-control" value={skill} onChange={event => setSkill(event.currentTarget.value as LearnerSkill | '')}>
+            <option value="">Tất cả kỹ năng</option>
+            {resultGroups.LR.map(id => <option key={id} value={id}>{skillNames[id]}</option>)}
+          </select>
+        </label>
+        <label>Loại kết quả
+          <select className="learner-study-control" value={kind} onChange={event => setKind(event.currentTarget.value as ResultKind)}>
+            <option value="all">Tất cả kết quả</option>
+            <option value="band">Có điểm band</option>
+            <option value="practice">Có tỷ lệ đúng</option>
+          </select>
+        </label>
       </div>
-    </div>}
-    <ResultList key={`${kind}:${skill}`} kind={kind} skill={skill || undefined} recent={recent} />
+    </div>
+    <ResultList key={`${kind}:${skill}`} kind={kind} skill={skill || undefined} sample={sample} />
   </section>;
 }
 
-function ResultList({ kind, skill, recent }: { kind: ResultKind; skill?: LearnerSkill; recent: boolean }) {
-  const [items, setItems] = useState<StudyResult[]>([]);
-  const [next, setNext] = useState<string | null>(null);
-  const [request, setRequest] = useState<{ before?: string }>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+function ResultList({ kind, skill, recent = false, sample }: {
+  kind: ResultKind; skill?: LearnerSkill; recent?: boolean; sample?: readonly StudyResult[];
+}) {
+  const result = useStudyResults({ kind, skill, group: recent ? undefined : 'LR', limit: recent ? 4 : 15 }, Boolean(sample));
+  const { next, loading, error, retry, loadMore } = result;
+  const items = sample?.filter(item => (!skill || item.skill === skill) &&
+    (kind === 'all' || (kind === 'band' ? item.band !== null : item.accuracy !== null))) ?? result.items;
 
-  useEffect(() => {
-    let active = true;
-    setLoading(true);
-    setError('');
-    void getStudyResults({ kind, skill, limit: recent ? 4 : 15, before: request.before }).then(result => {
-      if (!active) return;
-      setItems(current => request.before ? [...current, ...result.items] : result.items);
-      setNext(result.nextCursor);
-    }).catch(() => { if (active) setError('Chưa tải được lịch sử kết quả.'); })
-      .finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [request, recent, skill, kind]);
-
-  return <>
-    {kind === 'band' && <p className={`my-2 text-sm ${learnerMuted}`}>Band theo kỹ năng từ kết quả đã lưu. Chưa có band tổng đã lưu.</p>}
-    {loading && <p role="status">Đang tải kết quả…</p>}
-    {error && <p role="alert">{error} <button type="button" className={control} onClick={() => setRequest(current => ({ ...current }))}>Thử lại</button></p>}
-    {!items.length && !loading && !error && <p className={learnerMuted}>{kind === 'band' ? 'Chưa có kết quả band đã lưu.'
-      : kind === 'practice' ? 'Chưa có kết quả bài luyện đã lưu.' : 'Chưa có kết quả đã lưu.'}</p>}
-    {!!items.length && <ul className={`m-0 grid list-none gap-2 p-0 ${recent ? 'mt-3 sm:grid-cols-2' : ''}`}>
-      {items.map(item => <li key={item.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-solid border-[var(--attempt-line-d6d4d0,#D6D4D0)] p-3">
-        <div className="min-w-0 break-words">
-          <strong>{item.title}</strong>
-          <div className={`text-sm ${learnerMuted}`}>
-            {skillNames[item.skill]}{item.form ? ` · ${item.form === 'GENERAL' ? 'General Training' : 'Academic'}` : ''} · {scopes[item.scope]} ·{' '}
+  return <div className="learner-study-result-list" aria-busy={loading}>
+    {!!items.length && <ul className={recent ? 'learner-study-recent' : undefined}>
+      {items.map(item => {
+        const score = item.band !== null ? `Band ${item.band.toFixed(1)}` : item.accuracy !== null
+          ? `${accuracyFormat.format(item.accuracy)}% đúng` : 'Chưa có điểm';
+        return <li key={item.id} className="learner-study-result">
+          <div className="learner-study-result-info">
+            <div className="learner-study-result-tags">
+              <span className="learner-study-badge" data-skill={item.skill}>{skillNames[item.skill]}</span>
+              <span>{scopes[item.scope]}</span>
+              {item.form && <span>{item.form === 'GENERAL' ? 'General Training' : 'Academic'}</span>}
+            </div>
+            <strong className="learner-study-result-title">{item.title}</strong>
             <time dateTime={item.completedAt}>{shortDate.format(new Date(item.completedAt))}</time>
           </div>
-        </div>
-        <strong className="tabular-nums">{item.band !== null ? `Band ${item.band.toFixed(1)}` : item.accuracy !== null
-          ? `${accuracyFormat.format(item.accuracy)}% đúng${item.correct !== null && item.total !== null ? ` (${item.correct}/${item.total})` : ''}` : '—'}</strong>
-      </li>)}
+          <div className="learner-study-result-score" data-pending={item.band === null && item.accuracy === null}>
+            <strong>{score}</strong>
+            {item.accuracy !== null && item.correct !== null && item.total !== null && <span>{item.correct}/{item.total} câu</span>}
+          </div>
+        </li>;
+      })}
     </ul>}
-    {!recent && next && <button type="button" className={`${control} mt-3`} disabled={loading} onClick={() => setRequest({ before: next })}>Xem thêm</button>}
-  </>;
+    {loading && <p role="status" className="learner-study-empty">Đang tải kết quả…</p>}
+    {error && <div role="alert" className="learner-study-empty">{error}{' '}
+      <button type="button" className="learner-study-button" onClick={retry}>Thử lại</button>
+    </div>}
+    {!items.length && !loading && !error && <p className="learner-study-empty">
+      {kind === 'all' ? 'Chưa có bài làm đã lưu.' : 'Chưa có kết quả phù hợp với bộ lọc.'}
+    </p>}
+    {!recent && next && !error && <button type="button" className="learner-study-button" disabled={loading}
+      onClick={loadMore}>Xem thêm</button>}
+  </div>;
 }

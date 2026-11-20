@@ -8,6 +8,7 @@ const auditLabel = {
   USER_UNLOCKED: 'Mở khóa tài khoản',
   USER_DELETED: 'Xóa tài khoản',
   USER_INVITED: 'Tạo lời mời',
+  USER_CREATED: 'Tạo tài khoản',
   USER_INVITE_REISSUED: 'Gửi lại lời mời',
   USER_INVITE_ACCEPTED: 'Nhận lời mời',
 };

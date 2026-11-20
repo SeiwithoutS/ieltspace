@@ -369,18 +369,8 @@ export async function uploadSampleAsset(
     sizeBytes: input.buffer.length,
   };
 
-  const { error: uploadError } = await client.storage
-    .from(bucket)
-    .upload(path, input.buffer, {
-      contentType: asset.mimeType,
-      upsert: false,
-      cacheControl: "60",
-    });
-
-  if (uploadError) storageUnavailable();
-
-  try {
-    await prisma.$executeRaw`
+  // Register before uploading so an ambiguous Storage failure remains discoverable.
+  await prisma.$executeRaw`
       insert into public.sample_media_assets (
         id,
         sample_id,
@@ -403,26 +393,83 @@ export async function uploadSampleAsset(
         ${asset.sizeBytes},
         ${input.userId}::uuid
       )
-    `;
-  } catch (error: unknown) {
-    // Bù trừ nếu upload thành công nhưng đăng ký DB thất bại.
-    // Không log key hoặc signed URL.
-    try {
-      const { error: removeError } = await client.storage
-        .from(bucket)
-        .remove([path]);
+  `;
 
-      if (removeError) {
-        console.warn("Sample asset compensation failed.");
-      }
-    } catch {
-      console.warn("Sample asset compensation failed.");
-    }
-
-    throw error;
-  }
+  const { error: uploadError } = await client.storage
+    .from(bucket)
+    .upload(path, input.buffer, {
+      contentType: asset.mimeType,
+      upsert: false,
+      cacheControl: "60",
+    });
+  if (uploadError) storageUnavailable();
 
   return asset;
+}
+
+type CleanupCandidate = { id: string; path: string };
+
+// Match by path even if old references have metadata that differs from the receipt.
+const unusedMedia = Prisma.sql`
+  a.bucket = ${env.STORAGE_BUCKET_SAMPLE_ASSETS}
+  and a.path ~ ('^samples/' || a.sample_id || '/' || a.kind || '/' || a.id || '[.](jpg|png|webp|mp3|wav|m4a)$')
+  and (a.state = 'DELETING' or a.created_at <= now() - interval '7 days')
+  and not exists (
+    select 1 from (values (s.published_payload), (d.payload)) doc(payload)
+    cross join lateral (values (doc.payload->'cover'), (doc.payload->'promptImage')) refs(ref)
+    where refs.ref->>'path' = a.path
+  )
+  and not exists (
+    select 1 from (values (s.published_payload), (d.payload)) doc(payload)
+    cross join lateral jsonb_path_query(doc.payload, '$.items[*].audio') refs(ref)
+    where refs.ref->>'path' = a.path
+  )
+`;
+
+function cleanupCandidates(db: Database, lock: boolean) {
+  return db.$queryRaw<CleanupCandidate[]>(Prisma.sql`
+    select a.id, a.path
+    from public.sample_media_assets a
+    join public.sample_answers s on s.id = a.sample_id
+    left join public.sample_answer_drafts d on d.sample_id = s.id
+    where ${unusedMedia}
+    order by (a.state = 'DELETING') desc, a.created_at, a.id
+    limit 100
+    ${lock ? Prisma.sql`for update of s skip locked` : Prisma.empty}
+  `);
+}
+
+export async function cleanupSampleMedia(prisma: PrismaClient, apply: boolean) {
+  if (!apply) {
+    const candidates = await cleanupCandidates(prisma, false);
+    return { candidates: candidates.length, removed: 0, failed: 0 };
+  }
+  const { client, bucket } = await privateStorage();
+  const candidates = await prisma.$transaction(async tx => {
+    const locked = await cleanupCandidates(tx, true);
+    if (!locked.length) return [];
+
+    // Draft saves and publication hold the same sample locks. Re-read after
+    // acquiring them so a save that just committed is visible before claiming.
+    return tx.$queryRaw<CleanupCandidate[]>(Prisma.sql`
+      update public.sample_media_assets a set state = 'DELETING'
+      from public.sample_answers s
+      left join public.sample_answer_drafts d on d.sample_id = s.id
+      where a.sample_id = s.id
+        and a.id in (${Prisma.join(locked.map(item => Prisma.sql`${item.id}::uuid`))})
+        and ${unusedMedia}
+      returning a.id, a.path
+    `);
+  });
+  if (!candidates.length) return { candidates: 0, removed: 0, failed: 0 };
+
+  const { error } = await client.storage.from(bucket).remove(candidates.map(item => item.path));
+  if (error) return { candidates: candidates.length, removed: 0, failed: candidates.length };
+  await prisma.$executeRaw(Prisma.sql`
+    delete from public.sample_media_assets
+    where state = 'DELETING' and id in (${Prisma.join(candidates.map(item => Prisma.sql`${item.id}::uuid`))})
+  `);
+  return { candidates: candidates.length, removed: candidates.length, failed: 0 };
 }
 
 export async function getSampleAssetUrl(

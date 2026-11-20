@@ -1,19 +1,46 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { getStudyGoals, saveStudyGoal, type GoalValues, type StudyGoal } from '../../lib/auth/study-goals';
+import '../learner/learner-study.css';
 
-const fields = [
-  ['overall', 'Band mục tiêu tổng'], ['listening', 'Listening'], ['reading', 'Reading'],
-  ['writing', 'Writing'], ['speaking', 'Speaking'],
+const skills = [
+  ['listening', 'Listening'], ['reading', 'Reading'], ['writing', 'Writing'], ['speaking', 'Speaking'],
 ] as const;
-const options = Array.from({ length: 19 }, (_, index) => (index / 2).toFixed(1));
-const timeFormat = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Ho_Chi_Minh' });
-const formControl = 'box-border min-h-10 w-full rounded-lg border border-solid border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-ffffff,#fff)] px-3 text-inherit';
-const button = 'min-h-10 cursor-pointer rounded-full border border-solid border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-transparent px-4 text-inherit font-semibold disabled:opacity-60';
+const bands = Array.from({ length: 19 }, (_, index) => (index / 2).toFixed(1));
+const sessionOptions = Array.from({ length: 10 }, (_, index) => index + 1);
+const date = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'medium', timeZone: 'Asia/Ho_Chi_Minh' });
+const time = new Intl.DateTimeFormat('vi-VN', { timeStyle: 'short', timeZone: 'Asia/Ho_Chi_Minh' });
+
+function BandField({ name, label, value }: { name: keyof Omit<GoalValues, 'dailySessions'>; label: string; value?: number | null }) {
+  return <label>{label}
+    <select name={name} className="learner-study-control" defaultValue={value?.toFixed(1) ?? ''}>
+      <option value="">Chưa đặt</option>
+      {bands.map(option => <option key={option} value={option}>{option}</option>)}
+    </select>
+  </label>;
+}
+
+function DailySessions({ saved }: { saved: number }) {
+  const [selected, setSelected] = useState(sessionOptions.includes(saved) ? String(saved) : 'custom');
+  return <div className="learner-study-daily">
+    <label>Số phiên học mỗi ngày
+      <select name={selected === 'custom' ? undefined : 'dailySessions'} className="learner-study-control" value={selected}
+        onChange={event => setSelected(event.target.value)}>
+        {sessionOptions.map(value => <option key={value} value={value}>{value}</option>)}
+        <option value="custom">Số phiên khác</option>
+      </select>
+    </label>
+    {selected === 'custom' && <label>Nhập số phiên
+      <input type="number" name="dailySessions" min={1} max={2147483647} step={1} required
+        className="learner-study-control" defaultValue={saved > sessionOptions.length ? saved : undefined} />
+    </label>}
+  </div>;
+}
 
 export default function StudyGoals() {
   const [history, setHistory] = useState<StudyGoal[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [retry, setRetry] = useState(0);
+  const [reset, setReset] = useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -32,7 +59,7 @@ export default function StudyGoals() {
     event.preventDefault();
     if (busy) return;
     const form = new FormData(event.currentTarget);
-    const readBand = (key: keyof GoalValues) => {
+    const readBand = (key: string) => {
       const value = form.get(key);
       return value == null || value === '' ? null : Number(value);
     };
@@ -51,37 +78,56 @@ export default function StudyGoals() {
     } finally { setBusy(false); }
   }
 
-  return <section aria-label="Mục tiêu học tập" className="grid gap-3 rounded-[22px] border border-solid border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-[var(--attempt-bg-ffffff,#fff)] p-4 sm:p-7 shadow-sm">
-    <h2 className="m-0 text-lg font-bold">Mục tiêu học tập</h2>
-    <p className="m-0 text-sm">Band từ 0 đến 9, theo bước 0,5. Nhập band tổng riêng với mục tiêu từng kỹ năng.</p>
-    {!loaded && !error && <p role="status" className="m-0">Đang tải mục tiêu…</p>}
-    {error && <p role="alert" className="m-0">{error} {!loaded && <button type="button" className={button} onClick={() => setRetry(value => value + 1)}>Thử lại</button>}</p>}
-    {loaded && <>
-      <form key={current?.id ?? 'new'} className="grid gap-3" onSubmit={save}>
-        <fieldset disabled={busy} className="m-0 grid min-w-0 grid-cols-1 gap-3 border-0 p-0 sm:grid-cols-2">
-          {fields.map(([field, label]) => <label key={field} className="grid gap-1 text-sm">{label}
-            <select name={field} className={formControl} defaultValue={current?.[field]?.toFixed(1) ?? ''}>
-              <option value="">Chưa đặt</option>
-              {options.map(value => <option key={value} value={value}>{value}</option>)}
-            </select>
-          </label>)}
-          <label className="grid gap-1 text-sm">Số phiên học mỗi ngày
-            <input type="number" name="dailySessions" min={1} max={2147483647} step={1} required className={formControl} defaultValue={current?.dailySessions ?? 1} />
-          </label>
+  function cancel() {
+    setError('');
+    setMessage('');
+    setReset(value => value + 1);
+  }
+
+  return <>
+    <section className="learner-study-panel learner-goals" aria-labelledby="learner-goals-title">
+      <h2 id="learner-goals-title">Mục tiêu học tập</h2>
+      <p className="learner-study-muted">Band từ 0 đến 9, theo bước 0,5. Mục tiêu tổng được nhập riêng.</p>
+      {!loaded && !error && <p role="status">Đang tải mục tiêu…</p>}
+      {loaded && <form key={`${current?.id ?? 'new'}:${reset}`} onSubmit={save}>
+        <fieldset disabled={busy}>
+          <div className="learner-goal-primary">
+            <BandField name="overall" label="Band mục tiêu tổng" value={current?.overall} />
+            <DailySessions saved={current?.dailySessions ?? 1} />
+          </div>
+          <h3>Band mục tiêu theo kỹ năng (tùy chọn)</h3>
+          <div className="learner-goal-skills">
+            {skills.map(([name, label]) => <BandField key={name} name={name} label={label} value={current?.[name]} />)}
+          </div>
+          <p className="learner-study-muted learner-goal-hint">Một phiên học là một lượt làm bài đã hoàn thành hoặc một phiên Flashcard đủ điều kiện.</p>
+          <div className="learner-study-actions">
+            <button type="button" className="learner-study-button learner-study-cancel" onClick={cancel}>Hủy</button>
+            <button type="submit" className="learner-study-button learner-study-primary">{busy ? 'Đang lưu…' : 'Lưu mục tiêu'}</button>
+          </div>
         </fieldset>
-        <button type="submit" disabled={busy} className={`${button} justify-self-start`}>{busy ? 'Đang lưu…' : 'Lưu mục tiêu'}</button>
-      </form>
-      {message && <p role="status" className="m-0 text-sm">{message}</p>}
-      {current && <details>
-        <summary className="cursor-pointer font-semibold">Lịch sử mục tiêu</summary>
-        <ol className="grid gap-2 pl-5 text-sm">
-          {history.map(goal => <li key={goal.id}>
-            <time dateTime={goal.effectiveFrom}>{timeFormat.format(new Date(goal.effectiveFrom))}</time>
-            {' · '}{goal.dailySessions} phiên/ngày
-            <div>{fields.map(([field, label]) => `${label}: ${goal[field]?.toFixed(1) ?? '—'}`).join(' · ')}</div>
-          </li>)}
-        </ol>
-      </details>}
-    </>}
-  </section>;
+      </form>}
+      {message && <p role="status" className="learner-goal-success">{message}</p>}
+      {error && <div role="alert" className="learner-goal-error">{error}{' '}
+        {!loaded && <button type="button" className="learner-study-button" onClick={() => setRetry(value => value + 1)}>Thử lại</button>}
+      </div>}
+    </section>
+    {current && <details className="learner-study-panel learner-goal-history">
+      <summary><span>Lịch sử đã lưu</span><span className="learner-goal-count">{history.length} lần lưu</span></summary>
+      <ol>
+        {history.map((goal, index) => {
+          const savedAt = new Date(goal.effectiveFrom);
+          return <li key={goal.id} className="learner-goal-record">
+            <header><time dateTime={goal.effectiveFrom}>{date.format(savedAt)} · {time.format(savedAt)}</time>
+              {index === 0 && <span className="learner-study-badge">Đang áp dụng</span>}
+            </header>
+            <dl>
+              <div><dt>Band tổng</dt><dd>{goal.overall?.toFixed(1) ?? '—'}</dd></div>
+              <div><dt>Phiên/ngày</dt><dd>{goal.dailySessions}</dd></div>
+              {skills.map(([key, name]) => <div key={key}><dt>{name}</dt><dd>{goal[key]?.toFixed(1) ?? '—'}</dd></div>)}
+            </dl>
+          </li>;
+        })}
+      </ol>
+    </details>}
+  </>;
 }

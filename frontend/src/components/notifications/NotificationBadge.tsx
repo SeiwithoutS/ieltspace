@@ -1,9 +1,9 @@
 import React from "react";
-import { useNotifications } from "../../lib/notifications/notifications";
+import { useNotificationCount } from "../../lib/notifications/notifications";
 export default function NotificationBadge(
   props: React.HTMLAttributes<HTMLSpanElement>,
 ) {
-  const { unread } = useNotifications();
+  const unread = useNotificationCount();
   return unread ? (
     <span {...props} aria-label={`${unread} thông báo chưa đọc`}>
       {unread}

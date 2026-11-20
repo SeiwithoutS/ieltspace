@@ -26,6 +26,7 @@ test('SAMPLE-01 handlers and authorization guards against isolated PostgreSQL', 
     '../dist/modules/samples/samples.routes.js'
   );
   const { createSampleImportRouter } = await import('../dist/modules/samples/sample-import.routes.js');
+  const { cleanupSampleMedia } = await import('../dist/modules/samples/sample-assets.service.js');
   const { requireAuth, requireRole } = await import('../dist/middleware/auth.js');
   const engine = new PGlite();
   try {
@@ -201,10 +202,16 @@ test('SAMPLE-01 handlers and authorization guards against isolated PostgreSQL', 
     const realFetch = globalThis.fetch;
     const storageObjects = new Set();
     let bucketIsPublic = false;
+    let failRemoval = false;
     globalThis.fetch = async (input, options) => {
       const { origin, pathname } = new URL(input);
       assert.equal(origin, 'https://example.supabase.co');
       if (pathname === '/storage/v1/bucket/sample-assets') return Response.json({ public: bucketIsPublic });
+      if (pathname === '/storage/v1/object/sample-assets' && options.method === 'DELETE') {
+        if (failRemoval) return Response.json({ message: 'Storage failure' }, { status: 503 });
+        const { prefixes } = JSON.parse(options.body);
+        return Response.json(prefixes.filter(path => storageObjects.delete(path)).map(name => ({ name })));
+      }
       const route = pathname.match(/^\/storage\/v1\/object\/(sign\/)?sample-assets\/(samples\/.+)$/);
       assert.ok(route, pathname);
       assert.equal(options.method, 'POST');
@@ -287,6 +294,8 @@ test('SAMPLE-01 handlers and authorization guards against isolated PostgreSQL', 
 
       const { body: { asset: replacement } } = await upload(noImage.id, 'prompt-image', image);
       await saveAcademic({ ...academic, promptImage: replacement }, 3);
+      await engine.exec("update public.sample_media_assets set created_at = now() - interval '8 days'");
+      assert.deepEqual(await cleanupSampleMedia(client, false), { candidates: 0, removed: 0, failed: 0 });
       await assertUnavailable(noImage.id, replacement.path);
       assert.match((await sign(publicRouter, noImage.id, promptImage.path)).body.url, /token=fixture$/);
       await transition('PUBLISH', 4, noImage.id);
@@ -307,6 +316,21 @@ test('SAMPLE-01 handlers and authorization guards against isolated PostgreSQL', 
       assert.deepEqual(savedSpeaking.body.sample.document.items, [{ ...item, audio }]);
       await transition('PUBLISH', 2, spoken.id);
       assert.match((await sign(publicRouter, spoken.id, audio.path)).body.url, /token=fixture$/);
+      await transition('HIDE', 7, noImage.id);
+      const { body: { asset: fresh } } = await upload(spoken.id, 'audio', wav, 'audio/wav');
+      await engine.query("update public.sample_media_assets set created_at = now() - interval '8 days' where path <> $1", [fresh.path]);
+      assert.deepEqual(await cleanupSampleMedia(client, false), { candidates: 1, removed: 0, failed: 0 });
+      assert.equal(storageObjects.has(promptImage.path), true);
+      failRemoval = true;
+      assert.deepEqual(await cleanupSampleMedia(client, true), { candidates: 1, removed: 0, failed: 1 });
+      assert.equal((await engine.query('select state from public.sample_media_assets where path = $1', [promptImage.path])).rows[0].state, 'DELETING');
+      await assert.rejects(saveAcademic(withFirstImage, 8), errorIs('SAMPLE_ASSET_INVALID', 400));
+      failRemoval = false;
+      assert.deepEqual(await cleanupSampleMedia(client, true), { candidates: 1, removed: 1, failed: 0 });
+      assert.equal(storageObjects.has(promptImage.path), false);
+      assert.equal((await engine.query('select 1 from public.sample_media_assets where path = $1', [promptImage.path])).rows.length, 0);
+      assert.deepEqual(new Set(storageObjects), new Set([replacement.path, audio.path, fresh.path]));
+      assert.deepEqual(await cleanupSampleMedia(client, true), { candidates: 0, removed: 0, failed: 0 });
     } finally {
       globalThis.fetch = realFetch;
     }

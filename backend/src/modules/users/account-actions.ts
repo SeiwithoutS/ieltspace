@@ -5,9 +5,7 @@ import { invalidateUserCache } from '../../middleware/auth.js';
 import { writeAudit } from '../../shared/audit.js';
 import { HttpError } from '../../utils/http.js';
 import { accountAuditActions } from './account-history.js';
-import { consumeAdminCode, sendAdminCode, type SecurityCode } from './admin-security-code.js';
 import { finishAccountDeletion } from './account-deletion.js';
-export { securityCode } from './admin-security-code.js';
 
 const role = z.enum(['LEARNER', 'TEACHER', 'ADMIN']);
 const status = z.enum(['ACTIVE', 'LOCKED']);
@@ -21,7 +19,7 @@ export const accountAction = z.discriminatedUnion('kind', [roleAction, statusAct
 type AccountAction = z.infer<typeof accountAction>;
 type Profile = { id: string; auth_user_id: string | null; role: string; status: string };
 
-function requiresCode(target: Profile, action: AccountAction) {
+function requiresCode(target: Pick<Profile, 'role'>, action: AccountAction) {
   return target.role === 'ADMIN' || (action.kind === 'role' && action.role === 'ADMIN');
 }
 
@@ -45,23 +43,19 @@ function verifyProfiles(rows: Profile[], actorId: string, targetId: string, acti
   return { actor, target, unchanged };
 }
 
-function actionPurpose(targetId: string, action: AccountAction) {
-  return [targetId, action.kind, action.previousRole, action.previousStatus,
-    action.kind === 'role' ? action.role : action.kind === 'status' ? action.status : 'DELETED', action.reason];
-}
-
-export async function issueAccountCode(actorId: string, targetId: string, action: AccountAction) {
-  const rows = await prisma.$queryRaw<Profile[]>`
-    SELECT id, auth_user_id, role, status FROM public.users WHERE id IN (${actorId}::uuid, ${targetId}::uuid)
-  `;
-  const { actor, target, unchanged } = verifyProfiles(rows, actorId, targetId, action);
-  if (unchanged || !requiresCode(target, action)) {
-    throw new HttpError(409, 'ADMIN_CODE_NOT_NEEDED', 'Thao tác này không cần mã bảo mật.');
+export async function updateAccount(actorId: string, targetId: string, action: AccountAction, verify: () => Promise<void>) {
+  let verified = false;
+  if (requiresCode({ role: action.previousRole }, action)) {
+    const rows = await prisma.$queryRaw<Profile[]>`
+      SELECT id, auth_user_id, role, status FROM public.users WHERE id IN (${actorId}::uuid, ${targetId}::uuid)
+    `;
+    const { unchanged } = verifyProfiles(rows, actorId, targetId, action);
+    if (!unchanged) {
+      await verify();
+      verified = true;
+    }
   }
-  return sendAdminCode(actorId, actor.auth_user_id, actionPurpose(targetId, action));
-}
 
-export async function updateAccount(actorId: string, targetId: string, action: AccountAction, code?: SecurityCode) {
   const result = await prisma.$transaction(async tx => {
     // Every administration write takes this lock before checking the actor or counting active admins.
     await tx.$queryRaw`SELECT 1 FROM pg_advisory_xact_lock(hashtextextended('ieltspace:admin-accounts', 0))`;
@@ -84,9 +78,8 @@ export async function updateAccount(actorId: string, targetId: string, action: A
       `;
       if (assigned.present) throw new HttpError(409, 'TEACHER_HAS_ASSIGNED_WORK', 'Giáo viên còn bài đang được giao.');
     }
-    if (requiresCode(target, action) && !await consumeAdminCode(tx, actorId, actionPurpose(targetId, action), code)) {
-      // Commit failed-attempt accounting even though the account mutation is rejected.
-      return null;
+    if (requiresCode(target, action) && !verified) {
+      throw new HttpError(409, 'USER_CHANGED', 'Tài khoản vừa thay đổi. Hãy tải lại chi tiết.');
     }
 
     if (action.kind === 'delete') {
@@ -108,7 +101,6 @@ export async function updateAccount(actorId: string, targetId: string, action: A
     });
     return { target: updated, changed: true };
   });
-  if (!result) throw new HttpError(403, 'ADMIN_CODE_INVALID', 'Mã không đúng, hết hạn hoặc đã được dùng.');
   if (result.target.auth_user_id) invalidateUserCache(result.target.auth_user_id);
   const cleanup = action.kind === 'delete' ? await finishAccountDeletion(targetId) : undefined;
   return { id: result.target.id, role: result.target.role, status: result.target.status, changed: result.changed, cleanup };

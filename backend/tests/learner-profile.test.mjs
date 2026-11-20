@@ -53,24 +53,33 @@ function requestApp(path, method, headers, body) {
   });
 }
 
-test('Learner profile protects ownership, private avatars, and password changes', async t => {
-  const learner = { id: '11111111-1111-4111-8111-111111111111', auth_user_id: '22222222-2222-4222-8222-222222222222', role: 'LEARNER', status: 'ACTIVE', full_name: 'Mai An', email: 'learner@example.test', display_name: null, avatar_url: null };
-  const admin = { ...learner, id: '33333333-3333-4333-8333-333333333333', auth_user_id: '44444444-4444-4444-8444-444444444444', role: 'ADMIN' };
+for (const role of ['LEARNER', 'TEACHER', 'ADMIN']) {
+  test(`${role} profile protects ownership, private avatars, and password changes`, t => verifyProfile(t, role));
+}
+
+async function verifyProfile(t, role) {
+  const owner = { id: '11111111-1111-4111-8111-111111111111', auth_user_id: '22222222-2222-4222-8222-222222222222', role, status: 'ACTIVE', full_name: 'Mai An', email: 'owner@example.test', display_name: null, avatar_url: null };
+  const admin = { ...owner, id: '33333333-3333-4333-8333-333333333333', auth_user_id: '44444444-4444-4444-8444-444444444444', role: 'ADMIN', email: 'other@example.test' };
   const objects = new Set();
   const profile = ({ where }) => {
-    return [learner, admin].find(user => Object.entries(where).every(([key, value]) => user[key] === value)) ?? null;
+    return [owner, admin].find(user => Object.entries(where).every(([key, value]) => user[key] === value)) ?? null;
   };
   const replace = (object, method, value) => {
     Object.defineProperty(object, method, { value, configurable: true });
     t.after(() => { delete object[method]; });
   };
   replace(prisma.users, 'findUnique', async args => profile(args));
+  replace(prisma, '$queryRaw', async (query, authUserId) => {
+    assert.match(query.join(''), /WHERE account\.auth_user_id/);
+    const user = profile({ where: { auth_user_id: authUserId } });
+    return user ? [{ ...user, must_change_password: false }] : [];
+  });
   replace(prisma.users, 'updateManyAndReturn', async args => {
     const user = profile(args);
     return user ? [{ ...Object.assign(user, args.data) }] : [];
   });
   replace(prisma, '$transaction', async operation => operation({
-    $queryRaw: async () => [{ avatar_url: learner.avatar_url }],
+    $queryRaw: async () => [{ avatar_url: owner.avatar_url }],
     users: { update: async args => ({ ...Object.assign(profile(args), args.data) }) },
   }));
 
@@ -103,18 +112,18 @@ test('Learner profile protects ownership, private avatars, and password changes'
     const headers = new Headers(options?.headers);
     const body = () => JSON.parse(options.body);
     const authUser = owner => ({ id: owner.auth_user_id, email: owner.email, email_confirmed_at: '2026-11-20T00:00:00Z', identities: [{ provider: google ? 'google' : 'email' }] });
-    if (path === '/auth/v1/user' && method === 'GET') return Response.json(authUser(headers.get('authorization')?.endsWith('admin-token') ? admin : learner));
+    if (path === '/auth/v1/user' && method === 'GET') return Response.json(authUser(headers.get('authorization')?.endsWith('admin-token') ? admin : owner));
     if (path === '/auth/v1/token') {
-      assert.equal(body().email, learner.email);
+      assert.equal(body().email, owner.email);
       return body().password === providerPassword
-        ? Response.json({ access_token: 'fresh-token', refresh_token: 'fresh-refresh', expires_in: 3600, token_type: 'bearer', user: authUser(learner) })
+        ? Response.json({ access_token: 'fresh-token', refresh_token: 'fresh-refresh', expires_in: 3600, token_type: 'bearer', user: authUser(owner) })
         : Response.json({ code: 'invalid_credentials', msg: 'Invalid credentials' }, { status: 400 });
     }
     if (path === '/auth/v1/user' && method === 'PUT') {
       assert.equal(headers.get('authorization'), 'Bearer fresh-token');
       assert.equal(body().current_password, providerPassword);
       providerPassword = body().password;
-      return Response.json(authUser(learner));
+      return Response.json(authUser(owner));
     }
     if (path === '/auth/v1/logout') {
       signOutScope = url.searchParams.get('scope');
@@ -142,33 +151,39 @@ test('Learner profile protects ownership, private avatars, and password changes'
     return Response.json({ msg: `Unexpected mock route: ${method} ${path}` }, { status: 500 });
   });
 
-  const request = (path, method = 'GET', { token = 'learner-token', json, image, type = 'application/json', origin = process.env.FRONTEND_ORIGIN } = {}) => requestApp(path, method,
+  const request = (path, method = 'GET', { token = 'owner-token', json, image, type = 'application/json', origin = process.env.FRONTEND_ORIGIN } = {}) => requestApp(path, method,
     { origin, 'content-type': type, ...(token ? { authorization: `Bearer ${token}` } : {}) },
     image ?? (json === undefined ? undefined : JSON.stringify(json)));
 
   const name = { displayName: '  An IELTS  ' };
   assert.equal((await request('', 'PATCH', { json: name, token: '' })).status, 401);
-  assert.equal((await request('', 'PATCH', { json: name, token: 'admin-token' })).status, 403);
   assert.equal((await request('', 'PATCH', { json: name, origin: 'https://untrusted.example' })).status, 403);
   assert.equal((await request('', 'PATCH', { json: { ...name, id: admin.id } })).status, 400);
+  assert.equal((await request('', 'PATCH', { json: { ...name, role: 'ADMIN', email: 'another@example.test' } })).status, 400);
   assert.equal((await (await request('', 'PATCH', { json: name })).json()).user.display_name, 'An IELTS');
   assert.equal((await (await request('')).json()).user.display_name, 'An IELTS');
+  assert.equal((await (await request('', 'GET', { token: 'admin-token' })).json()).user.display_name, null);
+  owner.status = 'LOCKED';
+  assert.equal((await request('', 'PATCH', { json: name })).status, 403);
+  assert.equal((await request('/avatar')).status, 403);
+  assert.equal((await request('/password-options')).status, 403);
+  owner.status = 'ACTIVE';
 
   const avatar = (image, type = 'image/png') => request('/avatar', 'PUT', { image, type });
   assert.equal((await avatar(Buffer.from('<svg/>'))).status, 415);
   const maxBytes = (useR2 ? 5 : 2) * 1024 * 1024;
   assert.deepEqual(await (await request('/avatar-options')).json(), { maxBytes });
   assert.equal((await avatar(Buffer.alloc(maxBytes + 1))).status, 413);
-  const originalKey = `${learner.id}/55555555-5555-4555-8555-555555555555.png`;
-  learner.avatar_url = originalKey;
+  const originalKey = `${owner.id}/55555555-5555-4555-8555-555555555555.png`;
+  owner.avatar_url = originalKey;
   objects.add(originalKey);
   assert.match((await (await request('/avatar')).json()).url, /token=test$/);
   const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jf2kAAAAASUVORK5CYII=', 'base64');
   assert.equal((await avatar(useR2 ? Buffer.concat([png, Buffer.alloc(3 * 1024 * 1024)]) : png)).status, 200);
   assert.equal(objects.has(originalKey), false);
-  assert.equal(learner.avatar_url.startsWith('r2:'), useR2);
-  const oldPath = learner.avatar_url.replace(/^r2:/, '');
-  assert.match(oldPath, new RegExp(`^${learner.id}/`));
+  assert.equal(owner.avatar_url.startsWith('r2:'), useR2);
+  const oldPath = owner.avatar_url.replace(/^r2:/, '');
+  assert.match(oldPath, new RegExp(`^${owner.id}/`));
   const signed = new URL((await (await request('/avatar')).json()).url);
   if (useR2) {
     assert.equal(signed.host, r2Host);
@@ -195,9 +210,9 @@ test('Learner profile protects ownership, private avatars, and password changes'
   assert.match(result.headers.get('set-cookie'), /ielts_refresh_token=;/);
   assert.equal((await request('/password/setup', 'POST')).status, 403);
   google = true;
-  assert.deepEqual(await (await request('/password-options')).json(), { google: true, canSendSetupEmail: true });
+  assert.deepEqual(await (await request('/password-options')).json(), { google: true, canSendSetupEmail: true, authenticator: false });
   assert.equal((await request('/password/setup', 'POST')).status, 202);
-  assert.equal(recoveryEmail, learner.email);
+  assert.equal(recoveryEmail, owner.email);
   if (useR2) {
     const key = 'practice/mock.wav';
     await recordingsBucket.put(key, Buffer.from('synthetic recording'), 'audio/wav');
@@ -208,4 +223,4 @@ test('Learner profile protects ownership, private avatars, and password changes'
     await recordingsBucket.remove(key);
     assert.equal(objects.size, 0);
   }
-});
+}

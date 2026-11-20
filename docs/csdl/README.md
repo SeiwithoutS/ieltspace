@@ -10,6 +10,16 @@ Chạy [17_nhat_ky_dang_nhap.sql](17_nhat_ky_dang_nhap.sql) và [18_ma_bao_mat_q
 
 Chạy [19_staff_invitations.sql](19_staff_invitations.sql) rồi [20_account_deletion.sql](20_account_deletion.sql) trước khi triển khai quản trị đợt 4–5. Trên dự án dùng trigger `on_auth_user_created` với hàm `handle_new_auth_user`, chạy [19a_staff_invitation_auth_compat.sql](19a_staff_invitation_auth_compat.sql) trước 19. Tệp 19a tách nhánh lời mời và giữ nguyên hàm tạo hồ sơ đăng ký công khai. Migration 19 mở trạng thái `INVITED`. Migration 20 thêm hàng đợi dọn Auth/Storage và thủ tục ẩn danh hồ sơ. Hai bảng được đọc qua kết nối DB của backend.
 
+Chạy [21_notifications_support_reports.sql](21_notifications_support_reports.sql) trước khi triển khai API thông báo, hỗ trợ và Dashboard có số phiếu. Tệp thêm chỉ mục chưa đọc vào bảng `notifications` hiện có và tạo `support_reports`, `support_report_updates`. Hai bảng bật RLS và chỉ đọc/ghi qua backend.
+
+Chạy [22_vocabulary_image_assets.sql](22_vocabulary_image_assets.sql) trước khi bật tải ảnh từ vựng qua R2. Tệp cần các bảng từ vựng và bảng bản nháp đã có. Tệp tạo bảng tham chiếu ảnh riêng cho backend, bật RLS và thêm chỉ mục kiểm tra ảnh đã công bố.
+
+Chạy [23_announcements_and_notification_settings.sql](23_announcements_and_notification_settings.sql) trước khi phát hành thông báo chung và tác vụ nhắc hết hạn. Tệp tạo bảng lịch gửi và cài đặt mẫu, bật RLS và thu hồi quyền trực tiếp của khách/người dùng. Mẫu mặc định nằm trong backend và chỉ sinh bản ghi cài đặt khi Quản lý lưu thay đổi.
+
+Chạy [24_staff_accounts_and_authenticator.sql](24_staff_accounts_and_authenticator.sql) sau 19, rồi chạy [25_staff_auth_metadata.sql](25_staff_auth_metadata.sql) để bật tạo nhân sự bằng mật khẩu tạm. Nếu đã chạy 24, chỉ bổ sung 25. SQL 25 xử lý thứ tự Supabase Auth lưu vai trò nhân sự và cho phép Quản lý thử lại bằng đúng thông tin của lần tạo lỗi nếu tài khoản chưa được sử dụng. Tài khoản hiện có vẫn đăng nhập được trước hai migration này.
+
+Sau khi triển khai, Quản lý mở **Hồ sơ cá nhân → Google Authenticator**, quét QR và xác nhận mã 6 số. Quản lý tạo nhân sự trong trang **Người dùng** và chuyển thông tin đăng nhập qua kênh riêng. Nếu một email còn hồ sơ `INVITED` cũ, xử lý hồ sơ đó trong trang **Người dùng** trước khi tạo tài khoản bằng cùng email.
+
 **Database đã chạy 01 cũ:** dùng [04_nang_cap_tu_01.sql](04_nang_cap_tu_01.sql) và [05_danh_muc_bo_de.sql](05_danh_muc_bo_de.sql). **Project Supabase mới với schema public trống:** chạy một lần [01_tao_cau_truc_moi.sql](01_tao_cau_truc_moi.sql). Ngày 13/11, cấu trúc đã theo [D08–D10](../DECISIONS.md) và thiết kế Quản lý bộ đề (40 bảng: bổ sung bảng `exam_set_categories`, bỏ exam_versions, kỹ năng có trạng thái và phiên bản, trigger updated_at cho exam_sets và exams, ràng buộc UNIQUE tên bộ đề). Tệp 05 tách riêng bảng danh mục động, thêm 5 danh mục mặc định và chuyển đổi dữ liệu an toàn.
 
 ## Database đang dùng

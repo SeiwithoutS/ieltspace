@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { applyAccountAction, requestAccountCode, userRoles, type AccountAction, type UserDetails, type UserRole } from '../../../lib/admin-users/api';
+import { applyAccountAction, userRoles, type AccountAction, type UserDetails, type UserRole } from '../../../lib/admin-users/api';
 import { styleOf } from '../../../lib/shared/styles';
 import AccountDialog from './AccountDialog';
 import { directoryButton, directoryMuted } from './userDirectoryUi';
@@ -15,7 +15,6 @@ export default function AccountChangeDialog({ kind, user, onClose, onChanged }: 
 }) {
   const [role, setRole] = useState(user.role);
   const [reason, setReason] = useState('');
-  const [challenge, setChallenge] = useState<string>();
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -29,24 +28,17 @@ export default function AccountChangeDialog({ kind, user, onClose, onChanged }: 
   };
 
   function resetCode() {
-    setChallenge(undefined);
     setCode('');
     setError('');
   }
 
-  async function perform(sendCode = false) {
-    if (!validAction || busy || (!sendCode && requiresCode && (!challenge || !/^\d{6}$/.test(code)))) return;
+  async function perform() {
+    if (!validAction || busy || (requiresCode && !/^\d{6}$/.test(code))) return;
     setBusy(true);
     setError('');
     try {
-      if (sendCode) {
-        const result = await requestAccountCode(user.id, action);
-        setChallenge(result.id);
-        setCode('');
-      } else {
-        await applyAccountAction(user.id, action, challenge ? { id: challenge, code } : undefined);
-        onChanged();
-      }
+      await applyAccountAction(user.id, action, requiresCode ? code : undefined);
+      onChanged();
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Không thực hiện được thao tác. Vui lòng thử lại.');
     } finally {
@@ -83,19 +75,17 @@ export default function AccountChangeDialog({ kind, user, onClose, onChanged }: 
       </label>
       {requiresCode && <div className="grid gap-2 text-sm">
         <label className="grid gap-1.5 font-semibold">
-          Mã bảo mật
+          Mã Google Authenticator
           <input className={field} type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6}
-            disabled={!challenge || busy} value={code} onChange={event => setCode(event.currentTarget.value.replace(/\D/g, ''))} />
+            required pattern="[0-9]{6}" disabled={busy} value={code}
+            onChange={event => setCode(event.currentTarget.value.replace(/\D/g, ''))} />
         </label>
-        <button type="button" className={`${directoryButton} justify-self-start`} aria-disabled={!validAction || busy} onClick={() => void perform(true)}>
-          {challenge ? 'Gửi mã mới' : 'Gửi mã đến email'}
-        </button>
-        {challenge && <span role="status" className={directoryMuted}>Hãy kiểm tra email đã xác minh. Mã có hiệu lực 10 phút.</span>}
+        <span className={directoryMuted}>Nhập mã 6 số từ ứng dụng xác thực đã thiết lập trong Hồ sơ cá nhân.</span>
       </div>}
       {error && <div role="alert" className="text-sm text-[var(--attempt-text-c0412a)]">{error}</div>}
       <div className="flex flex-wrap justify-end gap-2.5">
         <button type="button" className={directoryButton} aria-disabled={busy} onClick={close}>Hủy</button>
-        <button type="submit" className={directoryButton} aria-disabled={!validAction || busy || (requiresCode && (!challenge || code.length !== 6))}>
+        <button type="submit" className={directoryButton} aria-disabled={!validAction || busy || (requiresCode && code.length !== 6)}>
           {busy ? 'Đang xử lý…' : 'Xác nhận'}
         </button>
       </div>

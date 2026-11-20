@@ -34,12 +34,14 @@ export async function createVocabularySet(input: {
     set: DatabaseVocabularySet;
   }>(base, {
     method: "POST",
-    json: input,
+    json: { title: input.title, description: input.description, cover: input.cover },
   });
 }
 
 export async function updateVocabularySet(set: DatabaseVocabularySet) {
-  return apiFetch<{ revision: number }>(`${base}/${encodeURIComponent(set.id)}`, { method: "PATCH", json: { ...set, revision: set.revision } });
+  return apiFetch<{ revision: number }>(`${base}/${encodeURIComponent(set.id)}`, {
+    method: "PATCH", json: { title: set.title, description: set.description, cover: set.cover, revision: set.revision },
+  });
 }
 export async function deleteVocabularySet(id: string) {
   return apiFetch(`${base}/${encodeURIComponent(id)}`, { method: "DELETE" });

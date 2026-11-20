@@ -7,8 +7,9 @@ import { createPrivilegedSupabaseClient } from '../../lib/supabase.js';
 import { requireAuth, requireRole } from '../../middleware/auth.js';
 import { asyncHandler, HttpError } from '../../utils/http.js';
 import { listAccountAudit, listLoginHistory } from './account-history.js';
-import { accountAction, issueAccountCode, retryAccountDeletion, securityCode, updateAccount } from './account-actions.js';
-import { issueInvitationCode, sendStaffInvitation, staffInvitation } from './staff-invitations.js';
+import { accountAction, retryAccountDeletion, updateAccount } from './account-actions.js';
+import { authenticatorCode, verifyAdminAction } from '../auth/authenticator.js';
+import { createStaffAccount, staffAccount } from './staff-accounts.js';
 import { env } from '../../config.js';
 
 const roles = ['LEARNER', 'TEACHER', 'ADMIN'] as const;
@@ -66,7 +67,8 @@ async function readAuthDetails(id: string | null) {
     const user = data.user;
     if (!user) return { state: 'missing' } as const;
     const provider = user.app_metadata.provider;
-    const source = user.invited_at || user.app_metadata.ieltspace_staff_invite === true ? 'INVITE'
+    const source = user.app_metadata.ieltspace_staff_created === true ? 'STAFF'
+      : user.invited_at || user.app_metadata.ieltspace_staff_invite === true ? 'INVITE'
       : provider === 'google' ? 'GOOGLE' : provider === 'email' ? 'EMAIL' : null;
     return {
       state: 'available',
@@ -144,18 +146,12 @@ adminUsersRouter.get('/', asyncHandler(async (req, res) => {
   res.json({ items: items.map(toDirectoryUser), page, pageSize, total, counts: { all, byRole, byStatus } });
 }));
 
-adminUsersRouter.post('/invitations/security-code', asyncHandler(async (req, res) => {
+adminUsersRouter.post('/staff', asyncHandler(async (req, res) => {
   if (req.get('Origin') !== env.FRONTEND_ORIGIN) throw new HttpError(403, 'INVALID_ORIGIN', 'Nguồn yêu cầu không được phép.');
-  const input = staffInvitation.safeParse(req.body);
-  if (!input.success) throw new HttpError(400, 'INVITE_INVALID_INPUT', 'Thông tin lời mời không hợp lệ.');
-  res.status(202).json(await issueInvitationCode(req.appUser!.id, input.data));
-}));
-
-adminUsersRouter.post('/invitations', asyncHandler(async (req, res) => {
-  if (req.get('Origin') !== env.FRONTEND_ORIGIN) throw new HttpError(403, 'INVALID_ORIGIN', 'Nguồn yêu cầu không được phép.');
-  const input = z.object({ invitation: staffInvitation, securityCode: securityCode.optional() }).strict().safeParse(req.body);
-  if (!input.success) throw new HttpError(400, 'INVITE_INVALID_INPUT', 'Thông tin lời mời không hợp lệ.');
-  res.status(202).json(await sendStaffInvitation(req.appUser!.id, input.data.invitation, input.data.securityCode));
+  const input = z.object({ account: staffAccount, code: authenticatorCode.optional() }).strict().safeParse(req.body);
+  if (!input.success) throw new HttpError(400, 'STAFF_INVALID_INPUT', 'Thông tin tài khoản hoặc mã xác thực không hợp lệ.');
+  const { account, code } = input.data;
+  res.status(201).json(await createStaffAccount(req.appUser!.id, account, () => verifyAdminAction(req, res, code)));
 }));
 
 adminUsersRouter.get('/activity', asyncHandler(async (req, res) => {
@@ -176,32 +172,26 @@ adminUsersRouter.get('/:id/history', asyncHandler(async (req, res) => {
     : await listAccountAudit(id.data, page, 5));
 }));
 
-adminUsersRouter.post('/:id/security-code', asyncHandler(async (req, res) => {
-  if (req.get('Origin') !== env.FRONTEND_ORIGIN) throw new HttpError(403, 'INVALID_ORIGIN', 'Nguồn yêu cầu không được phép.');
-  const id = profileId.safeParse(req.params.id);
-  const action = accountAction.safeParse(req.body);
-  if (!id.success || !action.success) throw new HttpError(400, 'INVALID_USER_ACTION', 'Thông tin thao tác không hợp lệ.');
-  res.status(202).json(await issueAccountCode(req.appUser!.id, id.data, action.data));
-}));
-
 adminUsersRouter.patch('/:id/:kind(role|status)', asyncHandler(async (req, res) => {
   if (req.get('Origin') !== env.FRONTEND_ORIGIN) throw new HttpError(403, 'INVALID_ORIGIN', 'Nguồn yêu cầu không được phép.');
   const id = profileId.safeParse(req.params.id);
-  const input = z.object({ action: accountAction, securityCode: securityCode.optional() }).strict().safeParse(req.body);
+  const input = z.object({ action: accountAction, code: authenticatorCode.optional() }).strict().safeParse(req.body);
   if (!id.success || !input.success || req.params.kind !== input.data.action.kind) {
     throw new HttpError(400, 'INVALID_USER_ACTION', 'Thông tin thao tác không hợp lệ.');
   }
-  res.json(await updateAccount(req.appUser!.id, id.data, input.data.action, input.data.securityCode));
+  const { action, code } = input.data;
+  res.json(await updateAccount(req.appUser!.id, id.data, action, () => verifyAdminAction(req, res, code)));
 }));
 
 adminUsersRouter.delete('/:id', asyncHandler(async (req, res) => {
   if (req.get('Origin') !== env.FRONTEND_ORIGIN) throw new HttpError(403, 'INVALID_ORIGIN', 'Nguồn yêu cầu không được phép.');
   const id = profileId.safeParse(req.params.id);
-  const input = z.object({ action: accountAction, securityCode: securityCode.optional() }).strict().safeParse(req.body);
+  const input = z.object({ action: accountAction, code: authenticatorCode.optional() }).strict().safeParse(req.body);
   if (!id.success || !input.success || input.data.action.kind !== 'delete') {
     throw new HttpError(400, 'INVALID_USER_ACTION', 'Thông tin xóa tài khoản không hợp lệ.');
   }
-  const result = await updateAccount(req.appUser!.id, id.data, input.data.action, input.data.securityCode);
+  const { action, code } = input.data;
+  const result = await updateAccount(req.appUser!.id, id.data, action, () => verifyAdminAction(req, res, code));
   res.status(result.cleanup === 'PENDING' ? 202 : 200).json(result);
 }));
 

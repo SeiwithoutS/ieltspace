@@ -7,20 +7,21 @@ import React, { useEffect, useState } from 'react';
 import AttemptSession from "../components/attempts/AttemptSession";
 import AccountMenu from '../components/account/AccountMenu';
 import { pages, type PageName } from './pages';
+import { supportDestination, takeGoogleSupport } from '../lib/reports/support-navigation';
 const googleCallback = location.pathname === '/auth/callback' && !location.hash;
 const googleError = new URLSearchParams(location.search).get('auth_error');
 const googleNotice = googleError === 'account_unavailable' ? 'Tài khoản không được phép truy cập hoặc thiếu hồ sơ.' : googleError ? 'Không thể hoàn tất đăng nhập Google. Hãy thử lại.' : '';
 if(googleError) history.replaceState(null,'','/login#Login');
 const initialRoute = location.hash.slice(1);
-const initialContext = /^(Admin|Question)/.test(initialRoute) ? 'AdminHome' : /^Teacher/.test(initialRoute) ? 'TeacherHome' : /^(Student|Profile$|MyWS$|Vocab$|Flashcard$)/.test(initialRoute) ? 'StudentHome' : sessionStorage.getItem('ieltspace-context') || 'StudentHome';
+const initialContext = /^(Admin|Question)/.test(initialRoute) ? 'AdminHome' : /^Teacher/.test(initialRoute) ? 'TeacherHome' : /^(Student|PracticeHistory|Profile$|MyWS$|Vocab$|Flashcard$)/.test(initialRoute) ? 'StudentHome' : sessionStorage.getItem('ieltspace-context') || 'StudentHome';
 sessionStorage.setItem('ieltspace-context', initialContext);
 (window as any).__dcFrom = initialContext;
-const aliases: Record<string, string> = {AvatarMenu:'Profile', ResultsHistory:'StudentHome', QTPractice:'PracticeLibrary', AdminContent:'AdminSamples'};
+const aliases: Record<string, string> = {AvatarMenu:'Profile', ResultsHistory:'PracticeHistory', QTPractice:'PracticeLibrary', AdminContent:'AdminSamples'};
 const publicSamplePages: readonly PageName[] = ["SampleLibrary", "SampleWriting", "SampleSpeaking"];
 const publicLibraryPages: readonly PageName[] = [
  ...publicSamplePages, "FullTests", "ExamDetail", "PracticeLibrary", "PracticeWS", "Vocab",
 ];
-const learnerStudyPages: readonly PageName[] = ['Profile', 'Flashcard', 'StudentLanding', 'StudentHome'];
+const learnerStudyPages: readonly PageName[] = ['Profile', 'Flashcard', 'StudentLanding', 'StudentHome', 'PracticeHistory', 'MyWS'];
 function resolve(name: string): PageName { name=name.split('?')[0]; return (aliases[name] || name) in pages ? (aliases[name] || name) as PageName : 'Main'; }
 export default function App() {
  const auth=useAuth();
@@ -40,9 +41,14 @@ export default function App() {
 
  const [page, setPage] = useState<PageName>(() => resolve(location.hash.slice(1) || (location.pathname === "/login" ? "Login" : "Main")));
  const [routeHash, setRouteHash] = useState(() => location.hash);
- useEffect(()=>{if(googleCallback&&auth.ready&&!auth.error){history.replaceState(null,'','/');navigate(auth.user?home():'Login');}},[auth.ready,auth.user,auth.error]);
+ useEffect(() => {
+  if (!googleCallback || location.pathname !== '/auth/callback' || !auth.ready || auth.error) return;
+  history.replaceState(null, '', '/');
+  const support = takeGoogleSupport();
+  navigate(auth.user ? (support ? supportDestination(auth.user.role) : home()) : 'Login');
+ }, [auth.ready, auth.user, auth.error]);
  const [revision, setRevision] = useState(0);
- const [menu, setMenu] = useState(false);
+ const [menu, setMenu] = useState<HTMLElement | null>(null);
  useEffect(() => {
   let context = sessionStorage.getItem('ieltspace-context') || (/^Admin|^Question/.test(page) ? 'AdminHome' : /^Teacher/.test(page) ? 'TeacherHome' : 'StudentHome'), previous = page;
   let acceptedHash = location.hash;
@@ -58,7 +64,7 @@ export default function App() {
    if (/^(Admin|Question)/.test(next)) context = 'AdminHome'; else if (/^Teacher/.test(next)) context = 'TeacherHome'; else if (!/^(Notifications|StaffProfile|Main|Login|Register|ForgotPassword|CheckEmail|ResetPassword)$/.test(next)) context = 'StudentHome';
    acceptedHash = location.hash;
    setRouteHash(acceptedHash);
-   sessionStorage.setItem('ieltspace-context',context); previous = next; setMenu(false); setPage(next); window.scrollTo(0,0);
+   sessionStorage.setItem('ieltspace-context',context); previous = next; setMenu(null); setPage(next); window.scrollTo(0,0);
   };
   const allowNavigation = () => getAuthUser()?.role !== "ADMIN" || canNavigate();
   const pushRoute = (route: string) => {
@@ -113,7 +119,9 @@ export default function App() {
    if(authAnchor === '#dang-ky' || authAnchor === '#dang-nhap') { e.preventDefault(); e.stopPropagation(); pushRoute(authAnchor === '#dang-ky' ? 'Register' : 'Login'); return; }
    if(a?.textContent?.includes('Đăng xuất')){e.preventDefault();e.stopPropagation();if(allowNavigation()) void logout().catch(err=>window.alert(err.message));return;}
 
-   if(authAnchor === '#AvatarMenu' || authAnchor === 'AvatarMenu.dc.html') { e.preventDefault(); setMenu(v=>!v); return; }
+   if(a instanceof HTMLElement && (authAnchor === '#AvatarMenu' || authAnchor === 'AvatarMenu.dc.html')) {
+    e.preventDefault(); setMenu(opener => opener ? null : a); return;
+   }
    if(a?.getAttribute('href') === '#') { e.preventDefault(); return; }
    const match = /^([A-Za-z0-9_-]+)\.dc\.html(#.*)?$/.exec(a?.getAttribute('href') || '');
    if (match && !e.defaultPrevented) {
@@ -169,5 +177,9 @@ export default function App() {
  const AttemptPage = page === "ReadingTest" || page === "ListeningTest" || page === "WritingTest" || page === "SpeakingTest" ? pages[page] : null;
  const query = new URLSearchParams(routeHash.split("?")[1]);
  const vocabularySetId = query.get("set") ?? undefined;
- return <><React.Suspense fallback={<div role="status" style={{padding:24,fontFamily:"Inter, sans-serif"}}>Đang tải…</div>}>{AttemptPage ? <DesktopOnly key={page}><AttemptSession page={page} Screen={AttemptPage}/></DesktopOnly> : React.createElement(Page as React.ComponentType<any>, {key:page === "Flashcard" ? `Flashcard:${auth.user?.id ?? ""}:${vocabularySetId ?? ""}` : page, vocabularySetId, themeRevision:revision, kyNang:query.get("skill") || undefined, cheDo:query.get("mode") || undefined, sampleId:query.get("id") || undefined, sampleType:query.get("sampleType") || undefined, sampleQuery:isPublicSamplePage ? query.toString() : undefined, callbackNotice:googleNotice || emailCallback?.notice})}</React.Suspense>{menu && <AccountMenu onClose={()=>setMenu(false)} />}</>;
+ const remindPassword = auth.user?.must_change_password && auth.user.role !== 'LEARNER' && !publicPage && page !== 'StaffProfile';
+ return <>{remindPassword && <div role="status" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-[var(--attempt-bg-e2ebfb,#E2EBFB)] px-4 py-2 text-center text-sm text-[var(--attempt-text-352637,#352637)]">
+  <span>Bạn đang dùng mật khẩu tạm.</span>
+  <button type="button" className="border-0 bg-transparent p-0 font-semibold text-inherit underline" onClick={() => navigate('StaffProfile')}>Đổi mật khẩu trong Hồ sơ cá nhân</button>
+ </div>}<React.Suspense fallback={<div role="status" style={{padding:24,fontFamily:"Inter, sans-serif"}}>Đang tải…</div>}>{AttemptPage ? <DesktopOnly key={page}><AttemptSession page={page} Screen={AttemptPage}/></DesktopOnly> : React.createElement(Page as React.ComponentType<any>, {key:page === "Flashcard" ? `Flashcard:${auth.user?.id ?? ""}:${vocabularySetId ?? ""}` : page === "MyWS" ? "PracticeHistory" : page, vocabularySetId, historyGroup:page === "MyWS" || query.get("tab") === "ws" ? "WS" : "LR", previewHistory:query.get("demo") === "1", reportId:query.get("report") || undefined, focusSupport:query.get("support") === "1", themeRevision:revision, kyNang:query.get("skill") || undefined, cheDo:query.get("mode") || undefined, sampleId:query.get("id") || undefined, sampleType:query.get("sampleType") || undefined, sampleQuery:isPublicSamplePage ? query.toString() : undefined, callbackNotice:googleNotice || emailCallback?.notice})}</React.Suspense>{menu && <AccountMenu opener={menu} onClose={()=>setMenu(null)} />}</>;
 }

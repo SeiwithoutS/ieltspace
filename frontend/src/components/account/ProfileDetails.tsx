@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import type { Account } from '../../lib/auth/account';
 import { changePassword } from '../../lib/auth/auth';
 import { deleteAvatar, getAvatarOptions, getPasswordOptions, saveAvatar, saveDisplayName, sendPasswordSetupEmail } from '../../lib/auth/profile-api';
@@ -8,6 +8,7 @@ const border = 'border-[var(--attempt-line-d6d4d0,#D6D4D0)]';
 const row = `flex flex-wrap items-center justify-between gap-3 py-3 border-0 border-t border-solid ${border}`;
 const muted = 'text-[var(--attempt-text-706473,#706473)]';
 const action = `min-h-9 px-4 rounded-full border border-solid ${border} bg-transparent text-inherit text-sm font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`;
+const staffAction = `inline-flex min-h-11 items-center gap-2 rounded-full border border-solid ${border} bg-[var(--attempt-bg-ffffff)] px-5 text-sm font-semibold text-inherit cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`;
 const input = `min-h-10 w-full max-w-sm box-border px-3 rounded-lg border border-solid ${border} bg-transparent text-inherit text-sm`;
 
 type Feedback = { text: string; error?: boolean };
@@ -17,7 +18,7 @@ function Status({ value }: { value: Feedback | null }) {
   return <p role={value.error ? 'alert' : 'status'} className="m-0 text-sm">{value.text}</p>;
 }
 
-function PasswordSettings() {
+export function PasswordSettings({ staffActions }: { staffActions?: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<Awaited<ReturnType<typeof getPasswordOptions>>>();
   const [busy, setBusy] = useState<'change' | 'email' | null>(null);
@@ -47,7 +48,8 @@ function PasswordSettings() {
     setBusy('change');
     setFeedback(null);
     try {
-      await changePassword(currentPassword, newPassword);
+      const code = String(data.get('authenticatorCode') ?? '') || undefined;
+      await changePassword(currentPassword, newPassword, code);
     } catch (error) {
       setFeedback({ text: error instanceof Error ? error.message : 'Chưa đổi được mật khẩu.', error: true });
     } finally { setBusy(null); }
@@ -65,10 +67,18 @@ function PasswordSettings() {
     } finally { setBusy(null); }
   }
 
-  return <div className={row}>
-    <span className={muted}>Mật khẩu</span>
-    {open ? <button type="button" className={action} disabled={!!busy} onClick={() => setOpen(false)}>Đóng</button>
-      : <button type="button" className={action} onClick={() => void showForm()}>Đổi mật khẩu</button>}
+  const toggle = <button type="button" className={staffActions ? staffAction : action}
+    aria-expanded={open} disabled={!!busy} onClick={() => open ? setOpen(false) : void showForm()}>
+    {staffActions && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </svg>}
+    {open ? 'Đóng' : 'Đổi mật khẩu'}
+  </button>;
+
+  return <div className={staffActions ? 'grid gap-3' : row}>
+    {staffActions
+      ? <div className="flex flex-wrap items-start gap-2.5">{toggle}{staffActions}</div>
+      : <><span className={muted}>Mật khẩu</span>{toggle}</>}
     {open && <div className="w-full grid gap-3">
       {options?.google && <div className="grid gap-2 justify-items-start">
         <p className="m-0 text-sm">Bạn có thể tiếp tục dùng Google. Nếu chưa có mật khẩu IELTSpace, hãy thiết lập qua email đã xác minh.</p>
@@ -87,6 +97,10 @@ function PasswordSettings() {
           <label className="grid gap-1 w-full text-sm">Nhập lại mật khẩu mới
             <input name="confirmation" type="password" autoComplete="new-password" maxLength={128} required className={input} />
           </label>
+          {options?.authenticator && <label className="grid gap-1 w-full text-sm">Mã Google Authenticator
+            <input name="authenticatorCode" type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}"
+              maxLength={6} required className={input} />
+          </label>}
           <button type="submit" className={action}>{busy === 'change' ? 'Đang cập nhật…' : 'Lưu mật khẩu mới'}</button>
         </fieldset>
       </form>

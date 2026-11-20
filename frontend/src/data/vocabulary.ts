@@ -15,6 +15,7 @@ export interface Word {
   example: string;
   translation: string;
   image: string;
+  imagePreview?: string;
   audio: string;
   audioUs?: string;
   audioUk?: string;
@@ -173,6 +174,7 @@ export interface VocabularySet {
   id: string;
   title: string;
   cover: string;
+  coverPreview?: string;
   description?: string;
 }
 

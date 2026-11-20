@@ -6,7 +6,7 @@ import React from "react";
 import StudyGoals from "../../components/account/StudyGoals";
 import { styleOf, cssText } from "../../lib/shared/styles";
 
-export default function Profile() {
+export default function Profile({ reportId, focusSupport }: { reportId?: string; focusSupport?: boolean }) {
     const account = useAccount();
     return (
       <>
@@ -57,7 +57,7 @@ export default function Profile() {
               </div>
               <div
                 style={styleOf(
-                  "max-width: 760px; width: 100%; display: flex; flex-direction: column; gap: 24px",
+                  "max-width: 960px; width: 100%; display: flex; flex-direction: column; gap: 24px",
                 )}
               >
                 <ProfileDetails key={account.id} account={account} />
@@ -141,6 +141,7 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
+                <Support reportId={reportId} focusOnOpen={focusSupport} />
                 <a
                   href={"Main.dc.html"}
                   style={styleOf(
@@ -163,7 +164,6 @@ export default function Profile() {
                   {"Đăng xuất"}
                 </a>
               </div>
-              <Support />
             </main>
           </div>
           {"\n"}

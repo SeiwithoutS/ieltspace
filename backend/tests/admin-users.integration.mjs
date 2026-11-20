@@ -5,19 +5,53 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
 import { pathToFileURL } from 'node:url';
-import { exportJWK, generateKeyPair, SignJWT } from 'jose';
+import { decodeJwt, exportJWK, generateKeyPair, SignJWT } from 'jose';
 
 const pgModule = process.env.SAMPLE_TEST_PGLITE_MODULE;
 
-test('Admin account history, invitations, deletion and protection against isolated PostgreSQL', { skip: !pgModule }, async t => {
+test('Managed account trigger also works with the development signup trigger', { skip: !pgModule }, async t => {
+  const { PGlite } = await import(pathToFileURL(resolve(pgModule)).href);
+  const db = new PGlite();
+  t.after(() => db.close());
+  await db.exec(`
+    create role anon;
+    create role authenticated;
+    create schema auth;
+    create table auth.users (id uuid primary key, email text, raw_app_meta_data jsonb, raw_user_meta_data jsonb,
+      encrypted_password text, last_sign_in_at timestamptz);
+  `);
+  for (const name of ['01_tao_cau_truc_moi', '08_ho_so_auth', '17_nhat_ky_dang_nhap', '19_staff_invitations',
+    '24_staff_accounts_and_authenticator', '25_staff_auth_metadata']) {
+    await db.exec(await readFile(new URL(`../../docs/csdl/${name}.sql`, import.meta.url), 'utf8'));
+  }
+  const actorAuth = randomUUID();
+  await db.query('INSERT INTO auth.users (id, email, raw_user_meta_data) VALUES ($1,$2,$3)', [
+    actorAuth, 'manager@example.test', { role: 'ADMIN', ieltspace_invitation_proof: 'managed-account-v1' },
+  ]);
+  const [learner] = (await db.query('SELECT id, role, must_change_password FROM public.users WHERE auth_user_id = $1', [actorAuth])).rows;
+  assert.equal(learner.role, 'LEARNER');
+  assert.equal(learner.must_change_password, false);
+  const employee = [randomUUID(), 'teacher@example.test', {
+    ieltspace_invitation_proof: 'managed-account-v1',
+    ieltspace_staff_created: true,
+    ieltspace_staff_creation: { actorId: learner.id, role: 'TEACHER', writing: true, maxPending: 4 },
+  }, { full_name: 'Giáo viên fixture' }];
+  const create = () => db.query('INSERT INTO auth.users (id, email, raw_app_meta_data, raw_user_meta_data) VALUES ($1,$2,$3,$4)', employee);
+  await assert.rejects(create, /not an active administrator/);
+  assert.equal((await db.query('SELECT id FROM auth.users WHERE id = $1', [employee[0]])).rows.length, 0);
+  await db.query("UPDATE public.users SET role = 'ADMIN' WHERE id = $1", [learner.id]);
+  await create();
+  const [teacher] = (await db.query('SELECT role, status, must_change_password FROM public.users WHERE auth_user_id = $1', [employee[0]])).rows;
+  assert.deepEqual(teacher, { role: 'TEACHER', status: 'ACTIVE', must_change_password: true });
+});
+
+test('Admin account history, staff creation, MFA, deletion and protection against isolated PostgreSQL', { skip: !pgModule }, async t => {
   const origin = 'http://localhost:3000';
   const supabase = 'https://admin-test.example';
   Object.assign(process.env, {
     NODE_ENV: 'test', FRONTEND_ORIGIN: origin, AUTH_EMAIL_REDIRECT_URL: origin + '/login',
     SUPABASE_URL: supabase, SUPABASE_PUBLISHABLE_KEY: 'test-public', SUPABASE_SERVICE_ROLE_KEY: 'test-admin',
     DATABASE_URL: 'postgresql://unused:unused@localhost:1/unused',
-    ADMIN_SECURITY_CODE_SECRET: 'test-otp-secret-used-only-for-isolated-tests',
-    RESEND_API_KEY: 'test-sending-key', ADMIN_SECURITY_EMAIL_FROM: 'test@example.test',
     STORAGE_BUCKET_AVATARS: 'avatars',
   });
   const { PGlite } = await import(pathToFileURL(resolve(pgModule)).href);
@@ -30,12 +64,14 @@ test('Admin account history, invitations, deletion and protection against isolat
     create role anon;
     create role authenticated;
     create schema auth;
-    create table auth.users (id uuid primary key, email text, raw_app_meta_data jsonb, raw_user_meta_data jsonb, deleted_at timestamptz);
+    create table auth.users (id uuid primary key, email text, raw_app_meta_data jsonb, raw_user_meta_data jsonb,
+      deleted_at timestamptz, encrypted_password text, last_sign_in_at timestamptz);
     create schema storage;
     create table storage.objects (bucket_id text, name text, owner_id text);
   `);
   for (const name of ['01_tao_cau_truc_moi', '08_ho_so_auth', '16_learner_checkins', '17_nhat_ky_dang_nhap',
-    '18_ma_bao_mat_quan_tri', '19a_staff_invitation_auth_compat', '19_staff_invitations', '20_account_deletion']) {
+    '18_ma_bao_mat_quan_tri', '19a_staff_invitation_auth_compat', '19_staff_invitations', '20_account_deletion',
+    '21_notifications_support_reports', '23_announcements_and_notification_settings']) {
     if (name.startsWith('19a')) {
       await db.exec(`
         alter function public.ieltspace_create_learner_profile() rename to handle_new_auth_user;
@@ -98,27 +134,36 @@ test('Admin account history, invitations, deletion and protection against isolat
     .setIssuer(supabase + '/auth/v1').setAudience('authenticated').setExpirationTime('15m').sign(privateKey);
   const tokens = { actor: await getToken(actor), second: await getToken(second), learner: await getToken(learner), google: await getToken(learner) };
   const fetchHttp = globalThis.fetch;
-  const delivered = [];
-  const invitationEmails = [];
+  const factors = new Map([[second.auth, { id: randomUUID(), factor_type: 'totp', status: 'verified', friendly_name: 'IELTSpace' }]]);
+  const challenges = new Map();
+  const refreshedAuth = new Map();
+  const recoveryTokens = new Map();
   let rejectAuthDeletion = true;
   let rejectAvatarDeletion = true;
   const removedAvatars = [];
-  let rejectMail = false;
+  const unexpectedProviderRequests = [];
   const createdAuth = new Map();
   function providerUser(user) {
-    return { id: user.auth, email: user.auth + '@example.test', email_confirmed_at: '2026-11-20T00:00:00Z', app_metadata: { provider: 'email' } };
+    return { id: user.auth, email: user.email ?? user.auth + '@example.test', email_confirmed_at: '2026-11-20T00:00:00Z',
+      app_metadata: { provider: 'email', ...user.metadata }, factors: factors.has(user.auth) ? [factors.get(user.auth)] : [] };
+  }
+  async function providerSession(user, session) {
+    const refresh_token = randomUUID();
+    refreshedAuth.set(refresh_token, { user, session });
+    return { access_token: await getToken(user, session), refresh_token, expires_in: 900, token_type: 'bearer', user: providerUser(user) };
+  }
+  function authenticatedUser(options) {
+    const token = new Headers(options?.headers).get('Authorization')?.split(' ')[1];
+    if (!token?.includes('.')) return null;
+    const { sub } = decodeJwt(token);
+    return [actor, second, learner, ...createdAuth.values()].find(user => user.auth === sub);
   }
   t.mock.method(globalThis, 'fetch', async (input, options) => {
     const url = new URL(input instanceof Request ? input.url : input);
-    if (url.hostname === 'api.resend.com') {
-      const mail = JSON.parse(options.body);
-      const code = mail.text.match(/\b\d{6}\b/)?.[0];
-      if (code) delivered.push({ recipient: mail.to[0], code });
-      else invitationEmails.push({ email: mail.to[0], token: mail.text.match(/token_hash=([0-9a-f]{64})/)[1] });
-      if (rejectMail && !code) return Response.json({}, { status: 503 });
-      return Response.json({ id: 'mock-delivery' });
+    if (url.origin !== supabase) {
+      unexpectedProviderRequests.push(url.hostname);
+      throw new Error('Unexpected external request');
     }
-    if (url.origin !== supabase) return fetchHttp(input, options);
     if (url.pathname.endsWith('/jwks.json')) return Response.json({ keys: [jwk] });
     if (url.pathname.endsWith('/storage/v1/object/avatars') && options?.method === 'DELETE') {
       if (rejectAvatarDeletion) return Response.json({ message: 'Temporary storage error' }, { status: 503 });
@@ -127,16 +172,21 @@ test('Admin account history, invitations, deletion and protection against isolat
     }
     if (url.pathname.endsWith('/admin/users') && options?.method === 'POST') {
       const payload = JSON.parse(options.body);
+      assert.equal(new Headers(options.headers).get('apikey'), 'test-admin');
       assert.equal(payload.email_confirm, true);
       const auth = randomUUID();
       try {
-        await db.query('INSERT INTO auth.users (id, email, raw_app_meta_data) VALUES ($1,$2,$3)', [auth, payload.email, payload.app_metadata]);
+        await db.transaction(async tx => {
+          await tx.query('INSERT INTO auth.users (id, email, raw_user_meta_data, encrypted_password) VALUES ($1,$2,$3,$4)',
+            [auth, payload.email, payload.user_metadata, 'initial-test-hash']);
+          await tx.query('UPDATE auth.users SET raw_app_meta_data=$2 WHERE id=$1', [auth, payload.app_metadata]);
+        });
       } catch {
-        return Response.json({ code: 'unexpected_failure', msg: 'Invalid invitation' }, { status: 500 });
+        return Response.json({ code: 'unexpected_failure', msg: 'Staff creation trigger rejected' }, { status: 500 });
       }
-      const user = { auth, email: payload.email };
+      const user = { auth, email: payload.email, password: payload.password, metadata: payload.app_metadata };
       createdAuth.set(user.email, user);
-      return Response.json({ ...providerUser(user), email: user.email, app_metadata: payload.app_metadata });
+      return Response.json(providerUser(user));
     }
     if (url.pathname.includes('/admin/users/') && options?.method === 'DELETE') {
       if (rejectAuthDeletion) return Response.json({ code: 'unexpected_failure', msg: 'Temporary error' }, { status: 503 });
@@ -144,18 +194,84 @@ test('Admin account history, invitations, deletion and protection against isolat
       await db.query('DELETE FROM auth.users WHERE id=$1', [id]);
       return Response.json({});
     }
-    if (url.pathname.includes('/admin/users/')) return Response.json(providerUser(url.pathname.endsWith(actor.auth) ? actor : second));
+    if (url.pathname.includes('/admin/users/')) {
+      const user = [actor, second, learner, ...createdAuth.values()].find(item => url.pathname.endsWith(item.auth));
+      if (user && options.method === 'PUT') {
+        const payload = JSON.parse(options.body);
+        try {
+          await db.transaction(async tx => {
+            await tx.query('UPDATE auth.users SET encrypted_password=$2 WHERE id=$1', [user.auth, randomUUID()]);
+            await tx.query('UPDATE auth.users SET raw_app_meta_data=raw_app_meta_data || $2::jsonb WHERE id=$1', [user.auth, payload.app_metadata]);
+          });
+        } catch {
+          return Response.json({ code: 'unexpected_failure' }, { status: 500 });
+        }
+        user.password = payload.password;
+        user.metadata = { ...user.metadata, ...payload.app_metadata };
+      }
+      return user ? Response.json(providerUser(user)) : Response.json({ code: 'user_not_found' }, { status: 404 });
+    }
+    if (url.pathname.endsWith('/verify') && !url.pathname.includes('/factors/')) {
+      const { token_hash } = JSON.parse(options.body);
+      const user = recoveryTokens.get(token_hash);
+      if (!user) return Response.json({ code: 'otp_expired' }, { status: 403 });
+      recoveryTokens.delete(token_hash);
+      return Response.json(await providerSession(user));
+    }
+    if (/\/auth\/v1\/(?:user|factors)(?:\/|$)/.test(url.pathname)) {
+      const user = authenticatedUser(options);
+      if (!user) return Response.json({ code: 'invalid_token' }, { status: 401 });
+      if (url.pathname.endsWith('/user')) {
+        if (options.method === 'PUT') {
+          const { password } = JSON.parse(options.body);
+          await db.query('UPDATE auth.users SET encrypted_password = $2 WHERE id = $1', [user.auth, randomUUID()]);
+          user.password = password;
+        }
+        return Response.json(providerUser(user));
+      }
+      if (url.pathname.endsWith('/factors')) {
+        const factor = { id: randomUUID(), factor_type: 'totp', status: 'unverified', friendly_name: 'IELTSpace' };
+        factors.set(user.auth, factor);
+        return Response.json({ id: factor.id, type: 'totp', totp: { qr_code: '<svg/>', secret: 'fake-secret' } });
+      }
+      const factor = factors.get(user.auth);
+      if (!factor || !url.pathname.includes('/' + factor.id)) return Response.json({ code: 'mfa_factor_not_found' }, { status: 404 });
+      if (options.method === 'DELETE') {
+        factors.delete(user.auth);
+        return Response.json({ id: factor.id });
+      }
+      if (url.pathname.endsWith('/challenge')) {
+        const challenge = randomUUID();
+        challenges.set(challenge, factor.id);
+        return Response.json({ id: challenge, type: 'totp', expires_at: 99999999 });
+      }
+      const { challenge_id, code } = JSON.parse(options.body);
+      if (code !== '123456' || challenges.get(challenge_id) !== factor.id) {
+        return Response.json({ code: 'mfa_verification_failed' }, { status: 422 });
+      }
+      challenges.delete(challenge_id);
+      factor.status = 'verified';
+      const authorization = new Headers(options.headers).get('Authorization');
+      return Response.json(await providerSession(user, decodeJwt(authorization.split(' ')[1]).session_id));
+    }
     if (url.pathname.endsWith('/token')) {
       const grant = url.searchParams.get('grant_type');
-      const invited = createdAuth.get(JSON.parse(options.body).email);
-      if (invited) return Response.json({ access_token: await getToken(invited), refresh_token: 'staff-refresh',
-        expires_in: 900, token_type: 'bearer', user: { ...providerUser(invited), email: invited.email } });
+      const credentials = JSON.parse(options.body);
+      if (credentials.email === 'legacy-admin@example.test' && credentials.password === 'admin-fixture-password') {
+        return Response.json(await providerSession(actor));
+      }
+      const staff = createdAuth.get(credentials.email);
+      if (staff) return staff.password === credentials.password ? Response.json(await providerSession(staff))
+        : Response.json({ code: 'invalid_credentials' }, { status: 400 });
+      const refreshed = refreshedAuth.get(credentials.refresh_token);
+      if (refreshed) return Response.json(await providerSession(refreshed.user, refreshed.session));
       return Response.json({
         access_token: grant === 'pkce' ? tokens.google : tokens.learner, refresh_token: 'test-refresh',
         expires_in: 900, token_type: 'bearer', user: providerUser(learner),
       });
     }
     if (url.pathname.endsWith('/logout')) return new Response(null, { status: 204 });
+    unexpectedProviderRequests.push(url.pathname);
     throw new Error('Unexpected provider request: ' + url.pathname);
   });
 
@@ -168,13 +284,23 @@ test('Admin account history, invitations, deletion and protection against isolat
     if (json) headers['Content-Type'] = 'application/json';
     const response = await fetchHttp(base + path, { method, headers, body: json && JSON.stringify(json), redirect: 'manual' });
     const body = response.headers.get('content-type')?.includes('json') ? await response.json() : null;
-    return { status: response.status, body, location: response.headers.get('location') };
+    return { status: response.status, body, location: response.headers.get('location'),
+      cookies: response.headers.getSetCookie(), cache: response.headers.get('cache-control') };
   }
   const password = { method: 'POST', json: { email: 'learner@example.test', password: 'test-pass' } };
   const refresh = { method: 'POST', cookie: 'ielts_refresh_token=test-refresh' };
   const google = { cookie: 'ielts_google_pkce=' + encodeURIComponent(JSON.stringify('test-verifier')) };
   const activity = '/admin/users/activity';
   const adminGet = path => request('/admin/users' + path, { token: tokens.actor });
+  assert.equal((await request('/auth/me', { token: tokens.actor })).body.user.must_change_password, false);
+  const beforeMigration = await request('/admin/users/staff', {
+    token: tokens.actor, method: 'POST', json: {
+      account: { fullName: 'Giáo viên fixture', email: 'before@example.test', role: 'TEACHER', writing: true, speaking: false, maxPending: 4 },
+    },
+  });
+  assert.equal(beforeMigration.status, 503);
+  assert.equal(beforeMigration.body.code, 'STAFF_MIGRATION_REQUIRED');
+  assert.equal(createdAuth.size, 0);
   assert.equal((await request(activity)).status, 401);
   assert.equal((await request(activity, { token: tokens.learner })).status, 403);
   const statsPath = '/admin/statistics?from=2025-01-01&to=2025-01-01';
@@ -187,7 +313,7 @@ test('Admin account history, invitations, deletion and protection against isolat
   assert.equal(emptyStats.accountsLocked, 0);
   assert.equal(emptyStats.accountsNew, 0);
   assert.equal(emptyStats.loginHistoryFrom, null);
-  assert.equal(emptyStats.supportReports, null);
+  assert.equal(emptyStats.supportReports, 0);
   assert.deepEqual(emptyStats.dailyFlashcards, [{ day: '2025-01-01', sessions: 0 }]);
   const borderTimes = ['2024-12-31T16:59:59Z', '2024-12-31T17:00:00Z', '2025-01-01T16:59:59Z', '2025-01-01T17:00:00Z'];
   await db.query('UPDATE public.users SET created_at=$2 WHERE id=$1', [learner.id, borderTimes[1]]);
@@ -195,6 +321,8 @@ test('Admin account history, invitations, deletion and protection against isolat
     const digest = String(index).repeat(64);
     await db.query("INSERT INTO public.user_login_events(user_id,method,session_digest,created_at) VALUES ($1,'PASSWORD',$2,$3)", [actor.id, digest, time]);
     await db.query("INSERT INTO public.audit_logs(actor_type,action,entity_type,created_at) VALUES ('USER','USER_LOCKED','USER',$1)", [time]);
+    await db.query('INSERT INTO public.support_reports(owner_id, request_id, content, created_at) VALUES ($1,$2,$3,$4)',
+      [learner.id, randomUUID(), 'Phiếu kiểm tra ranh giới giờ', time]);
     await db.query(`
       WITH session AS (INSERT INTO public.flashcard_sessions(user_id,source_type,total_cards,minimum_cards)
         VALUES ($1,'FAVORITES',1,1) RETURNING id)
@@ -209,11 +337,263 @@ test('Admin account history, invitations, deletion and protection against isolat
   assert.equal(measured.accountLocks, 2);
   assert.equal(measured.flashcardSessions, 2);
   assert.equal(measured.flashcardLearners, 1);
+  assert.equal(measured.supportReports, 2);
   assert.deepEqual(measured.dailyFlashcards, [{ day: '2025-01-01', sessions: 2 }]);
   assert.equal((await request('/admin/statistics?from=2024-01-01&to=2025-01-02', { token: tokens.actor })).body.dailyFlashcards.length, 7);
   await db.query("DELETE FROM public.user_login_events WHERE created_at < '2025-02-01'");
   await db.query("DELETE FROM public.audit_logs WHERE created_at < '2025-02-01'");
-  assert.equal((await request('/auth/login', password)).status, 200);
+
+  await t.test('Support and notifications enforce ownership, retry once and persist read state', async () => {
+    const teacher = { id: randomUUID(), auth: randomUUID() };
+    await db.query('INSERT INTO auth.users (id, email) VALUES ($1,$2)', [teacher.auth, teacher.auth + '@example.test']);
+    await db.query("UPDATE public.users SET id=$1, role='TEACHER' WHERE auth_user_id=$2", [teacher.id, teacher.auth]);
+    const teacherToken = await getToken(teacher);
+    const mine = '/support/reports';
+    const queue = '/admin/support/reports';
+    const inbox = '/notifications';
+    const payload = { requestId: randomUUID(), text: 'Không mở được bản luyện.' };
+    const send = (json = payload) => request(mine, { token: tokens.learner, method: 'POST', json });
+    const owner = { token: tokens.learner };
+    const staff = { token: tokens.actor };
+    assert.equal((await request(inbox)).status, 401);
+    assert.equal((await request(queue, owner)).status, 403);
+    assert.equal((await send({ ...payload, ownerId: teacher.id })).status, 400);
+    const first = await send();
+    assert.equal(first.status, 201);
+    const id = first.body.id;
+    const pending = await send();
+    assert.equal(pending.status, 200);
+    assert.equal(pending.body.id, id);
+    assert.equal((await send({ ...payload, text: 'Nội dung khác.' })).status, 409);
+    assert.equal((await request(mine, { token: teacherToken })).body.items.length, 0);
+    assert.equal((await request(`${mine}/${id}`, { token: teacherToken })).status, 404);
+    const createdByTeacher = await request(mine, { token: teacherToken, method: 'POST', json: { ...payload, requestId: randomUUID() } });
+    assert.equal(createdByTeacher.status, 201);
+    assert.equal((await request(queue, staff)).body.counts.PENDING, 6);
+
+    const change = json => request(`${queue}/${id}`, { ...staff, method: 'PATCH', json });
+    const answer = { status: 'IN_PROGRESS', reply: 'Đang kiểm tra.', revision: 0 };
+    failAudit = true;
+    assert.equal((await change(answer)).status, 500);
+    failAudit = false;
+    assert.equal((await request(`${mine}/${id}`, owner)).body.revision, 0);
+    assert.equal((await request(inbox + '/unread-count', owner)).body.unread, 0);
+    assert.equal((await change(answer)).body.revision, 1);
+    assert.equal((await change(answer)).body.revision, 1);
+    assert.equal((await change({ ...answer, status: 'RESOLVED' })).body.code, 'SUPPORT_REPORT_CHANGED');
+    const reopened = (await request(`${mine}/${id}`, owner)).body;
+    assert.equal(reopened.reply, answer.reply);
+    assert.equal(reopened.status, answer.status);
+    assert.equal((await request(queue + '?status=IN_PROGRESS', staff)).body.items.length, 1);
+    assert.equal((await db.query('SELECT count(*)::int AS n FROM public.support_report_updates WHERE report_id=$1', [id])).rows[0].n, 1);
+    const notice = (await request(inbox, owner)).body.items[0];
+    assert.equal(notice.referenceId, id);
+    assert.equal(notice.referenceType, 'SUPPORT_REPORT');
+    assert.ok(!notice.content.includes(answer.reply));
+    const noticePath = `${inbox}/${notice.id}/read`;
+    const mark = { ...owner, method: 'PATCH' };
+    assert.equal((await request(noticePath, { token: teacherToken, method: 'PATCH' })).status, 404);
+    const onceRead = (await request(noticePath, mark)).body.readAt;
+    assert.equal((await request(noticePath, mark)).body.readAt, onceRead);
+    assert.equal((await request(inbox + '/unread-count', owner)).body.unread, 0);
+    await db.query(`INSERT INTO public.notifications(recipient_id,event_key,type,title)
+      SELECT $1, 'pagination:' || i, 'TEST', 'Thông báo thử' FROM generate_series(1,21) AS i`, [learner.id]);
+    assert.equal((await request(inbox + '/unread-count', owner)).body.unread, 21);
+    const firstPage = (await request(inbox + '?unread=1', owner)).body;
+    assert.equal(firstPage.items.length, 20);
+    const nextPage = (await request(inbox + '?unread=1&after=' + firstPage.nextCursor, owner)).body;
+    assert.equal(nextPage.items.length, 1);
+    assert.ok(firstPage.items.every(item => item.id !== nextPage.items[0].id));
+    assert.equal((await request(inbox + '/read-all', { ...owner, method: 'POST' })).status, 204);
+    assert.equal((await request(inbox + '/unread-count', owner)).body.unread, 0);
+    await db.query("UPDATE public.users SET status='LOCKED' WHERE id=$1", [learner.id]);
+    assert.equal((await request(inbox, owner)).status, 403);
+    assert.equal((await request(mine, owner)).status, 403);
+    await db.query("UPDATE public.users SET status='ACTIVE' WHERE id=$1", [learner.id]);
+  });
+
+  await t.test('Announcement scheduling snapshots active recipients at delivery and retries safely', async () => {
+    const { dispatchAnnouncement } = await import('../dist/modules/notifications/announcements.js');
+    const path = '/admin/notifications/announcements';
+    const manager = { token: tokens.actor };
+    const create = json => request(path, { ...manager, method: 'POST', json });
+    const submitted = { requestId: randomUUID(), title: 'Tin thử', content: 'Nội dung thử', audience: 'TEACHER' };
+    assert.equal((await request(path, { token: tokens.learner })).status, 403);
+    const created = await create(submitted);
+    assert.equal(created.status, 201);
+    assert.equal((await create(submitted)).body.id, created.body.id);
+    assert.equal((await create({ ...submitted, title: 'Thay đổi' })).status, 409);
+    const id = created.body.id;
+    const revise = json => request(`${path}/${id}`, { ...manager, method: 'PATCH', json });
+    assert.equal((await revise({ title: 'Tin đã sửa', content: submitted.content, audience: 'TEACHER', revision: 0 })).body.revision, 1);
+    const send = json => request(`${path}/${id}/send`, { ...manager, method: 'POST', json });
+    assert.equal((await send({ mode: 'scheduled', revision: 1, scheduledAt: '2000-01-01T00:00:00Z' })).status, 400);
+    assert.equal((await send({ mode: 'scheduled', revision: 1, scheduledAt: new Date(Date.now() + 3_600_000).toISOString() })).status, 202);
+    assert.equal(await dispatchAnnouncement(id), false);
+    assert.equal((await revise({ title: 'Tin đã sửa', content: 'Khác', audience: 'ALL', revision: 2 })).status, 409);
+    await db.query("UPDATE public.users SET role='TEACHER' WHERE id=$1", [second.id]);
+    await db.query("UPDATE public.announcements SET scheduled_at=now()-interval '1 second' WHERE id=$1", [id]);
+    await db.exec(`
+      CREATE FUNCTION public.reject_test_announcement() RETURNS trigger LANGUAGE plpgsql AS $$
+        BEGIN RAISE EXCEPTION 'Simulated delivery failure'; END
+      $$;
+      CREATE TRIGGER reject_test_announcement BEFORE INSERT ON public.notifications
+      FOR EACH ROW WHEN (NEW.reference_type='ANNOUNCEMENT') EXECUTE FUNCTION public.reject_test_announcement();
+    `);
+    await assert.rejects(dispatchAnnouncement(id), /Simulated delivery failure/);
+    assert.equal((await db.query('SELECT status FROM public.announcements WHERE id=$1', [id])).rows[0].status, 'SCHEDULED');
+    assert.equal((await db.query('SELECT count(*)::int AS n FROM public.notifications WHERE reference_id=$1', [id])).rows[0].n, 0);
+    await db.exec('DROP TRIGGER reject_test_announcement ON public.notifications; DROP FUNCTION public.reject_test_announcement()');
+    assert.equal((await Promise.all([dispatchAnnouncement(id), dispatchAnnouncement(id)])).filter(Boolean).length, 1);
+    assert.equal((await send({ mode: 'now', revision: 1 })).body.status, 'SENT');
+    const recipients = (await db.query('SELECT recipient_id FROM public.notifications WHERE reference_id=$1 ORDER BY recipient_id', [id])).rows;
+    assert.ok(recipients.some(entry => entry.recipient_id === second.id));
+    assert.ok(recipients.every(entry => ![actor.id, learner.id].includes(entry.recipient_id)));
+    assert.equal((await request(path, manager)).body.items[0].recipientCount, recipients.length);
+    assert.equal((await db.query("SELECT count(*)::int AS n FROM public.audit_logs WHERE entity_id=$1 AND action='ANNOUNCEMENT_SENT'", [id])).rows[0].n, 1);
+    await db.query("UPDATE public.users SET role='ADMIN' WHERE id=$1", [second.id]);
+    await db.query("UPDATE public.users SET status='LOCKED' WHERE id=$1", [learner.id]);
+    const immediate = (await create({ ...submitted, requestId: randomUUID(), audience: 'ALL' })).body;
+    const sent = await request(`${path}/${immediate.id}/send`, { ...manager, method: 'POST', json: { mode: 'now', revision: 0 } });
+    assert.equal(sent.body.status, 'SENT');
+    const all = (await db.query('SELECT recipient_id FROM public.notifications WHERE reference_id=$1', [immediate.id])).rows;
+    assert.ok(all.some(entry => entry.recipient_id === actor.id));
+    assert.ok(all.every(entry => entry.recipient_id !== learner.id));
+    const empty = (await create({ ...submitted, requestId: randomUUID(), audience: 'LEARNER' })).body;
+    assert.equal((await request(`${path}/${empty.id}/send`, {
+      ...manager, method: 'POST', json: { mode: 'now', revision: 0 },
+    })).body.recipientCount, 0);
+    await db.query("UPDATE public.users SET status='ACTIVE' WHERE id=$1", [learner.id]);
+  });
+
+  await t.test('Grading templates, expiry and details use confirmed state and enforce access', async () => {
+    const { dispatchExpiryReminders, recordGradingTransition } = await import('../dist/modules/notifications/grading-notifications.js');
+    const config = '/admin/notifications/settings';
+    const manager = { token: tokens.actor };
+    const patch = (event, json) => request(`${config}/${event}`, { ...manager, method: 'PATCH', json });
+    const result = (await request(config, manager)).body.items;
+    assert.equal(result.length, 6);
+    const template = { title: 'Nhắc {{skill}}', content: 'Hạn {{expiresAt}}', enabled: true, leadHours: 24, revision: 0 };
+    assert.equal((await patch('CONTENT_EXPIRING', { ...template, title: '{{email}}' })).status, 400);
+    assert.equal((await patch('GRADING_ASSIGNED', { ...template, content: 'Bài mới', enabled: false, leadHours: null })).status, 400);
+    assert.equal((await patch('CONTENT_EXPIRING', template)).body.revision, 1);
+    assert.equal((await patch('CONTENT_EXPIRING', template)).status, 409);
+    const [{ skill_id: skillId }] = (await db.query(`
+      WITH collection AS (INSERT INTO public.exam_sets(name) VALUES ('Reminder fixture') RETURNING id),
+      exam AS (INSERT INTO public.exams(exam_set_id,title,order_no) SELECT id,'Fixture',1 FROM collection RETURNING id),
+      skill AS (INSERT INTO public.exam_skills(exam_id,skill,version_number,duration_minutes)
+        SELECT id,'SPEAKING',1,12 FROM exam RETURNING id),
+      section AS (INSERT INTO public.exam_sections(exam_skill_id,title,section_type,order_no)
+        SELECT id,'Part','PART',1 FROM skill RETURNING id),
+      attempt AS (INSERT INTO public.attempts(user_id,exam_id,attempt_type,status)
+        SELECT $1,id,'FULL_SKILL','COMPLETED' FROM exam RETURNING id),
+      done AS (INSERT INTO public.skill_attempts(attempt_id,exam_skill_id,status,deadline_at,content_expires_at)
+        SELECT attempt.id,skill.id,'COMPLETED',now()+interval '1 minute',now()+interval '1 hour' FROM attempt,skill RETURNING id)
+      INSERT INTO public.submission_contents(skill_attempt_id,section_id,text_content)
+      SELECT done.id,section.id,'Private fixture' FROM done,section RETURNING skill_attempt_id AS skill_id
+    `, [learner.id])).rows;
+    assert.equal(await dispatchExpiryReminders(), 1);
+    assert.equal(await dispatchExpiryReminders(), 0);
+    const [notice] = (await db.query("SELECT id,title,content FROM public.notifications WHERE reference_id=$1 AND type='CONTENT_EXPIRING'", [skillId])).rows;
+    assert.equal(notice.title, 'Nhắc Speaking');
+    assert.ok(!notice.content.includes('{{') && !notice.content.includes('Private fixture'));
+    const target = '/notifications/' + notice.id + '/target';
+    assert.equal((await request(target, { token: tokens.learner })).body.skill, 'SPEAKING');
+    assert.equal((await request(target, manager)).status, 404);
+    await db.query("UPDATE public.skill_attempts SET content_expires_at=now()-interval '1 second' WHERE id=$1", [skillId]);
+    assert.equal((await request(target, { token: tokens.learner })).status, 410);
+    const [grading] = (await db.query(`
+      WITH credit AS (INSERT INTO public.support_credits(user_id,credit_type,valid_from,expires_at)
+        VALUES($1,'BONUS',now(),now()+interval '2 days') RETURNING id)
+      INSERT INTO public.grading_requests(skill_attempt_id,used_credit_id,assignment_deadline)
+      SELECT $2,id,now()+interval '72 hours' FROM credit RETURNING id
+    `, [learner.id, skillId])).rows;
+    const event = type => db.transaction(tx => recordGradingTransition(sqlClient(tx), type, grading.id));
+    await event('GRADING_REQUEST_ACCEPTED');
+    await event('GRADING_REQUEST_ACCEPTED');
+    await event('GRADING_RESULT_PUBLISHED'); // Draft/waiting state must not announce a result.
+    await db.query("UPDATE public.skill_attempts SET content_expires_at=now()+interval '2 hours' WHERE id=$1", [skillId]);
+    assert.equal(await dispatchExpiryReminders(), 0, 'Active grading disables the reminder');
+    await db.query("UPDATE public.users SET role='TEACHER' WHERE id=$1", [second.id]);
+    await db.query("UPDATE public.grading_requests SET status='ASSIGNED',teacher_id=$2,assigned_at=now() WHERE id=$1", [grading.id, second.id]);
+    await event('GRADING_ASSIGNED');
+    const [assigned] = (await db.query("SELECT id,recipient_id FROM public.notifications WHERE reference_id=$1 AND type='GRADING_ASSIGNED'", [grading.id])).rows;
+    assert.equal(assigned.recipient_id, second.id);
+    assert.equal((await request('/notifications/' + assigned.id + '/target', { token: tokens.second })).status, 200);
+    await db.query("UPDATE public.grading_requests SET status='CANCELLED',cancelled_at=now(),cancel_reason='TEACHER_UNAVAILABLE' WHERE id=$1", [grading.id]);
+    await event('GRADING_CANCELLED_REFUNDED');
+    await event('GRADING_CANCELLED');
+    assert.equal((await request('/notifications/' + assigned.id + '/target', { token: tokens.second })).status, 404);
+    await db.query(`
+      WITH bonus AS (INSERT INTO public.support_credits(user_id,credit_type,valid_from,expires_at)
+        VALUES($1,'BONUS',now(),now()+interval '2 days') RETURNING id)
+      INSERT INTO public.credit_refunds(grading_request_id,bonus_credit_id,status,refunded_at)
+      SELECT $2,id,'COMPLETED',now() FROM bonus
+    `, [learner.id, grading.id]);
+    await event('GRADING_CANCELLED_REFUNDED');
+    assert.deepEqual((await db.query("SELECT type FROM public.notifications WHERE recipient_id=$1 AND reference_id=$2 ORDER BY type",
+      [learner.id, grading.id])).rows, [{ type: 'GRADING_CANCELLED_REFUNDED' }, { type: 'GRADING_REQUEST_ACCEPTED' }]);
+    const [published] = (await db.query(`
+      WITH credit AS (INSERT INTO public.support_credits(user_id,credit_type,valid_from,expires_at)
+        VALUES($1,'BONUS',now(),now()+interval '2 days') RETURNING id),
+      rule AS (INSERT INTO public.grading_rules(name,skill,assessment_scope,version,aggregation_rules,rounding_rules)
+        VALUES('Fixture','SPEAKING','FULL_SKILL',1,'{}','{}') RETURNING id),
+      submitted AS (INSERT INTO public.grading_requests(skill_attempt_id,used_credit_id,assignment_deadline,status,teacher_id,assigned_at)
+        SELECT $2,id,now()+interval '72 hours','COMPLETED',$3,now() FROM credit RETURNING id)
+      INSERT INTO public.grading_reviews(grading_request_id,teacher_id,grading_rule_id,status,overall_score,published_at)
+      SELECT submitted.id,$3,rule.id,'PUBLISHED',7.5,now() FROM submitted,rule RETURNING grading_request_id AS id
+    `, [learner.id, skillId, second.id])).rows;
+    await db.transaction(tx => recordGradingTransition(sqlClient(tx), 'GRADING_RESULT_PUBLISHED', published.id));
+    assert.equal((await db.query("SELECT recipient_id FROM public.notifications WHERE reference_id=$1 AND type='GRADING_RESULT_PUBLISHED'", [published.id])).rows[0].recipient_id, learner.id);
+    assert.equal(await dispatchExpiryReminders(), 1, 'A changed effective deadline has its own reminder');
+    await db.query("UPDATE public.users SET role='ADMIN' WHERE id=$1", [second.id]);
+    const { invalidateUserCache } = await import('../dist/middleware/auth.js');
+    invalidateUserCache(second.auth);
+  });
+
+  const legacyLogin = await request('/auth/login', { method: 'POST',
+    json: { email: 'legacy-admin@example.test', password: 'admin-fixture-password' } });
+  assert.equal(legacyLogin.status, 200);
+  assert.equal(legacyLogin.body.user.role, 'ADMIN');
+  assert.equal(legacyLogin.body.user.must_change_password, false);
+  const legacyRefresh = await request('/auth/refresh', { method: 'POST', cookie: legacyLogin.cookies[0].split(';')[0] });
+  assert.equal(legacyRefresh.status, 200);
+  assert.equal(legacyRefresh.body.user.role, 'ADMIN');
+  assert.equal(legacyRefresh.body.user.must_change_password, false);
+  const staffMigration = await readFile(new URL('../../docs/csdl/24_staff_accounts_and_authenticator.sql', import.meta.url), 'utf8');
+  await db.exec(staffMigration);
+  await db.exec(staffMigration);
+  const previousStaff = { fullName: 'Giáo viên thử lại', email: 'retry@example.test', role: 'TEACHER', writing: true, speaking: false, maxPending: 10 };
+  const previousAuth = { auth: randomUUID(), email: previousStaff.email, password: 'inaccessible-old-fixture', metadata: {
+    ieltspace_invitation_proof: 'managed-account-v1', ieltspace_staff_created: true,
+    ieltspace_staff_creation: { actorId: actor.id, role: 'TEACHER', writing: true, speaking: false, maxPending: 10 },
+  } };
+  await db.query('INSERT INTO auth.users(id,email,raw_user_meta_data) VALUES($1,$2,$3)',
+    [previousAuth.auth, previousStaff.email, { full_name: previousStaff.fullName }]);
+  await db.query('UPDATE auth.users SET raw_app_meta_data=$2 WHERE id=$1', [previousAuth.auth, previousAuth.metadata]);
+  createdAuth.set(previousAuth.email, previousAuth);
+  const fixStaffMigration = await readFile(new URL('../../docs/csdl/25_staff_auth_metadata.sql', import.meta.url), 'utf8');
+  await db.exec(fixStaffMigration);
+  await db.exec(fixStaffMigration);
+  const retryStaff = (account, token = tokens.actor) => request('/admin/users/staff', {
+    token, method: 'POST', json: { account },
+  });
+  assert.equal((await retryStaff({ ...previousStaff, maxPending: 11 })).status, 409);
+  assert.equal((await retryStaff(previousStaff, tokens.second)).status, 409);
+  await db.query('UPDATE auth.users SET last_sign_in_at=now() WHERE id=$1', [previousAuth.auth]);
+  assert.equal((await retryStaff(previousStaff)).status, 409);
+  await db.query('UPDATE auth.users SET last_sign_in_at=null WHERE id=$1', [previousAuth.auth]);
+  const recover = await retryStaff(previousStaff);
+  assert.equal(recover.status, 201);
+  assert.equal(recover.body.temporaryPassword, previousAuth.password);
+  assert.notEqual(previousAuth.password, 'inaccessible-old-fixture');
+  const recovered = await client.users.findUnique({ where: { id: recover.body.id } });
+  assert.equal(recovered.role, 'TEACHER');
+  assert.equal(recovered.auth_user_id, previousAuth.auth);
+  assert.equal(recovered.must_change_password, true);
+  assert.deepEqual((await db.query('SELECT skill,max_pending FROM public.teacher_permissions WHERE teacher_id=$1', [recovered.id])).rows,
+    [{ skill: 'WRITING', max_pending: 10 }]);
+  assert.equal((await retryStaff(previousStaff)).status, 409);
   assert.equal((await request('/auth/login', password)).status, 200);
   assert.equal((await request('/auth/refresh', refresh)).status, 200);
   assert.equal((await request('/auth/google/callback?code=test-code', google)).location, origin + '/auth/callback');
@@ -225,8 +605,8 @@ test('Admin account history, invitations, deletion and protection against isolat
   assert.ok(loginHistory.items.every(event => !('session_digest' in event)));
 
   const lock = { kind: 'status', previousRole: 'LEARNER', previousStatus: 'ACTIVE', status: 'LOCKED', reason: 'Kiểm tra khóa' };
-  const change = (user, action, securityCode, token = tokens.actor) =>
-    request('/admin/users/' + user.id + '/' + action.kind, { token, method: 'PATCH', json: { action, securityCode } });
+  const change = (user, action, code, token = tokens.actor) =>
+    request('/admin/users/' + user.id + '/' + action.kind, { token, method: 'PATCH', json: { action, code } });
   assert.equal((await change(actor, { ...lock, previousRole: 'ADMIN' })).body.code, 'SELF_ADMIN_ACTION');
   failAudit = true;
   assert.equal((await change(learner, lock)).status, 500);
@@ -249,68 +629,102 @@ test('Admin account history, invitations, deletion and protection against isolat
   assert.ok(audit.every(row => row.actorName === 'ADMIN' && row.reason));
 
   const demote = { kind: 'role', previousRole: 'ADMIN', previousStatus: 'ACTIVE', role: 'TEACHER', reason: 'Kiểm tra Quản lý' };
-  const issue = (user, action, token = tokens.actor) => request('/admin/users/' + user.id + '/security-code', { token, method: 'POST', json: action });
-  assert.equal((await change(second, demote)).body.code, 'ADMIN_CODE_REQUIRED');
-  const firstCode = await issue(second, demote);
-  assert.equal(firstCode.status, 202);
-  assert.deepEqual(Object.keys(firstCode.body).sort(), ['expiresInSeconds', 'id']);
-  assert.equal(delivered[0].recipient, actor.auth + '@example.test');
-  assert.equal((await issue(second, demote)).status, 429);
-  const wrong = delivered[0].code === '000000' ? '111111' : '000000';
-  const proof = { id: firstCode.body.id, code: delivered[0].code };
-  assert.equal((await change(second, demote, { ...proof, code: wrong })).body.code, 'ADMIN_CODE_INVALID');
-  assert.equal((await change(second, { ...demote, role: 'LEARNER' }, proof)).body.code, 'ADMIN_CODE_INVALID');
-  const competingCode = await issue(actor, demote, tokens.second);
-  assert.equal(competingCode.status, 202);
-  const race = await Promise.all([change(second, demote, proof),
-    change(actor, demote, { id: competingCode.body.id, code: delivered[1].code }, tokens.second)]);
+  const mfa = '/auth/me/authenticator';
+  const enroll = (token = tokens.actor) => request(mfa + '/enroll', { token, method: 'POST' });
+  const setupCode = (factorId, code, token = tokens.actor) => request(mfa + '/verify', { token, method: 'POST', json: { factorId, code } });
+  assert.equal((await change(second, demote)).body.code, 'AUTHENTICATOR_REQUIRED');
+  assert.equal((await change(second, demote, '123456')).body.code, 'AUTHENTICATOR_NOT_CONFIGURED');
+  assert.equal((await enroll(tokens.learner)).status, 403);
+  assert.deepEqual((await adminGet('/' + second.id)).body.auth.source, 'EMAIL');
+  assert.deepEqual((await request(mfa, { token: tokens.actor })).body, { enabled: false });
+  const enrollment = await enroll();
+  assert.equal(enrollment.status, 201);
+  assert.equal(enrollment.body.qrCode, 'data:image/svg+xml;base64,' + Buffer.from('<svg/>').toString('base64'));
+  assert.equal(enrollment.body.secret, undefined);
+  assert.equal((await setupCode(factors.get(second.auth).id, '123456')).status, 409);
+  assert.equal((await setupCode(enrollment.body.factorId, '000000')).body.code, 'AUTHENTICATOR_FAILED');
+  const verified = await setupCode(enrollment.body.factorId, '123456');
+  assert.equal(verified.status, 200);
+  assert.match(verified.cookies[0], /ielts_refresh_token=.*HttpOnly/i);
+  assert.ok(verified.body.session.accessToken);
+  assert.deepEqual((await request(mfa, { token: verified.body.session.accessToken })).body, { enabled: true });
+  assert.equal((await enroll()).body.code, 'AUTHENTICATOR_EXISTS');
+  assert.equal((await change(second, demote, '000000')).body.code, 'AUTHENTICATOR_FAILED');
+  assert.equal((await change(second, demote, '12345')).status, 400);
+  assert.equal((await change(second, demote)).body.code, 'AUTHENTICATOR_REQUIRED', 'A new action always requires a code');
+  const race = await Promise.all([change(second, demote, '123456'), change(actor, demote, '123456', tokens.second)]);
   assert.deepEqual(race.map(value => value.status).sort(), [200, 403]);
   assert.equal(await client.users.count(), 1);
-  const consumed = await db.query('SELECT count(*)::int AS n FROM public.admin_action_codes WHERE consumed_at IS NOT NULL');
-  assert.equal(consumed.rows[0].n, 1);
+  assert.equal(race.filter(result => result.status === 200 && result.cookies.some(cookie => cookie.includes('HttpOnly'))).length, 1);
 
   const activeToken = race[0].status === 200 ? tokens.actor : tokens.second;
   const activeAdmin = race[0].status === 200 ? actor : second;
-  const invite = (invitation, securityCode) => request('/admin/users/invitations', {
-    token: activeToken, method: 'POST', json: { invitation, securityCode },
+  const createStaff = (account, code, token = activeToken) => request('/admin/users/staff', {
+    token, method: 'POST', json: { account, code },
   });
   const staff = { fullName: 'Giáo viên mới', email: 'staff@example.test', role: 'TEACHER', writing: true, speaking: false, maxPending: 4 };
-  const invitedAdmin = { fullName: 'Quản lý mới', email: 'staff-admin@example.test', role: 'ADMIN' };
-  assert.equal((await invite(invitedAdmin)).body.code, 'ADMIN_CODE_REQUIRED');
-  assert.equal((await invite({ ...staff, email: learner.auth + '@example.test' })).body.code, 'INVITE_EMAIL_EXISTS');
-  rejectMail = true;
-  assert.equal((await invite(staff)).body.code, 'INVITE_EMAIL_FAILED');
-  const oldToken = invitationEmails.at(-1).token;
-  rejectMail = false;
-  const invitation = await invite(staff);
-  assert.equal(invitation.status, 202);
-  assert.equal(invitation.body.status, 'INVITED');
-  assert.equal((await invite(staff)).status, 429);
-  const latest = invitationEmails.at(-1).token;
-  const accept = token => request('/auth/accept-staff-invite', { method: 'POST', json: { token, password: 'staff-pass-123' } });
-  assert.equal((await accept(oldToken)).status, 400);
-  assert.equal((await accept(latest)).status, 200);
-  assert.equal((await accept(latest)).status, 400);
-  assert.equal((await invite(staff)).body.code, 'INVITE_EMAIL_EXISTS');
-  const profile = await client.users.findUnique({ where: { id: invitation.body.id } });
+  const admin = { fullName: 'Quản lý mới', email: 'staff-admin@example.test', role: 'ADMIN' };
+  assert.equal((await createStaff(admin)).body.code, 'AUTHENTICATOR_REQUIRED');
+  assert.equal((await createStaff(staff, undefined, tokens.learner)).status, 403);
+  assert.equal((await createStaff({ ...staff, email: learner.auth + '@example.test' })).body.code, 'STAFF_EMAIL_EXISTS');
+  const results = await Promise.all([createStaff(staff), createStaff(staff)]);
+  assert.deepEqual(results.map(result => result.status).sort(), [201, 409]);
+  const created = results.find(result => result.status === 201);
+  assert.equal(created.body.status, 'ACTIVE');
+  assert.equal(created.body.email, staff.email);
+  assert.match(created.cache, /no-store/i);
+  assert.ok(created.body.temporaryPassword.length >= 24);
+  const profile = await client.users.findUnique({ where: { id: created.body.id } });
   assert.equal(profile.status, 'ACTIVE');
   assert.equal(profile.role, 'TEACHER');
+  assert.equal(profile.full_name, staff.fullName);
   assert.deepEqual((await db.query('SELECT skill, max_pending FROM public.teacher_permissions WHERE teacher_id = $1', [profile.id])).rows,
     [{ skill: 'WRITING', max_pending: 4 }]);
-  const staffPassword = { method: 'POST', json: { email: staff.email, password: 'staff-pass-123' } };
-  assert.equal((await request('/auth/login', staffPassword)).body.user.role, 'TEACHER');
+  const staffDetails = await request('/admin/users/' + profile.id, { token: activeToken });
+  assert.equal(staffDetails.body.auth.source, 'STAFF');
+  assert.equal(staffDetails.body.temporaryPassword, undefined);
+  const staffAudit = await request('/admin/users/' + profile.id + '/history?kind=admin', { token: activeToken });
+  assert.equal(staffAudit.body.items[0].action, 'USER_CREATED');
+  const staffPassword = { method: 'POST', json: { email: staff.email, password: created.body.temporaryPassword } };
+  const staffLogin = await request('/auth/login', staffPassword);
+  assert.equal(staffLogin.body.user.role, 'TEACHER');
+  assert.equal(staffLogin.body.user.must_change_password, true);
+  const staffToken = staffLogin.body.session.accessToken;
+  const refreshCookie = cookie => cookie.split(';')[0];
+  assert.equal((await request('/auth/refresh', { method: 'POST', cookie: refreshCookie(staffLogin.cookies[0]) })).body.user.must_change_password, true);
+  const changePassword = (token, currentPassword, newPassword, code) =>
+    request('/auth/me/password', { token, method: 'POST', json: { currentPassword, newPassword, code } });
+  const personalPassword = 'own-password-123';
+  assert.equal((await changePassword(staffToken, 'incorrect', personalPassword)).status, 400);
+  assert.equal((await request('/auth/me', { token: staffToken })).body.user.must_change_password, true);
+  assert.equal((await changePassword(staffToken, created.body.temporaryPassword, personalPassword)).status, 200);
+  assert.equal((await request('/auth/login', staffPassword)).status, 401);
+  const personalLogin = await request('/auth/login', { method: 'POST', json: { email: staff.email, password: personalPassword } });
+  assert.equal(personalLogin.body.user.must_change_password, false);
   assert.equal((await change(profile, { ...lock, previousRole: 'TEACHER' }, undefined, activeToken)).body.status, 'LOCKED');
   assert.equal((await request('/auth/me', { token: await getToken(createdAuth.get(staff.email)) })).status, 403);
   assert.equal((await change(profile, { ...lock, previousRole: 'TEACHER', previousStatus: 'LOCKED', status: 'ACTIVE' },
     undefined, activeToken)).body.role, 'TEACHER');
 
-  const demotionCode = await db.query('UPDATE public.admin_action_codes SET created_at=now()-interval \'2 minutes\'');
-  assert.ok(demotionCode.affectedRows > 0);
-  const codeRequest = await request('/admin/users/invitations/security-code', { token: activeToken, method: 'POST', json: invitedAdmin });
-  assert.equal(codeRequest.status, 202);
-  assert.equal((await invite(invitedAdmin, { id: codeRequest.body.id, code: delivered.at(-1).code })).status, 202);
-  assert.equal((await accept(invitationEmails.at(-1).token)).status, 200);
-  assert.equal((await request('/auth/login', { method: 'POST', json: { email: invitedAdmin.email, password: 'staff-pass-123' } })).body.user.role, 'ADMIN');
+  const adminCreation = await createStaff(admin, '123456');
+  assert.equal(adminCreation.status, 201);
+  assert.equal((await request('/auth/login', { method: 'POST',
+    json: { email: admin.email, password: adminCreation.body.temporaryPassword } })).body.user.role, 'ADMIN');
+  const newAdminToken = await getToken(createdAuth.get(admin.email));
+  assert.equal((await enroll(newAdminToken)).body.code, 'TEMPORARY_PASSWORD');
+  assert.deepEqual(unexpectedProviderRequests, []);
+  recoveryTokens.set('mfa-recovery-fixture', activeAdmin);
+  const reset = (code, cookie) => request('/auth/reset-password', { method: 'POST', cookie, json: {
+    tokenHash: 'mfa-recovery-fixture', password: 'new-admin-password', code,
+  } });
+  const step = await reset();
+  assert.equal(step.body.code, 'AUTHENTICATOR_REQUIRED');
+  assert.match(step.cookies[0], /ielts_recovery_session=.*HttpOnly/i);
+  const recovery = refreshCookie(step.cookies[0]);
+  const tampered = recovery.slice(0, -1) + (recovery.endsWith('f') ? '0' : 'f');
+  assert.equal((await reset('123456', tampered)).body.code, 'INVALID_RECOVERY');
+  assert.equal((await reset('000000', recovery)).body.code, 'AUTHENTICATOR_FAILED');
+  assert.equal((await reset('123456', recovery)).status, 200);
 
   const deleteAction = { kind: 'delete', previousRole: 'TEACHER', previousStatus: 'ACTIVE', reason: 'Kiểm tra xóa' };
   const remove = (target, action) => request('/admin/users/' + target, { token: activeToken, method: 'DELETE', json: { action } });

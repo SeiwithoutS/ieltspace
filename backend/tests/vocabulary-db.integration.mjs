@@ -17,7 +17,7 @@ test('dev draft API persists, detects revision conflict and rolls back fixture',
       const router = createVocabularyAdminRouter(db);
       const request = (method, path, body = {}, id = fixtureId) => new Promise((resolve,reject) => {
         const route = router.stack.find(layer => layer.route?.path === path && layer.route.methods[method]).route;
-        const response = { status(){return this;}, json:resolve, end:resolve };
+        const response = { set(){return this;}, status(){return this;}, json:resolve, end:resolve };
         route.stack.at(-1).handle({params:{id},body,appUser:users[0]},response,reject);
       });
       const created = await request('post','/',{title:'Vocabulary rollback fixture',description:'Test only',cover:''});

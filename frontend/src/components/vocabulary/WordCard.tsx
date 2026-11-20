@@ -3,11 +3,12 @@ import { WordImage } from "./WordImage";
 import { type Word } from "../../data/vocabulary";
 export function WordCard({
   entry,
-  children, favorite, onFavorite, onImageChange,
+  children, favorite, onFavorite, onImageChange, onImageTransfer,
 }: {
   entry: Word; favorite?:boolean; onFavorite?:()=>void;
   children?: React.ReactNode;
   onImageChange?: (patch: Partial<Word>) => void;
+  onImageTransfer?: (active: boolean) => void;
 }) {
   const [error, setError] = useState("");
   useEffect(() => {
@@ -50,7 +51,7 @@ export function WordCard({
   return (
     <article className={"word-card"+(onFavorite?" has-favorite":"")}>
       {onFavorite && <button type="button" className="word-favorite" aria-label={"Yêu thích "+entry.word} aria-pressed={favorite} onClick={onFavorite}><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill={favorite?"currentColor":"none"} strokeWidth="1.7"><path d="m12 3 2.8 5.7 6.3.9-4.6 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L3 9.6l6.2-.9Z"/></svg></button>}
-      <WordImage entry={entry} onChange={onImageChange} />
+      <WordImage entry={entry} onChange={onImageChange} onTransfer={onImageTransfer} />
       <div className="min-w-0 flex-1">
         <div className="word-heading flex items-center gap-3 flex-wrap">
           <h3 lang="en">{entry.word}</h3>

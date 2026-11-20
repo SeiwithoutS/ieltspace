@@ -1,0 +1,68 @@
+.learner-activity-calendar {
+  --activity-none: var(--study-hover);
+  --activity-low: #b8dfc7;
+  --activity-medium: #77bf97;
+  --activity-high: #3b9164;
+  --activity-highest: #1c5c3d;
+}
+.dark .learner-activity-calendar {
+  --activity-low: #28523b;
+  --activity-medium: #33764f;
+  --activity-high: #4c9f6d;
+  --activity-highest: #84cda1;
+}
+.learner-activity-calendar .learner-study-control { min-height: 36px; padding-block: 4px; font-size: 13px; }
+.learner-activity-calendar .learner-study-empty { margin-top: 12px; }
+.learner-activity-calendar .activity-calendar-year { width: auto; max-width: 100%; }
+.activity-calendar-total { margin: 18px 0 10px; color: var(--study-muted); font-size: 14px; }
+.activity-calendar-total strong { color: var(--study-text); }
+.activity-calendar-scroll { padding: 4px; overflow-x: auto; }
+.activity-calendar-grid { width: max-content; display: grid; gap: 3px; }
+.activity-calendar-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 24px;
+  grid-auto-columns: 14px;
+  gap: 3px;
+  align-items: center;
+  min-height: 14px;
+}
+.activity-calendar-row > span { display: grid; align-items: center; min-height: 14px; }
+.activity-calendar-months { margin-bottom: 2px; }
+.activity-calendar-months span, .activity-calendar-row [role="rowheader"] {
+  color: var(--study-muted);
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.learner-activity-calendar [data-level="0"] { background: var(--activity-none); }
+.learner-activity-calendar [data-level="1"] { background: var(--activity-low); }
+.learner-activity-calendar [data-level="2"] { background: var(--activity-medium); }
+.learner-activity-calendar [data-level="3"] { background: var(--activity-high); }
+.learner-activity-calendar [data-level="4"] { background: var(--activity-highest); }
+.activity-calendar-day, .activity-calendar-legend li span {
+  box-sizing: border-box;
+  display: block;
+  width: 14px;
+  height: 14px;
+  border: 1px solid color-mix(in srgb, var(--study-text) 9%, transparent);
+  border-radius: 3px;
+}
+.activity-calendar-day { padding: 0; cursor: pointer; }
+.activity-calendar-day:hover, .activity-calendar-day[aria-pressed="true"] { outline: 1px solid var(--study-text); outline-offset: 1px; }
+.activity-calendar-day:focus-visible { outline: 2px solid var(--study-blue); outline-offset: 1px; }
+.activity-calendar-footer, .activity-calendar-selection, .activity-calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  color: var(--study-muted);
+  font-size: 13px;
+}
+.activity-calendar-footer { justify-content: space-between; margin-top: 12px; }
+.activity-calendar-selection label { display: flex; align-items: center; gap: 6px; }
+.activity-calendar-selection input { width: auto; }
+.activity-calendar-selection strong { color: var(--study-text); }
+.activity-calendar-legend { list-style: none; margin: 0; padding: 0; gap: 8px; }
+.activity-calendar-legend li { display: flex; align-items: center; gap: 4px; }
+.activity-calendar-legend li span { width: 11px; height: 11px; }

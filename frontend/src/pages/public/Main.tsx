@@ -1,7 +1,11 @@
 import LearnerHeader from "../../components/navigation/LearnerHeader";
+import FeaturedSamples from "../../components/samples/FeaturedSamples";
+import { useAuth } from "../../lib/auth/auth";
+import { supportDestination } from "../../lib/reports/support-navigation";
 import { styleOf, cssText, getAccentColors } from "../../lib/shared/styles";
 
 export default function Main({ accent }: { accent?: string }) {
+  const { user } = useAuth();
   const v = getAccentColors(accent);
   return (
     <>
@@ -1636,7 +1640,7 @@ export default function Main({ accent }: { accent?: string }) {
             </div>
             {"\n"}
             <a
-              href={"#dang-ky"}
+              href="#Vocab"
               style={styleOf(
                 "display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 15px; color: #352637; text-decoration: none",
               )}
@@ -1911,7 +1915,7 @@ export default function Main({ accent }: { accent?: string }) {
             </div>
             {"\n"}
             <a
-              href={"#dang-ky"}
+              href="#SampleLibrary"
               style={styleOf(
                 "display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 15px; color: #352637; text-decoration: none",
               )}
@@ -1933,153 +1937,7 @@ export default function Main({ accent }: { accent?: string }) {
             {"\n"}
           </div>
           {"\n"}
-          <div
-            style={styleOf(
-              "display: flex; gap: 28px 20px; overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 4px 12px; margin: -4px",
-            )}
-          >
-            {"\n"}
-            <a
-              href={"#dang-ky"}
-              style={styleOf(
-                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
-              )}
-            >
-              {"\n"}
-              <div
-                style={styleOf(
-                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #F7C4B6",
-                )}
-              ></div>
-              {"\n"}
-              <div
-                style={styleOf(
-                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
-                )}
-              >
-                {
-                  "Writing Task 1 · Line graph · Topic Museum Visitors & bài mẫu band 8.0"
-                }
-              </div>
-              {"\n"}
-              <div
-                style={styleOf(
-                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
-                )}
-              >
-                {
-                  "[Quý 3/2026] Đề thi thật IELTS Writing Task 1, dạng Line graph, chủ đề lượng khách tham quan ba bảo tàng giai đoạn 2010–2025."
-                }
-              </div>
-              {"\n"}
-            </a>
-            {"\n"}
-            <a
-              href={"#dang-ky"}
-              style={styleOf(
-                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
-              )}
-            >
-              {"\n"}
-              <div
-                style={styleOf(
-                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #BFD8F7",
-                )}
-              ></div>
-              {"\n"}
-              <div
-                style={styleOf(
-                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
-                )}
-              >
-                {
-                  "Writing Task 1 · Map · Topic Library Redevelopment & bài mẫu band 8.0"
-                }
-              </div>
-              {"\n"}
-              <div
-                style={styleOf(
-                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
-                )}
-              >
-                {
-                  "[Quý 3/2026] Đề thi thật IELTS Writing Task 1, dạng Map, chủ đề cải tạo thư viện thị trấn trước và sau năm 2020."
-                }
-              </div>
-              {"\n"}
-            </a>
-            {"\n"}
-            <a
-              href={"#dang-ky"}
-              style={styleOf(
-                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
-              )}
-            >
-              {"\n"}
-              <div
-                style={styleOf(
-                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5CEF5",
-                )}
-              ></div>
-              {"\n"}
-              <div
-                style={styleOf(
-                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
-                )}
-              >
-                {
-                  "Writing Task 1 · Bar chart · Topic Household Energy & bài mẫu band 7.5"
-                }
-              </div>
-              {"\n"}
-              <div
-                style={styleOf(
-                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
-                )}
-              >
-                {
-                  "[Quý 3/2026] Đề thi thật IELTS Writing Task 1, dạng Bar chart, chủ đề mức tiêu thụ năng lượng hộ gia đình ở năm quốc gia."
-                }
-              </div>
-              {"\n"}
-            </a>
-            {"\n"}
-            <a
-              href={"#dang-ky"}
-              style={styleOf(
-                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 18px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
-              )}
-            >
-              {"\n"}
-              <div
-                style={styleOf(
-                  "aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5DECE",
-                )}
-              ></div>
-              {"\n"}
-              <div
-                style={styleOf(
-                  "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; padding: 4px 8px 0",
-                )}
-              >
-                {
-                  "Writing Task 2 · Topic Education (Free University) & bài mẫu band 8.0"
-                }
-              </div>
-              {"\n"}
-              <div
-                style={styleOf(
-                  "font-size: 14px; line-height: 1.5; color: #706473; padding: 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden",
-                )}
-              >
-                {
-                  "[Quý 3/2026] Đề thi thật IELTS Writing Task 2, dạng Discuss both views, chủ đề miễn học phí đại học cho mọi sinh viên."
-                }
-              </div>
-              {"\n"}
-            </a>
-            {"\n"}
-          </div>
+          <FeaturedSamples />
           {"\n"}
         </section>
         {"\n\n"}
@@ -2432,7 +2290,7 @@ export default function Main({ accent }: { accent?: string }) {
                   {"Câu hỏi thường gặp"}
                 </a>
                 <a
-                  href={"#lien-he"}
+                  href={"#" + supportDestination(user?.role)}
                   style={styleOf("color: #4B3D4D; text-decoration: none")}
                 >
                   {"Liên hệ"}

@@ -8,25 +8,11 @@ import { getAuthUser, logout } from '../../lib/auth/auth';
 
 export type LearnerNavKey = 'exams' | 'samples' | 'vocab' | 'flashcard' | 'home';
 
-export interface AccountNavItem {
-  id: string;
-  label: string;
-  page?: PageName;
-  icon?: React.ReactNode;
-  active?: boolean;
-  badge?: React.ReactNode;
-  danger?: boolean;
-  onClick?: () => void;
-}
-
 export interface LearnerHeaderProps {
   active?: LearnerNavKey;
   guest?: boolean;
   accent?: string;
   onAccent?: string;
-  accountNav?: {
-    items: AccountNavItem[];
-  };
 }
 
 export default function LearnerHeader({
@@ -34,7 +20,6 @@ export default function LearnerHeader({
   guest,
   accent = 'var(--color-primary-600, #2963CC)',
   onAccent = '#FFFFFF',
-  accountNav,
 }: LearnerHeaderProps) {
   const isGuest = guest !== undefined ? guest : !getAuthUser();
   const account = useAccount('learner');
@@ -561,6 +546,8 @@ export default function LearnerHeader({
               <PageLink
                 page="AvatarMenu"
                 aria-label="Tài khoản: tiến độ học tập và cài đặt"
+                aria-haspopup="menu"
+                aria-expanded={false}
                 className="flex p-0.5 rounded-full no-underline"
                 style={{ border: `2px solid ${accent}` }}
               >
@@ -601,6 +588,8 @@ export default function LearnerHeader({
               <PageLink
                 page="AvatarMenu"
                 aria-label="Tài khoản: tiến độ học tập và cài đặt"
+                aria-haspopup="menu"
+                aria-expanded={false}
                 className="flex p-0.5 rounded-full no-underline"
                 style={{ border: `2px solid ${accent}` }}
               >
@@ -704,102 +693,50 @@ export default function LearnerHeader({
                   </div>
 
                   {/* Account Nav Items */}
-                  {accountNav ? (
-                    accountNav.items.map((item) => (
-                      item.page ? (
-                        <PageLink
-                          key={item.id}
-                          page={item.page}
-                          onClick={() => {
-                            item.onClick?.();
-                            closeMobile();
-                          }}
-                          className={`flex items-center justify-between p-2.5 rounded-xl text-sm font-medium no-underline transition-colors ${
-                            item.danger
-                              ? 'text-[var(--attempt-text-c0412a,#C0412A)] bg-transparent hover:bg-[var(--attempt-bg-fbdcd3,#FBDCD3)]/40'
-                              : item.active
-                              ? 'bg-[var(--attempt-bg-e3ecfd,#E3ECFD)] text-[var(--attempt-text-2963cc,#2963CC)] font-semibold'
-                              : 'text-[var(--attempt-text-352637,#352637)] bg-transparent hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)]'
-                          }`}
-                        >
-                          <span className="flex items-center gap-2.5">
-                            {item.icon}
-                            {item.label}
-                          </span>
-                          {item.badge}
-                        </PageLink>
-                      ) : (
-                        <button
-                          key={item.id}
-                          type="button"
-                          onClick={() => {
-                            item.onClick?.();
-                            closeMobile();
-                          }}
-                          className={`w-full flex items-center justify-between p-2.5 rounded-xl text-sm font-medium transition-colors text-left border-0 cursor-pointer ${
-                            item.danger
-                              ? 'text-[var(--attempt-text-c0412a,#C0412A)] bg-transparent hover:bg-[var(--attempt-bg-fbdcd3,#FBDCD3)]/40'
-                              : item.active
-                              ? 'bg-[var(--attempt-bg-e3ecfd,#E3ECFD)] text-[var(--attempt-text-2963cc,#2963CC)] font-semibold'
-                              : 'text-[var(--attempt-text-352637,#352637)] bg-transparent hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)]'
-                          }`}
-                        >
-                          <span className="flex items-center gap-2.5">
-                            {item.icon}
-                            {item.label}
-                          </span>
-                          {item.badge}
-                        </button>
-                      )
-                    ))
-                  ) : (
-                    <>
-                      <PageLink
-                        page="StudentHome"
-                        onClick={closeMobile}
-                        className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)] no-underline font-medium"
-                      >
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M4 11l8-7 8 7v9H4z" />
-                        </svg>
-                        Dashboard
-                      </PageLink>
-                      <PageLink
-                        page="MyWS"
-                        onClick={closeMobile}
-                        className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)] no-underline font-medium"
-                      >
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M15 5l4 4L8 20H4v-4z" />
-                        </svg>
-                        Bài Writing và Speaking
-                      </PageLink>
-                      <PageLink
-                        page="Profile"
-                        onClick={closeMobile}
-                        className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)] no-underline font-medium"
-                      >
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="8" r="4" />
-                          <path d="M4 21a8 8 0 0 1 16 0" />
-                        </svg>
-                        Hồ sơ cá nhân
-                      </PageLink>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          logout();
-                          closeMobile();
-                        }}
-                        className="w-full flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-c0412a,#C0412A)] hover:bg-[var(--attempt-bg-fbdcd3,#FBDCD3)]/40 font-medium text-left border-0 bg-transparent cursor-pointer"
-                      >
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
-                        </svg>
-                        Đăng xuất
-                      </button>
-                    </>
-                  )}
+                  <PageLink
+                    page="StudentHome"
+                    onClick={closeMobile}
+                    className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)] no-underline font-medium"
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 11l8-7 8 7v9H4z" />
+                    </svg>
+                    Dashboard
+                  </PageLink>
+                  <PageLink
+                    page="PracticeHistory"
+                    onClick={closeMobile}
+                    className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)] no-underline font-medium"
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 12a9 9 0 1 0 3-6.7L3 8m0-5v5h5m4 0v5l3 2" />
+                    </svg>
+                    Lịch sử luyện tập
+                  </PageLink>
+                  <PageLink
+                    page="Profile"
+                    onClick={closeMobile}
+                    className="flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-352637,#352637)] hover:bg-[var(--attempt-bg-ffffff,#FFFFFF)] no-underline font-medium"
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="8" r="4" />
+                      <path d="M4 21a8 8 0 0 1 16 0" />
+                    </svg>
+                    Hồ sơ cá nhân
+                  </PageLink>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      closeMobile();
+                    }}
+                    className="w-full flex items-center gap-2.5 p-2.5 rounded-xl text-sm text-[var(--attempt-text-c0412a,#C0412A)] hover:bg-[var(--attempt-bg-fbdcd3,#FBDCD3)]/40 font-medium text-left border-0 bg-transparent cursor-pointer"
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+                    </svg>
+                    Đăng xuất
+                  </button>
                 </div>
               )}
 

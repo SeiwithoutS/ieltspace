@@ -1,46 +1,85 @@
-import { useSyncExternalStore } from "react";
-import seed from "../../data/notifications.json";
-import { getAccount, type Role } from "../auth/account";
-const event = "ieltspace-notifications-change";
-function subscribe(callback: () => void) {
-  window.addEventListener(event, callback);
-  window.addEventListener("storage", callback);
-  window.addEventListener("ieltspace-account-change", callback);
-  return () => {
-    window.removeEventListener(event, callback);
-    window.removeEventListener("storage", callback);
-    window.removeEventListener("ieltspace-account-change", callback);
-  };
+import { useEffect, useSyncExternalStore } from 'react';
+import { getAuthUser, useAuth } from '../auth/auth';
+import { apiFetch } from '../shared/api';
+
+export type Notification = {
+  id: string;
+  type: string;
+  title: string;
+  content: string | null;
+  referenceType: string | null;
+  referenceId: string | null;
+  createdAt: string;
+  readAt: string | null;
+};
+
+export type NotificationPage = { items: Notification[]; nextCursor: string | null };
+
+export function listNotifications(unreadOnly: boolean, after?: string) {
+  const query = new URLSearchParams();
+  if (unreadOnly) query.set('unread', '1');
+  if (after) query.set('after', after);
+  const search = query.toString();
+  return apiFetch<NotificationPage>('/notifications' + (search ? '?' + search : ''));
 }
-const key = (role?: Role) => "ieltspace-notifications:" + getAccount(role).id;
-function snapshot(role?: Role) {
-  try {
-    return localStorage.getItem(key(role)) || "[]";
-  } catch {
-    return "[]";
+
+export async function markNotificationRead(id: string) {
+  await apiFetch(`/notifications/${encodeURIComponent(id)}/read`, { method: 'PATCH' });
+  await refreshNotificationCount(true);
+}
+
+export async function markAllNotificationsRead() {
+  await apiFetch('/notifications/read-all', { method: 'POST' });
+  await refreshNotificationCount(true);
+}
+
+const subscribers = new Set<() => void>();
+let count: { userId: string; unread: number } | undefined;
+let activeRequest: { userId: string; pending: Promise<void> } | undefined;
+let timer: number | undefined;
+
+function refreshNotificationCount(force = false): Promise<void> {
+  const userId = getAuthUser()?.id;
+  if (!userId) {
+    count = undefined;
+    activeRequest = undefined;
+    return Promise.resolve();
   }
+  if (!force && activeRequest?.userId === userId) return activeRequest.pending;
+  const pending = apiFetch<{ unread: number }>('/notifications/unread-count')
+    .then(result => {
+      if (activeRequest?.pending !== pending || getAuthUser()?.id !== userId) return;
+      if (count?.userId === userId && count.unread === result.unread) return;
+      count = { userId, unread: result.unread };
+      subscribers.forEach(listener => listener());
+    })
+    .catch(() => { /* Keep the last counter while offline. */ })
+    .finally(() => { if (activeRequest?.pending === pending) activeRequest = undefined; });
+  activeRequest = { userId, pending };
+  return pending;
 }
-export function useNotifications(role?: Role) {
-  const account = getAccount(role);
-  const raw = useSyncExternalStore(subscribe, () => snapshot(role));
-  let read: string[] = [];
-  try {
-    const value = JSON.parse(raw);
-    if (Array.isArray(value)) read = value.filter((v) => typeof v === "string");
-  } catch {}
-  const items = seed[account.role].map((item) => ({
-    ...item,
-    unread: item.unread && !read.includes(item.id),
-  }));
-  const markRead = (ids: string[]) => {
-    const next = Array.from(new Set([...read, ...ids]));
-    localStorage.setItem(key(role), JSON.stringify(next));
-    window.dispatchEvent(new Event(event));
+
+function refreshWhileVisible() {
+  if (document.visibilityState === 'visible') void refreshNotificationCount();
+}
+
+function subscribe(listener: () => void) {
+  subscribers.add(listener);
+  if (subscribers.size === 1) {
+    timer = window.setInterval(refreshWhileVisible, 30_000);
+    document.addEventListener('visibilitychange', refreshWhileVisible);
+  }
+  return () => {
+    subscribers.delete(listener);
+    if (subscribers.size === 0) {
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', refreshWhileVisible);
+    }
   };
-  return {
-    items,
-    unread: items.filter((i) => i.unread).length,
-    markRead,
-    markAll: () => markRead(items.map((i) => i.id)),
-  };
+}
+
+export function useNotificationCount() {
+  const userId = useAuth().user?.id;
+  useEffect(() => { void refreshNotificationCount(); }, [userId]);
+  return useSyncExternalStore(subscribe, () => userId && count?.userId === userId ? count.unread : undefined);
 }

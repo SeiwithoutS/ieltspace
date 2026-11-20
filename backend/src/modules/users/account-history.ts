@@ -6,6 +6,7 @@ export const accountAuditActions = {
   lock: 'USER_LOCKED',
   unlock: 'USER_UNLOCKED',
   delete: 'USER_DELETED',
+  create: 'USER_CREATED',
   invite: 'USER_INVITED',
   inviteReissued: 'USER_INVITE_REISSUED',
   inviteAccepted: 'USER_INVITE_ACCEPTED',

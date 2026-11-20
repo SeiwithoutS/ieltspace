@@ -18,6 +18,7 @@ type Statistics = {
   accountLocks: number;
   flashcardSessions: number;
   flashcardLearners: number;
+  supportReports: number;
   dailyFlashcards: { day: string; sessions: number }[];
 };
 
@@ -56,8 +57,9 @@ adminStatisticsRouter.get('/', requireFreshAuth, requireRole('ADMIN'), asyncHand
         WHERE entity_type = 'USER' AND action = 'USER_LOCKED' AND created_at >= from_at AND created_at < until_at) AS "accountLocks",
       (SELECT count(*)::int FROM flashcards) AS "flashcardSessions",
       (SELECT count(DISTINCT user_id)::int FROM flashcards) AS "flashcardLearners",
+      (SELECT count(*)::int FROM public.support_reports WHERE created_at >= from_at AND created_at < until_at) AS "supportReports",
       (SELECT jsonb_agg(chart ORDER BY chart.day) FROM chart) AS "dailyFlashcards"
     FROM bounds CROSS JOIN accounts
   `;
-  res.set('Cache-Control', 'private, no-store').json({ from, to, ...stats, supportReports: null });
+  res.set('Cache-Control', 'private, no-store').json({ from, to, ...stats });
 }));

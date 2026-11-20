@@ -3,6 +3,7 @@ import { getAccount } from '../../lib/auth/account';
 import { navigate } from '../../lib/auth/auth';
 import NotificationBadge from '../notifications/NotificationBadge';
 import AccountDropdown from '../account/AccountDropdown';
+import AvatarContent from '../account/AvatarContent';
 import { styleOf, cssText } from '../../lib/shared/styles';
 import { Crumb, parseCrumbString } from '../../lib/shared/breadcrumbs';
 
@@ -94,6 +95,7 @@ class AdminTopbar extends React.Component<AdminTopbarProps, State> {
       crumbsList: crumbsList,
       name: account.name,
       initials: account.initials,
+      avatar: account.avatar,
       email: account.email,
       role: P.role || 'Quản lý',
       open: open,
@@ -248,7 +250,7 @@ class AdminTopbar extends React.Component<AdminTopbarProps, State> {
                     go();
                   }
                 }}
-                aria-label="Thông báo"
+                aria-label={v.role === 'Giáo viên' || v.role === 'TEACHER' ? 'Thông báo' : 'Thông báo hệ thống'}
                 style={styleOf(
                   'position: relative; width: 42px; height: 42px; box-sizing: border-box; border-radius: 50%; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; color: #352637; text-decoration: none; background: #FFFFFF'
                 )}
@@ -293,7 +295,7 @@ class AdminTopbar extends React.Component<AdminTopbarProps, State> {
                       'width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #C5CEF5; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #352637'
                     )}
                   >
-                    {v.initials}
+                    <AvatarContent avatar={v.avatar} initials={v.initials} />
                   </span>
                   <span
                     style={styleOf(

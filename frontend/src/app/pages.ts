@@ -1,5 +1,7 @@
 import { lazy } from "react";
 
+const PracticeHistory = lazy(() => import("../pages/learner/PracticeHistory"));
+
 export const pages = {
   AdminReports: lazy(() => import("../pages/admin/reports/AdminReports")),
   Main: lazy(() => import("../pages/public/Main")),
@@ -21,7 +23,8 @@ export const pages = {
   SubmitDialogs: lazy(() => import("../pages/attempts/SubmitDialogs")),
   ResultLR: lazy(() => import("../pages/results/ResultLR")),
   ResultWS: lazy(() => import("../pages/results/ResultWS")),
-  MyWS: lazy(() => import("../pages/results/MyWS")),
+  MyWS: PracticeHistory,
+  PracticeHistory,
   PracticeWS: lazy(() => import("../pages/practice/PracticeWS")),
   SampleLibrary: lazy(() => import("../pages/samples/SampleLibrary")),
   SampleWriting: lazy(() => import("../pages/samples/SampleWriting")),
@@ -37,6 +40,7 @@ export const pages = {
   StaffProfile: lazy(() => import("../pages/account/StaffProfile")),
   AdminHome: lazy(() => import("../pages/admin/dashboard/AdminHome")),
   AdminUsers: lazy(() => import("../pages/admin/users/AdminUsers")),
+  AdminNotifications: lazy(() => import("../pages/admin/notifications/AdminNotificationsPage")),
   AdminGrading: lazy(() => import("../pages/admin/grading/AdminGrading")),
   AdminExams: lazy(() => import("../pages/admin/exams/AdminExams")),
   AdminExamSet: lazy(() => import("../pages/admin/exams/AdminExamSet")),

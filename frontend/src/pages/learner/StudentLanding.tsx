@@ -1,4 +1,6 @@
 import LearnerHeader from "../../components/navigation/LearnerHeader";
+import FeaturedSamples from "../../components/samples/FeaturedSamples";
+import { useDailyMotivation } from "../../lib/learner/daily-motivation";
 import { useAccount } from "../../lib/auth/account";
 import StudyProgress from "../../components/learner/StudyProgress";
 import StudyResults from "../../components/learner/StudyResults";
@@ -6,6 +8,7 @@ import { styleOf, cssText, getAccentColors } from "../../lib/shared/styles";
 
 export default function StudentLanding({ accent }: { accent?: string }) {
   const account = useAccount();
+  const motivation = useDailyMotivation();
   const v = getAccentColors(accent);
   return (
     <>
@@ -99,7 +102,7 @@ export default function StudentLanding({ accent }: { accent?: string }) {
                   )}
                 >
                   {
-                    "“Bạn không cần tiến nhanh hơn ai khác. Chỉ cần tiến hơn chính mình hôm qua.”"
+                    `“${motivation}”`
                   }
                 </div>
                 {"\n"}
@@ -1259,7 +1262,7 @@ export default function StudentLanding({ accent }: { accent?: string }) {
             </div>
             {"\n"}
             <a
-              href={"#"}
+              href="#Vocab"
               style={styleOf(
                 "display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 15px; color: #352637; text-decoration: none",
               )}
@@ -1534,7 +1537,7 @@ export default function StudentLanding({ accent }: { accent?: string }) {
             </div>
             {"\n"}
             <a
-              href={"#"}
+              href="#SampleLibrary"
               style={styleOf(
                 "display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 15px; color: #352637; text-decoration: none",
               )}
@@ -1556,289 +1559,7 @@ export default function StudentLanding({ accent }: { accent?: string }) {
             {"\n"}
           </div>
           {"\n"}
-          <div
-            style={styleOf(
-              "display: flex; gap: 28px 20px; overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 4px 12px; margin: -4px",
-            )}
-          >
-            {"\n"}
-            <div
-              style={styleOf(
-                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
-              )}
-            >
-              <div
-                style={styleOf(
-                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #F7C4B6",
-                )}
-              ></div>
-              <div
-                style={styleOf(
-                  "display: flex; flex-direction: column; gap: 8px; padding: 4px 8px 0",
-                )}
-              >
-                <div
-                  style={styleOf(
-                    "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
-                  )}
-                >
-                  {"Museum Visitors"}
-                </div>
-                <div style={styleOf("display: flex")}>
-                  <span
-                    style={styleOf(
-                      "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
-                    )}
-                  >
-                    {"Line graph"}
-                  </span>
-                </div>
-              </div>
-              <div
-                style={styleOf(
-                  "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
-                )}
-              >
-                <span>{"Writing Task 1"}</span>
-                <span
-                  aria-hidden={"true"}
-                  style={styleOf(
-                    "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
-                  )}
-                ></span>
-                <span>{"Band 8.0"}</span>
-              </div>
-              <a
-                href={"SampleWriting.dc.html"}
-                style={styleOf(
-                  "margin-top: auto; padding: 4px 8px 0; display: flex; align-items: center; gap: 4px; font-weight: 600; font-size: 15px; color: #2963CC; text-decoration: none",
-                )}
-              >
-                {"Xem bài mẫu"}
-                <svg
-                  width={"16"}
-                  height={"16"}
-                  viewBox={"0 0 24 24"}
-                  fill={"none"}
-                  stroke={"currentColor"}
-                  strokeWidth={"2"}
-                  strokeLinecap={"round"}
-                  strokeLinejoin={"round"}
-                  aria-hidden={"true"}
-                >
-                  <path d={"M5 12h14M13 6l6 6-6 6"}></path>
-                </svg>
-              </a>
-            </div>
-            {"\n"}
-            <div
-              style={styleOf(
-                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
-              )}
-            >
-              <div
-                style={styleOf(
-                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #BFD8F7",
-                )}
-              ></div>
-              <div
-                style={styleOf(
-                  "display: flex; flex-direction: column; gap: 8px; padding: 4px 8px 0",
-                )}
-              >
-                <div
-                  style={styleOf(
-                    "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
-                  )}
-                >
-                  {"Library Redevelopment"}
-                </div>
-                <div style={styleOf("display: flex")}>
-                  <span
-                    style={styleOf(
-                      "padding: 4px 12px; border-radius: 999px; background: #DCEDE2; color: #2E6A48; font-size: 13px; font-weight: 600; line-height: 1.4",
-                    )}
-                  >
-                    {"Map"}
-                  </span>
-                </div>
-              </div>
-              <div
-                style={styleOf(
-                  "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
-                )}
-              >
-                <span>{"Writing Task 1"}</span>
-                <span
-                  aria-hidden={"true"}
-                  style={styleOf(
-                    "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
-                  )}
-                ></span>
-                <span>{"Band 8.0"}</span>
-              </div>
-              <a
-                href={"SampleWriting.dc.html"}
-                style={styleOf(
-                  "margin-top: auto; padding: 4px 8px 0; display: flex; align-items: center; gap: 4px; font-weight: 600; font-size: 15px; color: #2963CC; text-decoration: none",
-                )}
-              >
-                {"Xem bài mẫu"}
-                <svg
-                  width={"16"}
-                  height={"16"}
-                  viewBox={"0 0 24 24"}
-                  fill={"none"}
-                  stroke={"currentColor"}
-                  strokeWidth={"2"}
-                  strokeLinecap={"round"}
-                  strokeLinejoin={"round"}
-                  aria-hidden={"true"}
-                >
-                  <path d={"M5 12h14M13 6l6 6-6 6"}></path>
-                </svg>
-              </a>
-            </div>
-            {"\n"}
-            <div
-              style={styleOf(
-                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
-              )}
-            >
-              <div
-                style={styleOf(
-                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5CEF5",
-                )}
-              ></div>
-              <div
-                style={styleOf(
-                  "display: flex; flex-direction: column; gap: 8px; padding: 4px 8px 0",
-                )}
-              >
-                <div
-                  style={styleOf(
-                    "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
-                  )}
-                >
-                  {"Household Energy"}
-                </div>
-                <div style={styleOf("display: flex")}>
-                  <span
-                    style={styleOf(
-                      "padding: 4px 12px; border-radius: 999px; background: #E8E4FA; color: #5543B0; font-size: 13px; font-weight: 600; line-height: 1.4",
-                    )}
-                  >
-                    {"Bar chart"}
-                  </span>
-                </div>
-              </div>
-              <div
-                style={styleOf(
-                  "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
-                )}
-              >
-                <span>{"Writing Task 1"}</span>
-                <span
-                  aria-hidden={"true"}
-                  style={styleOf(
-                    "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
-                  )}
-                ></span>
-                <span>{"Band 7.5"}</span>
-              </div>
-              <a
-                href={"SampleWriting.dc.html"}
-                style={styleOf(
-                  "margin-top: auto; padding: 4px 8px 0; display: flex; align-items: center; gap: 4px; font-weight: 600; font-size: 15px; color: #2963CC; text-decoration: none",
-                )}
-              >
-                {"Xem bài mẫu"}
-                <svg
-                  width={"16"}
-                  height={"16"}
-                  viewBox={"0 0 24 24"}
-                  fill={"none"}
-                  stroke={"currentColor"}
-                  strokeWidth={"2"}
-                  strokeLinecap={"round"}
-                  strokeLinejoin={"round"}
-                  aria-hidden={"true"}
-                >
-                  <path d={"M5 12h14M13 6l6 6-6 6"}></path>
-                </svg>
-              </a>
-            </div>
-            {"\n"}
-            <div
-              style={styleOf(
-                "flex: 1 0 240px; scroll-snap-align: start; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; color: #352637; text-decoration: none; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)",
-              )}
-            >
-              <div
-                style={styleOf(
-                  "position: relative; aspect-ratio: 3 / 2; max-width: 100%; border-radius: 12px; overflow: hidden; background: #C5DECE",
-                )}
-              ></div>
-              <div
-                style={styleOf(
-                  "display: flex; flex-direction: column; gap: 8px; padding: 4px 8px 0",
-                )}
-              >
-                <div
-                  style={styleOf(
-                    "font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em",
-                  )}
-                >
-                  {"Education (Free University)"}
-                </div>
-                <div style={styleOf("display: flex")}>
-                  <span
-                    style={styleOf(
-                      "padding: 4px 12px; border-radius: 999px; background: #DDE8FC; color: #2A55B8; font-size: 13px; font-weight: 600; line-height: 1.4",
-                    )}
-                  >
-                    {"Discuss Both Views"}
-                  </span>
-                </div>
-              </div>
-              <div
-                style={styleOf(
-                  "display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 14px; color: #706473",
-                )}
-              >
-                <span>{"Writing Task 2"}</span>
-                <span
-                  aria-hidden={"true"}
-                  style={styleOf(
-                    "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
-                  )}
-                ></span>
-                <span>{"Band 8.0"}</span>
-              </div>
-              <a
-                href={"SampleWriting.dc.html"}
-                style={styleOf(
-                  "margin-top: auto; padding: 4px 8px 0; display: flex; align-items: center; gap: 4px; font-weight: 600; font-size: 15px; color: #2963CC; text-decoration: none",
-                )}
-              >
-                {"Xem bài mẫu"}
-                <svg
-                  width={"16"}
-                  height={"16"}
-                  viewBox={"0 0 24 24"}
-                  fill={"none"}
-                  stroke={"currentColor"}
-                  strokeWidth={"2"}
-                  strokeLinecap={"round"}
-                  strokeLinejoin={"round"}
-                  aria-hidden={"true"}
-                >
-                  <path d={"M5 12h14M13 6l6 6-6 6"}></path>
-                </svg>
-              </a>
-            </div>
-            {"\n"}
-          </div>
+          <FeaturedSamples />
           {"\n"}
         </section>
         {"\n\n"}
@@ -1977,7 +1698,7 @@ export default function StudentLanding({ accent }: { accent?: string }) {
                   {"Câu hỏi thường gặp"}
                 </a>
                 <a
-                  href={"#lien-he"}
+                  href="#Profile?support=1"
                   style={styleOf("color: #4B3D4D; text-decoration: none")}
                 >
                   {"Liên hệ"}

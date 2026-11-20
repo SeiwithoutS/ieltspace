@@ -10,7 +10,7 @@ import {
   directoryMuted, formatUserDate, roleBadgeStyle, userInitials,
 } from './userDirectoryUi';
 
-const sourceLabels = { EMAIL: 'Email', GOOGLE: 'Google', INVITE: 'Quản lý tạo, email mời' };
+const sourceLabels = { EMAIL: 'Email', GOOGLE: 'Google', INVITE: 'Quản lý tạo, email mời', STAFF: 'Quản lý tạo' };
 const missing = 'Chưa ghi nhận';
 const unavailable = 'Tạm thời không tải được';
 const secondaryAction = accountAction + '; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; flex: 1';

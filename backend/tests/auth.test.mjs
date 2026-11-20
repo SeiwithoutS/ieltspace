@@ -43,3 +43,57 @@ test('Auth rejects invalid requests before contacting Supabase', async()=>{
   assert.equal(r.headers.get('cache-control'),'no-store');
  } finally {await new Promise(resolve=>server.close(resolve));}
 });
+
+test('Verification resend uses the signup flow and reports throttling', async t => {
+ const nativeFetch = globalThis.fetch;
+ let providerCode;
+ let providerCalls = 0;
+ t.mock.method(globalThis, 'fetch', async (input, options) => {
+  const url = new URL(input instanceof Request ? input.url : input);
+  if (url.hostname !== 'example.supabase.co') return nativeFetch(input, options);
+  const body = JSON.parse(options.body);
+  assert.equal(body.email, 'verify@example.test');
+  if (url.pathname === '/auth/v1/token') {
+   return Response.json({ code: 'email_not_confirmed', msg: 'Email not confirmed' },
+    { status: 400, headers: { 'X-Supabase-Api-Version': '2024-01-01' } });
+  }
+  providerCalls++;
+  assert.equal(url.pathname, '/auth/v1/resend');
+  assert.equal(url.searchParams.get('redirect_to'), process.env.AUTH_EMAIL_REDIRECT_URL);
+  assert.equal(body.type, 'signup');
+  if (!providerCode) return Response.json({});
+  const status = providerCode === 'over_email_send_rate_limit' ? 429
+   : providerCode === 'unexpected_failure' ? 500 : 400;
+  return Response.json({ code: providerCode, msg: 'Mock provider failure' },
+   { status, headers: { 'X-Supabase-Api-Version': '2024-01-01' } });
+ });
+ const server = app.listen(0, '127.0.0.1');
+ await new Promise(resolve => server.once('listening', resolve));
+ const base = `http://127.0.0.1:${server.address().port}/api/auth`;
+ const post = (path, body, origin = process.env.FRONTEND_ORIGIN) => nativeFetch(base + path, {
+  method: 'POST', headers: { Origin: origin, 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+ });
+ try {
+  const email = { email: 'Verify@Example.Test ' };
+  const signup = '/resend-verification';
+  assert.equal((await post(signup, email, 'https://untrusted.test')).status, 403);
+  assert.equal((await post(signup, { email: 'invalid' })).status, 400);
+  assert.equal(providerCalls, 0);
+  const login = await post('/login', { ...email, password: 'test-password' });
+  assert.equal(login.status, 403);
+  assert.equal((await login.json()).code, 'EMAIL_NOT_VERIFIED');
+  const accepted = await post(signup, email);
+  assert.equal(accepted.status, 202);
+  const message = await accepted.json();
+  providerCode = 'user_not_found';
+  assert.deepEqual(await (await post(signup, email)).json(), message);
+  providerCode = 'over_email_send_rate_limit';
+  assert.equal((await post(signup, email)).status, 429);
+  providerCode = 'unexpected_failure';
+  assert.equal((await post(signup, email)).status, 503);
+  assert.equal((await post(signup, email)).status, 429);
+  assert.equal(providerCalls, 4);
+ } finally {
+  await new Promise(resolve => server.close(resolve));
+ }
+});

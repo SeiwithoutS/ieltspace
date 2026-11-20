@@ -8,6 +8,7 @@ import { navigate, useAuth } from "../../lib/auth/auth";
 import { apiFetch } from "../../lib/shared/api";
 import { getPersonalVocabulary, usePublishedVocabulary } from "../../lib/vocabulary/vocabulary-library";
 import { WordCard } from "../../components/vocabulary/WordCard";
+import "../../components/shared/library-cards.css";
 import "./vocabulary.css";
 export default function Vocabulary({ vocabularySetId: topic }: { vocabularySetId?: string }) {
   const [search, setSearch] = useState(""),
@@ -54,7 +55,7 @@ export default function Vocabulary({ vocabularySetId: topic }: { vocabularySetId
     <>
       <LearnerHeader active="vocab" accent="#2963CC" onAccent="#fff" />
       <section className="vocab-library-banner">
-        <div className="vocabulary">
+        <div className="vocabulary vocab-library-container">
           <nav aria-label="Đường dẫn" className="vocab-breadcrumb">
             <PageLink page={user ? "StudentLanding" : "Main"}>Trang chủ</PageLink>
             <span aria-hidden="true">›</span><span>Thư viện từ vựng</span>
@@ -63,7 +64,7 @@ export default function Vocabulary({ vocabularySetId: topic }: { vocabularySetId
           <p>{userId ? "Khám phá từ vựng theo chủ đề, nghe phát âm và lưu những từ bạn muốn ôn tập." : "Khám phá các bộ từ vựng theo chủ đề và nghe phát âm."}</p>
         </div>
       </section>
-      <main className="vocabulary">
+      <main className="vocabulary vocab-library-container">
         <div className="vocab-library-toolbar flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div className="vocab-tabs w-full sm:w-auto flex justify-center sm:justify-start" role="group" aria-label="Nội dung thư viện">
             <button type="button" aria-pressed={!favorites} onClick={() => switchTab("sets")}>Từ vựng</button>
@@ -77,8 +78,8 @@ export default function Vocabulary({ vocabularySetId: topic }: { vocabularySetId
         {userId && personalError && <p role="alert">{personalError} <button onClick={() => setPersonalRetry(n => n+1)}>Tải lại</button></p>}
         {loading && <p role="status">Đang tải bộ từ…</p>}
         {error && <p role="alert">{error} <button onClick={retry}>Thử lại</button></p>}
-        {!loading && !error && (showSets ? <div className="vocab-sets">
-          {!visibleSets.length && <p role="status">Không tìm thấy bộ từ phù hợp.</p>}
+        {!loading && !error && (showSets ? <div className="vocab-sets library-card-grid">
+          {!visibleSets.length && <p className="col-span-full" role="status">Không tìm thấy bộ từ phù hợp.</p>}
           {visibleSets.map((set) => (
             <VocabularySetCard
               key={set.id}

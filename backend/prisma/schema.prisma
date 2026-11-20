@@ -21,6 +21,7 @@ model users {
   avatar_url   String?
   role         String
   status       String
+  must_change_password Boolean @default(false)
 }
 
 model exam_set_categories {

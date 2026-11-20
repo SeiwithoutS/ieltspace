@@ -1,65 +1,118 @@
-import { useAccount } from "../../lib/auth/account";
-import React, { useState } from "react";
+import { useRef, useEffect, useState } from "react";
+import { getAuthUser, useAuth } from "../../lib/auth/auth";
+import {
+  createSupportReport, getSupportReport, listSupportReports, updateSupportReport,
+  supportStatuses, type SupportPage, type SupportReport, type SupportStatus,
+} from "../../lib/reports/support";
 import "./support.css";
 import StaffLayout from "../layout/StaffLayout";
 
-const key = "ieltspace-support";
+const statuses = Object.keys(supportStatuses) as SupportStatus[];
+const reportDate = new Intl.DateTimeFormat("vi-VN", { dateStyle: "short", timeZone: "Asia/Ho_Chi_Minh" });
 
-interface SupportReport {
-  id?: number;
-  owner?: string;
-  ownerId?: string;
-  ownerEmail?: string;
-  text: string;
-  status?: string | null;
-  reply?: string | null;
+export default function Support(props: { admin?: boolean; reportId?: string; focusOnOpen?: boolean }) {
+  const user = useAuth().user;
+  if (!user) return null;
+  return <SupportPanel key={user.id} {...props} userId={user.id} />;
 }
 
-function isSupportReport(value: unknown): value is SupportReport {
-  if (typeof value !== "object" || value === null || !("text" in value) || typeof value.text !== "string") return false;
+function SupportPanel({ admin = false, reportId, userId, focusOnOpen }: { admin?: boolean; reportId?: string; userId: string; focusOnOpen?: boolean }) {
+  const [filter, setFilter] = useState<SupportStatus | "">("");
+  const [open, setOpen] = useState(false);
+  const [text, setText] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [revision, setRevision] = useState(0);
+  const [page, setPage] = useState<SupportPage>();
+  const [selected, setSelected] = useState<SupportReport>();
+  const selectedElement = useRef<HTMLElement>(null);
+  const panel = useRef<HTMLElement>(null);
+  const composeButton = useRef<HTMLButtonElement>(null);
+  const composeText = useRef<HTMLTextAreaElement>(null);
+  const request = useRef(0);
+  const createRequest = useRef<{ text: string; id: string }>();
 
-  return (!("id" in value) || typeof value.id === "number") &&
-    (!("owner" in value) || typeof value.owner === "string") &&
-    (!("ownerId" in value) || typeof value.ownerId === "string") &&
-    (!("ownerEmail" in value) || typeof value.ownerEmail === "string") &&
-    (!("status" in value) || value.status === null || typeof value.status === "string") &&
-    (!("reply" in value) || value.reply === null || typeof value.reply === "string");
-}
+  useEffect(() => {
+    if (open) composeText.current?.focus();
+  }, [open]);
 
-const read = (): SupportReport[] => {
-  try {
-    const value: unknown = JSON.parse(localStorage.getItem(key) || "[]");
-    return Array.isArray(value)
-      ? value.filter(isSupportReport)
-      : [];
-  } catch {
-    return [];
+  function closeForm() {
+    setOpen(false);
+    composeButton.current?.focus();
   }
-};
-export default function Support({ admin = false }: { admin?: boolean }) {
-  const [items, setItems] = useState(read),
-    [filter, setFilter] = useState(""),
-    [open, setOpen] = useState(false),
-    [text, setText] = useState(""),
-    [error, setError] = useState("");
-  const account = useAccount();
-  const owner = account.name;
-  const ownerId = account.id;
-  const save = (next: SupportReport[]) => {
+
+  useEffect(() => {
+    if (!focusOnOpen || reportId) return;
+    panel.current?.scrollIntoView({ block: "start" });
+    panel.current?.focus({ preventScroll: true });
+  }, [focusOnOpen, reportId]);
+
+  useEffect(() => {
+    const current = ++request.current;
+    setPage(undefined);
+    setError("");
+    void listSupportReports(admin, filter).then(result => {
+      if (request.current === current) setPage(result);
+    }).catch((failure: Error) => {
+      if (request.current === current) setError(failure.message);
+    });
+    return () => { request.current++; };
+  }, [admin, filter, revision]);
+
+  useEffect(() => {
+    setSelected(undefined);
+    if (!reportId || admin) return;
+    let active = true;
+    void getSupportReport(reportId).then(result => {
+      if (active) setSelected(result);
+    }).catch((failure: Error) => {
+      if (active) setError(failure.message);
+    });
+    return () => { active = false; };
+  }, [admin, reportId, revision]);
+
+  const linked = selected?.id === reportId && !filter ? selected : undefined;
+  const visible = linked
+    ? [linked, ...(page?.items ?? []).filter(item => item.id !== linked.id)]
+    : page?.items ?? [];
+  useEffect(() => {
+    if (!linked?.id) return;
+    selectedElement.current?.scrollIntoView({ block: "nearest" });
+    selectedElement.current?.focus({ preventScroll: true });
+  }, [linked?.id]);
+
+  async function save(action: () => Promise<unknown>, afterSave?: () => void) {
+    if (busy) return;
+    setError("");
+    setBusy(true);
     try {
-      localStorage.setItem(key, JSON.stringify(next));
-      setItems(next);
-      setError("");
-      return true;
-    } catch {
-      setError("Không thể lưu báo cáo trên trình duyệt này.");
-      return false;
+      await action();
+      if (getAuthUser()?.id !== userId) return;
+      afterSave?.();
+      setRevision(value => value + 1);
+    } catch (failure) {
+      if (getAuthUser()?.id === userId) setError((failure as Error).message);
+    } finally {
+      setBusy(false);
     }
-  };
-  const statuses = ["Chờ tiếp nhận", "Đang xử lý", "Đã giải quyết"];
-  const visible = items.filter(
-    (i) => (admin || i.ownerId === ownerId) && (!filter || i.status === filter),
-  );
+  }
+
+  async function loadMore() {
+    if (!page?.nextCursor || busy) return;
+    const current = request.current;
+    setError("");
+    setBusy(true);
+    try {
+      const next = await listSupportReports(admin, filter, page.nextCursor);
+      if (request.current === current) {
+        setPage({ ...next, items: [...page.items, ...next.items] });
+      }
+    } catch (failure) {
+      if (request.current === current) setError((failure as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
   const icon = (
     <svg
       width="22"
@@ -78,137 +131,142 @@ export default function Support({ admin = false }: { admin?: boolean }) {
   );
   const content = (
     <section
+      ref={panel}
+      tabIndex={focusOnOpen ? -1 : undefined}
+      aria-labelledby="support-title"
       className={admin ? "support-panel" : "support-panel support-profile"}
     >
-      <div className="support-heading">
-        <span className="support-heading-icon">{icon}</span>
-        <h1>{admin ? "Báo cáo & phản hồi" : "Báo cáo & hỗ trợ"}</h1>
-      </div>
-      <p className="support-intro">
-        {admin
-          ? "Tiếp nhận báo cáo từ học viên và trợ giảng, xử lý và phản hồi tại một nơi."
-          : "Gặp lỗi, cần giải đáp hoặc muốn đóng góp ý kiến? Gửi báo cáo và theo dõi phản hồi tại một nơi."}
-      </p>
+      {admin ? <>
+        <div className="support-heading">
+          <span className="support-heading-icon">{icon}</span>
+          <h1 id="support-title">Báo cáo & phản hồi</h1>
+        </div>
+        <p className="support-intro">Tiếp nhận báo cáo từ học viên và trợ giảng, xử lý và phản hồi tại một nơi.</p>
+      </> : <header className="support-profile-header">
+        <div className="support-heading">
+          <span className="support-heading-icon">{icon}</span>
+          <div>
+            <h2 id="support-title">Báo cáo & hỗ trợ</h2>
+            <p>Gửi báo cáo và theo dõi phản hồi của bạn.</p>
+          </div>
+        </div>
+        <button ref={composeButton} type="button" className="support-primary" aria-expanded={open}
+          aria-controls={open ? "support-report-form" : undefined} onClick={() => open ? closeForm() : setOpen(true)}>
+          <span aria-hidden="true">+</span> Gửi báo cáo
+        </button>
+      </header>}
       {admin && (
         <div className="support-stats">
           {statuses.map((s) => (
             <div key={s} className="support-card support-stat">
-              {s}
-              <h2>{items.filter((i) => i.status === s).length}</h2>
+              {supportStatuses[s]}
+              <h2>{page ? page.counts?.[s] ?? 0 : "—"}</h2>
             </div>
           ))}
         </div>
       )}
-      {!admin && (
-        <button className="support-primary" onClick={() => setOpen(!open)}>
-          + Gửi báo cáo
-        </button>
-      )}
       {open && (
         <form
+          id="support-report-form"
           className="support-card support-form"
           onSubmit={(e) => {
             e.preventDefault();
-            if (!text.trim()) return;
-            if (
-              save([
-                ...items,
-                {
-                  id: Date.now(),
-                  owner,
-                  ownerId,
-                  ownerEmail: account.email,
-                  text: text.trim(),
-                  status: statuses[0],
-                  reply: "",
-                },
-              ])
-            ) {
+            const content = text.trim();
+            if (!content || busy) return;
+            const attempt = createRequest.current?.text === content
+              ? createRequest.current
+              : { text: content, id: crypto.randomUUID() };
+            createRequest.current = attempt;
+            void save(() => createSupportReport(content, attempt.id), () => {
+              createRequest.current = undefined;
               setText("");
-              setOpen(false);
-            }
+              closeForm();
+              setFilter("");
+            });
           }}
         >
           <label>
             Nội dung báo cáo
             <textarea
+              ref={composeText}
               required
+              maxLength={3000}
+              disabled={busy}
               value={text}
               onChange={(e) => setText(e.target.value)}
-              style={{ display: "block", width: "100%", minHeight: 100 }}
             />
           </label>
-          <button type="submit">Gửi báo cáo</button>
-          <button type="button" onClick={() => setOpen(false)}>
+          <button type="submit" disabled={busy}>Gửi báo cáo</button>
+          <button type="button" onClick={closeForm}>
             Hủy
           </button>
         </form>
       )}
       <div className="support-filters" role="group" aria-label="Lọc báo cáo">
-        {["", ...statuses].map((s) => (
+        {(["", ...statuses] as const).map((s) => (
           <button
             key={s}
             aria-pressed={filter === s}
             onClick={() => setFilter(s)}
           >
-            {s || "Tất cả"}
+            {s ? supportStatuses[s] : "Tất cả"}
           </button>
         ))}
       </div>
-      {error && <p role="alert">{error}</p>}
-      {visible.length === 0 ? (
-        <div className="support-card support-empty">
+      {error && <p role="alert">{error} <button className="support-primary" type="button" disabled={busy}
+        onClick={() => setRevision(value => value + 1)}>Tải lại</button></p>}
+      {!page && !error && <p role="status">Đang tải báo cáo…</p>}
+      {page && visible.length === 0 && (
+        <div className={admin ? "support-card support-empty" : "support-empty"}>
           <span>{icon}</span>
-          <p>Chưa có báo cáo phù hợp.</p>
+          <p>{admin || filter ? "Chưa có báo cáo phù hợp." : "Bạn chưa gửi báo cáo nào."}</p>
         </div>
-      ) : (
-        visible.map((i) => (
-          <article key={i.id} className="support-card">
-            <span className="support-badge">{icon}</span>
-            <strong>
-              {i.owner}
-              {i.ownerEmail
-                ? " · " + i.ownerEmail
-                : " · Báo cáo cũ chưa xác định tài khoản"}{" "}
-              · {i.status}
-            </strong>
-            <p style={{ whiteSpace: "pre-wrap" }}>{i.text}</p>
-            {i.reply && <p>Phản hồi: {i.reply}</p>}
+      )}
+      {visible.map((i) => (
+          <article key={i.id} className="support-card" ref={i.id === linked?.id ? selectedElement : undefined}
+            tabIndex={i.id === linked?.id ? -1 : undefined}>
+            {admin ? <>
+              <span className="support-badge">{icon}</span>
+              <strong>{i.owner}{i.ownerEmail && ` · ${i.ownerEmail}`} · {supportStatuses[i.status]}</strong>
+            </> : <header className="support-report-meta">
+              <span className="support-status" data-status={i.status}>{supportStatuses[i.status]}</span>
+              {i.createdAt && <time dateTime={i.createdAt}>{reportDate.format(new Date(i.createdAt))}</time>}
+            </header>}
+            <p className="support-report-text">{i.text}</p>
+            {i.reply && (admin ? <p>Phản hồi: {i.reply}</p> : <div className="support-reply">
+              <strong>Phản hồi từ IELTSpace</strong>
+              <p className="support-report-text">{i.reply}</p>
+            </div>)}
             {admin && (
               <form
+                key={i.revision}
                 className="support-form"
                 onSubmit={(e) => {
                   e.preventDefault();
                   const data = new FormData(e.currentTarget);
-                  save(
-                    items.map((x) =>
-                      x.id === i.id
-                        ? {
-                            ...x,
-                            reply: String(data.get("reply") ?? ""),
-                            status: String(data.get("status") ?? ""),
-                          }
-                        : x,
-                    ),
-                  );
+                  const status = String(data.get("status")) as SupportStatus;
+                  const reply = String(data.get("reply") ?? "");
+                  void save(() => updateSupportReport(i.id, status, reply, i.revision));
                 }}
               >
                 <textarea
                   name="reply"
                   aria-label="Phản hồi"
+                  maxLength={3000}
+                  disabled={busy}
                   defaultValue={i.reply ?? undefined}
                 />
-                <select name="status" defaultValue={i.status ?? undefined}>
+                <select name="status" aria-label="Trạng thái báo cáo" disabled={busy} defaultValue={i.status}>
                   {statuses.map((s) => (
-                    <option key={s}>{s}</option>
+                    <option key={s} value={s}>{supportStatuses[s]}</option>
                   ))}
                 </select>
-                <button>Lưu phản hồi</button>
+                <button disabled={busy}>Lưu phản hồi</button>
               </form>
             )}
           </article>
-        ))
-      )}
+      ))}
+      {page?.nextCursor && <button className="support-primary" type="button" disabled={busy} onClick={() => void loadMore()}>Xem thêm</button>}
     </section>
   );
   return admin ? (

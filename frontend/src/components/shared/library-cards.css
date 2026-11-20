@@ -1,0 +1,13 @@
+.library-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px 20px;
+}
+
+@media (max-width: 900px) {
+  .library-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .library-card-grid { grid-template-columns: minmax(0, 1fr); }
+}

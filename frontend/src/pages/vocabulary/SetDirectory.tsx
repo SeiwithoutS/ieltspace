@@ -3,6 +3,7 @@ import Popup from "../../components/attempts/Popup";
 import { StaffDataTable } from "../../components/shared/StaffDataTable";
 import { type VocabularySet } from "../../data/vocabulary";
 import { listAdminVocabularySets, createVocabularySet, deleteVocabularySet, type DatabaseVocabularySet } from "../../lib/vocabulary/vocabulary-api";
+import { isManagedVocabularyImage, uploadVocabularyImage, useVocabularyImagePreview } from "../../lib/vocabulary/vocabulary-media";
 
 const coverChoices = [
   ["Tím", "#4338a4", "#6764c4"],
@@ -155,7 +156,8 @@ export function SetDirectory({ onOpen }: { onOpen: (set: VocabularySet) => void 
 }
 
 export function VocabularySetCover({ set }: { set: VocabularySet }) {
-  return set.cover ? <img src={set.cover} alt="" className="vocab-set-cover" /> :
+  const { source, renew } = useVocabularyImagePreview(set.cover, set.coverPreview);
+  return source ? <img src={source} alt="" className="vocab-set-cover" onError={() => void renew()} /> :
     <span className="vocab-set-cover" aria-hidden="true">{set.title.slice(0, 1)}</span>;
 }
 
@@ -164,14 +166,17 @@ export function SetForm({ initial, onSave, close }: { initial: VocabularySet; on
   const [editing, setEditing] = useState(initial);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const managed = isManagedVocabularyImage(editing.cover);
+  const { source: coverSource, renew } = useVocabularyImagePreview(editing.cover, editing.coverPreview);
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (!editing || saving) return;
+    if (saving || uploading) return;
     const title = editing.title.trim();
     if (!title) { setError("Nhập tên bộ từ."); return; }
     setSaving(true);
     try {
-      await onSave({ id: editing.id, title, description: editing.description?.trim(), cover: editing.cover.trim() });
+      await onSave({ id: editing.id, title, description: editing.description?.trim(), cover: editing.cover.trim(), coverPreview: editing.coverPreview });
       close();
 
       setError("");
@@ -186,32 +191,38 @@ export function SetForm({ initial, onSave, close }: { initial: VocabularySet; on
       <h2>{editing.id ? "Sửa bộ từ" : "Tạo bộ từ"}</h2>
       <p>{editing.id ? "Cập nhật thông tin bộ từ." : "Bộ mới ở trạng thái Bản nháp. Thêm từ sau khi tạo bộ."}</p>
       <div className="set-form-grid"><div>
-        <div className="cover-preview">{editing.cover ? <img src={editing.cover} alt="Ảnh bìa" /> : "Ảnh bìa ngang 3:2"}</div>
-        <input ref={coverInput} type="file" hidden accept="image/png,image/jpeg,image/webp" onChange={e => {
+        <div className="cover-preview">{coverSource ? <img src={coverSource} alt="Ảnh bìa" onError={() => void renew()} /> : "Ảnh bìa ngang 3:2"}</div>
+        <input ref={coverInput} type="file" hidden accept="image/png,image/jpeg,image/webp" onChange={async e => {
           const file = e.target.files?.[0];
           e.target.value = "";
-          if (!file) return;
+          if (!file || uploading || saving) return;
           if (!["image/png", "image/jpeg", "image/webp"].includes(file.type) || file.size > 1024 * 1024) {
             setError("Chọn ảnh JPG, PNG hoặc WebP tối đa 1 MB."); return;
           }
-          const reader = new FileReader();
-          reader.onload = () => { setEditing(current => current === editing ? { ...current, cover: String(reader.result) } : current); setError(""); };
-          reader.onerror = () => setError("Chưa đọc được ảnh.");
-          reader.readAsDataURL(file);
+          setUploading(true);
+          setError("");
+          try {
+            const { image, imagePreview } = await uploadVocabularyImage(file);
+            setEditing(current => ({ ...current, cover: image, coverPreview: imagePreview }));
+          } catch (failure) {
+            setError(failure instanceof Error ? failure.message : "Chưa tải được ảnh bìa.");
+          } finally {
+            setUploading(false);
+          }
         }} />
-        <button type="button" className="vocab-button vocab-upload-cover" onClick={() => coverInput.current?.click()}>Tải ảnh bìa lên</button>
+        <button type="button" className="vocab-button vocab-upload-cover" disabled={uploading || saving} onClick={() => coverInput.current?.click()}>{uploading ? "Đang tải ảnh…" : "Tải ảnh bìa lên"}</button>
         <div className="cover-options">{coverChoices.map(choice =>
           <button type="button" key={choice.name} aria-label={"Chọn bìa " + choice.name}
-            aria-pressed={editing.cover === choice.url} onClick={() => setEditing({ ...editing, cover: choice.url })}>
+            disabled={uploading} aria-pressed={editing.cover === choice.url} onClick={() => setEditing({ ...editing, cover: choice.url, coverPreview: undefined })}>
             <img src={choice.url} alt="" />
           </button>)}</div><small>JPG, PNG hoặc WebP, tối đa 1 MB.</small>
       </div><div className="word-fields">
         <label>Tên bộ từ<input required maxLength={80} autoFocus placeholder="Ví dụ: Từ vựng chủ đề Môi trường" value={editing.title} onChange={e => setEditing({ ...editing, title: e.target.value })} /></label>
-        <label>URL ảnh bìa<input type="url" placeholder="https://…" value={editing.cover.startsWith("data:") ? "" : editing.cover} onChange={e => setEditing({ ...editing, cover: e.target.value })} /></label>
+        <label>URL ảnh bìa<input type="url" disabled={uploading} placeholder="https://…" value={managed || editing.cover.startsWith("data:") ? "" : editing.cover} onChange={e => setEditing({ ...editing, cover: e.target.value, coverPreview: undefined })} /></label>
 
         <label>Mô tả (không bắt buộc)<textarea value={editing.description ?? ""} onChange={e => setEditing({ ...editing, description: e.target.value })} /></label>
       </div></div>
       {error && <p role="alert" className="vocab-feedback">{error}</p>}
-      <div className="vocab-dialog-actions"><button type="button" className="vocab-button" onClick={close}>Hủy</button><button type="submit" disabled={saving} className="vocab-button vocab-button-primary">{saving ? "Đang lưu…" : editing.id ? "Lưu thay đổi" : "＋ Tạo bộ từ"}</button></div>
+      <div className="vocab-dialog-actions"><button type="button" className="vocab-button" onClick={close}>Hủy</button><button type="submit" disabled={saving || uploading} className="vocab-button vocab-button-primary">{saving ? "Đang lưu…" : editing.id ? "Lưu thay đổi" : "＋ Tạo bộ từ"}</button></div>
     </form></Popup>;
 }

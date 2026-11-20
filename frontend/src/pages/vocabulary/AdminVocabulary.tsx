@@ -37,6 +37,10 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
   const file = useRef<HTMLInputElement>(null);
   const savedWords = useRef<Word[]>([]);
   const importPhase = useRef<ImportPhase | null>(null);
+  const pendingImages = useRef(0);
+  function trackImageTransfer(active: boolean) {
+    pendingImages.current += active ? 1 : -1;
+  }
   const importJob = useRef<AbortController | null>(null);
   useEffect(() => () => importJob.current?.abort(), []);
 
@@ -45,7 +49,7 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
       if (importPhase.current === "lookup") {
         return window.confirm("Danh sách từ đã lưu. Rời trang sẽ dừng phần tra ảnh và audio còn lại. Bạn muốn rời đi?");
       }
-      if (busy || importPhase.current) {
+      if (busy || importPhase.current || pendingImages.current > 0) {
         window.alert("Đang xử lý bộ từ. Hãy đợi thao tác hoàn tất trước khi rời trang.");
         return false;
       }
@@ -53,7 +57,7 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
     });
     function beforeUnload(event: BeforeUnloadEvent) {
       if (importPhase.current === "lookup") return;
-      if (busy || importPhase.current || words !== savedWords.current) {
+      if (busy || importPhase.current || pendingImages.current > 0 || words !== savedWords.current) {
         event.preventDefault();
         event.returnValue = "";
       }
@@ -114,20 +118,14 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
       if (signal.aborted) return;
 
       setWords(enriched);
-      const hasTemporaryImages = enriched.some(word => word.image.startsWith("data:"));
-      const draftWithMedia = hasTemporaryImages
-        ? enriched.map(word => word.image.startsWith("data:") ? { ...word, image: "", imageCredit: undefined } : word)
-        : enriched;
-      if (draftWithMedia.some(word => word.image || word.audio)) {
+      if (enriched.some(word => word.image || word.audio)) {
         importPhase.current = "saving-media";
-        const result = await saveVocabularyDraft(topic, saved.revision, draftWithMedia);
+        const result = await saveVocabularyDraft(topic, saved.revision, enriched);
         if (signal.aborted) return;
         setRevision(result.revision);
       }
-      savedWords.current = draftWithMedia;
-      setMessage(`Đã lưu bản nháp ${next.length} từ và hoàn tất tra ảnh, audio. ${hasTemporaryImages
-        ? "Ảnh tạm chỉ dùng để xem trước. Hãy thay bằng URL HTTPS hoặc bỏ ảnh trước khi lưu tiếp."
-        : "Kiểm tra nội dung trước khi công bố."}`);
+      savedWords.current = enriched;
+      setMessage(`Đã lưu bản nháp ${next.length} từ và hoàn tất tra ảnh, audio. Kiểm tra nội dung trước khi công bố.`);
     } catch (e) {
       if (signal.aborted) return;
       const detail = e instanceof Error ? e.message : "Thao tác không thành công.";
@@ -156,10 +154,14 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
   const [status, setStatus] = useState<DatabaseVocabularySet["status"]>("DRAFT");
   async function saveDraft(publish = false) {
     if (busy || revision === null) return;
+    if (pendingImages.current > 0) {
+      setMessage("Đợi ảnh tải xong trước khi lưu bộ từ.");
+      return;
+    }
     setBusy(true); setMessage("");
     try {
       if (words.some(word => !word.word.trim() || !word.meaning.trim())) throw new Error("Mỗi mục cần có từ và nghĩa tiếng Việt.");
-      if (words.some(word => word.image.startsWith("data:"))) throw new Error("Ảnh máy/Pixabay cần upload lên Storage trước khi lưu DB. Ở bước lưu nháp này, thay bằng URL HTTPS hoặc xóa ảnh đó.");
+      if (words.some(word => word.image.startsWith("data:"))) throw new Error("Hãy tải lại ảnh tạm hoặc chọn ảnh đã lưu trước khi lưu bộ từ.");
       const result = await saveVocabularyDraft(topic, revision, words);
       savedWords.current = words;
       setRevision(result.revision);
@@ -381,10 +383,11 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
           {!preview && <label className="vocab-select-word"><input type="checkbox" disabled={busy} checked={chosenIds.has(w.id)}
             onChange={event => setChosen(ids => event.target.checked ? [...ids, w.id] : ids.filter(id => id !== w.id))} /> Chọn {w.word || "từ mới"}</label>}
           <fieldset className="m-0 min-w-0 border-0 p-0" disabled={busy}>
-            <WordCard entry={w} onImageChange={preview ? undefined : patch => setWords(current => current.map(item => item.id === w.id ? { ...item, ...patch } : item))} />
+            <WordCard entry={w} onImageTransfer={trackImageTransfer} onImageChange={preview ? undefined : patch => setWords(current => current.map(item => item.id === w.id ? { ...item, ...patch } : item))} />
             {!preview && (
               <WordMediaEditor
                 onWordEntered={fillMissingMedia}
+                onImageTransfer={trackImageTransfer}
                 entry={w}
                 onChange={(patch) =>
                   setWords((prev) =>

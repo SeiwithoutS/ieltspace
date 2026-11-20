@@ -11,6 +11,7 @@ import {
   asyncHandler,
   HttpError,
 } from "../../utils/http.js";
+import { isVocabularyImage, lockVocabularyImages, publishedVocabularyImage, vocabularyImagePreviews } from "./image-assets.js";
 
 const uuidSchema = z.string().uuid();
 
@@ -33,8 +34,7 @@ const wordSchema = z.object({
   example: z.string().trim().max(4000).default(""),
   translation: z.string().trim().max(4000).default(""),
 
-  // Giai đoạn này chưa nhận ảnh base64.
-  image: webUrlSchema.default(""),
+  image: z.union([webUrlSchema, z.string().refine(isVocabularyImage)]).default(""),
   audio: webUrlSchema.default(""),
   audioUs: webUrlSchema.optional(),
   audioUk: webUrlSchema.optional(),
@@ -61,7 +61,8 @@ const wordSchema = z.object({
 export const createSetSchema = z.object({
   title: z.string().trim().min(1).max(200),
   description: z.string().trim().max(4000).default(""),
-  cover: z.string().max(2048, "Ảnh bìa tải từ máy cần nối Storage; tạm dùng URL HTTPS hoặc bìa màu.").refine(value => !value || value.startsWith("https://") || value.startsWith("data:image/svg+xml,%3Csvg"), "Chọn URL HTTPS hoặc bìa màu.").default(""),
+  cover: z.string().max(2048).refine(value => !value || isVocabularyImage(value) || value.startsWith("https://") ||
+    value.startsWith("data:image/svg+xml,%3Csvg"), "Chọn ảnh đã tải lên, URL HTTPS hoặc bìa màu.").default(""),
 });
 
 export const saveDraftSchema = z.object({
@@ -144,11 +145,12 @@ export function createVocabularyAdminRouter(prisma: PrismaClient) {
       order by s.updated_at desc, s.id
     `;
 
-    res.json({
+    const previews = await vocabularyImagePreviews(prisma, sets.map(set => set.cover));
+    res.set("Cache-Control", "private, no-store").json({
       sets: sets.map(set => ({
         ...set,
         description: set.description ?? "",
-        cover: set.cover,
+        coverPreview: previews.get(set.cover),
       })),
     });
   }));
@@ -169,6 +171,7 @@ export function createVocabularyAdminRouter(prisma: PrismaClient) {
     const userId = req.appUser!.id;
 
     const set = await prisma.$transaction(async tx => {
+      await lockVocabularyImages(tx, [cover]);
       const rows = await tx.$queryRaw<{ id: string }[]>`
         insert into public.vocabulary_sets (
           name,
@@ -206,7 +209,8 @@ export function createVocabularyAdminRouter(prisma: PrismaClient) {
       };
     });
 
-    res.status(201).json({ set });
+    const previews = await vocabularyImagePreviews(prisma, [cover]);
+    res.set("Cache-Control", "private, no-store").status(201).json({ set: { ...set, coverPreview: previews.get(cover) } });
   }));
 
   // Đọc bản nháp khi mở bộ từ.
@@ -237,16 +241,19 @@ export function createVocabularyAdminRouter(prisma: PrismaClient) {
       );
     }
 
-    res.json({
+    const cover = row.content.cover ?? "";
+    const previews = await vocabularyImagePreviews(prisma, [cover, ...row.content.words.map(word => word.image ?? "")]);
+    res.set("Cache-Control", "private, no-store").json({
       set: {
         id: row.id,
         title: row.title,
         description: row.description ?? "",
-        cover: row.content.cover ?? "",
+        cover,
+        coverPreview: previews.get(cover),
         status: row.status,
       },
       revision: row.revision,
-      words: row.content.words,
+      words: row.content.words.map(word => ({ ...word, imagePreview: previews.get(word.image) })),
     });
   }));
 
@@ -272,6 +279,7 @@ export function createVocabularyAdminRouter(prisma: PrismaClient) {
     const content = JSON.stringify({ words });
 
     const result = await prisma.$transaction(async tx => {
+      await lockVocabularyImages(tx, words.map(word => word.image));
       const updated = await tx.$queryRaw<
         { revision: number; updatedAt: Date }[]
       >`
@@ -330,6 +338,7 @@ export function createVocabularyAdminRouter(prisma: PrismaClient) {
     const data = createSetSchema.extend({ revision: z.number().int().nonnegative() }).safeParse(req.body);
     if (!data.success) throw new HttpError(400, "INVALID_SET", data.error.issues[0]!.message);
     await prisma.$transaction(async tx => {
+      await lockVocabularyImages(tx, [data.data.cover]);
       const changed = await tx.$executeRaw`update public.vocabulary_set_drafts
         set content = content || ${JSON.stringify({ cover: data.data.cover })}::jsonb,
             revision = revision + 1, updated_by = ${req.appUser!.id}::uuid, updated_at = now()
@@ -352,6 +361,7 @@ export function createVocabularyAdminRouter(prisma: PrismaClient) {
       if (action === "publish") {
         const parsed = saveDraftSchema.safeParse({ revision, words: draft.content.words });
         if (!parsed.success || !parsed.data.words.length) throw new HttpError(400, "EMPTY_SET", "Cần ít nhất một từ hợp lệ để công bố.");
+        await lockVocabularyImages(tx, [draft.content.cover ?? "", ...parsed.data.words.map(word => word.image)]);
         const payload = JSON.stringify(parsed.data.words);
         const count = await tx.$executeRaw`insert into public.vocabularies (id,word,phonetic,definitions,audio_url,sources,status)
           select (w->>'id')::uuid,w->>'word',w->>'phonetic',jsonb_build_array(w),w->>'audio',jsonb_build_array(jsonb_build_object('setId',${id}::text)),'PUBLISHED'
@@ -389,6 +399,12 @@ export function createVocabularyAdminRouter(prisma: PrismaClient) {
 
 export function createVocabularyLibraryRouter(prisma: PrismaClient) {
   const router = Router();
+  router.get("/images/:id", asyncHandler(async (req, res) => {
+    const id = parseId(req.params.id);
+    res.set("Cache-Control", "no-store");
+    const url = await publishedVocabularyImage(prisma, id);
+    res.redirect(302, url);
+  }));
   router.get("/me/personal", requireAuth, asyncHandler(async (req,res) => {
     const user = req.appUser!.id;
     const records = await prisma.$queryRaw`

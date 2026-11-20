@@ -15,6 +15,7 @@ export type AppUser = {
   avatar_url: string | null;
   role: string;
   status: string;
+  must_change_password: boolean;
 };
 
 declare global {
@@ -70,12 +71,14 @@ export async function findActiveUser(authUserId: string, fresh = false): Promise
     return cached.user;
   }
 
-  const user = await prisma.users.findUnique({
-    where: {
-      auth_user_id: authUserId,
-    },
-    select: userSelect,
-  });
+  // Read the reminder from the row so existing accounts can sign in before migration 24.
+  const [user] = await prisma.$queryRaw<AppUser[]>`
+    SELECT account.id, account.auth_user_id, account.full_name, account.display_name,
+      account.email, account.avatar_url, account.role, account.status,
+      COALESCE((to_jsonb(account) ->> 'must_change_password')::boolean, false) AS must_change_password
+    FROM public.users AS account
+    WHERE account.auth_user_id = ${authUserId}::uuid
+  `;
 
   if (!user) {
     throw new HttpError(

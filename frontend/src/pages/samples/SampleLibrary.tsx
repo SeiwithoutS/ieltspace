@@ -17,6 +17,7 @@ import {
   type PublicSampleSkill,
 } from "../../lib/samples/sample-public";
 import { SampleNotice, SampleShell } from "./sample-public-ui";
+import "../../components/shared/library-cards.css";
 
 const libraryGroups = [
   { type: "WRITING_TASK_1_GENERAL", title: "Writing Task 1 General", description: "Bài mẫu viết thư theo từng loại thư thường gặp." },
@@ -202,7 +203,7 @@ function LibraryGroups({ samples, query }: { samples: PublicSampleCard[]; query:
               </div>
               {explore && <a href={sampleLibraryHref(groupQuery)}>Xem thêm →</a>}
             </div>
-            <div className="samples-card-grid">
+            <div className="samples-card-grid library-card-grid">
               {entries.map((sample) => <LibraryCard key={sample.id} sample={sample} query={query} />)}
             </div>
           </section>

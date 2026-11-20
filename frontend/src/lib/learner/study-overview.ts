@@ -5,6 +5,23 @@ import type { GoalValues } from '../auth/study-goals';
 export const skillNames = { LISTENING: 'Listening', READING: 'Reading', WRITING: 'Writing', SPEAKING: 'Speaking' } as const;
 export type LearnerSkill = keyof typeof skillNames;
 export type ResultKind = 'all' | 'band' | 'practice';
+export const resultGroups = { LR: ['LISTENING', 'READING'], WS: ['WRITING', 'SPEAKING'] } as const;
+export type ResultGroup = keyof typeof resultGroups;
+export type DashboardRange = 7 | 30;
+export type LearnerDashboard = {
+  practice: number;
+  flashcards: number;
+  reviewedWords: number;
+  days: { date: string; practice: number; flashcards: number }[];
+  skills: Partial<Record<LearnerSkill, number>>;
+};
+
+export type LearnerActivityCalendar = {
+  startDate: string;
+  endDate: string;
+  years: number[];
+  days: LearnerDashboard['days'];
+};
 
 export type LearningProgress = {
   today: string;
@@ -31,11 +48,49 @@ export type StudyResult = {
   total: number | null;
 };
 
-export function getStudyResults(filters: { kind: ResultKind; skill?: LearnerSkill; limit: number; before?: string }) {
+export function getStudyDashboard(days: DashboardRange) {
+  return apiFetch<LearnerDashboard>(`/learner/dashboard?days=${days}`);
+}
+
+export function getStudyActivityCalendar(year?: number) {
+  return apiFetch<LearnerActivityCalendar>(year === undefined ? '/learner/activity-calendar' : `/learner/activity-calendar?year=${year}`);
+}
+
+type ResultFilters = { kind: ResultKind; skill?: LearnerSkill; group?: ResultGroup; limit: number };
+
+export function getStudyResults(filters: ResultFilters & { before?: string }) {
   const params = new URLSearchParams({ kind: filters.kind, limit: String(filters.limit) });
   if (filters.skill) params.set('skill', filters.skill);
+  if (filters.group) params.set('group', filters.group);
   if (filters.before) params.set('before', filters.before);
   return apiFetch<{ items: StudyResult[]; nextCursor: string | null }>(`/learner/results?${params}`);
+}
+
+export function useStudyResults({ kind, skill, group, limit }: ResultFilters, preview: boolean) {
+  const [items, setItems] = useState<StudyResult[]>([]);
+  const [next, setNext] = useState<string | null>(null);
+  const [request, setRequest] = useState<{ before?: string }>({});
+  const [loading, setLoading] = useState(!preview);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (preview) return;
+    let active = true;
+    setLoading(true);
+    setError('');
+    void getStudyResults({ kind, skill, group, limit, before: request.before }).then(result => {
+      if (!active) return;
+      setItems(current => request.before ? [...current, ...result.items] : result.items);
+      setNext(result.nextCursor);
+    }).catch(() => { if (active) setError('Chưa tải được lịch sử kết quả.'); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [request, kind, skill, group, limit, preview]);
+
+  return { items, loading, error, next,
+    retry: () => setRequest(current => ({ ...current })),
+    loadMore: () => { if (next && !loading) setRequest({ before: next }); },
+  };
 }
 
 export function useLearningProgress(userId: string) {

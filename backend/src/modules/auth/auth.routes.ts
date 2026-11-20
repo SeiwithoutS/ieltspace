@@ -1,5 +1,5 @@
 import { createGoogleOAuthClient, hasGoogleVerifier, clearGoogleVerifier } from "../../lib/supabase-oauth.js";
-import { Router, type Response, type CookieOptions } from "express";
+import { Router } from "express";
 import { rateLimit } from "express-rate-limit";
 import { z } from "zod";
 import type { Session } from "@supabase/supabase-js";
@@ -9,41 +9,19 @@ import { createAuthClient } from "../../lib/supabase.js";
 import {
   findActiveUser,
   invalidateUserCache,
-  requireAuth,
   requireFreshAuth,
   requireRole,
 } from "../../middleware/auth.js";
 import { asyncHandler, HttpError } from "../../utils/http.js";
 import { profileRouter } from './profile.routes.js';
 import { recordLogin } from './login-history.js';
-import { acceptStaffInvitation, invitationToken } from '../users/staff-invitations.js';
+import { authenticatorCode, authenticatorFailure, readAuthenticator, verifiedTotp, verifyAuthenticator } from './authenticator.js';
+import { RECOVERY_COOKIE, readRecoveryCookie, recoveryCookieOptions, setRecoveryCookie,
+  REFRESH_COOKIE, setRefreshCookie, clearRefreshCookie } from './session-cookie.js';
 
 export const authRouter = Router();
 
-const REFRESH_COOKIE = "ielts_refresh_token";
-
-const cookieOptions: CookieOptions = {
-  httpOnly: true,
-  secure: env.NODE_ENV === "production",
-  sameSite: env.COOKIE_SAME_SITE,
-  path: "/api/auth",
-};
-
-function setRefreshCookie(res: Response, refreshToken: string) {
-  res.cookie(REFRESH_COOKIE, refreshToken, {
-    ...cookieOptions,
-
-    // Đây là thời gian lưu cookie của ứng dụng,
-    // không phải cấu hình tuổi thọ session trong Supabase.
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
-}
-
-function clearRefreshCookie(res: Response) {
-  res.clearCookie(REFRESH_COOKIE, cookieOptions);
-}
-
-function sessionResponse(session: Session) {
+function sessionResponse(session: Pick<Session, 'access_token' | 'expires_at' | 'expires_in' | 'token_type'>) {
   return {
     accessToken: session.access_token,
     expiresAt: session.expires_at,
@@ -107,29 +85,42 @@ const credentialLimiter = rateLimit({
   },
 });
 
+const emailSchema = z.string().trim().email().max(254).transform(value => value.toLowerCase());
 const registerSchema = z.object({
-  email: z.string().trim().email().max(254)
-    .transform((value) => value.toLowerCase()),
+  email: emailSchema,
   password: z.string().min(8).max(128),
   fullName: z.string().trim().min(2).max(100),
 }).strict();
 
 const loginSchema = z.object({
-  email: z.string().trim().email().max(254)
-    .transform((value) => value.toLowerCase()),
+  email: emailSchema,
   password: z.string().min(1).max(128),
 }).strict();
 const recoveryLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: 'draft-7', legacyHeaders: false,
   message: { message: 'Có quá nhiều yêu cầu khôi phục. Vui lòng thử lại sau.' },
 });
-authRouter.post('/accept-staff-invite', recoveryLimiter, asyncHandler(async (req, res) => {
-  const input = z.object({ token: invitationToken, password: z.string().min(8).max(128) }).strict().safeParse(req.body);
-  if (!input.success) throw new HttpError(400, 'INVITE_INVALID', 'Liên kết hoặc mật khẩu không hợp lệ.');
-  await acceptStaffInvitation(input.data.token, input.data.password);
-  res.json({ message: 'Đã nhận lời mời và đặt mật khẩu. Hãy đăng nhập để tiếp tục.' });
-}));
+const verificationLimiter = rateLimit({
+  windowMs: 60_000, limit: 5, standardHeaders: 'draft-7', legacyHeaders: false,
+  message: { message: 'Có quá nhiều yêu cầu xác minh. Vui lòng thử lại sau.' },
+});
 
+authRouter.post('/resend-verification', verificationLimiter, asyncHandler(async (req, res) => {
+  const input = z.object({ email: emailSchema }).strict().safeParse(req.body);
+  if (!input.success) throw new HttpError(400, 'INVALID_EMAIL', 'Địa chỉ email không hợp lệ.');
+  const { error } = await createAuthClient().auth.resend({
+    type: 'signup',
+    email: input.data.email,
+    options: { emailRedirectTo: env.AUTH_EMAIL_REDIRECT_URL },
+  });
+  if (error) {
+    throwAuthUnavailable(error);
+    if (error.code !== 'user_not_found' && error.code !== 'email_already_confirmed') {
+      throw new HttpError(400, 'VERIFICATION_RESEND_FAILED', 'Chưa thể gửi yêu cầu xác minh. Vui lòng thử lại.');
+    }
+  }
+  res.status(202).json({ message: 'Đã tiếp nhận yêu cầu. Nếu email còn chờ xác minh, hãy kiểm tra hộp thư.' });
+}));
 authRouter.post('/forgot-password', recoveryLimiter, asyncHandler(async (req, res) => {
   const { email } = z.object({ email: z.string().trim().email().max(254).transform(value => value.toLowerCase()) }).strict().parse(req.body);
   const { error } = await createAuthClient().auth.resetPasswordForEmail(email, {
@@ -143,14 +134,37 @@ authRouter.post('/forgot-password', recoveryLimiter, asyncHandler(async (req, re
 }));
 
 authRouter.post('/reset-password', recoveryLimiter, asyncHandler(async (req, res) => {
-  const input = z.object({ tokenHash: z.string().min(1).max(2048), password: z.string().min(8).max(128) }).strict().parse(req.body);
-  const client = createAuthClient();
-  const verified = await client.auth.verifyOtp({ token_hash: input.tokenHash, type: 'recovery' });
-  if (verified.error) {
-    throwAuthUnavailable(verified.error);
-    throw new HttpError(400, 'INVALID_RECOVERY', 'Liên kết hết hạn hoặc đã được sử dụng. Hãy yêu cầu liên kết mới.');
+  const input = z.object({
+    tokenHash: z.string().min(1).max(2048), password: z.string().min(8).max(128), code: authenticatorCode.optional(),
+  }).strict().parse(req.body);
+  const continuation = readRecoveryCookie(req.cookies[RECOVERY_COOKIE], input.tokenHash);
+  const client = createAuthClient(continuation || undefined);
+  let factor;
+  if (continuation) {
+    const { data, error } = await client.auth.getUser(continuation);
+    if (error) throwAuthUnavailable(error);
+    factor = verifiedTotp(data.user);
+    if (!factor) {
+      res.clearCookie(RECOVERY_COOKIE, recoveryCookieOptions);
+      throw new HttpError(400, 'INVALID_RECOVERY', 'Liên kết hết hạn hoặc đã được sử dụng. Hãy yêu cầu liên kết mới.');
+    }
+  } else {
+    const verified = await client.auth.verifyOtp({ token_hash: input.tokenHash, type: 'recovery' });
+    if (verified.error) {
+      throwAuthUnavailable(verified.error);
+      throw new HttpError(400, 'INVALID_RECOVERY', 'Liên kết hết hạn hoặc đã được sử dụng. Hãy yêu cầu liên kết mới.');
+    }
+    if (!verified.data.session) throw new HttpError(400, 'INVALID_RECOVERY', 'Liên kết không hợp lệ.');
+    factor = verifiedTotp(verified.data.user);
+    if (factor) {
+      setRecoveryCookie(res, input.tokenHash, verified.data.session.access_token);
+    }
   }
-  if (!verified.data.session) throw new HttpError(400, 'INVALID_RECOVERY', 'Liên kết không hợp lệ.');
+  if (factor) {
+    if (!input.code) throw new HttpError(403, 'AUTHENTICATOR_REQUIRED', 'Hãy nhập mã 6 số từ Google Authenticator.');
+    await verifyAuthenticator(client, factor.id, input.code);
+    res.clearCookie(RECOVERY_COOKIE, recoveryCookieOptions);
+  }
   let updated = false;
   let revoked = false;
   try {
@@ -242,6 +256,9 @@ authRouter.post(
     if (error) {
       throwAuthUnavailable(error);
 
+      if (error.code === 'email_not_confirmed') {
+        throw new HttpError(403, 'EMAIL_NOT_VERIFIED', 'Email chưa được xác minh.');
+      }
       throw new HttpError(
         401,
         "LOGIN_FAILED",
@@ -416,11 +433,49 @@ authRouter.get(
   }
 );
 
-const learnerOnly = [requireAuth, requireRole('LEARNER')];
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1).max(128),
   newPassword: z.string().min(8).max(128),
+  code: authenticatorCode.optional(),
 }).strict();
+
+authRouter.get('/me/authenticator', requireFreshAuth, requireRole('ADMIN'), asyncHandler(async (req, res) => {
+  const { user } = await readAuthenticator(req);
+  res.json({ enabled: Boolean(verifiedTotp(user)) });
+}));
+
+authRouter.post('/me/authenticator/enroll', credentialLimiter, requireFreshAuth, requireRole('ADMIN'), asyncHandler(async (req, res) => {
+  if (req.appUser!.must_change_password) {
+    throw new HttpError(409, 'TEMPORARY_PASSWORD', 'Hãy đổi mật khẩu tạm trước khi thiết lập Google Authenticator.');
+  }
+  const { client, user } = await readAuthenticator(req);
+  if (verifiedTotp(user)) throw new HttpError(409, 'AUTHENTICATOR_EXISTS', 'Tài khoản đã bật Google Authenticator.');
+  for (const factor of user.factors ?? []) {
+    if (factor.factor_type !== 'totp' || factor.status !== 'unverified' || factor.friendly_name !== 'IELTSpace') continue;
+    const { error } = await client.auth.mfa.unenroll({ factorId: factor.id });
+    if (error && error.code !== 'mfa_factor_not_found') authenticatorFailure(error, 'Chưa thể tạo mã QR mới. Vui lòng thử lại.');
+  }
+  const { data, error } = await client.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'IELTSpace', issuer: 'IELTSpace' });
+  if (error) authenticatorFailure(error, 'Chưa thể thiết lập Google Authenticator. Vui lòng thử lại.');
+  const svg = data.totp.qr_code.replace(/^data:image\/svg\+xml;utf-8,/, '');
+  res.status(201).json({ factorId: data.id, qrCode: 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64') });
+}));
+
+authRouter.post('/me/authenticator/verify', credentialLimiter, requireFreshAuth, requireRole('ADMIN'), asyncHandler(async (req, res) => {
+  const input = z.object({ factorId: z.string().uuid(), code: authenticatorCode }).strict().parse(req.body);
+  if (req.appUser!.must_change_password) {
+    throw new HttpError(409, 'TEMPORARY_PASSWORD', 'Hãy đổi mật khẩu tạm trước khi thiết lập Google Authenticator.');
+  }
+  const { client, user } = await readAuthenticator(req);
+  const pending = user.factors?.some(factor => factor.id === input.factorId && factor.factor_type === 'totp'
+    && factor.status === 'unverified' && factor.friendly_name === 'IELTSpace');
+  if (!pending || verifiedTotp(user)) {
+    throw new HttpError(409, 'AUTHENTICATOR_SETUP_CHANGED', 'Mã QR không còn hiệu lực. Hãy tải lại cài đặt xác thực.');
+  }
+  const session = await verifyAuthenticator(client, input.factorId, input.code);
+  setRefreshCookie(res, session.refresh_token);
+  res.json({ user: req.appUser, session: sessionResponse(session) });
+}));
 
 async function getPasswordAccount(accessToken: string, authUserId: string | null) {
   const { data, error } = await createAuthClient().auth.getUser(accessToken);
@@ -435,12 +490,12 @@ function usesGoogle(user: Awaited<ReturnType<typeof getPasswordAccount>>) {
   return user.identities?.some(identity => identity.provider === 'google') === true;
 }
 
-authRouter.get('/me/password-options', ...learnerOnly, asyncHandler(async (req, res) => {
+authRouter.get('/me/password-options', requireFreshAuth, asyncHandler(async (req, res) => {
   const user = await getPasswordAccount(req.accessToken!, req.appUser!.auth_user_id);
-  res.json({ google: usesGoogle(user), canSendSetupEmail: Boolean(user.email && user.email_confirmed_at) });
+  res.json({ google: usesGoogle(user), canSendSetupEmail: Boolean(user.email && user.email_confirmed_at), authenticator: Boolean(verifiedTotp(user)) });
 }));
 
-authRouter.post('/me/password/setup', recoveryLimiter, ...learnerOnly, asyncHandler(async (req, res) => {
+authRouter.post('/me/password/setup', recoveryLimiter, requireFreshAuth, asyncHandler(async (req, res) => {
   const user = await getPasswordAccount(req.accessToken!, req.appUser!.auth_user_id);
   if (!usesGoogle(user) || !user.email || !user.email_confirmed_at) {
     throw new HttpError(403, 'PASSWORD_SETUP_UNAVAILABLE', 'Tài khoản hiện chưa thể nhận liên kết thiết lập mật khẩu.');
@@ -455,15 +510,17 @@ authRouter.post('/me/password/setup', recoveryLimiter, ...learnerOnly, asyncHand
   res.status(202).json({ message: 'Hãy kiểm tra email đã xác minh để mở liên kết đặt mật khẩu.' });
 }));
 
-authRouter.post('/me/password', credentialLimiter, ...learnerOnly, asyncHandler(async (req, res) => {
+authRouter.post('/me/password', credentialLimiter, requireFreshAuth, asyncHandler(async (req, res) => {
   const input = changePasswordSchema.safeParse(req.body);
   if (!input.success) throw new HttpError(400, 'INVALID_PASSWORD', 'Mật khẩu mới phải có từ 8 đến 128 ký tự.');
-  const { currentPassword, newPassword } = input.data;
+  const { currentPassword, newPassword, code } = input.data;
   if (currentPassword === newPassword) throw new HttpError(400, 'SAME_PASSWORD', 'Hãy chọn mật khẩu khác mật khẩu hiện tại.');
   const user = await getPasswordAccount(req.accessToken!, req.appUser!.auth_user_id);
   if (!user.email || !user.email_confirmed_at) {
     throw new HttpError(403, 'EMAIL_NOT_VERIFIED', 'Vui lòng xác minh email trước khi đổi mật khẩu.');
   }
+  const factor = verifiedTotp(user);
+  if (factor && !code) throw new HttpError(403, 'AUTHENTICATOR_REQUIRED', 'Hãy nhập mã 6 số từ Google Authenticator.');
 
   // A fresh, separate session verifies the current password even if the Auth setting is off.
   const client = createAuthClient();
@@ -475,6 +532,7 @@ authRouter.post('/me/password', credentialLimiter, ...learnerOnly, asyncHandler(
     if (error || !data.session || data.user?.id !== user.id) {
       throw new HttpError(400, 'CURRENT_PASSWORD_INVALID', 'Mật khẩu hiện tại không đúng.');
     }
+    if (factor && code) await verifyAuthenticator(client, factor.id, code);
     const result = await client.auth.updateUser({ password: newPassword, current_password: currentPassword });
     if (result.error) {
       throwAuthUnavailable(result.error);
@@ -495,6 +553,7 @@ authRouter.post('/me/password', credentialLimiter, ...learnerOnly, asyncHandler(
       }
     }
   }
+  invalidateUserCache(user.id);
   clearRefreshCookie(res);
   res.json({ message: revoked
     ? 'Đã đổi mật khẩu. Hãy đăng nhập bằng mật khẩu mới.'

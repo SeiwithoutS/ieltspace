@@ -8,6 +8,9 @@ import { createSamplesPublicRouter } from './modules/samples/samples.routes.js';
 import { createLearnerStudyRouter } from './modules/learner/study.routes.js';
 import { adminUsersRouter } from './modules/users/admin-users.routes.js';
 import { adminStatisticsRouter } from './modules/statistics/admin-statistics.routes.js';
+import { notificationsRouter } from './modules/notifications/notifications.routes.js';
+import { announcementAdminRouter } from './modules/notifications/announcement-admin.routes.js';
+import { adminSupportRouter, supportRouter } from './modules/support/support.routes.js';
 
 export const routes = Router();
 routes.use('/learner', createLearnerStudyRouter());
@@ -22,5 +25,9 @@ routes.get('/health', (_req, res) => {
 
 routes.use('/admin/users', adminUsersRouter);
 routes.use('/admin/statistics', adminStatisticsRouter);
+routes.use('/notifications', notificationsRouter);
+routes.use('/admin/notifications', announcementAdminRouter);
+routes.use('/support/reports', supportRouter);
+routes.use('/admin/support/reports', adminSupportRouter);
 routes.use('/admin', adminExamsRouter);
 routes.use('/exam-sets', publicExamsRouter);

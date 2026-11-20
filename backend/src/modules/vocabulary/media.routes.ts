@@ -1,9 +1,11 @@
-import { Router } from "express";
+import { raw, Router, type ErrorRequestHandler } from "express";
 import rateLimit from "express-rate-limit";
 import { z } from "zod";
 import { env } from "../../config.js";
-import { requireAuth, requireRole } from "../../middleware/auth.js";
+import { prisma } from "../../lib/prisma.js";
+import { requireAuth, requireFreshAuth, requireRole } from "../../middleware/auth.js";
 import { asyncHandler, HttpError } from "../../utils/http.js";
+import { isVocabularyImage, pruneVocabularyImages, storeVocabularyImage, vocabularyImageLimit, vocabularyImagePreviews, vocabularyImageTypes } from "./image-assets.js";
 
 const audioSchema = z.array(z.object({ phonetics: z.array(z.object({ audio: z.string().optional() })).optional() }));
 const mwSchema = z.array(z.union([z.string(), z.object({
@@ -111,30 +113,62 @@ vocabularyMediaRouter.get("/", asyncHandler(async (req, res) => {
   const word = query.data.word.toLowerCase();
   res.json(await (query.data.type === "audio" ? lookupAudio(word) : lookupImages(word)));
 }));
-vocabularyMediaRouter.post("/image", asyncHandler(async (req, res) => {
+vocabularyMediaRouter.post("/image", requireFreshAuth, requireRole("ADMIN"), asyncHandler(async (req, res) => {
   const id = z.object({ id: z.string().max(100) }).safeParse(req.body);
   const picture = id.success ? pictures.get(id.data.id) : undefined;
   if (!picture) throw new HttpError(400, "IMAGE_EXPIRED", "Hãy tìm lại ảnh trước khi chọn.");
   try {
-    let url = picture.url;
+    let stored: { image: string; imagePreview?: string } = { image: picture.url };
     if (picture.source === "Unsplash") {
       if (new URL(picture.download!).hostname !== "api.unsplash.com") throw new Error();
       await json(picture.download!, { Authorization: `Client-ID ${env.UNSPLASH_ACCESS_KEY}` });
     } else if (picture.source === "Pixabay") {
-      // Pixabay allows preview hotlinks only; keep a local copy for the current local draft.
-      const host = new URL(url).hostname;
-      if (host !== "pixabay.com" && !host.endsWith(".pixabay.com")) throw new Error();
+      const url = new URL(picture.url);
+      if (url.protocol !== "https:" || (url.hostname !== "pixabay.com" && !url.hostname.endsWith(".pixabay.com"))) throw new Error();
       const response = await fetch(url, { redirect: "error", signal: AbortSignal.timeout(8000) });
       const mime = response.headers.get("content-type")?.split(";")[0];
-      if (!response.ok || !mime || !["image/jpeg", "image/png", "image/webp"].includes(mime) || !response.body) throw new Error();
+      if (!response.ok || !mime || !vocabularyImageTypes.includes(mime) || !response.body) throw new Error();
       const chunks: Uint8Array[] = []; let size = 0;
       for await (const chunk of response.body) {
         size += chunk.length;
-        if (size > 1024 * 1024) throw new Error();
+        if (size > vocabularyImageLimit) throw new HttpError(413, "IMAGE_TOO_LARGE", "Ảnh tối đa 1 MB.");
         chunks.push(chunk);
       }
-      url = `data:${mime};base64,${Buffer.concat(chunks).toString("base64")}`;
+      stored = await storeVocabularyImage(prisma, Buffer.concat(chunks), mime, "PIXABAY");
     }
-    res.json({ image: url, imageCredit: { source: picture.source, name: picture.credit, url: picture.creditUrl } });
-  } catch { throw new HttpError(502, "IMAGE_UNAVAILABLE", "Chưa lấy được ảnh. Hãy chọn ảnh khác hoặc tải ảnh từ máy."); }
+    res.set("Cache-Control", "private, no-store").json({ ...stored, imageCredit: { source: picture.source, name: picture.credit, url: picture.creditUrl } });
+  } catch (error) {
+    if (error instanceof HttpError) throw error;
+    throw new HttpError(502, "IMAGE_UNAVAILABLE", "Chưa lấy được ảnh. Hãy chọn ảnh khác hoặc tải ảnh từ máy.");
+  }
+}));
+
+const uploadError: ErrorRequestHandler = (error: unknown, _req, _res, next) => {
+  if (typeof error === "object" && error && "status" in error && error.status === 413) {
+    return next(new HttpError(413, "IMAGE_TOO_LARGE", "Ảnh tối đa 1 MB."));
+  }
+  next(error);
+};
+
+vocabularyMediaRouter.get("/preview", requireFreshAuth, requireRole("ADMIN"), asyncHandler(async (req, res) => {
+  const image = z.string().refine(isVocabularyImage).safeParse(req.query.image);
+  if (!image.success) throw new HttpError(400, "INVALID_IMAGE", "Mã ảnh không hợp lệ.");
+  const url = (await vocabularyImagePreviews(prisma, [image.data])).get(image.data);
+  if (!url) throw new HttpError(404, "VOCABULARY_IMAGE_NOT_FOUND", "Không tìm thấy ảnh.");
+  res.set("Cache-Control", "private, no-store").json({ url });
+}));
+
+vocabularyMediaRouter.post("/upload", requireFreshAuth, requireRole("ADMIN"),
+  raw({ type: vocabularyImageTypes, limit: vocabularyImageLimit }),
+  asyncHandler(async (req, res) => {
+    const mime = req.headers["content-type"]?.split(";")[0] ?? "";
+    if (!vocabularyImageTypes.includes(mime)) throw new HttpError(415, "IMAGE_TYPE", "Chọn ảnh JPG, PNG hoặc WebP.");
+    const stored = await storeVocabularyImage(prisma, req.body, mime, "UPLOAD");
+    res.set("Cache-Control", "private, no-store").status(201).json(stored);
+  }),
+  uploadError,
+);
+
+vocabularyMediaRouter.post("/cleanup", requireFreshAuth, requireRole("ADMIN"), asyncHandler(async (_req, res) => {
+  res.json(await pruneVocabularyImages(prisma));
 }));

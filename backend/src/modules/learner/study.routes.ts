@@ -5,7 +5,7 @@ import { env } from '../../config.js';
 import { prisma } from '../../lib/prisma.js';
 import { requireAuth, requireRole } from '../../middleware/auth.js';
 import { asyncHandler, HttpError } from '../../utils/http.js';
-import { historyQuery, readLearnerResults, readLearningProgress } from './study-overview.js';
+import { activityCalendarQuery, dashboardQuery, historyQuery, readLearnerActivityCalendar, readLearnerDashboard, readLearnerResults, readLearningProgress } from './study-overview.js';
 
 function studyRouter() {
   const router = Router();
@@ -38,6 +38,20 @@ export function createLearnerStudyRouter(db: typeof prisma = prisma) {
 
   learnerStudyRouter.get('/progress', asyncHandler(async (req, res) => {
     res.json(await readLearningProgress(db, req.appUser!.id));
+  }));
+
+  learnerStudyRouter.get('/dashboard', asyncHandler(async (req, res) => {
+    const query = dashboardQuery.safeParse(req.query);
+    if (!query.success) throw new HttpError(400, 'INVALID_DASHBOARD_RANGE', 'Khoảng thời gian không hợp lệ.');
+    res.json(await readLearnerDashboard(db, req.appUser!.id, query.data.days));
+  }));
+
+  learnerStudyRouter.get('/activity-calendar', asyncHandler(async (req, res) => {
+    const query = activityCalendarQuery.safeParse(req.query);
+    if (!query.success) throw new HttpError(400, 'INVALID_ACTIVITY_YEAR', 'Năm không hợp lệ.');
+    const calendar = await readLearnerActivityCalendar(db, req.appUser!.id, query.data.year);
+    if (!calendar) throw new HttpError(400, 'INVALID_ACTIVITY_YEAR', 'Chọn năm hiện tại hoặc một năm trước đó.');
+    res.json(calendar);
   }));
 
   learnerStudyRouter.post('/check-in', asyncHandler(async (req, res) => {

@@ -549,6 +549,28 @@ class AdminSidebar extends React.Component<AdminSidebarProps, AdminSidebarState>
                     </span>
                   )}
                 </a>
+                <a
+                  href="AdminNotifications.dc.html"
+                  title="Quản lý thông báo"
+                  aria-label="Quản lý thông báo"
+                  aria-current={this.props.active === "notifications" ? "page" : undefined}
+                  style={styleOf(v.st.notifications)}
+                >
+                  <svg
+                    width="19"
+                    height="19"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 10v4h4l8 4V6l-8 4H4zM8 14l2 6h3l-2-4M19 9l2-2m-2 8 2 2m-2-5h3" />
+                  </svg>
+                  {v.open && <span style={{ whiteSpace: "nowrap" }}>Quản lý thông báo</span>}
+                </a>
               </>
             )}
           </nav>

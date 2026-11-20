@@ -15,6 +15,7 @@ export class ApiError extends Error {
 }
 
 const base = ((import.meta as any).env?.VITE_API_URL || 'http://localhost:3001/api').replace(/\/$/, '');
+export const apiUrl = (path: string) => base + (path.startsWith('/') ? path : '/' + path);
 
 function isTokenExpiringSoon(token: string): boolean {
   try {
@@ -66,8 +67,7 @@ export async function apiFetch<T = any>(
     body = JSON.stringify(options.json);
   }
 
-  const cleanPath = path.startsWith('/') ? path : `/${path}`;
-  const url = `${base}${cleanPath}`;
+  const url = apiUrl(path);
 
   let res: Response;
   try {

@@ -23,9 +23,8 @@ interface AccountDropdownProps {
 }
 
 const learnerLinks = [
-  { label: "Dashboard tiến độ", page: "StudentHome", icon: "M4 11l8-7 8 7v9H4z" },
-  { label: "Bài Writing/Speaking của tôi", page: "MyWS", icon: "M15 5l4 4L8 20H4v-4z" },
-  { label: "Từ vựng đã lưu", page: "Vocab", icon: "M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" },
+  { label: "Dashboard", page: "StudentHome", icon: "M4 11l8-7 8 7v9H4z" },
+  { label: "Lịch sử luyện tập", page: "PracticeHistory", icon: "M3 12a9 9 0 1 0 3-6.7L3 8m0-5v5h5m4 0v5l3 2" },
 ];
 
 export default function AccountDropdown({ v, learner = false }: AccountDropdownProps) {
@@ -33,7 +32,7 @@ export default function AccountDropdown({ v, learner = false }: AccountDropdownP
     <>
       <div onClick={v.close} style={styleOf("position: fixed; inset: 0; z-index: 40")} />
       <div role="menu" aria-label="Tài khoản" style={styleOf("position: absolute; right: 0; top: 52px; z-index: 50; width: 288px; box-sizing: border-box; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 16px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 8px; display: flex; flex-direction: column; gap: 2px")}>
-        <div style={styleOf("display: flex; gap: 12px; align-items: center; padding: 10px 12px 12px")}>
+        {!learner && <><div style={styleOf("display: flex; gap: 12px; align-items: center; padding: 10px 12px 12px")}>
           <span style={styleOf("flex: none; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #C5CEF5; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #352637")}>
             <AvatarContent avatar={v.avatar} initials={v.initials} />
           </span>
@@ -43,7 +42,7 @@ export default function AccountDropdown({ v, learner = false }: AccountDropdownP
             <div style={styleOf("font-size: 13px; color: #706473")}>{v.role}</div>
           </div>
         </div>
-        <div style={styleOf("height: 1px; background: #E6E4E0; margin: 2px 4px 4px")} />
+        <div style={styleOf("height: 1px; background: #E6E4E0; margin: 2px 4px 4px")} /></>}
         {learner && learnerLinks.map(({ label, page, icon }) => (
           <a key={page} role="menuitem" href={page + ".dc.html"} style={styleOf('display:flex;align-items:center;gap:12px;height:42px;padding:0 12px;border-radius:10px;color:#352637;font-size:14px;font-weight:500;text-decoration:none')}>
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

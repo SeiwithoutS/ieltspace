@@ -6,22 +6,23 @@ Base URL local là `http://localhost:3001/api`. Bảng dưới dùng đường d
 |---|---|---|---|
 | GET /health | Công khai | 200, status=ok, service=ieltspace-backend | Lỗi kết nối dịch vụ |
 | POST /auth/register | Công khai, email, password 8–128 ký tự, fullName sau trim 2–100 ký tự | 202 {message}, hướng dẫn kiểm tra email | 400, 429, lỗi đăng ký/dịch vụ |
-| POST /auth/login | Công khai, email, password 1–128 ký tự | 200 {user,session}, đặt cookie | 401 LOGIN_FAILED, 403 hồ sơ, 429, 503 |
+| POST /auth/login | Công khai, email, password 1–128 ký tự | 200 {user,session}, đặt cookie | 401 LOGIN_FAILED, 403 EMAIL_NOT_VERIFIED hoặc hồ sơ, 429, 503 |
+| POST /auth/resend-verification | Công khai, chỉ nhận {email}, tối đa 5 yêu cầu mỗi phút theo IP tại ứng dụng | 202 {message} trung tính sau khi gửi yêu cầu xác minh đăng ký qua Supabase Auth | 400 sai đầu vào hoặc gửi thất bại, 429, 503 |
 | POST /auth/refresh | Cookie phiên hiện tại, không cần body | 200 {user,session}, thay cookie và đọc lại hồ sơ | 401 NO_SESSION/SESSION_EXPIRED, 403 hồ sơ, 503 |
 | POST /auth/logout | Cookie phiên hiện tại, không cần body | 204, xóa cookie. Thiếu phiên cũng trả 204 | LOGOUT_FAILED hoặc lỗi dịch vụ |
 | GET /auth/me | Authorization: Bearer accessToken | 200 {user} của chính phiên | 401 UNAUTHENTICATED/INVALID_TOKEN, 403 hồ sơ, 503 |
 | POST /auth/forgot-password | Công khai, email | 202 {message} chung, tránh tiết lộ tài khoản | 400, 429, 503 |
-| POST /auth/reset-password | tokenHash của luồng recovery, password mới 8–128 ký tự | 200 {message}, xóa cookie. Đọc thông điệp nếu chưa xác nhận được thu hồi phiên cũ | 400 INVALID_RECOVERY/RESET_FAILED, 429, 503 |
+| POST /auth/reset-password | `{ tokenHash, password, code? }`, mật khẩu mới 8–128 ký tự | 200 `{ message }`, xóa cookie. Với tài khoản có TOTP, website yêu cầu mã 6 số sau khi xác minh liên kết và giữ phiên khôi phục trong cookie HttpOnly tối đa 5 phút. | 400 INVALID_RECOVERY/RESET_FAILED, 403 AUTHENTICATOR_REQUIRED/AUTHENTICATOR_FAILED, 429, 503 |
 | POST /auth/google | Công khai, không cần body | 200 {url}, frontend điều hướng đến URL OAuth | GOOGLE_LOGIN_START_FAILED, 429, 503 |
 | GET /auth/google/callback | Trình duyệt quay về với code và cookie PKCE, hoặc lỗi provider | 303 tới frontend /auth/callback sau khi đặt cookie | Khi OAuth thất bại, chuyển hướng về /login với auth_error |
 
-**Dữ liệu phiên.** user có id, auth_user_id, full_name, display_name, email, avatar_url, role, status. session có accessToken, expiresAt, expiresIn và tokenType. Cookie ielts_refresh_token là HttpOnly, path=/api/auth, Secure ở production, SameSite theo cấu hình. Cookie lưu 7 ngày. Mã phía client không cần đọc refresh token. Các API này xác định người dùng từ phiên, không nhận user_id đích. BR-AUTH-001 áp dụng khi kiểm tra hồ sơ.
+**Dữ liệu phiên.** user có id, auth_user_id, full_name, display_name, email, avatar_url, role, status và must_change_password. Cờ này dùng để nhắc nhân sự đổi mật khẩu tạm. session có accessToken, expiresAt, expiresIn và tokenType. Cookie ielts_refresh_token là HttpOnly, path=/api/auth, Secure ở production, SameSite theo cấu hình. Cookie lưu 7 ngày. Các API này xác định người dùng từ phiên. BR-AUTH-001 áp dụng khi kiểm tra hồ sơ.
 
 **Lỗi.** HttpError trả {message,code}. Zod hoặc JSON hỏng trả 400 {message}. Bộ giới hạn tần suất đăng nhập có dạng {error:{code,message}}. 403 INVALID_ORIGIN khác với 403 PROFILE_NOT_FOUND/ACCOUNT_UNAVAILABLE. Frontend cần xử lý theo trạng thái HTTP và kiểu body thực tế.
 
-### Hồ sơ người học
+### Hồ sơ cá nhân
 
-Đọc hồ sơ bằng `GET /auth/me` hoặc dữ liệu phiên hiện có. Các route bên dưới dùng Bearer và quyền `LEARNER`. Với thao tác ghi, `Origin` phải khớp `FRONTEND_ORIGIN`. `user.id` được xác định từ phiên.
+Đọc hồ sơ bằng `GET /auth/me` hoặc dữ liệu phiên hiện có. Các route bên dưới dùng Bearer, kiểm tra tài khoản còn hoạt động và dùng được cho Người học, Giáo viên và Quản lý. Với thao tác ghi, `Origin` phải khớp `FRONTEND_ORIGIN`. `user.id` được xác định từ phiên.
 
 | Method và đường dẫn | Đầu vào | Thành công và lỗi cần xử lý |
 |---|---|---|
@@ -30,9 +31,12 @@ Base URL local là `http://localhost:3001/api`. Bảng dưới dùng đường d
 | PUT /auth/me/avatar | Body nhị phân JPG/PNG, giới hạn theo `avatar-options` | 200 `{ user }`. 413 quá dung lượng, 415 sai định dạng, 503 lỗi Storage. |
 | GET /auth/me/avatar | Không có | 200 `{ url }`, `null` nếu chưa có ảnh của ứng dụng. URL ký hết hạn sau 5 phút. |
 | DELETE /auth/me/avatar | Không có | 200 `{ user }`, đã gỡ ảnh. |
-| GET /auth/me/password-options | Không có | 200 `{ google, canSendSetupEmail }` lấy từ Auth. |
-| POST /auth/me/password | `{ currentPassword, newPassword }`, mật khẩu mới 8–128 ký tự | 200 `{ message }`, xóa refresh cookie và yêu cầu đăng nhập lại. 400 nếu sai mật khẩu hiện tại, mật khẩu trùng hoặc mật khẩu mới bị từ chối. |
+| GET /auth/me/password-options | Không có | 200 `{ google, canSendSetupEmail, authenticator }` lấy từ Auth. |
+| POST /auth/me/password | `{ currentPassword, newPassword, code? }`, mật khẩu mới 8–128 ký tự. Tài khoản có TOTP cần mã 6 số. | 200 `{ message }`, xóa refresh cookie và yêu cầu đăng nhập lại. 400 nếu sai mật khẩu hiện tại, mật khẩu trùng hoặc mật khẩu mới bị từ chối. |
 | POST /auth/me/password/setup | Không có | 202 `{ message }` khi Auth tiếp nhận yêu cầu gửi link đặt mật khẩu đến email đã xác minh của tài khoản có Google. 403 khi chưa đủ điều kiện. |
+| GET /auth/me/authenticator | Quản lý đang hoạt động | 200 `{ enabled }`. |
+| POST /auth/me/authenticator/enroll | Quản lý đang hoạt động, đã đổi mật khẩu tạm nếu có | 201 `{ factorId, qrCode }`. Mã QR là ảnh chỉ hiện trong lúc thiết lập. |
+| POST /auth/me/authenticator/verify | `{ factorId, code }`, mã TOTP 6 số từ ứng dụng đã quét QR | 200 `{ user, session }` và cập nhật cookie phiên sau khi bật TOTP. |
 
 Backend giữ bucket avatar riêng tư. `AVATAR_STORAGE_PROVIDER=auto` dùng R2 cho ảnh mới nếu có `R2_ENDPOINT`, `R2_ACCESS_KEY_ID` và `R2_SECRET_ACCESS_KEY`. Khi chưa cấu hình R2, ảnh mới dùng Supabase Storage và `STORAGE_BUCKET_AVATARS`. `users.avatar_url` giữ khóa đối tượng. Khóa R2 có tiền tố `r2:` để đọc/xóa đúng kho. Giữ cấu hình cũ khi còn ảnh tham chiếu đến kho đó. Tài khoản Google dùng template khôi phục và trang `/reset-password` hiện có. Sau khi đổi mật khẩu, backend yêu cầu thu hồi refresh session toàn cục. Access token cũ có thể còn hiệu lực đến khi hết hạn theo D11.
 
@@ -47,14 +51,16 @@ Yêu cầu Bearer, vai trò `LEARNER` và `Origin` hợp lệ đối với POST.
 | POST /learner/flashcards | `{ id, ownerId, title, source, cardIds, reviews, finishedAt, elapsedSeconds, reason }`. `id` là UUID ổn định. `source.type` là `SET` (có `setId`), `FAVORITES` hoặc `REVIEW`. Mỗi đánh giá là `{ wordId, remembered }`. `finishedAt` tính bằng ms Unix. `reason` nhận `completed`, `timeout`, `stopped`. `ownerId` phải trùng phiên đăng nhập để tránh gửi nhầm khi đổi tài khoản. | 201 `{ id }` khi tạo. 200 cùng `id` nếu phiên của người học đã lưu. 409 nếu mã đã thuộc tài khoản khác. |
 | GET /learner/flashcards | `before` tùy chọn (UUID phiên cuối trang trước) | `{ items, nextCursor, stats? }`. Trang đầu trả số phiên, số từ khác nhau đã ôn và ID các từ chưa nhớ theo đánh giá gần nhất. Các trang sau trả danh sách phiên. |
 | GET /learner/progress | Không có | `{ today, nextDayAt, goal, todaySessions, currentStreak, longestStreak, checkedInToday, checkInDays, flashcards }`. `checkInDays` gồm bảy phần tử `{ date, checkedIn }` từ thứ Hai đến Chủ nhật. Ngày và thời điểm nửa đêm kế tiếp lấy theo giờ Việt Nam. `goal` có thể `null`. |
+| GET /learner/dashboard | `days=7\|30`, mặc định 7 | `{ practice, flashcards, reviewedWords, days, skills }`. Đếm lượt làm bài đã hoàn thành, phiên Flashcard đã lưu và số từ khác nhau đã ôn của người học. `days` gồm `{ date, practice, flashcards }` theo ngày Việt Nam, kể cả ngày chưa có hoạt động. `skills` đếm lượt hoàn thành theo kỹ năng. |
+| GET /learner/activity-calendar | `year` tùy chọn. Mặc định 365 ngày gần nhất gồm hôm nay. | `{ startDate, endDate, years, days }` theo giờ Việt Nam. `years` gồm năm hiện tại và các năm có hoạt động. `days` gồm `{ date, practice, flashcards }` cho những ngày có lượt thi/luyện hoàn thành hoặc Flashcard đủ điều kiện. Ngày hiện tại là giới hạn cuối khi xem năm đang diễn ra. |
 | POST /learner/check-in | `{ ownerId }` khớp tài khoản người học trong phiên hiện tại. | Ghi một lượt điểm danh cho ngày Việt Nam hiện tại và trả cùng cấu trúc với `GET /learner/progress`. Gửi lại trong ngày trả tiến độ mới nhất và dùng lại lượt điểm danh của ngày đó. |
-| GET /learner/results | `kind=all\|band\|practice`, `skill` tùy chọn, `before` tùy chọn là ID kết quả cuối trang, `limit` 1–25 | `{ items, nextCursor }`. `band` và `accuracy` nullable theo phạm vi kết quả. Bài luyện theo phần hoặc nhóm câu dùng tỷ lệ đúng đã lưu. Band Writing/Speaking toàn kỹ năng chỉ đọc sau công bố. |
+| GET /learner/results | `kind=all\|band\|practice`, tùy chọn `group=LR\|WS`, `skill`, `before` là ID kết quả cuối trang, `limit` 1–25 | `{ items, nextCursor }`. `band` và `accuracy` nullable theo phạm vi kết quả. Khi có `group` và `kind=all`, trả cả bài hoàn thành chưa có điểm. Bài luyện theo phần hoặc nhóm câu dùng tỷ lệ đúng đã lưu. Band Writing/Speaking toàn kỹ năng chỉ đọc sau công bố. |
 
 `POST /learner/flashcards` ghi một hoạt động hợp lệ trong cùng giao dịch với phiên và thẻ. Ngưỡng là số thẻ khác nhau theo cấu hình (mặc định 10), giảm xuống số thẻ đã chọn nếu tập nhỏ hơn. Tiến độ cộng thêm các lượt làm bài đã hoàn tất theo `attempts.id`, mỗi lượt một lần. Các phiên Flashcard đủ điều kiện đã lưu trước được bổ sung bằng [migration 15](csdl/15_learner_activity.sql). Chuỗi đăng nhập và kỷ lục đọc từ bảng điểm danh được tạo trong [migration 16](csdl/16_learner_checkins.sql).
 
 ## Quản lý người dùng
 
-Hai API chỉ đọc yêu cầu Bearer và hồ sơ `ADMIN` đang hoạt động. Phản hồi dùng `Cache-Control: private, no-store`.
+Các API quản lý người dùng yêu cầu Bearer và hồ sơ `ADMIN` đang hoạt động. Phản hồi dùng `Cache-Control: private, no-store`.
 
 | Method và đường dẫn | Đầu vào | Thành công | Lỗi cần xử lý |
 |---|---|---|---|
@@ -62,19 +68,16 @@ Hai API chỉ đọc yêu cầu Bearer và hồ sơ `ADMIN` đang hoạt động
 | GET /admin/users/:id | UUID của `public.users.id` | Hồ sơ cùng `auth` và `avatar` | 400 INVALID_USER_ID, 401, 403, 404 USER_NOT_FOUND |
 | GET /admin/users/activity | `role` tùy chọn, `page` mặc định 1 | `{ items, nextPage }`, 20 sự kiện Email/Google mỗi trang, lọc theo vai trò hiện tại của tài khoản. | 400, 401, 403 |
 | GET /admin/users/:id/history | `kind=login\|admin`, `page` mặc định 1 | `{ items, nextPage }`, 5 sự kiện mỗi trang. Nhật ký quản trị trả hành động, người thao tác, giá trị trước/sau, lý do và thời điểm. | 400, 401, 403, 404 |
-| POST /admin/users/:id/security-code | Hành động dự kiến như dưới đây, có `Origin` hợp lệ. | 202 với `{ id, expiresInSeconds }`. Mã thật gửi tới email Auth đã xác minh của Quản lý thao tác. | 400, 401, 403, 404, 409, 429, 503 |
-| PATCH /admin/users/:id/role hoặc /status | `{ action, securityCode? }` với `Origin` hợp lệ. Tùy hành động, `action` có `kind`, `previousRole`, `previousStatus`, `role` hoặc `status` mới và `reason` (1–500 ký tự). `securityCode` là `{ id, code }` cho thay đổi liên quan đến vai trò Quản lý. | `{ id, role, status, changed }`. Gửi lại cùng thay đổi đã thành công trả `changed:false`. | 400, 401, 403, 404, 409 |
-| POST /admin/users/invitations/security-code | Dữ liệu lời mời Quản lý. | 202 `{ id, expiresInSeconds }`. | 400, 403, 429, 503 |
-| POST /admin/users/invitations | `{ invitation, securityCode? }`. Lời mời có `fullName`, `email`, `role` (TEACHER/ADMIN). Với Giáo viên thêm `writing`, `speaking` và `maxPending` (1–50). Mời Quản lý cần mã. | 202 `{ id, status: "INVITED" }`. Gửi lại bằng cùng nội dung sẽ cấp liên kết mới. | 409 INVITE_EMAIL_EXISTS, 429 INVITE_COOLDOWN, 503 INVITE_EMAIL_FAILED/INVITE_UNAVAILABLE |
-| POST /auth/accept-staff-invite | Token từ liên kết và mật khẩu mới. | 200 sau khi tạo Auth và kích hoạt đúng hồ sơ. | 400 INVITE_INVALID/INVITE_WEAK_PASSWORD, 409 INVITE_ACCEPT_FAILED |
-| DELETE /admin/users/:id | `{ action, securityCode? }` với `kind=delete`, vai trò/trạng thái trước đó và lý do. Xóa Quản lý cần mã. | 200 khi hoàn tất hoặc 202 khi đã ẩn danh và còn dọn Auth/tệp. `cleanup` là COMPLETE hoặc PENDING. | 400, 403, 404, 409 |
+| PATCH /admin/users/:id/role hoặc /status | `{ action, code? }` với `Origin` hợp lệ. Tùy hành động, `action` có `kind`, `previousRole`, `previousStatus`, `role` hoặc `status` mới và `reason` (1–500 ký tự). Thay đổi liên quan đến Quản lý cần mã TOTP 6 số của người thao tác. | `{ id, role, status, changed }`. Gửi lại cùng thay đổi đã thành công trả `changed:false`. | 400, 401, 403, 404, 409, 429, 503 |
+| POST /admin/users/staff | `{ account, code? }` với `Origin` hợp lệ. Account có `fullName`, `email`, `role` (TEACHER/ADMIN). Giáo viên có thêm `writing`, `speaking` và `maxPending` (1–50). Tạo Quản lý cần mã TOTP 6 số. | 201 `{ id, role, status: "ACTIVE", email, temporaryPassword }`. Mật khẩu tạm chỉ có trong phản hồi tạo. | 400, 403, 409 STAFF_EMAIL_EXISTS, 429, 503 |
+| DELETE /admin/users/:id | `{ action, code? }` với `kind=delete`, vai trò/trạng thái trước đó và lý do. Xóa Quản lý cần mã TOTP. | 200 khi hoàn tất hoặc 202 khi đã ẩn danh và còn dọn Auth/tệp. `cleanup` là COMPLETE hoặc PENDING. | 400, 403, 404, 409, 429, 503 |
 | POST /admin/users/:id/deletion-retry | Tài khoản đã xóa. | 200 `{ cleanup }`. | 400, 403, 409 |
 
-Mỗi hồ sơ có `id`, `name` (ưu tiên tên hiển thị), `email`, `role`, `status`, `createdAt` và `lastLoginAt` (mốc gần nhất mà ứng dụng đã ghi, có thể null). Chi tiết Auth có `state`. Khi `available`, Auth trả email hiện tại, `emailVerified`, `source` (EMAIL/GOOGLE/INVITE hoặc null) và `lastSignInAt` (nullable). Nguồn đọc từ thông tin mời hoặc provider đăng ký đầu tiên. `missing` nghĩa là chưa có danh tính Auth tương ứng, `unavailable` nghĩa là tạm thời chưa đọc được Auth. Server dùng `SUPABASE_SERVICE_ROLE_KEY` để đọc Auth. Avatar ứng dụng có `{ url, unavailable }`, URL ký có hạn 5 phút. Quyền khóa và xác minh email là hai trường riêng.
+Mỗi hồ sơ có `id`, `name` (ưu tiên tên hiển thị), `email`, `role`, `status`, `createdAt` và `lastLoginAt` (mốc gần nhất mà ứng dụng đã ghi, có thể null). Chi tiết Auth có `state`. Khi `available`, Auth trả email hiện tại, `emailVerified`, `source` (EMAIL/GOOGLE/STAFF/INVITE hoặc null) và `lastSignInAt` (nullable). `missing` nghĩa là chưa có danh tính Auth tương ứng, `unavailable` nghĩa là tạm thời chưa đọc được Auth. Server dùng `SUPABASE_SERVICE_ROLE_KEY` để đọc và tạo tài khoản Auth. Avatar ứng dụng có `{ url, unavailable }`, URL ký có hạn 5 phút.
 
-Lịch sử đăng nhập bắt đầu từ khi triển khai, dùng mã băm session để ghi một lần. Thao tác đổi vai trò và khóa/mở ghi `audit_logs` cùng giao dịch. Quản lý tự thao tác bị từ chối. Mã bảo mật có hiệu lực 10 phút, tối đa 5 lần nhập sai, gắn với người thao tác, tài khoản đích, thay đổi và lý do. Một mã mới thay thế mã đang chờ của cùng Quản lý. Khi mã sai hoặc hết hạn, trả 403 `ADMIN_CODE_INVALID`. Nếu chưa cấu hình cấp mã, API gửi mã báo 503.
+Lịch sử đăng nhập bắt đầu từ khi triển khai, dùng mã băm session để ghi một lần. Tạo tài khoản, đổi vai trò, khóa/mở và xóa ghi `audit_logs`. Quy tắc tự thao tác và bảo vệ Quản lý cuối cùng được kiểm tra trên server. Website chuyển mã TOTP của mỗi thao tác cần xác thực đến Supabase Auth. Các lỗi 403 gồm `AUTHENTICATOR_REQUIRED`, `AUTHENTICATOR_NOT_CONFIGURED` và `AUTHENTICATOR_FAILED`. 429 báo giới hạn thử mã.
 
-Trạng thái bộ lọc có thêm `INVITED` và chi tiết trả `cleanupPending`. Lời mời gửi bằng cấu hình Resend của backend, có hạn 24 giờ. Hồ sơ `INVITED` chỉ kích hoạt bằng liên kết mời. Thao tác ghi của Quản lý yêu cầu Bearer và `Origin` hợp lệ. Nhận lời mời yêu cầu `Origin` hợp lệ và giới hạn tần suất chung của Auth.
+Trạng thái `INVITED` dùng cho hồ sơ cũ. Liên kết mời cũ đã hết hiệu lực. Chi tiết trả `cleanupPending`. Thao tác ghi của Quản lý yêu cầu Bearer và `Origin` hợp lệ.
 
 ## Thống kê tổng quan Quản lý
 
@@ -83,7 +86,53 @@ Trạng thái bộ lọc có thêm `INVITED` và chi tiết trả `cleanupPendin
 - `accountsNew` đếm hồ sơ được tạo, `usersSignedIn` đếm tài khoản khác nhau có nhật ký đăng nhập, `accountLocks` đếm sự kiện khóa trong khoảng. `loginHistoryFrom` là ngày sớm nhất đang có bản ghi thực tế hoặc null.
 - `accountsTotal`, `accountsActive`, `accountsLocked` là số hồ sơ toàn hệ thống theo trạng thái hiện tại. Tổng bao gồm hồ sơ chờ kích hoạt và hồ sơ đã xóa được giữ để đối soát.
 - `flashcardSessions` và `flashcardLearners` đếm phiên Flashcard đủ điều kiện và người dùng khác nhau trong khoảng. `dailyFlashcards` trả ngày và số phiên của tối đa 7 ngày cuối, gồm cả ngày có 0 phiên.
-- `supportReports` trả null trong khi chưa có kho phiếu tập trung. Phản hồi cũng trả `from`, `to` và thời điểm lấy số liệu `measuredAt`.
+- `supportReports` đếm phiếu hỗ trợ được tạo trong khoảng ngày Việt Nam, gồm tất cả trạng thái. Phản hồi cũng trả `from`, `to` và thời điểm lấy số liệu `measuredAt`.
+
+## Thông báo và phiếu hỗ trợ
+
+Đường dẫn bên dưới dùng tiền tố `/api`. API đọc hồ sơ đang hoạt động từ DB và trả `Cache-Control: private, no-store`. Trang có tối đa 20 mục, sắp xếp mới nhất trước theo thời điểm và ID. Dùng `nextCursor` làm `after` để đọc trang tiếp theo. `nextCursor: null` báo hết danh sách.
+
+| Phương thức và đường dẫn | Vai trò và hành vi |
+|---|---|
+| GET /notifications | Hộp thư của tài khoản trong phiên, nhận `unread=1` và `after` tùy chọn. Trả `{ items, nextCursor }`. Mỗi mục có `id, type, title, content, referenceType, referenceId, createdAt, readAt`. |
+| GET /notifications/unread-count | Trả `{ unread }` của toàn hộp thư. |
+| PATCH /notifications/:id/read | Chỉ người nhận. Trả `{ readAt }`, giữ nguyên mốc ở lần gửi lại. |
+| POST /notifications/read-all | Đánh dấu tất cả mục chưa đọc của người nhận. Trả 204. |
+| GET /support/reports | Người học/Giáo viên đọc phiếu của mình. Nhận `status` và `after` tùy chọn. |
+| GET /support/reports/:id | Người học/Giáo viên đọc một phiếu của mình, dùng khi mở từ thông báo. |
+| POST /support/reports | Người học/Giáo viên gửi `{ requestId, text }`, nội dung 1–3.000 ký tự. Trả 201 khi tạo, 200 nếu gửi lại cùng UUID và nội dung, 409 nếu UUID đã dùng cho nội dung khác. |
+| GET /admin/support/reports | Quản lý đọc hàng đợi, nhận cùng bộ lọc. Trả thêm `counts` cho toàn bộ hàng đợi và tên/email chủ phiếu. |
+| PATCH /admin/support/reports/:id | Quản lý cập nhật `{ status, reply, revision }`. Phản hồi trống được lưu thành null. Trả 409 nếu có thay đổi đồng thời và kết quả mong muốn chưa được lưu. |
+
+Trạng thái phiếu gồm `PENDING`, `IN_PROGRESS` và `RESOLVED`. Phiếu trả `id, text, status, reply, revision, createdAt`. Cập nhật ghi lịch sử, audit và thông báo cùng giao dịch. Một lượt cập nhật có phản hồi mới hoặc đổi trạng thái gửi tối đa một thông báo cho chủ phiếu đang hoạt động. Hộp thư dùng tham chiếu `SUPPORT_REPORT` để mở chi tiết qua API vẫn kiểm tra chủ phiếu.
+
+### Thông báo chung và mẫu nghiệp vụ
+
+| Phương thức và đường dẫn | Hành vi |
+|---|---|
+| GET /admin/notifications/announcements | Quản lý đọc lịch sử 20 mục/trang, dùng `after`. Bao gồm trạng thái và số người nhận của đợt đã gửi. |
+| POST /admin/notifications/announcements | Tạo nháp từ `{ requestId, title, content, audience }`. Cùng yêu cầu gửi lại dùng chung bản nháp. |
+| PATCH /admin/notifications/announcements/:id | Sửa nháp từ `{ title, content, audience, revision }`. Sau khi lên lịch/gửi, nội dung đã khóa. |
+| POST /admin/notifications/announcements/:id/send | `{ mode, revision, scheduledAt? }`. Chế độ `now` hoặc `scheduled`. Hẹn giờ nhận chuỗi ISO có múi giờ. Trả 200 khi đã gửi hoặc 202 khi đang chờ tác vụ. |
+| GET /admin/notifications/settings | Danh sách mẫu, biến cho phép, trạng thái bắt buộc và giờ nhắc. |
+| PATCH /admin/notifications/settings/:event | Sửa `{ title, content, enabled, leadHours, revision }`. Sự kiện bắt buộc luôn bật. Chỉ nhắc hết hạn được đặt `leadHours` từ 1 đến 168. |
+| GET /notifications/:id/target | Trả kỹ năng, trạng thái và hạn lưu nếu thông báo gắn bài/yêu cầu chấm. Chỉ đúng người nhận và chủ bài hoặc Giáo viên còn quan hệ phân công mới xem được. Trả 410 khi nội dung đã hết hạn. |
+
+Nhóm nhận gồm `ALL`, `LEARNER`, `TEACHER`. Hệ thống chọn tài khoản hoạt động tại lúc gửi. Trạng thái chuyển `DRAFT → SCHEDULED → SENT`. Tác vụ duy nhất giữ khóa đợt gửi, tạo bản ghi hộp thư và cập nhật lịch sử trong cùng giao dịch. Số người nhận có thể là 0. Mốc hẹn lưu theo timestamp có múi giờ và hiển thị theo giờ Việt Nam.
+
+Backend có tác vụ kiểm tra mỗi 30 giây khi đang chạy. Hạ tầng chạy lịch ngoài có thể gọi `npm run notifications:dispatch` sau khi build. Trên môi trường dùng tác vụ ngoài, đặt `NOTIFICATION_WORKER_ENABLED=false` nếu muốn tắt vòng kiểm tra trong tiến trình web. Tránh chạy lệnh tác vụ với kết nối sai môi trường.
+
+## Ảnh từ vựng
+
+| Phương thức và đường dẫn | Hành vi |
+|---|---|
+| POST /api/admin/vocabulary/media/upload | Quản lý tải thân yêu cầu dạng JPG, PNG hoặc WebP, tối đa 1 MiB. Backend kiểm tra nội dung tệp rồi ghi R2. Trả 201 với `{ image, imagePreview }`. |
+| POST /api/admin/vocabulary/media/image | Chọn `{ id }` từ lần tra ảnh. Wikipedia và Unsplash trả URL nguồn. Pixabay được chọn sẽ lưu vào R2, trả tham chiếu ổn định, URL xem trước và thông tin ghi công. |
+| GET /api/admin/vocabulary/media/preview | Quản lý gửi `image` là mã tham chiếu để lấy URL xem trước mới. |
+| GET /api/vocabulary/sets/images/:id | Trả 302 đến URL ký 60 giây nếu có bộ đang công bố dùng ảnh. Trả 404 khi không còn bộ đang công bố nào dùng ảnh. |
+| POST /api/admin/vocabulary/media/cleanup | Quản lý dọn tối đa 25 ảnh từ 24 giờ trở lên không còn tham chiếu trong nháp hoặc bản công bố, kể cả bản đã ẩn. Trả `{ removed, pending }`. Tệp lỗi có thể dọn lại. |
+
+Bản nháp lưu `vocab-image:<uuid>` cho ảnh từ và ảnh bìa trên R2. Danh sách quản lý và API đọc nháp trả thêm URL xem trước có hạn 5 phút. URL ký chỉ dùng để hiển thị. Ảnh bên ngoài qua HTTPS và bìa màu vẫn đọc được. Giữ ảnh công bố cũ cho tới khi công bố lại thay đổi từ nháp.
 
 ## Quản lý bộ đề (Exam Sets)
 

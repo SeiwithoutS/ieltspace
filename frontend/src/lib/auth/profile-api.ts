@@ -42,7 +42,15 @@ export function getAvatarUrl(path: string) {
 }
 
 export function getPasswordOptions() {
-  return apiFetch<{ google: boolean; canSendSetupEmail: boolean }>(`${profilePath}/password-options`);
+  return apiFetch<{ google: boolean; canSendSetupEmail: boolean; authenticator: boolean }>(`${profilePath}/password-options`);
+}
+
+export function getAuthenticatorStatus() {
+  return apiFetch<{ enabled: boolean }>(`${profilePath}/authenticator`);
+}
+
+export function enrollAuthenticator() {
+  return apiFetch<{ factorId: string; qrCode: string }>(`${profilePath}/authenticator/enroll`, { method: 'POST' });
 }
 
 export function sendPasswordSetupEmail() {

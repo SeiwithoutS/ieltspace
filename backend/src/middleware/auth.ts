@@ -46,12 +46,15 @@ type CachedProfile = {
 const userProfileCache = new Map<string, CachedProfile>();
 const MAX_CACHE_SIZE = 1000;
 const CACHE_TTL_MS = 60_000;
+let cacheRevision = 0;
 
 export function invalidateUserCache(authUserId: string): void {
+  cacheRevision++;
   userProfileCache.delete(authUserId);
 }
 
 export function clearUserCache(): void {
+  cacheRevision++;
   userProfileCache.clear();
 }
 
@@ -59,9 +62,10 @@ export function getUserCacheSize(): number {
   return userProfileCache.size;
 }
 
-export async function findActiveUser(authUserId: string): Promise<AppUser> {
+export async function findActiveUser(authUserId: string, fresh = false): Promise<AppUser> {
   const now = Date.now();
-  const cached = userProfileCache.get(authUserId);
+  const revision = cacheRevision;
+  const cached = fresh ? undefined : userProfileCache.get(authUserId);
   if (cached && cached.expires > now) {
     return cached.user;
   }
@@ -88,6 +92,8 @@ export async function findActiveUser(authUserId: string): Promise<AppUser> {
       "Tài khoản không được phép truy cập."
     );
   }
+
+  if (revision !== cacheRevision) return user;
 
   // FIFO eviction if cache size exceeds limit
   if (userProfileCache.size >= MAX_CACHE_SIZE) {
@@ -202,7 +208,7 @@ export async function verifyAccessToken(accessToken: string): Promise<string> {
   }
 }
 
-export const requireAuth = asyncHandler(async (req, _res, next) => {
+const authenticate = (fresh = false) => asyncHandler(async (req, _res, next) => {
   const authStart = process.hrtime.bigint();
   try {
     const authorization = req.headers.authorization;
@@ -219,7 +225,7 @@ export const requireAuth = asyncHandler(async (req, _res, next) => {
     const accessToken = match[1];
     const authUserId = await verifyAccessToken(accessToken);
 
-    req.appUser = await findActiveUser(authUserId);
+    req.appUser = await findActiveUser(authUserId, fresh);
     req.accessToken = accessToken;
 
     next();
@@ -227,6 +233,9 @@ export const requireAuth = asyncHandler(async (req, _res, next) => {
     recordAuthTiming(Number(process.hrtime.bigint() - authStart) / 1_000_000);
   }
 });
+
+export const requireAuth = authenticate();
+export const requireFreshAuth = authenticate(true);
 
 export function requireRole(
   ...roles: Array<"LEARNER" | "TEACHER" | "ADMIN">

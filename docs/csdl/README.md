@@ -6,6 +6,10 @@ Sau migration 14, chạy [15_learner_activity.sql](15_learner_activity.sql) đ�
 
 Chạy [16_learner_checkins.sql](16_learner_checkins.sql) trước khi triển khai báo cáo tiến độ có điểm danh. Bảng `learner_checkins` lưu mỗi tài khoản một lượt điểm danh mỗi ngày Việt Nam. Backend đọc bảng qua kết nối PostgreSQL.
 
+Chạy [17_nhat_ky_dang_nhap.sql](17_nhat_ky_dang_nhap.sql) và [18_ma_bao_mat_quan_tri.sql](18_ma_bao_mat_quan_tri.sql) trước khi triển khai quản trị đợt 2–3. Hai bảng cần quyền truy cập qua kết nối PostgreSQL của backend, bật RLS và thu hồi quyền trực tiếp của khách/người dùng. Lịch sử bắt đầu từ lúc triển khai. Đợt 3 ghi thao tác vào `audit_logs` hiện có.
+
+Chạy [19_staff_invitations.sql](19_staff_invitations.sql) rồi [20_account_deletion.sql](20_account_deletion.sql) trước khi triển khai quản trị đợt 4–5. Trên dự án dùng trigger `on_auth_user_created` với hàm `handle_new_auth_user`, chạy [19a_staff_invitation_auth_compat.sql](19a_staff_invitation_auth_compat.sql) trước 19. Tệp 19a tách nhánh lời mời và giữ nguyên hàm tạo hồ sơ đăng ký công khai. Migration 19 mở trạng thái `INVITED`. Migration 20 thêm hàng đợi dọn Auth/Storage và thủ tục ẩn danh hồ sơ. Hai bảng được đọc qua kết nối DB của backend.
+
 **Database đã chạy 01 cũ:** dùng [04_nang_cap_tu_01.sql](04_nang_cap_tu_01.sql) và [05_danh_muc_bo_de.sql](05_danh_muc_bo_de.sql). **Project Supabase mới với schema public trống:** chạy một lần [01_tao_cau_truc_moi.sql](01_tao_cau_truc_moi.sql). Ngày 13/11, cấu trúc đã theo [D08–D10](../DECISIONS.md) và thiết kế Quản lý bộ đề (40 bảng: bổ sung bảng `exam_set_categories`, bỏ exam_versions, kỹ năng có trạng thái và phiên bản, trigger updated_at cho exam_sets và exams, ràng buộc UNIQUE tên bộ đề). Tệp 05 tách riêng bảng danh mục động, thêm 5 danh mục mặc định và chuyển đổi dữ liệu an toàn.
 
 ## Database đang dùng

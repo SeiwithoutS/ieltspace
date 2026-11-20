@@ -48,10 +48,11 @@ export function serverTiming(req: Request, res: Response, next: NextFunction) {
       const totalMs = Number(process.hrtime.bigint() - start) / 1_000_000;
       if (process.env.NODE_ENV !== 'production') {
         const method = req.method;
-        const url = req.originalUrl || req.url;
+        // Query strings may contain account search terms or authentication codes.
+        const [path] = (req.originalUrl || req.url).split('?', 1);
         const status = res.statusCode;
         console.log(
-          `[HTTP] ${method} ${url} ${status} ${totalMs.toFixed(1)}ms ` +
+          `[HTTP] ${method} ${path} ${status} ${totalMs.toFixed(1)}ms ` +
             `(auth: ${ctx.auth.toFixed(1)}ms, db: ${ctx.db.toFixed(1)}ms, queries: ${ctx.queryCount})`
         );
       }

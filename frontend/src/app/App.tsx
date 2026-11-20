@@ -1,6 +1,6 @@
 import DesktopOnly from "../components/attempts/DesktopOnly";
 import {emailCallback} from '../lib/auth/auth-links';
-import {useAuth,refresh,logout,home,navigate,getAuthUser} from '../lib/auth/auth';
+import {useAuth,refresh,logout,home,navigate,getAuthUser,recheckAuthProfile} from '../lib/auth/auth';
 import { sampleHashReplaced } from "../lib/samples/sample-navigation";
 import { canNavigate } from "../lib/shared/navigation-guard";
 import React, { useEffect, useState } from 'react';
@@ -25,6 +25,18 @@ function resolve(name: string): PageName { name=name.split('?')[0]; return (alia
 export default function App() {
  const auth=useAuth();
  useEffect(()=>{void refresh().catch(()=>{});},[]);
+ useEffect(() => {
+  if (!auth.user?.id) return;
+  function checkVisibleSession() {
+   if (document.visibilityState === 'visible') void recheckAuthProfile();
+  }
+  const timer = window.setInterval(checkVisibleSession, 60_000);
+  document.addEventListener('visibilitychange', checkVisibleSession);
+  return () => {
+   window.clearInterval(timer);
+   document.removeEventListener('visibilitychange', checkVisibleSession);
+  };
+ }, [auth.user?.id]);
 
  const [page, setPage] = useState<PageName>(() => resolve(location.hash.slice(1) || (location.pathname === "/login" ? "Login" : "Main")));
  const [routeHash, setRouteHash] = useState(() => location.hash);

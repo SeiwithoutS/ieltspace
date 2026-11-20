@@ -26,6 +26,13 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | GRADE-02 | Hủy quá hạn và hoàn bonus | GRADE-01 | Đúng mốc 72 giờ chỉ hủy yêu cầu còn chờ, job lặp chỉ hoàn một bonus. |
 | GRADE-03 | Lưu nháp và công bố phiếu | GRADE-01 | Nháp riêng của người được giao. Công bố và hủy đồng thời chỉ một thao tác thành công. |
 | USER-01 | Xử lý thu hồi quyền chấm | GRADE-02, GRADE-03 | Dừng nhận mới vẫn giữ bài đang giao. Quản lý hủy có lý do khi giáo viên không thể hoàn thành. |
+| RS-A01 | Danh sách tài khoản cho Quản lý | Hồ sơ `public.users` | Chỉ admin đọc được. Tìm tên/email, lọc vai trò/trạng thái, phân trang ổn định và số đếm khớp dữ liệu. |
+| RS-A02 | Chi tiết tài khoản cho Quản lý, phần hồ sơ và Auth | RS-A01, Supabase Auth, kho ảnh hiện có | Hiển thị thông tin hồ sơ, xác minh email, nguồn đăng ký và lần đăng nhập gần nhất theo Auth. Có trạng thái cho dữ liệu thiếu và lỗi dịch vụ. Lịch sử nằm ở Đợt 2. |
+| RS-A07 | Nhật ký đăng nhập và quản trị | RS-A02, migration 17, `audit_logs` | Email/Google ghi một lần mỗi phiên. F5/refresh giữ nguyên lịch sử. Quản lý xem lịch sử theo tài khoản và lọc tab Hoạt động theo vai trò. |
+| RS-A03 / RS-A04 / RS-A09 | Đổi vai trò, khóa/mở và bảo vệ Quản lý | RS-A07, D18, migration 18 và email gửi mã | Thao tác thật có nhật ký trước/sau. Thử phiên đang mở, hai thao tác đồng thời và mã dùng một lần cho thay đổi liên quan đến vai trò Quản lý. |
+| RS-A06 | Mời Giáo viên hoặc Quản lý | D19, migration 19, Auth Admin và Resend | Người nhận dùng liên kết một lần để đặt mật khẩu và đăng nhập đúng vai trò. Có trạng thái chờ kích hoạt, bị trùng và gửi lại được khi lỗi. |
+| RS-A05 | Xóa tài khoản và dọn dữ liệu | D19, migration 20, Auth Admin và kho ảnh/bài nộp | Chặn truy cập, hủy yêu cầu chấm đang mở theo BR-AUTH-002, giữ lịch sử tối thiểu và thử lại được khi Auth hoặc Storage lỗi. |
+| RS-A08 | Thống kê tổng quan Quản lý | Hồ sơ, nhật ký đăng nhập, audit và hoạt động Flashcard | Bộ lọc 7 ngày, 30 ngày hoặc khoảng tùy chọn theo giờ Việt Nam. Số đếm khớp nguồn. Khoảng không có bản ghi hiện 0; phiếu hỗ trợ hiện — đến khi có kho tập trung. |
 | VOC-01 | Lưu từ yêu thích và ghi chú | DB-01 | Hai người ghi chú cùng từ độc lập. Bấm yêu thích lặp không tạo bản sao. |
 | VOC-02 | Hoàn tất phiên flashcard | VOC-01 | Tập nhỏ ôn hết vẫn hợp lệ. Ôn lại một thẻ nhiều lần không tăng số thẻ khác nhau. |
 | STAT-01 | Tổng hợp lịch sử và chuỗi đăng nhập | ATT-02, VOC-02 | Một attempt chỉ sinh một hoạt động. Tiến độ phiên và chuỗi đăng nhập hiển thị riêng. Điểm danh tối đa một lần mỗi ngày Việt Nam. Band và tỷ lệ bài luyện hiển thị riêng. |

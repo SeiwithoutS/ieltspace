@@ -10,10 +10,13 @@ import {
   findActiveUser,
   invalidateUserCache,
   requireAuth,
+  requireFreshAuth,
   requireRole,
 } from "../../middleware/auth.js";
 import { asyncHandler, HttpError } from "../../utils/http.js";
 import { profileRouter } from './profile.routes.js';
+import { recordLogin } from './login-history.js';
+import { acceptStaffInvitation, invitationToken } from '../users/staff-invitations.js';
 
 export const authRouter = Router();
 
@@ -120,6 +123,13 @@ const recoveryLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: 'draft-7', legacyHeaders: false,
   message: { message: 'Có quá nhiều yêu cầu khôi phục. Vui lòng thử lại sau.' },
 });
+authRouter.post('/accept-staff-invite', recoveryLimiter, asyncHandler(async (req, res) => {
+  const input = z.object({ token: invitationToken, password: z.string().min(8).max(128) }).strict().safeParse(req.body);
+  if (!input.success) throw new HttpError(400, 'INVITE_INVALID', 'Liên kết hoặc mật khẩu không hợp lệ.');
+  await acceptStaffInvitation(input.data.token, input.data.password);
+  res.json({ message: 'Đã nhận lời mời và đặt mật khẩu. Hãy đăng nhập để tiếp tục.' });
+}));
+
 authRouter.post('/forgot-password', recoveryLimiter, asyncHandler(async (req, res) => {
   const { email } = z.object({ email: z.string().trim().email().max(254).transform(value => value.toLowerCase()) }).strict().parse(req.body);
   const { error } = await createAuthClient().auth.resetPasswordForEmail(email, {
@@ -249,7 +259,8 @@ authRouter.post(
 
     try {
       invalidateUserCache(data.user.id);
-      const user = await findActiveUser(data.user.id);
+      const user = await findActiveUser(data.user.id, true);
+      await recordLogin(user.id, data.session.access_token, 'PASSWORD');
 
       setRefreshCookie(res, data.session.refresh_token);
 
@@ -311,7 +322,7 @@ authRouter.post(
 
     try {
       invalidateUserCache(data.user.id);
-      const user = await findActiveUser(data.user.id);
+      const user = await findActiveUser(data.user.id, true);
 
       // Refresh token có thể được xoay vòng.
       // Luôn cập nhật cookie bằng token mới.
@@ -397,7 +408,7 @@ authRouter.post(
 );
 authRouter.get(
   "/me",
-  requireAuth,
+  requireFreshAuth,
   (req, res) => {
     res.json({
       user: req.appUser,
@@ -591,7 +602,9 @@ authRouter.get(
 
     try {
       // Kiểm tra hồ sơ, ACTIVE/LOCKED/DELETED.
-      await findActiveUser(data.user.id);
+      invalidateUserCache(data.user.id);
+      const user = await findActiveUser(data.user.id, true);
+      await recordLogin(user.id, data.session.access_token, 'GOOGLE');
     } catch (error) {
       const { error: signOutError } =
         await supabase.auth.signOut({

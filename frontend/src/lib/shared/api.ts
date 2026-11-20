@@ -1,4 +1,4 @@
-import { getAccessToken, refresh } from '../auth/auth';
+import { getAccessToken, recheckAuthProfile, refresh } from '../auth/auth';
 
 export class ApiError extends Error {
   status: number;
@@ -106,6 +106,10 @@ export async function apiFetch<T = any>(
 
   if (!res.ok) {
     const code = data?.code || 'API_ERROR';
+    if (authenticated && res.status === 403 &&
+      (code === 'ACCOUNT_UNAVAILABLE' || code === 'PROFILE_NOT_FOUND' || code === 'FORBIDDEN')) {
+      void recheckAuthProfile();
+    }
     const message = data?.message || 'Lỗi từ máy chủ. Vui lòng thử lại.';
     const details = data?.details;
     throw new ApiError(res.status, code, message, details);

@@ -1,6 +1,16 @@
 import React from "react";
 import { styleOf, cssText } from "../../../lib/shared/styles";
 import StaffLayout from "../../../components/layout/StaffLayout";
+import { dashboardDate, getAdminStatistics, vietnamToday, type AdminStatistics } from "../../../lib/admin-users/statistics";
+
+const DAY = 86_400_000;
+const numberFormat = new Intl.NumberFormat("vi-VN");
+const updatedFormat = new Intl.DateTimeFormat("vi-VN", {
+  timeZone: "Asia/Ho_Chi_Minh", dateStyle: "short", timeStyle: "short",
+});
+const displayCount = (value: number | null | undefined) => value == null ? "—" : numberFormat.format(value);
+const cardSurface = "border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden";
+const linkStyle = "display: inline-flex; align-items: center; justify-content: center; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; color: #352637; font-weight: 600; text-decoration: none";
 
 interface DashboardState {
   period: "7" | "30" | "custom";
@@ -11,28 +21,59 @@ interface DashboardState {
   draftTo: number | null;
   appliedFrom: number;
   appliedTo: number;
+  stats?: AdminStatistics;
+  error?: string;
 }
 
 type CalendarClick = React.MouseEvent<HTMLElement>;
 
 class AdminHome extends React.Component<Record<never, never>, DashboardState> {
+  private initialDay = vietnamToday();
+  private requestId = 0;
   state: DashboardState = {
     period: "30",
     open: false,
-    calendarYear: 2026,
-    calendarMonth: 9,
+    calendarYear: new Date(this.initialDay).getUTCFullYear(),
+    calendarMonth: new Date(this.initialDay).getUTCMonth(),
     draftFrom: null,
     draftTo: null,
-    appliedFrom: Date.UTC(2026, 9, 23),
-    appliedTo: Date.UTC(2026, 9, 23),
+    appliedFrom: this.initialDay - 29 * DAY,
+    appliedTo: this.initialDay,
+  };
+
+  componentDidMount() {
+    this.loadStatistics();
+  }
+
+  componentDidUpdate(_props: Record<never, never>, previous: DashboardState) {
+    if (previous.appliedFrom !== this.state.appliedFrom || previous.appliedTo !== this.state.appliedTo) {
+      this.loadStatistics();
+    }
+  }
+
+  componentWillUnmount() {
+    this.requestId++;
+  }
+
+  private loadStatistics = () => {
+    const requestId = ++this.requestId;
+    const { appliedFrom, appliedTo } = this.state;
+    this.setState({ stats: undefined, error: undefined });
+    void getAdminStatistics(appliedFrom, appliedTo).then(stats => {
+      if (requestId === this.requestId) this.setState({ stats });
+    }).catch((error: unknown) => {
+      if (requestId === this.requestId) this.setState({
+        error: error instanceof Error ? error.message : "Chưa tải được thống kê.",
+      });
+    });
   };
 
   renderVals() {
     const s = this.state;
     const self = this;
-    const TODAY = Date.UTC(2026, 9, 23),
-      DAY = 86400000;
+    const TODAY = vietnamToday();
     const { period, calendarYear, calendarMonth, draftFrom, draftTo, appliedFrom, appliedTo } = s;
+    const stats = s.stats?.from === dashboardDate(appliedFrom) && s.stats.to === dashboardDate(appliedTo) ? s.stats : undefined;
     function padDay(value: number) {
       return (value < 10 ? "0" : "") + value;
     }
@@ -126,7 +167,7 @@ class AdminHome extends React.Component<Record<never, never>, DashboardState> {
       "flex: 1; display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-radius: 10px; border: 1.5px solid ";
     const picking = draftFrom == null || draftTo != null ? "from" : "to";
     const canApply = draftFrom != null;
-    const atEnd = calendarYear === 2026 && calendarMonth === 9;
+    const atEnd = Date.UTC(calendarYear, calendarMonth) >= Date.UTC(new Date(TODAY).getUTCFullYear(), new Date(TODAY).getUTCMonth());
     return {
       is7: period === "7",
       is30: period === "30",
@@ -136,24 +177,13 @@ class AdminHome extends React.Component<Record<never, never>, DashboardState> {
       seg30: period === "30" ? on : off,
       segCustom: period === "custom" || s.open ? on : off,
       customLabel: period === "custom" ? label : "Tùy chọn",
-      summary:
-        period === "custom"
-          ? "Số liệu từ " +
-            formatDate(appliedFrom) +
-            " đến " +
-            formatDate(appliedTo) +
-            " (" +
-            durationDays +
-            " ngày), cập nhật 09:30 ngày 23/10/2026."
-          : "Số liệu " + period + " ngày, cập nhật 09:30 ngày 23/10/2026.",
+      stats,
+      summary: `Số liệu từ ${formatDate(appliedFrom)} đến ${formatDate(appliedTo)} (giờ Việt Nam).`
+        + (stats ? ` Cập nhật ${updatedFormat.format(new Date(stats.measuredAt))}.` : ""),
       rangeIn:
         period === "custom"
           ? "từ " + formatDate(appliedFrom, false) + " đến " + formatDate(appliedTo, false)
           : "trong " + period + " ngày",
-      rangePast:
-        period === "custom"
-          ? "Từ " + formatDate(appliedFrom) + " đến " + formatDate(appliedTo)
-          : period + " ngày qua",
       fromText: draftFrom == null ? "dd/mm/yyyy" : formatDate(draftFrom),
       toText: draftTo == null ? (draftFrom == null ? "dd/mm/yyyy" : formatDate(draftFrom)) : formatDate(draftTo),
       fromBox: box + (picking === "from" ? "#2963CC" : "#D6D4D0"),
@@ -165,7 +195,7 @@ class AdminHome extends React.Component<Record<never, never>, DashboardState> {
         (atEnd ? "color: #BDB6BE; cursor: default" : "color: #352637"),
       hint:
         picking === "from"
-          ? "Chọn ngày bắt đầu. Số liệu có đến hết hôm nay, 23/10/2026."
+          ? "Chọn ngày bắt đầu. Ngày hiện tại là " + formatDate(TODAY) + "."
           : "Chọn ngày kết thúc, hoặc bấm Áp dụng để xem riêng ngày " +
             formatDate(draftFrom ?? TODAY) +
             ".",
@@ -175,11 +205,13 @@ class AdminHome extends React.Component<Record<never, never>, DashboardState> {
         (canApply ? "" : "; opacity: 0.4; cursor: default"),
       pick7: function (e: CalendarClick) {
         stop(e);
-        self.setState({ period: "7", open: false });
+        const today = vietnamToday();
+        self.setState({ period: "7", open: false, appliedFrom: today - 6 * DAY, appliedTo: today });
       },
       pick30: function (e: CalendarClick) {
         stop(e);
-        self.setState({ period: "30", open: false });
+        const today = vietnamToday();
+        self.setState({ period: "30", open: false, appliedFrom: today - 29 * DAY, appliedTo: today });
       },
       openPicker: function (e: CalendarClick) {
         stop(e);
@@ -225,6 +257,31 @@ class AdminHome extends React.Component<Record<never, never>, DashboardState> {
 
   render() {
     const v = this.renderVals();
+    const { stats } = v;
+    const loginDate = stats?.loginHistoryFrom?.split("-").reverse().join("/");
+    const metricRows = [
+      [
+        ["Tổng hồ sơ", stats?.accountsTotal, "Mọi trạng thái · hiện tại"],
+        ["Tài khoản mới", stats?.accountsNew, v.rangeIn],
+        ["Tài khoản có đăng nhập", stats?.usersSignedIn, loginDate ? `Nhật ký từ ${loginDate}` : v.rangeIn],
+        ["Lượt khóa tài khoản", stats?.accountLocks, v.rangeIn],
+      ],
+      [
+        ["Tài khoản đang khóa", stats?.accountsLocked, "Hiện tại"],
+        ["Phiên Flashcard hợp lệ", stats?.flashcardSessions, v.rangeIn],
+        ["Người ôn Flashcard", stats?.flashcardLearners, v.rangeIn],
+        ["Phiếu hỗ trợ", stats?.supportReports, stats?.supportReports == null ? "Chưa có nguồn thống kê" : v.rangeIn],
+      ],
+    ] as const;
+    const chart = stats?.dailyFlashcards.map(point => {
+      const [, month, day] = point.day.split("-");
+      return { ...point, label: day + "/" + month };
+    }) ?? [];
+    const maxSessions = Math.max(1, ...chart.map(point => point.sessions));
+    const followUps = [
+      ["Tài khoản đang khóa", stats?.accountsLocked, "AdminUsers.dc.html"],
+      ["Phiếu hỗ trợ", stats?.supportReports, "AdminReports.dc.html"],
+    ] as const;
     return (
       <>
         {"\n"}
@@ -243,7 +300,7 @@ class AdminHome extends React.Component<Record<never, never>, DashboardState> {
         >
                 <div
                   style={styleOf(
-                    "display: flex; justify-content: space-between; align-items: flex-end; gap: 16px",
+                    "position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px",
                   )}
                 >
                   <div>
@@ -265,7 +322,7 @@ class AdminHome extends React.Component<Record<never, never>, DashboardState> {
                   <div
                     style={styleOf("display: flex; flex-wrap: wrap; gap: 10px")}
                   >
-                    <div style={styleOf("position: relative")}>
+                    <div>
                       <div
                         role={"group"}
                         aria-label={"Khoảng thời gian"}
@@ -331,8 +388,9 @@ class AdminHome extends React.Component<Record<never, never>, DashboardState> {
                           <div
                             role={"dialog"}
                             aria-label={"Chọn khoảng thời gian"}
+                            className="absolute left-0 top-full z-50 mt-2 w-full max-w-[352px] sm:left-auto sm:right-0"
                             style={styleOf(
-                              "position: absolute; right: 0; top: 48px; z-index: 50; width: 352px; box-sizing: border-box; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 16px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 18px; display: flex; flex-direction: column; gap: 14px",
+                              "box-sizing: border-box; background: #FFFFFF; border: 1.5px solid #D6D4D0; border-radius: 16px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 18px; display: flex; flex-direction: column; gap: 14px",
                             )}
                           >
                             <div
@@ -532,527 +590,69 @@ class AdminHome extends React.Component<Record<never, never>, DashboardState> {
                         </>
                       ) : null}
                     </div>
-                    <div
-                      style={styleOf(
-                        "display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA",
-                      )}
-                    >
-                      <span
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; background: #FFFFFF; border: 1.5px solid #D6D4D0; font-size: 13px; font-weight: 600",
-                        )}
-                      >
-                        {"Mọi kỹ năng"}
-                      </span>
-                      <span
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
-                        )}
-                      >
-                        {"Writing"}
-                      </span>
-                      <span
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 8px; border: 1.5px solid transparent; color: #706473; font-size: 13px; font-weight: 500",
-                        )}
-                      >
-                        {"Speaking"}
-                      </span>
-                    </div>
                   </div>
                 </div>
-                <div
-                  className="shrink-0"
-                  style={styleOf(
-                    "display: flex; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden",
-                  )}
-                >
-                  <div style={styleOf("flex: 1 1 0; padding: 18px 22px; ")}>
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"Người dùng"}
+                {this.state.error ? <div role="alert" className="flex flex-wrap items-center gap-3 text-sm">
+                  <span>{this.state.error}</span>
+                  <button type="button" className="rounded-full border border-solid border-[var(--attempt-line-d6d4d0)] bg-transparent px-4 py-2 text-inherit" onClick={this.loadStatistics}>Thử lại</button>
+                </div> : !v.stats && <div role="status" className="sr-only">Đang tải thống kê…</div>}
+                <div aria-busy={!v.stats && !this.state.error} className="flex shrink-0 flex-col gap-6">
+                  {metricRows.map((row, index) => (
+                    <div key={index} className="grid grid-cols-2 xl:grid-cols-4" style={styleOf(cardSurface)}>
+                      {row.map(([title, count, description]) => (
+                        <div key={title} className="min-w-0 border border-solid border-[var(--attempt-line-e6e4e0)] px-4 py-4 sm:px-[22px] sm:py-[18px]">
+                          <div className="text-[13px] text-[var(--attempt-text-706473)]">{title}</div>
+                          <div className="break-words font-mono text-[28px] font-bold leading-tight tracking-tight">{displayCount(count)}</div>
+                          <div className="text-[13px] text-[var(--attempt-text-706473)]">{description}</div>
+                        </div>
+                      ))}
                     </div>
-                    <div
-                      style={styleOf(
-                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                      )}
-                    >
-                      {"1.284"}
-                    </div>
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"1.262 người học · 18 giáo viên · 4 quản lý"}
-                    </div>
-                  </div>
-                  <div
-                    style={styleOf(
-                      "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                    )}
-                  >
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"Bài hoàn thành"}
-                    </div>
-                    <div
-                      style={styleOf(
-                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                      )}
-                    >
-                      {"2.316"}
-                    </div>
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {v.rangeIn}
-                    </div>
-                  </div>
-                  <div
-                    style={styleOf(
-                      "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                    )}
-                  >
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"Yêu cầu chấm tiếp nhận"}
-                    </div>
-                    <div
-                      style={styleOf(
-                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                      )}
-                    >
-                      {"342"}
-                    </div>
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {v.rangeIn}
-                    </div>
-                  </div>
-                  <div
-                    style={styleOf(
-                      "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                    )}
-                  >
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"Bonus đã hoàn"}
-                    </div>
-                    <div
-                      style={styleOf(
-                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                      )}
-                    >
-                      {"19"}
-                    </div>
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"2 giao dịch chờ xử lý"}
-                    </div>
-                  </div>
+                  ))}
                 </div>
-                <div
-                  className="shrink-0"
-                  style={styleOf(
-                    "display: flex; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden",
-                  )}
-                >
-                  <div style={styleOf("flex: 1 1 0; padding: 18px 22px; ")}>
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"Chờ phân công"}
-                    </div>
-                    <div
-                      style={styleOf(
-                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                      )}
-                    >
-                      {"7"}
-                    </div>
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"2 yêu cầu còn dưới 12 giờ"}
-                    </div>
+                <div className="flex flex-wrap items-start gap-6">
+                  <div className="flex min-w-0 flex-[1.5_1_420px] flex-col gap-6">
+                    <section className="p-6" style={styleOf(cardSurface)} aria-labelledby="admin-flashcard-chart">
+                      <h2 id="admin-flashcard-chart" className="m-0 text-lg font-semibold">Phiên Flashcard theo ngày</h2>
+                      <div className="text-[13px] text-[var(--attempt-text-706473)]">Tối đa 7 ngày cuối của khoảng đã chọn</div>
+                      {chart.length ? (
+                        <div className="flex h-[150px] items-end gap-3 pt-2.5" role="img" aria-label={chart.map(point => point.label + ': ' + point.sessions + ' phiên').join(', ')}>
+                          {chart.map(point => (
+                            <div key={point.day} className="flex min-w-0 flex-1 flex-col items-center gap-1.5" title={point.day + ' · ' + point.sessions + ' phiên'}>
+                              <span aria-hidden="true" className="text-xs">{displayCount(point.sessions)}</span>
+                              {point.sessions > 0 && <div aria-hidden="true" className="w-full max-w-[34px] rounded-t-md bg-[var(--attempt-bg-bfd8f7,#BFD8F7)]" style={{ height: point.sessions / maxSessions * 95 }} />}
+                              <span aria-hidden="true" className="text-xs text-[var(--attempt-text-706473)]">{point.label}</span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : <div className="flex h-[150px] items-end text-[var(--attempt-text-706473)]">—</div>}
+                    </section>
+                    <section className="p-6" style={styleOf(cardSurface)}>
+                      <h2 className="mb-3.5 mt-0 text-lg font-semibold">Việc cần xem</h2>
+                      {followUps.map(([title, count, href]) => (
+                        <div key={title} className="flex items-center gap-3 border-0 border-t border-solid border-[var(--attempt-line-e6e4e0)] py-2.5 text-sm">
+                          <span className="flex-1">{title}</span>
+                          <span>{displayCount(count)}</span>
+                          <a href={href} style={styleOf(linkStyle)}>Xem</a>
+                        </div>
+                      ))}
+                    </section>
                   </div>
-                  <div
-                    style={styleOf(
-                      "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                    )}
-                  >
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"Đã phân công, chờ chấm"}
-                    </div>
-                    <div
-                      style={styleOf(
-                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                      )}
-                    >
-                      {"23"}
-                    </div>
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"18 giáo viên đang nhận bài"}
-                    </div>
-                  </div>
-                  <div
-                    style={styleOf(
-                      "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                    )}
-                  >
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"Đã có kết quả"}
-                    </div>
-                    <div
-                      style={styleOf(
-                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                      )}
-                    >
-                      {"291"}
-                    </div>
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {v.rangeIn}
-                    </div>
-                  </div>
-                  <div
-                    style={styleOf(
-                      "flex: 1 1 0; padding: 18px 22px; border-left: 1.5px solid #D6D4D0; ",
-                    )}
-                  >
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"Đã hủy"}
-                    </div>
-                    <div
-                      style={styleOf(
-                        "font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; font-family: 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: -0.015em",
-                      )}
-                    >
-                      {"21"}
-                    </div>
-                    <div style={styleOf("font-size: 13px; color: #706473")}>
-                      {"17 quá hạn 72 giờ · 4 giáo viên không thể hoàn thành"}
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style={styleOf(
-                    "display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start",
-                  )}
-                >
-                  <div
-                    style={styleOf(
-                      "flex: 1.5 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 24px",
-                    )}
-                  >
-                    <div
-                      style={styleOf(
-                        "padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
-                      )}
-                    >
-                      <div
-                        style={styleOf(
-                          "display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px",
-                        )}
-                      >
-                        <div>
-                          <div
-                            style={styleOf("font-size: 18px; font-weight: 600")}
-                          >
-                            {"Bài hoàn thành 7 ngày qua"}
-                          </div>
-                          <div
-                            style={styleOf("font-size: 13px; color: #706473")}
-                          >
-                            {
-                              "L/R chấm tự động và W/S đã lưu, tính theo ngày hoàn thành"
-                            }
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        style={styleOf(
-                          "display: flex; align-items: flex-end; gap: 12px; height: 150px; padding-top: 10px",
-                        )}
-                      >
-                        <div
-                          style={styleOf(
-                            "flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px",
-                          )}
-                        >
-                          <div
-                            style={styleOf(
-                              "width: 100%; max-width: 34px; height: 60px; border-radius: 6px 6px 0 0; background: #BFD8F7; border: 1.5px solid #D6D4D0",
-                            )}
-                          ></div>
-                          <span
-                            style={styleOf("font-size: 13px; color: #706473")}
-                          >
-                            {"T2"}
-                          </span>
-                        </div>
-                        <div
-                          style={styleOf(
-                            "flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px",
-                          )}
-                        >
-                          <div
-                            style={styleOf(
-                              "width: 100%; max-width: 34px; height: 84px; border-radius: 6px 6px 0 0; background: #BFD8F7; border: 1.5px solid #D6D4D0",
-                            )}
-                          ></div>
-                          <span
-                            style={styleOf("font-size: 13px; color: #706473")}
-                          >
-                            {"T3"}
-                          </span>
-                        </div>
-                        <div
-                          style={styleOf(
-                            "flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px",
-                          )}
-                        >
-                          <div
-                            style={styleOf(
-                              "width: 100%; max-width: 34px; height: 72px; border-radius: 6px 6px 0 0; background: #BFD8F7; border: 1.5px solid #D6D4D0",
-                            )}
-                          ></div>
-                          <span
-                            style={styleOf("font-size: 13px; color: #706473")}
-                          >
-                            {"T4"}
-                          </span>
-                        </div>
-                        <div
-                          style={styleOf(
-                            "flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px",
-                          )}
-                        >
-                          <div
-                            style={styleOf(
-                              "width: 100%; max-width: 34px; height: 110px; border-radius: 6px 6px 0 0; background: #BFD8F7; border: 1.5px solid #D6D4D0",
-                            )}
-                          ></div>
-                          <span
-                            style={styleOf("font-size: 13px; color: #706473")}
-                          >
-                            {"T5"}
-                          </span>
-                        </div>
-                        <div
-                          style={styleOf(
-                            "flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px",
-                          )}
-                        >
-                          <div
-                            style={styleOf(
-                              "width: 100%; max-width: 34px; height: 96px; border-radius: 6px 6px 0 0; background: #BFD8F7; border: 1.5px solid #D6D4D0",
-                            )}
-                          ></div>
-                          <span
-                            style={styleOf("font-size: 13px; color: #706473")}
-                          >
-                            {"T6"}
-                          </span>
-                        </div>
-                        <div
-                          style={styleOf(
-                            "flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px",
-                          )}
-                        >
-                          <div
-                            style={styleOf(
-                              "width: 100%; max-width: 34px; height: 130px; border-radius: 6px 6px 0 0; background: #BFD8F7; border: 1.5px solid #D6D4D0",
-                            )}
-                          ></div>
-                          <span
-                            style={styleOf("font-size: 13px; color: #706473")}
-                          >
-                            {"T7"}
-                          </span>
-                        </div>
-                        <div
-                          style={styleOf(
-                            "flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px",
-                          )}
-                        >
-                          <div
-                            style={styleOf(
-                              "width: 100%; max-width: 34px; height: 118px; border-radius: 6px 6px 0 0; background: #BFD8F7; border: 1.5px solid #D6D4D0",
-                            )}
-                          ></div>
-                          <span
-                            style={styleOf("font-size: 13px; color: #706473")}
-                          >
-                            {"CN"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      style={styleOf(
-                        "padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
-                      )}
-                    >
-                      <div
-                        style={styleOf(
-                          "display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px",
-                        )}
-                      >
-                        <div>
-                          <div
-                            style={styleOf("font-size: 18px; font-weight: 600")}
-                          >
-                            {"Việc cần xem"}
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        style={styleOf(
-                          "display: flex; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid #E6E4E0",
-                        )}
-                      >
-                        <span style={styleOf("flex: 1; font-size: 14px")}>
-                          {
-                            "2 yêu cầu sắp quá hạn 72 giờ chờ phân công (Speaking)"
-                          }
+                  <section className="min-w-0 flex-[1_1_320px] p-6" style={styleOf(cardSurface)}>
+                    <h2 className="m-0 text-lg font-semibold">Trạng thái tài khoản hiện tại</h2>
+                    <div className="mb-3.5 text-[13px] text-[var(--attempt-text-706473)]">Toàn hệ thống</div>
+                    {([
+                      ["Đang hoạt động", stats?.accountsActive, "#2963CC"],
+                      ["Đang khóa", stats?.accountsLocked, "#B23A24"],
+                    ] as const).map(([title, count, color]) => (
+                      <div key={title} className="flex items-center gap-4 pb-3 text-sm">
+                        <span className="w-32">{title}</span>
+                        <span aria-hidden="true" className="h-2 flex-1 overflow-hidden rounded-full bg-[var(--attempt-bg-f3f0ea)]">
+                          <span className="block h-full" style={{ backgroundColor: color, width: stats?.accountsTotal ? (count ?? 0) / stats.accountsTotal * 100 + "%" : 0 }} />
                         </span>
-                        <a
-                          href={"AdminGrading.dc.html"}
-                          style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
-                          )}
-                        >
-                          {"Theo dõi"}
-                        </a>
+                        <span className="min-w-8 text-right font-semibold">{displayCount(count)}</span>
                       </div>
-                      <div
-                        style={styleOf(
-                          "display: flex; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid #E6E4E0",
-                        )}
-                      >
-                        <span style={styleOf("flex: 1; font-size: 14px")}>
-                          {
-                            "Thầy Quốc Bảo báo không thể hoàn thành 3 bài, cần xác nhận hủy"
-                          }
-                        </span>
-                        <a
-                          href={"AdminUsers.dc.html"}
-                          style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
-                          )}
-                        >
-                          {"Xử lý"}
-                        </a>
-                      </div>
-                      <div
-                        style={styleOf(
-                          "display: flex; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid #E6E4E0",
-                        )}
-                      >
-                        <span style={styleOf("flex: 1; font-size: 14px")}>
-                          {
-                            "Lô nhập đề exam_reading_04.xlsx có 3 lỗi, chưa lưu gì"
-                          }
-                        </span>
-                        <a
-                          href={"AdminReadingEditor.dc.html"}
-                          style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 34px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap",
-                          )}
-                        >
-                          {"Xem"}
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    style={styleOf(
-                      "flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 24px",
-                    )}
-                  >
-                    <div
-                      style={styleOf(
-                        "padding: 24px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); ",
-                      )}
-                    >
-                      <div
-                        style={styleOf(
-                          "display: flex; flex-direction: column; gap: 12px; ",
-                        )}
-                      >
-                        <div
-                          style={styleOf(
-                            "display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px",
-                          )}
-                        >
-                          <div>
-                            <div
-                              style={styleOf(
-                                "font-size: 18px; font-weight: 600",
-                              )}
-                            >
-                              {"Yêu cầu bị hủy theo nguyên nhân"}
-                            </div>
-                            <div
-                              style={styleOf(
-                                "font-size: 13px; color: #706473",
-                              )}
-                            >
-                              {v.rangePast + ", mỗi yêu cầu chỉ tính một lần"}
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          style={styleOf(
-                            "display: flex; gap: 16px; align-items: center",
-                          )}
-                        >
-                          <div style={styleOf("width: 210px; font-size: 14px")}>
-                            {"Quá 72 giờ chưa phân công"}
-                          </div>
-                          <div style={styleOf("flex: 1")}>
-                            <div
-                              style={styleOf(
-                                "height: 8px; border-radius: 4px; background: #F3F0EA; border: 1px solid #DDDBD7; overflow: hidden",
-                              )}
-                            >
-                              <div
-                                style={styleOf(
-                                  "width: 81%; height: 100%; background: #7A5A0E",
-                                )}
-                              ></div>
-                            </div>
-                          </div>
-                          <span
-                            style={styleOf(
-                              "font-weight: 600; width: 30px; text-align: right",
-                            )}
-                          >
-                            {"17"}
-                          </span>
-                        </div>
-                        <div
-                          style={styleOf(
-                            "display: flex; gap: 16px; align-items: center",
-                          )}
-                        >
-                          <div style={styleOf("width: 210px; font-size: 14px")}>
-                            {"Giáo viên không thể hoàn thành"}
-                          </div>
-                          <div style={styleOf("flex: 1")}>
-                            <div
-                              style={styleOf(
-                                "height: 8px; border-radius: 4px; background: #F3F0EA; border: 1px solid #DDDBD7; overflow: hidden",
-                              )}
-                            >
-                              <div
-                                style={styleOf(
-                                  "width: 19%; height: 100%; background: #B23A24",
-                                )}
-                              ></div>
-                            </div>
-                          </div>
-                          <span
-                            style={styleOf(
-                              "font-weight: 600; width: 30px; text-align: right",
-                            )}
-                          >
-                            {"4"}
-                          </span>
-                        </div>
-                        <div style={styleOf("font-size: 13px; color: #706473")}>
-                          {
-                            "Bonus đã hoàn chỉ tính giao dịch thành công (19). 2 giao dịch đang chờ thử lại được đếm riêng."
-                          }
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    ))}
+                  </section>
                 </div>
         </StaffLayout>
         {"\n"}

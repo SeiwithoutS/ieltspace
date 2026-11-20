@@ -1,11 +1,11 @@
 import crypto from 'node:crypto';
-import { createClient, type RealtimeClientOptions } from '@supabase/supabase-js';
-import WebSocket from 'ws';
 import { env } from '../../config.js';
+import { createPrivilegedSupabaseClient } from '../../lib/supabase.js';
 import { HttpError } from '../../utils/http.js';
 
 export function getStorageClient() {
-  if (!env.SUPABASE_SERVICE_ROLE_KEY) {
+  const client = createPrivilegedSupabaseClient();
+  if (!client) {
     throw new HttpError(
       503,
       'STORAGE_UNAVAILABLE',
@@ -13,13 +13,7 @@ export function getStorageClient() {
     );
   }
 
-  return createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
-    realtime: { transport: WebSocket as unknown as RealtimeClientOptions['transport'] },
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-    },
-  });
+  return client;
 }
 
 export function detectImageExtension(

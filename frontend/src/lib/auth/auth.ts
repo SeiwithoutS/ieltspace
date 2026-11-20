@@ -11,6 +11,7 @@ let user: AuthUser|null=null;
 let accessToken='';
 let ready=false;
 let refreshPromise:Promise<void>|null=null;
+let profileCheck: Promise<void> | null = null;
 let timer:ReturnType<typeof setTimeout>|undefined;
 let refreshAt = 0;
 let signingOut=false;
@@ -46,6 +47,33 @@ export function navigate(page:string){history.pushState(null,'','#'+page);window
 export function home(){return user?.role==='ADMIN'?'AdminHome':user?.role==='TEACHER'?'TeacherHome':'StudentHome';}
 export function getAccessToken(){return accessToken;}
 
+export function recheckAuthProfile(): Promise<void> {
+ const token = accessToken;
+ if (!token || !user || signingOut) return Promise.resolve();
+ if (profileCheck) return profileCheck;
+
+ profileCheck = fetch(base.replace(/\/$/, '') + '/auth/me', {
+  headers: { Authorization: `Bearer ${token}` },
+  cache: 'no-store',
+ }).then(async response => {
+  if (response.status !== 403 && !response.ok) return;
+  const payload = await response.json();
+  if (token !== accessToken || !user || signingOut) return;
+  if (payload.code === 'ACCOUNT_UNAVAILABLE' || payload.code === 'PROFILE_NOT_FOUND') {
+   clearTimeout(timer);
+   user = null;
+   accessToken = '';
+   publish();
+  } else if (response.ok && payload.user?.id === user.id && payload.user.role !== user.role) {
+   user = payload.user;
+   publish();
+  }
+ }).catch(() => {
+  // Keep the active session on a temporary network error.
+ }).finally(() => { profileCheck = null; });
+ return profileCheck;
+}
+
 export async function updateAuthProfile(profile: AuthUser) {
  await refreshPromise?.catch(() => {});
  if (user?.id !== profile.id) return;
@@ -79,6 +107,9 @@ export function takePasswordChangeNotice() {
 }
 
 export function forgotPassword(email:string){return request('forgot-password',{email});}
+export async function acceptStaffInvite(token: string, password: string) {
+ return request('accept-staff-invite', { token, password });
+}
 export async function resetPassword(tokenHash:string,password:string){signingOut=true;clearTimeout(timer);try{await refreshPromise?.catch(()=>{});const result=await request('reset-password',{tokenHash,password});user=null;accessToken='';publish();return result;}finally{signingOut=false;}}
 
 export async function loginWithGoogle(){const data=await request('google');if(!data.url)throw new Error('Không thể bắt đầu đăng nhập Google.');window.location.assign(data.url);}

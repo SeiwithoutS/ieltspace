@@ -14,6 +14,14 @@ test('new recovery template opens reset and removes the secret fragment', () => 
 test('legacy reset links remain supported', () => {
  assert.equal(parseAuthLink('/', '#ResetPassword?token_hash=legacy').token, 'legacy');
 });
+test('staff invitation can open the existing password page from the SPA root', () => {
+ const token = 'a'.repeat(64);
+ const result = parseAuthLink('/', '#type=staff-invite&token_hash=' + token);
+ assert.equal(result.page, 'ResetPassword');
+ assert.equal(result.invitation, true);
+ assert.equal(result.token, token);
+ assert.equal(parseAuthLink('/', '#type=staff-invite&token_hash=invalid').token, '');
+});
 test('wrong token purpose is rejected and login navigation stays on login', () => {
  assert.equal(parseAuthLink('/reset-password', '#token_hash=test&type=signup').token, '');
  assert.equal(parseAuthLink('/reset-password', '#Login'), null);

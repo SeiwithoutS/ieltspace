@@ -19,13 +19,14 @@
 | D15 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11, O-D1, O-D2). | Lịch sử phiên bản kỹ năng giữ vĩnh viễn mọi bản ARCHIVED, không tự xóa. Khôi phục phiên bản cũ (tạo bản nháp mới từ bản ARCHIVED) lùi sang đợt tiếp theo. |
 | D16 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11 đợt 2, R1). | Một header người học duy nhất ở `frontend/src/components/navigation/LearnerHeader.tsx`, gộp thiết kế responsive 3 mốc (>=1024, 768-1023, <768) với hỗ trợ theme CSS (`--attempt-*`), NotificationBadge và PageLink hash router. Xóa bản thừa ở `components/attempts/LearnerHeader.tsx`. |
 | D17 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11 đợt 2, O-R4). | Giữ `DesktopOnly.tsx` của THuong làm nơi duy nhất thực thi: màn dưới 1024px hoặc cảm ứng không làm bài được, kể cả lượt đã bắt đầu (bị che, nội dung vẫn giữ). `ExamDetail` dùng chung điều kiện (`lib/device.ts`) để chặn trước khi tạo lượt. |
+| D18 | Người dùng chốt 20/11, quản trị đợt 2–3. | Giữ toàn bộ lịch sử đăng nhập ứng dụng. Cấm Quản lý tự khóa và tự hạ quyền. Có thể thao tác trên Quản lý khác nếu giữ ít nhất một Quản lý hoạt động. Cấp/thu hồi vai trò Quản lý và khóa/mở tài khoản Quản lý cần mã bảo mật dùng một lần do website gửi. |
+| D19 | Người dùng chốt 20/11, quản trị đợt 4–5. | Mời/xóa Quản lý cần mã bảo mật. Khi xóa, bỏ Auth, tên/email/ảnh, dữ liệu học cá nhân, ghi chú và bài nộp. Giữ ID ẩn danh, điểm/kết quả đã công bố và audit. Dùng hộp xác nhận quản trị hiện có. |
 
 ## Điểm mở trước khi triển khai
 
 | Vấn đề | Bằng chứng | Quyết định cần có |
 |---|---|---|
 | Nơi lưu tham số | Bản rà soát và phần bảng CSDL nêu system_settings, cuối CSDL vẫn đặt câu hỏi. | Bản SQL ngày 11/11 dùng bảng theo thiết kế Word, seed 72/14/10. Nhóm còn cần chốt tải mặc định của giáo viên và cách thay đổi cấu hình lúc vận hành. |
-| Nhật ký đăng nhập | Bản rà soát ghi bổ sung nếu cần cho trang Người dùng. | Chốt nhu cầu hiển thị, dữ liệu tối thiểu và thời gian giữ. |
 | Ngữ pháp | Chương 1 §1.3.2 có nêu, danh sách UC Chương 3 không có luồng tương ứng. | Chưa giao task triển khai. Cần xác nhận phạm vi nếu bổ sung. |
 
 Khi chốt thay đổi mới, ghi ngày, người hoặc nguồn xác nhận, quyết định được thay thế và mã BR/task bị ảnh hưởng.

@@ -52,6 +52,39 @@ Yêu cầu Bearer, vai trò `LEARNER` và `Origin` hợp lệ đối với POST.
 
 `POST /learner/flashcards` ghi một hoạt động hợp lệ trong cùng giao dịch với phiên và thẻ. Ngưỡng là số thẻ khác nhau theo cấu hình (mặc định 10), giảm xuống số thẻ đã chọn nếu tập nhỏ hơn. Tiến độ cộng thêm các lượt làm bài đã hoàn tất theo `attempts.id`, mỗi lượt một lần. Các phiên Flashcard đủ điều kiện đã lưu trước được bổ sung bằng [migration 15](csdl/15_learner_activity.sql). Chuỗi đăng nhập và kỷ lục đọc từ bảng điểm danh được tạo trong [migration 16](csdl/16_learner_checkins.sql).
 
+## Quản lý người dùng
+
+Hai API chỉ đọc yêu cầu Bearer và hồ sơ `ADMIN` đang hoạt động. Phản hồi dùng `Cache-Control: private, no-store`.
+
+| Method và đường dẫn | Đầu vào | Thành công | Lỗi cần xử lý |
+|---|---|---|---|
+| GET /admin/users | `q` tìm tên/email, tối đa 150 ký tự. `role` là LEARNER/TEACHER/ADMIN. `status` là ACTIVE/LOCKED/DELETED. `page` mặc định 1, `pageSize` mặc định 20, tối đa 50. Bỏ bộ lọc để lấy mọi vai trò/trạng thái. | `{ items, total, page, pageSize, counts: { all, byRole, byStatus } }`. `total` theo bộ lọc; `counts` toàn bộ danh sách. Sắp xếp ngày tạo và ID mới nhất trước. Trang vượt giới hạn trả trang cuối. | 400 INVALID_USER_FILTER, 401, 403 |
+| GET /admin/users/:id | UUID của `public.users.id` | Hồ sơ cùng `auth` và `avatar` | 400 INVALID_USER_ID, 401, 403, 404 USER_NOT_FOUND |
+| GET /admin/users/activity | `role` tùy chọn, `page` mặc định 1 | `{ items, nextPage }`, 20 sự kiện Email/Google mỗi trang, lọc theo vai trò hiện tại của tài khoản. | 400, 401, 403 |
+| GET /admin/users/:id/history | `kind=login\|admin`, `page` mặc định 1 | `{ items, nextPage }`, 5 sự kiện mỗi trang. Nhật ký quản trị trả hành động, người thao tác, giá trị trước/sau, lý do và thời điểm. | 400, 401, 403, 404 |
+| POST /admin/users/:id/security-code | Hành động dự kiến như dưới đây, có `Origin` hợp lệ. | 202 với `{ id, expiresInSeconds }`. Mã thật gửi tới email Auth đã xác minh của Quản lý thao tác. | 400, 401, 403, 404, 409, 429, 503 |
+| PATCH /admin/users/:id/role hoặc /status | `{ action, securityCode? }` với `Origin` hợp lệ. Tùy hành động, `action` có `kind`, `previousRole`, `previousStatus`, `role` hoặc `status` mới và `reason` (1–500 ký tự). `securityCode` là `{ id, code }` cho thay đổi liên quan đến vai trò Quản lý. | `{ id, role, status, changed }`. Gửi lại cùng thay đổi đã thành công trả `changed:false`. | 400, 401, 403, 404, 409 |
+| POST /admin/users/invitations/security-code | Dữ liệu lời mời Quản lý. | 202 `{ id, expiresInSeconds }`. | 400, 403, 429, 503 |
+| POST /admin/users/invitations | `{ invitation, securityCode? }`. Lời mời có `fullName`, `email`, `role` (TEACHER/ADMIN). Với Giáo viên thêm `writing`, `speaking` và `maxPending` (1–50). Mời Quản lý cần mã. | 202 `{ id, status: "INVITED" }`. Gửi lại bằng cùng nội dung sẽ cấp liên kết mới. | 409 INVITE_EMAIL_EXISTS, 429 INVITE_COOLDOWN, 503 INVITE_EMAIL_FAILED/INVITE_UNAVAILABLE |
+| POST /auth/accept-staff-invite | Token từ liên kết và mật khẩu mới. | 200 sau khi tạo Auth và kích hoạt đúng hồ sơ. | 400 INVITE_INVALID/INVITE_WEAK_PASSWORD, 409 INVITE_ACCEPT_FAILED |
+| DELETE /admin/users/:id | `{ action, securityCode? }` với `kind=delete`, vai trò/trạng thái trước đó và lý do. Xóa Quản lý cần mã. | 200 khi hoàn tất hoặc 202 khi đã ẩn danh và còn dọn Auth/tệp. `cleanup` là COMPLETE hoặc PENDING. | 400, 403, 404, 409 |
+| POST /admin/users/:id/deletion-retry | Tài khoản đã xóa. | 200 `{ cleanup }`. | 400, 403, 409 |
+
+Mỗi hồ sơ có `id`, `name` (ưu tiên tên hiển thị), `email`, `role`, `status`, `createdAt` và `lastLoginAt` (mốc gần nhất mà ứng dụng đã ghi, có thể null). Chi tiết Auth có `state`. Khi `available`, Auth trả email hiện tại, `emailVerified`, `source` (EMAIL/GOOGLE/INVITE hoặc null) và `lastSignInAt` (nullable). Nguồn đọc từ thông tin mời hoặc provider đăng ký đầu tiên. `missing` nghĩa là chưa có danh tính Auth tương ứng, `unavailable` nghĩa là tạm thời chưa đọc được Auth. Server dùng `SUPABASE_SERVICE_ROLE_KEY` để đọc Auth. Avatar ứng dụng có `{ url, unavailable }`, URL ký có hạn 5 phút. Quyền khóa và xác minh email là hai trường riêng.
+
+Lịch sử đăng nhập bắt đầu từ khi triển khai, dùng mã băm session để ghi một lần. Thao tác đổi vai trò và khóa/mở ghi `audit_logs` cùng giao dịch. Quản lý tự thao tác bị từ chối. Mã bảo mật có hiệu lực 10 phút, tối đa 5 lần nhập sai, gắn với người thao tác, tài khoản đích, thay đổi và lý do. Một mã mới thay thế mã đang chờ của cùng Quản lý. Khi mã sai hoặc hết hạn, trả 403 `ADMIN_CODE_INVALID`. Nếu chưa cấu hình cấp mã, API gửi mã báo 503.
+
+Trạng thái bộ lọc có thêm `INVITED` và chi tiết trả `cleanupPending`. Lời mời gửi bằng cấu hình Resend của backend, có hạn 24 giờ. Hồ sơ `INVITED` chỉ kích hoạt bằng liên kết mời. Thao tác ghi của Quản lý yêu cầu Bearer và `Origin` hợp lệ. Nhận lời mời yêu cầu `Origin` hợp lệ và giới hạn tần suất chung của Auth.
+
+## Thống kê tổng quan Quản lý
+
+`GET /admin/statistics?from=YYYY-MM-DD&to=YYYY-MM-DD` yêu cầu Bearer và vai trò ADMIN. Cả hai ngày đều được tính theo `Asia/Ho_Chi_Minh`. Ngày sai hoặc thứ tự đảo trả 400 INVALID_STATISTICS_RANGE. API chỉ đọc và không cache phản hồi riêng tư.
+
+- `accountsNew` đếm hồ sơ được tạo, `usersSignedIn` đếm tài khoản khác nhau có nhật ký đăng nhập, `accountLocks` đếm sự kiện khóa trong khoảng. `loginHistoryFrom` là ngày sớm nhất đang có bản ghi thực tế hoặc null.
+- `accountsTotal`, `accountsActive`, `accountsLocked` là số hồ sơ toàn hệ thống theo trạng thái hiện tại. Tổng bao gồm hồ sơ chờ kích hoạt và hồ sơ đã xóa được giữ để đối soát.
+- `flashcardSessions` và `flashcardLearners` đếm phiên Flashcard đủ điều kiện và người dùng khác nhau trong khoảng. `dailyFlashcards` trả ngày và số phiên của tối đa 7 ngày cuối, gồm cả ngày có 0 phiên.
+- `supportReports` trả null trong khi chưa có kho phiếu tập trung. Phản hồi cũng trả `from`, `to` và thời điểm lấy số liệu `measuredAt`.
+
 ## Quản lý bộ đề (Exam Sets)
 
 Mã A1–A16 và E1–E6 trùng chú thích trong `backend/src/modules/exams/exams.admin.routes.ts`. Các route `/admin/*` yêu cầu quyền ADMIN (`requireAuth`, `requireRole('ADMIN')`). Route công khai `/exam-sets/*` không yêu cầu xác thực. Mọi thao tác ghi trả về `ExamSetAdminDto` của cả bộ đề (trừ A10, A2, A7 của danh mục và nhóm E). Lỗi dạng `{ message, code }`; lỗi kiểm tra đầu vào là 400 `VALIDATION_ERROR` kèm danh sách chi tiết.

@@ -17,6 +17,7 @@ PostgreSQL chứa hồ sơ và dữ liệu nghiệp vụ. Supabase Auth quản l
 | Hỗ trợ | support_credits → grading_requests qua used_credit_id. Mỗi yêu cầu gắn một skill_attempt, có hạn phân công và giáo viên hiện tại. grading_reviews → grading_scores lưu phiếu và điểm tiêu chí. credit_refunds liên kết yêu cầu hủy với bonus sinh ra. |
 | Từ vựng | vocabulary_sets ↔ vocabularies qua vocabulary_set_items. favorite_vocabularies và vocabulary_notes gắn người–từ. flashcard_sessions → flashcard_session_items ghi thẻ đã ôn và mức tự đánh giá. |
 | Học tập và nội dung | sample_answers lưu bài mẫu công khai/nháp. learning_activities tham chiếu một attempt hoặc phiên flashcard đủ điều kiện. notifications lưu recipient_id, event_key, read_at. audit_logs giữ chủ thể, hành động và đối tượng. |
+| Quản lý tài khoản | user_login_events lưu ID hồ sơ, phương thức, thời điểm và mã băm phiên duy nhất. admin_action_codes lưu yêu cầu mã bảo mật ngắn hạn và số lần nhập sai. audit_logs lưu người thao tác, tài khoản đích, lý do và giá trị trước/sau. |
 | Nhập | import_batches giữ request_key, exam_id, skill, form (R/W), loại nhập và số bản ghi. import_assets ghép tên tệp với Storage. import_errors giữ sheet_name, row_number, field_name và message. |
 
 ## Trạng thái và khóa cần thực thi ở DB

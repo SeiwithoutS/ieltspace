@@ -59,3 +59,12 @@ export async function removeAvatar(reference: string) {
     console.warn('R2 avatar cleanup failed', { status: error instanceof R2StorageError ? error.status : undefined });
   }
 }
+
+export async function deleteStoredAvatar(reference: string) {
+  if (reference.startsWith(r2Prefix)) {
+    await avatars.remove(reference.slice(r2Prefix.length));
+  } else {
+    const { error } = await supabaseBucket().remove([reference]);
+    if (error) throw new HttpError(503, 'AVATAR_DELETE_FAILED', 'Chưa dọn được ảnh đại diện.');
+  }
+}

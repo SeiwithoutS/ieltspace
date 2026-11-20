@@ -2,10 +2,10 @@ import { createClient, type RealtimeClientOptions } from "@supabase/supabase-js"
 import WebSocket from "ws";
 import { env } from "../config.js";
 
-export function createAuthClient() {
+function createServerClient(key: string) {
   return createClient(
     env.SUPABASE_URL,
-    env.SUPABASE_PUBLISHABLE_KEY,
+    key,
     {
       // Node 20 does not provide the native WebSocket required by Realtime.
       // ws has Node-specific overloads; its runtime API is compatible with Realtime.
@@ -17,4 +17,13 @@ export function createAuthClient() {
       },
     }
   );
+}
+
+export function createAuthClient() {
+  return createServerClient(env.SUPABASE_PUBLISHABLE_KEY);
+}
+
+export function createPrivilegedSupabaseClient() {
+  const key = env.SUPABASE_SERVICE_ROLE_KEY;
+  return key ? createServerClient(key) : null;
 }

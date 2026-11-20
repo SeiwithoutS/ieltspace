@@ -1,8 +1,8 @@
-import { takeRecoveryToken } from '../../lib/auth/auth-links';
+import { staffInvitationCallback, takeRecoveryToken } from '../../lib/auth/auth-links';
 import React, { useState, useEffect } from 'react';
 import AuthLayout from '../../components/auth/AuthLayout';
 import { Field, Notice } from '../../components/auth/AuthFields';
-import { resetPassword } from '../../lib/auth/auth';
+import { acceptStaffInvite, resetPassword } from '../../lib/auth/auth';
 export default function ResetPassword({ callbackNotice }: {
     callbackNotice?: string;
 }) { const [token] = useState(takeRecoveryToken), [password, setPassword] = useState(''), [confirm, setConfirm] = useState(''), [busy, setBusy] = useState(false), [error, setError] = useState(''), [message, setMessage] = useState(''); useEffect(() => { history.replaceState(null, '', location.pathname + '#ResetPassword'); }, []); async function submit(e: React.FormEvent<HTMLFormElement>) { e.preventDefault(); if (busy || !token)
@@ -10,7 +10,7 @@ export default function ResetPassword({ callbackNotice }: {
     setError('Hai mật khẩu không khớp.');
     return;
 } setBusy(true); try {
-    const result = await resetPassword(token, password);
+    const result = await (staffInvitationCallback ? acceptStaffInvite(token, password) : resetPassword(token, password));
     setMessage(result.message);
     setPassword('');
     setConfirm('');

@@ -1,4 +1,7 @@
 import { Router } from 'express';
+import { z } from 'zod';
+import { listPracticeItems, listPublicSets, QUESTION_TYPE_CODES } from './exams.catalog.service.js';
+import { TOPIC_MAX_LENGTH, WRITING_ESSAY_TYPE_CODES } from './exam-labels.js';
 import { prisma } from '../../lib/prisma.js';
 import { asyncHandler, HttpError } from '../../utils/http.js';
 import { idParamSchema } from './exams.schemas.js';
@@ -8,6 +11,39 @@ import {
 } from './exams.mapper.js';
 
 export const publicExamsRouter = Router();
+
+const practiceQuerySchema = z.object({
+  skill: z.enum(['LISTENING', 'READING', 'WRITING', 'SPEAKING']),
+  questionType: z.enum(QUESTION_TYPE_CODES).optional(),
+  essayType: z.enum(WRITING_ESSAY_TYPE_CODES).optional(),
+  topic: z.string().trim().min(1).max(TOPIC_MAX_LENGTH).optional(),
+});
+
+// P0: GET /exam-sets (danh sách bộ đề công khai, không cần đăng nhập)
+publicExamsRouter.get(
+  '/',
+  asyncHandler(async (_req, res) => {
+    res.json({ items: await listPublicSets() });
+  })
+);
+
+// P0b: GET /exam-sets/practice-items?skill=WRITING (các ô kỹ năng đã đăng để luyện)
+publicExamsRouter.get(
+  '/practice-items',
+  asyncHandler(async (req, res) => {
+    const q = practiceQuerySchema.safeParse(req.query);
+    if (!q.success) {
+      throw new HttpError(400, 'VALIDATION_ERROR', 'Kỹ năng hoặc bộ lọc không hợp lệ.');
+    }
+    res.json(
+      await listPracticeItems(q.data.skill, {
+        questionType: q.data.questionType,
+        essayType: q.data.essayType,
+        topic: q.data.topic,
+      })
+    );
+  })
+);
 
 // P1: GET /exam-sets/:id
 publicExamsRouter.get(

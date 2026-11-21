@@ -7,6 +7,8 @@ export type WritingTask = {
   prompt: string;
   imagePath: string | null;
   imageUrl: string | null;
+  essayType?: string | null;
+  topic?: string | null;
 };
 
 export type WritingContent = {
@@ -18,15 +20,18 @@ export type SpeakingContent = {
   part1: {
     instruction: string;
     questions: string[];
+    topic?: string | null;
   };
   part2: {
     prepMinutes: number | null;
     speakMinutes: number | null;
     cueCard: string;
+    topic?: string | null;
   };
   part3: {
     instruction: string;
     questions: string[];
+    topic?: string | null;
   };
 };
 
@@ -71,6 +76,8 @@ export type WritingEditorImage = {
 export type WritingEditorTask = {
   prompt: string;
   img: WritingEditorImage | null;
+  essayType?: string;
+  topic?: string;
 };
 
 export type WritingEditorState = {
@@ -82,6 +89,7 @@ export type SpeakingPartQs = {
   kind: 'qs';
   instr: string;
   qs: string[];
+  topic?: string;
 };
 
 export type SpeakingPartCue = {
@@ -90,6 +98,7 @@ export type SpeakingPartCue = {
   speak: string;
   text: string;
   cue?: string;
+  topic?: string;
 };
 
 export type SpeakingPart = SpeakingPartQs | SpeakingPartCue;
@@ -206,6 +215,12 @@ export async function uploadSkillImage(
   );
 }
 
+// Chủ đề Writing/Speaking đã có trong các đề (mọi trạng thái), cho combobox "Chủ đề".
+export async function listTopics(): Promise<string[]> {
+  const res = await apiFetch<{ items: string[] }>('/admin/exam-topics');
+  return res.items;
+}
+
 // Converters
 export function toWritingEditorState(skill: EditorSkill): WritingEditorState {
   const t1 = skill.writing?.tasks[0];
@@ -228,10 +243,14 @@ export function toWritingEditorState(skill: EditorSkill): WritingEditorState {
       {
         prompt: t1?.prompt || '',
         img: img1,
+        essayType: t1?.essayType || '',
+        topic: t1?.topic || '',
       },
       {
         prompt: t2?.prompt || '',
         img: null,
+        essayType: t2?.essayType || '',
+        topic: t2?.topic || '',
       },
     ],
   };
@@ -247,11 +266,15 @@ export function fromWritingEditorState(state: WritingEditorState): WritingConten
         prompt: t1?.prompt || '',
         imagePath: t1?.img?.path || (t1?.img?.url && t1.img.url.startsWith('exam-skills/') ? t1.img.url : null),
         imageUrl: t1?.img?.url || null,
+        essayType: t1?.essayType || null,
+        topic: (t1?.topic || '').trim() || null,
       },
       {
         prompt: t2?.prompt || '',
         imagePath: null,
         imageUrl: null,
+        essayType: t2?.essayType || null,
+        topic: (t2?.topic || '').trim() || null,
       },
     ],
   };
@@ -267,6 +290,7 @@ export function toSpeakingEditorState(skill: EditorSkill): SpeakingEditorState {
         kind: 'qs',
         instr: sp?.part1?.instruction ?? 'Two or three complex sentences for each answer.',
         qs: sp?.part1?.questions ? [...sp.part1.questions] : [],
+        topic: sp?.part1?.topic || '',
       },
       {
         kind: 'cue',
@@ -274,11 +298,13 @@ export function toSpeakingEditorState(skill: EditorSkill): SpeakingEditorState {
         speak: sp?.part2?.speakMinutes != null ? String(sp.part2.speakMinutes) : '2',
         text: sp?.part2?.cueCard || '',
         cue: sp?.part2?.cueCard || '',
+        topic: sp?.part2?.topic || '',
       },
       {
         kind: 'qs',
         instr: sp?.part3?.instruction ?? 'Four or five complex sentences for each answer.',
         qs: sp?.part3?.questions ? [...sp.part3.questions] : [],
+        topic: sp?.part3?.topic || '',
       },
     ],
   };
@@ -304,15 +330,18 @@ export function fromSpeakingEditorState(state: SpeakingEditorState): SpeakingCon
     part1: {
       instruction: p1?.instr || '',
       questions: p1?.qs ? [...p1.qs] : [],
+      topic: (p1?.topic || '').trim() || null,
     },
     part2: {
       prepMinutes: prep,
       speakMinutes: speak,
       cueCard: p2?.text || '',
+      topic: (p2?.topic || '').trim() || null,
     },
     part3: {
       instruction: p3?.instr || '',
       questions: p3?.qs ? [...p3.qs] : [],
+      topic: (p3?.topic || '').trim() || null,
     },
   };
 }

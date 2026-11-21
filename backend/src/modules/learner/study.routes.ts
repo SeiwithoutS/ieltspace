@@ -5,6 +5,7 @@ import { env } from '../../config.js';
 import { prisma } from '../../lib/prisma.js';
 import { requireAuth, requireRole } from '../../middleware/auth.js';
 import { asyncHandler, HttpError } from '../../utils/http.js';
+import { readInProgressAttempts } from './practice-progress.js';
 import { activityCalendarQuery, dashboardQuery, historyQuery, readLearnerActivityCalendar, readLearnerDashboard, readLearnerResults, readLearningProgress } from './study-overview.js';
 
 function studyRouter() {
@@ -35,6 +36,10 @@ const goalColumns = Prisma.sql`id, effective_from AS "effectiveFrom", overall_ta
 
 export function createLearnerStudyRouter(db: typeof prisma = prisma) {
   const learnerStudyRouter = studyRouter();
+
+  learnerStudyRouter.get('/in-progress', asyncHandler(async (req, res) => {
+    res.json({ items: await readInProgressAttempts(db, req.appUser!.id) });
+  }));
 
   learnerStudyRouter.get('/progress', asyncHandler(async (req, res) => {
     res.json(await readLearningProgress(db, req.appUser!.id));

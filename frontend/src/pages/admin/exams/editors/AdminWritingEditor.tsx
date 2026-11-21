@@ -5,7 +5,10 @@ import AdminSidebar from "../../../../components/navigation/AdminSidebar";
 import AdminTopbar, { Crumb } from "../../../../components/navigation/AdminTopbar";
 import { navigate } from "../../../../lib/auth/auth";
 import { errorInfo, fmtDate, deleteSkill, publishSkill } from "../../../../lib/exams/exam-admin";
+import { essayTypeOptions, TOPIC_MAX_LENGTH } from "../../../../lib/exams/exam-labels";
+import TopicCombobox from "../../../../components/exams/TopicCombobox";
 import { ApiError } from "../../../../lib/shared/api";
+import { listTopics } from "../../../../lib/exams/exam-editor";
 import {
   getEditorSkill,
   saveSkillContent,
@@ -32,6 +35,7 @@ type ConfirmData = {
 type ImportFileItem = [string, number, string, (string | null)?];
 
 type State = {
+  topicOptions: string[];
   skillId: string | null;
   loading: boolean;
   notFound: boolean;
@@ -73,6 +77,12 @@ type WritingFormItem = {
   setPrompt?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   promptSt?: string;
   promptNote?: string;
+  essayType?: string;
+  setEssayType?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  essayOptions?: Array<{ code: string; name: string }>;
+  topic?: string;
+  setTopicValue?: (value: string) => void;
+  canEdit?: boolean;
   fixedNote?: string;
   hasImg?: boolean;
   imgUrl?: string | null;
@@ -251,6 +261,7 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
   _impFile?: File | Blob | null;
 
   state: State = {
+    topicOptions: [],
     skillId: null,
     loading: true,
     notFound: false,
@@ -283,6 +294,9 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
 
   componentDidMount() {
     this._mounted = true;
+    listTopics()
+      .then((t) => this._mounted && this.setState({ topicOptions: t }))
+      .catch(() => undefined);
     const self = this;
     this._key = function (e: KeyboardEvent) {
       const tag = (e.target && (e.target as HTMLElement).tagName) || "";
@@ -533,7 +547,7 @@ renderVals(): WritingView {
       self.setState(st as State);
     }
     function setter(fn: (it: WritingEditorTask, v: string) => void) {
-      return function (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+      return function (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
         var v = e.target.value;
         upd(
           function (it) {
@@ -712,6 +726,8 @@ renderVals(): WritingView {
               function (x) {
                 x.prompt = "";
                 x.img = null;
+                x.essayType = "";
+                x.topic = "";
               },
               {
                 snack: "Đã xóa nội dung " + UNIT + " " + (ti + 1) + ".",
@@ -733,6 +749,22 @@ renderVals(): WritingView {
       }),
       promptSt: "",
       promptNote: "Hiện trong khung, chữ đậm nghiêng như đề thi thật. Dòng trống tách đoạn.",
+      essayType: it.essayType || "",
+      setEssayType: setter(function (x, v) {
+        x.essayType = v;
+      }),
+      essayOptions: essayTypeOptions(t1 ? 1 : 2, GTF),
+      topic: it.topic || "",
+      setTopicValue: function (value: string) {
+        upd(
+          function (x) {
+            x.topic = value;
+          },
+          null,
+          "type",
+        );
+      },
+      canEdit: editing,
       fixedNote:
         "Cố định theo Task: " +
         FIX[ti].mins +
@@ -3202,6 +3234,37 @@ renderVals(): WritingView {
                         {v.F.promptNote}
                       </span>
                     </label>
+                    <label
+                      style={styleOf(
+                        "display: flex; flex-direction: column; gap: 6px",
+                      )}
+                    >
+                      <span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>
+                        {"Dạng đề bài (hiện ở bộ lọc thư viện đề, không bắt buộc)"}
+                      </span>
+                      <select
+                        aria-label={"Dạng đề bài"}
+                        value={v.F.essayType}
+                        onChange={v.F.setEssayType}
+                        disabled={!v.F.canEdit}
+                        style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; outline-color: #2963CC")}
+                      >
+                        <option value={""}>{"Chưa chọn"}</option>
+                        {(v.F.essayOptions || []).map((o) => (
+                          <option key={o.code} value={o.code}>
+                            {o.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <TopicCombobox
+                      value={v.F.topic || ""}
+                      options={this.state.topicOptions || []}
+                      onChange={v.F.setTopicValue || (() => undefined)}
+                      disabled={!v.F.canEdit}
+                      maxLength={TOPIC_MAX_LENGTH}
+                      label={"Chủ đề (không bắt buộc)"}
+                    />
                     {v.F.isTask1 ? (
                       <>
                         <div

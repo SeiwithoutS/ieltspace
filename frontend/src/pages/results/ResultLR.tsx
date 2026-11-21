@@ -72,6 +72,7 @@ function ResultLR(props: { accent?: string; cheDo?: string; kyNang?: string }) {
       accent: accent,
       onAccent: accentForeground(accent),
       skillName: S.name,
+      practicePage: (listening ? "PracticeListening" : "PracticeReading") as "PracticeListening" | "PracticeReading",
       retryHref: S.retry,
       submitNote: practice
         ? "Nộp lúc 09:42, 07/10/2026 · Practice không tính band"
@@ -246,7 +247,7 @@ function ResultLR(props: { accent?: string; cheDo?: string; kyNang?: string }) {
                       </React.Fragment>
                     ))}
                     <PageLink
-                      page="PracticeLibrary"
+                      page={v.practicePage}
                       className="inline-flex items-center justify-center gap-2 h-10 [padding:0_20px] w-full rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border [background:var(--attempt-bg-ffffff)] [color:var(--attempt-text-352637)] font-semibold [font-size:14px] no-underline whitespace-nowrap"
                     >
                       {"Luyện thêm dạng yếu"}

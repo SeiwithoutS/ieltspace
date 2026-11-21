@@ -16,10 +16,10 @@ const initialRoute = location.hash.slice(1);
 const initialContext = /^(Admin|Question)/.test(initialRoute) ? 'AdminHome' : /^Teacher/.test(initialRoute) ? 'TeacherHome' : /^(Student|PracticeHistory|Profile$|MyWS$|Vocab$|Flashcard$)/.test(initialRoute) ? 'StudentHome' : sessionStorage.getItem('ieltspace-context') || 'StudentHome';
 sessionStorage.setItem('ieltspace-context', initialContext);
 (window as any).__dcFrom = initialContext;
-const aliases: Record<string, string> = {AvatarMenu:'Profile', ResultsHistory:'PracticeHistory', QTPractice:'PracticeLibrary', AdminContent:'AdminSamples'};
+const aliases: Record<string, string> = {AvatarMenu:'Profile', ResultsHistory:'PracticeHistory', QTPractice:'PracticeListening', PracticeLibrary:'PracticeListening', PracticeWS:'PracticeWriting', AdminContent:'AdminSamples'};
 const publicSamplePages: readonly PageName[] = ["SampleLibrary", "SampleWriting", "SampleSpeaking"];
 const publicLibraryPages: readonly PageName[] = [
- ...publicSamplePages, "FullTests", "ExamDetail", "PracticeLibrary", "PracticeWS", "Vocab",
+ ...publicSamplePages, "FullTests", "ExamDetail", "PracticeHub", "PracticeListening", "PracticeReading", "PracticeWriting", "PracticeSpeaking", "PracticeLibrary", "PracticeWS", "Vocab",
 ];
 const learnerStudyPages: readonly PageName[] = ['Profile', 'Flashcard', 'StudentLanding', 'StudentHome', 'PracticeHistory', 'MyWS'];
 function resolve(name: string): PageName { name=name.split('?')[0]; return (aliases[name] || name) in pages ? (aliases[name] || name) as PageName : 'Main'; }

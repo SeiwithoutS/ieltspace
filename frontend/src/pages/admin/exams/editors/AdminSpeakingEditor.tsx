@@ -1,6 +1,9 @@
 import React from "react";
 import { TOAST_MS } from "../../../../lib/shared/toast";
 import { styleOf, cssText } from "../../../../lib/shared/styles";
+import { TOPIC_MAX_LENGTH } from "../../../../lib/exams/exam-labels";
+import TopicCombobox from "../../../../components/exams/TopicCombobox";
+import { listTopics } from "../../../../lib/exams/exam-editor";
 import AdminSidebar from "../../../../components/navigation/AdminSidebar";
 import AdminTopbar, { Crumb } from "../../../../components/navigation/AdminTopbar";
 import { navigate } from "../../../../lib/auth/auth";
@@ -33,6 +36,7 @@ type ConfirmData = {
 type ImportFileItem = [string, number, string, (string | null)?];
 
 type State = {
+  topicOptions: string[];
   skillId: string | null;
   loading: boolean;
   notFound: boolean;
@@ -97,6 +101,9 @@ type SpeakingFormItem = {
   pq: Array<{ n: number; v: string }>;
   instr: string;
   setInstr: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  topic: string;
+  setTopicValue: (value: string) => void;
+  canEdit: boolean;
   prep: string;
   speak: string;
   setPrep: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -271,6 +278,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
   _edId?: string;
 
   state: State = {
+    topicOptions: [],
     skillId: null,
     loading: true,
     notFound: false,
@@ -305,6 +313,9 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
 
   componentDidMount() {
     this._mounted = true;
+    listTopics()
+      .then((t) => this._mounted && this.setState({ topicOptions: t }))
+      .catch(() => undefined);
     const self = this;
     this._key = function (e: KeyboardEvent) {
       const tag = (e.target && (e.target as HTMLElement).tagName) || "";
@@ -881,6 +892,17 @@ renderVals(): SpeakingView {
         .map(function (q, i) {
           return { n: i + 1, v: q };
         }),
+      topic: it ? it.topic || "" : "",
+      setTopicValue: function (value: string) {
+        upd(
+          function (x) {
+            x.topic = value;
+          },
+          null,
+          "type",
+        );
+      },
+      canEdit: editing,
       instr: qsPart ? qsPart.instr : "",
       setInstr: setter(function (x, v) {
         if (x.kind === "qs") {
@@ -3271,6 +3293,14 @@ renderVals(): SpeakingView {
                         </div>
                       </>
                     ) : null}
+                    <TopicCombobox
+                      value={v.F.topic || ""}
+                      options={this.state.topicOptions || []}
+                      onChange={v.F.setTopicValue}
+                      disabled={!v.F.canEdit}
+                      maxLength={TOPIC_MAX_LENGTH}
+                      label={"Chủ đề (không bắt buộc)"}
+                    />
                     {v.F.hasInstr ? (
                       <>
                         <label

@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { HttpError } from '../../utils/http.js';
 import { writeAudit } from '../../shared/audit.js';
@@ -21,6 +21,7 @@ import {
   speakingToRows,
 } from './exam-content.mapper.js';
 import { speakingDuration, checkLrNumbering } from './exam-rules.js';
+import { TASK1_ACADEMIC_ESSAY_TYPES, TASK1_GENERAL_ESSAY_TYPES, TASK2_ESSAY_TYPES } from './exam-labels.js';
 import {
   uploadSkillImage as supabaseUploadSkillImage,
   uploadSkillAudio as supabaseUploadSkillAudio,
@@ -217,6 +218,36 @@ async function deleteSkillContent(
     select jsonb_array_elements(content->'images')->>'path' as p from ds where jsonb_typeof(content->'images') = 'array'
   `;
   return rows.map((r) => r.p).filter((p): p is string => Boolean(p));
+}
+
+// Xóa câu hỏi theo id kèm đáp án và lựa chọn (cùng transaction).
+async function deleteQuestionsCascade(tx: Prisma.TransactionClient, questionIds: string[]): Promise<void> {
+  if (questionIds.length === 0) return;
+  await tx.$executeRaw`delete from public.question_answers where question_id = any(${questionIds}::uuid[])`;
+  await tx.$executeRaw`delete from public.question_options where question_id = any(${questionIds}::uuid[])`;
+  await tx.$executeRaw`delete from public.questions where id = any(${questionIds}::uuid[])`;
+}
+
+// Xóa nhóm câu hỏi theo id (kèm câu hỏi); trả về đường dẫn ảnh/audio của nhóm để dọn tệp mồ côi.
+async function deleteGroupsCascade(tx: Prisma.TransactionClient, groupIds: string[]): Promise<string[]> {
+  if (groupIds.length === 0) return [];
+  const qs = await tx.questions.findMany({ where: { question_group_id: { in: groupIds } }, select: { id: true } });
+  await deleteQuestionsCascade(tx, qs.map((q) => q.id));
+  const rows = await tx.$queryRaw<Array<{ image_path: string | null; audio_path: string | null }>>`
+    delete from public.question_groups where id = any(${groupIds}::uuid[]) returning image_path, audio_path
+  `;
+  return rows.flatMap((r) => [r.image_path, r.audio_path]).filter((p): p is string => Boolean(p));
+}
+
+// Xóa section theo id (kèm nhóm và câu hỏi); trả về đường dẫn tệp của section để dọn tệp mồ côi.
+async function deleteSectionsCascade(tx: Prisma.TransactionClient, sectionIds: string[]): Promise<string[]> {
+  if (sectionIds.length === 0) return [];
+  const groups = await tx.question_groups.findMany({ where: { section_id: { in: sectionIds } }, select: { id: true } });
+  const paths = await deleteGroupsCascade(tx, groups.map((g) => g.id));
+  const rows = await tx.$queryRaw<Array<{ image_path: string | null; audio_path: string | null }>>`
+    delete from public.exam_sections where id = any(${sectionIds}::uuid[]) returning image_path, audio_path
+  `;
+  return paths.concat(rows.flatMap((r) => [r.image_path, r.audio_path]).filter((p): p is string => Boolean(p)));
 }
 
 export async function assertSkillAssetPath(
@@ -798,6 +829,20 @@ export async function saveSkillContent(
         }
       }
 
+      // Dạng đề phải đúng Task và form: Task 1 Academic chỉ nhận dạng biểu đồ, Task 1 General chỉ nhận dạng thư, Task 2 chỉ dạng luận.
+      const allowed1 = skill.form === 'GENERAL' ? TASK1_GENERAL_ESSAY_TYPES : TASK1_ACADEMIC_ESSAY_TYPES;
+      if (t1?.essayType && !allowed1.includes(t1.essayType as never)) {
+        throw new HttpError(
+          400,
+          'VALIDATION_ERROR',
+          'Dạng đề của Task 1 không phù hợp với loại đề ' + (skill.form === 'GENERAL' ? 'General Training.' : 'Academic.')
+        );
+      }
+      const t2Type = input.writing.tasks[1]?.essayType;
+      if (t2Type && !TASK2_ESSAY_TYPES.includes(t2Type as never)) {
+        throw new HttpError(400, 'VALIDATION_ERROR', 'Dạng đề của Task 2 không hợp lệ.');
+      }
+
       // Task 2 không có ảnh
       const t2 = input.writing.tasks[1];
       if (t2?.imagePath && t2.imagePath.trim().length > 0) {
@@ -809,82 +854,153 @@ export async function saveSkillContent(
       }
     }
 
-    // Xóa nội dung cũ và lấy đường dẫn ảnh cũ để dọn dẹp sau transaction (WS-09)
-    const collectedPaths = await deleteSkillContent(tx, skillId);
+    // Ghi nội dung theo vị trí ổn định (Writing: Task 1-2, Speaking: Part 1-3): section hiện có giữ nguyên id,
+    // chỉ tạo khi thiếu và xóa khi dư. Đường dẫn ảnh cũ được gom để dọn sau transaction (WS-09).
+    const collectedPaths: string[] = [];
 
     let savedSectionsCount = 0;
     let savedQuestionsCount = 0;
 
-    // Ghi nội dung mới (E2: Batch write)
+    const existingSections = await tx.exam_sections.findMany({
+      where: { exam_skill_id: skillId },
+      select: { id: true, order_no: true, image_path: true },
+    });
+    const sectionByOrder = new Map(existingSections.map((s) => [s.order_no, s] as const));
+    for (const s of existingSections) {
+      if (s.image_path) collectedPaths.push(s.image_path);
+    }
+
     if (skill.skill === 'WRITING' && input.writing) {
       const rows = writingToRows(input.writing);
-      const sectionInserts: Prisma.exam_sectionsCreateManyInput[] = rows.map((r) => ({
-        id: crypto.randomUUID(),
-        exam_skill_id: skillId,
-        order_no: r.order_no,
-        title: r.title,
-        section_type: r.section_type,
-        content: r.content as Prisma.InputJsonValue,
-        config: r.config as Prisma.InputJsonValue,
-        image_path: r.image_path,
-        instruction: r.instruction,
-      }));
-      if (sectionInserts.length > 0) {
-        await tx.exam_sections.createMany({ data: sectionInserts });
+      const keep = new Set(rows.map((r) => r.order_no));
+      const creates: Prisma.exam_sectionsCreateManyInput[] = [];
+      for (const r of rows) {
+        const data = {
+          title: r.title,
+          section_type: r.section_type,
+          content: r.content as Prisma.InputJsonValue,
+          config: r.config as Prisma.InputJsonValue,
+          image_path: r.image_path,
+          instruction: r.instruction,
+        };
+        const cur = sectionByOrder.get(r.order_no);
+        if (cur) {
+          await tx.exam_sections.update({ where: { id: cur.id }, data });
+        } else {
+          creates.push({ id: crypto.randomUUID(), exam_skill_id: skillId, order_no: r.order_no, ...data });
+        }
       }
-      savedSectionsCount = sectionInserts.length;
+      if (creates.length > 0) await tx.exam_sections.createMany({ data: creates });
+      const extra = existingSections.filter((s) => !keep.has(s.order_no)).map((s) => s.id);
+      if (extra.length > 0) collectedPaths.push(...(await deleteSectionsCascade(tx, extra)));
+      savedSectionsCount = rows.length;
     } else if (skill.skill === 'SPEAKING' && input.speaking) {
       const rows = speakingToRows(input.speaking);
-      const sectionInserts: Prisma.exam_sectionsCreateManyInput[] = [];
-      const groupInserts: Prisma.question_groupsCreateManyInput[] = [];
-      const questionInserts: Prisma.questionsCreateManyInput[] = [];
+      const keep = new Set(rows.map((r) => r.order_no));
+
+      // Một truy vấn đọc toàn bộ nhóm và câu hỏi hiện có của kỹ năng.
+      const curGroups = await tx.question_groups.findMany({
+        where: { section_id: { in: existingSections.map((s) => s.id) } },
+        select: { id: true, section_id: true, order_no: true, questions: { select: { id: true, order_no: true } } },
+      });
+
+      const newSections: Prisma.exam_sectionsCreateManyInput[] = [];
+      const newGroups: Prisma.question_groupsCreateManyInput[] = [];
+      const newQs: Prisma.questionsCreateManyInput[] = [];
+      const qUpdates: Array<{ id: string; type: string; content: unknown }> = [];
+      const gUpdates: Array<{ id: string; type: string }> = [];
+      const extraQuestionIds: string[] = [];
+      const extraGroupIds: string[] = [];
 
       for (const r of rows) {
-        const secId = crypto.randomUUID();
-        sectionInserts.push({
-          id: secId,
-          exam_skill_id: skillId,
-          order_no: r.order_no,
+        const data = {
           title: r.title,
           section_type: r.section_type,
           instruction: r.instruction,
           content: r.content as Prisma.InputJsonValue,
           config: r.config as Prisma.InputJsonValue,
-        });
+        };
+        const cur = sectionByOrder.get(r.order_no);
+        let secId: string;
+        if (cur) {
+          secId = cur.id;
+          await tx.exam_sections.update({ where: { id: secId }, data });
+        } else {
+          secId = crypto.randomUUID();
+          newSections.push({ id: secId, exam_skill_id: skillId, order_no: r.order_no, ...data });
+        }
 
+        // Nhóm câu hỏi và câu hỏi giữ id theo order_no.
+        const groups = curGroups.filter((g) => g.section_id === secId);
+        const groupByOrder = new Map(groups.map((g) => [g.order_no, g] as const));
+        const keepGroups = new Set(r.groups.map((g) => g.order_no));
         for (const g of r.groups) {
-          const grpId = crypto.randomUUID();
-          groupInserts.push({
-            id: grpId,
-            section_id: secId,
-            order_no: g.order_no,
-            question_type: g.question_type,
-            instruction: null,
-          });
-
-          for (const q of g.questions) {
-            questionInserts.push({
-              id: crypto.randomUUID(),
-              question_group_id: grpId,
-              order_no: q.order_no,
-              question_type: q.question_type,
-              content: q.content as Prisma.InputJsonValue,
+          const curG = groupByOrder.get(g.order_no);
+          let grpId: string;
+          const curQs = new Map((curG?.questions ?? []).map((q) => [q.order_no, q.id] as const));
+          if (curG) {
+            grpId = curG.id;
+            gUpdates.push({ id: grpId, type: g.question_type });
+          } else {
+            grpId = crypto.randomUUID();
+            newGroups.push({
+              id: grpId,
+              section_id: secId,
+              order_no: g.order_no,
+              question_type: g.question_type,
+              instruction: null,
             });
           }
+          const keepQs = new Set(g.questions.map((q) => q.order_no));
+          for (const q of g.questions) {
+            const qid = curQs.get(q.order_no);
+            if (qid) {
+              qUpdates.push({ id: qid, type: q.question_type, content: q.content });
+            } else {
+              newQs.push({
+                id: crypto.randomUUID(),
+                question_group_id: grpId,
+                order_no: q.order_no,
+                question_type: q.question_type,
+                content: q.content as Prisma.InputJsonValue,
+              });
+            }
+          }
+          for (const [no, id] of curQs) if (!keepQs.has(no)) extraQuestionIds.push(id);
+          savedQuestionsCount += g.questions.length;
         }
+        for (const g of groups) if (!keepGroups.has(g.order_no)) extraGroupIds.push(g.id);
       }
 
-      if (sectionInserts.length > 0) {
-        await tx.exam_sections.createMany({ data: sectionInserts });
+      // Tạo mới trước (section -> nhóm -> câu hỏi) để khóa ngoại luôn hợp lệ.
+      if (newSections.length > 0) await tx.exam_sections.createMany({ data: newSections });
+      if (newGroups.length > 0) await tx.question_groups.createMany({ data: newGroups });
+      if (newQs.length > 0) await tx.questions.createMany({ data: newQs });
+
+      // Cập nhật gom: mỗi loại một câu lệnh.
+      if (gUpdates.length > 0) {
+        await tx.$executeRaw`
+          update public.question_groups g set question_type = v.t, instruction = null
+          from (values ${Prisma.join(gUpdates.map((u) => Prisma.sql`(${u.id}::uuid, ${u.type})`))}) as v(id, t)
+          where g.id = v.id
+        `;
       }
-      if (groupInserts.length > 0) {
-        await tx.question_groups.createMany({ data: groupInserts });
+      if (qUpdates.length > 0) {
+        await tx.$executeRaw`
+          update public.questions q set question_type = v.t, content = v.c::jsonb
+          from (values ${Prisma.join(
+            qUpdates.map((u) => Prisma.sql`(${u.id}::uuid, ${u.type}, ${JSON.stringify(u.content)})`)
+          )}) as v(id, t, c)
+          where q.id = v.id
+        `;
       }
-      if (questionInserts.length > 0) {
-        await tx.questions.createMany({ data: questionInserts });
-      }
-      savedSectionsCount = sectionInserts.length;
-      savedQuestionsCount = questionInserts.length;
+
+      // Xóa phần dư theo thứ tự khóa ngoại: câu hỏi -> nhóm dư -> section dư.
+      await deleteQuestionsCascade(tx, extraQuestionIds);
+      collectedPaths.push(...(await deleteGroupsCascade(tx, extraGroupIds)));
+      const extra = existingSections.filter((s) => !keep.has(s.order_no)).map((s) => s.id);
+      if (extra.length > 0) collectedPaths.push(...(await deleteSectionsCascade(tx, extra)));
+      savedSectionsCount = rows.length;
     }
 
     // Cập nhật duration_minutes và trigger updated_at (WS-02)

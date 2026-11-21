@@ -957,7 +957,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         tests.length +
         " đề · cập nhật " +
         (SET.updated || "") +
-        (status === "PUBLISHED" ? " · " + SET.plays + " lượt làm" : ""),
+        (status === "PUBLISHED" ? " · " + SET.plays + " lượt làm bài" : ""),
       isPub: status === "PUBLISHED",
       notPub: status !== "PUBLISHED" && tests.length > 0,
       blockPub: status !== "PUBLISHED" && tests.length === 0,

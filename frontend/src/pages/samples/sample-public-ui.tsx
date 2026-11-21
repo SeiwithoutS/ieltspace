@@ -483,7 +483,7 @@ export function SampleDetailLayout({
               Bài mẫu được xem công khai. Bạn cần đăng nhập để luyện tập và
               lưu bài.
             </p>
-            <a className="samples-button" href="#PracticeWS">
+            <a className="samples-button" href={document.skill === "WRITING" ? "#PracticeWriting" : "#PracticeSpeaking"}>
               Đến trang luyện tập
             </a>
           </div>

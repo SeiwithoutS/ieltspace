@@ -203,57 +203,50 @@ export function speakingDuration(c: {
   return null;
 }
 
+// Kiểm tra một Task Writing (idx 0 = Task 1, 1 = Task 2).
+function writingTaskIssues(content: WritingContent, form: string | null | undefined, idx: 0 | 1): string[] {
+  const issues: string[] = [];
+  const t = content.tasks[idx];
+  if (!t?.prompt || t.prompt.trim().length === 0) {
+    issues.push(`Task ${idx + 1} chưa có yêu cầu (đề bài).`);
+  }
+  if (idx === 0 && form === 'ACADEMIC' && (!t?.imagePath || t.imagePath.trim().length === 0)) {
+    issues.push('Task 1 chưa có ảnh đề.');
+  }
+  return issues;
+}
+
 export function validateWritingReady(
   content: WritingContent | null,
   form?: string | null
 ): string[] {
-  const issues: string[] = [];
   const tasks = content?.tasks || [];
-  if (tasks.length < 2) {
-    issues.push('Kỹ năng Writing phải có đủ 2 Task.');
-    return issues;
+  if (!content || tasks.length < 2) {
+    return ['Kỹ năng Writing phải có đủ 2 Task.'];
   }
-
-  const t1 = tasks[0];
-  if (!t1?.prompt || t1.prompt.trim().length === 0) {
-    issues.push('Task 1 chưa có yêu cầu (đề bài).');
-  }
-  if (form === 'ACADEMIC' && (!t1?.imagePath || t1.imagePath.trim().length === 0)) {
-    issues.push('Task 1 chưa có ảnh đề.');
-  }
-
-  const t2 = tasks[1];
-  if (!t2?.prompt || t2.prompt.trim().length === 0) {
-    issues.push('Task 2 chưa có yêu cầu (đề bài).');
-  }
-
-  return issues;
+  return [...writingTaskIssues(content, form, 0), ...writingTaskIssues(content, form, 1)];
 }
 
-export function validateSpeakingReady(
-  content: SpeakingContent | null
-): string[] {
-  const issues: string[] = [];
-  if (!content) {
-    issues.push('Kỹ năng Speaking chưa có nội dung.');
-    return issues;
+function speakingQuestionIssues(label: 'Part 1' | 'Part 3', qs: string[]): string[] {
+  if (qs.length === 0 || !qs.some((q) => q && q.trim().length > 0)) {
+    return [`${label} chưa có câu hỏi nào.`];
   }
-
-  // Part 1
-  const p1Qs = content.part1?.questions || [];
-  if (p1Qs.length === 0 || !p1Qs.some((q) => q && q.trim().length > 0)) {
-    issues.push('Part 1 chưa có câu hỏi nào.');
-  } else if (p1Qs.some((q) => !q || q.trim().length === 0)) {
-    issues.push('Part 1 có câu hỏi để trống, hãy nhập hoặc xóa.');
+  if (qs.some((q) => !q || q.trim().length === 0)) {
+    return [`${label} có câu hỏi để trống, hãy nhập hoặc xóa.`];
   }
+  return [];
+}
 
-  // p13Minutes
+function speakingP13Issues(content: SpeakingContent): string[] {
   const p13 = content.p13Minutes;
   if (typeof p13 !== 'number' || !Number.isInteger(p13) || p13 < 1 || p13 > 60) {
-    issues.push('Thời gian tổng Part 1 và Part 3 cần là số phút từ 1 đến 60.');
+    return ['Thời gian tổng Part 1 và Part 3 cần là số phút từ 1 đến 60.'];
   }
+  return [];
+}
 
-  // Part 2
+function speakingCueIssues(content: SpeakingContent): string[] {
+  const issues: string[] = [];
   const cueCard = content.part2?.cueCard;
   if (!cueCard || cueCard.trim().length === 0) {
     issues.push('Part 2 chưa có nội dung thẻ đề.');
@@ -270,16 +263,40 @@ export function validateSpeakingReady(
   ) {
     issues.push('Part 2 cần số phút chờ chuẩn bị và số phút nói (số nguyên từ 1).');
   }
-
-  // Part 3
-  const p3Qs = content.part3?.questions || [];
-  if (p3Qs.length === 0 || !p3Qs.some((q) => q && q.trim().length > 0)) {
-    issues.push('Part 3 chưa có câu hỏi nào.');
-  } else if (p3Qs.some((q) => !q || q.trim().length === 0)) {
-    issues.push('Part 3 có câu hỏi để trống, hãy nhập hoặc xóa.');
-  }
-
   return issues;
+}
+
+export function validateSpeakingReady(
+  content: SpeakingContent | null
+): string[] {
+  if (!content) {
+    return ['Kỹ năng Speaking chưa có nội dung.'];
+  }
+  return [
+    ...speakingQuestionIssues('Part 1', content.part1?.questions || []),
+    ...speakingP13Issues(content),
+    ...speakingCueIssues(content),
+    ...speakingQuestionIssues('Part 3', content.part3?.questions || []),
+  ];
+}
+
+// Kiểm tra riêng một Passage/Section/Task/Part (idx tính từ 0). Không kiểm tổng 40 câu hay đánh số cả kỹ năng.
+export type SectionReadyTarget =
+  | { skill: 'READING' | 'LISTENING'; section: LrSection; index: number }
+  | { skill: 'WRITING'; content: WritingContent; index: 0 | 1; form?: string | null }
+  | { skill: 'SPEAKING'; content: SpeakingContent; index: 0 | 1 | 2 };
+
+export function validateSectionReady(target: SectionReadyTarget): string[] {
+  if (target.skill === 'WRITING') {
+    return writingTaskIssues(target.content, target.form, target.index);
+  }
+  if (target.skill === 'SPEAKING') {
+    const c = target.content;
+    if (target.index === 0) return [...speakingQuestionIssues('Part 1', c.part1?.questions || []), ...speakingP13Issues(c)];
+    if (target.index === 1) return speakingCueIssues(c);
+    return [...speakingQuestionIssues('Part 3', c.part3?.questions || []), ...speakingP13Issues(c)];
+  }
+  return lrSectionIssues(target.section, target.skill, target.index);
 }
 
 export function checkLrNumbering(content: LrContent, skill?: 'READING' | 'LISTENING'): void {
@@ -383,9 +400,10 @@ function checkLrGroupReady(
   if (g.type === 'MCQ_SINGLE') {
     for (const q of g.questions) {
       if (q.accepted.length > 0) {
-        const optionLabels = q.options.map((o) => o.label);
-        const ans = q.accepted[0];
-        if (ans && !optionLabels.includes(ans)) {
+        // Editor lưu đáp án bằng nội dung lựa chọn; dữ liệu khác có thể lưu nhãn (A, B, C...).
+        const ans = q.accepted[0]?.trim();
+        const matches = q.options.some((o) => o.label === ans || o.text?.trim() === ans);
+        if (ans && !matches) {
           issues.push(`${prefix}đáp án không nằm trong danh sách lựa chọn.`);
           break;
         }
@@ -411,11 +429,19 @@ function checkLrGroupReady(
   ) {
     const rawOpts = (g.content as any)?.options;
     if (Array.isArray(rawOpts) && rawOpts.length > 0) {
-      const optionLabels = rawOpts.map((o: any) => o.label);
+      // Lựa chọn có thể là { label, text } hoặc chuỗi; đáp án có thể là nhãn hoặc nội dung.
+      const optionValues = new Set<string>();
+      for (const o of rawOpts) {
+        if (typeof o === 'string') optionValues.add(o.trim());
+        else if (o && typeof o === 'object') {
+          if (o.label != null) optionValues.add(String(o.label));
+          if (o.text != null) optionValues.add(String(o.text).trim());
+        }
+      }
       let invalidFound = false;
       for (const q of g.questions) {
         for (const ans of q.accepted) {
-          if (ans && !optionLabels.includes(ans)) {
+          if (ans && !optionValues.has(ans.trim())) {
             invalidFound = true;
             break;
           }
@@ -428,6 +454,29 @@ function checkLrGroupReady(
     }
   }
 
+  return issues;
+}
+
+// Kiểm tra một Passage (Reading) hoặc Section (Listening): nội dung, audio, nhóm câu hỏi và đáp án từng nhóm.
+function lrSectionIssues(p: LrSection, skill: 'READING' | 'LISTENING', a: number): string[] {
+  const issues: string[] = [];
+  const hasText = (p.paragraphs || []).some((x) => Boolean(x.text && x.text.trim().length > 0));
+  const prefix = skill === 'READING' ? 'Passage' : 'Section';
+  if (skill === 'READING') {
+    if (!hasText) issues.push(`Passage ${a + 1} chưa có bài đọc.`);
+  } else {
+    if (!hasText) issues.push(`Section ${a + 1} chưa có transcript.`);
+    if (!p.audio || !p.audio.path || p.audio.path.trim().length === 0) {
+      issues.push(`Section ${a + 1} chưa có ghi âm.`);
+    }
+  }
+  if (!p.groups || p.groups.length === 0) {
+    issues.push(`${prefix} ${a + 1} chưa có nhóm câu hỏi.`);
+  } else {
+    for (let k = 0; k < p.groups.length; k++) {
+      issues.push(...checkLrGroupReady(p.groups[k], p, prefix, a, k));
+    }
+  }
   return issues;
 }
 
@@ -460,19 +509,7 @@ export function validateReadingReady(
   }
 
   for (let a = 0; a < Math.min(3, sections.length); a++) {
-    const p = sections[a];
-    const hasReading = (p.paragraphs || []).some((x) => Boolean(x.text && x.text.trim().length > 0));
-    if (!hasReading) {
-      issues.push(`Passage ${a + 1} chưa có bài đọc.`);
-    }
-    if (!p.groups || p.groups.length === 0) {
-      issues.push(`Passage ${a + 1} chưa có nhóm câu hỏi.`);
-    } else {
-      for (let k = 0; k < p.groups.length; k++) {
-        const g = p.groups[k];
-        issues.push(...checkLrGroupReady(g, p, 'Passage', a, k));
-      }
-    }
+    issues.push(...lrSectionIssues(sections[a], 'READING', a));
   }
 
   return issues;
@@ -506,22 +543,7 @@ export function validateListeningReady(
   }
 
   for (let a = 0; a < Math.min(4, sections.length); a++) {
-    const p = sections[a];
-    const hasTranscript = (p.paragraphs || []).some((x) => Boolean(x.text && x.text.trim().length > 0));
-    if (!hasTranscript) {
-      issues.push(`Section ${a + 1} chưa có transcript.`);
-    }
-    if (!p.audio || !p.audio.path || p.audio.path.trim().length === 0) {
-      issues.push(`Section ${a + 1} chưa có ghi âm.`);
-    }
-    if (!p.groups || p.groups.length === 0) {
-      issues.push(`Section ${a + 1} chưa có nhóm câu hỏi.`);
-    } else {
-      for (let k = 0; k < p.groups.length; k++) {
-        const g = p.groups[k];
-        issues.push(...checkLrGroupReady(g, p, 'Section', a, k));
-      }
-    }
+    issues.push(...lrSectionIssues(sections[a], 'LISTENING', a));
   }
 
   return issues;

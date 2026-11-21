@@ -219,7 +219,7 @@ class SpeakingTest extends React.Component<ScreenProps, AttemptState> {
               <div className="p-7 [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)]">
                 <div className="flex flex-col [gap:14px]">
                   <div className="font-semibold">{"Ghi âm câu trả lời"}</div>
-                  <div className="flex items-center justify-center gap-1 [height:120px] [border-radius:18px] [background:var(--attempt-bg-e8e4fa)] [border:1.5px_solid_var(--attempt-line-d6d4d0)]">
+                  <div className="flex items-center justify-center gap-1 [height:120px] [border-radius:16px] [background:var(--attempt-bg-e8e4fa)] [border:1.5px_solid_var(--attempt-line-d6d4d0)]">
                     <span className="w-1 [border-radius:2px] [background:var(--attempt-bg-5543b0)] [height:10px]"></span>
                     <span className="w-1 [border-radius:2px] [background:var(--attempt-bg-5543b0)] [height:22px]"></span>
                     <span className="w-1 [border-radius:2px] [background:var(--attempt-bg-5543b0)] [height:34px]"></span>

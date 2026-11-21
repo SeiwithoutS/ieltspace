@@ -6,6 +6,8 @@ import {
   type ReactNode,
 } from "react";
 
+import SampleUploadFrame from "./SampleUploadFrame";
+import AutoTextarea from "../../../components/exams/lr-editor/AutoTextarea";
 import SampleMediaPreview from "../../../components/samples/SampleMediaPreview";
 import { VisibilityIcon } from "../../../components/shared/VisibilityIcon";
 import type { SampleAssetKind, SampleMediaRef } from "../../../lib/samples/sample-media-types";
@@ -144,6 +146,14 @@ function MarkdownField({
 }) {
   const textarea = useRef<HTMLTextAreaElement>(null);
 
+  // ô soạn ôm nội dung, không có thanh cuộn (giống ô soạn Summary/Note của đề)
+  useEffect(() => {
+    const element = textarea.current;
+    if (!element) return;
+    element.style.height = "auto";
+    element.style.height = `${element.scrollHeight}px`;
+  }, [value]);
+
   function format(kind: "bold" | "italic" | "heading" | "list") {
     const element = textarea.current;
     if (!element) return;
@@ -189,8 +199,15 @@ function MarkdownField({
 
   return (
     <div className="sample-field">
-      <label>
-        <span>{label}</span>
+      <span>{label}</span>
+
+      <div className="sample-markdown-editor">
+        <div className="sample-markdown-toolbar" role="toolbar" aria-label={`Định dạng ${label}`}>
+          <button type="button" title="In đậm" aria-label="In đậm" onClick={() => format("bold")}><b>B</b></button>
+          <button type="button" title="In nghiêng" aria-label="In nghiêng" onClick={() => format("italic")}><i>I</i></button>
+          <button type="button" title="Tiêu đề" aria-label="Tiêu đề" onClick={() => format("heading")}>H</button>
+          <button type="button" title="Gạch đầu dòng" aria-label="Gạch đầu dòng" onClick={() => format("list")}>•</button>
+        </div>
         <textarea
           ref={textarea}
           aria-label={label}
@@ -198,13 +215,6 @@ function MarkdownField({
           rows={rows}
           onChange={(event) => onChange(event.target.value)}
         />
-      </label>
-
-      <div className="sample-markdown-toolbar" role="toolbar" aria-label={`Định dạng ${label}`}>
-        <button type="button" onClick={() => format("bold")}>Đậm</button>
-        <button type="button" onClick={() => format("italic")}>Nghiêng</button>
-        <button type="button" onClick={() => format("heading")}>Tiêu đề</button>
-        <button type="button" onClick={() => format("list")}>Gạch đầu dòng</button>
       </div>
 
       <small className="sample-muted">
@@ -267,7 +277,6 @@ export default function SampleEditor({
   const historyRef = useRef<SampleDocumentV1[]>([]);
   const lastFieldRef = useRef("");
   const loadSequenceRef = useRef(0);
-  const coverInput = useRef<HTMLInputElement>(null);
   const newDraftRoute = sampleId ? null : `${skill}:${sampleType ?? ""}`;
   const initializedDraftRoute = useRef(newDraftRoute);
 
@@ -644,52 +653,29 @@ export default function SampleEditor({
 
     return (
       <div className="sample-field">
-        <label className="grid gap-2">
-          <span>{label}</span>
+        <span>{label}</span>
 
-          <input
-            type="file"
-            disabled={!record || !editing || busy}
-            accept={
-              audio
-                ? ".mp3,.wav,.m4a,audio/mpeg,audio/wav,audio/x-wav,audio/mp4,audio/x-m4a"
-                : ".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-            }
-            onChange={event => {
-              const file = event.currentTarget.files?.[0];
+        <SampleUploadFrame
+          kind={audio ? "audio" : "image"}
+          media={media}
+          disabled={!record || !editing || busy}
+          title={audio ? "Tải tệp audio mẫu" : "Tải hình ảnh"}
+          hint={
+            audio
+              ? "Kéo thả tệp hoặc bấm để chọn (MP3, WAV, M4A tối đa 50 MiB)"
+              : "Kéo thả tệp hoặc bấm để chọn (JPG, PNG, WebP tối đa 5 MiB)"
+          }
+          accept={
+            audio
+              ? ".mp3,.wav,.m4a,audio/mpeg,audio/wav,audio/x-wav,audio/mp4,audio/x-m4a"
+              : ".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+          }
+          onSelect={(file) => uploadMedia(kind, file, itemId)}
+          onRemove={() => removeMedia(kind, itemId)}
+        />
 
-              // Cho phép chọn lại cùng file sau lỗi.
-              event.currentTarget.value = "";
-
-              if (file) uploadMedia(kind, file, itemId);
-            }}
-          />
-        </label>
-
-        <small className="sample-muted">
-          {audio
-            ? "MP3, WAV hoặc M4A. Tối đa 50 MiB."
-            : "JPEG, PNG hoặc WebP. Tối đa 5 MiB."}
-          {!record ? " Bấm Lưu lần đầu để tải tệp." : ""}
-        </small>
-
-        {media && (
-          <>
-            <span className="sample-muted break-all">
-              {media.originalName}
-              {" · "}
-              {(media.sizeBytes / 1024 / 1024).toFixed(2)} MiB
-            </span>
-
-            <button
-              type="button"
-              className="sample-button sample-button--secondary self-start"
-              disabled={!editing || busy}
-              onClick={() => removeMedia(kind, itemId)}
-            >
-              Gỡ khỏi bản đang soạn
-            </button>
-          </>
+        {!record && (
+          <small className="sample-muted">Bấm Lưu lần đầu để tải tệp.</small>
         )}
       </div>
     );
@@ -773,7 +759,7 @@ export default function SampleEditor({
     <StaffLayout
       active="samples"
       crumb={`Quản lý / Bài mẫu / ${skill === "WRITING" ? "Writing" : "Speaking"}`}
-      contentClassName="p-4 sm:p-6 md:p-8"
+      contentClassName="flex flex-col"
     >
       <div className="sample-editor">
         <header className="sample-editor-header">
@@ -942,22 +928,19 @@ export default function SampleEditor({
                       Hiển thị trên thẻ bài mẫu sau khi công bố. JPG, PNG hoặc WebP, tối đa 5 MiB.
                     </small>
                     {!record && <small className="sample-muted">Nhập tiêu đề trước khi tải ảnh. Hệ thống sẽ tạo bản nháp nếu cần.</small>}
-                    {document.cover && <small className="sample-muted break-all">{document.cover.originalName}</small>}
-                    {editing && (
-                      <div className="flex flex-wrap gap-2">
-                        <input ref={coverInput} hidden type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                          aria-label="Tệp ảnh đại diện" onChange={event => {
-                            const file = event.currentTarget.files?.[0];
-                            event.currentTarget.value = "";
-                            if (file) uploadMedia("cover", file);
-                          }} />
-                        <button type="button" className="sample-button sample-button--secondary"
-                          disabled={busy || (!record && !document.title.trim())} onClick={() => coverInput.current?.click()}>
-                          {document.cover ? "Đổi ảnh đại diện" : "Tải ảnh đại diện"}
-                        </button>
-                        {document.cover && <button type="button" className="sample-button sample-button--secondary"
-                          disabled={busy} onClick={() => removeMedia("cover")}>Gỡ ảnh</button>}
-                      </div>
+                    {editing ? (
+                      <SampleUploadFrame
+                        kind="image"
+                        media={document.cover}
+                        disabled={busy || (!record && !document.title.trim())}
+                        title="Tải ảnh đại diện"
+                        hint="Kéo thả tệp hoặc bấm để chọn (JPG, PNG, WebP tối đa 5 MiB)"
+                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                        onSelect={(file) => uploadMedia("cover", file)}
+                        onRemove={() => removeMedia("cover")}
+                      />
+                    ) : (
+                      document.cover && <small className="sample-muted break-all">{document.cover.originalName}</small>
                     )}
                   </div>
                 </div>
@@ -1156,7 +1139,7 @@ export default function SampleEditor({
                       </div>
 
                       <Field label={document.part === 2 ? "Cue card" : `Câu hỏi ${index + 1}`}>
-                        <textarea
+                        <AutoTextarea
                           rows={document.part === 2 ? 7 : 3}
                           value={item.question}
                           onChange={(event) =>
@@ -1210,7 +1193,7 @@ export default function SampleEditor({
                 <h2>Dàn ý — không bắt buộc</h2>
 
                 <Field label="Đoạn giới thiệu dàn ý">
-                  <textarea
+                  <AutoTextarea
                     rows={3}
                     value={document.outlineIntro}
                     onChange={(event) =>

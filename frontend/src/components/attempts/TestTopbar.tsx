@@ -451,7 +451,7 @@ class TestTopbar extends React.Component<TopbarProps, TopbarState> {
                         <div
                           role="group"
                           aria-label="Màu highlight"
-                          className="absolute [left:0] [top:48px] [z-index:50] [padding:10px] [border-radius:14px] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_8px_24px_rgba(53,_38,_55,_0.12)] flex gap-2"
+                          className="absolute [left:0] [top:48px] [z-index:50] [padding:10px] [border-radius:12px] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_8px_24px_rgba(53,_38,_55,_0.12)] flex gap-2"
                           style={{
                             border: "1.5px solid " + v.t.line,
                             background: v.t.card,
@@ -548,7 +548,7 @@ class TestTopbar extends React.Component<TopbarProps, TopbarState> {
                         <div
                           role="dialog"
                           aria-label="Cỡ chữ và giao diện"
-                          className="absolute [right:0] [top:48px] [z-index:50] [width:288px] box-border p-4 [border-radius:18px] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_8px_24px_rgba(53,_38,_55,_0.12)] flex flex-col gap-4"
+                          className="absolute [right:0] [top:48px] [z-index:50] [width:288px] box-border p-4 [border-radius:16px] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_8px_24px_rgba(53,_38,_55,_0.12)] flex flex-col gap-4"
                           style={{
                             border: "1.5px solid " + v.t.line,
                             background: v.t.card,

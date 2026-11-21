@@ -188,7 +188,7 @@ class ReadingTest extends React.Component<ScreenProps, AttemptState> {
           fill: dark ? col.dark : col.fill,
           active: active === k,
           styleClass:
-            "relative overflow-hidden box-border [padding:14px_14px_8px_20px] [border-radius:14px]",
+            "relative overflow-hidden box-border [padding:14px_14px_8px_20px] [border-radius:12px]",
           style: {
             background: t.card,
             border:
@@ -481,7 +481,7 @@ class ReadingTest extends React.Component<ScreenProps, AttemptState> {
                                 <div
                                   role="dialog"
                                   aria-label="Tùy chọn highlight"
-                                  className="absolute [left:0] [top:100%] mt-2 [z-index:20] [width:236px] box-border p-2 [border-radius:14px] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_8px_24px_rgba(53,_38,_55,_0.14)] [font-size:14px] [line-height:1.5] font-medium [white-space:normal] [text-align:left] flex flex-col [gap:2px]"
+                                  className="absolute [left:0] [top:100%] mt-2 [z-index:20] [width:236px] box-border p-2 [border-radius:12px] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_8px_24px_rgba(53,_38,_55,_0.14)] [font-size:14px] [line-height:1.5] font-medium [white-space:normal] [text-align:left] flex flex-col [gap:2px]"
                                   style={{
                                     border: "1.5px solid " + v.t.line,
                                     background: v.t.card,
@@ -621,7 +621,7 @@ class ReadingTest extends React.Component<ScreenProps, AttemptState> {
                                 <div
                                   role="dialog"
                                   aria-label="Tùy chọn highlight"
-                                  className="absolute [left:0] [top:100%] mt-2 [z-index:20] [width:236px] box-border p-2 [border-radius:14px] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_8px_24px_rgba(53,_38,_55,_0.14)] [font-size:14px] [line-height:1.5] font-medium [white-space:normal] [text-align:left] flex flex-col [gap:2px]"
+                                  className="absolute [left:0] [top:100%] mt-2 [z-index:20] [width:236px] box-border p-2 [border-radius:12px] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_8px_24px_rgba(53,_38,_55,_0.14)] [font-size:14px] [line-height:1.5] font-medium [white-space:normal] [text-align:left] flex flex-col [gap:2px]"
                                   style={{
                                     border: "1.5px solid " + v.t.line,
                                     background: v.t.card,
@@ -767,7 +767,7 @@ class ReadingTest extends React.Component<ScreenProps, AttemptState> {
                                 <div
                                   role="dialog"
                                   aria-label="Tùy chọn highlight"
-                                  className="absolute [left:0] [top:100%] mt-2 [z-index:20] [width:236px] box-border p-2 [border-radius:14px] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_8px_24px_rgba(53,_38,_55,_0.14)] [font-size:14px] [line-height:1.5] font-medium [white-space:normal] [text-align:left] flex flex-col [gap:2px]"
+                                  className="absolute [left:0] [top:100%] mt-2 [z-index:20] [width:236px] box-border p-2 [border-radius:12px] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_8px_24px_rgba(53,_38,_55,_0.14)] [font-size:14px] [line-height:1.5] font-medium [white-space:normal] [text-align:left] flex flex-col [gap:2px]"
                                   style={{
                                     border: "1.5px solid " + v.t.line,
                                     background: v.t.card,
@@ -1072,7 +1072,7 @@ class ReadingTest extends React.Component<ScreenProps, AttemptState> {
                           }
                         </div>
                         <div
-                          className="w-full box-border mt-1 p-4 [border-radius:14px] [text-align:left] flex flex-col gap-3 [font-size:14px]"
+                          className="w-full box-border mt-1 p-4 [border-radius:12px] [text-align:left] flex flex-col gap-3 [font-size:14px]"
                           style={{
                             border: "1.5px solid " + v.t.line,
                             background: v.t.card,

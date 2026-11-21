@@ -11,7 +11,7 @@ export type SummaryModeToggleProps = {
 export function SummaryModeToggle({ group, readOnly = false, onChangeMode }: SummaryModeToggleProps) {
   const isBox = group.type === 'SUMMARY_BOX';
   const base =
-    'px-3 py-1.5 rounded-[9px] text-[13px] font-semibold border border-solid text-left transition-all';
+    'px-3 py-1.5 rounded-[10px] text-[13px] font-semibold border border-solid text-left transition-all';
   const on = 'bg-white border-[#D6D4D0] shadow-sm text-[#352637]';
   const off = 'border-transparent text-[#706473] hover:text-[#352637]';
 

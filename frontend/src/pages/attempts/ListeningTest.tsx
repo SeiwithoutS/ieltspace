@@ -757,7 +757,7 @@ class ListeningTest extends React.Component<ScreenProps, AttemptState> {
                     key={q.n}
                     question={q}
                     fontSize={v.fs}
-                    className="box-border flex flex-col gap-2.5 rounded-[18px] px-5 py-[18px] w-full"
+                    className="box-border flex flex-col gap-2.5 rounded-[16px] px-5 py-[18px] w-full"
                     style={{
                       border: "1.5px solid " + v.t.line,
                       background: v.t.card,

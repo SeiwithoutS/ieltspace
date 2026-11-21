@@ -185,7 +185,7 @@ class TestProgressBar extends React.Component<
           >
             <div className="[flex:1_1_520px] min-w-0 flex justify-center">
               <div
-                className="inline-flex flex-wrap items-center gap-2 [padding:6px_10px] [border-radius:14px] [max-width:100%] box-border"
+                className="inline-flex flex-wrap items-center gap-2 [padding:6px_10px] [border-radius:12px] [max-width:100%] box-border"
                 style={{
                   border: "1.5px solid " + v.t.line,
                   background: v.t.card,

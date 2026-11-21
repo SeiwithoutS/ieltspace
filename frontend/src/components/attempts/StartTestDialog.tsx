@@ -183,7 +183,7 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
         tagFg: m.tagFg,
         checked: on,
         styleClass:
-          "[flex:1_1_280px] box-border flex flex-col gap-2 p-4 [border-radius:14px] cursor-pointer",
+          "[flex:1_1_280px] box-border flex flex-col gap-2 p-4 [border-radius:12px] cursor-pointer",
         style: {
           background: on ? "#E3ECFD" : "#FFFFFF",
           border: on ? "2px solid #2963CC" : "1.5px solid #D6D4D0",

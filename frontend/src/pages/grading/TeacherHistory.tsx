@@ -39,8 +39,9 @@ export default function TeacherHistory() {
               role="Giáo viên"
             />
             <main
+              className="p-4 sm:p-6 md:p-8"
               style={styleOf(
-                "flex: 1; background: #FAF9F5; padding: 36px 32px 48px; display: flex; flex-direction: column; gap: 24px",
+                "flex: 1; background: #FAF9F5; display: flex; flex-direction: column; gap: 24px",
               )}
             >
               <div

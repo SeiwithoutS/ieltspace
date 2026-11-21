@@ -121,7 +121,7 @@ export default function EditorTopbar({
             key={i}
             type="button"
             onClick={() => onSelectTab(i)}
-            className={`px-3.5 py-1.5 rounded-[9px] text-left shrink-0 border border-solid ${
+            className={`px-3.5 py-1.5 rounded-[10px] text-left shrink-0 border border-solid ${
               i === activeTab
                 ? 'bg-white border-[#D6D4D0] shadow-sm text-[#352637]'
                 : 'border-transparent text-[#706473] hover:text-[#352637]'

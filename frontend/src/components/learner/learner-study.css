@@ -87,7 +87,7 @@
   gap: 2px;
   max-width: 100%;
   padding: 3px;
-  border-radius: 11px;
+  border-radius: 10px;
   background: var(--study-hover);
 }
 .learner-study-segments button {
@@ -161,7 +161,7 @@
   gap: 12px;
   padding: 13px 15px;
   border: 1px solid var(--study-line);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--study-surface);
 }
 .learner-study-result-info { display: grid; gap: 4px; min-width: 0; }

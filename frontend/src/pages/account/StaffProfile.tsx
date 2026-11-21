@@ -44,8 +44,9 @@ export default function StaffProfile({ reportId, focusSupport }: { reportId?: st
               >
                 <AdminTopbar crumb="Giáo viên / Hồ sơ cá nhân" role="Giáo viên" />
                 <main
+                  className="p-4 sm:p-6 md:p-8"
                   style={styleOf(
-                    "flex: 1; background: #FAF9F5; padding: 36px 32px 48px; display: flex; flex-direction: column; gap: 24px",
+                    "flex: 1; background: #FAF9F5; display: flex; flex-direction: column; gap: 24px",
                   )}
                 >
                   <div
@@ -193,8 +194,9 @@ export default function StaffProfile({ reportId, focusSupport }: { reportId?: st
               >
                 <AdminTopbar crumb="Quản lý / Hồ sơ cá nhân" />
                 <main
+                  className="p-4 sm:p-6 md:p-8"
                   style={styleOf(
-                    "flex: 1; background: #FAF9F5; padding: 36px 32px 48px; display: flex; flex-direction: column; gap: 24px",
+                    "flex: 1; background: #FAF9F5; display: flex; flex-direction: column; gap: 24px",
                   )}
                 >
                   <div

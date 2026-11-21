@@ -218,7 +218,7 @@ export const SkillHistoryDrawer: React.FC<SkillHistoryDrawerProps> = ({
                     tabIndex={active ? 0 : -1}
                     onClick={() => setTab(t.key)}
                     onKeyDown={onTabKeyDown}
-                    className={`flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-[9px] border-0 font-[inherit] text-[14px] cursor-pointer transition-colors ${FOCUS_RING} ${
+                    className={`flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-[10px] border-0 font-[inherit] text-[14px] cursor-pointer transition-colors ${FOCUS_RING} ${
                       active
                         ? 'bg-white text-[#352637] font-semibold shadow-[0_1px_2px_rgba(53,38,55,0.12)]'
                         : 'bg-transparent text-[#706473] font-medium hover:text-[#352637]'
@@ -305,7 +305,7 @@ export const SkillHistoryDrawer: React.FC<SkillHistoryDrawerProps> = ({
                           onSelectVersion?.(ver.id);
                         }
                       }}
-                      className={`px-4 py-3.5 rounded-[14px] border-[1.5px] border-solid transition-colors ${FOCUS_RING} ${
+                      className={`px-4 py-3.5 rounded-[12px] border-[1.5px] border-solid transition-colors ${FOCUS_RING} ${
                         isCurrent
                           ? 'border-[#2963CC]/40 bg-[#F4F7FE]'
                           : `border-[#ECEAE5] bg-white ${

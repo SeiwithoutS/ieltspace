@@ -16,7 +16,7 @@ export function DiagramModeToggle({ group, readOnly = false, onChange }: ModeTog
   const [confirmPending, setConfirmPending] = useState<'labels' | 'letters' | null>(null);
   const letters = group.mode === 'letters';
   const base =
-    'px-3 py-1.5 rounded-[9px] text-[13px] font-semibold border border-solid text-left';
+    'px-3 py-1.5 rounded-[10px] text-[13px] font-semibold border border-solid text-left';
   const on = 'bg-white border-[#D6D4D0] shadow-sm text-[#352637]';
   const off = 'border-transparent text-[#706473] hover:text-[#352637]';
 

@@ -32,6 +32,11 @@ html.dark .support-panel:not(.support-profile) {
   max-width: 1400px;
   margin: 0 auto;
 }
+.support-shell .support-panel {
+  padding: 0;
+  max-width: none;
+  margin: 0;
+}
 .support-profile {
   max-width: 100%;
   background: var(--support-card);
@@ -241,7 +246,7 @@ html.dark .support-panel:not(.support-profile) {
 .support-profile .support-filters button {
   min-height: 34px;
   border-color: transparent;
-  border-radius: 9px;
+  border-radius: 10px;
   background: transparent;
   color: var(--support-muted);
   padding-inline: 11px;
@@ -270,7 +275,7 @@ html.dark .support-panel:not(.support-profile) {
 .support-profile .support-card {
   margin-bottom: 10px;
   padding: 14px;
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow: none;
   overflow-wrap: anywhere;
 }

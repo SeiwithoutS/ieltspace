@@ -687,7 +687,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
               nm +
               (stx ? " · " + stx[0] : " · chưa có, bấm để tạo"),
             menuSt:
-              "position: fixed; z-index: 50; min-width: 240px; width: max-content; max-width: 300px; padding: 6px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); box-sizing: border-box; left: " +
+              "position: fixed; z-index: 50; min-width: 240px; width: max-content; max-width: 300px; padding: 6px; border-radius: 12px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); box-sizing: border-box; left: " +
               (s.menuPos ? s.menuPos.l : 0) +
               "px; " +
               (s.menuPos && s.menuPos.up

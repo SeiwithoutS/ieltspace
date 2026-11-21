@@ -270,7 +270,7 @@ function SupportPanel({ admin = false, reportId, userId, focusOnOpen }: { admin?
     </section>
   );
   return admin ? (
-    <StaffLayout active="reports" crumb="Quản lý / Báo cáo & phản hồi" contentClassName="support-shell">
+    <StaffLayout active="reports" crumb="Quản lý / Báo cáo & phản hồi" contentClassName="support-shell p-4 sm:p-6 md:p-8">
       {content}
     </StaffLayout>
   ) : (

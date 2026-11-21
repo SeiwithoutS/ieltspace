@@ -28,8 +28,9 @@
 }
 
 .vocabulary.vocab-admin-content {
-  max-width: 1440px;
-  padding: clamp(16px, 2.5vw, 32px) clamp(14px, 2.5vw, 36px) 48px;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   display: grid;
   gap: 20px;
 }
@@ -53,7 +54,7 @@
   overflow-wrap: anywhere;
 }
 
-.vocab-page-header h1 { font-size: clamp(27px, 3vw, 36px); }
+.vocab-page-header h1 { font-size: 28px; }
 .vocab-page-header p, .vocab-set-dialog p { margin: 6px 0 0; }
 .vocab-page-header :is(p, small), .vocab-set-dialog :is(p, small), .vocab-section-heading small,
 .vocab-import-panel p, .vocab-empty { color: var(--muted); }
@@ -97,7 +98,7 @@
   min-width: 0;
   border: 1px solid var(--line);
   background: var(--surface);
-  border-radius: 18px;
+  border-radius: 16px;
   padding: clamp(14px, 2vw, 22px);
 }
 

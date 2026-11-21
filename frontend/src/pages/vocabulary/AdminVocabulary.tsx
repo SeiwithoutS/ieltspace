@@ -411,7 +411,7 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
 export default function AdminVocabulary() {
   const [selected, setSelected] = useState<VocabularySet | null>(null);
   return (
-    <StaffLayout active="vocabulary" crumb="Quản lý / Từ vựng" contentClassName="vocab-admin">
+    <StaffLayout active="vocabulary" crumb="Quản lý / Từ vựng" contentClassName="vocab-admin p-4 sm:p-6 md:p-8">
         <div className="vocabulary vocab-admin-content">
           {selected ? <>
             <button type="button" className="vocab-button vocab-back" onClick={() => { if (canNavigate()) setSelected(null); }}>← Danh sách bộ từ</button>

@@ -792,7 +792,7 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
                 <button
                   type="button"
                   onClick={() => setRightTab('q')}
-                  className={`px-3 py-1 rounded-[9px] text-[13px] font-semibold border border-solid ${rightTab === 'q'
+                  className={`px-3 py-1 rounded-[10px] text-[13px] font-semibold border border-solid ${rightTab === 'q'
                       ? 'bg-white border-[#D6D4D0] shadow-sm text-[#352637]'
                       : 'border-transparent text-[#706473]'
                     }`}
@@ -807,7 +807,7 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
                 <button
                   type="button"
                   onClick={() => setRightTab('e')}
-                  className={`px-3 py-1 rounded-[9px] text-[13px] font-semibold border border-solid ${rightTab === 'e'
+                  className={`px-3 py-1 rounded-[10px] text-[13px] font-semibold border border-solid ${rightTab === 'e'
                       ? 'bg-white border-[#D6D4D0] shadow-sm text-[#352637]'
                       : 'border-transparent text-[#706473]'
                     }`}

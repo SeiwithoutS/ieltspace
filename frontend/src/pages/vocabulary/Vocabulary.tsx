@@ -2,14 +2,52 @@ import { VocabularySetCard } from "../../components/vocabulary/VocabularySetCard
 import PageLink from "../../components/navigation/PageLink";
 import { WordNote } from "../../components/vocabulary/WordNote";
 import { FlashcardIcon } from "../../components/vocabulary/FlashcardIcon";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import LearnerHeader from "../../components/navigation/LearnerHeader";
 import { navigate, useAuth } from "../../lib/auth/auth";
 import { apiFetch } from "../../lib/shared/api";
-import { getPersonalVocabulary, usePublishedVocabulary } from "../../lib/vocabulary/vocabulary-library";
+import { getPersonalVocabulary, usePublishedVocabulary, type PublishedVocabularySet } from "../../lib/vocabulary/vocabulary-library";
 import { WordCard } from "../../components/vocabulary/WordCard";
+import type { Word } from "../../data/vocabulary";
+import { cefrRank, cefrTags } from "../../lib/vocabulary/cefr";
 import "../../components/shared/library-cards.css";
 import "./vocabulary.css";
+
+function VocabularyWordList({ set, words, canStudy, emptyMessage, renderWord }: {
+  set?: PublishedVocabularySet;
+  words: Word[];
+  canStudy: boolean;
+  emptyMessage: string;
+  renderWord: (word: Word) => ReactNode;
+}) {
+  const [level, setLevel] = useState("");
+  const [sortByLevel, setSortByLevel] = useState(false);
+  const visibleWords = words.filter((word) => !level || word.tag === level);
+  if (sortByLevel) visibleWords.sort((a, b) => cefrRank(a.tag) - cefrRank(b.tag));
+
+  return <>
+    <div className="vocab-detail-header">
+      <h2>{set?.title ?? "Từ yêu thích"} <small aria-live="polite">· {visibleWords.length} từ</small></h2>
+      {canStudy && !!set?.words.length && (
+        <PageLink page="Flashcard" query={new URLSearchParams({ set: set.id }).toString()} className="vocab-primary">
+          <FlashcardIcon /> Ôn bằng flashcard
+        </PageLink>
+      )}
+    </div>
+    {set && <div className="vocab-level-controls" role="group" aria-label="Sắp xếp và lọc từ theo CEFR">
+      <button type="button" aria-pressed={sortByLevel} onClick={() => setSortByLevel(!sortByLevel)}>
+        CEFR thấp → cao
+      </button>
+      <select aria-label="Lọc theo cấp độ CEFR" value={level} onChange={(event) => setLevel(event.target.value)}>
+        <option value="">Mọi cấp độ</option>
+        {cefrTags.map((tag) => <option key={tag} value={tag}>{tag}</option>)}
+      </select>
+    </div>}
+    {visibleWords.map(renderWord)}
+    {!visibleWords.length && <p>{emptyMessage}</p>}
+  </>;
+}
+
 export default function Vocabulary({ vocabularySetId: topic }: { vocabularySetId?: string }) {
   const [search, setSearch] = useState(""),
     [tab, setTab] = useState<"sets" | "favorites">("sets");
@@ -93,22 +131,20 @@ export default function Vocabulary({ vocabularySetId: topic }: { vocabularySetId
           ))}
         </div> : <>
         {topic && <div className="word-tools"><button type="button" onClick={() => switchTab("sets")}>← Tất cả bộ từ</button></div>}
-        {topic && !selectedSet ? <p role="status">Bộ từ này hiện không có trong thư viện.</p> : <>
-        <div className="vocab-detail-header">
-          <h2>{selectedSet?.title ?? "Từ yêu thích"} <small>· {words.length} từ</small></h2>
-          {userId && !!selectedSet?.words.length && (
-            <PageLink page="Flashcard" query={new URLSearchParams({ set: selectedSet.id }).toString()} className="vocab-primary">
-              <FlashcardIcon /> Ôn bằng flashcard
-            </PageLink>
-          )}
-        </div>
-        {words.map((w) => (
-          <WordCard key={w.id} entry={w} favorite={!!notes[w.id]?.fav} onFavorite={userId && ready ? ()=>void update(w.id,{fav:!notes[w.id]?.fav}) : undefined}>
-            {userId && ready && <WordNote word={w.word} value={notes[w.id]?.note ?? ""} onSave={(note) => update(w.id, { note })} />}
-          </WordCard>
-        ))}
-        {!words.length && <p>{favorites && !search ? (ready ? "Bạn chưa lưu từ yêu thích nào. Mở một bộ từ và bấm ngôi sao để lưu." : personalError ? "Không tải được từ yêu thích." : "Đang tải từ yêu thích…") : "Không có từ phù hợp."}</p>}
-        </>}
+        {topic && !selectedSet ? <p role="status">Bộ từ này hiện không có trong thư viện.</p> : (
+          <VocabularyWordList
+            key={selectedSet?.id}
+            set={selectedSet}
+            words={words}
+            canStudy={!!userId}
+            emptyMessage={favorites && !search ? (ready ? "Bạn chưa lưu từ yêu thích nào. Mở một bộ từ và bấm ngôi sao để lưu." : personalError ? "Không tải được từ yêu thích." : "Đang tải từ yêu thích…") : "Không có từ phù hợp."}
+            renderWord={(word) => (
+              <WordCard key={word.id} entry={word} favorite={!!notes[word.id]?.fav} onFavorite={userId && ready ? () => void update(word.id, { fav: !notes[word.id]?.fav }) : undefined}>
+                {userId && ready && <WordNote word={word.word} value={notes[word.id]?.note ?? ""} onSave={(note) => update(word.id, { note })} />}
+              </WordCard>
+            )}
+          />
+        )}
         </>)}
       </main>
     </>

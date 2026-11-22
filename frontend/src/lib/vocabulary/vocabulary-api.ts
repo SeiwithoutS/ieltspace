@@ -65,6 +65,7 @@ export async function saveVocabularyDraft(
     meaning: word.meaning,
     phonetic: word.phonetic,
     pos: word.pos,
+    tag: word.tag,
     example: word.example,
     translation: word.translation,
     image: word.image,

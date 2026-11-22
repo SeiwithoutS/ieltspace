@@ -91,6 +91,29 @@
   background: #352637;
   color: white;
 }
+.vocab-level-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.vocabulary .vocab-level-controls :is(button, select) {
+  min-height: 36px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.vocabulary .vocab-level-controls button[aria-pressed="true"] {
+  background: var(--soft);
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.vocab-level-controls :is(button, select):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+.dark .vocab-level-controls select { color-scheme: dark; }
 .word-card {
   display: flex;
   align-items: flex-start;
@@ -225,6 +248,19 @@
 .word-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
 .word-heading h3 { font-size: 22px; }
 .word-heading small { padding: 0; background: transparent; color: var(--muted); font-size: 13px; }
+.word-cefr-tag {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.35;
+}
 .word-phonetic { color: var(--muted); font-size: 14px; }
 .word-pronunciations {
   display: flex;

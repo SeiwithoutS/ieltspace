@@ -31,6 +31,7 @@ const wordSchema = z.object({
 
   phonetic: z.string().trim().max(200).default(""),
   pos: z.string().trim().max(100).default(""),
+  tag: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]).optional(),
   example: z.string().trim().max(4000).default(""),
   translation: z.string().trim().max(4000).default(""),
 

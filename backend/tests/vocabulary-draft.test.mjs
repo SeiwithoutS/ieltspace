@@ -17,6 +17,13 @@ test('draft preserves independent US and UK recordings and AU candidates', () =>
   assert.equal(saved.audioUk, audioUk);
   assert.deepEqual(saved.audioCandidates, audioCandidates);
 });
+test('draft round-trips optional CEFR levels and rejects unknown levels', () => {
+  assert.equal(saveDraftSchema.parse({ revision: 1, words: [word] }).words[0].tag, undefined);
+  for (const tag of ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']) {
+    assert.equal(saveDraftSchema.parse({ revision: 1, words: [{ ...word, tag }] }).words[0].tag, tag);
+  }
+  assert.equal(saveDraftSchema.safeParse({ revision: 1, words: [{ ...word, tag: 'B3' }] }).success, false);
+});
 test('draft rejects duplicates, stale-shaped revisions, invalid IDs and inline images', () => {
   for (const body of [
     {revision:0, words:[word,word]}, {revision:-1, words:[word]},

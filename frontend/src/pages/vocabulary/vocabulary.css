@@ -58,29 +58,14 @@
 .dark .vocabulary .vocab-primary { background: #e0e9fe; border-color: #e0e9fe; color: #222a38; }
 .dark .vocabulary .vocab-primary:hover:not(:disabled) { background: #f0f4ff; }
 
-.vocab-hero {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 16px; flex-wrap: wrap; padding: 0 0 20px;
-}
-.vocab-hero p {
-  margin: 0 0 6px;
-  color: var(--muted);
-  font-size: 14px;
-}
-.vocab-hero h1 {
-  margin: 0;
-  font-size: 28px;
-}
-.word-tools,
-.word-personal {
+.word-tools {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   margin: 16px 0;
 }
-.vocabulary :is(button, input:not([type="file"]), select, textarea),
-.vocab-hero a,
+.vocabulary :is(button, input:not([type="file"]), select, textarea):where(:not(.ui-btn, .ui-control, .ui-seg__item, .ui-dlg__close, .ui-coverpick__preset)),
 .word-tools a {
   font: inherit;
   font-size: 14px;
@@ -97,18 +82,14 @@
 .vocabulary select {
   cursor: pointer;
 }
-.vocabulary button:disabled {
+.vocabulary button:disabled:where(:not(.ui-btn, .ui-seg__item)) {
   opacity: 0.55;
   cursor: wait;
 }
-.vocabulary button[aria-pressed="true"],
+.vocabulary button[aria-pressed="true"]:where(:not(.ui-seg__item)),
 .vocabulary .word-primary {
   background: #352637;
   color: white;
-}
-.vocabulary :focus-visible {
-  outline: 2px solid #2963cc;
-  outline-offset: 2px;
 }
 .word-card {
   display: flex;
@@ -153,13 +134,6 @@
   font-size: 13px;
   color: var(--muted);
   margin: 5px 0;
-}
-.word-personal button {
-  font-size: 13px;
-  padding: 4px 9px;
-}
-.word-personal {
-  margin: 8px 0 0;
 }
 .word-fields {
   display: grid;
@@ -288,9 +262,6 @@
 .word-example mark { padding: 1px 3px; background: var(--soft); color: #2963cc; border-radius: 4px; font-weight: 600; }
 .dark .word-example mark { color: #8db0f7; }
 .word-card .word-translation { margin-top: 6px; font-size: 13px; line-height: 1.7; }
-.has-favorite .word-personal { border-left: 3px solid var(--line); padding-left: 12px; margin-top: 20px; }
-.has-favorite .word-personal details { width: 100%; }
-.has-favorite .word-personal textarea { width: 100%; min-height: 72px; }
 @media(max-width: 700px) { .word-card.has-favorite { padding: 20px 52px 20px 16px; } .vocabulary .word-card .word-favorite { right: 4px; } }
 .dark .set-cover{background:#23382e;color:#c0dfcc}.dark [data-topic=education] .set-cover{background:#3b3525;color:#ecdcae}.dark [data-topic=technology] .set-cover{background:#24344c;color:#c0d3f2}
 
@@ -308,7 +279,7 @@
 .word-note label { font-size: 13px; color: var(--muted); }
 .word-note textarea { margin-top: 8px; min-height: 80px; resize: vertical; }
 .word-note .word-tools { margin: 8px 0 0; }
-.vocabulary button:hover { filter: brightness(.97); }
+.vocabulary button:hover:where(:not(.ui-btn, .ui-seg__item, .ui-dlg__close, .ui-coverpick__preset)) { filter: brightness(.97); }
 .word-fields { margin-top: 16px; }
 .vocabulary .word-tools a { text-decoration: none; color: var(--accent); }
 @media(max-width: 700px) {
@@ -344,10 +315,6 @@
 .vocab-editor-row .word-fields { grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px 16px; }
 @media(max-width:800px) { .vocab-editor-row .word-fields {grid-template-columns:repeat(2,minmax(0,1fr));} }
 @media(max-width:480px) { .vocab-editor-row .word-fields {grid-template-columns:1fr;} }
-.cover-options { display:flex; gap:6px; margin:12px 0; }
-.vocabulary .cover-options button { padding:0; overflow:hidden; border-radius:8px; width:44px; }
-.cover-options img { width:100%; display:block; }
-.cover-options button[aria-pressed=true] { outline:2px solid var(--accent); }
 .word-image { width:88px; flex:none; }
 .word-image > img,.word-image-button > img { width:100%; height:88px; object-fit:cover; border-radius:12px; display:block; }
 .vocabulary .word-image-button { position:relative; display:block; width:100%; padding:0; border:0; background:var(--soft); border-radius:12px; }

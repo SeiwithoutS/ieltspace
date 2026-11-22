@@ -44,9 +44,9 @@ export function WordMediaEditor({ entry, onChange, onWordEntered, onImageTransfe
       <AudioFields entry={entry} onChange={onChange} />
     </div>
     <div className="word-tools">
-      <button type="button" className="vocab-button" disabled={busy || !entry.word.trim()} onClick={() => lookup("image")}>Tìm lại ảnh</button>
-      <button type="button" className="vocab-button" disabled={busy || !entry.word.trim()} onClick={() => lookup("audio")}>Tìm lại audio</button>
-      {entry.image && <button type="button" className="vocab-button" onClick={() => onChange({ image: "", imageCredit: undefined, imagePreview: undefined })}>Bỏ ảnh</button>}
+      <button type="button" className="ui-btn" disabled={busy || !entry.word.trim()} onClick={() => lookup("image")}>Tìm lại ảnh</button>
+      <button type="button" className="ui-btn" disabled={busy || !entry.word.trim()} onClick={() => lookup("audio")}>Tìm lại audio</button>
+      {entry.image && <button type="button" className="ui-btn" onClick={() => onChange({ image: "", imageCredit: undefined, imagePreview: undefined })}>Bỏ ảnh</button>}
       <small>Bấm vào hình của từ để tải ảnh từ máy.</small>
     </div>
     {!!entry.imageCandidates?.length && <div className="word-image-options" aria-label="Ảnh gợi ý">

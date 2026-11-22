@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { buttonClass, controlClass } from "../shared/ui";
 import { apiFetch } from "../../lib/shared/api";
 
 const base = "/admin/notifications";
@@ -22,8 +23,8 @@ const emptyDraft: Draft = { title: "", content: "", audience: "ALL" };
 const panel = "rounded-[22px] border border-solid border-[var(--attempt-line-d6d4d0)] bg-[var(--attempt-bg-ffffff)] p-5";
 const tabList = "flex w-fit max-w-full flex-wrap gap-[2px] rounded-[10px] bg-[var(--attempt-bg-f3f0ea)] p-[3px]";
 const tabButton = "min-h-[34px] max-w-full cursor-pointer rounded-lg border-[1.5px] border-solid border-transparent bg-transparent px-3.5 py-0 font-sans text-[13px] font-medium text-[var(--attempt-text-706473)] aria-selected:border-[var(--attempt-line-d6d4d0)] aria-selected:bg-[var(--attempt-bg-ffffff)] aria-selected:font-semibold aria-selected:text-[var(--attempt-text-352637)] disabled:opacity-50";
-const button = "cursor-pointer rounded-full border border-solid border-[var(--attempt-line-d6d4d0)] bg-[var(--attempt-bg-ffffff)] px-4 py-2 text-sm font-semibold text-inherit disabled:opacity-50";
-const field = "block w-full box-border rounded-lg border border-solid border-[var(--attempt-line-d6d4d0)] bg-[var(--attempt-bg-ffffff)] px-3 py-2 text-inherit";
+const button = buttonClass({ size: "sm" });
+const field = controlClass();
 
 export default function AdminNotifications() {
   const [tab, setTab] = useState(0);

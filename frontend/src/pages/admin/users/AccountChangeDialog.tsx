@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { applyAccountAction, userRoles, type AccountAction, type UserDetails, type UserRole } from '../../../lib/admin-users/api';
 import { styleOf } from '../../../lib/shared/styles';
 import AccountDialog from './AccountDialog';
-import { directoryButton, directoryMuted } from './userDirectoryUi';
+import { Button } from '../../../components/shared/ui';
+import { directoryField, directoryMuted } from './userDirectoryUi';
 
-const field = 'box-border min-h-10 w-full rounded-lg border border-solid border-[var(--attempt-line-d6d4d0)] bg-[var(--attempt-bg-ffffff)] px-3 font-sans text-sm text-inherit';
+const field = directoryField;
 const roles = Object.keys(userRoles) as UserRole[];
 
 export default function AccountChangeDialog({ kind, user, onClose, onChanged }: {
@@ -71,7 +72,7 @@ export default function AccountChangeDialog({ kind, user, onClose, onChanged }: 
       <label className="grid gap-1.5 text-sm font-semibold">
         Lý do
         <textarea value={reason} onChange={event => { setReason(event.currentTarget.value); resetCode(); }}
-          disabled={busy} rows={3} maxLength={500} required className={`${field} resize-y py-2`} />
+          disabled={busy} rows={3} maxLength={500} required className={field} />
       </label>
       {requiresCode && <div className="grid gap-2 text-sm">
         <label className="grid gap-1.5 font-semibold">
@@ -84,10 +85,11 @@ export default function AccountChangeDialog({ kind, user, onClose, onChanged }: 
       </div>}
       {error && <div role="alert" className="text-sm text-[var(--attempt-text-c0412a)]">{error}</div>}
       <div className="flex flex-wrap justify-end gap-2.5">
-        <button type="button" className={directoryButton} aria-disabled={busy} onClick={close}>Hủy</button>
-        <button type="submit" className={directoryButton} aria-disabled={!validAction || busy || (requiresCode && code.length !== 6)}>
+        <Button disabled={busy} onClick={close}>Hủy</Button>
+        {/* Khóa cho tới khi nhập Lý do (bắt buộc), đổi vai trò khác vai trò hiện tại và đủ mã 6 số khi cần. */}
+        <Button type="submit" variant={kind === 'delete' ? 'danger-solid' : 'primary'} disabled={!validAction || busy || (requiresCode && code.length !== 6)}>
           {busy ? 'Đang xử lý…' : 'Xác nhận'}
-        </button>
+        </Button>
       </div>
     </form>}
   </AccountDialog>;

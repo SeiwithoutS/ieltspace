@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { styleOf } from '../../../lib/shared/styles';
 import { createStaffAccount, type StaffAccountInput, type StaffCredentials } from '../../../lib/admin-users/api';
 import AccountDialog from './AccountDialog';
-import { CloseIcon, accountAction, closeAction, directoryButton, directoryMuted, primaryAction } from './userDirectoryUi';
+import { Button } from '../../../components/shared/ui';
+import { CloseIcon, closeButton, directoryField, directoryMuted } from './userDirectoryUi';
 
-const fieldStyle = 'height: 44px; padding: 0 14px; box-sizing: border-box; width: 100%; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC';
 const checkboxLabel = 'display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 10px; border: 1.5px solid #D6D4D0; font-size: 14px; font-weight: 600; cursor: pointer';
 
 function downloadCredentials({ email, temporaryPassword }: StaffCredentials) {
@@ -84,20 +84,20 @@ export default function CreateAccountDialog({ onClose, onChanged }: { onClose: (
           <h2 id="create-title" className="m-0 font-serif text-[22px] font-semibold">Đã tạo tài khoản</h2>
           <p className={`mb-0 mt-1 text-sm ${directoryMuted}`}>Sao chép hoặc tải thông tin trước khi đóng. Mật khẩu tạm chỉ hiện ở lần tạo này.</p>
         </div>
-        <button type="button" onClick={close} aria-label="Đóng" style={styleOf(closeAction)}><CloseIcon /></button>
+        <button type="button" onClick={close} aria-label="Đóng" className={closeButton}><CloseIcon /></button>
       </header>
       <label className="grid gap-1.5 text-[13px] font-semibold">
         Email đăng nhập
-        <input readOnly value={credentials.email} onFocus={event => event.currentTarget.select()} style={styleOf(fieldStyle)} />
+        <input readOnly value={credentials.email} onFocus={event => event.currentTarget.select()} className={directoryField} />
       </label>
       <label className="grid gap-1.5 text-[13px] font-semibold">
         Mật khẩu tạm
-        <input readOnly value={credentials.temporaryPassword} onFocus={event => event.currentTarget.select()} style={styleOf(fieldStyle)} />
+        <input readOnly value={credentials.temporaryPassword} onFocus={event => event.currentTarget.select()} className={directoryField} />
       </label>
       <div className="flex flex-wrap justify-end gap-2.5">
-        <button type="button" className={directoryButton} onClick={close}>Đóng</button>
-        <button type="button" className={directoryButton} onClick={() => downloadCredentials(credentials)}>Tải JSON</button>
-        <button type="button" style={styleOf(primaryAction)} onClick={() => void copyCredentials(credentials)}>Sao chép thông tin</button>
+        <Button onClick={close}>Đóng</Button>
+        <Button onClick={() => downloadCredentials(credentials)}>Tải JSON</Button>
+        <Button variant="primary" onClick={() => void copyCredentials(credentials)}>Sao chép thông tin</Button>
       </div>
       {copyStatus && <div role="status" className={`text-sm ${directoryMuted}`}>{copyStatus}</div>}
     </div> : <form className="flex flex-col gap-[18px]" onChange={() => setNotice('')} onSubmit={event => {
@@ -109,29 +109,29 @@ export default function CreateAccountDialog({ onClose, onChanged }: { onClose: (
           <h2 id="create-title" className="m-0 font-serif text-[22px] font-semibold">Tạo tài khoản Giáo viên hoặc Quản lý</h2>
           <p style={styleOf('font-size: 14px; color: #706473; margin: 4px 0 0')}>Người học tự đăng ký và phải xác minh email, nên không tạo ở đây.</p>
         </div>
-        <button type="button" onClick={close} aria-label="Đóng" style={styleOf(closeAction)}><CloseIcon /></button>
+        <button type="button" onClick={close} aria-label="Đóng" className={closeButton}><CloseIcon /></button>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex min-w-0 flex-col gap-1.5 text-[13px] font-semibold">
           Họ và tên
-          <input name="fullName" type="text" required disabled={busy} placeholder="Phạm Thị Mai" style={styleOf(fieldStyle)} />
+          <input name="fullName" type="text" required disabled={busy} placeholder="Phạm Thị Mai" className={directoryField} />
         </label>
         <label className="flex min-w-0 flex-col gap-1.5 text-[13px] font-semibold">
           Email
-          <input name="email" type="email" required disabled={busy} placeholder="mai@ieltspace.vn" style={styleOf(fieldStyle)} />
+          <input name="email" type="email" required disabled={busy} placeholder="mai@ieltspace.vn" className={directoryField} />
         </label>
       </div>
       <div className={`grid gap-4 ${teacher ? 'sm:grid-cols-2' : ''}`}>
         <div className="flex min-w-0 flex-col gap-1.5 text-[13px] font-semibold">
           <label htmlFor="create-account-role">Vai trò</label>
-          <select id="create-account-role" value={role} disabled={busy} onChange={event => { setRole(event.currentTarget.value); setCode(''); }} style={styleOf(fieldStyle + '; cursor: pointer')}>
+          <select id="create-account-role" value={role} disabled={busy} onChange={event => { setRole(event.currentTarget.value); setCode(''); }} className={directoryField}>
             <option value="teacher">Giáo viên</option>
             <option value="manager">Quản lý</option>
           </select>
         </div>
         {teacher && <label className="flex min-w-0 flex-col gap-1.5 text-[13px] font-semibold">
           Giới hạn bài chưa chấm
-          <input name="limit" type="number" min={1} max={50} defaultValue={10} required disabled={busy} style={styleOf(fieldStyle)} />
+          <input name="limit" type="number" min={1} max={50} defaultValue={10} required disabled={busy} className={directoryField} />
         </label>}
       </div>
       {teacher && <fieldset disabled={busy} className="m-0 min-w-0 border-0 p-0">
@@ -145,7 +145,7 @@ export default function CreateAccountDialog({ onClose, onChanged }: { onClose: (
         <label className="grid gap-1.5 font-semibold">
           Mã Google Authenticator
           <input name="security-code" type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6}
-            required pattern="[0-9]{6}" disabled={busy} style={styleOf(fieldStyle)} value={code}
+            required pattern="[0-9]{6}" disabled={busy} className={directoryField} value={code}
             onChange={event => setCode(event.currentTarget.value.replace(/\D/g, ''))} />
         </label>
         <span className={directoryMuted}>Nhập mã 6 số từ ứng dụng xác thực đã thiết lập trong Hồ sơ cá nhân.</span>
@@ -153,8 +153,8 @@ export default function CreateAccountDialog({ onClose, onChanged }: { onClose: (
       {notice && <div role="alert" style={styleOf('padding: 10px 14px; border-radius: 12px; font-size: 14px; background: #FBDCD3; border: 1.5px solid #F1B3A3; color: #C0412A')}>{notice}</div>}
       <div style={styleOf('font-size: 13px; color: #706473')}>Tài khoản dùng được ngay. Hãy chuyển thông tin đăng nhập qua kênh riêng cho người nhận.</div>
       <div className="flex flex-wrap justify-end gap-2.5">
-        <button type="button" onClick={close} style={styleOf(accountAction + '; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A')}>Hủy</button>
-        <button type="submit" disabled={busy} style={styleOf(primaryAction)}>{busy ? 'Đang tạo…' : 'Tạo tài khoản'}</button>
+        <Button onClick={close}>Hủy</Button>
+        <Button type="submit" variant="primary" disabled={busy}>{busy ? 'Đang tạo…' : 'Tạo tài khoản'}</Button>
       </div>
     </form>}
   </AccountDialog>;

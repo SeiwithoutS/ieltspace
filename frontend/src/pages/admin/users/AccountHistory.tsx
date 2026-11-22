@@ -58,9 +58,9 @@ export default function AccountHistory({ userId, kind, revision = 0 }: { userId:
         </>}
       </div>)}
       {(page > 1 || nextPage) && <nav aria-label={kind === 'login' ? 'Phân trang đăng nhập' : 'Phân trang thao tác quản lý'} className="flex items-center justify-end gap-2 pt-2">
-        <button type="button" className={directoryButton} aria-disabled={page <= 1} onClick={() => { if (page > 1) setPage(page - 1); }}>Trước</button>
+        <button type="button" className={directoryButton} disabled={page <= 1} onClick={() => { if (page > 1) setPage(page - 1); }}>Trước</button>
         <span>Trang {page}</span>
-        <button type="button" className={directoryButton} aria-disabled={!nextPage} onClick={() => { if (nextPage) setPage(nextPage); }}>Sau</button>
+        <button type="button" className={directoryButton} disabled={!nextPage} onClick={() => { if (nextPage) setPage(nextPage); }}>Sau</button>
       </nav>}
     </div>
   </section>;

@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import StaffLayout from '../../../components/layout/StaffLayout';
 import { listUsers, userRoles, userStatuses, type DirectoryFilters, type UserDirectory } from '../../../lib/admin-users/api';
 import { styleOf } from '../../../lib/shared/styles';
+import { AdminPagination, Button, EmptyState, FilterBar, SearchField, TextField } from '../../../components/shared/ui';
 import CreateAccountDialog from './CreateAccountDialog';
 import UserActivity from './UserActivity';
 import UserDetailsPanel from './UserDetailsPanel';
-import { AccountStatus, directoryButton, directoryCard, directoryMuted, formatUserDate, primaryAction, roleBadgeStyle, userInitials } from './userDirectoryUi';
+import { AccountStatus, directoryCard, directoryMuted, formatUserDate, roleBadgeStyle, userInitials } from './userDirectoryUi';
 
 const initialFilters: DirectoryFilters = { q: '', role: '', status: '', page: 1 };
-const borderColor = 'border-[var(--attempt-line-d6d4d0,#D6D4D0)]';
-const control = `box-border min-h-10 min-w-0 rounded-lg border border-solid ${borderColor} bg-[var(--attempt-bg-ffffff,#fff)] px-3 font-sans text-sm text-inherit`;
 const grid = 'display: grid; grid-template-columns: minmax(230px, 2.2fr) 120px minmax(140px, 1.1fr) 110px 170px 170px 24px';
 const headerCell = 'padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473';
 const tableColumns = ['Người dùng', 'Vai trò', 'Quyền chấm · bài/giới hạn', 'Ngày tạo', 'Đăng nhập gần nhất', 'Trạng thái'];
@@ -77,10 +76,10 @@ export default function AdminUsers() {
           <h1 style={styleOf("margin: 0; font-size: 28px; line-height: 1.25; letter-spacing: -0.015em; font-family: 'IBM Plex Serif', Georgia, serif")}>Người dùng</h1>
           <div style={styleOf('font-size: 15px; color: #706473; margin-top: 4px')}>Tài khoản Người học, Giáo viên và Quản lý; quyền chấm và giới hạn nhận bài của Giáo viên.</div>
         </div>
-        <button type="button" onClick={() => setCreateOpen(true)} aria-haspopup="dialog" style={styleOf(primaryAction)}>
+        <Button variant="primary" onClick={() => setCreateOpen(true)} aria-haspopup="dialog">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
           Tạo tài khoản
-        </button>
+        </Button>
       </header>
       <div role="tablist" aria-label="Người dùng và hoạt động" style={styleOf('align-self: flex-start; display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: #F3F0EA')}>
         {tabs.map(({ id, label }) => <button
@@ -106,55 +105,48 @@ export default function AdminUsers() {
       </div>
       <section id="admin-users-panel-directory" role="tabpanel" aria-labelledby="admin-users-tab-directory" hidden={tab !== 'directory'}>
         <div className="flex flex-col gap-6">
-          <section aria-label="Bộ lọc người dùng" className="flex flex-wrap items-end gap-3">
-            <div className="grid min-w-0 flex-[2_1_16rem] gap-1.5 text-sm font-semibold">
-              <label htmlFor="admin-user-search">Tìm người dùng</label>
-              <input
-                id="admin-user-search"
-                type="search"
-                value={filters.q}
-                maxLength={150}
-                onChange={event => updateFilters({ q: event.currentTarget.value })}
-                placeholder="Tìm theo tên hoặc email"
-                className={control}
-              />
-            </div>
-            <div className="grid min-w-0 flex-[1_1_10rem] gap-1.5 text-sm font-semibold">
-              <label htmlFor="admin-user-role">Vai trò</label>
-              <select
-                id="admin-user-role"
-                value={filters.role}
-                onChange={event => updateFilters({ role: event.currentTarget.value as DirectoryFilters['role'] })}
-                className={control}
-              >
-                <option value="">Tất cả vai trò</option>
-                {roles.map(role => (
-                  <option key={role} value={role}>{userRoles[role]}{counts ? ` (${counts.byRole[role]})` : ''}</option>
-                ))}
-              </select>
-            </div>
-            <div className="grid min-w-0 flex-[1_1_10rem] gap-1.5 text-sm font-semibold">
-              <label htmlFor="admin-user-status">Trạng thái</label>
-              <select
-                id="admin-user-status"
-                value={filters.status}
-                onChange={event => updateFilters({ status: event.currentTarget.value as DirectoryFilters['status'] })}
-                className={control}
-              >
-                <option value="">Tất cả trạng thái</option>
-                {statuses.map(status => (
-                  <option key={status} value={status}>{userStatuses[status]}{counts ? ` (${counts.byStatus[status]})` : ''}</option>
-                ))}
-              </select>
-            </div>
-          </section>
+          <FilterBar
+            label="Bộ lọc người dùng"
+            count={pagination ? `${pagination.total} / ${pagination.counts.all} tài khoản` : undefined}
+            filtered={Boolean(filters.q || filters.role || filters.status)}
+            onClear={() => updateFilters({ q: '', role: '', status: '' })}
+          >
+            <SearchField
+              value={filters.q}
+              maxLength={150}
+              onChange={q => updateFilters({ q })}
+              placeholder="Tìm theo tên hoặc email"
+              label="Tìm người dùng"
+            />
+            <TextField
+              as="select"
+              label="Vai trò"
+              hideLabel
+              value={filters.role}
+              onChange={event => updateFilters({ role: event.currentTarget.value as DirectoryFilters['role'] })}
+            >
+              <option value="">Tất cả vai trò</option>
+              {roles.map(role => (
+                <option key={role} value={role}>{userRoles[role]}{counts ? ` (${counts.byRole[role]})` : ''}</option>
+              ))}
+            </TextField>
+            <TextField
+              as="select"
+              label="Trạng thái"
+              hideLabel
+              value={filters.status}
+              onChange={event => updateFilters({ status: event.currentTarget.value as DirectoryFilters['status'] })}
+            >
+              <option value="">Tất cả trạng thái</option>
+              {statuses.map(status => (
+                <option key={status} value={status}>{userStatuses[status]}{counts ? ` (${counts.byStatus[status]})` : ''}</option>
+              ))}
+            </TextField>
+          </FilterBar>
 
           <section aria-label="Kết quả tìm người dùng" aria-busy={!current} className="shrink-0" style={styleOf(directoryCard)}>
-            {!current && <p role="status" className={`m-0 p-5 ${directoryMuted}`}>Đang tải danh sách người dùng…</p>}
-            {error && <div role="alert" className="m-0 flex flex-wrap items-center gap-3 p-5">
-              <span>{error}</span>
-              <button type="button" className={directoryButton} onClick={() => setAttempt(value => value + 1)}>Thử lại</button>
-            </div>}
+            {!current && <EmptyState kind="loading" inline>Đang tải danh sách người dùng…</EmptyState>}
+            {error && <EmptyState kind="error" inline action={<Button size="sm" onClick={() => setAttempt(value => value + 1)}>Thử lại</Button>}>{error}</EmptyState>}
             {data && (data.items.length > 0 ? (
                 <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Bảng danh sách người dùng">
                   <div role="table" aria-label="Danh sách người dùng" className="min-w-[1000px]">
@@ -192,19 +184,12 @@ export default function AdminUsers() {
                       ))}
                   </div>
                 </div>
-              ) : <p role="status" className={`m-0 p-5 ${directoryMuted}`}>Không tìm thấy tài khoản phù hợp.</p>)}
-            {pagination && (
-              <footer className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
-                <span aria-live="polite" className={directoryMuted}>{pagination.total} / {pagination.counts.all} tài khoản</span>
-                {numPages > 1 && <nav aria-label="Phân trang người dùng" className="flex flex-wrap items-center gap-2">
-                  <button type="button" className={directoryButton} aria-disabled={!data || data.page <= 1} onClick={() => {
-                    if (data && data.page > 1) goToPage(data.page - 1);
-                  }}>Trước</button>
-                  <span>Trang {data?.page ?? filters.page} / {numPages}</span>
-                  <button type="button" className={directoryButton} aria-disabled={!data || data.page >= numPages} onClick={() => {
-                    if (data && data.page < numPages) goToPage(data.page + 1);
-                  }}>Sau</button>
-                </nav>}
+              ) : <EmptyState inline>Không tìm thấy tài khoản phù hợp.</EmptyState>)}
+            {pagination && numPages > 1 && (
+              <footer className="flex flex-wrap items-center justify-end gap-3 px-4 py-3">
+                <AdminPagination label="Phân trang người dùng" page={data?.page ?? filters.page} pages={numPages} onPage={page => {
+                  if (data) goToPage(page);
+                }} />
               </footer>
             )}
           </section>

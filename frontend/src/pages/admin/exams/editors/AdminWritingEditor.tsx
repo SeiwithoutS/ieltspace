@@ -102,8 +102,6 @@ type WritingFormItem = {
   showImg?: boolean;
 };
 
-type MdLine = { li: boolean; segs: Array<{ t: string; st: string }>; st: string };
-
 type ImportCheckItem = {
   text: string;
   color: string;
@@ -480,29 +478,7 @@ renderVals(): WritingView {
             img: null,
           },
         ],
-      },
-      EMPTY: WritingFixture = {
-        title: "Practice Test 02",
-        items: [
-          { prompt: "", img: null },
-          { prompt: "", img: null },
-        ],
       };
-    function variant(): WritingFixture {
-      var t = PR.trangThai;
-      if (t === "Đề mới tạo") {
-        return EMPTY;
-      }
-      if (t === "Mới có Part 1" || t === "Mới có Task 1") {
-        var n: WritingFixture = JSON.parse(JSON.stringify(FULL));
-        n.title = "Practice Test 03";
-        for (var i = 1; i < n.items.length; i++) {
-          n.items[i] = JSON.parse(JSON.stringify(EMPTY.items[i]));
-        }
-        return n;
-      }
-      return FULL;
-    }
     var ex = s.ex;
     var NI = ex.items.length,
       ti = Math.min(s.t == null ? 0 : s.t, NI - 1);
@@ -583,89 +559,8 @@ renderVals(): WritingView {
     me._undo = undo;
     var CHIP =
       "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600";
-    var num = function (v: unknown): number {
-      return /^\d+$/.test(String(v || "").trim()) ? parseInt(String(v), 10) : 0;
-    };
-    var inp = function (bad?: boolean): string {
-      return (
-        "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC" +
-        (bad ? "; border-color: #C0412A; background: #FDF3F0" : "")
-      );
-    };
-    function plural(n: number, w: string): string {
-      return n + " " + w + (n === 1 ? "" : "s");
-    }
-    function lines(t?: string): string[] {
-      return String(t || "").split("\n");
-    }
-    function qCount(t?: string): number {
-      return lines(t).filter(function (l) {
-        var x = l.trim();
-        return x && !/^#{1,3} /.test(x);
-      }).length;
-    }
-    function groupCount(t?: string): number {
-      var g = 0,
-        inG = false;
-      lines(t).forEach(function (l) {
-        if (l.trim()) {
-          if (!inG) {
-            g++;
-            inG = true;
-          }
-        } else {
-          inG = false;
-        }
-      });
-      return g;
-    }
     function isEmptyItem(it: WritingEditorTask): boolean {
       return !String(it.prompt || "").trim() && !it.img;
-    }
-    function segsOf(l: string): Array<{ t: string; st: string }> {
-      var segs: Array<{ t: string; st: string }> = [];
-      String(l)
-        .split(/(\*\*[^*]+\*\*|\*[^*]+\*)/)
-        .forEach(function (t) {
-          if (!t) {
-            return;
-          }
-          if (/^\*\*[^*]+\*\*$/.test(t)) {
-            segs.push({ t: t.slice(2, -2), st: "font-weight: 700" });
-          } else if (/^\*[^*]+\*$/.test(t)) {
-            segs.push({ t: t.slice(1, -1), st: "font-style: italic" });
-          } else {
-            segs.push({ t: t, st: "" });
-          }
-        });
-      return segs;
-    }
-    function mdLines(text: string): MdLine[] {
-      return lines(text).map(function (raw) {
-        var l = raw.trim(),
-          kind = "p";
-        if (!l) {
-          return { li: false, segs: [], st: "height: 8px" };
-        }
-        if (/^#{1,3} /.test(l)) {
-          kind = "h";
-          l = l.replace(/^#{1,3} /, "");
-        } else if (/^[-•] /.test(l)) {
-          kind = "li";
-          l = l.slice(2);
-        }
-        return {
-          li: kind === "li",
-          segs: segsOf(l),
-          st:
-            "display: flex; gap: 4px; " +
-            (kind === "h"
-              ? "font-weight: 700; font-size: 15px"
-              : kind === "li"
-                ? "padding-left: 4px"
-                : ""),
-        };
-      });
     }
     var it = ex.items[ti];
     function allIssues(): Array<{ t?: number; text: string }> {

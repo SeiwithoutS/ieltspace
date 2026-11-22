@@ -1,6 +1,5 @@
 import { apiFetch, ApiError } from '../shared/api';
 import { getAccessToken } from '../auth/auth';
-import type { ExamSetAdmin } from './exam-admin';
 import type { LrContent, LrPatch } from './lr-editor/types';
 
 export type WritingTask = {

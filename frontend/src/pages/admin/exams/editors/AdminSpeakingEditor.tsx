@@ -18,8 +18,6 @@ import {
   type EditorSkill,
   type SpeakingEditorState,
   type SpeakingPart,
-  type SpeakingPartQs,
-  type SpeakingPartCue,
 } from "../../../../lib/exams/exam-editor";
 import SkillHistoryDrawer from "../../../../components/exams/SkillHistoryDrawer";
 import { versionMessages } from "../../../../lib/exams/version-messages";
@@ -426,11 +424,9 @@ renderVals(): SpeakingView {
     var me = this,
       s = me.state,
       self = me,
-      PR = (me.props as Record<string, unknown>) || {},
       UNIT = "Part",
       NAME = "Speaking";
     var skill = s.skill;
-    var GTF = skill ? skill.form === "GENERAL" : PR.loaiDe === "General Training";
     var FULL: SpeakingEditorState = {
       title: "Practice Test 01",
       tot: "15",
@@ -474,30 +470,6 @@ renderVals(): SpeakingView {
       ],
     };
 
-    var EMPTY: SpeakingEditorState = {
-      title: "Practice Test 02",
-      tot: "15",
-      items: [
-        { kind: "qs", instr: "", qs: [] },
-        { kind: "cue", prep: "1", speak: "2", text: "" },
-        { kind: "qs", instr: "", qs: [] },
-      ],
-    };
-
-    function variant(): SpeakingEditorState {
-      var t = PR.trangThai;
-      if (t === "Đề mới tạo") {
-        return EMPTY;
-      }
-      if (t === "Mới có Part 1") {
-        var n: SpeakingEditorState = JSON.parse(JSON.stringify(FULL));
-        n.title = "Practice Test 03";
-        n.items[1] = JSON.parse(JSON.stringify(EMPTY.items[1]));
-        n.items[2] = JSON.parse(JSON.stringify(EMPTY.items[2]));
-        return n;
-      }
-      return FULL;
-    }
     var ex = s.ex;
     var NI = ex.items.length,
       ti = Math.min(s.t == null ? 0 : s.t, NI - 1);
@@ -592,27 +564,6 @@ renderVals(): SpeakingView {
     }
     function lines(t?: string): string[] {
       return String(t || "").split("\n");
-    }
-    function qCount(t?: string): number {
-      return lines(t).filter(function (l) {
-        var x = l.trim();
-        return x && !/^#{1,3} /.test(x);
-      }).length;
-    }
-    function groupCount(t?: string): number {
-      var g = 0,
-        inG = false;
-      lines(t).forEach(function (l) {
-        if (l.trim()) {
-          if (!inG) {
-            g++;
-            inG = true;
-          }
-        } else {
-          inG = false;
-        }
-      });
-      return g;
     }
     function isEmptyItem(it: SpeakingPart): boolean {
       if (it.kind === "qs") {

@@ -13,12 +13,14 @@
   --mo-slow: 0.28s;
   --mo-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --mo-hover-bg: rgba(53, 38, 55, 0.06);
+  --mo-row-hover-bg: #fdfcf8;
   --mo-lift-shadow:
     0 2px 4px rgba(53, 38, 55, 0.05), 0 12px 28px rgba(53, 38, 55, 0.1);
   interpolate-size: allow-keywords;
 }
 html.dark {
   --mo-hover-bg: rgba(255, 255, 255, 0.08);
+  --mo-row-hover-bg: rgba(255, 255, 255, 0.08);
   --mo-lift-shadow:
     0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 28px rgba(0, 0, 0, 0.4);
 }
@@ -218,7 +220,7 @@ tbody > tr {
   transition: background-color var(--mo-fast) ease;
 }
 tbody > tr:hover {
-  background-color: var(--mo-hover-bg);
+  background-color: var(--mo-row-hover-bg);
 }
 
 /* ---- Ô nhập: viền và vòng focus mượt ---- */

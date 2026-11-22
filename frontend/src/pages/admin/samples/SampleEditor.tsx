@@ -795,18 +795,18 @@ export default function SampleEditor({
             {!unavailable && (
               <>
                 {!editing ? (
-                  <button className="sample-button sample-button--secondary" type="button" disabled={busy} onClick={() => setEditing(true)}>
+                  <button className="ui-btn" type="button" disabled={busy} onClick={() => setEditing(true)}>
                     Chỉnh sửa
                   </button>
                 ) : (
                   <>
-                    <button className="sample-button sample-button--secondary" type="button" disabled={busy || !undoCount} onClick={undo}>
+                    <button className="ui-btn" type="button" disabled={busy || !undoCount} onClick={undo}>
                       Hoàn tác
                     </button>
-                    <button className="sample-button sample-button--secondary" type="button" disabled={busy} onClick={cancelEdit}>
+                    <button className="ui-btn" type="button" disabled={busy} onClick={cancelEdit}>
                       Hủy sửa
                     </button>
-                    <button className="sample-button sample-button--secondary" type="button" disabled={busy} onClick={save}>
+                    <button className="ui-btn" type="button" disabled={busy} onClick={save}>
                       Lưu
                     </button>
                   </>
@@ -814,7 +814,7 @@ export default function SampleEditor({
 
                 <button
                   type="button"
-                  className="sample-button sample-button--primary"
+                  className="ui-btn ui-btn--primary"
                   disabled={busy}
                   onClick={() => publication("PUBLISH")}
                 >
@@ -822,7 +822,7 @@ export default function SampleEditor({
                 </button>
 
                 {record && record.publishedRevision !== null && status !== "DRAFT" && (
-                  <button className="sample-button sample-button--secondary sample-button--icon"
+                  <button className="ui-btn ui-btn--icon"
                     type="button"
                     disabled={busy}
                     aria-label={visibilityLabel}
@@ -1115,7 +1115,7 @@ export default function SampleEditor({
                         </h3>
 
                         {document.part !== 2 && document.items.length > 1 && (
-                          <button className="sample-button sample-button--secondary"
+                          <button className="ui-btn"
                             type="button"
                             onClick={() => {
                               if (!window.confirm(`Xóa câu ${index + 1} khỏi bản đang soạn?`)) {
@@ -1171,7 +1171,7 @@ export default function SampleEditor({
                   ))}
 
                   {document.part !== 2 && (
-                    <button className="sample-button sample-button--secondary"
+                    <button className="ui-btn"
                       type="button"
                       onClick={() =>
                         update(

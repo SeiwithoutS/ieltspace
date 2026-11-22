@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CardReview, FlashcardResult, FlashcardSubmission } from "../../lib/vocabulary/flashcard-history";
 import { clockLabel } from "../../lib/vocabulary/flashcard-history";
 import type { FlashcardSource } from "./FlashcardSetup";
+import { WordCefrTag } from "./WordCefrTag";
 
 export type StudySession = FlashcardSource & {
   id: string;
@@ -73,7 +74,10 @@ export function FlashcardStudy({ session, onFinish }: {
       </div>
       <progress className="flash-progress" aria-label="Số thẻ đã đánh giá" value={reviews.length} max={session.words.length} />
       <button ref={cardButton} type="button" className="flash-card-face" onClick={() => setFlipped((value) => !value)}>
-        <span className="flash-face-label">{flipped ? "Nghĩa tiếng Việt" : "Từ tiếng Anh"}</span>
+        <span className="flash-face-label inline-flex flex-wrap items-center justify-center gap-2">
+          {flipped ? "Nghĩa tiếng Việt" : "Từ tiếng Anh"}
+          <WordCefrTag tag={word.tag} />
+        </span>
         {flipped ? <>
           <strong>{word.meaning}</strong>
           {word.example && <span lang="en" className="flash-example">{word.example}</span>}

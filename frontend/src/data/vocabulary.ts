@@ -1,3 +1,5 @@
+import type { CefrTag } from "../lib/vocabulary/cefr";
+
 export const topics = {
   environment: "Môi trường",
   education: "Giáo dục",
@@ -12,6 +14,7 @@ export interface Word {
   meaning: string;
   phonetic: string;
   pos: string;
+  tag?: CefrTag;
   example: string;
   translation: string;
   image: string;

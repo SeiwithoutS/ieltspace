@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { WordImage } from "./WordImage";
+import { WordCefrTag } from "./WordCefrTag";
 import { type Word } from "../../data/vocabulary";
 export function WordCard({
   entry,
@@ -56,6 +57,7 @@ export function WordCard({
         <div className="word-heading flex items-center gap-3 flex-wrap">
           <h3 lang="en">{entry.word}</h3>
           {entry.pos && <small>{({ "danh từ": "(n)", "động từ": "(v)", "tính từ": "(adj)", "trạng từ": "(adv)" } as Record<string,string>)[entry.pos] ?? entry.pos}</small>}
+          <WordCefrTag tag={entry.tag} />
 
           <div className="word-pronunciations">
             <span className="word-phonetic">{entry.phonetic}</span>

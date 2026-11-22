@@ -1,6 +1,7 @@
 import { AudioFields } from "./AudioFields";
 import { useRef, useState } from "react";
 import type { Word } from "../../data/vocabulary";
+import { cefrTags, isCefrTag } from "../../lib/vocabulary/cefr";
 import { findVocabularyMedia, isManagedVocabularyImage, selectVocabularyImage } from "../../lib/vocabulary/vocabulary-media";
 
 export function WordMediaEditor({ entry, onChange, onWordEntered, onImageTransfer }: {
@@ -30,6 +31,15 @@ export function WordMediaEditor({ entry, onChange, onWordEntered, onImageTransfe
           onBlur={field === "word" ? () => onWordEntered(entry) : undefined}
           onChange={event => onChange({ [field]: event.target.value })} />
       </label>)}
+      <label>Cấp độ CEFR
+        <select value={entry.tag ?? ""} onChange={event => {
+          const value = event.target.value;
+          onChange({ tag: isCefrTag(value) ? value : undefined });
+        }}>
+          <option value="">Chưa gắn</option>
+          {cefrTags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
+        </select>
+      </label>
       <label className="word-field-wide">Ví dụ
         <textarea value={entry.example} onChange={event => onChange({ example: event.target.value })} />
       </label>

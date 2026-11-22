@@ -1,0 +1,583 @@
+/* Giao diện chung của AdminExams và AdminExamSet. Màu lấy từ token --ui-* (styles/admin-ui.css), đã có biến thể tối.
+   Các liên kết <a href> cần khai báo lại màu ở trạng thái :hover vì motion.css đặt a[href]:hover { color: #2257b8 }. */
+
+/* ---- Thẻ, bảng ---- */
+/* ---- Thanh lọc, chữ nhỏ ---- */
+.ex-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+.ex-count,
+.ex-muted13 {
+  font-size: 13px;
+  color: var(--ui-muted);
+}
+.ex-strong {
+  font-weight: 600;
+}
+.ex-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.ex-chips {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.ex-chips--6 {
+  gap: 6px;
+  align-items: center;
+}
+.ex-chips--8 {
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+.ex-sub {
+  font-size: 14px;
+  color: var(--ui-muted);
+  margin-top: 6px;
+}
+.ex-chip-fade {
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+/* ---- Cột tên bộ đề ---- */
+.ex-namelink,
+a.ex-namelink[href],
+a.ex-namelink[href]:hover {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ui-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+.ex-namelink:hover {
+  background-color: var(--mo-hover-bg);
+}
+.ex-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ex-name__cat {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ui-muted);
+}
+/* ---- Nút trạng thái đặc biệt ---- */
+.ex-file-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- Trạng thái tải, lỗi, rỗng ---- */
+.ex-state {
+  padding: 36px 20px;
+  text-align: center;
+  color: var(--ui-muted);
+  font-size: 14px;
+}
+.ex-state--error {
+  color: var(--ui-danger);
+}
+.ex-state--card {
+  border: 1.5px solid var(--ui-line);
+  border-radius: 16px;
+  background: var(--ui-surface);
+  padding: 48px 24px;
+}
+.ex-link,
+a.ex-link[href],
+a.ex-link[href]:hover {
+  font-weight: 600;
+  color: var(--ui-accent);
+}
+.ex-link--flex {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+.ex-link--flex:hover {
+  background-color: var(--mo-hover-bg);
+}
+.ex-empty {
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.ex-empty__title {
+  font-size: 16px;
+  font-weight: 600;
+}
+.ex-empty__text {
+  font-size: 14px;
+  color: var(--ui-muted);
+  max-width: 460px;
+}
+.ex-gone {
+  box-shadow: var(--ui-shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.ex-gone__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--ui-tone-danger-bg);
+  color: var(--ui-danger);
+}
+.ex-gone__title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+}
+.ex-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+}
+.ui-btn.ex-mt4 {
+  margin-top: 4px;
+}
+.ui-btn.ex-mt6 {
+  margin-top: 6px;
+}
+
+/* ---- Hộp thoại tạo bộ đề ---- */
+.ex-presets {
+  display: flex;
+  gap: 6px;
+}
+.ex-note {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ui-muted);
+}
+.ex-note--bad {
+  color: var(--ui-danger);
+}
+.ex-note--warn {
+  color: var(--ui-chip-skill-w-fg);
+}
+.ex-note--plain {
+  line-height: normal;
+}
+.ex-opt-label {
+  font-weight: 500;
+  color: var(--ui-muted);
+}
+.ex-infobox {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--ui-surface-soft);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ui-ink-2);
+}
+.ex-art__text {
+  padding: 0 0 12px 12px;
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.18);
+}
+.ex-art__text--lg {
+  padding: 0 0 14px 14px;
+  font-size: 28px;
+  letter-spacing: normal;
+}
+.ex-art__none {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+/* ---- Combobox danh mục ---- */
+.ex-rel {
+  position: relative;
+}
+.ex-rel--top {
+  z-index: 5;
+}
+.ex-catback {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+}
+.ui-control.ex-combo {
+  padding-right: 40px;
+}
+.ex-combo__icon {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  display: flex;
+  color: var(--ui-muted);
+  pointer-events: none;
+}
+.ex-menu {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 6px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  max-height: 240px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: var(--ui-surface);
+  border: 1.5px solid var(--ui-line);
+  border-radius: 12px;
+  box-shadow:
+    0 1px 2px rgba(53, 38, 55, 0.04),
+    0 12px 28px rgba(53, 38, 55, 0.16);
+}
+html.dark .ex-menu {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 12px 28px rgba(53, 38, 55, 0.16);
+}
+.ex-opt,
+a.ex-opt[href],
+a.ex-opt[href]:hover {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--ex-opt-fg, var(--ui-ink));
+}
+.ex-opt:hover {
+  background-color: var(--mo-hover-bg);
+}
+.ex-opt--on {
+  background: var(--ui-accent-soft);
+  font-weight: 600;
+}
+.ex-opt--on:hover {
+  background-color: var(--ui-accent-soft);
+  filter: var(--ui-hover-filter);
+}
+.ex-opt--new {
+  --ex-opt-fg: var(--ui-accent);
+  font-weight: 600;
+}
+.ex-opt--none {
+  --ex-opt-fg: var(--ui-muted);
+}
+.ex-opt__check {
+  display: flex;
+  color: var(--ui-accent);
+}
+
+/* ---- Hộp thoại tạo xong ---- */
+.ex-done {
+  padding: 32px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.ex-done__check {
+  position: absolute;
+  right: -12px;
+  bottom: -12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--ui-success-bg);
+  color: var(--ui-on-solid);
+  border: 3px solid var(--ui-surface);
+}
+.ex-done__title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+.ex-done__text {
+  font-size: 14px;
+  color: var(--ui-muted);
+  max-width: 380px;
+}
+.ex-done__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+/* ---- Trang chi tiết bộ đề ---- */
+.ex-back,
+a.ex-back[href],
+a.ex-back[href]:hover {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ui-muted);
+  text-decoration: none;
+  align-self: flex-start;
+}
+.ex-back:hover {
+  background-color: var(--mo-hover-bg);
+}
+.ex-cover {
+  position: relative;
+  flex: none;
+}
+.ex-cover__frame {
+  border-radius: 12px;
+  box-shadow:
+    0 1px 2px rgba(53, 38, 55, 0.06),
+    0 6px 18px rgba(53, 38, 55, 0.1);
+}
+.ex-cam {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 999px;
+  background: var(--ui-ink);
+  color: var(--ui-primary-fg);
+  border: 3px solid var(--ui-page);
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.ex-cam:hover {
+  filter: var(--ui-hover-filter);
+}
+.ex-pop {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 10px);
+  z-index: 30;
+  width: 272px;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--ui-surface);
+  border: 1.5px solid var(--ui-line);
+  box-shadow: var(--ui-shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ex-pop__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ui-muted);
+}
+.ex-menuitem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ui-ink);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+button.ex-menuitem:hover {
+  background-color: var(--mo-hover-bg);
+}
+.ex-menuitem--danger {
+  color: var(--ui-danger);
+}
+
+/* ---- Ô kỹ năng ---- */
+.ui-btn.ex-imp {
+  margin-left: auto;
+  gap: 5px;
+  height: 28px;
+  font-size: 13px;
+}
+
+/* ---- Ô trạng thái trong bảng đề ---- */
+.ex-cellwrap {
+  position: relative;
+  display: inline-flex;
+}
+.ex-create-btn,
+a.ex-create-btn[href],
+a.ex-create-btn[href]:hover {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ui-muted);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1.5px dashed var(--ui-line);
+}
+.ex-create-btn:hover {
+  background-color: var(--mo-hover-bg);
+}
+.ex-cellmenu {
+  position: fixed;
+  z-index: 50;
+  min-width: 240px;
+  width: max-content;
+  max-width: 300px;
+  padding: 6px;
+  border-radius: 12px;
+  background: var(--ui-surface);
+  border: 1.5px solid var(--ui-line);
+  box-shadow: var(--ui-shadow-card);
+  box-sizing: border-box;
+}
+.ex-cellmenu__head {
+  padding: 6px 12px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ui-muted);
+  white-space: nowrap;
+}
+.ex-mi,
+a.ex-mi[href],
+a.ex-mi[href]:hover {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  box-sizing: border-box;
+  color: var(--ex-mi-fg, var(--ui-ink));
+}
+a.ex-mi:hover {
+  background-color: var(--mo-hover-bg);
+}
+.ex-mi--accent {
+  --ex-mi-fg: var(--ui-accent);
+}
+.ex-mi--danger {
+  --ex-mi-fg: var(--ui-danger);
+}
+.ex-mi--note,
+.ex-mi--hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: default;
+  user-select: none;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+.ex-mi--note {
+  font-size: 12px;
+  color: #b25e00;
+  background: #fff7ed;
+}
+html.dark .ex-mi--note {
+  color: #f0b27a;
+  background: #35291f;
+}
+.ex-mi--hint {
+  font-size: 13px;
+  color: var(--ui-muted);
+}
+.ex-trash {
+  display: inline-flex;
+  padding: 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ui-danger);
+  cursor: pointer;
+}
+.ex-trash:hover {
+  background-color: var(--mo-hover-bg);
+}
+.ex-muted {
+  color: var(--ui-muted);
+}
+.ex-presets--8 {
+  gap: 8px;
+}
+.ex-gone__sub {
+  font-size: 14px;
+  color: var(--ui-muted);
+}
+
+/* Dark: html.dark a[href]:hover của motion.css (0,3,2) thắng các rule ở trên, nên khai báo lại màu hover. */
+html.dark a.ex-namelink[href]:hover,
+html.dark a.ex-mi[href]:hover {
+  color: var(--ex-mi-fg, var(--ui-ink));
+}
+html.dark a.ex-link[href]:hover {
+  color: var(--ui-accent);
+}
+html.dark a.ex-opt[href]:hover {
+  color: var(--ex-opt-fg, var(--ui-ink));
+}
+html.dark a.ex-back[href]:hover,
+html.dark a.ex-create-btn[href]:hover {
+  color: var(--ui-muted);
+}

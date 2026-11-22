@@ -119,7 +119,7 @@ export default function SampleImportPanel({ onClose, onImported }: Props) {
           <h2 id="sample-import-heading" ref={heading} tabIndex={-1}>Nhập bài mẫu từ Excel</h2>
           <p className="sample-muted">Giữ nguyên tiêu đề cột trong mẫu. Các bài được lưu ở trạng thái nháp.</p>
         </div>
-        <button className="sample-button sample-button--secondary" type="button" disabled={Boolean(busy)}
+        <button className="ui-btn" type="button" disabled={Boolean(busy)}
           onClick={() => { if (canLeaveImport()) onClose(); }}>Đóng</button>
       </div>
 
@@ -134,7 +134,7 @@ export default function SampleImportPanel({ onClose, onImported }: Props) {
             }} />
           {file && <small className="sample-muted break-all">{file.name}</small>}
         </label>
-        <button type="button" className="sample-button sample-button--secondary"
+        <button type="button" className="ui-btn"
           disabled={!file || Boolean(busy) || Boolean(result) || Boolean(pending?.preview.canConfirm)} onClick={preview}>
           {busy === "preview" ? "Đang kiểm tra…" : "Kiểm tra tệp"}
         </button>
@@ -188,7 +188,7 @@ export default function SampleImportPanel({ onClose, onImported }: Props) {
             {!pending.preview.canConfirm ? "Sửa các ô có lỗi rồi chọn lại tệp." :
               issues.length ? "Bạn có thể xử lý các cảnh báo trong trình chỉnh sửa trước khi công bố." : "Tệp đã sẵn sàng để nhập."}
           </p>
-          <button type="button" className="sample-button sample-button--primary" disabled={Boolean(busy) || !pending.preview.canConfirm} onClick={confirm}>
+          <button type="button" className="ui-btn ui-btn--primary" disabled={Boolean(busy) || !pending.preview.canConfirm} onClick={confirm}>
             {busy === "confirm" ? "Đang tạo bản nháp…" : "Xác nhận nhập"}
           </button>
         </div>
@@ -200,7 +200,7 @@ export default function SampleImportPanel({ onClose, onImported }: Props) {
           <ul className="grid gap-3 max-h-56 overflow-auto">
             {result.samples.map(sample => (
               <li key={sample.id}>
-                <a className="sample-button sample-button--secondary" href={sampleEditorHref(sample.skill, sample.id)}>
+                <a className="ui-btn" href={sampleEditorHref(sample.skill, sample.id)}>
                   Mở nháp {sample.sampleKey}
                 </a>
               </li>

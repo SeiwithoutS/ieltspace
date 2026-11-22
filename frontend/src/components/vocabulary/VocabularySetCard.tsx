@@ -13,7 +13,7 @@ export function VocabularySetCard({
   topic, title, cover, index, entries, onOpen,
 }: VocabularySetCardProps) {
   return (
-    <article className="vocab-set" data-topic={topic}>
+    <article className="vocab-set lift" data-topic={topic}>
       <div className="set-cover">
         <small>VOCABULARY / {String(index).padStart(2, "0")}</small>
         {cover ? <img src={cover} alt="" className="set-cover-image" /> : <strong>{title}</strong>}

@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import { cleanTopic, isWritingEssayType } from './exam-labels.js';
 
 export type LrQuestionType =
   | 'SENTENCE_COMP'
@@ -84,6 +85,9 @@ export type WritingTask = {
   prompt: string;
   imagePath: string | null;
   imageUrl?: string | null;
+  // Nhãn tuỳ chọn để lọc ở thư viện đề; đề cũ không có.
+  essayType?: string | null;
+  topic?: string | null;
 };
 
 export type WritingContent = {
@@ -95,15 +99,18 @@ export type SpeakingContent = {
   part1: {
     instruction: string;
     questions: string[];
+    topic?: string | null;
   };
   part2: {
     prepMinutes: number | null;
     speakMinutes: number | null;
     cueCard: string;
+    topic?: string | null;
   };
   part3: {
     instruction: string;
     questions: string[];
+    topic?: string | null;
   };
 };
 
@@ -227,19 +234,38 @@ export function sectionsToWriting(
     ? String((s2.content as { prompt?: unknown }).prompt || '')
     : '';
 
+  const labels = (s: RawSection | undefined) => {
+    const c = (s?.content && typeof s.content === 'object' ? s.content : {}) as {
+      essayType?: unknown;
+      topic?: unknown;
+    };
+    return {
+      essayType: isWritingEssayType(c.essayType) ? c.essayType : null,
+      topic: cleanTopic(c.topic),
+    };
+  };
+
   return {
     tasks: [
-      { prompt: p1, imagePath: imgPath1, imageUrl: imgUrl1 },
-      { prompt: p2, imagePath: null, imageUrl: null },
+      { prompt: p1, imagePath: imgPath1, imageUrl: imgUrl1, ...labels(s1) },
+      { prompt: p2, imagePath: null, imageUrl: null, ...labels(s2) },
     ],
   };
+}
+
+function writingTaskContent(t: Partial<WritingTask>): { prompt: string; essayType?: string; topic?: string } {
+  const out: { prompt: string; essayType?: string; topic?: string } = { prompt: t.prompt || '' };
+  if (isWritingEssayType(t.essayType)) out.essayType = t.essayType;
+  const topic = cleanTopic(t.topic);
+  if (topic) out.topic = topic;
+  return out;
 }
 
 export function writingToRows(content: WritingContent): Array<{
   order_no: number;
   title: string;
   section_type: string;
-  content: { prompt: string };
+  content: { prompt: string; essayType?: string; topic?: string };
   config: { minutes: number; minWords: number };
   image_path: string | null;
   instruction: null;
@@ -252,7 +278,7 @@ export function writingToRows(content: WritingContent): Array<{
       order_no: 1,
       title: 'Task 1',
       section_type: 'TASK',
-      content: { prompt: t1.prompt || '' },
+      content: writingTaskContent(t1),
       config: { minutes: 20, minWords: 150 },
       image_path: t1.imagePath || null,
       instruction: null,
@@ -261,7 +287,7 @@ export function writingToRows(content: WritingContent): Array<{
       order_no: 2,
       title: 'Task 2',
       section_type: 'TASK',
-      content: { prompt: t2.prompt || '' },
+      content: writingTaskContent(t2),
       config: { minutes: 40, minWords: 250 },
       image_path: null,
       instruction: null,
@@ -332,22 +358,33 @@ export function sectionsToSpeaking(sections: RawSection[]): SpeakingContent {
     }
   }
 
+  const topicOf = (s: RawSection | undefined) =>
+    cleanTopic(s?.config && typeof s.config === 'object' ? (s.config as { topic?: unknown }).topic : null);
+
   return {
     p13Minutes: p13,
     part1: {
       instruction: p1Instruction,
       questions: p1Questions,
+      topic: topicOf(s1),
     },
     part2: {
       prepMinutes: prep,
       speakMinutes: speak,
       cueCard,
+      topic: topicOf(s2),
     },
     part3: {
       instruction: p3Instruction,
       questions: p3Questions,
+      topic: topicOf(s3),
     },
   };
+}
+
+function topicConfig(value: unknown): { topic?: string } {
+  const topic = cleanTopic(value);
+  return topic ? { topic } : {};
 }
 
 export function speakingToRows(content: SpeakingContent): Array<{
@@ -374,7 +411,7 @@ export function speakingToRows(content: SpeakingContent): Array<{
       section_type: 'PART',
       instruction: content.part1.instruction ?? null,
       content: {},
-      config: { p13Minutes: content.p13Minutes },
+      config: { p13Minutes: content.p13Minutes, ...topicConfig(content.part1.topic) },
       groups: [
         {
           order_no: 1,
@@ -396,6 +433,7 @@ export function speakingToRows(content: SpeakingContent): Array<{
       config: {
         prepMinutes: content.part2.prepMinutes,
         speakMinutes: content.part2.speakMinutes,
+        ...topicConfig(content.part2.topic),
       },
       groups: [],
     },
@@ -405,7 +443,7 @@ export function speakingToRows(content: SpeakingContent): Array<{
       section_type: 'PART',
       instruction: content.part3.instruction ?? null,
       content: {},
-      config: {},
+      config: { ...topicConfig(content.part3.topic) },
       groups: [
         {
           order_no: 1,

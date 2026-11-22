@@ -621,7 +621,7 @@ export default function Main({ accent }: { accent?: string }) {
                     "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
                   )}
                 ></span>
-                <span>{"12.4K lượt làm"}</span>
+                <span>{"12.4K lượt làm bài"}</span>
               </div>
               <div
                 style={styleOf(
@@ -688,7 +688,7 @@ export default function Main({ accent }: { accent?: string }) {
                     "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
                   )}
                 ></span>
-                <span>{"21.0K lượt làm"}</span>
+                <span>{"21.0K lượt làm bài"}</span>
               </div>
               <div
                 style={styleOf(
@@ -753,7 +753,7 @@ export default function Main({ accent }: { accent?: string }) {
                     "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
                   )}
                 ></span>
-                <span>{"18.7K lượt làm"}</span>
+                <span>{"18.7K lượt làm bài"}</span>
               </div>
               <div
                 style={styleOf(
@@ -818,7 +818,7 @@ export default function Main({ accent }: { accent?: string }) {
                     "width: 4px; height: 4px; border-radius: 50%; background: #B3A9B5",
                   )}
                 ></span>
-                <span>{"9.3K lượt làm"}</span>
+                <span>{"9.3K lượt làm bài"}</span>
               </div>
               <div
                 style={styleOf(
@@ -949,7 +949,7 @@ export default function Main({ accent }: { accent?: string }) {
                   "font-size: 14px; color: #706473; padding: 0 6px",
                 )}
               >
-                {"Academic · 3.2K lượt làm"}
+                {"Academic · 3.2K lượt làm bài"}
               </div>
               {"\n"}
               <div
@@ -1027,7 +1027,7 @@ export default function Main({ accent }: { accent?: string }) {
                   "font-size: 14px; color: #706473; padding: 0 6px",
                 )}
               >
-                {"Academic · 5.6K lượt làm"}
+                {"Academic · 5.6K lượt làm bài"}
               </div>
               {"\n"}
               <div
@@ -1105,7 +1105,7 @@ export default function Main({ accent }: { accent?: string }) {
                   "font-size: 14px; color: #706473; padding: 0 6px",
                 )}
               >
-                {"Academic · 4.1K lượt làm"}
+                {"Academic · 4.1K lượt làm bài"}
               </div>
               {"\n"}
               <div
@@ -1183,7 +1183,7 @@ export default function Main({ accent }: { accent?: string }) {
                   "font-size: 14px; color: #706473; padding: 0 6px",
                 )}
               >
-                {"General Training · 2.7K lượt làm"}
+                {"General Training · 2.7K lượt làm bài"}
               </div>
               {"\n"}
               <div
@@ -1326,7 +1326,7 @@ export default function Main({ accent }: { accent?: string }) {
                   "font-size: 14px; color: #706473; padding: 0 6px",
                 )}
               >
-                {"2.8K lượt làm"}
+                {"2.8K lượt làm bài"}
               </div>
               {"\n"}
               <div
@@ -1404,7 +1404,7 @@ export default function Main({ accent }: { accent?: string }) {
                   "font-size: 14px; color: #706473; padding: 0 6px",
                 )}
               >
-                {"2.1K lượt làm"}
+                {"2.1K lượt làm bài"}
               </div>
               {"\n"}
               <div
@@ -1482,7 +1482,7 @@ export default function Main({ accent }: { accent?: string }) {
                   "font-size: 14px; color: #706473; padding: 0 6px",
                 )}
               >
-                {"3.7K lượt làm"}
+                {"3.7K lượt làm bài"}
               </div>
               {"\n"}
               <div
@@ -1560,7 +1560,7 @@ export default function Main({ accent }: { accent?: string }) {
                   "font-size: 14px; color: #706473; padding: 0 6px",
                 )}
               >
-                {"1.9K lượt làm"}
+                {"1.9K lượt làm bài"}
               </div>
               {"\n"}
               <div

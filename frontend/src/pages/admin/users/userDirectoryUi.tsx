@@ -1,11 +1,13 @@
 import { userStatuses } from '../../../lib/admin-users/api';
 import { styleOf } from '../../../lib/shared/styles';
+import { buttonClass, controlClass } from '../../../components/shared/ui';
 
 export const directoryMuted = 'text-[var(--attempt-text-706473,#706473)]';
 export const loginMethodLabel = { PASSWORD: 'Email', GOOGLE: 'Google' };
-export const directoryButton = 'min-h-9 cursor-pointer rounded-full border border-solid border-[var(--attempt-line-d6d4d0,#D6D4D0)] bg-transparent px-3 font-sans text-sm font-semibold text-inherit aria-disabled:cursor-default aria-disabled:opacity-50';
-export const accountAction = 'display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; cursor: pointer; font-family: inherit';
-export const primaryAction = accountAction + '; border: 1.5px solid #352637; background: #352637; color: #FFFFFF';
+// Nút và ô nhập theo DESIGN.md 12.1–12.2 (component dùng chung ở components/shared/ui).
+export const directoryButton = buttonClass({ size: 'sm' });
+export const closeButton = buttonClass({ icon: true, size: 'sm' });
+export const directoryField = controlClass();
 export const directoryCard = 'border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07); overflow: hidden';
 
 const pill = 'display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border: 1.5px solid #D6D4D0; border-radius: 999px; box-sizing: border-box; font-size: 13px; font-weight: 600; white-space: nowrap';
@@ -34,8 +36,6 @@ export function CloseIcon() {
     <path d="M6 6l12 12M18 6L6 18" />
   </svg>;
 }
-
-export const closeAction = 'flex: none; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #D6D4D0; display: flex; align-items: center; justify-content: center; color: #352637; background: transparent; cursor: pointer';
 
 const dateFormatter = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'short', timeZone: 'Asia/Ho_Chi_Minh' });
 const timeFormatter = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'short', timeStyle: 'short', timeZone: 'Asia/Ho_Chi_Minh' });

@@ -142,18 +142,6 @@ export const TYPE_MAP: Record<
   return acc;
 }, {} as Record<LrQuestionType, { label: string; form: string; tpl: string; lim: number }>);
 
-export const FORMLABEL: Record<string, string> = {
-  gap: '1. Câu có chỗ trống',
-  text: '2. Đoạn văn có chỗ trống',
-  bank: '3. Đoạn văn và khung từ',
-  table: '4. Bảng',
-  diagram: '5. Hình có nhãn',
-  match: '6. Ghép với danh sách',
-  mcq1: '7. Trắc nghiệm',
-  mcqN: '7. Trắc nghiệm',
-  judge: '7. Trắc nghiệm',
-};
-
 export const LIM: string[] = [
   'ONE WORD ONLY',
   'ONE WORD AND/OR A NUMBER',

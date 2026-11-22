@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { requireAuth, requireRole } from '../../middleware/auth.js';
+import { listTopicLabels } from './exams.catalog.service.js';
 import { asyncHandler, HttpError } from '../../utils/http.js';
 import {
   idParamSchema,
@@ -56,6 +57,14 @@ import { prisma } from '../../lib/prisma.js';
 export const adminExamsRouter = Router();
 
 adminExamsRouter.use(requireAuth, requireRole('ADMIN'));
+
+// A0: GET /admin/exam-topics (chủ đề Writing/Speaking đã có, cho combobox trong editor)
+adminExamsRouter.get(
+  '/exam-topics',
+  asyncHandler(async (_req, res) => {
+    res.json({ items: await listTopicLabels() });
+  })
+);
 
 // A1: GET /admin/exam-set-categories
 adminExamsRouter.get(

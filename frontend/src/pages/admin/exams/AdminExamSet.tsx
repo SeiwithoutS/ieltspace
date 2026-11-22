@@ -1,7 +1,30 @@
 import React from "react";
 import { styleOf, cssText } from "../../../lib/shared/styles";
-import AdminSidebar from "../../../components/navigation/AdminSidebar";
-import AdminTopbar, { Crumb } from "../../../components/navigation/AdminTopbar";
+import { readImage } from "../../../lib/shared/image-file";
+import {
+  ART,
+  SK,
+  SST,
+  SST_TONE,
+  ST,
+  TY,
+  type FormKey,
+  type SkillKey,
+} from "../../../lib/exams/exam-ui";
+import {
+  Button,
+  Chip,
+  ConfirmDialog,
+  DataCard,
+  DataTable,
+  Icon,
+  PageHeader,
+  StatCard,
+  StatGrid,
+  Toast,
+  type ConfirmTone,
+} from "../../../components/shared/ui";
+import "./admin-exams.css";
 import StaffLayout from "../../../components/layout/StaffLayout";
 import { navigate } from "../../../lib/auth/auth";
 import {
@@ -30,45 +53,40 @@ import SkillHistoryDrawer from "../../../components/exams/SkillHistoryDrawer";
 import { TOAST_MS } from "../../../lib/shared/toast";
 
 type Ev = React.SyntheticEvent | null | undefined;
-type SkillKey = "L" | "R" | "W" | "S";
-type FormKey = "A" | "G";
-type Palette = [label: string, background: string, color: string];
 type ConfirmKind = "pub" | "hide" | "del" | "delSkill";
 // Việc hoàn tác sau khi ẩn hoặc hiện lại một kỹ năng, hoặc hoàn tác tạo kỹ năng.
 type UndoAction =
   | {
-    action: "show" | "hide";
-    liveId: string;
-    nm: string;
-    tName: string;
-  }
+      action: "show" | "hide";
+      liveId: string;
+      nm: string;
+      tName: string;
+    }
   | {
-    action: "deleteSkill";
-    draftId: string;
-    nm: string;
-    tName: string;
-  };
+      action: "deleteSkill";
+      draftId: string;
+      nm: string;
+      tName: string;
+    };
 type MenuPos = { l: number; t: number; b: number; up: boolean };
 type MenuItem = {
   label: string;
-  st: string;
+  cls: string;
   href: string;
   act: (e: Ev) => unknown;
   disabled?: boolean;
 };
 // Nội dung hộp xác nhận Đăng / Ẩn / Xóa bộ đề.
-type ConfirmBase = {
+type Confirm = {
   title: string;
   text: string;
-  hasList: boolean;
-  list: Array<{ n: number; text: string; dot: string }>;
+  list: Array<{ n: number; text: string; dotColor: string }>;
   goText: string;
-  goSt: string;
+  goDanger: boolean;
   icon: string;
-  tone: [string, string];
-  noGo?: boolean;
+  tone: ConfirmTone;
+  noGo: boolean;
 };
-type Confirm = ConfirmBase & { canGo: boolean; noGo: boolean; iconSt: string };
 
 type DelSkillTarget = {
   skillId: string;
@@ -117,15 +135,12 @@ const EDITORS: Record<SkillKey, string> = {
 const EMPTY_CONFIRM: Confirm = {
   title: "",
   text: "",
-  hasList: false,
   list: [],
   goText: "",
-  goSt: "",
+  goDanger: false,
   icon: "",
-  tone: ["", ""],
+  tone: "neutral",
   noGo: false,
-  canGo: false,
-  iconSt: "",
 };
 
 function isForms(x: Cell | FormCells): x is FormCells {
@@ -235,112 +250,23 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       }
     }
 
-    // đọc ảnh người dùng chọn: kiểm tra loại và dung lượng, đo tỉ lệ để cảnh báo khi lệch xa 3:2
-    function readImage(
-      e: React.ChangeEvent<HTMLInputElement>,
-      done: (url: string | null, msg: string, ok?: boolean) => void,
-    ) {
-      var f = e && e.target && e.target.files && e.target.files[0];
-      if (!f) {
-        return;
-      }
-      if (!/^image\/(png|jpeg|webp)$/.test(f.type)) {
-        done(null, "Ảnh phải là JPG, PNG hoặc WebP.");
-        return;
-      }
-      if (f.size > 5 * 1024 * 1024) {
-        done(null, "Ảnh lớn hơn 5 MB, hãy chọn ảnh nhỏ hơn.");
-        return;
-      }
-      var r = new FileReader();
-      r.onload = function () {
-        var url = typeof r.result === "string" ? r.result : "",
-          im = new Image();
-        im.onload = function () {
-          var q = im.width / im.height;
-          done(
-            url,
-            Math.abs(q - 1.5) > 0.12
-              ? "Ảnh " +
-              im.width +
-              " × " +
-              im.height +
-              " không đúng tỉ lệ 3:2, sẽ được thu vừa khung bìa trên nền màu."
-              : "",
-            true,
-          );
-        };
-        im.onerror = function () {
-          done(url, "");
-        };
-        im.src = url;
-      };
-      r.readAsDataURL(f);
-      try {
-        e.target.value = "";
-      } catch (err) { }
-    }
-
-    var SK: Array<[SkillKey, string, string, string]> = [
-      ["L", "Listening", "#DDE8FC", "#2A55B8"],
-      ["R", "Reading", "#DCEDE2", "#2E6A48"],
-      ["W", "Writing", "#FBEDBF", "#7A5A0E"],
-      ["S", "Speaking", "#E8E4FA", "#5543B0"],
-    ],
-      ST: Record<NonNullable<Cell>, Palette> = {
-        pub: ["Đã đăng", "#DCEDE2", "#2E6A48"],
-        draft: ["Đang soạn", "#FBEDBF", "#7A5A0E"],
-        hidden: ["Đã ẩn", "#F3F0EA", "#706473"],
-      },
-      SST: Record<UiSet["status"], Palette> = {
-        PUBLISHED: ["Công khai", "#DCEDE2", "#2E6A48"],
-        DRAFT: ["Bản nháp", "#FBEDBF", "#7A5A0E"],
-        HIDDEN: ["Đã ẩn", "#F3F0EA", "#706473"],
-      },
-      TY: Record<FormKey, Palette> = {
-        A: ["Academic", "#DFF1F4", "#1F6A78"],
-        G: ["General Training", "#FCE6D6", "#9A4A17"],
-      },
-      ART: Array<[string, string, boolean]> = [
-        [
-          "Bìa CAM Inspired",
-          "url('data:image/jpeg;base64,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') center / contain no-repeat, #322A9A",
-          false,
-        ],
-        [
-          "Biển xanh",
-          "radial-gradient(circle at 78% 22%, rgba(255,255,255,0.55) 0 14%, transparent 15%), radial-gradient(circle at 18% 88%, #A9C4F5 0 26%, transparent 27%), linear-gradient(140deg, #1F4FA0, #5B8FE0 60%, #9CC0F5)",
-          true,
-        ],
-        [
-          "Hoàng hôn",
-          "radial-gradient(circle at 70% 30%, #FFE7A3 0 18%, transparent 19%), radial-gradient(ellipse at 20% 100%, #E0663A 0 38%, transparent 39%), linear-gradient(160deg, #F7B267, #F4845F 70%)",
-          true,
-        ],
-        [
-          "Lá non",
-          "radial-gradient(circle at 25% 25%, rgba(255,255,255,0.45) 0 12%, transparent 13%), radial-gradient(ellipse at 90% 95%, #2E6A48 0 40%, transparent 41%), linear-gradient(150deg, #9BD3AE, #4E9A6E)",
-          true,
-        ],
-      ];
-
     var SET: UiSet = s.apiSet
       ? toUiSet(s.apiSet)
       : {
-        id: sid,
-        cat: "",
-        catName: "",
-        name: s.loading ? "Đang tải…" : s.gone ? "Đã xóa" : "",
-        art: null,
-        img: null,
-        short: "",
-        status: "DRAFT",
-        updated: "",
-        plays: "0",
-        desc: "",
-        tests: [],
-        canDelete: true,
-      };
+          id: sid,
+          cat: "",
+          catName: "",
+          name: s.loading ? "Đang tải…" : s.gone ? "Đã xóa" : "",
+          art: null,
+          img: null,
+          short: "",
+          status: "DRAFT",
+          updated: "",
+          plays: "0",
+          desc: "",
+          tests: [],
+          canDelete: true,
+        };
 
     var tests = SET.tests,
       col = s.col == null ? -1 : s.col,
@@ -384,17 +310,6 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         self.setState({ toast: "", undoAction: null });
       }, TOAST_MS);
     }
-    function pill(c: FormKey, h?: number) {
-      return (
-        "display: inline-flex; align-items: center; height: " +
-        (h || 22) +
-        "px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; background: " +
-        TY[c][1] +
-        "; color: " +
-        TY[c][2]
-      );
-    }
-
     var tiles = SK.map(function (k, i) {
       var all: Cell[] = [],
         on = col === i;
@@ -402,29 +317,32 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         all = all.concat(vals(t, k[0]));
       });
       var pub = all.filter(function (x) {
-        return x === "pub";
-      }).length,
+          return x === "pub";
+        }).length,
         dr = all.filter(function (x) {
           return x === "draft";
         }).length,
         hid = all.length - pub - dr;
       var sub = [pub + " đã đăng", dr + " đang soạn"]
-        .concat(hid ? [hid + " đã ẩn"] : [])
-        .join(" · "),
+          .concat(hid ? [hid + " đã ẩn"] : [])
+          .join(" · "),
         rw = k[0] === "R" || k[0] === "W";
       var kinds = rw
         ? (["A", "G"] as FormKey[]).map(function (c) {
-          var n = tests.filter(function (t) {
-            return val(t, k[0], c);
-          }).length;
-          return { text: TY[c][0] + " " + n, st: pill(c) };
-        })
+            var n = tests.filter(function (t) {
+              return val(t, k[0], c);
+            }).length;
+            return {
+              text: TY[c][0] + " " + n,
+              tone: `form-${c}` as `form-${FormKey}` | null,
+            };
+          })
         : [
-          {
-            text: "Dùng chung cho cả 2 hình thức",
-            st: "font-size: 13px; color: #706473",
-          },
-        ];
+            {
+              text: "Dùng chung cho cả 2 hình thức",
+              tone: null as `form-${FormKey}` | null,
+            },
+          ];
       return {
         label: k[1],
         n: String(all.length),
@@ -432,23 +350,13 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         icon: k[1].charAt(0),
         on: on,
         kinds: kinds,
-        iconSt:
-          "display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 10px; font-weight: 700; font-size: 14px; background: " +
-          k[2] +
-          "; color: " +
-          k[3],
-        st:
-          "display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; border-radius: 16px; background: #FFFFFF; text-decoration: none; color: #352637; box-sizing: border-box; cursor: pointer; " +
-          (on
-            ? "border: 2px solid " +
-            k[3] +
-            "; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)"
-            : "border: 1.5px solid #D6D4D0"),
+        tone: `skill-${k[0]}` as `skill-${SkillKey}`,
         canImp: true,
         impDisabled: true,
         impHref: "#",
         imp: function (e: Ev) {
           stop(e);
+          keep(e);
           // O-L3: Khóa nút Nhập xlsx trong khi nâng cấp định dạng
         },
         pick: function (e: Ev) {
@@ -475,8 +383,6 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           : "background: #FAF9F5; color: #706473")
       );
     }
-    var MI =
-      "display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; box-sizing: border-box; ";
     var rows = tests.map(function (t, r) {
       var n = SK.filter(function (k) {
         return vals(t, k[0]).length;
@@ -501,7 +407,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           if (t.everPublished) {
             toastSet(
               t.name +
-              " đã đăng nên không xóa được, để giữ bài làm của người học. Hãy ẩn từng kỹ năng nếu không muốn người học thấy.",
+                " đã đăng nên không xóa được, để giữ bài làm của người học. Hãy ẩn từng kỹ năng nếu không muốn người học thấy.",
             );
             return;
           }
@@ -530,7 +436,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           if (v === "pub") {
             items.push({
               label: "Ẩn với người học",
-              st: MI + "color: #352637",
+              cls: "ex-mi",
               href: "#",
               act: async function (e: Ev) {
                 stop(e);
@@ -540,10 +446,10 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
                   self.setState({ apiSet: res, menu: null });
                   toastSet(
                     "Đã ẩn " +
-                    nm +
-                    " của " +
-                    t.name +
-                    ". Người học không thấy kỹ năng này nữa.",
+                      nm +
+                      " của " +
+                      t.name +
+                      ". Người học không thấy kỹ năng này nữa.",
                     {},
                     true,
                     {
@@ -562,7 +468,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           if (v === "hidden") {
             items.push({
               label: "Hiện lại cho người học",
-              st: MI + "color: #352637",
+              cls: "ex-mi",
               href: "#",
               act: async function (e: Ev) {
                 stop(e);
@@ -591,7 +497,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           var edName = EDITORS[k[0]];
           items.push({
             label: "Mở editor " + k[1],
-            st: MI + "color: #2963CC",
+            cls: "ex-mi ex-mi--accent",
             href: "#",
             act: function (e: Ev) {
               stop(e);
@@ -602,7 +508,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
             items.push({
               label: "Có bản sửa chưa đăng",
               disabled: true,
-              st: "display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; color: #B25E00; background: #FFF7ED; cursor: default; user-select: none; pointer-events: none; box-sizing: border-box",
+              cls: "ex-mi--note",
               href: "#",
               act: stop,
             });
@@ -611,7 +517,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
             const histId = slot.draftId || slot.liveId;
             items.push({
               label: "Xem lịch sử",
-              st: MI + "color: #352637",
+              cls: "ex-mi",
               href: "#",
               act: function (e: Ev) {
                 stop(e);
@@ -628,7 +534,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
             items.push({
               label: "Đăng trong editor khi soạn xong",
               disabled: true,
-              st: "display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #706473; cursor: default; user-select: none; pointer-events: none; box-sizing: border-box",
+              cls: "ex-mi--hint",
               href: "#",
               act: stop,
             });
@@ -637,7 +543,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
             const draftId = slot.draftId;
             items.push({
               label: "Xóa " + nm,
-              st: MI + "color: #C0412A",
+              cls: "ex-mi ex-mi--danger",
               href: "#",
               act: function (e: Ev) {
                 stop(e);
@@ -657,7 +563,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
             const draftId = slot.draftId;
             items.push({
               label: "Bỏ bản sửa chưa đăng",
-              st: MI + "color: #C0412A",
+              cls: "ex-mi ex-mi--danger",
               href: "#",
               act: function (e: Ev) {
                 stop(e);
@@ -686,13 +592,12 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
               " · " +
               nm +
               (stx ? " · " + stx[0] : " · chưa có, bấm để tạo"),
-            menuSt:
-              "position: fixed; z-index: 50; min-width: 240px; width: max-content; max-width: 300px; padding: 6px; border-radius: 12px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); box-sizing: border-box; left: " +
-              (s.menuPos ? s.menuPos.l : 0) +
-              "px; " +
-              (s.menuPos && s.menuPos.up
-                ? "bottom: " + s.menuPos.b + "px"
-                : "top: " + (s.menuPos ? s.menuPos.t : 0) + "px"),
+            menuStyle: Object.assign(
+              { left: s.menuPos ? s.menuPos.l : 0 },
+              s.menuPos && s.menuPos.up
+                ? { bottom: s.menuPos.b }
+                : { top: s.menuPos ? s.menuPos.t : 0 },
+            ) as { left: number; top?: number; bottom?: number },
             toggle: function (e: React.MouseEvent<HTMLElement>) {
               stop(e);
               var el = e && e.currentTarget,
@@ -720,8 +625,8 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
               (stx ? stx[1] + "; color: " + stx[2] : "#FFFFFF") +
               (open
                 ? "; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px " +
-                (stx ? stx[2] : "#2963CC") +
-                "55"
+                  (stx ? stx[2] : "#2963CC") +
+                  "55"
                 : ""),
             create: async function (e: Ev) {
               stop(e);
@@ -739,7 +644,9 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
                 var updatedTest = uiRes.tests.find(function (x) {
                   return x.id === t.id;
                 });
-                var updatedSlot = updatedTest ? updatedTest._slots[slotKey] : null;
+                var updatedSlot = updatedTest
+                  ? updatedTest._slots[slotKey]
+                  : null;
                 var newDraftId = updatedSlot ? updatedSlot.draftId : null;
                 if (newDraftId) {
                   toastSet(
@@ -769,19 +676,19 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       img = SET.img || null,
       AR: [string, string, boolean] | null = img
         ? [
-          "Ảnh đã tải lên",
-          "url('" + img + "') center / contain no-repeat, #E9E4DA",
-          false,
-        ]
+            "Ảnh đã tải lên",
+            "url('" + img + "') center / contain no-repeat, #E9E4DA",
+            false,
+          ]
         : ai == null
           ? null
           : ART[ai];
     // ---- đăng / ẩn / xóa bộ đề
     var cnt: Record<"pub" | "draft" | "hidden", number> = {
-      pub: 0,
-      draft: 0,
-      hidden: 0,
-    },
+        pub: 0,
+        draft: 0,
+        hidden: 0,
+      },
       live = 0;
     tests.forEach(function (t) {
       var any = false;
@@ -799,123 +706,103 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       }
     });
     var canDel =
-      SET.canDelete !== undefined
-        ? SET.canDelete
-        : status === "DRAFT" || !tests.length,
-      cfBase: ConfirmBase | null = null;
+        SET.canDelete !== undefined
+          ? SET.canDelete
+          : status === "DRAFT" || !tests.length,
+      cf: Confirm | null = null;
+    // Chấm màu trước mỗi dòng danh sách: đi qua styleOf để có màu tối tương ứng.
     function dot(c: string) {
-      return (
-        "display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 999px; background: " +
-        c
-      );
+      return String(styleOf("background: " + c).backgroundColor || c);
     }
     if (s.cf === "pub") {
-      cfBase = cnt.pub
+      cf = cnt.pub
         ? {
-          title:
-            (status === "HIDDEN" ? "Đăng lại" : "Đăng") +
-            " bộ đề “" +
-            SET.name +
-            "”?",
-          text: "Bộ đề sẽ hiện trong Thư viện đề của người học. Từng đề hiện theo các kỹ năng đã có:",
-          hasList: true,
-          list: [
-            {
-              n: cnt.pub,
-              text:
-                "kỹ năng đã đăng trong " +
-                live +
-                " đề: người học bấm Làm bài được ngay",
-              dot: dot("#2E7D4F"),
-            },
-            {
-              n: cnt.draft,
-              text: "kỹ năng đang soạn: chưa hiện, thấy “—”",
-              dot: dot("#C9A227"),
-            },
-            {
-              n: cnt.hidden,
-              text: "kỹ năng đã ẩn: không hiện",
-              dot: dot("#B3A9B5"),
-            },
-          ],
-          goText: "Đăng bộ đề",
-          goSt: "BTN_DARK",
-          icon: "↑",
-          tone: ["#DCEDE2", "#2E6A48"],
-        }
+            title:
+              (status === "HIDDEN" ? "Đăng lại" : "Đăng") +
+              " bộ đề “" +
+              SET.name +
+              "”?",
+            text: "Bộ đề sẽ hiện trong Thư viện đề của người học. Từng đề hiện theo các kỹ năng đã có:",
+            list: [
+              {
+                n: cnt.pub,
+                text:
+                  "kỹ năng đã đăng trong " +
+                  live +
+                  " đề: người học bấm Làm bài được ngay",
+                dotColor: dot("#2E7D4F"),
+              },
+              {
+                n: cnt.draft,
+                text: "kỹ năng đang soạn: chưa hiện, thấy “—”",
+                dotColor: dot("#C9A227"),
+              },
+              {
+                n: cnt.hidden,
+                text: "kỹ năng đã ẩn: không hiện",
+                dotColor: dot("#B3A9B5"),
+              },
+            ],
+            goText: "Đăng bộ đề",
+            goDanger: false,
+            icon: "↑",
+            tone: "success",
+            noGo: false,
+          }
         : {
-          title: "Chưa đăng được bộ đề",
-          text: "Bộ đề chưa có kỹ năng nào ở trạng thái Đã đăng. Soạn xong và đăng ít nhất một kỹ năng của một đề trong editor (đủ đáp án, tiêu chí và tệp audio/ảnh) rồi mới đăng cả bộ.",
-          hasList: false,
-          list: [],
-          noGo: true,
-          goText: "",
-          goSt: "",
-          icon: "!",
-          tone: ["#FBEDBF", "#7A5A0E"],
-        };
+            title: "Chưa đăng được bộ đề",
+            text: "Bộ đề chưa có kỹ năng nào ở trạng thái Đã đăng. Soạn xong và đăng ít nhất một kỹ năng của một đề trong editor (đủ đáp án, tiêu chí và tệp audio/ảnh) rồi mới đăng cả bộ.",
+            list: [],
+            noGo: true,
+            goText: "",
+            goDanger: false,
+            icon: "!",
+            tone: "warning",
+          };
     }
     if (s.cf === "hide") {
-      cfBase = {
+      cf = {
         title: "Ẩn bộ đề “" + SET.name + "”?",
         text: "Người học không thấy bộ đề trong thư viện và không bắt đầu lượt làm mới. Bài đã làm, bài đã lưu và lượt đang làm dở vẫn được giữ nguyên.",
-        hasList: false,
         list: [],
         goText: "Ẩn bộ đề",
-        goSt: "BTN_DARK",
+        goDanger: false,
         icon: "–",
-        tone: ["#F3F0EA", "#706473"],
+        tone: "neutral",
+        noGo: false,
       };
     }
     if (s.cf === "del") {
-      cfBase = {
+      cf = {
         title: "Xóa bộ đề “" + SET.name + "”?",
         text: tests.length
           ? "Bộ đề đang là Bản nháp với " +
-          tests.length +
-          " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
+            tests.length +
+            " đề chưa công khai, chưa có người học nào làm. Toàn bộ đề và nội dung đang soạn bên trong sẽ bị xóa vĩnh viễn."
           : "Bộ đề chưa có đề nào. Thao tác này không hoàn tác được.",
-        hasList: false,
         list: [],
         goText: "Xóa bộ đề",
-        goSt: "BTN_RED",
+        goDanger: true,
         icon: "×",
-        tone: ["#FBDCD3", "#C0412A"],
+        tone: "danger",
+        noGo: false,
       };
     }
     if (s.cf === "delSkill" && s.delSkillTarget) {
       var tgt = s.delSkillTarget;
-      cfBase = {
+      cf = {
         title: tgt.isDiscard
           ? "Bỏ bản sửa " + tgt.nm + " của " + tgt.testName + "?"
           : "Xóa " + tgt.nm + " của " + tgt.testName + "?",
         text: tgt.isDiscard
           ? "Bản đang hiển thị với người học giữ nguyên. Các thay đổi đã lưu trong bản sửa sẽ bị xóa vĩnh viễn."
           : "Kỹ năng đang soạn, chưa đăng lần nào. Nội dung đã soạn sẽ bị xóa vĩnh viễn, ô trở về trống để tạo lại.",
-        hasList: false,
         list: [],
         goText: tgt.isDiscard ? "Bỏ bản sửa" : "Xóa kỹ năng",
-        goSt: "BTN_RED",
+        goDanger: true,
         icon: "×",
-        tone: ["#FBDCD3", "#C0412A"],
-      };
-    }
-    var cf: Confirm | null = null;
-    if (cfBase) {
-      cf = {
-        ...cfBase,
-        canGo: !cfBase.noGo,
-        noGo: !!cfBase.noGo,
-        goSt:
-          cfBase.goSt === "BTN_RED"
-            ? "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #C0412A; background: #C0412A; color: #FFFFFF"
-            : "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
-        iconSt:
-          "display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; font-size: 22px; font-weight: 700; background: " +
-          cfBase.tone[0] +
-          "; color: " +
-          cfBase.tone[1],
+        tone: "danger",
+        noGo: false,
       };
     }
     var sst = SST[status],
@@ -944,20 +831,16 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       setTypes: used.map(function (c) {
         return {
           text: TY[c][0],
-          st: pill(c, 26) + "; font-size: 13px; padding: 0 10px",
+          tone: `form-${c}` as `form-${FormKey}`,
         };
       }),
       setStatus: sst[0],
-      setStatusSt:
-        "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; transition: background-color .3s, color .3s; background: " +
-        sst[1] +
-        "; color: " +
-        sst[2],
+      setStatusTone: SST_TONE[status],
       setSub:
         tests.length +
         " đề · cập nhật " +
         (SET.updated || "") +
-        (status === "PUBLISHED" ? " · " + SET.plays + " lượt làm" : ""),
+        (status === "PUBLISHED" ? " · " + SET.plays + " lượt làm bài" : ""),
       isPub: status === "PUBLISHED",
       notPub: status !== "PUBLISHED" && tests.length > 0,
       blockPub: status !== "PUBLISHED" && tests.length === 0,
@@ -1067,7 +950,7 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
       artOpen: !!s.artOpen,
       artMsg: !!s.artMsg,
       artMsgText: s.artMsg || "",
-      artMsgColor: s.artBad ? "#C0412A" : "#7A5A0E",
+      artMsgBad: !!s.artBad,
       artMenu: function (e: Ev) {
         stop(e);
         self.setState({ artOpen: !s.artOpen, menu: null, artMsg: "" });
@@ -1100,31 +983,34 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         var f = e && e.target && e.target.files && e.target.files[0];
         if (!f) return;
         var file: File = f;
-        readImage(e, async function (url: string | null, msg: string) {
-          if (!url) {
-            self.setState({ artMsg: msg, artBad: true });
-            return;
-          }
-          try {
-            var cov = await uploadCover(sid, file);
-            var updatedApiSet = Object.assign({}, s.apiSet, {
-              coverUrl: cov.coverUrl,
-            });
-            self.setState({
-              apiSet: updatedApiSet,
-              artOpen: !!msg,
-              artMsg: msg,
-              artBad: false,
-            });
-          } catch (err) {
-            self.setState({
-              artMsg:
-                errorInfo(err).message ||
-                "Chưa tải được ảnh. Hãy chọn ảnh mẫu hoặc thử lại sau.",
-              artBad: true,
-            });
-          }
-        });
+        readImage(
+          e,
+          async function (_f: File | null, url: string | null, msg: string) {
+            if (!url) {
+              self.setState({ artMsg: msg, artBad: true });
+              return;
+            }
+            try {
+              var cov = await uploadCover(sid, file);
+              var updatedApiSet = Object.assign({}, s.apiSet, {
+                coverUrl: cov.coverUrl,
+              });
+              self.setState({
+                apiSet: updatedApiSet,
+                artOpen: !!msg,
+                artMsg: msg,
+                artBad: false,
+              });
+            } catch (err) {
+              self.setState({
+                artMsg:
+                  errorInfo(err).message ||
+                  "Chưa tải được ảnh. Hãy chọn ảnh mẫu hoặc thử lại sau.",
+                artBad: true,
+              });
+            }
+          },
+        );
       },
       artRemove: async function (e: Ev) {
         stop(e);
@@ -1164,8 +1050,8 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           });
           toastSet(
             "Đã thêm " +
-            (newTest ? newTest.title : "đề mới") +
-            ". Bấm “Tạo” ở từng kỹ năng để soạn.",
+              (newTest ? newTest.title : "đề mới") +
+              ". Bấm “Tạo” ở từng kỹ năng để soạn.",
           );
         } catch (err) {
           toastSet(errorInfo(err).message || "Không thể thêm đề thi.");
@@ -1199,7 +1085,8 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
         }
       },
       toastLink: !!s.toastLink,
-      toastHref: "#",
+      toastHref: "#ExamDetail?id=" + sid,
+      toLearnerHref: "#ExamDetail?id=" + sid,
       toastLinkText: s.toastLink || "",
       clickToastLink: function (e: Ev) {
         stop(e);
@@ -1229,1196 +1116,475 @@ class AdminExamSet extends React.Component<Record<string, unknown>, State> {
           ]}
           contentClassName="p-4 sm:p-6 md:p-8 flex flex-col gap-6"
         >
-          <a
-            href={"#"}
-            onClick={v.back}
-            style={styleOf(
-              "display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #706473; text-decoration: none; align-self: flex-start",
-            )}
-          >
-            <svg
-              width={"16"}
-              height={"16"}
-              viewBox={"0 0 24 24"}
-              fill={"none"}
-              stroke={"currentColor"}
-              strokeWidth={"2"}
-              strokeLinecap={"round"}
-              strokeLinejoin={"round"}
-              aria-hidden={"true"}
-            >
-              <path d={"M19 12H5M11 6l-6 6 6 6"}></path>
-            </svg>
-            {" Bộ đề và đề thi"}
+          <a href="#" onClick={v.back} className="ex-back">
+            <Icon name="back" />
+            Bộ đề và đề thi
           </a>
           {v.loading ? (
-            <div
-              className={"an-fade"}
-              style={styleOf(
-                "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; padding: 48px 24px; text-align: center; color: #706473; font-size: 14px",
-              )}
-            >
-              {"Đang tải thông tin bộ đề…"}
+            <div className="an-fade ex-state ex-state--card">
+              Đang tải thông tin bộ đề…
             </div>
           ) : v.loadError ? (
-            <div
-              className={"an-fade"}
-              style={styleOf(
-                "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; padding: 48px 24px; text-align: center; color: #C0412A; font-size: 14px",
-              )}
-            >
+            <div className="an-fade ex-state ex-state--card ex-state--error">
               <div>{v.loadError}</div>
-              <a
-                href={"#"}
-                onClick={v.retry}
-                style={styleOf(
-                  "display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: #2963CC; margin-top: 10px",
-                )}
-              >
-                {"Thử lại"}
+              <a href="#" onClick={v.retry} className="ex-link ex-link--flex">
+                Thử lại
               </a>
             </div>
           ) : v.alive ? (
-            <>
-              <div
-                style={styleOf(
-                  "display: flex; flex-direction: column; gap: 24px",
-                )}
-              >
-                <div style={styleOf("margin-top: -8px")}>
-                  <div
-                    style={styleOf(
-                      "display: flex; align-items: center; gap: 20px; flex-wrap: wrap",
-                    )}
-                  >
-                    <div
-                      style={styleOf("position: relative; flex: none")}
+            <div className="ex-stack">
+              <PageHeader
+                title={v.setName}
+                lead={
+                  <div className="ex-cover">
+                    <div className="thumb-h ex-cover__frame">
+                      <div
+                        role="img"
+                        aria-label={v.artLabel}
+                        style={styleOf(v.artSt)}
+                      >
+                        {v.artShowText ? (
+                          <span className="ex-art__text">{v.artText}</span>
+                        ) : null}
+                        {v.artNone ? (
+                          <span className="ex-art__none">
+                            <Icon name="image" size={26} strokeWidth={1.8} />
+                            Chưa có ảnh
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={v.artMenu}
+                      title="Đổi ảnh bìa"
+                      aria-label="Đổi ảnh bìa"
+                      aria-expanded={v.artOpen}
+                      className="press ex-cam"
                     >
+                      <Icon name="camera" size={17} />
+                    </button>
+                    {v.artOpen ? (
                       <div
-                        className={"thumb-h"}
-                        style={styleOf(
-                          "border-radius: 12px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.06), 0 6px 18px rgba(53, 38, 55, 0.10)",
-                        )}
+                        role="dialog"
+                        aria-label="Ảnh bìa bộ đề"
+                        className="an-drop ex-pop"
                       >
-                        <div
-                          role={"img"}
-                          aria-label={v.artLabel}
-                          style={styleOf(v.artSt)}
-                        >
-                          {v.artShowText ? (
-                            <>
-                              <span
-                                style={styleOf(
-                                  "padding: 0 0 12px 12px; font-family: 'IBM Plex Serif', Georgia, serif; font-size: 24px; font-weight: 600; line-height: 1; letter-spacing: -0.01em; text-shadow: 0 1px 8px rgba(0,0,0,0.18)",
-                                )}
-                              >
-                                {v.artText}
-                              </span>
-                            </>
-                          ) : null}
-                          {v.artNone ? (
-                            <>
-                              <span
-                                style={styleOf(
-                                  "margin: auto; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 13px; font-weight: 600",
-                                )}
-                              >
-                                <svg
-                                  width={"26"}
-                                  height={"26"}
-                                  viewBox={"0 0 24 24"}
-                                  fill={"none"}
-                                  stroke={"currentColor"}
-                                  strokeWidth={"1.8"}
-                                  strokeLinecap={"round"}
-                                  strokeLinejoin={"round"}
-                                  aria-hidden={"true"}
-                                >
-                                  <rect
-                                    x={"3"}
-                                    y={"4"}
-                                    width={"18"}
-                                    height={"16"}
-                                    rx={"2"}
-                                  ></rect>
-                                  <circle
-                                    cx={"9"}
-                                    cy={"10"}
-                                    r={"1.5"}
-                                  ></circle>
-                                  <path d={"M21 16l-5-5-8 9"}></path>
-                                </svg>
-                                {" Chưa có ảnh"}
-                              </span>
-                            </>
-                          ) : null}
-                        </div>
-                      </div>
-                      <a
-                        href={"#"}
-                        onClick={v.artMenu}
-                        title={"Đổi ảnh bìa"}
-                        aria-label={"Đổi ảnh bìa"}
-                        aria-expanded={v.artOpen}
-                        className={"press"}
-                        style={styleOf(
-                          "position: absolute; right: -10px; top: -10px; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 999px; background: #352637; color: #FFFFFF; border: 3px solid #FAF9F5; box-sizing: border-box; text-decoration: none",
-                        )}
-                      >
-                        <svg
-                          width={"17"}
-                          height={"17"}
-                          viewBox={"0 0 24 24"}
-                          fill={"none"}
-                          stroke={"currentColor"}
-                          strokeWidth={"2"}
-                          strokeLinecap={"round"}
-                          strokeLinejoin={"round"}
-                          aria-hidden={"true"}
-                        >
-                          <path d={"M4 8h3l2-3h6l2 3h3v11H4z"}></path>
-                          <circle cx={"12"} cy={"13"} r={"3.5"}></circle>
-                        </svg>
-                      </a>
-                      {v.artOpen ? (
-                        <>
-                          <div
-                            role={"dialog"}
-                            aria-label={"Ảnh bìa bộ đề"}
-                            className={"an-drop"}
-                            style={styleOf(
-                              "position: absolute; left: 0; top: calc(100% + 10px); z-index: 30; width: 272px; padding: 14px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #D6D4D0; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); display: flex; flex-direction: column; gap: 10px",
-                            )}
-                          >
-                            <div
-                              style={styleOf(
-                                "font-size: 13px; font-weight: 600; color: #706473",
-                              )}
-                            >
-                              {"Ảnh bìa bộ đề"}
-                            </div>
-                            <div
-                              style={styleOf("display: flex; gap: 8px")}
-                            >
-                              {(v.arts || []).map((g, index) => (
-                                <React.Fragment key={index}>
-                                  <a
-                                    href={"#"}
-                                    onClick={g.pick}
-                                    title={g.name}
-                                    aria-label={g.name}
-                                    style={styleOf(g.st)}
-                                  ></a>
-                                </React.Fragment>
-                              ))}
-                            </div>
-                            <div
-                              style={styleOf(
-                                "font-size: 13px; color: #706473",
-                              )}
-                            >
-                              {
-                                "Ảnh bìa ngang tỉ lệ 3:2, tối thiểu 1200 × 800 px, JPG, PNG hoặc WebP."
-                              }
-                            </div>
-                            {v.artMsg ? (
-                              <>
-                                <div
-                                  style={styleOf(
-                                    "font-size: 13px; color: " +
-                                    v.artMsgColor,
-                                  )}
-                                >
-                                  {v.artMsgText}
-                                </div>
-                              </>
-                            ) : null}
-                            <label
-                              style={styleOf(
-                                "display: flex; align-items: center; gap: 8px; width: 100%; height: 36px; padding: 0 10px; border-radius: 10px; box-sizing: border-box; font-size: 14px; font-weight: 600; text-decoration: none; color: #352637; cursor: pointer; position: relative; overflow: hidden",
-                              )}
-                            >
-                              <svg
-                                width={"15"}
-                                height={"15"}
-                                viewBox={"0 0 24 24"}
-                                fill={"none"}
-                                stroke={"currentColor"}
-                                strokeWidth={"2"}
-                                strokeLinecap={"round"}
-                                strokeLinejoin={"round"}
-                                aria-hidden={"true"}
-                              >
-                                <path
-                                  d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
-                                ></path>
-                              </svg>
-                              {" Tải ảnh lên"}
-                              <input
-                                type={"file"}
-                                accept={"image/png,image/jpeg,image/webp"}
-                                onChange={v.artFile}
-                                style={styleOf(
-                                  "position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none",
-                                )}
-                              />
-                            </label>
-                            {v.artHas ? (
-                              <>
-                                <a
-                                  href={"#"}
-                                  onClick={v.artRemove}
-                                  style={styleOf(
-                                    "display: flex; align-items: center; gap: 8px; width: 100%; height: 36px; padding: 0 10px; border-radius: 10px; box-sizing: border-box; font-size: 14px; font-weight: 600; text-decoration: none; color: #352637; cursor: pointer; position: relative; overflow: hidden; color: #C0412A",
-                                  )}
-                                >
-                                  <svg
-                                    width={"16"}
-                                    height={"16"}
-                                    viewBox={"0 0 24 24"}
-                                    fill={"none"}
-                                    stroke={"currentColor"}
-                                    strokeWidth={"2"}
-                                    strokeLinecap={"round"}
-                                    strokeLinejoin={"round"}
-                                    aria-hidden={"true"}
-                                  >
-                                    <path
-                                      d={
-                                        "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
-                                      }
-                                    ></path>
-                                  </svg>
-                                  {" Xóa ảnh"}
-                                </a>
-                              </>
-                            ) : null}
-                          </div>
-                        </>
-                      ) : null}
-                    </div>
-                    <div style={styleOf("flex: 1 1 320px; min-width: 0")}>
-                      <h1
-                        style={styleOf(
-                          "margin: 0; font-size: 28px; line-height: 1.25; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em",
-                        )}
-                      >
-                        {v.setName}
-                      </h1>
-                      <div
-                        style={styleOf(
-                          "display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px",
-                        )}
-                      >
-                        {(v.setTypes || []).map((y, index) => (
-                          <React.Fragment key={index}>
-                            <span style={styleOf(y.st)}>{y.text}</span>
-                          </React.Fragment>
-                        ))}
-                        <span style={styleOf(v.setStatusSt)}>
-                          {v.setStatus}
-                        </span>
-                      </div>
-                      <div
-                        style={styleOf(
-                          "font-size: 14px; color: #706473; margin-top: 6px",
-                        )}
-                      >
-                        {v.setSub}
-                      </div>
-                    </div>
-                    <div
-                      style={styleOf(
-                        "display: flex; gap: 10px; flex-wrap: wrap; align-items: center",
-                      )}
-                    >
-                      <a
-                        href={"ExamDetail.dc.html"}
-                        onClick={v.toLearner}
-                        title={"Xem như người học"}
-                        aria-label={"Xem như người học"}
-                        className={"press"}
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 999px; box-sizing: border-box; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #4B3D4D; text-decoration: none",
-                        )}
-                      >
-                        <svg
-                          width={"18"}
-                          height={"18"}
-                          viewBox={"0 0 24 24"}
-                          fill={"none"}
-                          stroke={"currentColor"}
-                          strokeWidth={"2"}
-                          strokeLinecap={"round"}
-                          strokeLinejoin={"round"}
-                          aria-hidden={"true"}
-                        >
-                          <path
-                            d={
-                              "M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"
-                            }
-                          ></path>
-                          <circle cx={"12"} cy={"12"} r={"3"}></circle>
-                        </svg>
-                      </a>
-                      {v.canDel ? (
-                        <>
-                          <a
-                            href={"#"}
-                            onClick={v.askDel}
-                            className={"press"}
-                            style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
-                            )}
-                          >
-                            <svg
-                              width={"16"}
-                              height={"16"}
-                              viewBox={"0 0 24 24"}
-                              fill={"none"}
-                              stroke={"currentColor"}
-                              strokeWidth={"2"}
-                              strokeLinecap={"round"}
-                              strokeLinejoin={"round"}
-                              aria-hidden={"true"}
-                            >
-                              <path
-                                d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}
-                              ></path>
-                            </svg>
-                            {" Xóa bộ đề"}
-                          </a>
-                        </>
-                      ) : null}
-                      <a
-                        href={"#"}
-                        onClick={v.addTest}
-                        className={"press"}
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
-                        )}
-                      >
-                        <svg
-                          width={"16"}
-                          height={"16"}
-                          viewBox={"0 0 24 24"}
-                          fill={"none"}
-                          stroke={"currentColor"}
-                          strokeWidth={"2"}
-                          strokeLinecap={"round"}
-                          strokeLinejoin={"round"}
-                          aria-hidden={"true"}
-                        >
-                          <path d={"M12 5v14M5 12h14"}></path>
-                        </svg>
-                        {" Thêm đề"}
-                      </a>
-                      {v.isPub ? (
-                        <>
-                          <a
-                            href={"#"}
-                            onClick={v.askHide}
-                            className={"press"}
-                            style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637",
-                            )}
-                          >
-                            <svg
-                              width={"16"}
-                              height={"16"}
-                              viewBox={"0 0 24 24"}
-                              fill={"none"}
-                              stroke={"currentColor"}
-                              strokeWidth={"2"}
-                              strokeLinecap={"round"}
-                              strokeLinejoin={"round"}
-                              aria-hidden={"true"}
-                            >
-                              <path d={"M3 3l18 18"}></path>
-                              <path
-                                d={
-                                  "M10.6 6.1A9.8 9.8 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-3 3.5M6.5 7.5C4.3 9 3 12 3 12s4 6 9 6a9 9 0 0 0 4-1"
-                                }
-                              ></path>
-                            </svg>
-                            {" Ẩn bộ đề"}
-                          </a>
-                        </>
-                      ) : null}
-                      {v.notPub ? (
-                        <>
-                          <a
-                            href={"#"}
-                            onClick={v.askPub}
-                            className={"press"}
-                            style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
-                            )}
-                          >
-                            <svg
-                              width={"16"}
-                              height={"16"}
-                              viewBox={"0 0 24 24"}
-                              fill={"none"}
-                              stroke={"currentColor"}
-                              strokeWidth={"2"}
-                              strokeLinecap={"round"}
-                              strokeLinejoin={"round"}
-                              aria-hidden={"true"}
-                            >
-                              <path d={"M4 12l16-8-6 16-3-7z"}></path>
-                            </svg>
-                            {" " + v.pubLabel}
-                          </a>
-                        </>
-                      ) : null}
-                      {v.blockPub ? (
-                        <span
-                          role={"button"}
-                          aria-disabled={"true"}
-                          title={
-                            "Bộ đề chưa có đề nào. Thêm ít nhất một đề rồi mới đăng được."
-                          }
-                          style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; white-space: nowrap; cursor: not-allowed; border: 1.5px solid #D6D4D0; background: #F3F0EA; color: #8E8392",
-                          )}
-                        >
-                          <svg
-                            width={"16"}
-                            height={"16"}
-                            viewBox={"0 0 24 24"}
-                            fill={"none"}
-                            stroke={"currentColor"}
-                            strokeWidth={"2"}
-                            strokeLinecap={"round"}
-                            strokeLinejoin={"round"}
-                            aria-hidden={"true"}
-                          >
-                            <path d={"M4 12l16-8-6 16-3-7z"}></path>
-                          </svg>
-                          {" " + v.pubLabel}
-                        </span>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style={styleOf(
-                    "display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px",
-                  )}
-                >
-                  {(v.tiles || []).map((t, index) => (
-                    <React.Fragment key={index}>
-                      <div
-                        role={"button"}
-                        tabIndex={0}
-                        onClick={t.pick}
-                        aria-pressed={t.on}
-                        className={"lift"}
-                        style={styleOf(t.st)}
-                      >
-                        <div
-                          style={styleOf(
-                            "display: flex; align-items: center; gap: 10px",
-                          )}
-                        >
-                          <span style={styleOf(t.iconSt)}>{t.icon}</span>
-                          <span
-                            style={styleOf(
-                              "font-weight: 600; font-size: 15px",
-                            )}
-                          >
-                            {t.label}
-                          </span>
-                          {t.canImp ? (
-                            <>
-                              <a
-                                href={t.impHref}
-                                onClick={t.imp}
-                                title={
-                                  "Đang nâng cấp định dạng xlsx cho kỹ năng này"
-                                }
-                                aria-disabled={"true"}
-                                style={styleOf(
-                                  "margin-left: auto; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1.5px solid #E5E0D8; background: #F3F0EA; color: #8E8392; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; cursor: not-allowed",
-                                )}
-                              >
-                                <svg
-                                  width={"13"}
-                                  height={"13"}
-                                  viewBox={"0 0 24 24"}
-                                  fill={"none"}
-                                  stroke={"currentColor"}
-                                  strokeWidth={"2"}
-                                  strokeLinecap={"round"}
-                                  strokeLinejoin={"round"}
-                                  aria-hidden={"true"}
-                                >
-                                  <path
-                                    d={"M12 16V4M7 9l5-5 5 5M4 20h16"}
-                                  ></path>
-                                </svg>
-                                {" Nhập xlsx"}
-                              </a>
-                            </>
-                          ) : null}
-                        </div>
-                        <div
-                          style={styleOf(
-                            "display: flex; align-items: baseline; gap: 6px",
-                          )}
-                        >
-                          <span
-                            style={styleOf(
-                              "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 32px; font-weight: 600; line-height: 1.1",
-                            )}
-                          >
-                            {t.n}
-                          </span>
-                          <span
-                            style={styleOf(
-                              "font-size: 14px; color: #706473",
-                            )}
-                          >
-                            {"đề"}
-                          </span>
-                        </div>
-                        <div
-                          style={styleOf(
-                            "font-size: 13px; color: #706473",
-                          )}
-                        >
-                          {t.sub}
-                        </div>
-                        <div
-                          style={styleOf(
-                            "display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 13px; color: #706473",
-                          )}
-                        >
-                          {(t.kinds || []).map((q, index) => (
-                            <React.Fragment key={index}>
-                              <span style={styleOf(q.st)}>{q.text}</span>
-                            </React.Fragment>
+                        <div className="ex-pop__title">Ảnh bìa bộ đề</div>
+                        <div className="ex-presets ex-presets--8">
+                          {(v.arts || []).map((g, index) => (
+                            <a
+                              key={index}
+                              href="#"
+                              onClick={g.pick}
+                              title={g.name}
+                              aria-label={g.name}
+                              style={styleOf(g.st)}
+                            ></a>
                           ))}
                         </div>
+                        <div className="ex-note ex-note--plain">
+                          Ảnh bìa ngang tỉ lệ 3:2, tối thiểu 1200 × 800 px, JPG,
+                          PNG hoặc WebP.
+                        </div>
+                        {v.artMsg ? (
+                          <div
+                            className={
+                              "ex-note ex-note--plain " +
+                              (v.artMsgBad ? "ex-note--bad" : "ex-note--warn")
+                            }
+                          >
+                            {v.artMsgText}
+                          </div>
+                        ) : null}
+                        <label className="ex-menuitem">
+                          <Icon name="upload" size={15} />
+                          Tải ảnh lên
+                          <input
+                            type="file"
+                            accept="image/png,image/jpeg,image/webp"
+                            onChange={v.artFile}
+                            className="ex-file-hidden"
+                          />
+                        </label>
+                        {v.artHas ? (
+                          <button
+                            type="button"
+                            onClick={v.artRemove}
+                            className="ex-menuitem ex-menuitem--danger"
+                          >
+                            <Icon name="trash" />
+                            Xóa ảnh
+                          </button>
+                        ) : null}
                       </div>
-                    </React.Fragment>
-                  ))}
-                </div>
-                <div
-                  style={styleOf(
-                    "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; overflow: visible; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07)",
-                  )}
-                >
-                  <div
-                    style={styleOf(
-                      "display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px 20px; border-bottom: 1px solid #E6E4E0",
+                    ) : null}
+                  </div>
+                }
+                meta={
+                  <>
+                    <div className="ex-chips ex-chips--8">
+                      {(v.setTypes || []).map((y, index) => (
+                        <Chip key={index} tone={y.tone}>
+                          {y.text}
+                        </Chip>
+                      ))}
+                      <Chip tone={v.setStatusTone} className="ex-chip-fade">
+                        {v.setStatus}
+                      </Chip>
+                    </div>
+                    <div className="ex-sub">{v.setSub}</div>
+                  </>
+                }
+                actions={
+                  <>
+                    {v.isPub ? (
+                      <Button
+                        as="a"
+                        href={v.toLearnerHref}
+                        icon
+                        className="press"
+                        onClick={v.toLearner}
+                        title="Xem như người học"
+                        aria-label="Xem như người học"
+                      >
+                        <Icon name="eye" size={18} />
+                      </Button>
+                    ) : (
+                      <Button
+                        as="a"
+                        role="button"
+                        icon
+                        aria-disabled="true"
+                        title="Bộ đề chưa công khai nên người học chưa xem được."
+                        aria-label="Xem như người học"
+                      >
+                        <Icon name="eye" size={18} />
+                      </Button>
                     )}
+                    {v.canDel ? (
+                      <Button
+                        variant="danger"
+                        className="press"
+                        onClick={v.askDel}
+                      >
+                        <Icon name="trash" />
+                        Xóa bộ đề
+                      </Button>
+                    ) : null}
+                    <Button className="press" onClick={v.addTest}>
+                      <Icon name="plus" />
+                      Thêm đề
+                    </Button>
+                    {v.isPub ? (
+                      <Button className="press" onClick={v.askHide}>
+                        <Icon name="eye-off" />
+                        Ẩn bộ đề
+                      </Button>
+                    ) : null}
+                    {v.notPub ? (
+                      <Button
+                        variant="primary"
+                        className="press"
+                        onClick={v.askPub}
+                      >
+                        <Icon name="send" />
+                        {v.pubLabel}
+                      </Button>
+                    ) : null}
+                    {v.blockPub ? (
+                      <Button
+                        as="a"
+                        role="button"
+                        aria-disabled="true"
+                        title="Bộ đề chưa có đề nào. Thêm ít nhất một đề rồi mới đăng được."
+                      >
+                        <Icon name="send" />
+                        {v.pubLabel}
+                      </Button>
+                    ) : null}
+                  </>
+                }
+              />
+              <StatGrid>
+                {(v.tiles || []).map((t, index) => (
+                  <StatCard
+                    key={index}
+                    label={t.label}
+                    icon={t.icon}
+                    tone={t.tone}
+                    value={t.n}
+                    unit="đề"
+                    sub={t.sub}
+                    selected={t.on}
+                    onSelect={() => t.pick(null)}
+                    action={
+                      t.canImp ? (
+                        <Button
+                          as="a"
+                          size="xs"
+                          href={t.impHref}
+                          onClick={t.imp}
+                          title="Đang nâng cấp định dạng xlsx cho kỹ năng này"
+                          aria-disabled="true"
+                          className="press ex-imp"
+                        >
+                          <Icon name="upload" size={13} />
+                          Nhập xlsx
+                        </Button>
+                      ) : null
+                    }
                   >
-                    <span
-                      style={styleOf("font-size: 18px; font-weight: 600")}
-                    >
-                      {"Các đề trong bộ"}
-                    </span>
-                    <span
-                      style={styleOf(
-                        "display: flex; gap: 6px; flex-wrap: wrap; align-items: center",
-                      )}
-                    >
-                      <span
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #DCEDE2; color: #2E6A48",
-                        )}
+                    {(t.kinds || []).map((q, i) =>
+                      q.tone ? (
+                        <Chip key={i} size="sm" tone={q.tone}>
+                          {q.text}
+                        </Chip>
+                      ) : (
+                        <span key={i}>{q.text}</span>
+                      ),
+                    )}
+                  </StatCard>
+                ))}
+              </StatGrid>
+              <DataCard
+                overflowVisible
+                title="Các đề trong bộ"
+                aside={
+                  <span className="ex-chips ex-chips--6">
+                    <Chip tone="published">Đã đăng</Chip>
+                    <Chip tone="draft">Đang soạn</Chip>
+                    <Chip tone="hidden">Đã ẩn</Chip>
+                    <Chip tone="neutral" dashed>
+                      <Icon name="plus" size={12} />
+                      Chưa có
+                    </Chip>
+                  </span>
+                }
+              >
+                <DataTable label="Bảng đề thi theo kỹ năng" minWidth={1000}>
+                  <thead>
+                    <tr>
+                      <th
+                        rowSpan={2}
+                        className="ui-th ui-th--w20 ui-th--bottom"
                       >
-                        {"Đã đăng"}
-                      </span>
-                      <span
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #FBEDBF; color: #7A5A0E",
-                        )}
-                      >
-                        {"Đang soạn"}
-                      </span>
-                      <span
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #F3F0EA; color: #706473",
-                        )}
-                      >
-                        {"Đã ẩn"}
-                      </span>
-                      <span
-                        style={styleOf(
-                          "display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; text-decoration: none; box-sizing: border-box; background: #FFFFFF; color: #706473; border: 1.5px dashed #D6D4D0",
-                        )}
-                      >
-                        <svg
-                          width={"12"}
-                          height={"12"}
-                          viewBox={"0 0 24 24"}
-                          fill={"none"}
-                          stroke={"currentColor"}
-                          strokeWidth={"2"}
-                          strokeLinecap={"round"}
-                          strokeLinejoin={"round"}
-                          aria-hidden={"true"}
-                        >
-                          <path d={"M12 5v14M5 12h14"}></path>
-                        </svg>
-                        {" Chưa có"}
-                      </span>
-                    </span>
-                  </div>
-                  <div style={styleOf("overflow-x: auto")}>
-                    <table
-                      className={"hov"}
-                      style={styleOf(
-                        "width: 100%; border-collapse: collapse; min-width: 1000px",
-                      )}
-                    >
-                      <thead>
-                        <tr>
-                          <th
-                            rowSpan={2}
-                            style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; width: 20%; vertical-align: bottom",
-                            )}
-                          >
-                            {"Đề"}
-                          </th>
-                          <th rowSpan={2} style={styleOf(v.h0)}>
-                            {"Listening"}
-                          </th>
-                          <th colSpan={2} style={styleOf(v.h1)}>
-                            {"Reading"}
-                          </th>
-                          <th colSpan={2} style={styleOf(v.h2)}>
-                            {"Writing"}
-                          </th>
-                          <th rowSpan={2} style={styleOf(v.h3)}>
-                            {"Speaking"}
-                          </th>
-                          <th
-                            rowSpan={2}
-                            style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap; vertical-align: bottom",
-                            )}
-                          >
-                            {"Cập nhật"}
-                          </th>
-                          <th
-                            rowSpan={2}
-                            style={styleOf(
-                              "text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #706473; background: #FAF9F5; border-bottom: 1.5px solid #D6D4D0; white-space: nowrap",
-                            )}
-                          ></th>
-                        </tr>
-                        <tr>
-                          <th style={styleOf(v.s1)}>
-                            <span
-                              style={styleOf(
-                                "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #DFF1F4; color: #1F6A78",
-                              )}
-                            >
-                              {"Academic"}
-                            </span>
-                          </th>
-                          <th style={styleOf(v.s1)}>
-                            <span
-                              style={styleOf(
-                                "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #FCE6D6; color: #9A4A17",
-                              )}
-                            >
-                              {"General Training"}
-                            </span>
-                          </th>
-                          <th style={styleOf(v.s2)}>
-                            <span
-                              style={styleOf(
-                                "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #DFF1F4; color: #1F6A78",
-                              )}
-                            >
-                              {"Academic"}
-                            </span>
-                          </th>
-                          <th style={styleOf(v.s2)}>
-                            <span
-                              style={styleOf(
-                                "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #FCE6D6; color: #9A4A17",
-                              )}
-                            >
-                              {"General Training"}
-                            </span>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(v.rows || []).map((r, index) => (
-                          <React.Fragment key={index}>
-                            <tr className={r.cls}>
-                              <td
-                                style={styleOf(
-                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle",
-                                )}
-                              >
-                                <div style={styleOf("font-weight: 600")}>
-                                  {r.name}
-                                </div>
-                                <div
-                                  style={styleOf(
-                                    "font-size: 13px; color: #706473",
-                                  )}
-                                >
-                                  {r.sub}
-                                </div>
-                              </td>
-                              {(r.cells || []).map((x, index) => (
-                                <React.Fragment key={index}>
-                                  <td style={styleOf(x.tdSt)}>
-                                    <div
-                                      style={styleOf(
-                                        "position: relative; display: inline-flex",
-                                      )}
-                                    >
-                                      {x.has ? (
-                                        <>
-                                          <a
-                                            href={"#"}
-                                            onClick={x.toggle}
-                                            title={x.title}
-                                            aria-haspopup={"menu"}
-                                            aria-expanded={x.open}
-                                            className={"press"}
-                                            style={styleOf(x.st)}
-                                          >
-                                            {x.label + " "}
-                                            <svg
-                                              width={"13"}
-                                              height={"13"}
-                                              viewBox={"0 0 24 24"}
-                                              fill={"none"}
-                                              stroke={"currentColor"}
-                                              strokeWidth={"2.2"}
-                                              strokeLinecap={"round"}
-                                              strokeLinejoin={"round"}
-                                              aria-hidden={"true"}
-                                            >
-                                              <path
-                                                d={"M7 10l5 5 5-5"}
-                                              ></path>
-                                            </svg>
-                                          </a>
-                                        </>
-                                      ) : null}
-                                      {x.none ? (
-                                        <>
-                                          <a
-                                            href={"#"}
-                                            onClick={x.create}
-                                            title={x.title}
-                                            className={"press"}
-                                            style={styleOf(
-                                              "display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #706473; text-decoration: none; cursor: pointer; white-space: nowrap; border: 1.5px dashed #D6D4D0; height: 28px",
-                                            )}
-                                          >
-                                            <svg
-                                              width={"13"}
-                                              height={"13"}
-                                              viewBox={"0 0 24 24"}
-                                              fill={"none"}
-                                              stroke={"currentColor"}
-                                              strokeWidth={"2"}
-                                              strokeLinecap={"round"}
-                                              strokeLinejoin={"round"}
-                                              aria-hidden={"true"}
-                                            >
-                                              <path
-                                                d={"M12 5v14M5 12h14"}
-                                              ></path>
-                                            </svg>
-                                            {" Tạo"}
-                                          </a>
-                                        </>
-                                      ) : null}
-                                      {x.open ? (
-                                        <>
-                                          <div
-                                            role={"menu"}
-                                            className={"an-drop"}
-                                            style={styleOf(x.menuSt)}
-                                          >
-                                            <div
-                                              style={styleOf(
-                                                "padding: 6px 12px 6px; font-size: 12px; font-weight: 600; color: #706473; white-space: nowrap",
-                                              )}
-                                            >
-                                              {x.menuHead}
-                                            </div>
-                                            {(x.items || []).map(
-                                              (it, index) => (
-                                                <React.Fragment
-                                                  key={index}
-                                                >
-                                                  {it.disabled ? (
-                                                    <div
-                                                      role={"menuitem"}
-                                                      aria-disabled={
-                                                        "true"
-                                                      }
-                                                      style={styleOf(
-                                                        it.st,
-                                                      )}
-                                                    >
-                                                      {it.label}
-                                                    </div>
-                                                  ) : (
-                                                    <a
-                                                      href={it.href}
-                                                      role={"menuitem"}
-                                                      onClick={it.act}
-                                                      style={styleOf(
-                                                        it.st,
-                                                      )}
-                                                    >
-                                                      {it.label}
-                                                    </a>
-                                                  )}
-                                                </React.Fragment>
-                                              ),
-                                            )}
-                                          </div>
-                                        </>
-                                      ) : null}
-                                    </div>
-                                  </td>
-                                </React.Fragment>
-                              ))}
-                              <td
-                                style={styleOf(
-                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; color: #706473",
-                                )}
-                              >
-                                {r.updated}
-                              </td>
-                              <td
-                                style={styleOf(
-                                  "padding: 12px 16px; border-top: 1px solid #E6E4E0; font-size: 14px; vertical-align: middle; text-align: right",
-                                )}
-                              >
+                        Đề
+                      </th>
+                      <th rowSpan={2} style={styleOf(v.h0)}>
+                        Listening
+                      </th>
+                      <th colSpan={2} style={styleOf(v.h1)}>
+                        Reading
+                      </th>
+                      <th colSpan={2} style={styleOf(v.h2)}>
+                        Writing
+                      </th>
+                      <th rowSpan={2} style={styleOf(v.h3)}>
+                        Speaking
+                      </th>
+                      <th rowSpan={2} className="ui-th ui-th--bottom">
+                        Cập nhật
+                      </th>
+                      <th rowSpan={2} className="ui-th"></th>
+                    </tr>
+                    <tr>
+                      <th style={styleOf(v.s1)}>
+                        <Chip size="sm" tone="form-A">
+                          Academic
+                        </Chip>
+                      </th>
+                      <th style={styleOf(v.s1)}>
+                        <Chip size="sm" tone="form-G">
+                          General Training
+                        </Chip>
+                      </th>
+                      <th style={styleOf(v.s2)}>
+                        <Chip size="sm" tone="form-A">
+                          Academic
+                        </Chip>
+                      </th>
+                      <th style={styleOf(v.s2)}>
+                        <Chip size="sm" tone="form-G">
+                          General Training
+                        </Chip>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(v.rows || []).map((r, index) => (
+                      <tr key={index} className={r.cls}>
+                        <td className="ui-td">
+                          <div className="ex-strong">{r.name}</div>
+                          <div className="ex-muted13">{r.sub}</div>
+                        </td>
+                        {(r.cells || []).map((x, xi) => (
+                          <td key={xi} style={styleOf(x.tdSt)}>
+                            <div className="ex-cellwrap">
+                              {x.has ? (
                                 <a
-                                  href={"#"}
-                                  onClick={r.del}
-                                  aria-label={"Xóa " + r.name}
-                                  title={"Xóa đề"}
-                                  className={"press"}
-                                  style={styleOf(
-                                    "display: inline-flex; color: #C0412A; padding: 6px; border-radius: 8px",
-                                  )}
+                                  href="#"
+                                  onClick={x.toggle}
+                                  title={x.title}
+                                  aria-haspopup="menu"
+                                  aria-expanded={x.open}
+                                  className="press"
+                                  style={styleOf(x.st)}
                                 >
-                                  <svg
-                                    width={"15"}
-                                    height={"15"}
-                                    viewBox={"0 0 24 24"}
-                                    fill={"none"}
-                                    stroke={"currentColor"}
-                                    strokeWidth={"2"}
-                                    strokeLinecap={"round"}
-                                    strokeLinejoin={"round"}
-                                    aria-hidden={"true"}
-                                  >
-                                    <path
-                                      d={
-                                        "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"
-                                      }
-                                    ></path>
-                                  </svg>
+                                  {x.label + " "}
+                                  <Icon
+                                    name="caret"
+                                    size={13}
+                                    strokeWidth={2.2}
+                                  />
                                 </a>
-                              </td>
-                            </tr>
-                          </React.Fragment>
+                              ) : null}
+                              {x.none ? (
+                                <a
+                                  href="#"
+                                  onClick={x.create}
+                                  title={x.title}
+                                  className="press ex-create-btn"
+                                >
+                                  <Icon name="plus" size={13} />
+                                  Tạo
+                                </a>
+                              ) : null}
+                              {x.open ? (
+                                <div
+                                  role="menu"
+                                  className="an-drop ex-cellmenu"
+                                  style={x.menuStyle}
+                                >
+                                  <div className="ex-cellmenu__head">
+                                    {x.menuHead}
+                                  </div>
+                                  {(x.items || []).map((it, ii) =>
+                                    it.disabled ? (
+                                      <div
+                                        key={ii}
+                                        role="menuitem"
+                                        aria-disabled="true"
+                                        className={"press " + it.cls}
+                                      >
+                                        {it.label}
+                                      </div>
+                                    ) : (
+                                      <a
+                                        key={ii}
+                                        href={it.href}
+                                        role="menuitem"
+                                        onClick={it.act}
+                                        className={"press " + it.cls}
+                                      >
+                                        {it.label}
+                                      </a>
+                                    ),
+                                  )}
+                                </div>
+                              ) : null}
+                            </div>
+                          </td>
                         ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  {v.noTests ? (
-                    <>
-                      <div
-                        className={"an-fade"}
-                        style={styleOf(
-                          "padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center",
-                        )}
-                      >
-                        <div
-                          style={styleOf(
-                            "font-size: 16px; font-weight: 600",
-                          )}
-                        >
-                          {"Bộ đề chưa có đề nào"}
-                        </div>
-                        <div
-                          style={styleOf(
-                            "font-size: 14px; color: #706473; max-width: 460px",
-                          )}
-                        >
-                          {
-                            "Thêm đề rồi bấm “Tạo” ở từng kỹ năng để soạn trong editor, hoặc dùng nút Nhập xlsx ở ô Listening, Reading phía trên để nhập cả đề từ file."
-                          }
-                        </div>
-                        <a
-                          href={"#"}
-                          onClick={v.addTest}
-                          className={"press"}
-                          style={styleOf(
-                            "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; margin-top: 4px",
-                          )}
-                        >
-                          <svg
-                            width={"16"}
-                            height={"16"}
-                            viewBox={"0 0 24 24"}
-                            fill={"none"}
-                            stroke={"currentColor"}
-                            strokeWidth={"2"}
-                            strokeLinecap={"round"}
-                            strokeLinejoin={"round"}
-                            aria-hidden={"true"}
+                        <td className="ui-td ui-td--muted">{r.updated}</td>
+                        <td className="ui-td ui-td--right">
+                          <button
+                            type="button"
+                            onClick={r.del}
+                            aria-label={"Xóa " + r.name}
+                            title="Xóa đề"
+                            className="press ex-trash"
                           >
-                            <path d={"M12 5v14M5 12h14"}></path>
-                          </svg>
-                          {" Thêm đề đầu tiên"}
-                        </a>
-                      </div>
-                    </>
-                  ) : null}
-                </div>
-              </div>
-            </>
+                            <Icon name="trash" size={15} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </DataTable>
+                {v.noTests ? (
+                  <div className="an-fade ex-empty">
+                    <div className="ex-empty__title">Bộ đề chưa có đề nào</div>
+                    <div className="ex-empty__text">
+                      Thêm đề rồi bấm “Tạo” ở từng kỹ năng để soạn trong editor,
+                      hoặc dùng nút Nhập xlsx ở ô Listening, Reading phía trên
+                      để nhập cả đề từ file.
+                    </div>
+                    <Button
+                      variant="primary"
+                      className="press ex-mt4"
+                      onClick={v.addTest}
+                    >
+                      <Icon name="plus" />
+                      Thêm đề đầu tiên
+                    </Button>
+                  </div>
+                ) : null}
+              </DataCard>
+            </div>
           ) : null}
           {v.gone ? (
-            <>
-              <div
-                className={"an-pop"}
-                style={styleOf(
-                  "border: 1.5px solid #D6D4D0; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center",
-                )}
+            <div className="an-pop ex-state--card ex-gone">
+              <span className="an-check ex-gone__icon">
+                <Icon name="trash" size={22} />
+              </span>
+              <div className="ex-gone__title">{v.goneTitle}</div>
+              <div className="ex-gone__sub">{v.goneSub}</div>
+              <Button
+                as="a"
+                href="AdminExams.dc.html"
+                variant="primary"
+                className="press ex-mt6"
               >
-                <span
-                  className={"an-check"}
-                  style={styleOf(
-                    "display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 999px; background: #FBDCD3; color: #C0412A",
-                  )}
-                >
-                  <svg
-                    width={"22"}
-                    height={"22"}
-                    viewBox={"0 0 24 24"}
-                    fill={"none"}
-                    stroke={"currentColor"}
-                    strokeWidth={"2"}
-                    strokeLinecap={"round"}
-                    strokeLinejoin={"round"}
-                    aria-hidden={"true"}
-                  >
-                    <path d={"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"}></path>
-                  </svg>
-                </span>
-                <div
-                  style={styleOf(
-                    "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 22px; font-weight: 600",
-                  )}
-                >
-                  {v.goneTitle}
-                </div>
-                <div style={styleOf("font-size: 14px; color: #706473")}>
-                  {v.goneSub}
-                </div>
-                <a
-                  href={"AdminExams.dc.html"}
-                  className={"press"}
-                  style={styleOf(
-                    "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF; margin-top: 6px",
-                  )}
-                >
-                  <svg
-                    width={"16"}
-                    height={"16"}
-                    viewBox={"0 0 24 24"}
-                    fill={"none"}
-                    stroke={"currentColor"}
-                    strokeWidth={"2"}
-                    strokeLinecap={"round"}
-                    strokeLinejoin={"round"}
-                    aria-hidden={"true"}
-                  >
-                    <path d={"M19 12H5M11 6l-6 6 6 6"}></path>
-                  </svg>
-                  {" Về danh sách bộ đề"}
-                </a>
-              </div>
-            </>
+                <Icon name="back" />
+                Về danh sách bộ đề
+              </Button>
+            </div>
           ) : null}
           {v.anyMenu ? (
-            <>
-              <div
-                onClick={v.closeMenus}
-                style={styleOf("position: fixed; inset: 0; z-index: 20")}
-              ></div>
-            </>
+            <div onClick={v.closeMenus} className="ex-backdrop"></div>
           ) : null}
-          {v.cfOpen ? (
-            <>
-              <div
-                className={"an-fade"}
-                onClick={v.cfClose}
-                style={styleOf(
-                  "position: fixed; inset: 0; z-index: 60; background: rgba(53, 38, 55, 0.42); display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box",
-                )}
-              >
-                <div
-                  className={"an-pop"}
-                  role={"dialog"}
-                  aria-modal={"true"}
-                  aria-label={"Xác nhận"}
-                  onClick={v.keep}
-                  style={styleOf(
-                    "width: 460px; max-width: 100%; max-height: calc(100vh - 48px); overflow: auto; background: #FFFFFF; border-radius: 22px; border: 1.5px solid #D6D4D0; box-shadow: 0 24px 64px rgba(53, 38, 55, 0.22); box-sizing: border-box",
-                  )}
-                >
-                  <div
-                    style={styleOf(
-                      "padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 14px",
-                    )}
-                  >
-                    <span
-                      className={"an-check"}
-                      style={styleOf(v.cf.iconSt)}
-                    >
-                      {v.cf.icon}
-                    </span>
-                    <div
-                      style={styleOf(
-                        "font-family: 'IBM Plex Serif', Georgia, serif; font-size: 20px; font-weight: 600",
-                      )}
-                    >
-                      {v.cf.title}
-                    </div>
-                    <div
-                      style={styleOf(
-                        "font-size: 14px; color: #4B3D4D; line-height: 1.55",
-                      )}
-                    >
-                      {v.cf.text}
-                    </div>
-                    {v.cf.hasList ? (
-                      <>
-                        <div
-                          style={styleOf(
-                            "display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 12px; background: #F3F0EA",
-                          )}
-                        >
-                          {(v.cf.list || []).map((li, index) => (
-                            <React.Fragment key={index}>
-                              <div
-                                className={"an-rise"}
-                                style={styleOf(
-                                  "display: flex; gap: 10px; align-items: baseline; font-size: 14px",
-                                )}
-                              >
-                                <span style={styleOf(li.dot)}></span>
-                                <span>
-                                  <b>{li.n}</b>
-                                  {" " + li.text}
-                                </span>
-                              </div>
-                            </React.Fragment>
-                          ))}
-                        </div>
-                      </>
-                    ) : null}
-                    <div
-                      style={styleOf(
-                        "display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px",
-                      )}
-                    >
-                      {v.cf.canGo ? (
-                        <>
-                          <a
-                            href={"#"}
-                            onClick={v.cfClose}
-                            className={"press"}
-                            style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #F1B3A3; background: #FFFFFF; color: #C0412A",
-                            )}
-                          >
-                            {"Hủy"}
-                          </a>
-                          <a
-                            href={"#"}
-                            onClick={v.cfGo}
-                            className={"press"}
-                            style={styleOf(v.cf.goSt)}
-                          >
-                            {v.cf.goText}
-                          </a>
-                        </>
-                      ) : null}
-                      {v.cf.noGo ? (
-                        <>
-                          <a
-                            href={"#"}
-                            onClick={v.cfClose}
-                            className={"press"}
-                            style={styleOf(
-                              "display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 16px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; cursor: pointer; border: 1.5px solid #352637; background: #352637; color: #FFFFFF",
-                            )}
-                          >
-                            {"Đã hiểu"}
-                          </a>
-                        </>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : null}
-          {v.toast ? (
-            <>
-              <div
-                role={"status"}
-                className={"an-toast"}
-                style={styleOf(
-                  "position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; gap: 16px; padding: 10px 14px 10px 18px; border-radius: 12px; background: #352637; color: #FFFFFF; font-size: 14px; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 8px 24px rgba(53, 38, 55, 0.07); max-width: calc(100% - 48px)",
-                )}
-              >
-                <span>{v.toastText}</span>
-                {v.canUndo ? (
-                  <>
-                    <a
-                      href={"#"}
-                      onClick={v.undo}
-                      style={styleOf(
-                        "color: #A9C4F5; font-weight: 600; text-decoration: none; white-space: nowrap",
-                      )}
-                    >
-                      {"Hoàn tác"}
-                    </a>
-                  </>
-                ) : null}
-                {v.toastLink ? (
-                  <>
-                    <a
-                      href={v.toastHref}
-                      style={styleOf(
-                        "color: #A9C4F5; font-weight: 600; text-decoration: none; white-space: nowrap",
-                      )}
-                    >
-                      {v.toastLinkText}
-                    </a>
-                  </>
-                ) : null}
-              </div>
-            </>
-          ) : null}
+          <ConfirmDialog
+            open={v.cfOpen}
+            onClose={() => v.cfClose(null)}
+            onConfirm={() => v.cfGo(null)}
+            label="Xác nhận"
+            width={460}
+            tone={v.cf.tone}
+            icon={v.cf.icon}
+            title={v.cf.title}
+            items={v.cf.list.map((li) => ({
+              count: li.n,
+              text: li.text,
+              dotColor: li.dotColor,
+            }))}
+            info={v.cf.noGo}
+            cancelVariant="danger"
+            confirmVariant={v.cf.goDanger ? "danger-solid" : "primary"}
+            confirmClassName={v.cf.goDanger ? "ui-btn--on-solid" : undefined}
+            confirmLabel={v.cf.goText}
+          >
+            {v.cf.text}
+          </ConfirmDialog>
+          <Toast
+            open={v.toast}
+            action={
+              v.canUndo
+                ? { label: "Hoàn tác", onClick: () => v.undo(null) }
+                : null
+            }
+            link={
+              v.toastLink
+                ? {
+                    label: v.toastLinkText,
+                    href: v.toastHref,
+                    onClick: () => v.clickToastLink(null),
+                  }
+                : null
+            }
+          >
+            {v.toastText}
+          </Toast>
         </StaffLayout>
         {"\n"}
         <SkillHistoryDrawer

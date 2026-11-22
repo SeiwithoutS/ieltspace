@@ -1,7 +1,7 @@
 import { apiFetch } from "../../lib/shared/api";
-import Popup from "../../components/attempts/Popup";
 import StaffLayout from "../../components/layout/StaffLayout";
-import { SetDirectory, SetForm, VocabularySearch, VocabularySetCover, VocabularySetStatus, VocabularyStats } from "./SetDirectory";
+import { SetDirectory, SetForm, VocabularySetCover, VocabularyStats, statusLabels, statusTone } from "./SetDirectory";
+import { Button, Chip, ConfirmDialog, FilterBar, Icon, PageHeader, SearchField, TextField, useToast } from "../../components/shared/ui";
 import { useEffect, useRef, useState } from "react";
 import type { VocabularySet, Word } from "../../data/vocabulary";
 import { importWords } from "../../lib/vocabulary/vocabulary-import";
@@ -27,6 +27,8 @@ async function lookupMedia(entry: Word, field: typeof mediaFields[number]): Prom
 
 function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: VocabularySet) => void }) {
   const [editingInfo, setEditingInfo] = useState(false);
+  // Thông báo tạm (đã lưu, đã xóa...) dùng Toast; tiến trình và lỗi vẫn ở `message` (hiện trên trang).
+  const toast = useToast();
   const topic = set.id;
   const [words, setWords] = useState<Word[]>([]),
     [preview, setPreview] = useState(false),
@@ -125,7 +127,8 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
         setRevision(result.revision);
       }
       savedWords.current = enriched;
-      setMessage(`Đã lưu bản nháp ${next.length} từ và hoàn tất tra ảnh, audio. Kiểm tra nội dung trước khi công bố.`);
+      setMessage("");
+      toast.show(`Đã lưu bản nháp ${next.length} từ và hoàn tất tra ảnh, audio. Kiểm tra nội dung trước khi công bố.`, { ms: 6000 });
     } catch (e) {
       if (signal.aborted) return;
       const detail = e instanceof Error ? e.message : "Thao tác không thành công.";
@@ -166,7 +169,7 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
       savedWords.current = words;
       setRevision(result.revision);
       if (publish) { await publication("publish", result.revision); return; }
-      setMessage(`Đã lưu ${result.wordCount} từ vào database, bản nháp ${result.revision}.`);
+      toast.show(`Đã lưu ${result.wordCount} từ vào database, bản nháp ${result.revision}.`);
     } catch (error) { setMessage(error instanceof Error ? error.message : "Không lưu được bản nháp."); }
     finally { setBusy(false); }
   }
@@ -175,7 +178,8 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
     try {
       const result = await apiFetch<{status: DatabaseVocabularySet["status"]; revision: number}>(`/admin/vocabulary/sets/${topic}/publication`, {method:"POST",json:{action,revision:version}});
       setStatus(result.status); setRevision(result.revision);
-      setMessage(action === "hide" ? "Đã ẩn khỏi thư viện." : "Bộ từ đã hiển thị trong thư viện người học.");
+      setMessage("");
+      toast.show(action === "hide" ? "Đã ẩn khỏi thư viện." : "Bộ từ đã hiển thị trong thư viện người học.");
     } catch (error) { setMessage(error instanceof Error ? error.message : "Chưa cập nhật được trạng thái."); }
     finally { setBusy(false); }
   }
@@ -204,7 +208,8 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
           }
         }
       }));
-      setMessage(`Đã tra ${selectedWords.length} từ. ${missing} lượt không tìm được URL; các URL cũ được giữ khi tra lỗi.`);
+      setMessage("");
+      toast.show(`Đã tra ${selectedWords.length} từ. ${missing} lượt không tìm được URL; các URL cũ được giữ khi tra lỗi.`, { ms: 6000 });
     } finally { setBusy(false); }
   }
   const visible = words.filter(
@@ -225,14 +230,15 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
     setWords(current => current.filter(word => !chosenIds.has(word.id)));
     setChosen([]);
     setConfirmingDelete(false);
-    setMessage(`Đã xóa ${chosenIds.size} từ khỏi danh sách đang chỉnh sửa. Bấm Lưu để lưu thay đổi.`);
+    setMessage("");
+    toast.show(`Đã xóa ${chosenIds.size} từ khỏi danh sách đang chỉnh sửa. Bấm Lưu để lưu thay đổi.`, { ms: 6000 });
     requestAnimationFrame(() => wordListHeading.current?.focus({ preventScroll: true }));
   }
 
   if (loading) return <p className="vocab-panel vocab-empty" role="status">Đang tải bản nháp…</p>;
   if (loadError) return (
     <div className="vocab-feedback flex flex-wrap items-center justify-between gap-3" role="alert">
-      {loadError} <button type="button" className="vocab-button" onClick={() => setReload(value => value + 1)}>Thử lại</button>
+      {loadError} <button type="button" className="ui-btn" onClick={() => setReload(value => value + 1)}>Thử lại</button>
     </div>
   );
   const visibilityLabel = status === "HIDDEN" ? "Hiện lại bộ từ" : "Ẩn bộ từ";
@@ -243,59 +249,65 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
         const result = await updateVocabularySet({ ...updated, status: "DRAFT", revision });
         setRevision(result.revision); onSetUpdate(updated);
       }} />}
-      {confirmingDelete && (
-        <Popup title="Xóa từ đã chọn" onCancel={() => setConfirmingDelete(false)}>
-          <div className="vocabulary vocab-set-dialog vocab-delete-dialog">
-            <h2>Xóa {chosenIds.size} từ đã chọn?</h2>
-            {hiddenChosenCount > 0 && <p>Trong số này có {hiddenChosenCount} từ nằm ngoài bộ lọc hiện tại.</p>}
-            <p>Các từ sẽ được bỏ khỏi danh sách đang chỉnh sửa. Bấm Lưu để lưu thay đổi.</p>
-            <div className="vocab-dialog-actions">
-              <button type="button" className="vocab-button" autoFocus onClick={() => setConfirmingDelete(false)}>Hủy</button>
-              <button type="button" className="vocab-button vocab-button-danger" onClick={removeChosenWords}>Xóa từ</button>
-            </div>
+      <ConfirmDialog
+        open={confirmingDelete}
+        onClose={() => setConfirmingDelete(false)}
+        onConfirm={removeChosenWords}
+        label="Xóa từ đã chọn"
+        width={440}
+        tone="danger"
+        icon={<Icon name="trash" size={20} />}
+        title={`Xóa ${chosenIds.size} từ đã chọn?`}
+        cancelVariant="danger"
+        confirmVariant="danger-solid"
+        confirmClassName="ui-btn--on-solid"
+        confirmLabel={<><Icon name="trash" />Xóa từ</>}
+      >
+        {hiddenChosenCount > 0 && <p>Trong số này có {hiddenChosenCount} từ nằm ngoài bộ lọc hiện tại.</p>}
+        <p>Các từ sẽ được bỏ khỏi danh sách đang chỉnh sửa. Bấm Lưu để lưu thay đổi.</p>
+      </ConfirmDialog>
+      <PageHeader
+        className="vocab-detail-header"
+        title={set.title}
+        description={set.description}
+        lead={<VocabularySetCover set={set} size="lg" />}
+        meta={
+          <div className="vocab-detail-meta">
+            <Chip tone={statusTone[status]}>{statusLabels[status]}</Chip>
+            <span className="vocab-detail-count">{words.length} từ</span>
           </div>
-        </Popup>
-      )}
-      <header className="vocab-page-header vocab-detail-header">
-        <div className="flex items-start gap-4 min-w-0">
-          <VocabularySetCover set={set} />
-          <div className="min-w-0">
-            <h1>{set.title}</h1>
-            <div className="flex flex-wrap items-center gap-2">
-              <VocabularySetStatus status={status} />
-              <small>{words.length} từ</small>
-            </div>
-            {set.description && <p>{set.description}</p>}
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button type="button" className="vocab-button" onClick={() => setPreview(!preview)}>
-            {preview ? "Quay lại chỉnh sửa" : "Xem trước"}
-          </button>
-          {!preview && <button type="button" className="vocab-button" disabled={busy} onClick={() => setEditingInfo(true)}>Thông tin bộ từ</button>}
-        </div>
-      </header>
+        }
+        actions={
+          <>
+            <Button className="press" onClick={() => setPreview(!preview)}>
+              {preview ? "Quay lại chỉnh sửa" : "Xem trước"}
+            </Button>
+            {!preview && <Button className="press" disabled={busy} onClick={() => setEditingInfo(true)}>Thông tin bộ từ</Button>}
+          </>
+        }
+      />
       {!preview && (
         <section className="vocab-panel vocab-edit-toolbar" aria-label="Thao tác bộ từ">
-          <button type="button" className="vocab-button" disabled={busy} onClick={() => {
+          <button type="button" className="ui-btn" disabled={busy} onClick={() => {
             setSearch("");
             setFilter("all");
             setWords(items => [{ id: crypto.randomUUID(), word: "", meaning: "", pos: "", phonetic: "", example: "", translation: "", image: "", audio: "" }, ...items]);
           }}>＋ Thêm từ vựng</button>
           <div className="flex flex-wrap gap-2">
-            {status !== "DRAFT" && <button type="button" className="vocab-button vocab-button-icon" disabled={busy || revision === null}
+            {status !== "DRAFT" && <button type="button" className="ui-btn ui-btn--icon" disabled={busy || revision === null}
               aria-label={visibilityLabel} title={visibilityLabel}
               onClick={() => revision !== null && publication(status === "HIDDEN" ? "show" : "hide", revision)}>
               <VisibilityIcon visible={status === "PUBLISHED"} />
             </button>}
-            <button type="button" className="vocab-button" disabled={busy} onClick={() => saveDraft()}>Lưu</button>
-            <button type="button" className="vocab-button vocab-button-primary" disabled={busy || !words.length} onClick={() => saveDraft(true)}>
+            <button type="button" className="ui-btn" disabled={busy} onClick={() => saveDraft()}>Lưu</button>
+            <button type="button" className="ui-btn ui-btn--primary" disabled={busy || !words.length} onClick={() => saveDraft(true)}>
               Công bố
             </button>
           </div>
         </section>
       )}
       {message && <p role="status" className="vocab-feedback">{message}</p>}
+      {toast.node}
       {!preview && (
         <section
           className="vocab-panel vocab-edit-toolbar vocab-import-panel"
@@ -323,11 +335,11 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
               accept=".xlsx,.csv"
               onChange={(e) => void upload(e.target.files?.[0])}
             />
-            <button type="button" className="vocab-button" disabled={busy} onClick={() => file.current?.click()}>
+            <button type="button" className="ui-btn" disabled={busy} onClick={() => file.current?.click()}>
               Chọn tệp
             </button>
             <a
-              className="vocab-button" download
+              className="ui-btn" download
               href={`${import.meta.env.BASE_URL}templates/mau-tu-vung.xlsx`}
             >
               Tải Excel mẫu
@@ -347,16 +359,20 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
             ["Thiếu ảnh", words.filter(word => !word.image).length],
             ["Thiếu audio", words.filter(word => !word.audio).length],
           ]} />
-          <div className="vocab-panel vocab-word-toolbar">
-            <div className="vocab-filter-row">
-              <VocabularySearch label="Tìm mục từ" placeholder="Tìm từ hoặc nghĩa…" value={search} onSearch={setSearch} />
-              <select aria-label="Lọc trạng thái media" value={filter} onChange={event => setFilter(event.target.value)}>
-                <option value="all">Mọi trạng thái</option>
-                <option value="ready">Đủ ảnh và audio</option>
-                <option value="image">Thiếu ảnh</option>
-                <option value="audio">Thiếu audio</option>
-              </select>
-            </div>
+          <FilterBar
+            label="Tìm và lọc từ"
+            filtered={Boolean(search || filter !== "all")}
+            onClear={() => { setSearch(""); setFilter("all"); }}
+          >
+            <SearchField label="Tìm mục từ" placeholder="Tìm từ hoặc nghĩa…" value={search} onChange={setSearch} />
+            <TextField as="select" label="Lọc trạng thái media" hideLabel value={filter} onChange={event => setFilter(event.target.value)}>
+              <option value="all">Mọi trạng thái</option>
+              <option value="ready">Đủ ảnh và audio</option>
+              <option value="image">Thiếu ảnh</option>
+              <option value="audio">Thiếu audio</option>
+            </TextField>
+          </FilterBar>
+          <div className="vocab-panel">
             <fieldset className="vocab-edit-toolbar vocab-bulk-toolbar" aria-label="Thao tác với các từ đã chọn" disabled={busy}>
               <label className="vocab-select-word">
                 <input type="checkbox" checked={words.length > 0 && words.every(word => chosenIds.has(word.id))}
@@ -364,15 +380,15 @@ function Editor({ set, onSetUpdate }: { set: VocabularySet; onSetUpdate: (set: V
                 Chọn tất cả ({words.length})
               </label>
               <div className="flex flex-wrap items-center gap-2">
-                <select aria-label="Media cần tìm lại" value={target} onChange={event => setTarget(event.target.value)}>
+                <TextField as="select" label="Media cần tìm lại" hideLabel value={target} onChange={event => setTarget(event.target.value)}>
                   <option value="both">Ảnh và audio</option>
                   <option value="image">Chỉ ảnh</option>
                   <option value="audio">Chỉ audio</option>
-                </select>
-                <button className="vocab-button" type="button" disabled={!chosen.length} onClick={refreshMedia}>Tìm lại URL ({chosen.length} từ)</button>
-                <button type="button" className="vocab-button vocab-button-danger" disabled={!chosen.length} onClick={() => setConfirmingDelete(true)}>
+                </TextField>
+                <Button disabled={!chosen.length} onClick={refreshMedia}>Tìm lại URL ({chosen.length} từ)</Button>
+                <Button variant="danger" disabled={!chosen.length} onClick={() => setConfirmingDelete(true)}>
                   Xóa từ đã chọn{chosen.length > 0 && ` (${chosen.length})`}
-                </button>
+                </Button>
               </div>
             </fieldset>
           </div>
@@ -414,7 +430,7 @@ export default function AdminVocabulary() {
     <StaffLayout active="vocabulary" crumb="Quản lý / Từ vựng" contentClassName="vocab-admin p-4 sm:p-6 md:p-8">
         <div className="vocabulary vocab-admin-content">
           {selected ? <>
-            <button type="button" className="vocab-button vocab-back" onClick={() => { if (canNavigate()) setSelected(null); }}>← Danh sách bộ từ</button>
+            <button type="button" className="ui-back" onClick={() => { if (canNavigate()) setSelected(null); }}>← Danh sách bộ từ</button>
 
             <Editor key={selected.id} set={selected} onSetUpdate={setSelected} />
           </> : <SetDirectory onOpen={setSelected} />}

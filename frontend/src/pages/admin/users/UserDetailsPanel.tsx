@@ -1,20 +1,19 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { getUserDetails, retryAccountDeletion, userRoles, type UserDetails } from '../../../lib/admin-users/api';
 import { styleOf } from '../../../lib/shared/styles';
+import { Button } from '../../../components/shared/ui';
 import { useAuth } from '../../../lib/auth/auth';
 import AccountDialog from './AccountDialog';
 import AccountHistory from './AccountHistory';
 import AccountChangeDialog from './AccountChangeDialog';
 import {
-  AccountStatus, CloseIcon, accountAction, closeAction, directoryButton,
+  AccountStatus, CloseIcon, closeButton, directoryButton,
   directoryMuted, formatUserDate, roleBadgeStyle, userInitials,
 } from './userDirectoryUi';
 
 const sourceLabels = { EMAIL: 'Email', GOOGLE: 'Google', INVITE: 'Quản lý tạo, email mời', STAFF: 'Quản lý tạo' };
 const missing = 'Chưa ghi nhận';
 const unavailable = 'Tạm thời không tải được';
-const secondaryAction = accountAction + '; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; flex: 1';
-const dangerAction = secondaryAction + '; border-color: #F1B3A3; color: #C0412A';
 
 function DetailsSection({ title, rows }: { title: string; rows: Array<[string, ReactNode]> }) {
   return <section>
@@ -128,7 +127,7 @@ export default function UserDetailsPanel({ id, onClose, onChanged }: { id: strin
     {close => <div className="flex h-full min-h-0 flex-col">
       <header style={styleOf('display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 24px; border-bottom: 1.5px solid #D6D4D0')}>
         <h2 id="admin-user-details-title" style={styleOf('margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #706473')}>Chi tiết người dùng</h2>
-        <button type="button" onClick={close} aria-label="Đóng chi tiết người dùng" style={styleOf(closeAction)}><CloseIcon /></button>
+        <button type="button" onClick={close} aria-label="Đóng chi tiết người dùng" className={closeButton}><CloseIcon /></button>
       </header>
       <div aria-busy={!details} className="flex min-h-0 flex-1 flex-col gap-[22px] overflow-y-auto p-6">
         {!details && <p role="status" className={`m-0 ${directoryMuted}`}>Đang tải chi tiết người dùng…</p>}
@@ -147,8 +146,8 @@ export default function UserDetailsPanel({ id, onClose, onChanged }: { id: strin
       {canChange && <footer
         style={styleOf('display: flex; flex-wrap: wrap; gap: 10px; padding: 16px 24px; border-top: 1.5px solid #D6D4D0; background: #FCFBF7')}
       >
-        {canChangeAccess && <button type="button" onClick={() => setAction('status')} style={styleOf(secondaryAction)}>{user.status === 'LOCKED' ? 'Mở khóa tài khoản' : 'Khóa tài khoản'}</button>}
-        <button type="button" onClick={() => setAction('delete')} style={styleOf(dangerAction)}>Xóa tài khoản</button>
+        {canChangeAccess && <Button className="flex-1" onClick={() => setAction('status')}>{user.status === 'LOCKED' ? 'Mở khóa tài khoản' : 'Khóa tài khoản'}</Button>}
+        <Button variant="danger" className="flex-1" onClick={() => setAction('delete')}>Xóa tài khoản</Button>
       </footer>}
     </div>}
   </AccountDialog>

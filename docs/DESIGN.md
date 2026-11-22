@@ -1,6 +1,6 @@
 # DESIGN.md – IELTSpace
 
-**Nguồn duy nhất để theo dõi thiết kế giao diện.** Gộp từ `DESIGN.md` cũ (giá trị thực tế trong code), `docs/ui/design.md` (quy chuẩn gốc, mục A và mục 0) và `docs/11-quy-chuan-giao-dien.md`. Cập nhật 10/11/2026 (thêm mục "Màn làm bài").
+**Nguồn duy nhất để theo dõi thiết kế giao diện.** Gộp từ `DESIGN.md` cũ (giá trị thực tế trong code), `docs/ui/design.md` (quy chuẩn gốc, mục A và mục 0) và `docs/11-quy-chuan-giao-dien.md`. Cập nhật 21/11/2026: dò lại luồng Quản lý bộ đề, Thông tin bộ đề và các Editor; chốt bộ component dùng chung ở mục 12 (khung Quản lý), trạng thái component ở mục 13, quy tắc áp dụng ở mục 14. Khi mục 6 mâu thuẫn với mục 12 thì **mục 12 thắng** cho khung Quản lý.
 
 - Nguồn mẫu hình ảnh vẫn là canvas "IELTSpace · Giao diện" (https://claude.ai/artifact/BbGeNht7gcmTF2YWJcEF2V; bản chép ở `docs/ui/canvas/`). Tên màn trùng tên trang trong `frontend/src/app/pages.ts`.
 - Khi file này mâu thuẫn với các mục cũ (v1, v2) của `docs/ui/design.md`, **file này thắng**. `docs/ui/design.md` chỉ còn để tra lịch sử.
@@ -42,6 +42,25 @@
 | danger-soft | `#FBDCD3` | Chip "Đã hủy", hộp thoại lỗi, FAQ đang mở |
 
 Màu trang trí: coral `#F27D65`, mint `#C5DECE`, butter `#F4D66F`.
+
+### Token bổ sung (đã dùng trong code, 21/11/2026)
+
+Mọi mã dưới đây đã có ánh xạ tối trong `dark-palette.json`. Viết style inline thì dùng đúng mã; viết bằng class Tailwind `[#hex]` thì **không** được đổi sang tối tự động.
+
+| Token | Sáng | Tối | Dùng cho |
+|---|---|---|---|
+| danger-line | `#F1B3A3` | `#7A4238` | Viền nút/ô destructive, hộp lỗi |
+| danger-surface | `#FDF3F0` | `#3A2A28` | Nền hover nút destructive, hộp lỗi nhẹ |
+| danger-solid | `#C0412A` (hover `#A33420`) | `#D9553F` | Nút xác nhận xóa, chữ lỗi |
+| success-solid | `#2E7D4F` | `#3E9A63` (chữ `#7FCB9B`) | Toast thành công, nút "Công bố" |
+| success-surface | `#E2F3E7` | `#213A2D` | Nền hover nút success, hộp thành công |
+| text-disabled | `#B5ADB7` | `#74757C` | Chữ nút/ô bị khóa |
+| line-soft | `#EAE7E2` | `#37383C` | Viền nút icon bị khóa |
+| warning-surface | `#FDF4D9` / `#FBF4DD` | `#332D1A` | Dải cảnh báo nhẹ |
+| teal (Academic) | `#DFF1F4` / `#1F6A78` | `#1F3338` / `#8FCBD6` | Chip phân loại bài |
+| orange (General) | `#FCE6D6` / `#9A4A17` | `#3D2E22` / `#F0B27A` | Chip phân loại bài |
+
+**Mã lệch cần gộp khi sửa tới** (không dùng cho code mới): `#E5E0D8` → divider `#E6E4E0` hoặc line `#D6D4D0`; `#FAF9F7` → paper-deep `#FAF9F5`; `#A89CA8` → text-subtle `#706473` (placeholder dùng `#8E8392`); `#2A1F2D`, `#554756`, `#5B4E5F`, `#3D2F40` → ink `#352637` hoặc text-2 `#4B3D4D`; `#1E40AF`, `#2050A8` → accent `#2963CC`; `#EFF6FF`, `#BFDBFE` → sky-soft `#E3ECFD` và `#C9D8F5`.
 
 ### Màu kỹ năng (nền / chữ)
 
@@ -122,7 +141,8 @@ Hành vi: link và nút sáng/tối nhẹ khi hover, co 3% khi nhấn; thẻ là
 ## 6. Thành phần dùng chung
 
 ### Nút, chip, nhãn
-- **Nút chính:** nền ink, chữ trắng, bo 12, cao 44–46. **Nút viền:** nền trắng, viền ink hoặc line. **"Làm bài" (đề lẻ):** nút viền cao 44, bo 12.
+- **Khung Quản lý và Editor:** dùng bộ nút ở mục 12.1 (cao 38, bo 999).
+- **Khung Khách / Người học:** **nút chính** nền ink, chữ trắng, bo 12, cao 44–46. **Nút viền:** nền trắng, viền ink hoặc line. **"Làm bài" (đề lẻ):** nút viền cao 44, bo 12.
 - **Nút destructive** (mọi Hủy/Xóa, icon thùng rác, "Đăng xuất", "Không lưu"): nền trắng, chữ `#C0412A`, viền 1.5px `#F1B3A3`.
 - **Chip kỹ năng:** bo 999, cặp màu kỹ năng. **Chip dạng bài:** mỗi dạng một màu pastel.
 - **Focus:** viền 2px accent, offset 2px (ô nhập offset 0), vòng sáng 3px khi focus ô nhập.
@@ -276,3 +296,136 @@ Component `components/navigation/LearnerHeader.tsx` thống nhất cho toàn b�
   - **Từ 768px trở lên:** Giữ bảng chuẩn `<table>` bọc trong khung `overflow-x-auto` để đảm bảo không tràn trang khi xem trên màn hình vừa.
   - **Dưới 768px:** Ẩn bảng (`hidden md:block`), hiển thị danh sách thẻ dọc (`flex flex-col gap-3 md:hidden`). Mỗi thẻ gói gọn tên bài/đề, badge kỹ năng/trạng thái, ngày làm và nút hành động chính (chiều cao tối thiểu 40px, dễ chạm ngón tay).
 
+---
+
+## 12. Bộ component dùng chung cho khung Quản lý và Editor (chốt 21/11/2026)
+
+Chuẩn lấy từ luồng đã hiệu chỉnh: **AdminExams → AdminExamSet → Editor Writing/Speaking**. Các trang Quản lý khác (Người dùng, Bài mẫu, Từ vựng, Báo cáo, Thông báo) và editor LR (Reading/Listening) phải đưa về chuẩn này. Số đo theo px, viền khung luôn 1.5px.
+
+### 12.1 Nút
+
+| Biến thể | Nền | Viền | Chữ | Dùng cho |
+|---|---|---|---|---|
+| Chính (primary) | `#352637` | `#352637` | `#FFFFFF` | Một hành động chính mỗi khu vực: Thêm, Lưu, Tạo |
+| Phụ (secondary) | `#FFFFFF` | `#D6D4D0` | `#352637` | Hủy, Quay lại, Sửa, Lọc |
+| Destructive | `#FFFFFF` | `#F1B3A3` | `#C0412A` | Xóa, Gỡ, Hủy dữ liệu |
+| Destructive đặc | `#C0412A` | `#C0412A` | `#FFFFFF` | Nút xác nhận trong hộp thoại xóa |
+| Thành công | `#2E7D4F` | `#2E7D4F` | `#FFFFFF` | Công bố, Đăng (chỉ khi đủ điều kiện) |
+
+- **Kích thước:** chuẩn cao 38, padding `0 16`, chữ 14/600; gọn cao 34, padding `0 12`, chữ 13/600; chip-nút nhỏ cao 26, padding `0 10`, chữ 12/600. Bo **999**, gap 6 giữa icon và chữ, `white-space: nowrap`.
+- **Nút icon:** tròn 38 (gọn 34), viền 1.5px `#D6D4D0`, nền trắng, icon `#4B3D4D`; bản destructive viền `#F1B3A3`, icon `#C0412A`.
+- **Nút trong hộp thoại:** Hủy (phụ) đứng trước, hành động chính đứng sau, canh phải, gap 10.
+- Không dùng nút xanh accent đặc làm nút chính trong Quản lý (accent chỉ cho link, focus, mục đang chọn). Không bo 12 hoặc `rounded-xl` cho nút.
+
+### 12.2 Ô nhập (textbox, select, textarea, combobox)
+
+| Thuộc tính | Giá trị |
+|---|---|
+| Cao | 38 (ô một dòng, select); combobox lớn 44 với chữ 15 |
+| Padding | `0 12`; select/combobox `0 40 0 12` (chừa mũi tên); textarea `10 12` |
+| Viền | 1.5px `#8E8392`, bo **10**, nền `#FFFFFF`, chữ `#352637`, 14px |
+| Textarea | line-height 1.6, `resize: vertical` (ô soạn dài của bài mẫu và dạng Note dùng tự giãn, xem 12.9) |
+| Placeholder | `#8E8392` |
+| Nhãn | 13/600 `#352637`, cách ô 6; chú thích 13 `#706473`, cách ô 4–6 |
+| Tìm kiếm | rộng 280 (tối đa 100%), icon kính lúp bên trái |
+| Lỗi | viền và thông báo `#C0412A`, thông báo cạnh ô bằng chữ, `aria-invalid` |
+| Khóa | nền `#F3F0EA`, chữ `#8E8392`, `cursor: not-allowed` |
+
+### 12.3 Bảng
+
+- **Khung:** viền 1.5px `#D6D4D0`, bo **16**, nền trắng, `overflow: hidden` (nếu có dropdown trong khung thì `visible`), bóng `0 1px 2px rgba(53,38,55,.04), 0 8px 24px rgba(53,38,55,.07)`.
+- **Tiêu đề cột:** nền `#FAF9F5`, 13/600 `#706473`, `text-align: left`, `white-space: nowrap`, viền dưới 1.5px `#D6D4D0`. Padding `12 16` (bảng thường) hoặc `10 14` (bảng dày).
+- **Ô:** padding cùng kích thước tiêu đề, 14px (dày 13px), viền trên 1px `#E6E4E0`, `vertical-align: middle` (ô nhiều dòng thì `top`).
+- **Hàng:** hover nền `var(--mo-hover-bg)` (class `hov` hoặc rule `tbody > tr` trong motion.css). Hàng bấm được có `cursor: pointer`.
+- **Trạng thái rỗng, lỗi, đang tải:** thẻ cùng khung, padding `48 24` (hoặc `36 20` khi nằm trong bảng), căn giữa, 14px; rỗng `#706473`, lỗi `#C0412A` kèm nút thử lại.
+- Dưới 768px bảng đổi sang danh sách thẻ (mục 11).
+
+### 12.4 Tab, nhóm nút chọn (segmented)
+
+- **Khung:** `inline-flex`, gap 2, padding 3, bo **10**, nền `#F3F0EA`.
+- **Mục:** cao 34, padding `0 14`, bo **8**, 13px. Đang chọn: nền trắng, viền 1.5px `#D6D4D0`, 600, bóng `0 1px 2px rgba(53,38,55,.06)`. Không chọn: nền trong, chữ `#706473`, hover chữ `#352637`.
+- Huy hiệu số trong tab: nền `#C0412A`, chữ trắng 11/700, bo 999, padding `2 6`.
+
+### 12.5 Chip và huy hiệu
+
+| Loại | Kích thước | Màu |
+|---|---|---|
+| Trạng thái nội dung | cao 26, `0 10`, 13/600, bo 999 | Công khai `#DCEDE2`/`#2E6A48`; Bản nháp `#FBEDBF`/`#7A5A0E`; Đã ẩn `#F3F0EA`/`#706473` |
+| Kỹ năng L/R/W/S | cao 26 hoặc 22, `0 8–10`, 13/600 | Cặp màu kỹ năng ở mục 2, **luôn kèm chữ cái và tên** |
+| Phân loại (Academic, General...) | cao 22, `0 8`, 13/600 | teal / orange ở "Token bổ sung" |
+| Thẻ lọc/tag | cao 26, `0 10`, 12/600, viền 1px `#D6D4D0`, nền trắng | chữ `#4B3D4D` |
+| Số lượng/chưa đọc | tối thiểu 18, 11/700, bo 999 | nền `#E5604A` hoặc `#C0412A`, chữ trắng |
+
+Màu Reading (mint) trùng "Công khai", Writing (butter) trùng "Bản nháp": hai loại chip này **không đặt cạnh nhau mà thiếu chữ**, luôn có nhãn.
+
+### 12.6 Hộp thoại, dropdown, toast, banner
+
+- **Lớp phủ:** `rgba(53,38,55,.32–.42)`, padding 16 (mobile) hoặc 24, canh giữa, `z-index: 60`.
+- **Hộp thoại:** nền trắng, viền 1.5px `#D6D4D0`, bo **22**, bóng `0 24px 64px rgba(53,38,55,.22)`, padding 24 (hộp có form dài 26/26/22), tối đa `100vh - 48px`, cuộn trong hộp. Rộng 440 (xác nhận), 460 (một trường), 660 (form nhiều trường). Tiêu đề serif 20/600; nội dung 14px `#4B3D4D`, line-height 1.55; chân: nút canh phải, gap 10. Hộp xác nhận nguy hiểm có icon tròn 44 nền `#FBDCD3`, chữ `#C0412A`.
+- **Dropdown/menu:** nền trắng, viền 1.5px `#D6D4D0`, bo **12**, padding 6, bóng `0 1px 2px .04, 0 12px 28px .16`, cao tối đa 240 rồi cuộn. Mục cao tối thiểu 40, padding `0 12`, bo **8**, 14px; hover nền `#F3F0EA`; mục nguy hiểm chữ `#C0412A`.
+- **Popover lọc:** như dropdown nhưng bo **16**, padding 14, rộng 272.
+- **Toast:** `fixed`, giữa dưới (bottom 24), nền `#352637`, chữ trắng 14px, bo **12**, padding `10 14 10 18`, gap 16, `z-index: 70`; thành công dùng nền `#2E7D4F`.
+- **Banner (VersionBanner, thông báo đầu trang):** dùng màu của token, không dùng mã riêng: cảnh báo `#FBEDBF`/`#7A5A0E`, thông tin `#E3ECFD`/`#2257B8`, thành công `#E6F3EC`/`#24543D`, lỗi `#FBDCD3`/`#9D301E`. Chữ 13px, padding `10 24`, viền dưới 1.5px.
+
+### 12.7 Khung trang và tiêu đề
+
+- **Nội dung trang:** `p-4 sm:p-6 md:p-8` (16/24/32), `flex-col gap-6`. Trang Editor tràn mép (xem 12.9) là ngoại lệ duy nhất.
+- **Đầu trang:** `h1` serif **28**/600, line-height 1.25, letter-spacing `-0.015em`; mô tả 15px `#706473` cách 4; nút hành động chính góc phải, `flex-wrap`, căn dưới, gap 16.
+- **Tiêu đề khối:** serif 20/600. Nhãn nhóm 13/700. Tiêu đề thẻ 18/600.
+- **Liên kết quay lại:** 14/600 `#706473`, mũi tên trái, `align-self: flex-start`, đặt trên đầu trang.
+
+### 12.8 Khung tải tệp (ảnh, audio)
+
+Ô viền đứt 2px `#D6D4D0`, bo **12**, nền `#FAF9F5`, icon 28, tiêu đề 13/600, gợi ý 12 `#706473`, padding 16; kéo thả đổi viền và nền sang accent và `#E3ECFD`. Đã có tệp: thanh thông tin viền 1.5px, bo 12, gồm chấm tròn, tên tệp (cắt dấu ba chấm), dung lượng, và "Thay tệp | Xóa" (Xóa màu destructive). Component: `pages/admin/samples/SampleUploadFrame.tsx`, `components/exams/editor-shell/ImageUploader.tsx`. Khung ghi âm LR có thêm thanh tiến độ; nên gộp về một component.
+
+### 12.9 Editor
+
+- **Khung:** `StaffLayout` nhưng nội dung tràn mép: thanh trên (EditorTopbar) nền `#FAF9F5`, padding `20 24 16`, viền dưới 1px `#E6E4E0`; vùng soạn chia đôi, đường kẻ 1.5px `#D6D4D0`.
+- **Ô soạn dài (Summary, Note, bài mẫu):** một khung viền 1.5px `#8E8392`, bo 10–12, thanh công cụ ở trên (nút **B**, *I*, H, • cao 32, bo 8), ô chữ monospace 13px, line-height 1.7, **tự giãn theo nội dung, không thanh cuộn**.
+- **Thẻ trong editor** (section, câu hỏi): nền trắng, viền 1.5px `#D6D4D0`, bo **16**, padding `18 20`.
+- **Chế độ Chỉ xem / Chỉnh sửa:** theo mục 7 (chip, dải sky-soft, nút Chỉnh sửa/Lưu/Hủy).
+
+## 13. Trạng thái component (hover, nhấn, focus, khóa)
+
+Hover và nhấn do `motion.css` tự áp lên mọi `button`/`a` có `background` inline: hover `brightness(.96)` (tối `1.12`), nhấn `scale(.97)`, khóa `opacity .55`. Vì vậy **chỉ đặt màu mặc định trong style, không tự viết màu hover cho nút**, trừ khi cần đổi màu hẳn (hàng "Nút phụ", "Nút destructive").
+
+| Thành phần | Mặc định | Hover | Nhấn | Focus | Khóa |
+|---|---|---|---|---|---|
+| Nút chính | nền/viền `#352637`, chữ trắng | sáng/tối nhẹ (motion) | co 97% | outline 2px `#2963CC` offset 2 | nền `#FFFFFF`, viền `#D6D4D0`, chữ `#B5ADB7`, `not-allowed` |
+| Nút phụ | trắng, viền `#D6D4D0` | nền `#F3F0EA` | co 97% | như trên | chữ `#B5ADB7` |
+| Nút destructive | trắng, viền `#F1B3A3`, chữ `#C0412A` | nền `#FDF3F0` | co 97% | như trên | opacity .55 |
+| Nút icon | tròn, viền `#D6D4D0` | nền `#F3F0EA`, icon `#352637` | co 97% | như trên | viền `#EAE7E2`, icon `#C9C2C6` |
+| Link văn bản | `#2963CC` | `#2257B8`, gạch chân | — | như trên | `#B5ADB7` |
+| Ô nhập | viền `#8E8392` | viền `#6A5D6C` | — | viền `#2963CC` + vòng 3px `rgba(41,99,204,.16)`, offset 0 | nền `#F3F0EA`, chữ `#8E8392` |
+| Ô nhập lỗi | viền `#C0412A` | giữ | — | viền `#C0412A` + vòng đỏ nhẹ | — |
+| Tab / segmented | trong, chữ `#706473` | chữ `#352637` | — | outline accent | opacity .55 |
+| Hàng bảng | nền trắng | `var(--mo-hover-bg)` | — | hàng bấm được: outline khi focus | — |
+| Thẻ bấm được (bo 16/22) | viền `#D6D4D0` | nổi lên 2px, bóng `--mo-lift-shadow` | co 97% | outline accent | — |
+| Khung tải tệp | viền đứt `#D6D4D0` | viền `#8E8392` | — | outline accent (Enter/Space mở chọn tệp) | opacity .6, `not-allowed` |
+| Chip bấm được | theo cặp màu | sáng/tối nhẹ | co 97% | outline accent | — |
+
+Quy tắc chung: focus nhìn thấy được trên **mọi** điều khiển (outline 2px accent offset 2, ô nhập offset 0); trạng thái không chỉ bằng màu mà kèm chữ hoặc icon; thời lượng chuyển trạng thái dùng token `--mo-*` (mục 5). `prefers-reduced-motion` tắt chuyển động.
+
+## 14. Quy tắc áp dụng (checklist khi viết hoặc sửa màn)
+
+1. **Tìm trước, tạo sau.** Nút, ô nhập, bảng, tab, chip, hộp thoại, dropdown, toast đã có ở mục 12. Không tự chế kích thước hay bo góc mới. Muốn thêm biến thể mới thì thêm vào mục 12 trước.
+2. **Bảng số cố định.** Cao điều khiển 26/34/38/44; bo 8/10/12/16/22/26/999; viền khung 1.5px, vạch kẻ 1px; chữ 11–48 theo mục 3; khoảng cách chia hết cho 4.
+3. **Một nút chính mỗi khu vực.** Hành động phá hủy luôn dùng kiểu destructive; hộp thoại xóa dùng nút destructive đặc.
+4. **Màu từ token.** Không dùng mã hex ngoài mục 2 và "Token bổ sung". Mã mới phải thêm vào `dark-palette.json` trong cùng commit, nếu không dark mode sẽ giữ màu sáng. Class Tailwind `[#hex]` không được đổi sang tối tự động, nên ưu tiên style inline qua `styleOf` hoặc biến CSS (`var(--sample-*)`, `var(--attempt-*)`).
+5. **Tiêu đề trang 28 serif**, nội dung trang `p-4 sm:p-6 md:p-8`, cho mọi trang trong khung Quản lý và Giáo viên. Trang tràn mép chỉ dành cho editor chia đôi.
+6. **Bo góc theo cấp:** điều khiển 10, nút 999, thẻ nhỏ 12, thẻ 16, hộp thoại và khối CTA 22.
+7. **Style inline viết "prop: value"** (có khoảng trắng) để selector trong `motion.css` khớp; giữ `border-radius`, `display`, `background` ở dạng chuỗi dễ khớp.
+8. **Tiếp cận:** nhãn gắn với ô nhập, nút chỉ có icon có `aria-label`, lỗi dùng `role="alert"`, trạng thái dùng `role="status"`, tiêu điểm hiện rõ, không dùng màu làm tín hiệu duy nhất.
+9. **Dark mode:** kiểm tra cả hai chế độ trước khi báo xong; màn mới thì thêm ánh xạ.
+10. **Chữ Việt nhất quán:** "Giáo viên" (không "Trợ giảng"), "Bản nháp / Công khai / Đã ẩn", "Hủy", "Xóa", "Lưu".
+
+### Lệch hiện tại cần sửa theo mục 12
+
+| Nơi | Lệch | Đưa về |
+|---|---|---|
+| `editor-shell/ConfirmDialog`, `LeaveDialog` | Nút bo 12 (`rounded-xl`), chữ 13, nút chính nền xanh accent, viền `#E5E0D8`, lớp phủ `bg-black/40`, `rounded-2xl` | Nút 38/999, nút chính ink, hộp bo 22 viền `#D6D4D0`, lớp phủ aubergine |
+| `editor-shell/VersionBanner` | Mã màu riêng (`#FFF8E6`, `#EBF7EE`, `#B8E6C4`...) | Banner theo 12.6 |
+| `editor-shell/EditorTopbar` | Tab `rounded-xl` p-3px, mục `rounded-[10px]`; chip trạng thái padding riêng; menu `shadow-lg` viền `#E5E0D8` | Tab 10/8 như 12.4, chip 12.5, dropdown 12.6 |
+| Editor LR (Reading/Listening, `lr-editor/*`) | Dùng Tailwind với hex riêng (`#E5E0D8`, `#FAF9F7`, `#2A1F2D`...) | Dùng token mục 2; nút, ô nhập theo 12.1–12.2 |
+| Tiêu đề trang chưa khai báo `font-weight` (AdminHome, AdminExams, AdminUsers...) | Tailwind preflight có thể đưa h1 về weight mặc định | Khai báo 600 như 12.7 |
+| Trang Quản lý bài mẫu, Từ vựng, Báo cáo, Thông báo | Nút, ô nhập, chip viết bằng CSS riêng (`.sample-button`, `.vocab-button`, `.support-*`) | Hợp nhất số đo theo 12.1–12.5; giữ tên class, đổi giá trị |

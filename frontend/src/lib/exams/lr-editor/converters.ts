@@ -1,17 +1,15 @@
-import { LET, TYPE_MAP } from './constants.ts';
-import { blanks, cnt, formOf, normTbl, parseAlt, tblCells } from './pure.ts';
+import { LET } from './constants.ts';
+import { cnt, formOf, normTbl, parseAlt } from './pure.ts';
 import type {
   LrAsset,
   LrContent,
   LrEditorState,
   LrGroup,
-  LrGroupExplanation,
   LrGroupItem,
   LrGroupState,
   LrPassageImage,
   LrPassageState,
   LrQuestion,
-  LrQuestionType,
   LrSection,
 } from './types.ts';
 import type { EditorSkill } from '../exam-editor.ts';

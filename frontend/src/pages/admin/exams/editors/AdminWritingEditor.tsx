@@ -5,7 +5,10 @@ import AdminSidebar from "../../../../components/navigation/AdminSidebar";
 import AdminTopbar, { Crumb } from "../../../../components/navigation/AdminTopbar";
 import { navigate } from "../../../../lib/auth/auth";
 import { errorInfo, fmtDate, deleteSkill, publishSkill } from "../../../../lib/exams/exam-admin";
+import { essayTypeOptions, TOPIC_MAX_LENGTH } from "../../../../lib/exams/exam-labels";
+import TopicCombobox from "../../../../components/exams/TopicCombobox";
 import { ApiError } from "../../../../lib/shared/api";
+import { listTopics } from "../../../../lib/exams/exam-editor";
 import {
   getEditorSkill,
   saveSkillContent,
@@ -32,6 +35,7 @@ type ConfirmData = {
 type ImportFileItem = [string, number, string, (string | null)?];
 
 type State = {
+  topicOptions: string[];
   skillId: string | null;
   loading: boolean;
   notFound: boolean;
@@ -73,6 +77,12 @@ type WritingFormItem = {
   setPrompt?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   promptSt?: string;
   promptNote?: string;
+  essayType?: string;
+  setEssayType?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  essayOptions?: Array<{ code: string; name: string }>;
+  topic?: string;
+  setTopicValue?: (value: string) => void;
+  canEdit?: boolean;
   fixedNote?: string;
   hasImg?: boolean;
   imgUrl?: string | null;
@@ -91,8 +101,6 @@ type WritingFormItem = {
   wordLine?: string;
   showImg?: boolean;
 };
-
-type MdLine = { li: boolean; segs: Array<{ t: string; st: string }>; st: string };
 
 type ImportCheckItem = {
   text: string;
@@ -251,6 +259,7 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
   _impFile?: File | Blob | null;
 
   state: State = {
+    topicOptions: [],
     skillId: null,
     loading: true,
     notFound: false,
@@ -283,6 +292,9 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
 
   componentDidMount() {
     this._mounted = true;
+    listTopics()
+      .then((t) => this._mounted && this.setState({ topicOptions: t }))
+      .catch(() => undefined);
     const self = this;
     this._key = function (e: KeyboardEvent) {
       const tag = (e.target && (e.target as HTMLElement).tagName) || "";
@@ -466,29 +478,7 @@ renderVals(): WritingView {
             img: null,
           },
         ],
-      },
-      EMPTY: WritingFixture = {
-        title: "Practice Test 02",
-        items: [
-          { prompt: "", img: null },
-          { prompt: "", img: null },
-        ],
       };
-    function variant(): WritingFixture {
-      var t = PR.trangThai;
-      if (t === "Đề mới tạo") {
-        return EMPTY;
-      }
-      if (t === "Mới có Part 1" || t === "Mới có Task 1") {
-        var n: WritingFixture = JSON.parse(JSON.stringify(FULL));
-        n.title = "Practice Test 03";
-        for (var i = 1; i < n.items.length; i++) {
-          n.items[i] = JSON.parse(JSON.stringify(EMPTY.items[i]));
-        }
-        return n;
-      }
-      return FULL;
-    }
     var ex = s.ex;
     var NI = ex.items.length,
       ti = Math.min(s.t == null ? 0 : s.t, NI - 1);
@@ -533,7 +523,7 @@ renderVals(): WritingView {
       self.setState(st as State);
     }
     function setter(fn: (it: WritingEditorTask, v: string) => void) {
-      return function (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+      return function (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
         var v = e.target.value;
         upd(
           function (it) {
@@ -569,89 +559,8 @@ renderVals(): WritingView {
     me._undo = undo;
     var CHIP =
       "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600";
-    var num = function (v: unknown): number {
-      return /^\d+$/.test(String(v || "").trim()) ? parseInt(String(v), 10) : 0;
-    };
-    var inp = function (bad?: boolean): string {
-      return (
-        "box-sizing: border-box; width: 100%; min-width: 0; height: 38px; padding: 0 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; outline-color: #2963CC" +
-        (bad ? "; border-color: #C0412A; background: #FDF3F0" : "")
-      );
-    };
-    function plural(n: number, w: string): string {
-      return n + " " + w + (n === 1 ? "" : "s");
-    }
-    function lines(t?: string): string[] {
-      return String(t || "").split("\n");
-    }
-    function qCount(t?: string): number {
-      return lines(t).filter(function (l) {
-        var x = l.trim();
-        return x && !/^#{1,3} /.test(x);
-      }).length;
-    }
-    function groupCount(t?: string): number {
-      var g = 0,
-        inG = false;
-      lines(t).forEach(function (l) {
-        if (l.trim()) {
-          if (!inG) {
-            g++;
-            inG = true;
-          }
-        } else {
-          inG = false;
-        }
-      });
-      return g;
-    }
     function isEmptyItem(it: WritingEditorTask): boolean {
       return !String(it.prompt || "").trim() && !it.img;
-    }
-    function segsOf(l: string): Array<{ t: string; st: string }> {
-      var segs: Array<{ t: string; st: string }> = [];
-      String(l)
-        .split(/(\*\*[^*]+\*\*|\*[^*]+\*)/)
-        .forEach(function (t) {
-          if (!t) {
-            return;
-          }
-          if (/^\*\*[^*]+\*\*$/.test(t)) {
-            segs.push({ t: t.slice(2, -2), st: "font-weight: 700" });
-          } else if (/^\*[^*]+\*$/.test(t)) {
-            segs.push({ t: t.slice(1, -1), st: "font-style: italic" });
-          } else {
-            segs.push({ t: t, st: "" });
-          }
-        });
-      return segs;
-    }
-    function mdLines(text: string): MdLine[] {
-      return lines(text).map(function (raw) {
-        var l = raw.trim(),
-          kind = "p";
-        if (!l) {
-          return { li: false, segs: [], st: "height: 8px" };
-        }
-        if (/^#{1,3} /.test(l)) {
-          kind = "h";
-          l = l.replace(/^#{1,3} /, "");
-        } else if (/^[-•] /.test(l)) {
-          kind = "li";
-          l = l.slice(2);
-        }
-        return {
-          li: kind === "li",
-          segs: segsOf(l),
-          st:
-            "display: flex; gap: 4px; " +
-            (kind === "h"
-              ? "font-weight: 700; font-size: 15px"
-              : kind === "li"
-                ? "padding-left: 4px"
-                : ""),
-        };
-      });
     }
     var it = ex.items[ti];
     function allIssues(): Array<{ t?: number; text: string }> {
@@ -712,6 +621,8 @@ renderVals(): WritingView {
               function (x) {
                 x.prompt = "";
                 x.img = null;
+                x.essayType = "";
+                x.topic = "";
               },
               {
                 snack: "Đã xóa nội dung " + UNIT + " " + (ti + 1) + ".",
@@ -733,6 +644,22 @@ renderVals(): WritingView {
       }),
       promptSt: "",
       promptNote: "Hiện trong khung, chữ đậm nghiêng như đề thi thật. Dòng trống tách đoạn.",
+      essayType: it.essayType || "",
+      setEssayType: setter(function (x, v) {
+        x.essayType = v;
+      }),
+      essayOptions: essayTypeOptions(t1 ? 1 : 2, GTF),
+      topic: it.topic || "",
+      setTopicValue: function (value: string) {
+        upd(
+          function (x) {
+            x.topic = value;
+          },
+          null,
+          "type",
+        );
+      },
+      canEdit: editing,
       fixedNote:
         "Cố định theo Task: " +
         FIX[ti].mins +
@@ -3202,6 +3129,37 @@ renderVals(): WritingView {
                         {v.F.promptNote}
                       </span>
                     </label>
+                    <label
+                      style={styleOf(
+                        "display: flex; flex-direction: column; gap: 6px",
+                      )}
+                    >
+                      <span style={styleOf("font-size: 13px; font-weight: 700; color: #352637")}>
+                        {"Dạng đề bài (hiện ở bộ lọc thư viện đề, không bắt buộc)"}
+                      </span>
+                      <select
+                        aria-label={"Dạng đề bài"}
+                        value={v.F.essayType}
+                        onChange={v.F.setEssayType}
+                        disabled={!v.F.canEdit}
+                        style={styleOf("box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px; line-height: 1.6; outline-color: #2963CC")}
+                      >
+                        <option value={""}>{"Chưa chọn"}</option>
+                        {(v.F.essayOptions || []).map((o) => (
+                          <option key={o.code} value={o.code}>
+                            {o.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <TopicCombobox
+                      value={v.F.topic || ""}
+                      options={this.state.topicOptions || []}
+                      onChange={v.F.setTopicValue || (() => undefined)}
+                      disabled={!v.F.canEdit}
+                      maxLength={TOPIC_MAX_LENGTH}
+                      label={"Chủ đề (không bắt buộc)"}
+                    />
                     {v.F.isTask1 ? (
                       <>
                         <div

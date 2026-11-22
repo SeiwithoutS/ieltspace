@@ -5,5 +5,6 @@ import './styles/fonts.css';
 import './input.css';
 import './assets/css/app.css';
 import './components/attempts/attempt-theme.css';
+import './styles/admin-ui.css';
 import './styles/motion.css';
 createRoot(document.getElementById('root')!).render(<App />);

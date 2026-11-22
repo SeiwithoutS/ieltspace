@@ -3,14 +3,15 @@ import type { Account } from "../../lib/auth/account";
 import { useAuth } from "../../lib/auth/auth";
 import { saveAvatar, saveDisplayName } from "../../lib/auth/profile-api";
 import { styleOf } from "../../lib/shared/styles";
+import { buttonClass, controlClass } from "../shared/ui";
 import AvatarContent from "./AvatarContent";
 import { PasswordSettings } from "./ProfileDetails";
 import AuthenticatorSettings from "./AuthenticatorSettings";
 
 const card = "padding: 28px; border: 1.5px solid #D6D4D0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(53, 38, 55, 0.04), 0 6px 16px rgba(53, 38, 55, 0.07)";
-const field = "width: 100%; min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1.5px solid #8E8392; border-radius: 10px; background: #FFFFFF; color: #352637; font: inherit; font-size: 14px";
-const avatarAction = "display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #D6D4D0; box-sizing: border-box; background: #FFFFFF; color: #352637; font-weight: 600; font-size: 14px";
-const saveAction = "min-height: 44px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #352637; box-sizing: border-box; background: #352637; color: #FFFFFF; font: inherit; font-weight: 600; font-size: 14px";
+const field = controlClass();
+const avatarAction = buttonClass({});
+const saveAction = buttonClass({ variant: "primary" });
 
 export default function StaffProfileDetails({ account }: { account: Account }) {
   const temporaryPassword = useAuth().user?.must_change_password === true;
@@ -56,7 +57,7 @@ export default function StaffProfileDetails({ account }: { account: Account }) {
           <div style={styleOf("font-size: 20px; font-weight: 700; font-family: 'IBM Plex Serif', Georgia, serif; letter-spacing: -0.015em")}>{account.name}</div>
           <div style={styleOf("color: #706473")}>{account.email ? `${account.email} · ${role}` : role}</div>
         </div>
-        <label style={styleOf(avatarAction)} className="relative cursor-pointer focus-within:outline focus-within:outline-2">
+        <label className={avatarAction + " relative focus-within:outline focus-within:outline-2"}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="9" cy="10" r="1.5" /><path d="M21 16l-5-5-8 9" />
           </svg>
@@ -71,17 +72,17 @@ export default function StaffProfileDetails({ account }: { account: Account }) {
       <form id={formId} className="grid min-w-0 grid-cols-1 items-start gap-4 sm:grid-cols-2" onSubmit={submit}>
         <label className="grid min-w-0 gap-1.5">
           <span className="text-[13px] font-semibold">Tên hiển thị</span>
-          <input style={styleOf(field)} value={name} minLength={2} maxLength={100} required disabled={busy}
+          <input className={field} value={name} minLength={2} maxLength={100} required disabled={busy}
             onChange={event => setDraft(event.target.value)} />
         </label>
         <label className="grid min-w-0 gap-1.5">
           <span className="text-[13px] font-semibold">Email</span>
-          <input style={styleOf(field)} value={account.email} readOnly />
+          <input className={field} value={account.email} readOnly />
           <span style={styleOf("font-size: 13px; color: #706473")}>Không đổi được</span>
         </label>
       </form>
       {temporaryPassword && <p role="status" className="m-0 text-sm">Bạn đang dùng mật khẩu tạm. Hãy đổi sang mật khẩu riêng.</p>}
-      <PasswordSettings staffActions={<button type="submit" form={formId} disabled={busy} style={styleOf(saveAction)} className="cursor-pointer disabled:opacity-50">
+      <PasswordSettings staffActions={<button type="submit" form={formId} disabled={busy} className={saveAction}>
         {busy ? "Đang lưu…" : "Lưu thay đổi"}
       </button>} />
       {feedback && <p role={feedback.error ? "alert" : "status"} className="m-0 text-sm">{feedback.text}</p>}

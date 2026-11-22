@@ -39,7 +39,7 @@ export default function MyWS({ sample }: { sample: boolean }) {
         <h2>Bài Writing và Speaking của tôi</h2>
         <p className="learner-study-muted">Bài đã hoàn thành, trạng thái yêu cầu chấm và thời hạn nội dung.</p>
       </div>
-      <PageLink page="PracticeWS" className="learner-study-button">Luyện Writing, Speaking</PageLink>
+      <PageLink page="PracticeHub" className="learner-study-button">Luyện Writing, Speaking</PageLink>
     </header>
 
     <div className="ws-history-info">

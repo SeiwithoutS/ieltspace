@@ -61,7 +61,7 @@ export default function SampleMediaPreview({ sampleId, media, scope, label, clas
       {current?.error && (
         <div className="space-y-2">
           <p role="alert">{current.error}</p>
-          <button className={scope === "admin" ? "sample-button sample-button--secondary" : "samples-button samples-button-secondary"}
+          <button className={scope === "admin" ? "ui-btn" : "samples-button samples-button-secondary"}
             type="button" onClick={() => setAttempt(value => value + 1)}>
             Làm mới liên kết
           </button>

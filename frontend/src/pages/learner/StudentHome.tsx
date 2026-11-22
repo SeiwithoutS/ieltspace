@@ -97,7 +97,7 @@ function DashboardContent({ days }: { days: DashboardRange }) {
             </li>;
           })}
         </ul>
-        <PageLink className="learner-study-link" page="PracticeLibrary">Chọn bài luyện <span aria-hidden="true">→</span></PageLink>
+        <PageLink className="learner-study-link" page="PracticeHub">Chọn bài luyện <span aria-hidden="true">→</span></PageLink>
       </section>
     </div>
     <ActivityMix data={data} />

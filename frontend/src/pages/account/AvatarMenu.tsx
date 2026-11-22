@@ -135,7 +135,7 @@ class AvatarMenu extends React.Component<{ accent?: string }> {
                     </span>
                   </a>
                   <a
-                    href={"PracticeLibrary.dc.html"}
+                    href={"PracticeListening.dc.html"}
                     data-nav={"IELTS Listening Practice"}
                     style={styleOf(
                       "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
@@ -190,7 +190,7 @@ class AvatarMenu extends React.Component<{ accent?: string }> {
                     </span>
                   </a>
                   <a
-                    href={"PracticeLibrary.dc.html"}
+                    href={"PracticeReading.dc.html"}
                     data-nav={"IELTS Reading Practice"}
                     style={styleOf(
                       "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
@@ -234,7 +234,7 @@ class AvatarMenu extends React.Component<{ accent?: string }> {
                     </span>
                   </a>
                   <a
-                    href={"PracticeWS.dc.html"}
+                    href={"PracticeWriting.dc.html"}
                     data-nav={"IELTS Writing Practice"}
                     style={styleOf(
                       "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
@@ -275,7 +275,7 @@ class AvatarMenu extends React.Component<{ accent?: string }> {
                     </span>
                   </a>
                   <a
-                    href={"PracticeWS.dc.html"}
+                    href={"PracticeSpeaking.dc.html"}
                     data-nav={"IELTS Speaking Practice"}
                     style={styleOf(
                       "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
@@ -343,7 +343,7 @@ class AvatarMenu extends React.Component<{ accent?: string }> {
                   )}
                 >
                   <a
-                    href={"PracticeLibrary.dc.html"}
+                    href={"#SampleLibrary?sampleType=WRITING_TASK_1_ACADEMIC"}
                     data-nav={"Writing Task 1 Academic"}
                     style={styleOf(
                       "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
@@ -384,7 +384,7 @@ class AvatarMenu extends React.Component<{ accent?: string }> {
                     </span>
                   </a>
                   <a
-                    href={"PracticeLibrary.dc.html"}
+                    href={"#SampleLibrary?sampleType=WRITING_TASK_1_GENERAL"}
                     data-nav={"Writing Task 1 General"}
                     style={styleOf(
                       "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",
@@ -432,7 +432,7 @@ class AvatarMenu extends React.Component<{ accent?: string }> {
                     </span>
                   </a>
                   <a
-                    href={"PracticeLibrary.dc.html"}
+                    href={"#SampleLibrary?sampleType=WRITING_TASK_2"}
                     data-nav={"Writing Task 2"}
                     style={styleOf(
                       "display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; text-decoration: none; color: #352637",

@@ -1,6 +1,9 @@
 import React from "react";
 import { TOAST_MS } from "../../../../lib/shared/toast";
 import { styleOf, cssText } from "../../../../lib/shared/styles";
+import { TOPIC_MAX_LENGTH } from "../../../../lib/exams/exam-labels";
+import TopicCombobox from "../../../../components/exams/TopicCombobox";
+import { listTopics } from "../../../../lib/exams/exam-editor";
 import AdminSidebar from "../../../../components/navigation/AdminSidebar";
 import AdminTopbar, { Crumb } from "../../../../components/navigation/AdminTopbar";
 import { navigate } from "../../../../lib/auth/auth";
@@ -15,8 +18,6 @@ import {
   type EditorSkill,
   type SpeakingEditorState,
   type SpeakingPart,
-  type SpeakingPartQs,
-  type SpeakingPartCue,
 } from "../../../../lib/exams/exam-editor";
 import SkillHistoryDrawer from "../../../../components/exams/SkillHistoryDrawer";
 import { versionMessages } from "../../../../lib/exams/version-messages";
@@ -33,6 +34,7 @@ type ConfirmData = {
 type ImportFileItem = [string, number, string, (string | null)?];
 
 type State = {
+  topicOptions: string[];
   skillId: string | null;
   loading: boolean;
   notFound: boolean;
@@ -97,6 +99,9 @@ type SpeakingFormItem = {
   pq: Array<{ n: number; v: string }>;
   instr: string;
   setInstr: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  topic: string;
+  setTopicValue: (value: string) => void;
+  canEdit: boolean;
   prep: string;
   speak: string;
   setPrep: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -271,6 +276,7 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
   _edId?: string;
 
   state: State = {
+    topicOptions: [],
     skillId: null,
     loading: true,
     notFound: false,
@@ -305,6 +311,9 @@ class AdminSpeakingEditor extends React.Component<Record<string, unknown>, State
 
   componentDidMount() {
     this._mounted = true;
+    listTopics()
+      .then((t) => this._mounted && this.setState({ topicOptions: t }))
+      .catch(() => undefined);
     const self = this;
     this._key = function (e: KeyboardEvent) {
       const tag = (e.target && (e.target as HTMLElement).tagName) || "";
@@ -415,11 +424,9 @@ renderVals(): SpeakingView {
     var me = this,
       s = me.state,
       self = me,
-      PR = (me.props as Record<string, unknown>) || {},
       UNIT = "Part",
       NAME = "Speaking";
     var skill = s.skill;
-    var GTF = skill ? skill.form === "GENERAL" : PR.loaiDe === "General Training";
     var FULL: SpeakingEditorState = {
       title: "Practice Test 01",
       tot: "15",
@@ -463,30 +470,6 @@ renderVals(): SpeakingView {
       ],
     };
 
-    var EMPTY: SpeakingEditorState = {
-      title: "Practice Test 02",
-      tot: "15",
-      items: [
-        { kind: "qs", instr: "", qs: [] },
-        { kind: "cue", prep: "1", speak: "2", text: "" },
-        { kind: "qs", instr: "", qs: [] },
-      ],
-    };
-
-    function variant(): SpeakingEditorState {
-      var t = PR.trangThai;
-      if (t === "Đề mới tạo") {
-        return EMPTY;
-      }
-      if (t === "Mới có Part 1") {
-        var n: SpeakingEditorState = JSON.parse(JSON.stringify(FULL));
-        n.title = "Practice Test 03";
-        n.items[1] = JSON.parse(JSON.stringify(EMPTY.items[1]));
-        n.items[2] = JSON.parse(JSON.stringify(EMPTY.items[2]));
-        return n;
-      }
-      return FULL;
-    }
     var ex = s.ex;
     var NI = ex.items.length,
       ti = Math.min(s.t == null ? 0 : s.t, NI - 1);
@@ -581,27 +564,6 @@ renderVals(): SpeakingView {
     }
     function lines(t?: string): string[] {
       return String(t || "").split("\n");
-    }
-    function qCount(t?: string): number {
-      return lines(t).filter(function (l) {
-        var x = l.trim();
-        return x && !/^#{1,3} /.test(x);
-      }).length;
-    }
-    function groupCount(t?: string): number {
-      var g = 0,
-        inG = false;
-      lines(t).forEach(function (l) {
-        if (l.trim()) {
-          if (!inG) {
-            g++;
-            inG = true;
-          }
-        } else {
-          inG = false;
-        }
-      });
-      return g;
     }
     function isEmptyItem(it: SpeakingPart): boolean {
       if (it.kind === "qs") {
@@ -881,6 +843,17 @@ renderVals(): SpeakingView {
         .map(function (q, i) {
           return { n: i + 1, v: q };
         }),
+      topic: it ? it.topic || "" : "",
+      setTopicValue: function (value: string) {
+        upd(
+          function (x) {
+            x.topic = value;
+          },
+          null,
+          "type",
+        );
+      },
+      canEdit: editing,
       instr: qsPart ? qsPart.instr : "",
       setInstr: setter(function (x, v) {
         if (x.kind === "qs") {
@@ -3271,6 +3244,14 @@ renderVals(): SpeakingView {
                         </div>
                       </>
                     ) : null}
+                    <TopicCombobox
+                      value={v.F.topic || ""}
+                      options={this.state.topicOptions || []}
+                      onChange={v.F.setTopicValue}
+                      disabled={!v.F.canEdit}
+                      maxLength={TOPIC_MAX_LENGTH}
+                      label={"Chủ đề (không bắt buộc)"}
+                    />
                     {v.F.hasInstr ? (
                       <>
                         <label

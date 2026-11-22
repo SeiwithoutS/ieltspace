@@ -208,11 +208,11 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
         S: ["SpeakingTest", "3 phần · 11-14 phút"],
       },
       REL: Array<[string, number, string, string, string]> = [
-        ["IELTS CAM Inspired 19", 0, "8 bài test", "126K lượt làm", ""],
-        ["Mock Test 2026 Vol 3", 1, "6 bài test", "9,8K lượt làm", "Vol 3"],
-        ["Mock Test 2026 Vol 2", 2, "6 bài test", "15K lượt làm", "Vol 2"],
-        ["Actual Test Quý 2/2026", 3, "8 bài test", "21K lượt làm", "Q2"],
-        ["Mock Test 2026 Vol 1", 1, "6 bài test", "30K lượt làm", "Vol 1"],
+        ["IELTS CAM Inspired 19", 0, "8 bài test", "126K lượt làm bài", ""],
+        ["Mock Test 2026 Vol 3", 1, "6 bài test", "9,8K lượt làm bài", "Vol 3"],
+        ["Mock Test 2026 Vol 2", 2, "6 bài test", "15K lượt làm bài", "Vol 2"],
+        ["Actual Test Quý 2/2026", 3, "8 bài test", "21K lượt làm bài", "Q2"],
+        ["Mock Test 2026 Vol 1", 1, "6 bài test", "30K lượt làm bài", "Vol 1"],
       ];
 
     function stop(e?: Ev) {
@@ -458,7 +458,7 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
                 name: r.name,
                 n: (r.testCount || 0) + " bài test",
                 plays:
-                  (r.attemptCount || 0).toLocaleString("vi-VN") + " lượt làm",
+                  (r.attemptCount || 0).toLocaleString("vi-VN") + " lượt làm bài",
                 short: short,
                 st:
                   "display: flex; align-items: flex-end; width: 100%; aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden; color: #FFFFFF; background: " +
@@ -679,7 +679,7 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
                           ></span>
                           <span>
                             <b>{v.plays}</b>
-                            {" lượt làm"}
+                            {" lượt làm bài"}
                           </span>
                           <span
                             aria-hidden={"true"}

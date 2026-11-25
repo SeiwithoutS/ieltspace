@@ -27,6 +27,8 @@ const envSchema = z.object({
   STORAGE_BUCKET_EXAM_ASSETS: z.string().default("exam-assets"),
   STORAGE_BUCKET_SAMPLE_ASSETS: z.string().regex(/^[a-z0-9][a-z0-9._-]{0,99}$/).default("sample-assets"),
   STORAGE_BUCKET_AVATARS: z.string().regex(/^[a-z0-9][a-z0-9._-]{0,99}$/).default("avatars"),
+  // Bucket RIÊNG TƯ chứa bản ghi âm Speaking của Người học (Supabase Storage). Tạo thủ công, xem docs/API.md.
+  STORAGE_BUCKET_RECORDINGS: z.string().regex(/^[a-z0-9][a-z0-9._-]{0,99}$/).default("speaking-recordings"),
   AVATAR_STORAGE_PROVIDER: z.enum(['auto', 'supabase', 'r2']).default('auto'),
   R2_ENDPOINT: optionalStorageSetting,
   R2_ACCESS_KEY_ID: optionalStorageSetting,

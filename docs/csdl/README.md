@@ -20,6 +20,18 @@ Chạy [24_staff_accounts_and_authenticator.sql](24_staff_accounts_and_authentic
 
 Sau khi triển khai, Quản lý mở **Hồ sơ cá nhân → Google Authenticator**, quét QR và xác nhận mã 6 số. Quản lý tạo nhân sự trong trang **Người dùng** và chuyển thông tin đăng nhập qua kênh riêng. Nếu một email còn hồ sơ `INVITED` cũ, xử lý hồ sơ đó trong trang **Người dùng** trước khi tạo tài khoản bằng cùng email.
 
+Chạy [26_speaking_attempts.sql](26_speaking_attempts.sql) trước khi bật API lượt làm Speaking (`/learner/skill-attempts`). Tệp thêm `client_attempt_id`, `mode`, `time_limit_minutes`, cho `deadline_at` nhận NULL và khóa theo câu hỏi cho bản ghi âm ở `submission_contents`. Chưa áp dụng lên database nào, cần duyệt.
+
+Tiền đề của 26: đã có các bảng `attempts`, `skill_attempts`, `submission_contents` (từ 01 hoặc 01 mới; database cũ chạy 04, 05). Tệp 26 không tự tạo các bảng này và dừng bằng lỗi nếu thiếu hoặc nếu `recording_status` có giá trị ngoài `PENDING`, `UPLOADED`, `DELETED`. Kiểm tra trước khi áp:
+
+```sql
+select to_regclass('public.attempts'), to_regclass('public.skill_attempts'), to_regclass('public.submission_contents'); -- không NULL
+select distinct recording_status from public.submission_contents; -- chỉ NULL, PENDING, UPLOADED, DELETED
+select count(*) from public.submission_contents; -- ghi lại để so sau khi áp
+```
+
+Rollback 26 (thủ công, khối chú thích cuối tệp): bỏ hai index theo câu hỏi và ràng buộc `recording_status`, thêm lại unique `(skill_attempt_id, section_id)` (cần không còn hàng `question_key <> ''`), đặt lại `deadline_at not null` (cần không còn hàng NULL), rồi bỏ các cột `question_key`, `mode`, `time_limit_minutes`, `client_attempt_id` (mất dữ liệu ở các cột này). Tắt API `/learner/skill-attempts` trước khi rollback.
+
 **Database đã chạy 01 cũ:** dùng [04_nang_cap_tu_01.sql](04_nang_cap_tu_01.sql) và [05_danh_muc_bo_de.sql](05_danh_muc_bo_de.sql). **Project Supabase mới với schema public trống:** chạy một lần [01_tao_cau_truc_moi.sql](01_tao_cau_truc_moi.sql). Ngày 13/11, cấu trúc đã theo [D08–D10](../DECISIONS.md) và thiết kế Quản lý bộ đề (40 bảng: bổ sung bảng `exam_set_categories`, bỏ exam_versions, kỹ năng có trạng thái và phiên bản, trigger updated_at cho exam_sets và exams, ràng buộc UNIQUE tên bộ đề). Tệp 05 tách riêng bảng danh mục động, thêm 5 danh mục mặc định và chuyển đổi dữ liệu an toàn.
 
 ## Database đang dùng

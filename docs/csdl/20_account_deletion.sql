@@ -4,6 +4,8 @@ create table if not exists public.account_deletion_jobs (
   user_id uuid primary key references public.users(id),
   auth_user_id uuid,
   avatar_reference text,
+  -- Đường dẫn file cần xóa khi hoàn tất xóa tài khoản. Phân biệt kho theo đường dẫn: `speaking/...` là bản ghi Speaking ở
+  -- Supabase Storage (bucket STORAGE_BUCKET_RECORDINGS, migration 26); đường dẫn khác hoặc có tiền tố `r2:` là Cloudflare R2.
   recordings text[] not null default '{}',
   lease_id uuid,
   lease_until timestamptz,

@@ -15,7 +15,8 @@ export const app = express();
 app.disable('x-powered-by');
 app.use(serverTiming);
 app.use(compression({ threshold: 1024 }));
-app.use(cors({ origin: env.frontendUrl, credentials: true }));
+// Date được expose để frontend ước lượng độ lệch đồng hồ khi khôi phục bài làm (SPK-14).
+app.use(cors({ origin: env.frontendUrl, credentials: true, exposedHeaders: ['Date'] }));
 app.use(cookieParser());
 // Both sample writers check ADMIN before reading their route-specific bodies.
 app.use('/api/admin/samples/import', createSampleImportRouter(prisma));

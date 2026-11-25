@@ -1,6 +1,6 @@
 # DESIGN.md – IELTSpace
 
-**Nguồn duy nhất để theo dõi thiết kế giao diện.** Gộp từ `DESIGN.md` cũ (giá trị thực tế trong code), `docs/ui/design.md` (quy chuẩn gốc, mục A và mục 0) và `docs/11-quy-chuan-giao-dien.md`. Cập nhật 21/11/2026: dò lại luồng Quản lý bộ đề, Thông tin bộ đề và các Editor; chốt bộ component dùng chung ở mục 12 (khung Quản lý), trạng thái component ở mục 13, quy tắc áp dụng ở mục 14. Khi mục 6 mâu thuẫn với mục 12 thì **mục 12 thắng** cho khung Quản lý.
+**Nguồn duy nhất để theo dõi thiết kế giao diện.** Gộp từ `DESIGN.md` cũ (giá trị thực tế trong code), `docs/ui/design.md` (quy chuẩn gốc, mục A và mục 0) và `docs/11-quy-chuan-giao-dien.md`. Cập nhật 21/11/2026: dò lại luồng Quản lý bộ đề, Thông tin bộ đề và các Editor; chốt bộ component dùng chung ở mục 12 (khung Quản lý), trạng thái component ở mục 13, quy tắc áp dụng ở mục 14. Khi mục 6 mâu thuẫn với mục 12 thì **mục 12 thắng** cho khung Quản lý. Cập nhật 25/11/2026 (SPK-19): thêm mục 15 cho các màn làm bài Speaking/Writing, trang xác nhận hoàn thành, MenuButton và lịch sử W/S do nhóm tự dựng (chưa có canvas gốc, chờ duyệt), kiểm toán code theo mục 2–14.
 
 - Nguồn mẫu hình ảnh vẫn là canvas "IELTSpace · Giao diện" (https://claude.ai/artifact/BbGeNht7gcmTF2YWJcEF2V; bản chép ở `docs/ui/canvas/`). Tên màn trùng tên trang trong `frontend/src/app/pages.ts`.
 - Khi file này mâu thuẫn với các mục cũ (v1, v2) của `docs/ui/design.md`, **file này thắng**. `docs/ui/design.md` chỉ còn để tra lịch sử.
@@ -39,7 +39,7 @@
 | hero | `linear-gradient(135deg, #E3ECFD, #E6F3EC)` | Dải hero, đầu trang thư viện |
 | danger-bg | `#E5604A` | Chấm đỏ, huy hiệu số |
 | danger-text | `#C0412A` (5.2:1), viền `#F1B3A3` | Hủy, Xóa, Đăng xuất, Không lưu |
-| danger-soft | `#FBDCD3` | Chip "Đã hủy", hộp thoại lỗi, FAQ đang mở |
+| danger-soft | `#FBDCD3` (chữ trên nền này dùng `#9D301E`, 5.6:1; `#C0412A` chỉ 4.0:1) | Chip "Đã hủy", hộp thoại lỗi, FAQ đang mở |
 
 Màu trang trí: coral `#F27D65`, mint `#C5DECE`, butter `#F4D66F`.
 
@@ -142,11 +142,11 @@ Hành vi: link và nút sáng/tối nhẹ khi hover, co 3% khi nhấn; thẻ là
 
 ### Nút, chip, nhãn
 - **Khung Quản lý và Editor:** dùng bộ nút ở mục 12.1 (cao 38, bo 999).
-- **Khung Khách / Người học:** **nút chính** nền ink, chữ trắng, bo 12, cao 44–46. **Nút viền:** nền trắng, viền ink hoặc line. **"Làm bài" (đề lẻ):** nút viền cao 44, bo 12.
+- **Khung Khách / Người học:** **nút chính** nền ink, chữ trắng, bo 999, cao 44–46 (chốt 25/11/2026, khớp mục 1, 12.1, 14 và canvas v3). **Nút viền:** nền trắng, viền ink hoặc line, bo 999. **"Làm bài" (đề lẻ):** nút viền cao 44, bo 999.
 - **Nút destructive** (mọi Hủy/Xóa, icon thùng rác, "Đăng xuất", "Không lưu"): nền trắng, chữ `#C0412A`, viền 1.5px `#F1B3A3`.
 - **Chip kỹ năng:** bo 999, cặp màu kỹ năng. **Chip dạng bài:** mỗi dạng một màu pastel.
 - **Focus:** viền 2px accent, offset 2px (ô nhập offset 0), vòng sáng 3px khi focus ô nhập.
-- **Nhãn trạng thái:** bài W/S (Đã lưu · chưa gửi chấm, Chờ phân công, Chờ chấm, Đã có kết quả, Đã hủy · đã hoàn bonus; Giáo viên thấy thêm Chưa có điểm, Có bản nháp); nội dung (Công khai / Bản nháp / Đã ẩn); tài khoản (Hoạt động / Bị khóa / Đã xóa); quyền chấm (Đang nhận bài / Ngừng nhận bài mới / Đã thu hồi). Chấm đỏ nhỏ đánh dấu bài W/S mới có kết quả hoặc vừa bị hủy; chuông thông báo có chấm đỏ số chưa đọc.
+- **Nhãn trạng thái:** bài W/S (Đã lưu · chưa gửi chấm, Chờ phân công, Đang chấm, Đã có kết quả, Đã hủy · đã hoàn bonus; Giáo viên thấy thêm Chưa có điểm, Có bản nháp); nội dung (Công khai / Bản nháp / Đã ẩn); tài khoản (Hoạt động / Bị khóa / Đã xóa); quyền chấm (Đang nhận bài / Ngừng nhận bài mới / Đã thu hồi). Chấm đỏ nhỏ đánh dấu bài W/S mới có kết quả hoặc vừa bị hủy; chuông thông báo có chấm đỏ số chưa đọc.
 
 ### Thẻ chuẩn (Landing, thư viện, bài mẫu)
 Áp cho Main, StudentLanding, FullTests, SampleLibrary, PracticeLibrary (lưới và danh sách).
@@ -209,7 +209,7 @@ Giải thích từng trang và liên kết: `docs/ui/trang-va-lien-ket.md`.
 - Thư viện bài mẫu của Người học dùng banner chuyển màu ngang toàn trang. Thanh lọc trên danh sách gồm tab kỹ năng, loại bài và ô tìm tiêu đề hoặc chủ đề trong phạm vi đã chọn. Danh sách chia theo nhóm Writing Task 1 General, Writing Task 1 Academic, Writing Task 2 và Speaking. Chi tiết bài có breadcrumb, nội dung bên trái và mục lục theo vị trí cuộn bên phải trên desktop. Ảnh bìa nằm trên thẻ thư viện, ảnh đề và audio nằm trong bài.
 
 ### Màn làm bài (chốt 09/11/2026)
-Màn: StartTestDialog, ReadingTest, ListeningTest, WritingTest, SpeakingTest (chờ draft), SubmitDialogs. Chưa có trong `pages.ts`/code, canvas bản 237 là mẫu.
+Màn: StartTestDialog, ReadingTest, ListeningTest, WritingTest, SpeakingTest, SubmitDialogs. Đã khai báo trong `pages.ts` và có code; canvas bản 237 là mẫu cho Reading/Listening. Speaking, Writing và các hộp thoại/trang xác nhận đi kèm là phần tự dựng, mô tả ở mục 15.
 
 - **Lối vào:** đề theo kỹ năng (ví dụ "Test 1 · Listening") là thẻ ở Landing và tab kỹ năng của Thư viện đề, bấm là làm luôn. StartTestDialog chỉ chọn chế độ (Practice / Real Test) và phần. Practice chọn Part/Section; Question Group là bài tập nhỏ riêng trong PracticeLibrary, vào thẳng màn làm bài.
 - **Chế độ:** Practice đếm lên, chỉ hiện số câu đúng; Real Test đếm ngược, mới có band. Writing Practice = 1 Task đếm lên; Real Test = 2 Task, 60 phút đếm ngược.
@@ -253,7 +253,7 @@ Các mục 1–9 ở trên là quy chuẩn thiết kế gốc. Các số đo dư
 
 #### Nhận diện bốn kỹ năng
 
-ExamDetail ghép chữ cái, tên kỹ năng và cặp màu. Giữ cả ký hiệu lẫn tên khi không gian cho phép để người đọc nhận ra kỹ năng kể cả khi khó phân biệt màu.
+ExamDetail ghép chữ cái, tên kỹ năng và cặp màu. Giữ cả ký hiệu lẫn tên khi không gian cho phép để người đọc nhận ra kỹ năng kể cả khi khó phân biệt màu. Nút "Làm bài" trong ExamDetail không tô màu theo kỹ năng: dùng một kiểu chung, viền và chữ #352637 trên nền #FFFFFF.
 
 | Ký hiệu | Kỹ năng | Nền sáng | Chữ sáng | Nền tối theo dark-palette |
 |---|---|---|---|---|
@@ -295,6 +295,7 @@ Component `components/navigation/LearnerHeader.tsx` thống nhất cho toàn b�
 - Với các bảng dữ liệu lịch sử thi (`StudentHome`), danh sách bài nộp Writing/Speaking (`MyWS`):
   - **Từ 768px trở lên:** Giữ bảng chuẩn `<table>` bọc trong khung `overflow-x-auto` để đảm bảo không tràn trang khi xem trên màn hình vừa.
   - **Dưới 768px:** Ẩn bảng (`hidden md:block`), hiển thị danh sách thẻ dọc (`flex flex-col gap-3 md:hidden`). Mỗi thẻ gói gọn tên bài/đề, badge kỹ năng/trạng thái, ngày làm và nút hành động chính (chiều cao tối thiểu 40px, dễ chạm ngón tay).
+  - **MyWS (đã làm 25/11/2026):** chỉ render một dạng tại một thời điểm (hook `matchMedia('(max-width: 767px)')`), nên không trùng id/aria. Chi tiết ở 15.9.
 
 ---
 
@@ -361,7 +362,7 @@ Màu Reading (mint) trùng "Công khai", Writing (butter) trùng "Bản nháp": 
 ### 12.6 Hộp thoại, dropdown, toast, banner
 
 - **Lớp phủ:** `rgba(53,38,55,.32–.42)`, padding 16 (mobile) hoặc 24, canh giữa, `z-index: 60`.
-- **Hộp thoại:** nền trắng, viền 1.5px `#D6D4D0`, bo **22**, bóng `0 24px 64px rgba(53,38,55,.22)`, padding 24 (hộp có form dài 26/26/22), tối đa `100vh - 48px`, cuộn trong hộp. Rộng 440 (xác nhận), 460 (một trường), 660 (form nhiều trường). Tiêu đề serif 20/600; nội dung 14px `#4B3D4D`, line-height 1.55; chân: nút canh phải, gap 10. Hộp xác nhận nguy hiểm có icon tròn 44 nền `#FBDCD3`, chữ `#C0412A`.
+- **Hộp thoại:** nền trắng, viền 1.5px `#D6D4D0`, bo **22**, bóng `0 24px 64px rgba(53,38,55,.22)`, padding 24 (hộp có form dài 26/26/22), tối đa `100vh - 48px`, cuộn trong hộp. Rộng 440 (xác nhận), 460 (một trường), 660 (form nhiều trường). Tiêu đề serif 20/600; nội dung 14px `#4B3D4D`, line-height 1.55; chân: nút canh phải, gap 10. Hộp xác nhận nguy hiểm có icon tròn 44 nền `#FBDCD3`, chữ `#C0412A`. **Ngoại lệ có chủ ý cho Người học (khu làm bài, lịch sử W/S; chốt 25/11/2026):** tiêu đề hộp thoại Inter 700 theo canvas màn làm bài, hộp bo 26, icon hộp là ô vuông bo 12 chung các tông (theo canvas Reading/Listening, xem 15.5); khu Quản lý giữ serif 20/600, bo 22, icon tròn.
 - **Dropdown/menu:** nền trắng, viền 1.5px `#D6D4D0`, bo **12**, padding 6, bóng `0 1px 2px .04, 0 12px 28px .16`, cao tối đa 240 rồi cuộn. Mục cao tối thiểu 40, padding `0 12`, bo **8**, 14px; hover nền `#F3F0EA`; mục nguy hiểm chữ `#C0412A`.
 - **Popover lọc:** như dropdown nhưng bo **16**, padding 14, rộng 272.
 - **Toast:** `fixed`, giữa dưới (bottom 24), nền `#352637`, chữ trắng 14px, bo **12**, padding `10 14 10 18`, gap 16, `z-index: 70`; thành công dùng nền `#2E7D4F`.
@@ -424,8 +425,175 @@ Quy tắc chung: focus nhìn thấy được trên **mọi** điều khiển (ou
 | Nơi | Lệch | Đưa về |
 |---|---|---|
 | `editor-shell/ConfirmDialog`, `LeaveDialog` | Nút bo 12 (`rounded-xl`), chữ 13, nút chính nền xanh accent, viền `#E5E0D8`, lớp phủ `bg-black/40`, `rounded-2xl` | Nút 38/999, nút chính ink, hộp bo 22 viền `#D6D4D0`, lớp phủ aubergine |
-| `editor-shell/VersionBanner` | Mã màu riêng (`#FFF8E6`, `#EBF7EE`, `#B8E6C4`...) | Banner theo 12.6 |
 | `editor-shell/EditorTopbar` | Tab `rounded-xl` p-3px, mục `rounded-[10px]`; chip trạng thái padding riêng; menu `shadow-lg` viền `#E5E0D8` | Tab 10/8 như 12.4, chip 12.5, dropdown 12.6 |
 | Editor LR (Reading/Listening, `lr-editor/*`) | Dùng Tailwind với hex riêng (`#E5E0D8`, `#FAF9F7`, `#2A1F2D`...) | Dùng token mục 2; nút, ô nhập theo 12.1–12.2 |
 | Tiêu đề trang chưa khai báo `font-weight` (AdminHome, AdminExams, AdminUsers...) | Tailwind preflight có thể đưa h1 về weight mặc định | Khai báo 600 như 12.7 |
 | Trang Quản lý bài mẫu, Từ vựng, Báo cáo, Thông báo | Nút, ô nhập, chip viết bằng CSS riêng (`.sample-button`, `.vocab-button`, `.support-*`) | Hợp nhất số đo theo 12.1–12.5; giữ tên class, đổi giá trị |
+
+Đã sửa xong, bỏ khỏi bảng: `editor-shell/VersionBanner` (không còn mã màu riêng, kiểm 25/11/2026). Các lệch của khu làm bài và lịch sử W/S nằm ở mục 15.13.
+
+## 15. Màn làm bài Writing/Speaking, xác nhận hoàn thành và lịch sử W/S (25/11/2026)
+
+> **Trạng thái: tự dựng, chưa có canvas gốc, cần người dùng duyệt (SPK-19).** Nhóm làm các thành phần dưới đây khi canvas chưa có. Đã kiểm toán và sửa code theo mục 2–14 ngày 25/11/2026; chỗ DESIGN.md chưa có quy định thì ghi lại đúng giá trị code đang dùng và đánh dấu **[cần duyệt]**. Khi canvas có bản chính thức, cập nhật mục này theo canvas.
+
+### 15.0 Quy ước chung của khu làm bài W/S
+
+- **Màu qua biến, không viết hex trong class.** Dùng `var(--attempt-*)` (khai báo ở `components/attempts/attempt-theme.css`; `:root` là mã sáng, `.dark` là mã tối, khớp `dark-palette.json`). Biến thêm 25/11: `--attempt-text-9d301e` (chữ lỗi trên danger-soft, 5.6:1), `--attempt-text-24543d` (chữ thành công), `--attempt-text-2257b8` (chữ thông tin), `--attempt-bg-fdf3f0` (danger-surface), `--attempt-line-f1b3a3` (danger-line), `--attempt-line-8e8392` (input-line), `--attempt-line-6a5d6c` (viền ô nhập khi hover). Thêm màu mới thì thêm cả hai khối `:root` và `.dark`.
+- **Chữ:** Inter (`attempt-sans`), tiêu đề h2 Inter 700 với `letter-spacing: -0.015em` (không dùng serif, xem 15.13). Cỡ 11, 12, 13, 14, 15, 16, 20, 22, 28 đúng thang mục 3. Overline 12/600 in hoa `.08em`.
+- **Cao điều khiển:** 44 (nút chính của bước, nút ở thanh đầu trang, ô chọn thời gian, nút tròn ghi âm), 38 (nút trong thẻ, hộp thoại, khu ghi âm, popup), 34 (nút trong bảng, tab Task, MenuButton), 26 (chip), 22 (nhãn nhỏ). Bo 999 cho nút và chip, 12 cho ô số liệu và hộp thông báo, 22 cho thẻ, 26 cho hộp thoại làm bài.
+- **Hộp thông báo trong thẻ:** bo 12, padding `10–12 14`, chữ 13–14, dùng đúng cặp banner mục 12.6: thông tin `#E3ECFD`/`#2257B8`, thành công `#E6F3EC`/`#24543D`, cảnh báo `#FBEDBF`/`#7A5A0E`, lỗi `#FBDCD3`/`#9D301E`. Không viền; hộp đứng riêng (MicCheck, ConnectionNotice, StartTestDialog) có viền 1.5px `#D6D4D0`. Lỗi và mất mạng dùng `role="alert"`, còn lại `role="status"`. Chữ `#C0412A` chỉ dùng trên nền trắng (5.2:1); trên danger-soft chỉ có `#9D301E` đạt 4.5:1 (`#C0412A` trên `#FBDCD3` chỉ 4.0:1).
+- **Trạng thái nút:** nút nền class (không có `background` inline) thêm lớp `attempt-hover` để hover sáng/tối nhẹ (0.96/1.12) như `motion.css`; nút trong `.attempt-card` tự có. Nhấn co 97% và khóa opacity .55 do `motion.css`. Nút destructive hover nền danger-surface `#FDF3F0` (tối `#3A2A28`). Focus nhìn thấy trên mọi điều khiển: outline 2px accent offset 2 (`.attempt-screen`, `.attempt-popup`, MenuButton).
+- **Khung hộp thoại làm bài:** `<dialog>` `showModal`, thẻ trắng bo 26 viền 1.5px `#D6D4D0`, padding 28, lớp phủ `rgba(53,38,55,.5)`, Esc đóng, trả focus về nút đã mở. Nút trong hộp: hủy/phụ bên trái, hành động chính bên phải, gap 12.
+
+### 15.1 Kiểm tra micro (MicCheck)
+
+Bước đứng trước phần làm bài Speaking, nằm trong vùng làm việc nền paper-deep.
+
+- **Khung:** cột tối đa 560, padding `40 32`; thẻ bo 22, viền 1.5px `#D6D4D0`, nền trắng, padding 28, bóng `0 1px 2px .04, 0 6px 16px .07`, gap 14. Tiêu đề "Kiểm tra micro trước khi làm bài" 22; mô tả 14 `#4B3D4D`.
+- **Sóng âm** (LevelBars, cao 120) luôn hiện; mờ .55 khi chưa nghe.
+- **Các bước** (một nút chính mỗi bước, cao 44, bo 999, 14/600, nền accent theo kỹ năng, chữ theo `accentForeground`):
+
+| Bước | Hiển thị | Nút |
+|---|---|---|
+| `idle` | Mô tả | "Bật micro" |
+| `requesting` | "Đang chờ bạn cho phép dùng micro…" (`role="status"`) | không |
+| `error` | Hộp lỗi (`role="alert"`, nền `#FBDCD3`, chữ `#9D301E`, viền 1.5px) kèm lý do | "Thử lại" (phụ) |
+| `ready` | "Micro đã bật. Thanh sóng phải nhảy khi bạn nói…" | "Bắt đầu ghi thử" |
+| `testing` | "Đang ghi thử, hãy nói một câu… N giây" (15/600, giữa); tự dừng sau 30 giây | "Dừng ghi thử" |
+| `review` | Trình phát `<audio controls>` (nhãn "Nghe lại bản ghi thử"); hộp thành công (đã thu được tiếng) hoặc hộp cảnh báo `role="alert"` (chưa nghe thấy tiếng, vẫn cho vào) | "Ghi thử lại" (phụ) và "Nghe rõ, vào làm bài" (chính, sau khi đã bấm phát) hoặc "Bỏ qua nghe lại, vào làm bài" (phụ) |
+
+- Chỉ cảnh báo mềm khi không đo được mức âm; không chặn người học. Micro được trao cho trang làm bài khi vào (không tắt rồi xin lại).
+- Dark mode: toàn bộ qua `--attempt-*`. **[cần duyệt]**
+
+### 15.2 Thẻ làm bài Speaking (QuestionCard + RecorderControl + LevelBars)
+
+Mỗi lúc chỉ một thẻ câu hỏi (flashcard) trong cột tối đa 760, padding `24 24 32`, gap 16. Phía trên thẻ là dải chip tiến độ Part (cao 26, 13/600, viền 1.5px): đã xong nền mint kèm dấu tick, đang làm nền ink (kèm "Part 2 · 3/5"), chưa làm nền trắng.
+
+**Thẻ:** nền trắng, bo 22, viền 1.5px `#D6D4D0`, bóng như MicCheck, `overflow: hidden`. Gồm hai vùng:
+- **Phần câu hỏi** (padding `24 28`, cao tối thiểu 200, gap 14): chip trạng thái (self-start, cao 26) → overline `Part N · câu i/n · chủ đề` (12/600 in hoa) → câu hỏi (h2 28, line-height 1.4; cue card: tiêu đề 22 và các dòng 16, line-height 1.8, gạch đầu dòng) → thanh thời gian còn lại (cao 8, bo 999, viền 1px `#DDDBD7`, nền `#F3F0EA`, thanh chạy màu theo tông chip, `width` chuyển 1s linear; `role="progressbar"`).
+- **Khu ghi âm** (RecorderControl, cùng thẻ): vạch ngăn 1px `#E6E4E0`, nền paper-deep `#FAF9F5`, padding `16 28`. Gồm sóng âm cao 36, đồng hồ 20/700 (tabular-nums, `role="timer"`, dạng `mm:ss / mm:ss tối đa`), cụm nút canh phải, hộp lỗi micro (13) và dòng gợi ý 13 `#706473` (`role="status"`).
+
+**Trạng thái** (`phase`):
+
+| Phase | Chip (nền/chữ) | Thanh thời gian | Khu ghi âm |
+|---|---|---|---|
+| `viewing` | "Đọc câu hỏi · N giây", thông tin `#E3ECFD`/`#2963CC` | 5 giây | Gợi ý đọc câu; Real tự ghi khi hết đếm |
+| `preparing` (Part 2) | "Chuẩn bị · mm:ss", thông tin | thời gian chuẩn bị | Practice có "Bỏ qua chuẩn bị"; Real tự ghi |
+| `ready` | "Sẵn sàng ghi âm", Speaking `#E8E4FA`/`#5543B0` | không | Nút tròn đỏ 44 (micro); Practice có bản cũ thì thêm "Giữ bản cũ" |
+| `recording` | "Đang ghi âm", lỗi `#FBDCD3`/`#9D301E` | không | Sóng chạy; Practice: nút tròn đỏ có ô vuông "Dừng ghi âm"; Real: chỉ báo tròn không bấm (`role="img"`), dừng bằng "Câu tiếp" |
+| `answered` | "Đã trả lời", `#DCEDE2`/`#2E6A48` | không | Practice: "Nghe lại/Tạm dừng", "Ghi lại"; Real: chỉ "Câu tiếp" (không ghi lại) |
+| `micLost` | "Micro bị ngắt", lỗi | không | "Bật lại micro" + hộp lỗi |
+| `done` | không dùng thẻ; khung báo "Bạn đã trả lời hết các câu hỏi" (bo 22, trắng) | | Bấm "Hoàn thành" ở đầu trang |
+
+- **Nút:** pill cao 38, padding `0 16`, viền 1.5px `#D6D4D0`, nền trắng, chữ ink 14/600. "Câu tiếp"/"Xong phần thi" cao 38 nền accent (khóa: nền `#F3F0EA`, chữ `#706473`, `not-allowed`) nằm cuối cụm. Nút ghi âm tròn 44 nền `#C0412A` (destructive đặc, tối `#F49A85` chữ `#202125`), icon trắng.
+- **Chuyển thẻ** (`question-card.css`): thẻ mới `qcard-in` 0.36s `--mo-ease` từ `translateX(48px) rotateY(-14deg)`, mờ → rõ; thẻ cũ `qcard-out` (tuyệt đối, `pointer-events: none`, `aria-hidden`) 0.28s trượt trái 48px và lật 14°, gỡ sau 400ms; sân khấu `perspective: 1200px`. `prefers-reduced-motion`: cả hai chỉ còn mờ vào/ra (0.01ms), không trượt hay lật.
+- **Tiếp cận:** chip trạng thái chỉ đọc phần chữ trạng thái (`aria-live="polite"`), số giây ngoài vùng live; thẻ `role="group"` "Câu hỏi hiện tại"; nút tròn có `aria-label`.
+- **LevelBars (soundwave):** khung bo 12, nền `#E8E4FA`, viền 1.5px `#D6D4D0`, padding `0 8`, gap 2; 40 cột mức âm thật, **dàn đều hết chiều ngang** (mỗi cột `flex: 1`, rộng tối đa 6, bo 999, màu `#5543B0`, tối `#C3B9F7`); chiều cao cột `3 + mức × (cao khung − 11)`, cập nhật 70ms, mới nhất bên phải; `aria-hidden`; không ghi thì mờ .55. Cao 120 (MicCheck), 36 (khu ghi âm).
+
+### 15.3 ConnectionNotice
+
+Hộp nhắc không tắt màn hình, kèm trạng thái mạng, đặt ở cuối cột làm bài và dưới MicCheck. Nền danger-soft `#FBDCD3`, chữ `#9D301E`, viền 1.5px `#D6D4D0`, bo 12, padding `12 16`, 14px, icon 18. Luôn tông lỗi để người học không bỏ sót (**[cần duyệt]**: lúc mạng ổn đang cùng màu với lúc mất mạng).
+- **Online** (`role="note"`): icon tròn chữ i, "**Không tắt màn hình, không chuyển trang hoặc đóng tab** khi đang làm bài. Mạng đang ổn định." (thêm "Màn hình được giữ sáng." khi Wake Lock chạy).
+- **Offline** (`role="alert"`): icon mất sóng, "**Mất kết nối.**" kèm lời hướng dẫn: bài vẫn ghi và lưu trên máy; nếu trình duyệt không lưu được bản ghi lên đĩa thì báo bản ghi chỉ tạm trong bộ nhớ, mất khi tải lại.
+
+### 15.4 Hộp "Bắt đầu làm bài": ModePicker và TimeLimitPicker
+
+- **StartTestDialog:** rộng 680 (tối đa 100%), padding 28, bo 26, viền 1.5px, gap 18. Đầu hộp: ô kỹ năng 44 (bo 12, màu kỹ năng) + tiêu đề 22 + tên đề 14 `#706473`. Chân: "Hủy" (phụ cao 44) và "Bắt đầu" (accent theo kỹ năng, mũi tên); khi Practice chưa chọn phần thì thay bằng nút khóa "Chọn ít nhất một phần". Dải thông tin (nền `#E3ECFD`, viền 1.5px, 13px): Speaking nói đồng hồ vẫn chạy khi thoát.
+- **ModePicker** (`fieldset` + `legend` overline "Chọn chế độ"): hai thẻ Luyện tập / Thi thật, `flex: 1 1 280`, bo 12, padding 16, viền 1.5px; **bấm toàn thẻ để chọn** (radio nằm trong, `focus-within` hiện outline 2px accent offset 2, radio là nguồn tiêu điểm bàn phím). Đang chọn: nền `#E3ECFD`, viền accent 1.5px cộng vòng 0.5px (tổng thị giác 2px, không nhảy bố cục); hover viền accent mảnh. Tiêu đề 15/700; nhãn nhỏ bên phải cao 22, 11/700 (Luyện tập: "Không tính band" `#E3ECFD`/accent; Thi thật: nền ink, "Có tính band" hoặc "Như thi thật"); mô tả 13 `#4B3D4D`. Thẻ Luyện tập mở rộng bên trong khi chọn: danh sách Part/Passage/Section (radio hoặc checkbox, hàng cao 40, vạch 1px, "Chọn tất cả" khi nhiều lựa chọn) và TimeLimitPicker.
+- **TimeLimitPicker:** nhãn overline 12; combo box (`<select>`) cao 44, padding `0 40 0 14`, bo 10, viền 1.5px `#8E8392` (hover `#6A5D6C`), 14/600, mũi tên 18 bên phải; gợi ý 12 `#706473`. **Cố định** (Thi thật, full test): hiện mức nhưng khóa; có nhãn "Cố định" (cao 22, 11/700, nền `#F3F0EA`, chữ `#706473`), ô nền `#F3F0EA`, `not-allowed`. Chữ giá trị khóa vẫn giữ ink (không dùng `#8E8392`) vì đó là thông tin cần đọc: ngoại lệ có chủ ý so với 12.2 (chốt 25/11/2026).
+
+### 15.5 Hộp "Lưu bài làm?", "Hủy bài làm?", "Đã hết giờ", "Lưu và thoát?" (AttemptConfirmation)
+
+Thẻ trong khung 15.0, rộng `min(470, 100vw-24)`, gap 14. Hộp bo 26 và biểu tượng ô vuông 44 bo 12 chung các tông là giá trị chốt 25/11/2026, giữ theo canvas Reading/Listening (ngoại lệ của 12.6). Biểu tượng 44 (bo 12, viền 1.5px) theo tông: `butter` (hết giờ, lưu bài W/S, mất kết nối), `sky` (thoát), `mint`, **`danger`** (nền `#FBDCD3`, icon `#C0412A`, cố định cả chế độ tối như các tông khác). Tiêu đề 20/700; mô tả 14–15 `#706473`. Khi `busy` khóa nút và hiện dòng trạng thái.
+
+| Hộp | Nút (trái → phải) |
+|---|---|
+| Lưu bài làm? (Hoàn thành W/S; không tự gửi chấm, không dùng lượt) | **Không lưu** (destructive) · Quay lại làm tiếp · **Lưu bài làm** (chính) |
+| Đã hết giờ | **Không lưu** (destructive) · **Lưu** (chính); không có nút quay lại |
+| Hủy bài làm? (sau "Không lưu"; bài và bản ghi bị xóa) | Quay lại · **Xóa bài làm** (destructive đặc `#C0412A`, chữ trắng; tối nền `#F49A85` chữ `#202125`) |
+| Lưu và thoát? / Đang mất kết nối | Ở lại · **Lưu và thoát** |
+| Thoát sẽ mất bản ghi âm (Speaking, trình duyệt không lưu được lên máy) | Ở lại · **Vẫn thoát** |
+
+Hộp nộp bài Reading/Listening (danh sách câu thiếu, gắn cờ) là phần canvas, không thuộc mục này.
+
+### 15.6 Trang xác nhận hoàn thành (AttemptDoneSummary, StudentAttemptDone)
+
+Trang nền paper-deep, thẻ giữa rộng `min(640, 100vw-24)`, padding ngoài `48 16`, bóng nhẹ như MicCheck. Từ trên xuống:
+1. Icon tick tông `mint`, tiêu đề "Bạn đã hoàn thành bài Speaking/Writing" (20/700).
+2. **Ô số liệu** (`dl` lưới `auto-fit minmax(150, 1fr)`, gap 12): "Thời gian hoàn thành" (`mm:ss`) và "Số câu đã trả lời" hoặc "Số Task đã viết"; ô bo 12, nền `#FAF9F5`, viền 1.5px `#D6D4D0`, padding `12 14`, nhãn 12 `#706473`, số 20/700. Writing có thêm danh sách từng Task (hàng bo 12, cùng kiểu ô): "Task 1 · N từ (tối thiểu M)"; thiếu từ thì chữ số từ đổi sang `#7A5A0E` kèm chữ "(tối thiểu M)" (không chỉ bằng màu).
+3. **Huy hiệu trạng thái tải lên** (cao 26, 13/600, bo 999, `role="status"`, dùng cặp banner): xong (Đã tải lên đủ / Đã lưu đủ) = thành công `#E6F3EC`/`#24543D`; Chỉ lưu trên máy này, Đang tải lên (n/m), Đang kiểm tra = thông tin `#E3ECFD`/`#2257B8`; Chưa tải lên đủ (n/m) = lỗi `#FBDCD3`/`#9D301E` kèm câu "đang tiếp tục thử". Nút chính "Lưu bài làm" hiện cạnh huy hiệu khi chưa xong.
+4. **Dải đã lưu** (thành công, 14/600): "Bài làm đã được lưu đến dd/MM/yyyy HH:mm." (giờ Việt Nam; backend trả mốc hạn 14 ngày). Chưa xong thì thay bằng đoạn giải thích "Bấm “Lưu bài làm”…"; đoạn "được giữ 14 ngày kể từ lúc hoàn thành" nằm dưới.
+5. Hộp cảnh báo (`#FBEDBF`/`#7A5A0E`) cho câu không tải lên được, bài làm thử với đề mẫu...
+6. **Danh sách nghe lại** (Speaking, RecordingList): mỗi câu một dòng, vạch trên 1px `#E6E4E0`, padding `10 0`, nhãn 600 + " · mm:ss" thường `#706473`, nút "Nghe lại" (38) đổi thành trình phát `<audio controls autoplay>` cao 36 khi đã tải; "Đang tải…" khi chờ; lỗi 13 `#C0412A` bên dưới. Writing: nút phụ "Xem lại bài viết" mở popup 15.7.
+7. Dải thông tin (`#E3ECFD`/`#2257B8`): hoàn thành chưa tự gửi chấm và chưa dùng lượt. Sau khi gửi chấm: chưa khả dụng (cảnh báo), đã gửi (thành công), lỗi (`role="alert"`).
+8. **Chân:** "Về trang chủ", "Lịch sử làm bài" (phụ) và "Gửi cho Giáo viên chấm" (chính; khóa khi chưa chốt xong trên máy chủ, đang gửi hoặc đã gửi). Canh phải, gap 12, xuống dòng khi hẹp.
+
+### 15.7 Popup nghe lại và xem bài viết
+
+Cùng khung 15.0, xuất hiện từ lịch sử W/S và trang xác nhận. Tiêu đề 20/700, phụ đề tên bài `#706473`, nút "Đóng" (chính) canh phải.
+- **Nghe lại bài nói** (rộng `min(560, 100vw-24)`): RecordingList như 15.6; liệt kê Part/câu và độ dài, chỉ các câu `UPLOADED`; URL phát chỉ xin khi bấm và không ghi log; hết hạn thì thông báo thay cho danh sách.
+- **Xem bài viết** (rộng `min(640, 100vw-24)`): nhóm hai nút Task 1 / Task 2 (pill 38, `aria-pressed`, chọn = nền ink), dòng "N từ" 13 `#706473`, vùng chữ (`role="region"`, `tabIndex 0`, tối đa 50vh, cuộn, `pre-wrap`, line-height 1.7, nền `#FAF9F5`, viền 1.5px `#D6D4D0`, bo 12, padding `12 14`). Mở sẵn Task 2 (hoặc Task 1 nếu chỉ có Task 1). Chỉ đọc, không đổi hạn lưu, nội dung không ghi log.
+
+### 15.8 MenuButton ba chấm (`components/shared/ui/MenuButton.tsx`)
+
+- **Nút:** tròn 34 (nút icon gọn mục 12.1), viền 1.5px `#D6D4D0`, nền trắng, icon "more" 18 `#352637`; hover và khi menu mở nền `#F3F0EA`; `aria-label`/`title` do nơi dùng truyền (vd "Thao tác khác cho …"), `aria-haspopup="menu"`, `aria-expanded`.
+- **Menu:** vẽ qua portal, `position: fixed`, canh mép phải với nút, cách nút 6; mở xuống, nếu dưới không đủ chỗ thì mở lên. Nền trắng, viền 1.5px, bo 12, padding 6, gap 2, rộng tối thiểu 200, tối đa `min(320, 100vw-16)`, bóng `0 1px 2px .04, 0 12px 28px .16` (đúng 12.6), `z-index` 2000. Đóng khi cuộn, đổi cỡ cửa sổ hoặc bấm ngoài.
+- **Mục:** cao tối thiểu 40, padding `9 12`, bo 8, 14/600, icon 16 (tùy chọn); hover/focus nền `#F3F0EA`. Mục khóa (`aria-disabled`): chữ `#706473`, `not-allowed`, kèm dòng lý do 13 bên dưới (đọc được bằng trình đọc màn hình, không chọn được). Đây là ngoại lệ có chủ ý so với mục 13 (`#B5ADB7`): mục khóa ở đây kèm lý do mà người dùng cần đọc (chốt 25/11/2026).
+- **Bàn phím:** `ArrowDown`/`ArrowUp` ở nút mở menu; trong menu `ArrowDown`/`ArrowUp`/`Home`/`End` di chuyển, `Esc` đóng và trả focus về nút, `Tab` đóng, Enter/Space chọn. Mở menu thì tiêu điểm vào mục đầu.
+
+### 15.9 Lịch sử W/S (MyWS): chip trạng thái và cột Thao tác
+
+Bảng theo mục 12.3 trong thẻ panel bo 22 (tiêu đề cột 13/600 nền `#FAF9F5`, ô padding `12 16`). Cột: **Bài** (tên + "Hoàn thành dd/MM HH:mm") · **Kỹ năng** · **Trạng thái** (chip + chấm "Mới" 8px `#E5604A`) · **Nội dung bài** (hạn lưu: "Giữ đến dd/MM", "Tạm giữ", "Nội dung đã hết hạn") · **Thao tác** (tiêu đề ẩn bằng `sr-only`). Cột Thao tác: nút chính cao 34, padding `0 12`, 13/600, bo 999, viền 1.5px, cạnh MenuButton.
+
+**Dưới 768px** bảng đổi sang danh sách thẻ dọc (`ul.ws-card-list`, mục 11): mỗi bài một thẻ bo 16 (thẻ nằm trong panel bo 22), viền 1.5px `--study-line`, padding 14, gap 12 giữa các thẻ. Trong thẻ: tên bài (15/600) và "Hoàn thành dd/MM HH:mm"; hàng chip kỹ năng và trạng thái (kèm chấm "Mới"); dòng "Nội dung bài" (nhãn muted, giá trị bên phải); hàng thao tác ngăn bằng vạch 1px, nút chính cao 40 và MenuButton ba chấm giống bảng. Hành vi nút, menu, popup không đổi. Chip kỹ năng ở cả bảng lẫn thẻ kèm chữ cái L/R/W/S (chữ cái `aria-hidden`, tên kỹ năng vẫn đọc được) theo 12.5.
+
+Tên trạng thái chấm theo BUSINESS_RULES: `WAITING_ASSIGNMENT` = "Chờ phân công", `ASSIGNED` = "Đang chấm" (không dùng "Chờ chấm").
+
+Chip (cao 26, `0 10`, 13/600, bo 999, không viền) và nút chính theo trạng thái (`lib/learner/ws-history.ts`):
+
+| Trạng thái hiển thị | Chip (nền/chữ) | Nút chính | Menu ba chấm |
+|---|---|---|---|
+| Đã lưu · chưa gửi chấm | `#E3ECFD`/`#2257B8` | **Gửi yêu cầu chấm** (ink) → hộp xác nhận | có |
+| Chưa có điểm (API cũ) | như trên | không | có |
+| Chờ phân công / Tạm giữ | `#FBEDBF`/`#7A5A0E` | không | có |
+| Đang chấm | `#DDE8FC`/`#2A55B8` | không | có |
+| Đã có kết quả · band | `#DCEDE2`/`#2E6A48` | **Xem kết quả** (nút viền) | có |
+| Đã hủy | `#FBDCD3`/`#9D301E` | **Gửi lại yêu cầu** (ink) | có |
+| Nội dung đã hết hạn | `#F3F0EA`/`#706473` | không | mục khóa kèm lý do |
+
+Menu Speaking: Nghe lại, Tải ghi âm. Menu Writing: Xem bài viết, Tải .docx (đang khóa: "sẽ sớm khả dụng"). Hết hạn: các mục khóa với lý do "Nội dung đã hết hạn nên bản ghi và bài viết đã bị xóa." Bài đang xử lý thì nút hiện chữ tiến trình và mục menu khóa. Thông báo kết quả thao tác (`ws-notice`): cặp banner, `role="alert"` khi lỗi. Chip kỹ năng Writing (butter) trùng màu chip "Chờ phân công": cả hai luôn có chữ.
+Hộp xác nhận gửi chấm dùng ConfirmDialog chung (nút "Gửi yêu cầu" chính), nêu rõ dùng một lượt chấm theo quy định lượt miễn phí hằng tuần.
+
+### 15.10 Nút Làm bài / Tiếp tục làm bài trong bảng ExamDetail
+
+Một kiểu chung cho mọi kỹ năng (mục 10): nút viền cao 34 (gọn, trong bảng dày), padding `0 18`, bo 999, nền trắng, viền 1.5px `#D6D4D0` (giống nút Chia sẻ) và chữ `#352637`, 14/600, `white-space: nowrap`. Nhãn "Làm bài", đổi thành **"Tiếp tục làm bài"** khi người dùng có bài dở của đề đó; dòng meta dưới nút (13 `#706473`) ghi "· có bài làm dở" hoặc "· đã hết giờ, chưa lưu". Chưa đăng nhập: nút đầu trang đổi thành "Đăng nhập để làm bài". Hover/nhấn do `motion.css` (nút có `background` inline).
+
+### 15.11 Trang Writing (WritingTest)
+
+- **Khung:** TestTopbar chung, vùng làm việc hai cột (đề và Notes bên trái, bài làm bên phải), nền paper-deep, vạch giữa 1.5px; dùng bảng màu riêng sáng/tối của màn làm bài (mục 7).
+- **Tab Task** (Real Test): pill cao 34, `0 12`, 13/600; đang chọn nền ink. Practice chỉ có một Task, khóa.
+- **Thẻ đề:** bo 22, padding 28, overline Task 13 in hoa, tiêu đề 22, đề (cỡ theo nút Aa), ảnh Task 1 bo 12 viền 1.5px, gợi ý 14. **Notes:** thẻ bo 22 padding `20 24`, ô nhập bo 10; Notes không gửi cho Giáo viên.
+- **Giấy kẻ dòng:** textarea cao tối thiểu 540, line-height 30 (vạch 1px mỗi 30px), padding `0 20`, viền 1.5px, bo 12, `resize: vertical`; nhãn "Bài làm của bạn · Task N" gắn bằng `label`, chip đếm từ cao 26 (không đổi màu).
+- **Cảnh báo thiếu từ:** hộp cảnh báo (`#FBEDBF`/`#7A5A0E`, tối `#352E18`/`#F4D66F`, bo 12, padding `10 14`, 14px, `role="status"`) dưới ô viết: "Bài viết còn thiếu N từ so với mức tối thiểu M từ. Bạn vẫn có thể hoàn thành bài…". Chỉ hiện khi đã viết và còn thiếu; không chặn hoàn thành.
+- **Dòng trạng thái lưu** (13 `#706473`, `role="status"`, dưới cảnh báo): "Đang lưu…", "Đã lưu lên máy chủ.", "Chưa lưu được lên máy chủ. Bài viết vẫn được giữ trên máy này.", "Mất kết nối: bài viết vẫn được giữ trên máy này và sẽ tự lưu lên máy chủ khi có mạng.", "Đã hết thời gian nhận bài: phần chữ mới không lưu lên máy chủ được.", "Bài làm thử với đề mẫu, chỉ lưu trên máy này.". Lưu lên máy chủ khi mất tiêu điểm ô viết, khi chuyển Task, khi hết giờ và theo hàng đợi sau vài giây.
+
+### 15.12 Đối chiếu với canvas
+
+Chưa có màn nào trong mục 15 trên canvas "IELTSpace · Giao diện". Việc cần làm ở canvas: vẽ MicCheck, thẻ gộp câu hỏi/ghi âm, các hộp xác nhận W/S, trang xác nhận hoàn thành, popup nghe lại/xem bài viết, MenuButton và cột Thao tác lịch sử W/S, rồi đưa giá trị chính thức vào mục này.
+
+### 15.13 Quyết định đã chốt và lệch còn lại (25/11/2026)
+
+| # | Nội dung | Hiện trạng | Quyết định (25/11/2026) |
+|---|---|---|---|
+| 1 | Nút Người học: mục 6 ghi bo 12, mục 1/12.1/14 ghi bo 999 | Khu làm bài dùng 999 (khớp canvas v3) | Chốt bo 999; đã sửa mục 6 |
+| 2 | Danger-soft `#FBDCD3` với chữ `#C0412A` chỉ đạt 4.0:1 | Code dùng `#9D301E` (5.6:1) | Chữ trên nền danger-soft là `#9D301E`; đã sửa mục 2 và chip "Đã hủy" |
+| 3 | Tiêu đề hộp thoại: 12.6 ghi serif 20/600, canvas màn làm bài dùng Inter 700 | Khu làm bài dùng Inter 700 | Người học dùng Inter 700 (ngoại lệ có chủ ý của 12.6); khu Quản lý giữ serif 20/600 |
+| 4 | Hộp thoại làm bài bo 26, icon hộp nguy hiểm ô vuông bo 12 chung các tông | Theo canvas Reading/Listening | Giữ 26 và ô vuông bo 12; đã ghi vào 12.6 và 15.5 |
+| 5 | Mục menu khóa: mục 13 ghi chữ `#B5ADB7`; code dùng `#706473` kèm lý do | Chữ khóa cần đọc được lý do | Giữ `#706473`, ngoại lệ so với mục 13 (đã ghi ở 15.8) |
+| 6 | Ô chọn thời gian khóa: 12.2 ghi chữ `#8E8392` | Chữ ink vì là thông tin cần đọc | Giữ ink, ngoại lệ so với 12.2 (đã ghi ở 15.4) |
+| 7 | Nhãn trạng thái mục 6 có "Chờ chấm" | `ws-history.ts` dùng "Chờ phân công" / "Đang chấm" | Thống nhất: `WAITING_ASSIGNMENT` = "Chờ phân công", `ASSIGNED` = "Đang chấm"; đã sửa mục 6 |
+| 8 | MyWS dưới 768px: mục 11 ghi chuyển danh sách thẻ | Trước đây bảng cuộn ngang | Đã làm thẻ dọc dưới 768px, bảng từ 768px (xem 15.9) |
+| 9 | Chip kỹ năng ở MyWS cần kèm chữ cái L/R/W/S (12.5) | Trước đây chỉ có tên | Đã kèm chữ cái (xem 15.9) |
+| 10 | Phần cũ của SubmitDialogs/`.attempt-card` (`question-chip` cao 36, `mode-badge` 12/700, `#A12A2A`, tooltip `#26272B`) lệch thang | Thuộc canvas Reading/Listening, chưa đụng | **Để mở, ngoài phạm vi đợt này** (sửa cùng đợt SubmitDialogs) |
+| 11 | Panel `learner-study-panel` (dùng chung, bao cả MyWS) viền 1px | Dùng chung nhiều trang người học, chưa đụng | **Để mở, ngoài phạm vi đợt này** (đổi 1.5px toàn bộ cùng lúc) |
+| 12 | Màu nền/chữ trong style React (không qua `styleOf`) của StartTestDialog và bảng màu riêng của WritingTest không tự đổi theo `dark-palette.json` | WritingTest tự chọn bảng tối; StartTestDialog dùng biến `--attempt-*` cho phần lớn | **Để mở, ngoài phạm vi đợt này** (dọn khi chốt dark mode màn làm bài) |

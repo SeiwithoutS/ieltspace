@@ -11,6 +11,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "notifications:dispatch": "node dist/jobs/run-notifications.js",
+    "attempts:cleanup": "node dist/jobs/run-attempt-cleanup.js",
     "samples:cleanup-media": "node dist/jobs/run-sample-media-cleanup.js",
     "typecheck": "tsc --noEmit",
     "prisma:generate": "prisma generate",

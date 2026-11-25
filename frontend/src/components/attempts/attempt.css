@@ -24,7 +24,7 @@
 .attempt-card button {
   border-radius: 999px;
   padding: 10px 18px;
-  border: 1px solid #d6d4d0;
+  border: 1.5px solid #d6d4d0;
 }
 .attempt-card .primary {
   background: #352637;
@@ -72,7 +72,7 @@
 .attempt-card {
   box-sizing: border-box;
   width: min(470px, calc(100vw - 24px));
-  border: 1px solid #d6d4d0;
+  border: 1.5px solid #d6d4d0;
   border-radius: 26px;
   gap: 14px;
 }
@@ -164,12 +164,17 @@
 .attempt-card button {
   background: #fff;
   color: #352637;
-  border: 1px solid #d6d4d0;
+  border: 1.5px solid #d6d4d0;
 }
 .attempt-card button.primary {
   background: #352637;
   color: white;
   border-color: #352637;
+}
+.attempt-card button.danger {
+  background: #fff;
+  color: #c0412a;
+  border: 1.5px solid #f1b3a3;
 }
 .attempt-card .question-chip.flagged {
   background: #fbdcd3;
@@ -178,7 +183,7 @@
 }
 .attempt-card .dialog-icon {
   color: inherit;
-  border: 1px solid #d6d4d0;
+  border: 1.5px solid #d6d4d0;
 }
 .dialog-icon[data-tone="butter"] {
   background: #fbedbf;
@@ -188,6 +193,12 @@
 }
 .dialog-icon[data-tone="mint"] {
   background: #dcede2;
+}
+/* Hộp xác nhận nguy hiểm (Hủy bài làm): ô icon nền danger-soft, icon danger-text (DESIGN.md 12.6). */
+.attempt-card .dialog-icon[data-tone="danger"],
+.dark .attempt-card .dialog-icon[data-tone="danger"] {
+  background: #fbdcd3;
+  color: #c0412a;
 }
 .attempt-card strong {
   font-size: 13px;
@@ -201,6 +212,11 @@
 .dark .attempt-card button.primary {
   background: #f1f2f4;
   color: #202125;
+}
+.dark .attempt-card button.danger {
+  background: #292a2e;
+  color: #f49a85;
+  border-color: #7a4238;
 }
 .dark .attempt-card .question-chip.flagged {
   background: #5a2735;
@@ -223,3 +239,25 @@
 .attempt-screen .rsz:focus-visible { outline:2px solid #2963CC;outline-offset:-2px }
 .learner-result-header .bu-dd-menu { display:none }
 .learner-result-header .bu-dd:is(:hover,:focus-within,.is-open) .bu-dd-menu { display:block }
+
+/* Nút xác nhận xóa/hủy dữ liệu: destructive đặc (DESIGN.md 12.1). Tối dùng cặp nền/chữ danger của bảng tối. */
+.attempt-card button.danger-solid,
+.dark .attempt-card button.danger-solid {
+  background: var(--attempt-bg-c0412a);
+  border-color: var(--attempt-bg-c0412a);
+  color: var(--attempt-text-on-c0412a);
+}
+/* Hover: nút trong hộp thoại sáng/tối nhẹ như lớp motion; destructive viền đổi nền danger-surface (DESIGN.md 13). */
+.attempt-card button:not(:disabled):hover,
+.attempt-hover:not(:disabled):hover {
+  filter: brightness(0.96);
+}
+.dark .attempt-card button:not(:disabled):hover,
+.dark .attempt-hover:not(:disabled):hover {
+  filter: brightness(1.12);
+}
+.attempt-card button.danger:not(:disabled):hover,
+.dark .attempt-card button.danger:not(:disabled):hover {
+  background: var(--attempt-bg-fdf3f0);
+  filter: none;
+}

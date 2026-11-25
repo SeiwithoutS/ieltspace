@@ -1,48 +1,51 @@
 import { useEffect } from 'react';
+import { registerNavigationGuard } from '../../../lib/shared/navigation-guard';
 
 export type UnsavedGuardProps = {
   dirty: boolean;
-  onPromptLeave: (proceed: () => void) => void;
+  /** Nếu có, đọc trạng thái chưa lưu từ ref (cập nhật đồng bộ ngay sau khi lưu) thay cho `dirty`. */
+  dirtyRef?: { current: boolean };
+  /**
+   * Hộp thoại xác nhận trong app của trang chủ. Nhận `proceed` (bấm "Rời đi") và `cancel` (đóng hộp thoại);
+   * guard trả Promise<boolean> để App điều hướng tiếp tới đích sau khi xác nhận. Không có thì dùng window.confirm.
+   */
+  onPromptLeave?: (proceed: () => void, cancel: () => void) => void;
 };
 
-export default function UnsavedGuard({ dirty, onPromptLeave }: UnsavedGuardProps) {
+export default function UnsavedGuard({ dirty: dirtyProp, dirtyRef, onPromptLeave }: UnsavedGuardProps) {
   useEffect(() => {
+    const isDirty = () => (dirtyRef ? dirtyRef.current : dirtyProp);
+
+    const unregister = registerNavigationGuard(() => {
+      if (!isDirty()) return true;
+      if (!onPromptLeave) {
+        return window.confirm('Có thay đổi chưa lưu. Rời trang sẽ bỏ các thay đổi này. Bạn có muốn rời đi?');
+      }
+      return new Promise<boolean>(resolve => {
+        onPromptLeave(
+          () => {
+            if (dirtyRef) dirtyRef.current = false;
+            resolve(true);
+          },
+          () => resolve(false)
+        );
+      });
+    });
+
     function handleBeforeUnload(e: BeforeUnloadEvent) {
-      if (dirty) {
+      if (isDirty()) {
         e.preventDefault();
         e.returnValue = '';
       }
     }
 
-    function handleClickCapture(e: MouseEvent) {
-      if (!dirty) return;
-
-      const target = (e.target as HTMLElement)?.closest('a');
-      if (!target) return;
-
-      const href = target.getAttribute('href');
-      if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
-
-      e.preventDefault();
-      e.stopPropagation();
-
-      onPromptLeave(() => {
-        if (target.target === '_blank') {
-          window.open(href, '_blank');
-        } else {
-          window.location.href = href;
-        }
-      });
-    }
-
     window.addEventListener('beforeunload', handleBeforeUnload);
-    document.addEventListener('click', handleClickCapture, true);
 
     return () => {
+      unregister();
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      document.removeEventListener('click', handleClickCapture, true);
     };
-  }, [dirty, onPromptLeave]);
+  }, [dirtyProp, dirtyRef, onPromptLeave]);
 
   return null;
 }

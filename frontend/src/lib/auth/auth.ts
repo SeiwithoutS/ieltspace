@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { rememberGoogleSupport } from '../reports/support-navigation';
+import { clearAttemptLocalData } from '../attempts/attempt-storage';
 export type AuthUser = {
  id: string;
  full_name: string;
@@ -89,7 +90,31 @@ export async function resendVerification(email: string) {
   throw error;
  }
 }
-export async function logout(){signingOut=true;clearTimeout(timer);try{await refreshPromise?.catch(()=>{});await request('logout');user=null;accessToken='';ready=true;publish();navigate('Login');}finally{signingOut=false;}}
+const logoutFlagKey='ieltspace-logout';
+/** Đang đăng xuất: các nơi tự ghi bài làm xuống máy phải ngừng ngay (xem AttemptSession, SpeakingTest). */
+export function isSigningOut(){return signingOut;}
+/** Tab khác đăng xuất: gọi `fn` để tab đang làm bài ngừng ghi lại draft/bản ghi vừa bị dọn. Trả hàm hủy nghe. */
+export function onLogoutElsewhere(fn:(userId:string|undefined)=>void){
+ const handler=(event:StorageEvent)=>{
+  if(event.key!==logoutFlagKey||!event.newValue)return;
+  try{fn(JSON.parse(event.newValue).userId);}catch{fn(undefined);}
+ };
+ window.addEventListener('storage',handler);
+ return ()=>window.removeEventListener('storage',handler);
+}
+export async function logout(){
+ signingOut=true;clearTimeout(timer);
+ const uid=user?.id;
+ let cleared:Promise<void>=Promise.resolve();
+ try{
+  await refreshPromise?.catch(()=>{});
+  // Dọn bài làm trên máy trước khi gọi mạng: lỗi mạng/máy chủ không được để giọng nói và bài làm lại máy dùng chung.
+  try{localStorage.setItem(logoutFlagKey,JSON.stringify({userId:uid,at:Date.now()}));}catch{}
+  cleared=clearAttemptLocalData(uid).catch(()=>{});
+  await request('logout');
+  user=null;accessToken='';ready=true;publish();navigate('Login');
+ }finally{await cleared;signingOut=false;}
+}
 export function navigate(page:string){history.pushState(null,'','#'+page);window.dispatchEvent(new PopStateEvent('popstate'));}
 export function home(){return user?.role==='ADMIN'?'AdminHome':user?.role==='TEACHER'?'TeacherHome':'StudentHome';}
 export function getAccessToken(){return accessToken;}

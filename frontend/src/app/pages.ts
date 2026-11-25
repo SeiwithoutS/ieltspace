@@ -25,6 +25,7 @@ export const pages = {
   ListeningTest: lazy(() => import("../pages/attempts/ListeningTest")),
   WritingTest: lazy(() => import("../pages/attempts/WritingTest")),
   SpeakingTest: lazy(() => import("../pages/attempts/SpeakingTest")),
+  StudentAttemptDone: lazy(() => import("../pages/attempts/StudentAttemptDone")),
   SubmitDialogs: lazy(() => import("../pages/attempts/SubmitDialogs")),
   ResultLR: lazy(() => import("../pages/results/ResultLR")),
   ResultWS: lazy(() => import("../pages/results/ResultWS")),

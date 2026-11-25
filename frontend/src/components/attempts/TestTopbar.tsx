@@ -19,6 +19,7 @@ interface TopbarProps extends TopbarState {
   title?: string;
   timeText?: string;
   timeWarn?: boolean;
+  countdown?: boolean;
   hlCount?: number;
   submitLabel?: string;
   submitHref?: string;
@@ -89,7 +90,8 @@ class TestTopbar extends React.Component<TopbarProps, TopbarState> {
           fg: dark ? "#8DB0F7" : "#2963CC",
           label: "Practice",
         };
-    const warn = real && !!P.timeWarn;
+    const countdown = P.countdown ?? real;
+    const warn = countdown && !!P.timeWarn;
     const timeShown = P.timeText || (real ? "38:05" : "12:40");
     const timeBg = warn ? "#FDE7E7" : t.card,
       timeFg = warn ? "#A12A2A" : t.ink,
@@ -112,7 +114,7 @@ class TestTopbar extends React.Component<TopbarProps, TopbarState> {
       timeBg: timeBg,
       timeFg: timeFg,
       timeBorder: timeBorder,
-      timeAria: real
+      timeAria: countdown
         ? "Thời gian còn lại " + timeShown
         : "Thời gian đã làm " + timeShown,
       isReading: skill === "reading",

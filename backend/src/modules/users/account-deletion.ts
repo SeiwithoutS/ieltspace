@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
 import { createPrivilegedSupabaseClient } from '../../lib/supabase.js';
 import { deleteStoredAvatar, ownedAvatarReference } from '../../integrations/storage/avatar-storage.js';
+import { supabaseRecordingStorage } from '../../integrations/storage/recording-storage.js';
 import { recordingsBucket } from '../../integrations/storage/r2-storage.js';
 
 type DeletionJob = { auth_user_id: string | null; avatar_reference: string | null; recordings: string[] };
@@ -31,7 +32,9 @@ export async function finishAccountDeletion(userId: string): Promise<'PENDING' |
       if (!key || /^[a-z][a-z0-9+.-]*:/i.test(key) || key.split('/').some(part => !part || part === '.' || part === '..')) {
         throw new Error('Unrecognized recording reference');
       }
-      await recordingsBucket.remove(key);
+      // Bản ghi Speaking mới nằm ở Supabase Storage (khóa `speaking/...`, không có tiền tố `r2:`); còn lại là R2 cũ.
+      if (!reference.startsWith('r2:') && key.startsWith('speaking/')) await supabaseRecordingStorage.removeObjects([key]);
+      else await recordingsBucket.remove(key);
       const updated = await prisma.$executeRaw`
         UPDATE public.account_deletion_jobs SET recordings = array_remove(recordings, ${reference}), lease_until = now() + interval '1 minute'
         WHERE user_id = ${userId}::uuid AND lease_id = ${lease}::uuid

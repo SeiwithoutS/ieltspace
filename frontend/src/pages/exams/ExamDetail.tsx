@@ -12,6 +12,7 @@ import {
 import { getAuthUser, navigate } from "../../lib/auth/auth";
 import { DesktopRequiredDialog } from "../../components/exams/TestScreenGuard";
 import { canTakeTest } from "../../lib/shared/device";
+import { inProgressId, listInProgressInfo } from "../../lib/attempts/attempt-storage";
 
 type Ev = {
   preventDefault?: () => void;
@@ -21,12 +22,14 @@ type Ev = {
 type FormKey = "A" | "G";
 type SkillKey = "L" | "R" | "W" | "S";
 type Related = ExamSetPublic["related"];
-type Start = { t: string; pick: (e?: Ev) => void };
+type Start = { t: string; resume: boolean; pick: (e?: Ev) => void };
 type RowCell = {
   go: boolean;
   soon: boolean;
   none: boolean;
   meta: string;
+  /** Đề này có bài làm dở của người dùng hiện tại: nút đổi thành "Tiếp tục làm bài". */
+  resume: boolean;
   btnSt: string;
   pick: (e?: Ev) => void;
 };
@@ -83,7 +86,14 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
       });
   }
 
+  // Đọc lại bài làm dở khi quay lại tab/trang hoặc draft đổi ở tab khác, không giữ trạng thái cũ.
+  refreshProgress = () => this.forceUpdate();
+
   componentDidMount() {
+    window.addEventListener("focus", this.refreshProgress);
+    window.addEventListener("pageshow", this.refreshProgress);
+    window.addEventListener("storage", this.refreshProgress);
+    document.addEventListener("visibilitychange", this.refreshProgress);
     var hash = window.location.hash || "";
     var query = hash.includes("?")
       ? hash.slice(hash.indexOf("?") + 1)
@@ -95,6 +105,10 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
     }
   }
   componentWillUnmount() {
+    window.removeEventListener("focus", this.refreshProgress);
+    window.removeEventListener("pageshow", this.refreshProgress);
+    window.removeEventListener("storage", this.refreshProgress);
+    document.removeEventListener("visibilitychange", this.refreshProgress);
     clearTimeout(this._t);
   }
   renderVals() {
@@ -292,9 +306,13 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
         });
       }).length;
     }
+    // Đọc storage một lần cho cả bảng; chưa đăng nhập thì rỗng (nút luôn là "Làm bài").
+    var inProgress = listInProgressInfo(getAuthUser()?.id);
     var rows: Row[] = [],
       start: Start | null = null;
     SET.tests.forEach(function (t) {
+      // examId trong URL được mã hóa để khóa draft (đọc lại bằng URLSearchParams) luôn khớp id gốc.
+      var examQuery = t.id ? "?examId=" + encodeURIComponent(t.id) : "";
       var vs = SK.map(function (k) {
         return val(t, k[0]);
       });
@@ -310,9 +328,10 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
           var startPage = PAGES[SK[fi][0]][0];
           start = {
             t: t.name,
+            resume: !!t.id && inProgress.has(inProgressId(startPage, t.id)),
             pick: function (e?: Ev) {
               stop(e);
-              self.handleStartTest(startPage + (t.id ? "?examId=" + t.id : ""));
+              self.handleStartTest(startPage + examQuery);
             },
           };
         }
@@ -328,27 +347,29 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
         notFull: nPub < 4,
         pickFull: function (e?: Ev) {
           stop(e);
-          self.handleStartTest("ListeningTest" + (t.id ? "?examId=" + t.id : ""));
+          self.handleStartTest("ListeningTest" + examQuery);
         },
         cells: SK.map(function (k, i) {
           var v = vs[i];
           var pageName = PAGES[k[0]][0];
+          var progress = t.id ? inProgress.get(inProgressId(pageName, t.id)) : undefined;
+          var resume = !!progress;
           return {
             go: v === "pub",
             soon: v === "draft",
             none: !visible(v),
-            meta: PAGES[k[0]][1],
+            resume: resume,
+            meta: resume
+              ? PAGES[k[0]][1] +
+                (progress && progress.timedOut
+                  ? " · đã hết giờ, chưa lưu"
+                  : " · có bài làm dở")
+              : PAGES[k[0]][1],
             btnSt:
-              "display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 18px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; border: 1.5px solid " +
-              k[3] +
-              "33; background: " +
-              k[2] +
-              "; color: " +
-              k[3] +
-              "; cursor: pointer",
+              "display: inline-flex; align-items: center; justify-content: center; height: 34px; padding: 0 18px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; cursor: pointer",
             pick: function (e?: Ev) {
               stop(e);
-              self.handleStartTest(pageName + (t.id ? "?examId=" + t.id : ""));
+              self.handleStartTest(pageName + examQuery);
             },
           };
         }),
@@ -392,7 +413,13 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
         "; box-shadow: 0 2px 6px rgba(53,38,55,.12), 0 18px 40px rgba(53,38,55,.18)",
       hasStart: !!first,
       startPick: first ? first.pick : stop,
-      startText: first ? (getAuthUser() ? "Bắt đầu " + first.t : "Đăng nhập để làm bài") : "",
+      startText: first
+        ? getAuthUser()
+          ? first.resume
+            ? "Tiếp tục làm bài"
+            : "Bắt đầu " + first.t
+          : "Đăng nhập để làm bài"
+        : "",
       loading: !!s.loading,
       notFound: !!s.notFound,
       share: function (e?: Ev) {
@@ -912,7 +939,9 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
                                               className={"press"}
                                               style={styleOf(x.btnSt)}
                                             >
-                                              {"Làm bài"}
+                                              {x.resume
+                                                ? "Tiếp tục làm bài"
+                                                : "Làm bài"}
                                             </a>
                                             <span
                                               style={styleOf(
@@ -976,35 +1005,6 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
                                     "padding: 16px 18px; border-top: 1px solid #E6E4E0; vertical-align: middle; text-align: right",
                                   )}
                                 >
-                                  {r.full ? (
-                                    <>
-                                      <a
-                                        href={"#"}
-                                        onClick={r.pickFull}
-                                        className={"press"}
-                                        style={styleOf(
-                                          "display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 14px; color: #2963CC; text-decoration: none; white-space: nowrap",
-                                        )}
-                                      >
-                                        {"Làm full test "}
-                                        <svg
-                                          width={"15"}
-                                          height={"15"}
-                                          viewBox={"0 0 24 24"}
-                                          fill={"none"}
-                                          stroke={"currentColor"}
-                                          strokeWidth={"2"}
-                                          strokeLinecap={"round"}
-                                          strokeLinejoin={"round"}
-                                          aria-hidden={"true"}
-                                        >
-                                          <path
-                                            d={"M5 12h14M13 6l6 6-6 6"}
-                                          ></path>
-                                        </svg>
-                                      </a>
-                                    </>
-                                  ) : null}
                                   {r.notFull ? (
                                     <>
                                       <span

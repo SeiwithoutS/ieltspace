@@ -1,6 +1,7 @@
 import DesktopOnly from "../components/attempts/DesktopOnly";
 import {emailCallback} from '../lib/auth/auth-links';
 import {useAuth,refresh,logout,home,navigate,getAuthUser,recheckAuthProfile} from '../lib/auth/auth';
+import { sweepAttemptStorage } from "../lib/attempts/attempt-storage";
 import { sampleHashReplaced } from "../lib/samples/sample-navigation";
 import { checkNavigation, whenNavigationAllowed } from "../lib/shared/navigation-guard";
 import React, { useEffect, useState } from 'react';
@@ -26,6 +27,8 @@ function resolve(name: string): PageName { name=name.split('?')[0]; return (alia
 export default function App() {
  const auth=useAuth();
  useEffect(()=>{void refresh().catch(()=>{});},[]);
+ // Dọn draft và bản ghi âm Speaking quá 24 giờ còn sót trên máy.
+ useEffect(()=>{void sweepAttemptStorage();},[]);
  useEffect(() => {
   if (!auth.user?.id) return;
   function checkVisibleSession() {

@@ -1,3 +1,9 @@
+.attempt-select {
+  color-scheme: light;
+}
+.dark .attempt-select {
+  color-scheme: dark;
+}
 .attempt-sans {
   font-family: var(--font-sans), sans-serif;
 }
@@ -34,6 +40,8 @@
   --attempt-bg-b3a9b5: #b3a9b5;
   --attempt-text-2963cc: #2963cc;
   --attempt-line-ffffff: #ffffff;
+  --attempt-text-on-352637: #ffffff;
+  --attempt-text-on-c0412a: #ffffff;
 }
 .dark {
   --attempt-text-c0412a: #f49a85;
@@ -68,4 +76,6 @@
   --attempt-bg-b3a9b5: #74757c;
   --attempt-text-2963cc: #8db0f7;
   --attempt-line-ffffff: #292a2e;
+  --attempt-text-on-352637: #202125;
+  --attempt-text-on-c0412a: #202125;
 }

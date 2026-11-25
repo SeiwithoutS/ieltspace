@@ -1,5 +1,11 @@
 import { accentForeground } from "./appearance";
 import React from "react";
+import ModePicker from "./ModePicker";
+import TimeLimitPicker from "./TimeLimitPicker";
+import {
+  getTimeLimitConfig,
+  resolveTimeLimit,
+} from "../../lib/attempts/time-limits";
 
 import type { AttemptMode, Skill } from "./types";
 interface StartProps {
@@ -8,12 +14,14 @@ interface StartProps {
   title?: string;
   accent?: string;
   onClose: () => void;
-  onStart: (mode: AttemptMode, parts: number[]) => void;
+  onStart: (mode: AttemptMode, parts: number[], limitMinutes: number) => void;
 }
 interface StartState {
   mode?: AttemptMode;
   sel?: number[];
   skill?: Skill;
+  /** Chỉ số mức thời gian trong danh sách mức (không lưu số phút để khỏi lệch khi danh sách đổi). */
+  limitIndex?: number;
 }
 interface SkillConfig {
   name: string;
@@ -53,7 +61,8 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
         href: "#ReadingTest",
         legend: "Chọn Passage",
         unit: "câu",
-        single: false,
+        // TODO: trang Reading chưa đọc `parts`, tạm chỉ làm một Passage; mở chọn nhiều ở bước sau.
+        single: true,
         parts: [
           ["Passage 1", "13 câu", 13],
           ["Passage 2", "13 câu", 13],
@@ -61,7 +70,7 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
         ],
         real: "Làm trọn Reading, đếm ngược 60 phút. Có tính band.",
         practice:
-          "Chọn từng phần, đồng hồ đếm lên, không giới hạn thời gian. Band không tính, chỉ hiện số câu đúng.",
+          "Chọn từng phần và mức thời gian (hoặc không giới hạn). Band không tính, chỉ hiện số câu đúng.",
       },
       listening: {
         name: "Listening",
@@ -70,7 +79,8 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
         href: "#ListeningTest",
         legend: "Chọn Section",
         unit: "câu",
-        single: false,
+        // TODO: trang Listening chưa đọc `parts`, tạm chỉ làm một Section; mở chọn nhiều ở bước sau.
+        single: true,
         parts: [
           ["Section 1", "10 câu", 10],
           ["Section 2", "10 câu", 10],
@@ -109,8 +119,8 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
           ["Part 2", "nói theo thẻ gợi ý", 0],
           ["Part 3", "thảo luận mở rộng", 0],
         ],
-        real: "Làm trọn 3 Part theo thứ tự như buổi thi thật. Bài ghi âm được lưu để gửi chấm.",
-        practice: "Chọn từng Part, đồng hồ đếm lên, thu âm lại khi muốn.",
+        real: "Làm trọn 3 Part theo thứ tự như buổi thi thật, đếm ngược 15 phút. Bài ghi âm được lưu để gửi chấm.",
+        practice: "Chọn từng Part và mức thời gian (hoặc không giới hạn), thu âm lại khi muốn.",
       },
     };
     let K = configs[skill];
@@ -127,72 +137,14 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
         practice: "",
       };
     }
-    if (skill !== "writing") {
-      const sampleIndex = skill === "speaking" ? 1 : 0;
-      K.parts = K.parts.filter((_, i) => i === sampleIndex);
-    }
-    const sel = S.sel && S.skill === skill ? S.sel : [0];
+    const allParts = K.parts.map(function (_, i) {
+      return i;
+    });
+    const sel =
+      S.sel && S.skill === skill ? S.sel : skill === "speaking" ? allParts : [0];
     function setSel(a: number[]) {
       self.setState({ sel: a, skill: skill });
     }
-    const isPractice = mode === "practice";
-    const modeDefinitions: {
-      id: AttemptMode;
-      label: string;
-      tag: string;
-      desc: string;
-      tagBg: string;
-      tagFg: string;
-    }[] = [
-      {
-        id: "practice",
-        label: "Luyện tập",
-        tag: "Không tính band",
-        desc: K.practice,
-        tagBg: "#E3ECFD",
-        tagFg: "#2963CC",
-      },
-      {
-        id: "real",
-        label: "Thi thật\n",
-        tag:
-          skill === "reading" || skill === "listening"
-            ? "Có tính band"
-            : "Như thi thật",
-        desc: K.real,
-        tagBg: "#352637",
-        tagFg: "#FFFFFF",
-      },
-    ];
-    const modes = modeDefinitions.map(function (m) {
-      const on = mode === m.id;
-      const pr = m.id === "practice";
-      return {
-        parts: [] as PartChoice[],
-        allChecked: false,
-        summary: "",
-        toggleAll: () => {},
-        hasParts: pr && on,
-        legend: K.legend,
-        showAll: !K.single,
-        id: m.id,
-        label: m.label,
-        tag: m.tag,
-        desc: m.desc,
-        tagBg: m.tagBg,
-        tagFg: m.tagFg,
-        checked: on,
-        styleClass:
-          "[flex:1_1_280px] box-border flex flex-col gap-2 p-4 [border-radius:12px] cursor-pointer",
-        style: {
-          background: on ? "#E3ECFD" : "#FFFFFF",
-          border: on ? "2px solid #2963CC" : "1.5px solid #D6D4D0",
-        },
-        pick: function () {
-          self.setState({ mode: m.id });
-        },
-      };
-    });
     const parts: PartChoice[] = K.parts.map(function (p, i) {
       const on = sel.indexOf(i) >= 0;
       return {
@@ -234,30 +186,36 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
     parts.forEach(function (p) {
       p.type = K.single ? "radio" : "checkbox";
     });
-    modes.forEach(function (m) {
-      if (m.hasParts) {
-        m.parts = parts;
-        m.allChecked = sel.length === K.parts.length;
-        m.summary = summary;
-        m.toggleAll = function () {
-          setSel(
-            sel.length === K.parts.length
-              ? []
-              : K.parts.map(function (_, i) {
-                  return i;
-                }),
-          );
-        };
-      }
-    });
+    const isPractice = mode === "practice";
     const canStart = !isPractice || chosen.length > 0;
+    const timeConfig = getTimeLimitConfig({
+      skill,
+      mode,
+      sectionCount: chosen.length,
+    });
+    const limit = resolveTimeLimit(timeConfig, S.limitIndex);
     return {
       accent: accent,
       onAccent: onAccent,
       skillBg: K.bg,
       skillFg: K.fg,
       title: P.title || "IELTS Recent Actual Tests · Test 1 · " + K.name,
-      modes: modes,
+      mode: mode,
+      pickMode: (m: AttemptMode) => self.setState({ mode: m }),
+      practiceDesc: K.practice,
+      realDesc: K.real,
+      realTag:
+        skill === "reading" || skill === "listening"
+          ? "Có tính band"
+          : "Như thi thật",
+      isSpeaking: skill === "speaking",
+      timeConfig: timeConfig,
+      limit: limit,
+      setLimit: (minutes: number) =>
+        self.setState({
+          limitIndex: Math.max(0, timeConfig.options.indexOf(minutes)),
+        }),
+      legend: K.legend,
       isPractice: isPractice,
       partsLegend: K.legend,
       parts: parts,
@@ -265,14 +223,10 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
       showAll: !K.single,
       allChecked: sel.length === K.parts.length,
       toggleAll: function () {
-        setSel(
-          sel.length === K.parts.length
-            ? []
-            : K.parts.map(function (_, i) {
-                return i;
-              }),
-        );
+        setSel(sel.length === K.parts.length ? [] : allParts);
       },
+      allParts: allParts,
+      selected: sel,
       summary: summary,
       canStart: canStart,
       cannotStart: !canStart,
@@ -326,90 +280,64 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
               </div>
             </div>
           </div>
-          <fieldset className="m-0 p-0 border-0 min-w-0">
-            <legend className="p-0 [margin-bottom:10px] [font-size:12px] font-semibold [letter-spacing:0.08em] uppercase [color:var(--attempt-text-706473)]">
-              {"Chọn chế độ"}
-            </legend>
-            <div className="flex flex-wrap gap-3">
-              {(v.modes || []).map((m, index) => (
-                <React.Fragment key={index}>
-                  <div className={m.styleClass} style={m.style}>
-                    <label className="flex flex-col gap-2 cursor-pointer">
-                      <span className="flex items-center [gap:10px]">
-                        <input
-                          type="radio"
-                          name="cheDo"
-                          value={m.id}
-                          checked={m.checked}
-                          onChange={m.pick}
-                        />
-                        <span className="[font-size:15px] font-bold">
-                          {m.label}
-                        </span>
-                        <span
-                          className="ml-auto inline-flex items-center [height:22px] [padding:0_8px] rounded-full [font-size:11px] font-bold whitespace-nowrap"
-                          style={{ background: m.tagBg, color: m.tagFg }}
-                        >
-                          {m.tag}
-                        </span>
-                      </span>
-                      <span className="[font-size:13px] [line-height:1.5] [color:var(--attempt-text-4b3d4d)]">
-                        {m.desc}
-                      </span>
-                    </label>
-                    {m.hasParts ? (
-                      <>
-                        <div
-                          role="group"
-                          aria-label={m.legend}
-                          className="flex flex-col gap-2 mt-1"
-                        >
-                          <div className="[font-size:12px] font-semibold [letter-spacing:0.08em] uppercase [color:var(--attempt-text-706473)]">
-                            {m.legend}
-                          </div>
-                          <div className="[border-top:1px_solid_#C9D8F5]">
-                            {m.showAll ? (
-                              <>
-                                <label className="flex items-center gap-3 [min-height:40px] [padding:0_4px] box-border [border-bottom:1px_solid_#C9D8F5] font-semibold [font-size:14px] cursor-pointer">
-                                  <input
-                                    type="checkbox"
-                                    checked={m.allChecked}
-                                    onChange={m.toggleAll}
-                                  />
-                                  {"Chọn tất cả"}
-                                </label>
-                              </>
-                            ) : null}
-                            {(m.parts || []).map((p, index) => (
-                              <React.Fragment key={index}>
-                                <label className="flex items-center gap-3 [min-height:40px] [padding:0_4px] box-border [border-bottom:1px_solid_#C9D8F5] [font-size:14px] cursor-pointer">
-                                  <input
-                                    type={p.type}
-                                    name="phan"
-                                    checked={p.checked}
-                                    onChange={p.toggle}
-                                  />
-                                  <span className="font-semibold">
-                                    {p.label}
-                                  </span>
-                                  <span className="ml-auto [color:var(--attempt-text-706473)] [font-size:12px]">
-                                    {p.meta}
-                                  </span>
-                                </label>
-                              </React.Fragment>
-                            ))}
-                          </div>
-                          <div className="[font-size:12px] [color:var(--attempt-text-706473)]">
-                            {m.summary}
-                          </div>
-                        </div>
-                      </>
-                    ) : null}
+          <ModePicker
+            value={v.mode}
+            onChange={v.pickMode}
+            practiceDesc={v.practiceDesc}
+            realDesc={v.realDesc}
+            realTag={v.realTag}
+            practiceExtra={
+              <>
+                <div
+                  role="group"
+                  aria-label={v.legend}
+                  className="flex flex-col gap-2 mt-1"
+                >
+                  <div className="[font-size:12px] font-semibold [letter-spacing:0.08em] uppercase [color:var(--attempt-text-706473)]">
+                    {v.legend}
                   </div>
-                </React.Fragment>
-              ))}
-            </div>
-          </fieldset>
+                  <div className="[border-top:1px_solid_var(--attempt-bg-c5cef5)]">
+                    {v.showAll ? (
+                      <label className="flex items-center gap-3 [min-height:40px] [padding:0_4px] box-border [border-bottom:1px_solid_var(--attempt-bg-c5cef5)] font-semibold [font-size:14px] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={v.allChecked}
+                          onChange={v.toggleAll}
+                        />
+                        {"Chọn tất cả"}
+                      </label>
+                    ) : null}
+                    {v.parts.map((p, index) => (
+                      <label
+                        key={index}
+                        className="flex items-center gap-3 [min-height:40px] [padding:0_4px] box-border [border-bottom:1px_solid_var(--attempt-bg-c5cef5)] [font-size:14px] cursor-pointer"
+                      >
+                        <input
+                          type={p.type}
+                          name="phan"
+                          checked={p.checked}
+                          onChange={p.toggle}
+                        />
+                        <span className="font-semibold">{p.label}</span>
+                        <span className="ml-auto [color:var(--attempt-text-706473)] [font-size:12px]">
+                          {p.meta}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  <div className="[font-size:12px] [color:var(--attempt-text-706473)]">
+                    {v.summary}
+                  </div>
+                </div>
+                <TimeLimitPicker
+                  options={v.timeConfig.options}
+                  value={v.limit}
+                  onChange={v.setLimit}
+                  locked={v.timeConfig.locked}
+                />
+              </>
+            }
+          />
           <div className="flex items-start [gap:10px] [padding:12px_14px] rounded-xl [border:1.5px_solid_var(--attempt-line-d6d4d0)] [background:var(--attempt-bg-e3ecfd)] [font-size:13px] [color:var(--attempt-text-352637)]">
             <span className="[flex:0_0_18px] [margin-top:1px] [color:var(--attempt-text-2963cc)] flex">
               <svg
@@ -428,9 +356,9 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
               </svg>
             </span>
             <span>
-              {
-                "Thoát hoặc mất kết nối thì đồng hồ tạm dừng, làm tiếp từ thời gian còn lại."
-              }
+              {v.isSpeaking
+                ? "Thoát hoặc mất kết nối thì đồng hồ vẫn chạy. Các câu đã ghi âm được lưu trên máy này; câu đang nói dở sẽ được làm lại từ đầu."
+                : "Thoát hoặc mất kết nối thì đồng hồ tạm dừng, làm tiếp từ thời gian còn lại."}
             </span>
           </div>
           <div className="flex flex-wrap [gap:10px] justify-end">
@@ -448,8 +376,11 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
                   onClick={(e) => {
                     e.preventDefault();
                     this.props.onStart(
-                      this.state?.mode || this.props.cheDo || "practice",
-                      this.state?.sel || [0],
+                      v.mode,
+                      v.mode === "practice" ? v.selected : v.allParts,
+                      v.mode === "practice"
+                        ? v.limit
+                        : v.timeConfig.defaultValue,
                     );
                   }}
                   className="inline-flex items-center justify-center gap-2 h-11 [padding:0_24px] rounded-full box-border font-semibold [font-size:14px] no-underline whitespace-nowrap"

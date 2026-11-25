@@ -171,6 +171,11 @@
   color: white;
   border-color: #352637;
 }
+.attempt-card button.danger {
+  background: #fff;
+  color: #c0412a;
+  border: 1.5px solid #f1b3a3;
+}
 .attempt-card .question-chip.flagged {
   background: #fbdcd3;
   color: #a12a2a;
@@ -201,6 +206,11 @@
 .dark .attempt-card button.primary {
   background: #f1f2f4;
   color: #202125;
+}
+.dark .attempt-card button.danger {
+  background: #292a2e;
+  color: #f49a85;
+  border-color: #6b3a33;
 }
 .dark .attempt-card .question-chip.flagged {
   background: #5a2735;

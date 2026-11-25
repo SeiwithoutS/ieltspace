@@ -1,0 +1,63 @@
+/* Chuyển thẻ câu hỏi (flashcard): thẻ cũ trượt ra và hơi lật, thẻ mới trượt vào. */
+.qcard-stage {
+  position: relative;
+  perspective: 1200px;
+}
+.qcard-in {
+  animation: qcardIn 0.36s var(--mo-ease, cubic-bezier(0.2, 0.8, 0.2, 1)) both;
+}
+.qcard-out {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: qcardOut var(--mo-slow, 0.28s)
+    var(--mo-ease, cubic-bezier(0.2, 0.8, 0.2, 1)) both;
+}
+@keyframes qcardIn {
+  from {
+    opacity: 0;
+    transform: translateX(48px) rotateY(-14deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes qcardOut {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-48px) rotateY(14deg);
+  }
+}
+/* Người dùng tắt hiệu ứng: chỉ mờ dần, không trượt hay lật. */
+@media (prefers-reduced-motion: reduce) {
+  .qcard-in {
+    animation: qcardFadeIn 0.01ms both;
+  }
+  .qcard-out {
+    animation: qcardFadeOut 0.01ms both;
+  }
+  @keyframes qcardFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes qcardFadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}
+.qcard-bar {
+  transition: width 1s linear;
+}

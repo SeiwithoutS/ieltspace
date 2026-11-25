@@ -1,4 +1,5 @@
 import type { AttemptSummary } from "./AttemptConfirmation";
+import type { SpeakingPhase } from "../../lib/attempts/speaking-flow";
 
 export type AttemptMode = "practice" | "real";
 export type Skill = "reading" | "listening" | "writing" | "speaking";
@@ -9,6 +10,18 @@ export interface HighlightNote {
   on: boolean;
 }
 export type HighlightId = "h1" | "h2" | "h3";
+
+/** Tiến độ bài Speaking để vào lại bài (bản ghi nằm trong IndexedDB, không nằm ở đây). */
+export interface SpeakingProgress {
+  /** Mã lượt làm, một phần khóa bản ghi trong IndexedDB. */
+  attemptId: string;
+  /** Câu đang làm ("" khi đã hết câu). */
+  stepId: string;
+  index: number;
+  phase: SpeakingPhase;
+  /** Các câu đã có bản ghi lúc lưu. */
+  answered: string[];
+}
 
 /** Persisted UI state. Keys also accept drafts saved before the TSX migration. */
 export interface AttemptState {
@@ -31,14 +44,32 @@ export interface AttemptState {
   pos?: number;
   speed?: string;
   vol?: number;
+  speaking?: SpeakingProgress;
 }
 export interface Snapshot {
   state: AttemptState | undefined;
   model: AttemptSummary | null;
+  /**
+   * Chờ các tác vụ lưu dở của trang (vd bản ghi âm) xong trước khi lưu và thoát.
+   * `seal`: kết thúc bài, từ đây không nhận thêm bản ghi mới (tránh bản ghi mồ côi sau khi dọn).
+   */
+  flush?: (options?: { seal?: boolean }) => Promise<void>;
+  /** false khi bản ghi chỉ còn trong bộ nhớ (IndexedDB lỗi) và sẽ mất nếu thoát. */
+  persistent?: () => boolean;
 }
 export interface ScreenProps {
   initialState?: AttemptState;
   timeText?: string;
+  timeWarn?: boolean;
+  /** Đồng hồ đếm ngược (có giới hạn thời gian). */
+  countdown?: boolean;
+  /** Hết giờ: trang làm bài dừng mọi thao tác, giữ phần đang làm dở. */
+  timeExpired?: boolean;
+  /**
+   * Trang tự báo khi thật sự bắt đầu (Speaking: sau khi kiểm tra micro). Trước
+   * đó đồng hồ chưa chạy. Trang không dùng thì đồng hồ chạy ngay như cũ.
+   */
+  onBegin?: () => void;
   task?: number | string;
   selectedParts?: number[];
   cheDo?: string;

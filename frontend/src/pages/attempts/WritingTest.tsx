@@ -159,6 +159,8 @@ class WritingTest extends React.Component<ScreenProps, AttemptState> {
               title={v.title}
               crumb={v.crumb}
               timeText={v.timeText}
+              timeWarn={this.props.timeWarn}
+              countdown={this.props.countdown}
               fontPct={v.fontPct}
               dark={v.dark}
               submitLabel="Hoàn thành"

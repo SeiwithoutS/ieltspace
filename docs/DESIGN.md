@@ -253,7 +253,7 @@ Các mục 1–9 ở trên là quy chuẩn thiết kế gốc. Các số đo dư
 
 #### Nhận diện bốn kỹ năng
 
-ExamDetail ghép chữ cái, tên kỹ năng và cặp màu. Giữ cả ký hiệu lẫn tên khi không gian cho phép để người đọc nhận ra kỹ năng kể cả khi khó phân biệt màu.
+ExamDetail ghép chữ cái, tên kỹ năng và cặp màu. Giữ cả ký hiệu lẫn tên khi không gian cho phép để người đọc nhận ra kỹ năng kể cả khi khó phân biệt màu. Nút "Làm bài" trong ExamDetail không tô màu theo kỹ năng: dùng một kiểu chung, viền và chữ #352637 trên nền #FFFFFF.
 
 | Ký hiệu | Kỹ năng | Nền sáng | Chữ sáng | Nền tối theo dark-palette |
 |---|---|---|---|---|

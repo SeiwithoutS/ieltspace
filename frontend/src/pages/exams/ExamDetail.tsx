@@ -339,13 +339,7 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
             none: !visible(v),
             meta: PAGES[k[0]][1],
             btnSt:
-              "display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 18px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; border: 1.5px solid " +
-              k[3] +
-              "33; background: " +
-              k[2] +
-              "; color: " +
-              k[3] +
-              "; cursor: pointer",
+              "display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 18px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; cursor: pointer",
             pick: function (e?: Ev) {
               stop(e);
               self.handleStartTest(pageName + (t.id ? "?examId=" + t.id : ""));
@@ -976,35 +970,6 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
                                     "padding: 16px 18px; border-top: 1px solid #E6E4E0; vertical-align: middle; text-align: right",
                                   )}
                                 >
-                                  {r.full ? (
-                                    <>
-                                      <a
-                                        href={"#"}
-                                        onClick={r.pickFull}
-                                        className={"press"}
-                                        style={styleOf(
-                                          "display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 14px; color: #2963CC; text-decoration: none; white-space: nowrap",
-                                        )}
-                                      >
-                                        {"Làm full test "}
-                                        <svg
-                                          width={"15"}
-                                          height={"15"}
-                                          viewBox={"0 0 24 24"}
-                                          fill={"none"}
-                                          stroke={"currentColor"}
-                                          strokeWidth={"2"}
-                                          strokeLinecap={"round"}
-                                          strokeLinejoin={"round"}
-                                          aria-hidden={"true"}
-                                        >
-                                          <path
-                                            d={"M5 12h14M13 6l6 6-6 6"}
-                                          ></path>
-                                        </svg>
-                                      </a>
-                                    </>
-                                  ) : null}
                                   {r.notFull ? (
                                     <>
                                       <span

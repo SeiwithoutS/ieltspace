@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import AdminSidebar from '../../navigation/AdminSidebar';
 import './lr-editor.css';
 import AdminTopbar, { Crumb } from '../../navigation/AdminTopbar.tsx';
@@ -149,6 +149,24 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
     );
   }, [patch]);
 
+  // Ref đồng bộ cho UnsavedGuard (không còn dirty cũ ngay sau khi lưu) và trạng thái đã lưu mới nhất cho "Hủy"
+  const dirtyRef = useRef(false);
+  dirtyRef.current = Boolean(isDirty);
+  const savedStateRef = useRef<LrEditorState | null>(null);
+  // Hoàn nội dung về bản đã lưu rồi chuyển sang chế độ xem (để không còn dirty ở chế độ xem).
+  // Đọc trạng thái đã lưu mới nhất qua ref, tránh closure `skill` cũ.
+  const revertToView = () => {
+    if (savedStateRef.current) setEx(savedStateRef.current);
+    setHistory([]);
+    setMode('view');
+  };
+  // Hủy của navigation guard khi hộp thoại rời trang do guard mở.
+  const leaveCancelRef = useRef<(() => void) | null>(null);
+  const promptLeave = useCallback((proceed: () => void, cancel: () => void) => {
+    leaveCancelRef.current = cancel;
+    setLeavePendingGo(() => proceed);
+  }, []);
+
   // Numbering and Issues
   const { starts, total } = useMemo(() => numberQuestions(ex), [ex]);
   const issues = useMemo(
@@ -178,6 +196,8 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
         setSkill(fetchedSkill);
         setEx(editorState);
         setBaseline(base);
+        savedStateRef.current = editorState;
+        dirtyRef.current = false;
         setHistory([]);
         setMode(fetchedSkill.status === 'DRAFT' ? 'edit' : 'view');
         setLoading(false);
@@ -264,8 +284,9 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
   }
 
   // Save changes via minimal diff patch
-  async function handleSave() {
-    if (!skill || !skillId || saving) return;
+  async function handleSave(): Promise<boolean> {
+    if (!skill || !skillId || saving) return false;
+    if (!isDirty) return true; // không có gì để lưu
     setSaving(true);
     try {
       const input = {
@@ -282,10 +303,14 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
 
       setEx(updatedEx);
       setBaseline(newBase);
+      savedStateRef.current = updatedEx;
+      dirtyRef.current = false;
       setToast('Đã lưu thay đổi thành công.');
+      return true;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Lưu thay đổi thất bại.';
       alert(msg);
+      return false;
     } finally {
       setSaving(false);
     }
@@ -628,7 +653,11 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
       {/* Main Workspace */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Topbar: Breadcrumbs + Navigation */}
-        <AdminTopbar crumbs={crumbs} onNavigate={(go) => setLeavePendingGo(() => go)} />
+        <AdminTopbar crumbs={crumbs} onNavigate={(go) => {
+            if (dirtyRef.current) setLeavePendingGo(() => go);
+            else go();
+          }}
+        />
 
         {/* Editor Shell Topbar */}
         <EditorTopbar
@@ -637,7 +666,7 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
           mode={mode}
           onToggleMode={(newMode) => {
             if (newMode === 'view' && isDirty) {
-              setLeavePendingGo(() => () => setMode('view'));
+              setLeavePendingGo(() => revertToView);
             } else {
               setMode(newMode);
             }
@@ -647,10 +676,7 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
           onSave={handleSave}
           onCancel={() => {
             if (isDirty) {
-              setLeavePendingGo(() => () => {
-                setEx(toLrState(skill));
-                setMode('view');
-              });
+              setLeavePendingGo(() => revertToView);
             } else {
               setMode('view');
             }
@@ -680,7 +706,12 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
         <VersionBanner
           status={skill.status}
           versionNumber={skill.versionNumber}
-          basedOnVersion={skill.versionNumber > 1 ? skill.versionNumber - 1 : null}
+          slot={skill.slot}
+          onOpenCurrent={(id) => {
+            navigate(isReading ? `AdminReadingEditor?skillId=${id}` : `AdminListeningEditor?skillId=${id}`);
+            setSkillId(id);
+            loadSkill(id);
+          }}
           onCreateRevision={handleCreateRevision}
           creatingRevision={creatingDraft}
         />
@@ -1261,20 +1292,29 @@ export default function LrEditor({ skill: expectedSkill, initialSkillId }: LrEdi
         isOpen={leavePendingGo !== null}
         saving={saving}
         onSave={async () => {
-          await handleSave();
+          const ok = await handleSave();
+          if (!ok) return;
+          leaveCancelRef.current = null;
           if (leavePendingGo) leavePendingGo();
           setLeavePendingGo(null);
         }}
         onDiscard={() => {
+          leaveCancelRef.current = null;
           if (leavePendingGo) leavePendingGo();
           setLeavePendingGo(null);
         }}
-        onKeepEditing={() => setLeavePendingGo(null)}
+        onKeepEditing={() => {
+          const cancel = leaveCancelRef.current;
+          leaveCancelRef.current = null;
+          setLeavePendingGo(null);
+          cancel?.();
+        }}
       />
 
       <UnsavedGuard
         dirty={Boolean(isDirty)}
-        onPromptLeave={(proceed) => setLeavePendingGo(() => proceed)}
+        dirtyRef={dirtyRef}
+        onPromptLeave={promptLeave}
       />
 
       {/* Transcription Preview Modal (LRE-07c) */}

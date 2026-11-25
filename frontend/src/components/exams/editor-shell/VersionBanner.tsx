@@ -1,40 +1,56 @@
 import React from 'react';
+import { styleOf } from '../../../lib/shared/styles';
+
+export type VersionBannerSlot = {
+  liveId: string | null;
+  liveStatus: 'PUBLISHED' | 'HIDDEN' | null;
+  liveVersion: number | null;
+  draftId?: string | null;
+  draftVersion?: number | null;
+};
 
 export type VersionBannerProps = {
   status: 'DRAFT' | 'PUBLISHED' | 'HIDDEN' | 'ARCHIVED';
   versionNumber: number;
-  basedOnVersion?: number | null;
+  slot?: VersionBannerSlot | null;
+  /** Dùng cho bản ARCHIVED: bấm "Mở bản hiện tại →" (bản nháp nếu có, không thì bản đang đăng/ẩn). */
+  onOpenCurrent?: (skillId: string) => void;
   onCreateRevision?: () => void;
   creatingRevision?: boolean;
 };
 
+// Màu banner theo DESIGN.md 12.6 (cảnh báo, thành công) và 12.5 (trung tính cho bản ẩn/lưu trữ).
+const bannerStyle = (bg: string, fg: string) =>
+  styleOf(
+    `background: ${bg}; color: ${fg}; border-bottom: 1.5px solid #D6D4D0; padding: 10px 24px; font-size: 13px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;`
+  );
+
+const dotStyle = (color: string) =>
+  styleOf(`width: 8px; height: 8px; border-radius: 50%; background: ${color}; flex-shrink: 0;`);
+
+const rowStyle = styleOf('display: flex; align-items: center; gap: 8px;');
+
 export default function VersionBanner({
   status,
   versionNumber,
-  basedOnVersion,
+  slot,
+  onOpenCurrent,
   onCreateRevision,
   creatingRevision = false,
 }: VersionBannerProps) {
   if (status === 'DRAFT') {
-    if (!basedOnVersion || basedOnVersion === 1 && versionNumber === 1) {
-      return (
-        <div className="bg-[#FFF8E6] border-b border-[#F7E4A8] px-6 py-2.5 flex items-center justify-between text-[13px] text-[#7A5B04]">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#E5A800]" />
-            <span className="font-semibold">Bản nháp v{versionNumber}</span>
-            <span className="text-[#8F6E14]">· Đang soạn thảo, học viên chưa thấy trong thư viện bài thi.</span>
-          </div>
-        </div>
-      );
-    }
-
+    const liveVersion = slot?.liveId ? slot.liveVersion : null;
     return (
-      <div className="bg-[#FFF8E6] border-b border-[#F7E4A8] px-6 py-2.5 flex items-center justify-between text-[13px] text-[#7A5B04]">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#E5A800]" />
-          <span className="font-semibold">Bản nháp v{versionNumber}</span>
-          <span className="text-[#8F6E14]">
-            dựa trên v{basedOnVersion} đã phát hành. Học viên vẫn thấy v{basedOnVersion} cho đến khi bạn phát hành bản này.
+      <div style={bannerStyle('#FBEDBF', '#7A5A0E')}>
+        <div style={rowStyle}>
+          <span style={dotStyle('#7A5A0E')} />
+          <span style={styleOf('font-weight: 600;')}>Bản nháp v{versionNumber}</span>
+          <span>
+            {liveVersion
+              ? `· dựa trên v${liveVersion}. Người học vẫn thấy v${liveVersion} (${
+                  slot?.liveStatus === 'HIDDEN' ? 'đang ẩn' : 'đang đăng'
+                }) cho đến khi bạn đăng bản này.`
+              : '· Đang soạn thảo, người học chưa thấy trong thư viện bài thi.'}
           </span>
         </div>
       </div>
@@ -43,11 +59,11 @@ export default function VersionBanner({
 
   if (status === 'PUBLISHED') {
     return (
-      <div className="bg-[#EBF7EE] border-b border-[#B8E6C4] px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-[13px] text-[#1E5631]">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#2E7D4F]" />
-          <span className="font-semibold">Bản phát hành v{versionNumber}</span>
-          <span className="text-[#2D6A42]">· Đang hiển thị trực tiếp cho học viên làm bài.</span>
+      <div style={bannerStyle('#E6F3EC', '#24543D')}>
+        <div style={rowStyle}>
+          <span style={dotStyle('#2E7D4F')} />
+          <span style={styleOf('font-weight: 600;')}>Bản phát hành v{versionNumber}</span>
+          <span>· Đang hiển thị trực tiếp cho người học làm bài.</span>
         </div>
 
         {onCreateRevision && (
@@ -55,7 +71,9 @@ export default function VersionBanner({
             type="button"
             onClick={onCreateRevision}
             disabled={creatingRevision}
-            className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-[#2E7D4F] text-[#2E7D4F] hover:bg-[#E2F3E7] font-semibold text-[12px] rounded-lg transition-colors shadow-2xs"
+            style={styleOf(
+              'display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; background: #FFFFFF; color: #2E7D4F; border: 1.5px solid #2E7D4F; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer;'
+            )}
           >
             {creatingRevision ? (
               <>
@@ -79,16 +97,32 @@ export default function VersionBanner({
     );
   }
 
-  // ARCHIVED or HIDDEN
+  // ARCHIVED hoặc HIDDEN: dải trung tính (#F3F0EA / #706473 như chip "Đã ẩn")
+  const currentId = slot?.draftId || slot?.liveId;
   return (
-    <div className="bg-[#F3F0EA] border-b border-[#E5E0D8] px-6 py-2.5 flex items-center justify-between text-[13px] text-[#554756]">
-      <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-[#8E8392]" />
-        <span className="font-semibold">
+    <div style={bannerStyle('#F3F0EA', '#706473')}>
+      <div style={rowStyle}>
+        <span style={dotStyle('#8E8392')} />
+        <span style={styleOf('font-weight: 600;')}>
           {status === 'ARCHIVED' ? `Phiên bản lưu trữ v${versionNumber}` : `Phiên bản đã ẩn v${versionNumber}`}
         </span>
-        <span className="text-[#706473]">· Chỉ xem lại lịch sử (không thể chỉnh sửa trực tiếp).</span>
+        <span>
+          {status === 'ARCHIVED'
+            ? '· Chỉ xem lại lịch sử (không thể chỉnh sửa trực tiếp).'
+            : '· Đang ẩn khỏi người học (không thể chỉnh sửa trực tiếp).'}
+        </span>
       </div>
+      {status === 'ARCHIVED' && currentId && onOpenCurrent && (
+        <button
+          type="button"
+          onClick={() => onOpenCurrent(currentId)}
+          style={styleOf(
+            'font-weight: 600; color: #352637; text-decoration: underline; white-space: nowrap; background: transparent; border: 0; cursor: pointer;'
+          )}
+        >
+          Mở bản hiện tại →
+        </button>
+      )}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import DesktopOnly from "../components/attempts/DesktopOnly";
 import {emailCallback} from '../lib/auth/auth-links';
 import {useAuth,refresh,logout,home,navigate,getAuthUser,recheckAuthProfile} from '../lib/auth/auth';
 import { sampleHashReplaced } from "../lib/samples/sample-navigation";
-import { canNavigate } from "../lib/shared/navigation-guard";
+import { checkNavigation, whenNavigationAllowed } from "../lib/shared/navigation-guard";
 import React, { useEffect, useState } from 'react';
 import AttemptSession from "../components/attempts/AttemptSession";
 import AccountMenu from '../components/account/AccountMenu';
@@ -66,12 +66,22 @@ export default function App() {
    setRouteHash(acceptedHash);
    sessionStorage.setItem('ieltspace-context',context); previous = next; setMenu(null); setPage(next); window.scrollTo(0,0);
   };
-  const allowNavigation = () => getAuthUser()?.role !== "ADMIN" || canNavigate();
-  const pushRoute = (route: string) => {
-   if ("#" + route === acceptedHash || !allowNavigation()) return false;
+  // Guard chỉ áp dụng cho ADMIN. Guard có thể bất đồng bộ (hộp thoại trong app): đích được mở sau khi người dùng xác nhận.
+  const guarded = (target: string | undefined, run: () => void) => {
+   if (getAuthUser()?.role !== "ADMIN") { run(); return true; }
+   return whenNavigationAllowed(target, run);
+  };
+  const commitRoute = (route: string) => {
    history.pushState({ ieltspaceRouteIndex: ++acceptedIndex }, "", "#" + route);
    go(route);
-   return true;
+  };
+  const pushRoute = (route: string, after?: () => void) => {
+   if ("#" + route === acceptedHash) return false;
+   return guarded(route, () => {
+    if ("#" + route === acceptedHash) return;
+    commitRoute(route);
+    after?.();
+   });
   };
   const pop = () => {
    if (location.hash === acceptedHash) {
@@ -83,7 +93,9 @@ export default function App() {
    const name = route.split("?")[0];
    if (name && !(name in pages || name in aliases)) return;
    const nextIndex = historyIndex();
-   if (!allowNavigation()) {
+   const dest = route || (location.pathname === "/login" ? "Login" : "Main");
+   const result = getAuthUser()?.role !== "ADMIN" ? true : checkNavigation(dest);
+   if (result !== true) {
     if (nextIndex !== undefined && nextIndex !== acceptedIndex) {
      restoring = true;
      history.go(acceptedIndex - nextIndex);
@@ -91,13 +103,18 @@ export default function App() {
      history.replaceState({ ...history.state, ieltspaceRouteIndex: acceptedIndex }, "",
       acceptedHash || location.pathname + location.search);
     }
+    if (result !== false) {
+     void result.then(ok => {
+      if (ok && "#" + dest !== acceptedHash) commitRoute(dest);
+     });
+    }
     return;
    }
    acceptedIndex = nextIndex ?? acceptedIndex + 1;
    if (nextIndex === undefined) {
     history.replaceState({ ...history.state, ieltspaceRouteIndex: acceptedIndex }, "");
    }
-   go(route || (location.pathname === "/login" ? "Login" : "Main"));
+   go(dest);
   };
   const syncSavedSample = () => {
    acceptedHash = location.hash;
@@ -117,7 +134,7 @@ export default function App() {
    const a = target?.closest('a[href]');
    const authAnchor = a?.getAttribute('href');
    if(authAnchor === '#dang-ky' || authAnchor === '#dang-nhap') { e.preventDefault(); e.stopPropagation(); pushRoute(authAnchor === '#dang-ky' ? 'Register' : 'Login'); return; }
-   if(a?.textContent?.includes('Đăng xuất')){e.preventDefault();e.stopPropagation();if(allowNavigation()) void logout().catch(err=>window.alert(err.message));return;}
+   if(a?.textContent?.includes('Đăng xuất')){e.preventDefault();e.stopPropagation();guarded(undefined,()=>{void logout().catch(err=>window.alert(err.message));});return;}
 
    if(a instanceof HTMLElement && (authAnchor === '#AvatarMenu' || authAnchor === 'AvatarMenu.dc.html')) {
     e.preventDefault(); setMenu(opener => opener ? null : a); return;
@@ -130,8 +147,8 @@ export default function App() {
     // Các thẻ cũ không mang UUID bài, mở danh mục kỹ năng tương ứng.
     if (targetPage === "SampleWriting" || targetPage === "SampleSpeaking") {
      pushRoute("SampleLibrary?skill=" + (targetPage === "SampleWriting" ? "WRITING" : "SPEAKING"));
-    } else if (pushRoute(targetPage) && match[2]) {
-     setTimeout(()=>document.getElementById(match[2].slice(1))?.scrollIntoView(),100);
+    } else {
+     pushRoute(targetPage, match[2] ? () => { setTimeout(()=>document.getElementById(match[2].slice(1))?.scrollIntoView(),100); } : undefined);
     }
     return;
    }

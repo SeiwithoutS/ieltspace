@@ -4,26 +4,7 @@
  */
 export const versionMessages = {
   // Nhãn chế độ
-  modeEditing: (v: number) => `Đang chỉnh sửa phiên bản ${v} (bản nháp)`,
   modeViewing: 'Chỉ xem',
-
-  // Dải thông báo trên cùng
-  bannerDraftWithLive: (
-    v: number,
-    from: number,
-    liveVer: number,
-    liveStatus: 'PUBLISHED' | 'HIDDEN'
-  ) =>
-    `Đây là phiên bản ${v}, bản nháp tạo từ phiên bản ${from}. Người học vẫn thấy phiên bản ${liveVer} (${
-      liveStatus === 'PUBLISHED' ? 'đang đăng' : 'đang ẩn'
-    }) cho tới khi bạn đăng.`,
-
-  bannerDraftFirst: (v: number) => `Phiên bản ${v} chưa từng đăng.`,
-
-  bannerHidden: (v: number) => `Phiên bản ${v} đang ẩn khỏi người học.`,
-
-  bannerArchived: (v: number, dateStr: string) =>
-    `Bạn đang xem phiên bản ${v} (đã lưu trữ ngày ${dateStr}). Đây không phải bản người học đang thấy.`,
 
   // Hộp xác nhận và thông báo tạo bản sửa
   confirmCreateDraft: (nextVer: number, currentVer: number) => ({

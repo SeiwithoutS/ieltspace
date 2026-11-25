@@ -4,7 +4,7 @@ import { styleOf, cssText } from "../../../../lib/shared/styles";
 import AdminSidebar from "../../../../components/navigation/AdminSidebar";
 import AdminTopbar, { Crumb } from "../../../../components/navigation/AdminTopbar";
 import { navigate } from "../../../../lib/auth/auth";
-import { errorInfo, fmtDate, deleteSkill, publishSkill } from "../../../../lib/exams/exam-admin";
+import { errorInfo, deleteSkill, publishSkill } from "../../../../lib/exams/exam-admin";
 import { essayTypeOptions, TOPIC_MAX_LENGTH } from "../../../../lib/exams/exam-labels";
 import TopicCombobox from "../../../../components/exams/TopicCombobox";
 import { ApiError } from "../../../../lib/shared/api";
@@ -21,6 +21,8 @@ import {
   type WritingEditorTask,
 } from "../../../../lib/exams/exam-editor";
 import SkillHistoryDrawer from "../../../../components/exams/SkillHistoryDrawer";
+import VersionBanner from "../../../../components/exams/editor-shell/VersionBanner";
+import UnsavedGuard from "../../../../components/exams/editor-shell/UnsavedGuard";
 import { versionMessages } from "../../../../lib/exams/version-messages";
 
 type Ev = React.SyntheticEvent | null | undefined;
@@ -254,6 +256,7 @@ interface WritingView {
 class AdminWritingEditor extends React.Component<Record<string, unknown>, State> {
   _key?: (e: KeyboardEvent) => void;
   _undo?: (e?: Ev) => void;
+  _dirtyRef = { current: false };
   _it?: Array<ReturnType<typeof setTimeout>>;
   _mounted = false;
   _impFile?: File | Blob | null;
@@ -330,7 +333,12 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
 
   _toastT: ReturnType<typeof setTimeout> | undefined;
 
-  componentDidUpdate(_p: unknown, prev: { toast: string }) {
+  componentDidUpdate(_p: unknown, prev: { toast: string; confirm: State["confirm"] }) {
+    if (prev.confirm && !this.state.confirm && this._leaveCancel) {
+      const cancel = this._leaveCancel;
+      this._leaveCancel = undefined;
+      cancel();
+    }
     if (this.state.toast && this.state.toast !== prev.toast) {
       clearTimeout(this._toastT);
       this._toastT = setTimeout(() => {
@@ -349,15 +357,58 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
     (this._it || []).forEach(clearTimeout);
   }
 
-  onHashChange = () => {
+  _leaveCancel?: () => void;
+  _loadingId: string | null = null;
+
+  // `cancel` chỉ có khi hộp thoại do navigation guard mở: gọi khi hộp thoại bị đóng mà không bấm "Rời đi".
+  promptLeave = (proceed: () => void, cancel?: () => void) => {
+    this._leaveCancel = cancel;
+    const run = () => {
+      this._leaveCancel = undefined;
+      this.setState({ confirm: null, confirmRun: null });
+      proceed();
+      // App mở đích sau khi guard resolve; nếu đích là bản khác của trang này thì nạp lại.
+      setTimeout(() => {
+        if (this._mounted) this.syncFromUrl();
+      }, 0);
+    };
+    this.setState({
+      confirm: {
+        title: "Rời trang khi chưa lưu?",
+        sub: "Nội dung đang soạn sẽ bị mất nếu bạn rời đi bây giờ.",
+        goText: "Rời đi",
+        run,
+      },
+      confirmRun: run,
+      snack: null,
+    });
+  };
+
+  // Điều hướng trong app; hỏi trước nếu còn thay đổi chưa lưu, rồi nạp lại nếu đích là bản khác của trang này.
+  openPage = (page: string) => {
+    const run = () => {
+      this._dirtyRef.current = false;
+      navigate(page);
+      this.syncFromUrl();
+    };
+    if (this._dirtyRef.current) this.promptLeave(run);
+    else run();
+  };
+
+  // navigate() chỉ pushState nên không phát hashchange; tải lại khi skillId trên URL khác bản đang mở.
+  syncFromUrl = () => {
     const hash = window.location.hash || "";
-    const qIdx = hash.indexOf("?");
-    const paramStr = qIdx !== -1 ? hash.slice(qIdx + 1) : "";
-    const urlParams = new URLSearchParams(paramStr);
-    const skillId = urlParams.get("skillId");
-    if (skillId && skillId !== this.state.skillId) {
+    if (hash.split("?")[0] !== "#AdminWritingEditor") return;
+    const skillId = new URLSearchParams(hash.split("?")[1] || "").get("skillId");
+    if (skillId && skillId !== this.state.skillId && skillId !== this._loadingId) {
       this.initFromUrl();
     }
+  };
+
+  onHashChange = () => {
+    // Khi còn thay đổi chưa lưu, navigation guard đã chặn và hỏi người dùng.
+    if (this._dirtyRef.current) return;
+    this.syncFromUrl();
   };
 
   initFromUrl = async () => {
@@ -372,9 +423,12 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
       return;
     }
 
+    this._loadingId = skillId;
     this.setState({ loading: true, notFound: false });
     try {
       const skill = await getEditorSkill(skillId);
+      if (this._loadingId !== skillId) return;
+      this._loadingId = null;
       if (skill.skill !== "WRITING") {
         navigate(`AdminSpeakingEditor?skillId=${skillId}`);
         return;
@@ -396,6 +450,8 @@ class AdminWritingEditor extends React.Component<Record<string, unknown>, State>
         document.title = versionMessages.tabTitle("Writing", skill.versionNumber);
       }
     } catch {
+      if (this._loadingId !== skillId) return;
+      this._loadingId = null;
       if (this._mounted) {
         this.setState({ loading: false, notFound: true });
       }
@@ -499,7 +555,7 @@ renderVals(): WritingView {
       extra?: Partial<State> | null,
       tag?: string,
     ) {
-      if (!editing) {
+      if (!editing || self.state.saving) {
         return;
       }
       var n: WritingEditorState = clone(ex);
@@ -544,7 +600,7 @@ renderVals(): WritingView {
     function undo(e?: Ev) {
       stop(e);
       var h = s.hist || [];
-      if (!h.length) {
+      if (!h.length || self.state.saving) {
         return;
       }
       self.setState({
@@ -557,6 +613,7 @@ renderVals(): WritingView {
       });
     }
     me._undo = undo;
+    me._dirtyRef.current = dirty;
     var CHIP =
       "display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600";
     function isEmptyItem(it: WritingEditorTask): boolean {
@@ -1058,6 +1115,7 @@ renderVals(): WritingView {
         "Đề chuyển sang chế độ Chỉnh sửa, chưa lưu: xem lại rồi bấm Lưu, hoặc Hoàn tác.",
       impApply: function (e?: Ev) {
         stop(e);
+        if (self.state.saving) return;
         var n = clone(ex);
         n.items = [clone(FULL.items[0]), clone(FULL.items[1])];
         self.setState({
@@ -1089,7 +1147,10 @@ renderVals(): WritingView {
         ask(
           "Rời trang khi chưa lưu?",
           "Nội dung đang soạn sẽ bị mất nếu bạn rời đi bây giờ.",
-          go,
+          function () {
+            self._dirtyRef.current = false;
+            go();
+          },
           "Rời đi",
         );
       } else {
@@ -1111,7 +1172,7 @@ renderVals(): WritingView {
         (GTF
           ? "background: #FCE6D6; color: #9A4A17"
           : "background: #DFF1F4; color: #1F6A78"),
-      modeText: editing ? versionMessages.modeEditing(skill?.versionNumber || 1) : versionMessages.modeViewing,
+      modeText: editing ? "Đang chỉnh sửa" : versionMessages.modeViewing,
       modeSt:
         CHIP +
         "; " +
@@ -1180,7 +1241,7 @@ renderVals(): WritingView {
             async function () {
               try {
                 var rev = await createRevisionDraft(currentSkill.id);
-                window.history.replaceState(null, "", "#AdminWritingEditor?skillId=" + rev.id);
+                window.history.replaceState({ ...window.history.state }, "", "#AdminWritingEditor?skillId=" + rev.id);
                 var newEx = toWritingEditorState(rev);
                 self.setState({
                   skillId: rev.id,
@@ -1223,11 +1284,14 @@ renderVals(): WritingView {
             baseUpdatedAt: currentSkill.updatedAt,
             writing: content,
           });
+          var savedEx = toWritingEditorState(saved);
+          self._dirtyRef.current = false;
           self.setState({
             skill: saved,
             saving: false,
             editing: false,
-            base: JSON.parse(JSON.stringify(ex)),
+            ex: savedEx,
+            base: JSON.parse(JSON.stringify(savedEx)),
             hist: [],
             lastTag: null,
             leave: false,
@@ -1289,10 +1353,13 @@ renderVals(): WritingView {
               baseUpdatedAt: currentSkill.updatedAt,
               writing: content,
             });
+            var savedEx = toWritingEditorState(saved);
+            self._dirtyRef.current = false;
             self.setState({
               skill: saved,
               saving: false,
-              base: JSON.parse(JSON.stringify(ex)),
+              ex: savedEx,
+              base: JSON.parse(JSON.stringify(savedEx)),
               hist: [],
               issues: null,
               toast: "",
@@ -1460,6 +1527,11 @@ renderVals(): WritingView {
     const v = this.renderVals();
     return (
       <>
+        <UnsavedGuard
+          dirty={v.dirty}
+          dirtyRef={this._dirtyRef}
+          onPromptLeave={this.promptLeave}
+        />
         {"\n"}
         {"\n"}
         <style>
@@ -1505,75 +1577,12 @@ renderVals(): WritingView {
                 )}
               >
                 {v.skill && (
-                  <div
-                    style={styleOf(
-                      v.skill.status === "ARCHIVED"
-                        ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap"
-                        : v.skill.status === "HIDDEN"
-                          ? "background: #F4F1EA; border-bottom: 1.5px solid #E5E0D8; color: #5B4E5F; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
-                          : v.skill.status === "DRAFT"
-                            ? "background: #EFF6FF; border-bottom: 1.5px solid #BFDBFE; color: #1E40AF; padding: 10px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px"
-                            : "display: none"
-                    )}
-                  >
-                    {v.skill.status === "ARCHIVED" ? (
-                      <>
-                        <div style={styleOf("display: flex; align-items: center; gap: 8px")}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4" />
-                          </svg>
-                          <span>
-                            {versionMessages.bannerArchived(
-                              v.skill.versionNumber,
-                              fmtDate(v.skill.publishedAt || v.skill.updatedAt)
-                            )}
-                          </span>
-                        </div>
-                        {(v.skill?.slot?.draftId || v.skill?.slot?.liveId) && (
-                          <a
-                            href="#"
-                            onClick={function (e) {
-                              e.preventDefault();
-                              navigate(
-                                "AdminWritingEditor?skillId=" +
-                                (v.skill?.slot?.draftId || v.skill?.slot?.liveId)
-                              );
-                            }}
-                            style={styleOf(
-                              "font-weight: 600; color: #1E40AF; text-decoration: underline; cursor: pointer; white-space: nowrap"
-                            )}
-                          >
-                            Mở bản hiện tại →
-                          </a>
-                        )}
-                      </>
-                    ) : v.skill.status === "HIDDEN" ? (
-                      <>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22" />
-                        </svg>
-                        <span>{versionMessages.bannerHidden(v.skill.versionNumber)}</span>
-                      </>
-                    ) : v.skill.status === "DRAFT" ? (
-                      <>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <circle cx="12" cy="12" r="10" />
-                          <line x1="12" y1="16" x2="12" y2="12" />
-                          <line x1="12" y1="8" x2="12.01" y2="8" />
-                        </svg>
-                        <span>
-                          {v.skill.slot.liveId
-                            ? versionMessages.bannerDraftWithLive(
-                              v.skill.versionNumber,
-                              v.skill.slot.liveVersion || (v.skill.versionNumber - 1),
-                              v.skill.slot.liveVersion || 1,
-                              v.skill.slot.liveStatus || "PUBLISHED"
-                            )
-                            : versionMessages.bannerDraftFirst(v.skill.versionNumber)}
-                        </span>
-                      </>
-                    ) : null}
-                  </div>
+                  <VersionBanner
+                    status={v.skill.status}
+                    versionNumber={v.skill.versionNumber}
+                    slot={v.skill.slot}
+                    onOpenCurrent={(id) => this.openPage("AdminWritingEditor?skillId=" + id)}
+                  />
                 )}
                 <div
                   style={styleOf(
@@ -1583,9 +1592,9 @@ renderVals(): WritingView {
                   <div style={styleOf("min-width: 0; flex: 1 1 260px")}>
                     <a
                       href={"#"}
-                      onClick={function (e) {
+                      onClick={(e) => {
                         e.preventDefault();
-                        navigate(v.skill ? "AdminExamSet?id=" + v.skill.set.id : "AdminExams");
+                        this.openPage(v.skill ? "AdminExamSet?id=" + v.skill.set.id : "AdminExams");
                       }}
                       style={styleOf("display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: #706473; text-decoration: none; cursor: pointer")}
                     >
@@ -3453,21 +3462,9 @@ renderVals(): WritingView {
           isOpen={v.historyOpen}
           onClose={v.closeHistory}
           skillId={v.skill ? v.skill.id : null}
-          onSelectVersion={function (versionId) {
-            if (v.editing && v.dirty) {
-              v.ask(
-                "Rời trang khi chưa lưu thay đổi?",
-                "Các thay đổi bạn vừa chỉnh sửa sẽ bị mất nếu chuyển phiên bản.",
-                function () {
-                  v.closeHistory();
-                  navigate("AdminWritingEditor?skillId=" + versionId);
-                },
-                "Rời đi"
-              );
-            } else {
-              v.closeHistory();
-              navigate("AdminWritingEditor?skillId=" + versionId);
-            }
+          onSelectVersion={(versionId) => {
+            v.closeHistory();
+            this.openPage("AdminWritingEditor?skillId=" + versionId);
           }}
         />
       </>

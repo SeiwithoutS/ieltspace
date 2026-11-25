@@ -8,12 +8,14 @@ import type { RawSection } from '../exams/exam-content.mapper.js';
 
 export type AttemptMode = 'REAL' | 'PRACTICE';
 export type AttemptStatus = 'IN_PROGRESS' | 'COMPLETED' | 'ABANDONED';
+export type AttemptSkill = 'SPEAKING' | 'WRITING';
 
 export type AttemptRecord = {
   id: string;
   parentAttemptId: string;
   userId: string;
   examSkillId: string;
+  skill: AttemptSkill;
   mode: AttemptMode | null;
   status: AttemptStatus;
   startedAt: Date;
@@ -37,13 +39,17 @@ export type RecordingRecord = {
   size: number;
 };
 
-export type PublishedSpeakingSkill = {
+export type PublishedSkill = {
   id: string;
+  skill: AttemptSkill;
+  form: string | null;
   examId: string;
   examTitle: string;
   durationMinutes: number;
   sections: RawSection[];
 };
+
+export type WritingTextRecord = { taskKey: string; text: string; updatedAt: Date };
 
 export type UpsertRecordingInput = {
   skillAttemptId: string;
@@ -61,7 +67,7 @@ export type UpsertRecordingInput = {
 export type ExpiredAttempt = { id: string; paths: string[] };
 
 export type AttemptsRepository = {
-  findPublishedSpeakingSkill(examSkillId: string): Promise<PublishedSpeakingSkill | null>;
+  findPublishedSkill(examSkillId: string, skill: AttemptSkill): Promise<PublishedSkill | null>;
   findByClientAttemptId(userId: string, clientAttemptId: string): Promise<AttemptRecord | null>;
   createAttempt(input: {
     userId: string;
@@ -76,6 +82,17 @@ export type AttemptsRepository = {
   getAttempt(id: string): Promise<AttemptRecord | null>;
   resolveSectionId(attempt: AttemptRecord, partIndex: number): Promise<string | null>;
   listRecordings(skillAttemptId: string): Promise<RecordingRecord[]>;
+  // Văn bản Writing: hàng submission_contents có question_key = taskKey và text_content không NULL.
+  listWritingTexts(skillAttemptId: string): Promise<WritingTextRecord[]>;
+  getWritingText(skillAttemptId: string, taskKey: string): Promise<WritingTextRecord | null>;
+  // Ghi đè văn bản của Task (idempotent theo (lượt, taskKey)); trả hàng sau khi lưu.
+  upsertWritingText(input: {
+    skillAttemptId: string;
+    sectionId: string;
+    taskKey: string;
+    text: string;
+    now: Date;
+  }): Promise<WritingTextRecord | null>;
   getRecording(skillAttemptId: string, questionKey: string): Promise<RecordingRecord | null>;
   upsertRecording(input: UpsertRecordingInput): Promise<RecordingRecord | null>;
   confirmRecording(skillAttemptId: string, questionKey: string, size: number, now: Date): Promise<boolean>;
@@ -107,6 +124,7 @@ type AttemptRow = {
   parentAttemptId: string;
   userId: string;
   examSkillId: string;
+  skill: string;
   mode: string | null;
   status: string;
   startedAt: Date;
@@ -118,17 +136,18 @@ type AttemptRow = {
 };
 
 const attemptColumns = Prisma.sql`sa.id, sa.attempt_id AS "parentAttemptId", a.user_id AS "userId",
-  sa.exam_skill_id AS "examSkillId", sa.mode, sa.status, sa.started_at AS "startedAt", sa.deadline_at AS "deadlineAt",
+  sa.exam_skill_id AS "examSkillId", k.skill AS "skill", sa.mode, sa.status, sa.started_at AS "startedAt", sa.deadline_at AS "deadlineAt",
   sa.completed_at AS "completedAt", sa.content_expires_at AS "contentExpiresAt", sa.content_status AS "contentStatus",
   sa.duration_seconds AS "durationSeconds"`;
-// Chỉ lượt của kỹ năng Speaking mới đi qua module này.
+// Chỉ lượt của kỹ năng Speaking và Writing mới đi qua module này (Listening/Reading có luồng riêng).
 const attemptFrom = Prisma.sql`public.skill_attempts sa
   JOIN public.attempts a ON a.id = sa.attempt_id
-  JOIN public.exam_skills k ON k.id = sa.exam_skill_id AND k.skill = 'SPEAKING'`;
+  JOIN public.exam_skills k ON k.id = sa.exam_skill_id AND k.skill IN ('SPEAKING', 'WRITING')`;
 
 function toAttempt(row: AttemptRow): AttemptRecord {
   return {
     ...row,
+    skill: row.skill === 'WRITING' ? 'WRITING' : 'SPEAKING',
     mode: row.mode === 'REAL' || row.mode === 'PRACTICE' ? row.mode : null,
     status: row.status as AttemptStatus,
   };
@@ -175,12 +194,13 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
   };
 
   return {
-    async findPublishedSpeakingSkill(examSkillId) {
-      // Không select đáp án/bằng chứng; Speaking chỉ cần văn bản câu hỏi và cấu hình Part.
+    async findPublishedSkill(examSkillId, kind) {
+      // Không select đáp án/bằng chứng; Speaking/Writing chỉ cần đề bài và cấu hình.
       const skill = await db.exam_skills.findFirst({
-        where: { id: examSkillId, skill: 'SPEAKING', status: 'PUBLISHED', exam: { exam_set: { status: 'PUBLISHED' } } },
+        where: { id: examSkillId, skill: kind, status: 'PUBLISHED', exam: { exam_set: { status: 'PUBLISHED' } } },
         select: {
           id: true,
+          form: true,
           exam_id: true,
           duration_minutes: true,
           exam: { select: { title: true } },
@@ -190,6 +210,7 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
               order_no: true,
               title: true,
               section_type: true,
+              image_path: true,
               instruction: true,
               content: true,
               config: true,
@@ -208,6 +229,8 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
       if (!skill) return null;
       return {
         id: skill.id,
+        skill: kind,
+        form: skill.form ?? null,
         examId: skill.exam_id,
         examTitle: skill.exam.title,
         durationMinutes: skill.duration_minutes,
@@ -261,6 +284,36 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
           AND sc.recording_status IN ('PENDING', 'UPLOADED') AND sc.question_key <> ''
         ORDER BY s.order_no, sc.updated_at`;
       return rows.map(toRecording);
+    },
+
+    async listWritingTexts(skillAttemptId) {
+      const rows = await db.$queryRaw<Array<{ taskKey: string; text: string; updatedAt: Date }>>`
+        SELECT sc.question_key AS "taskKey", sc.text_content AS text, sc.updated_at AS "updatedAt"
+        FROM public.submission_contents sc JOIN public.exam_sections s ON s.id = sc.section_id
+        WHERE sc.skill_attempt_id = ${skillAttemptId}::uuid AND sc.question_key <> '' AND sc.text_content IS NOT NULL
+        ORDER BY s.order_no`;
+      return rows;
+    },
+
+    async getWritingText(skillAttemptId, taskKey) {
+      const [row] = await db.$queryRaw<Array<{ taskKey: string; text: string; updatedAt: Date }>>`
+        SELECT question_key AS "taskKey", text_content AS text, updated_at AS "updatedAt"
+        FROM public.submission_contents
+        WHERE skill_attempt_id = ${skillAttemptId}::uuid AND question_key = ${taskKey} AND text_content IS NOT NULL`;
+      return row ?? null;
+    },
+
+    async upsertWritingText(input) {
+      // Chỉ ghi vào hàng cùng section (khóa Task không đổi Task); hàng đã DELETED (nội dung hết hạn) không ghi lại.
+      const [row] = await db.$queryRaw<Array<{ taskKey: string; text: string; updatedAt: Date }>>`
+        INSERT INTO public.submission_contents AS sc (skill_attempt_id, section_id, question_key, text_content, updated_at)
+        VALUES (${input.skillAttemptId}::uuid, ${input.sectionId}::uuid, ${input.taskKey}, ${input.text},
+          ${input.now}::timestamptz)
+        ON CONFLICT (skill_attempt_id, question_key) WHERE question_key <> '' DO UPDATE SET
+          text_content = EXCLUDED.text_content, updated_at = EXCLUDED.updated_at
+        WHERE sc.section_id = EXCLUDED.section_id AND sc.recording_status IS DISTINCT FROM 'DELETED'
+        RETURNING sc.question_key AS "taskKey", sc.text_content AS text, sc.updated_at AS "updatedAt"`;
+      return row ?? null;
     },
 
     async getRecording(skillAttemptId, questionKey) {

@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import type { ZodType } from 'zod';
 import { env } from '../../config.js';
+import { publicUrl } from '../../integrations/storage/supabase-storage.js';
 import { supabaseRecordingStorage } from '../../integrations/storage/recording-storage.js';
 import { prisma } from '../../lib/prisma.js';
 import { requireAuth, requireRole } from '../../middleware/auth.js';
 import { asyncHandler, HttpError } from '../../utils/http.js';
 import { createAttemptsRepository } from './attempts.repository.js';
 import {
-  completeAttemptSchema, createAttemptSchema, createRecordingSchema, examSkillParamSchema, idParamSchema, recordingParamSchema,
+  completeAttemptSchema, createAttemptSchema, createRecordingSchema, examSkillParamSchema, idParamSchema, putWritingSchema, recordingParamSchema, writingTaskParamSchema,
 } from './attempts.schemas.js';
 import { createAttemptsService, type AttemptsDeps } from './attempts.service.js';
 
@@ -23,6 +24,7 @@ export function createAttemptsRouter(deps?: Partial<AttemptsDeps>, db: typeof pr
     repo: deps?.repo ?? createAttemptsRepository(db),
     storage: deps?.storage ?? supabaseRecordingStorage,
     clock: deps?.clock,
+    imageUrl: deps?.imageUrl ?? ((path) => publicUrl(path) || null),
   });
   const router = Router();
   router.use('/skill-attempts', (_req, res, next) => { res.setHeader('Cache-Control', 'no-store'); next(); });
@@ -39,6 +41,12 @@ export function createAttemptsRouter(deps?: Partial<AttemptsDeps>, db: typeof pr
     const { examSkillId } = parse(examSkillParamSchema, req.params, 'EXAM_SKILL_NOT_FOUND');
     res.setHeader('Cache-Control', 'no-store');
     res.json(await service.getSpeakingContent(examSkillId));
+  }));
+
+  router.get('/exam-skills/:examSkillId/writing', asyncHandler(async (req, res) => {
+    const { examSkillId } = parse(examSkillParamSchema, req.params, 'EXAM_SKILL_NOT_FOUND');
+    res.setHeader('Cache-Control', 'no-store');
+    res.json(await service.getWritingContent(examSkillId));
   }));
 
   router.post('/skill-attempts', asyncHandler(async (req, res) => {
@@ -63,6 +71,17 @@ export function createAttemptsRouter(deps?: Partial<AttemptsDeps>, db: typeof pr
   router.get('/skill-attempts/:id/recordings/:questionId/url', asyncHandler(async (req, res) => {
     const { id, questionId } = parse(recordingParamSchema, req.params, 'RECORDING_NOT_FOUND');
     res.json(await service.getRecordingUrl(uid(req), id, questionId));
+  }));
+
+  // Thân yêu cầu chứa bài viết: không log nội dung (docs/RULES.md).
+  router.put('/skill-attempts/:id/writing/:taskKey', asyncHandler(async (req, res) => {
+    const { id, taskKey } = parse(writingTaskParamSchema, req.params, 'TASK_NOT_FOUND');
+    res.json(await service.putWritingText(uid(req), id, taskKey, parse(putWritingSchema, req.body)));
+  }));
+
+  router.get('/skill-attempts/:id/writing/:taskKey', asyncHandler(async (req, res) => {
+    const { id, taskKey } = parse(writingTaskParamSchema, req.params, 'TASK_NOT_FOUND');
+    res.json(await service.getWritingText(uid(req), id, taskKey));
   }));
 
   router.post('/skill-attempts/:id/complete', asyncHandler(async (req, res) => {

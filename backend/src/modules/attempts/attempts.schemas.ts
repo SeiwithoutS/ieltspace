@@ -3,6 +3,13 @@ import { z } from 'zod';
 // Hằng số nghiệp vụ lượt làm Speaking (máy chủ quyết định, không tin client).
 export const SPEAKING_REAL_LIMIT_MINUTES = 15;
 export const PRACTICE_MAX_LIMIT_MINUTES = 30;
+// Writing: Thi thật cố định 60 phút (theo AttemptSession legacy); Practice tối đa 60 phút. Speaking giữ mức 30.
+export const WRITING_REAL_LIMIT_MINUTES = 60;
+export const WRITING_PRACTICE_MAX_LIMIT_MINUTES = 60;
+export const WRITING_TEXT_MAX_CHARS = 20_000;
+export const WRITING_TASK_KEYS = ['task1', 'task2'] as const;
+// Giới hạn từ tối thiểu mặc định khi đề chưa cấu hình (Task 1: 150, Task 2: 250).
+export const WRITING_DEFAULT_MIN_WORDS = { task1: 150, task2: 250 } as const;
 export const RECORDING_MAX_BYTES = 25 * 1024 * 1024;
 export const RECORDING_MAX_DURATION_MS = 31 * 60 * 1000;
 // Sau deadline_at vẫn nhận bản ghi trong ngần này giây (client tải nốt phần vừa ghi lúc hết giờ).
@@ -27,9 +34,13 @@ export const createAttemptSchema = z
     clientAttemptId: uuid,
     examSkillId: uuid,
     mode: z.enum(['REAL', 'PRACTICE']),
-    limitMinutes: z.number().int().min(1).max(PRACTICE_MAX_LIMIT_MINUTES).nullable(),
+    // Tối đa 60 theo Writing; service hạ về 30 cho Speaking (400 VALIDATION_ERROR nếu vượt).
+    limitMinutes: z.number().int().min(1).max(WRITING_PRACTICE_MAX_LIMIT_MINUTES).nullable(),
   })
   .strict();
+
+export const writingTaskParamSchema = z.object({ id: uuid, taskKey: z.enum(WRITING_TASK_KEYS) });
+export const putWritingSchema = z.object({ text: z.string().max(WRITING_TEXT_MAX_CHARS) }).strict();
 
 // partIndex tính từ 0 (Part 1 = 0, Part 2 = 1, Part 3 = 2) theo thứ tự mảng parts của API đề.
 export const createRecordingSchema = z
@@ -52,4 +63,5 @@ export const completeAttemptSchema = z
 
 export type CreateAttemptInput = z.infer<typeof createAttemptSchema>;
 export type CreateRecordingInput = z.infer<typeof createRecordingSchema>;
+export type PutWritingInput = z.infer<typeof putWritingSchema>;
 export type CompleteAttemptInput = z.infer<typeof completeAttemptSchema>;

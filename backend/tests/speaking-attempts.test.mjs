@@ -12,6 +12,7 @@ const schemas = await import('../dist/modules/attempts/attempts.schemas.js');
 const U1 = '11111111-1111-4111-8111-111111111111';
 const U2 = '22222222-2222-4222-8222-222222222222';
 const SKILL = '33333333-3333-4333-8333-333333333333';
+const WSKILL = '66666666-6666-4666-8666-666666666666';
 const NOSKILL = '55555555-5555-4555-8555-555555555555';
 const CLIENT = '44444444-4444-4444-8444-444444444444';
 const CLIENT2 = '99999999-9999-4999-8999-999999999999';
@@ -20,14 +21,20 @@ const DAY = 86_400_000;
 
 // Repo giả trong bộ nhớ, mô phỏng hành vi nguyên tử của các câu SQL thật.
 function fakeRepo() {
-  const s = { attempts: new Map(), recs: [], gradingFor: new Set(), seq: 0, foreignClientIds: new Set() };
+  const s = { attempts: new Map(), recs: [], texts: [], gradingFor: new Set(), seq: 0, foreignClientIds: new Set() };
   const sections = ['sec-1', 'sec-2', 'sec-3'];
   const view = (r) => ({ ...r, partIndex: sections.indexOf(r.sectionId) });
   return {
     s,
-    async findPublishedSpeakingSkill(id) {
-      if (id !== SKILL) return null;
-      return { id: SKILL, examId: 'exam-1', examTitle: 'Đề thử', durationMinutes: 15, sections: [
+    async findPublishedSkill(id, kind) {
+      if (id === WSKILL && kind === 'WRITING') {
+        return { id: WSKILL, skill: 'WRITING', form: 'ACADEMIC', examId: 'exam-w', examTitle: 'Đề viết', durationMinutes: 60, sections: [
+          { order_no: 1, title: 'Task 1', section_type: 'TASK', content: { prompt: 'Describe the chart', essayType: 'LINE_GRAPH' }, config: { minWords: 150 }, image_path: 'img/t1.png', groups: [] },
+          { order_no: 2, title: 'Task 2', section_type: 'TASK', content: { prompt: 'Discuss both views' }, config: {}, groups: [] },
+        ] };
+      }
+      if (id !== SKILL || kind !== 'SPEAKING') return null;
+      return { id: SKILL, skill: 'SPEAKING', form: null, examId: 'exam-1', examTitle: 'Đề thử', durationMinutes: 15, sections: [
         { order_no: 1, title: 'Part 1', section_type: 'PART', instruction: 'Hướng dẫn', config: {}, groups: [{ order_no: 1, question_type: 'SPEAKING_QUESTION', questions: [{ order_no: 1, question_type: 'SPEAKING_QUESTION', content: { text: 'Q1?' } }] }] },
         { order_no: 2, title: 'Part 2', section_type: 'PART', content: { cueCard: 'Describe...' }, config: { prepMinutes: 1, speakMinutes: 2 }, groups: [] },
         { order_no: 3, title: 'Part 3', section_type: 'PART', instruction: '', config: {}, groups: [{ order_no: 1, question_type: 'SPEAKING_QUESTION', questions: [{ order_no: 1, question_type: 'SPEAKING_QUESTION', content: { text: 'Q3?' } }] }] },
@@ -40,7 +47,7 @@ function fakeRepo() {
       if (s.foreignClientIds?.has(i.clientAttemptId)) throw Object.assign(new Error('x'), { statusCode: 409, code: 'CLIENT_ATTEMPT_ID_CONFLICT' });
       const dup = await this.findByClientAttemptId(i.userId, i.clientAttemptId);
       if (dup) return dup;
-      const a = { id: `att-${++s.seq}`, parentAttemptId: `p-${s.seq}`, userId: i.userId, clientId: i.clientAttemptId, examSkillId: i.examSkillId,
+      const a = { id: `att-${++s.seq}`, parentAttemptId: `p-${s.seq}`, userId: i.userId, clientId: i.clientAttemptId, examSkillId: i.examSkillId, skill: i.examSkillId === WSKILL ? 'WRITING' : 'SPEAKING',
         mode: i.mode, status: 'IN_PROGRESS', startedAt: i.startedAt, deadlineAt: i.deadlineAt, completedAt: null,
         contentExpiresAt: null, contentStatus: 'AVAILABLE', durationSeconds: null };
       s.attempts.set(a.id, a);
@@ -49,6 +56,14 @@ function fakeRepo() {
     async getAttempt(id) { return s.attempts.get(id) ?? null; },
     async resolveSectionId(_a, idx) { return sections[idx] ?? null; },
     async listRecordings(id) { return s.recs.filter((r) => r.skillAttemptId === id && ['PENDING', 'UPLOADED'].includes(r.status)).map(view); },
+    async listWritingTexts(id) { return s.texts.filter((t) => t.skillAttemptId === id && t.text !== null).map((t) => ({ taskKey: t.taskKey, text: t.text, updatedAt: t.updatedAt })); },
+    async getWritingText(id, key) { const t = s.texts.find((x) => x.skillAttemptId === id && x.taskKey === key && x.text !== null); return t ? { taskKey: key, text: t.text, updatedAt: t.updatedAt } : null; },
+    async upsertWritingText(i) {
+      let t = s.texts.find((x) => x.skillAttemptId === i.skillAttemptId && x.taskKey === i.taskKey);
+      if (!t) { t = { skillAttemptId: i.skillAttemptId, taskKey: i.taskKey }; s.texts.push(t); }
+      Object.assign(t, { text: i.text, updatedAt: i.now });
+      return { taskKey: t.taskKey, text: t.text, updatedAt: t.updatedAt };
+    },
     async getRecording(id, key) { const r = s.recs.find((x) => x.skillAttemptId === id && x.questionKey === key && ['PENDING', 'UPLOADED'].includes(x.status)); return r ? view(r) : null; },
     async upsertRecording(i) {
       let r = s.recs.find((x) => x.skillAttemptId === i.skillAttemptId && x.questionKey === i.questionKey);
@@ -68,7 +83,7 @@ function fakeRepo() {
       if (s.attempts.get(a.id)?.status === 'COMPLETED') return { deleted: false, paths: [], reason: 'COMPLETED' };
       if (s.gradingFor.has(a.id)) return { deleted: false, paths: [], reason: 'SUBMITTED' };
       const paths = s.recs.filter((r) => r.skillAttemptId === a.id).map((r) => r.audioPath);
-      s.recs = s.recs.filter((r) => r.skillAttemptId !== a.id); s.attempts.delete(a.id);
+      s.recs = s.recs.filter((r) => r.skillAttemptId !== a.id); s.texts = s.texts.filter((t) => t.skillAttemptId !== a.id); s.attempts.delete(a.id);
       return { deleted: true, paths };
     },
     async listExpiredContent(now) {
@@ -78,7 +93,7 @@ function fakeRepo() {
     // Mô phỏng claim: đổi trạng thái trước, hàng DELETED giữ audioPath cho tới khi xóa file xong.
     async claimExpiredContent(now) {
       const list = await this.listExpiredContent(now);
-      for (const x of list) { s.attempts.get(x.id).contentStatus = 'DELETED'; s.recs.forEach((r) => { if (r.skillAttemptId === x.id) r.status = 'DELETED'; }); }
+      for (const x of list) { s.attempts.get(x.id).contentStatus = 'DELETED'; s.recs.forEach((r) => { if (r.skillAttemptId === x.id) r.status = 'DELETED'; }); s.texts.forEach((t) => { if (t.skillAttemptId === x.id) t.text = null; }); }
       return list;
     },
     async claimStaleInProgress(before) {
@@ -125,7 +140,7 @@ test('zod: kiểm tra thân yêu cầu', () => {
   const ok = { clientAttemptId: CLIENT, examSkillId: SKILL, mode: 'PRACTICE', limitMinutes: 20 };
   assert.ok(schemas.createAttemptSchema.safeParse(ok).success);
   assert.ok(schemas.createAttemptSchema.safeParse({ ...ok, limitMinutes: null }).success);
-  for (const bad of [{ ...ok, clientAttemptId: 'x' }, { ...ok, mode: 'EXAM' }, { ...ok, limitMinutes: 0 }, { ...ok, limitMinutes: 99 }, { ...ok, extra: 1 }, { ...ok, limitMinutes: undefined }]) {
+  for (const bad of [{ ...ok, clientAttemptId: 'x' }, { ...ok, mode: 'EXAM' }, { ...ok, limitMinutes: 0 }, { ...ok, limitMinutes: 99 }, { ...ok, limitMinutes: 61 }, { ...ok, extra: 1 }, { ...ok, limitMinutes: undefined }]) {
     assert.equal(schemas.createAttemptSchema.safeParse(bad).success, false);
   }
   assert.ok(schemas.createRecordingSchema.safeParse(rec()).success);
@@ -423,9 +438,141 @@ test('API từ chối yêu cầu chưa đăng nhập trước khi chạm DB', as
   await new Promise((resolve) => server.once('listening', resolve));
   try {
     const base = `http://127.0.0.1:${server.address().port}/api/learner`;
-    for (const [method, path] of [['GET', `/exam-skills/${SKILL}/speaking`], ['POST', '/skill-attempts'], ['GET', `/skill-attempts/${SKILL}`],
+    for (const [method, path] of [['GET', `/exam-skills/${SKILL}/speaking`], ['GET', `/exam-skills/${SKILL}/writing`], ['PUT', `/skill-attempts/${SKILL}/writing/task1`], ['GET', `/skill-attempts/${SKILL}/writing/task1`], ['POST', '/skill-attempts'], ['GET', `/skill-attempts/${SKILL}`],
       ['POST', `/skill-attempts/${SKILL}/complete`], ['DELETE', `/skill-attempts/${SKILL}`], ['POST', `/skill-attempts/${SKILL}/grading-request`]]) {
       assert.equal((await fetch(base + path, { method })).status, 401, `${method} ${path}`);
     }
   } finally { await new Promise((resolve) => server.close(resolve)); }
+});
+
+// ---------- Writing dùng chung luồng lượt làm ----------
+const WCLIENT = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd';
+const wcreate = (service, over = {}) => service.createAttempt(U1, { clientAttemptId: WCLIENT, examSkillId: WSKILL, mode: 'REAL', limitMinutes: null, ...over });
+
+test('zod Writing: taskKey và thân PUT', () => {
+  assert.ok(schemas.writingTaskParamSchema.safeParse({ id: CLIENT, taskKey: 'task2' }).success);
+  for (const bad of [{ id: CLIENT, taskKey: 'task3' }, { id: 'x', taskKey: 'task1' }, { id: CLIENT, taskKey: '../x' }]) {
+    assert.equal(schemas.writingTaskParamSchema.safeParse(bad).success, false);
+  }
+  assert.ok(schemas.putWritingSchema.safeParse({ text: '' }).success);
+  assert.ok(schemas.putWritingSchema.safeParse({ text: 'a'.repeat(schemas.WRITING_TEXT_MAX_CHARS) }).success);
+  for (const bad of [{ text: 'a'.repeat(schemas.WRITING_TEXT_MAX_CHARS + 1) }, { text: 1 }, {}, { text: 'x', extra: 1 }]) {
+    assert.equal(schemas.putWritingSchema.safeParse(bad).success, false);
+  }
+  assert.ok(schemas.createAttemptSchema.safeParse({ clientAttemptId: CLIENT, examSkillId: WSKILL, mode: 'PRACTICE', limitMinutes: 60 }).success);
+});
+
+test('đề Writing: Task 1/2, đề bài, ảnh, minWords, không lộ thông tin chấm; Speaking và Writing không lẫn nhau', async () => {
+  const repo = fakeRepo();
+  const service = createAttemptsService({ repo, storage: fakeStorage(), imageUrl: (p) => `https://cdn.example/${p}` });
+  const c = await service.getWritingContent(WSKILL);
+  assert.deepEqual(c, { examSkillId: WSKILL, title: 'Đề viết', form: 'ACADEMIC', durationMinutes: 60, tasks: [
+    { taskKey: 'task1', prompt: 'Describe the chart', imageUrl: 'https://cdn.example/img/t1.png', minWords: 150, essayType: 'LINE_GRAPH' },
+    { taskKey: 'task2', prompt: 'Discuss both views', imageUrl: null, minWords: 250 },
+  ] });
+  assert.equal(await code(service.getWritingContent(SKILL)), '404:EXAM_SKILL_NOT_FOUND');
+  assert.equal(await code(service.getSpeakingContent(WSKILL)), '404:EXAM_SKILL_NOT_FOUND');
+  assert.equal(await code(service.getWritingContent(NOSKILL)), '404:EXAM_SKILL_NOT_FOUND');
+});
+
+test('tạo lượt Writing: REAL cố định 60 phút, Practice theo limit (tối đa 60) hoặc null; Speaking vẫn tối đa 30', async () => {
+  const { service, clock } = setup();
+  const r = await wcreate(service, { limitMinutes: 5 });
+  assert.equal(r.created, true);
+  assert.equal(r.body.deadlineAt, new Date(clock.now.getTime() + 60 * MIN).toISOString());
+  const p = await wcreate(service, { clientAttemptId: CLIENT2, mode: 'PRACTICE', limitMinutes: 45 });
+  assert.equal(p.body.deadlineAt, new Date(clock.now.getTime() + 45 * MIN).toISOString());
+  assert.equal((await wcreate(service, { clientAttemptId: '77777777-7777-4777-8777-777777777777', mode: 'PRACTICE', limitMinutes: null })).body.deadlineAt, null);
+  assert.equal(await code(create(service, { clientAttemptId: '88888888-8888-4888-8888-888888888888', mode: 'PRACTICE', limitMinutes: 45 })), '400:VALIDATION_ERROR');
+  const again = await wcreate(service);
+  assert.equal(again.created, false);
+  assert.equal(await code(wcreate(service, { examSkillId: SKILL })), '409:CLIENT_ATTEMPT_ID_CONFLICT');
+});
+
+test('Writing: lưu văn bản, ghi đè trước khi hoàn thành, GET lượt chỉ có wordCount', async () => {
+  const ctx = setup();
+  const { body } = await wcreate(ctx.service);
+  const first = await ctx.service.putWritingText(U1, body.id, 'task1', { text: 'One two  three\nfour' });
+  assert.equal(first.wordCount, 4);
+  assert.equal(first.taskKey, 'task1');
+  advance(ctx, 1000);
+  const second = await ctx.service.putWritingText(U1, body.id, 'task1', { text: 'Replaced text' });
+  assert.equal(second.wordCount, 2);
+  assert.equal(ctx.repo.s.texts.length, 1);
+  assert.equal((await ctx.service.putWritingText(U1, body.id, 'task1', { text: 'Replaced text' })).wordCount, 2);
+  await ctx.service.putWritingText(U1, body.id, 'task2', { text: '' });
+  const view = await ctx.service.getAttempt(U1, body.id);
+  assert.equal(view.skill, 'WRITING');
+  assert.deepEqual(view.recordings, []);
+  assert.deepEqual(view.tasks.map((t) => [t.taskKey, t.wordCount]), [['task1', 2], ['task2', 0]]);
+  assert.ok(view.tasks.every((t) => !('text' in t)));
+  assert.equal((await ctx.service.getWritingText(U1, body.id, 'task1')).text, 'Replaced text');
+  assert.equal((await ctx.service.getWritingText(U1, body.id, 'task2')).wordCount, 0);
+  const other = (await wcreate(ctx.service, { clientAttemptId: CLIENT2 })).body;
+  assert.equal((await ctx.service.getWritingText(U1, other.id, 'task1')).text, '');
+});
+
+test('Writing: quyền sở hữu, không lẫn với Speaking', async () => {
+  const ctx = setup();
+  const w = (await wcreate(ctx.service)).body;
+  const sp = (await create(ctx.service, { clientAttemptId: CLIENT2 })).body;
+  await ctx.service.putWritingText(U1, w.id, 'task1', { text: 'abc' });
+  assert.equal(await code(ctx.service.putWritingText(U2, w.id, 'task1', { text: 'x' })), '404:ATTEMPT_NOT_FOUND');
+  assert.equal(await code(ctx.service.getWritingText(U2, w.id, 'task1')), '404:ATTEMPT_NOT_FOUND');
+  assert.equal(await code(ctx.service.putWritingText(U1, sp.id, 'task1', { text: 'x' })), '404:ATTEMPT_NOT_FOUND');
+  assert.equal(await code(ctx.service.getWritingText(U1, sp.id, 'task1')), '404:ATTEMPT_NOT_FOUND');
+  assert.equal(await code(ctx.service.createRecording(U1, w.id, rec())), '404:ATTEMPT_NOT_FOUND');
+  assert.equal(await code(ctx.service.confirmRecording(U1, w.id, 'p1q1')), '404:ATTEMPT_NOT_FOUND');
+  assert.equal(await code(ctx.service.getRecordingUrl(U1, w.id, 'p1q1')), '404:ATTEMPT_NOT_FOUND');
+  assert.equal((await ctx.service.getAttempt(U1, sp.id)).tasks, undefined);
+  assert.equal(await code(ctx.service.putWritingText(U1, w.id, 'task9', { text: 'x' })), '404:TASK_NOT_FOUND');
+});
+
+test('Writing: quá hạn + ân hạn thì 409; hoàn thành ghi hạn 14 ngày, sau đó không sửa; không tự gửi chấm', async () => {
+  const ctx = setup();
+  const { body } = await wcreate(ctx.service);
+  advance(ctx, 60 * MIN + 100_000);
+  await ctx.service.putWritingText(U1, body.id, 'task1', { text: 'still ok in grace' });
+  advance(ctx, 30_000);
+  assert.equal(await code(ctx.service.putWritingText(U1, body.id, 'task1', { text: 'late' })), '409:ATTEMPT_TIME_EXPIRED');
+  const done = await ctx.service.completeAttempt(U1, body.id, { elapsedSeconds: 1, reason: 'TIME_UP' });
+  assert.equal(done.durationSeconds, 3600);
+  assert.equal(done.contentExpiresAt, new Date(ctx.clock.now.getTime() + 14 * DAY).toISOString());
+  assert.equal(await code(ctx.service.putWritingText(U1, body.id, 'task1', { text: 'after' })), '409:ATTEMPT_NOT_ACTIVE');
+  assert.equal((await ctx.service.getWritingText(U1, body.id, 'task1')).text, 'still ok in grace');
+  assert.equal(ctx.repo.s.gradingFor.size, 0);
+  assert.equal(await code(ctx.service.requestGrading(U1, body.id)), '501:GRADING_NOT_AVAILABLE');
+});
+
+test('Writing: đọc văn bản hết hạn 410 CONTENT_EXPIRED; dọn dẹp xóa text, không xóa bài đang chờ chấm', async () => {
+  const ctx = setup();
+  const mk = async (cid, grading) => {
+    const { body } = await wcreate(ctx.service, { clientAttemptId: cid });
+    await ctx.service.putWritingText(U1, body.id, 'task1', { text: 'bài viết' });
+    await ctx.service.completeAttempt(U1, body.id, { elapsedSeconds: 1 });
+    if (grading) ctx.repo.s.gradingFor.add(body.id);
+    return body.id;
+  };
+  const old = await mk('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', false);
+  const held = await mk('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', true);
+  advance(ctx, 13 * DAY);
+  assert.equal((await ctx.service.getWritingText(U1, old, 'task1')).text, 'bài viết');
+  advance(ctx, DAY);
+  assert.equal(await code(ctx.service.getWritingText(U1, old, 'task1')), '410:CONTENT_EXPIRED');
+  await cleanupAttemptContent({ repo: ctx.repo, storage: ctx.storage, clock: () => ctx.clock.now });
+  assert.ok(ctx.repo.s.texts.filter((t) => t.skillAttemptId === old).every((t) => t.text === null));
+  assert.ok(ctx.repo.s.texts.filter((t) => t.skillAttemptId === held).every((t) => t.text === 'bài viết'));
+  assert.deepEqual((await ctx.service.getAttempt(U1, old)).tasks, []);
+});
+
+test('Writing: hủy bài xóa văn bản; bài đã hoàn thành không hủy được', async () => {
+  const ctx = setup();
+  const a = (await wcreate(ctx.service)).body;
+  await ctx.service.putWritingText(U1, a.id, 'task1', { text: 'x y' });
+  await ctx.service.deleteAttempt(U1, a.id);
+  assert.equal(ctx.repo.s.texts.length, 0);
+  assert.equal(ctx.repo.s.attempts.size, 0);
+  const b = (await wcreate(ctx.service, { clientAttemptId: CLIENT2 })).body;
+  await ctx.service.completeAttempt(U1, b.id, { elapsedSeconds: 1 });
+  assert.equal(await code(ctx.service.deleteAttempt(U1, b.id)), '409:ATTEMPT_ALREADY_COMPLETED');
 });

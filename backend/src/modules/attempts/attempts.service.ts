@@ -1,20 +1,37 @@
 import type { RecordingStorage } from '../../integrations/storage/recording-storage.js';
 import { HttpError } from '../../utils/http.js';
-import { DEFAULT_SPEAKING_EMPTY, sectionsToSpeaking } from '../exams/exam-content.mapper.js';
-import type { AttemptRecord, AttemptsRepository } from './attempts.repository.js';
+import { DEFAULT_SPEAKING_EMPTY, sectionsToSpeaking, sectionsToWriting } from '../exams/exam-content.mapper.js';
+import type { AttemptRecord, AttemptSkill, AttemptsRepository } from './attempts.repository.js';
 import {
   CONTENT_RETENTION_DAYS,
   DEADLINE_GRACE_SECONDS,
   DOWNLOAD_URL_TTL_SECONDS,
   POST_COMPLETE_UPLOAD_WINDOW_MS,
   SPEAKING_REAL_LIMIT_MINUTES,
+  WRITING_DEFAULT_MIN_WORDS,
+  WRITING_REAL_LIMIT_MINUTES,
   STALE_IN_PROGRESS_HOURS,
   type CompleteAttemptInput,
   type CreateAttemptInput,
   type CreateRecordingInput,
+  type PutWritingInput,
+  PRACTICE_MAX_LIMIT_MINUTES,
 } from './attempts.schemas.js';
 
-export type AttemptsDeps = { repo: AttemptsRepository; storage: RecordingStorage; clock?: () => Date };
+export type AttemptsDeps = {
+  repo: AttemptsRepository;
+  storage: RecordingStorage;
+  clock?: () => Date;
+  // Đổi đường dẫn ảnh đề Writing thành URL công khai (bucket đề thi); mặc định không trả ảnh.
+  imageUrl?: (path: string) => string | null;
+};
+
+const TASK_ORDER: Record<string, number> = { task1: 0, task2: 1 };
+
+export function countWords(text: string) {
+  const t = text.trim();
+  return t ? t.split(/\s+/).length : 0;
+}
 
 const notFound = () => new HttpError(404, 'ATTEMPT_NOT_FOUND', 'Không tìm thấy lượt làm bài.');
 const DAY_MS = 24 * 3600 * 1000;
@@ -29,7 +46,7 @@ export function recordingPath(userId: string, attemptId: string, questionKey: st
   return `speaking/${userId}/${attemptId}/${questionKey}.${EXTENSIONS[base] ?? 'audio'}`;
 }
 
-export function createAttemptsService({ repo, storage, clock = () => new Date() }: AttemptsDeps) {
+export function createAttemptsService({ repo, storage, clock = () => new Date(), imageUrl }: AttemptsDeps) {
   // Chủ lượt làm: người khác nhận 404 như lượt không tồn tại (không lộ sự tồn tại).
   async function ownedAttempt(userId: string, id: string): Promise<AttemptRecord> {
     const attempt = await repo.getAttempt(id);
@@ -40,6 +57,12 @@ export function createAttemptsService({ repo, storage, clock = () => new Date() 
   function attemptView(a: AttemptRecord) {
     return { id: a.id, status: a.status, startedAt: a.startedAt.toISOString(), deadlineAt: a.deadlineAt?.toISOString() ?? null };
   }
+
+  const assertSkill = (a: AttemptRecord, skill: AttemptSkill) => {
+    if (a.skill !== skill) throw notFound();
+  };
+  const contentGone = (a: AttemptRecord, now: Date) =>
+    a.contentStatus === 'EXPIRED' || a.contentStatus === 'DELETED' || (a.contentExpiresAt !== null && now >= a.contentExpiresAt);
 
   // Cho phép TẠO/cấp lại URL bản ghi khi: đang làm (và chưa quá deadline + ân hạn), hoặc vừa hoàn thành trong cửa sổ ngắn.
   // Sau khi hoàn thành (mọi chế độ) chỉ được tải nốt hàng đã đăng ký lúc đang làm (hasPendingRow), không tạo câu mới.
@@ -69,7 +92,7 @@ export function createAttemptsService({ repo, storage, clock = () => new Date() 
 
   return {
     async getSpeakingContent(examSkillId: string) {
-      const skill = await repo.findPublishedSpeakingSkill(examSkillId);
+      const skill = await repo.findPublishedSkill(examSkillId, 'SPEAKING');
       if (!skill) throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Đề Speaking không tồn tại hoặc chưa được đăng.');
       const c = sectionsToSpeaking(skill.sections);
       const qs = (p: { instruction: string; questions: string[] }) => ({
@@ -98,6 +121,32 @@ export function createAttemptsService({ repo, storage, clock = () => new Date() 
       };
     },
 
+    async getWritingContent(examSkillId: string) {
+      const skill = await repo.findPublishedSkill(examSkillId, 'WRITING');
+      if (!skill) throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Đề Writing không tồn tại hoặc chưa được đăng.');
+      const content = sectionsToWriting(skill.sections, imageUrl ? (p) => imageUrl(p) || null : undefined);
+      const minWordsOf = (orderNo: number, key: 'task1' | 'task2') => {
+        const cfg = skill.sections.find((x) => x.order_no === orderNo)?.config as { minWords?: unknown } | null | undefined;
+        const n = Number(cfg?.minWords);
+        return Number.isFinite(n) && n > 0 ? Math.floor(n) : WRITING_DEFAULT_MIN_WORDS[key];
+      };
+      const keys = ['task1', 'task2'] as const;
+      return {
+        examSkillId: skill.id,
+        title: skill.examTitle,
+        form: skill.form,
+        durationMinutes: skill.durationMinutes,
+        tasks: content.tasks.map((t, i) => ({
+          taskKey: keys[i],
+          prompt: t.prompt,
+          imageUrl: t.imageUrl || null,
+          minWords: minWordsOf(i + 1, keys[i]),
+          ...(t.essayType ? { essayType: t.essayType } : {}),
+          ...(t.topic ? { topic: t.topic } : {}),
+        })),
+      };
+    },
+
     async createAttempt(userId: string, input: CreateAttemptInput) {
       const existing = await repo.findByClientAttemptId(userId, input.clientAttemptId);
       if (existing) {
@@ -106,10 +155,16 @@ export function createAttemptsService({ repo, storage, clock = () => new Date() 
         }
         return { created: false, body: attemptView(existing) };
       }
-      const skill = await repo.findPublishedSpeakingSkill(input.examSkillId);
-      if (!skill) throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Đề Speaking không tồn tại hoặc chưa được đăng.');
-      // Thi thật cố định 15 phút (bỏ qua limitMinutes của client). Practice: theo limitMinutes, null = không giới hạn.
-      const limitMinutes = input.mode === 'REAL' ? SPEAKING_REAL_LIMIT_MINUTES : input.limitMinutes;
+      // Kỹ năng do đề quyết định (không tin client): thử Speaking trước, không có thì Writing.
+      const skill =
+        (await repo.findPublishedSkill(input.examSkillId, 'SPEAKING')) ?? (await repo.findPublishedSkill(input.examSkillId, 'WRITING'));
+      if (!skill) throw new HttpError(404, 'EXAM_SKILL_NOT_FOUND', 'Đề không tồn tại hoặc chưa được đăng.');
+      // Thi thật cố định (Speaking 15, Writing 60 phút; bỏ qua limitMinutes của client). Practice: theo limitMinutes, null = không giới hạn.
+      if (skill.skill === 'SPEAKING' && input.limitMinutes !== null && input.limitMinutes > PRACTICE_MAX_LIMIT_MINUTES) {
+        throw new HttpError(400, 'VALIDATION_ERROR', 'Dữ liệu gửi lên không hợp lệ.');
+      }
+      const realLimit = skill.skill === 'WRITING' ? WRITING_REAL_LIMIT_MINUTES : SPEAKING_REAL_LIMIT_MINUTES;
+      const limitMinutes = input.mode === 'REAL' ? realLimit : input.limitMinutes;
       const startedAt = clock();
       const deadlineAt = limitMinutes === null ? null : new Date(startedAt.getTime() + limitMinutes * 60_000);
       const attempt = await repo.createAttempt({
@@ -122,8 +177,11 @@ export function createAttemptsService({ repo, storage, clock = () => new Date() 
 
     async getAttempt(userId: string, id: string) {
       const a = await ownedAttempt(userId, id);
-      const recordings = await repo.listRecordings(a.id);
+      const isWriting = a.skill === 'WRITING';
+      const recordings = isWriting ? [] : await repo.listRecordings(a.id);
+      const texts = isWriting && !contentGone(a, clock()) ? await repo.listWritingTexts(a.id) : [];
       return {
+        skill: a.skill,
         id: a.id,
         status: a.status,
         mode: a.mode,
@@ -135,12 +193,17 @@ export function createAttemptsService({ repo, storage, clock = () => new Date() 
         recordings: recordings.map((r) => ({
           questionId: r.questionKey, partIndex: r.partIndex, status: r.status, durationMs: r.durationMs, size: r.size,
         })),
+        // Chỉ Writing: số từ và mốc lưu, không kèm nội dung (đọc nội dung bằng GET .../writing/:taskKey).
+        ...(isWriting
+          ? { tasks: texts.map((t) => ({ taskKey: t.taskKey, wordCount: countWords(t.text), updatedAt: t.updatedAt.toISOString() })) }
+          : {}),
       };
     },
 
     async createRecording(userId: string, id: string, input: CreateRecordingInput) {
       const now = clock();
       const a = await ownedAttempt(userId, id);
+      assertSkill(a, 'SPEAKING');
       const current = await repo.getRecording(a.id, input.questionId);
       assertWritable(a, now, current?.status === 'PENDING');
       const sectionId = await repo.resolveSectionId(a, input.partIndex);
@@ -183,6 +246,7 @@ export function createAttemptsService({ repo, storage, clock = () => new Date() 
     async confirmRecording(userId: string, id: string, questionKey: string) {
       const now = clock();
       const a = await ownedAttempt(userId, id);
+      assertSkill(a, 'SPEAKING');
       const rec = await repo.getRecording(a.id, questionKey);
       if (!rec) throw new HttpError(404, 'RECORDING_NOT_FOUND', 'Không tìm thấy bản ghi.');
       if (rec.status === 'UPLOADED') return { status: 'UPLOADED' as const };
@@ -227,6 +291,7 @@ export function createAttemptsService({ repo, storage, clock = () => new Date() 
     async getRecordingUrl(userId: string, id: string, questionKey: string) {
       const now = clock();
       const a = await ownedAttempt(userId, id);
+      assertSkill(a, 'SPEAKING');
       // BR-CONTENT-002: hết hạn thì chặn đọc ngay cả khi job chưa xóa tệp. Mở/tải không đổi hạn.
       if (a.contentStatus === 'EXPIRED' || a.contentStatus === 'DELETED' || (a.contentExpiresAt && now >= a.contentExpiresAt)) {
         throw new HttpError(410, 'CONTENT_EXPIRED', 'Bản ghi đã hết hạn lưu.');
@@ -235,6 +300,36 @@ export function createAttemptsService({ repo, storage, clock = () => new Date() 
       if (!rec || rec.status !== 'UPLOADED') throw new HttpError(404, 'RECORDING_NOT_FOUND', 'Không tìm thấy bản ghi.');
       const url = await storage.createDownloadUrl(rec.audioPath, DOWNLOAD_URL_TTL_SECONDS);
       return { url, expiresAt: new Date(now.getTime() + DOWNLOAD_URL_TTL_SECONDS * 1000).toISOString() };
+    },
+
+    // Writing: lưu văn bản Task (ghi đè, idempotent). Không log nội dung bài viết.
+    async putWritingText(userId: string, id: string, taskKey: string, input: PutWritingInput) {
+      const now = clock();
+      const a = await ownedAttempt(userId, id);
+      assertSkill(a, 'WRITING');
+      if (contentGone(a, now)) throw new HttpError(410, 'CONTENT_EXPIRED', 'Nội dung đã hết hạn lưu.');
+      if (a.status !== 'IN_PROGRESS') throw new HttpError(409, 'ATTEMPT_NOT_ACTIVE', 'Lượt làm bài không còn nhận nội dung.');
+      if (a.deadlineAt && now.getTime() > a.deadlineAt.getTime() + DEADLINE_GRACE_SECONDS * 1000) {
+        throw new HttpError(409, 'ATTEMPT_TIME_EXPIRED', 'Đã quá thời gian làm bài.');
+      }
+      const partIndex = TASK_ORDER[taskKey];
+      const sectionId = partIndex === undefined ? null : await repo.resolveSectionId(a, partIndex);
+      if (!sectionId) throw new HttpError(404, 'TASK_NOT_FOUND', 'Task không tồn tại trong đề.');
+      const row = await repo.upsertWritingText({ skillAttemptId: a.id, sectionId, taskKey, text: input.text, now });
+      if (!row) throw new HttpError(410, 'CONTENT_EXPIRED', 'Nội dung đã hết hạn lưu.');
+      return { taskKey, wordCount: countWords(row.text), updatedAt: row.updatedAt.toISOString() };
+    },
+
+    async getWritingText(userId: string, id: string, taskKey: string) {
+      const now = clock();
+      const a = await ownedAttempt(userId, id);
+      assertSkill(a, 'WRITING');
+      // BR-CONTENT-002: hết hạn thì chặn đọc ngay cả khi job chưa xóa. Mở không đổi hạn.
+      if (contentGone(a, now)) throw new HttpError(410, 'CONTENT_EXPIRED', 'Nội dung đã hết hạn lưu.');
+      const row = await repo.getWritingText(a.id, taskKey);
+      // Chưa có hàng nghĩa là Người học chưa gõ gì cho Task này: trả văn bản rỗng để client khôi phục bài dở.
+      if (!row) return { taskKey, text: '', wordCount: 0, updatedAt: null };
+      return { taskKey, text: row.text, wordCount: countWords(row.text), updatedAt: row.updatedAt.toISOString() };
     },
 
     // "Không lưu": idempotent. Lượt không tồn tại hoặc của người khác: không làm gì (vẫn 204, không lộ thông tin).

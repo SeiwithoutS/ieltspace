@@ -90,3 +90,17 @@ export function resolveTimeLimit(
 export function limitLabel(minutes: number): string {
   return minutes === UNLIMITED ? "Không giới hạn" : minutes + " phút";
 }
+
+/**
+ * Giới hạn gửi lên máy chủ khi tạo lượt: số nguyên 1..30 (Practice có chọn mức) hoặc null
+ * (Không giới hạn, và Thi thật vì giờ do máy chủ tính). 0 hay số ngoài khoảng đều thành null.
+ */
+export function apiLimitMinutes(
+  mode: "real" | "practice",
+  minutes: number | undefined,
+): number | null {
+  if (mode === "real") return null;
+  return Number.isInteger(minutes) && (minutes as number) >= 1 && (minutes as number) <= 30
+    ? (minutes as number)
+    : null;
+}

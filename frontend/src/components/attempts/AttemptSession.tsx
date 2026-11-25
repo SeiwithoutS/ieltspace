@@ -19,7 +19,9 @@ import type { AttemptMode, Snapshot, ScreenProps } from "./types";
 import {
   parseAttemptDraft,
   type AttemptOptions,
+  type FinishedInfo,
 } from "../../lib/attempts/attempt-draft";
+import { clampElapsed } from "../../lib/attempts/finish-flow";
 import { useAttemptTimer } from "./AttemptTimer";
 import {
   purgeRecordings,
@@ -57,6 +59,12 @@ const LEGACY_REAL_MINUTES: Record<string, number> = {
   Writing: 60,
   Reading: 60,
 };
+/** Trang xác nhận hoàn thành bài Speaking (trang Người học, tên theo tiền tố Student). */
+function doneUrl(examId: string | null, extra: Record<string, string>): string {
+  const params = new URLSearchParams(extra);
+  if (examId) params.set("examId", examId);
+  return "StudentAttemptDone?" + params.toString();
+}
 export interface AttemptResult {
   elapsedSeconds: number;
   mode: AttemptMode;
@@ -117,6 +125,13 @@ export default function AttemptSession({
         : "",
   );
   const snapshot = useRef<Snapshot>({ state: draft?.state, model: null });
+  // Speaking đã Hoàn thành/Lưu nhưng chưa chốt được trên máy chủ: mở lại đề thì sang trang xác nhận.
+  const redirectDone = skill === "Speaking" && !!draft?.finished;
+  const finishedInfo = useRef<FinishedInfo | undefined>(undefined);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    if (redirectDone) navigate(doneUrl(examId, {}));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const real = options?.mode === "real";
   const limitMinutes = options?.limitMinutes ?? 0;
   // Speaking kiểm tra micro trước; đồng hồ chỉ chạy khi trang gọi onBegin.
@@ -167,7 +182,7 @@ export default function AttemptSession({
       await purgeRecordings(recordingPrefix(userId, examId));
   }
   // Sau khi hoàn thành/hủy/lưu thoát: không ghi lại draft nữa (kể cả khi trang còn phát snapshot muộn).
-  const ended = useRef(false);
+  const ended = useRef(redirectDone);
   const ending = useRef(false);
   const lastWrite = useRef(0);
   // Đã đăng xuất (tab này hoặc tab khác): dữ liệu local đã bị dọn, không ghi lại nữa.
@@ -200,6 +215,7 @@ export default function AttemptSession({
         state: snapshot.current.state,
         savedAt: now,
         ...(epoch !== undefined ? { startedAtEpoch: epoch } : {}),
+        ...(finishedInfo.current ? { finished: finishedInfo.current } : {}),
       }),
     );
     lastWrite.current = now;
@@ -265,16 +281,66 @@ export default function AttemptSession({
     if (!options || ending.current) return;
     ending.current = true;
     ended.current = true;
+    setBusy(true);
     window.clearTimeout(writeTimer.current);
     await sealRecordings();
+    const epoch = startEpoch.current;
+    let elapsedSeconds =
+      skill === "Speaking" && epoch !== undefined
+        ? Math.max(0, Math.floor((Date.now() - epoch) / 1000))
+        : timer.elapsedSeconds;
+    if (limitMinutes > 0) elapsedSeconds = Math.min(elapsedSeconds, limitMinutes * 60);
+    elapsedSeconds = clampElapsed(elapsedSeconds);
     const result: AttemptResult = {
-      elapsedSeconds: timer.elapsedSeconds,
+      elapsedSeconds,
       mode: options.mode,
       limitMinutes,
     };
     onFinish?.(result);
-    // TODO: Speaking cần tải bản ghi lên server (idempotent theo khóa câu) và mở AttemptDone
-    // trước khi dọn; chưa có API nên bản ghi bị xóa ở đây.
+    if (skill === "Speaking" && snapshot.current.complete) {
+      // Chỉ dọn bản ghi và draft sau khi tải lên đủ và chốt thành công trên máy chủ.
+      const reason = dialog === "expired" ? "TIME_UP" : "SUBMITTED";
+      const outcome = await snapshot.current.complete({ elapsedSeconds, reason });
+      if (outcome.status === "local") {
+        // Đề mẫu: không có gì trên máy chủ, dọn máy rồi báo đây là bài làm thử.
+        await clearStored();
+        navigate(
+          doneUrl(examId, {
+            sample: "1",
+            elapsed: String(elapsedSeconds),
+            answered: String(outcome.answered),
+          }),
+        );
+      } else if (outcome.status === "completed") {
+        await clearStored();
+        navigate(
+          doneUrl(examId, {
+            attempt: outcome.serverId,
+            elapsed: String(outcome.durationSeconds),
+            answered: String(outcome.answered),
+            ...(outcome.expiredIds.length
+              ? { expired: outcome.expiredIds.join(",") }
+              : {}),
+          }),
+        );
+      } else {
+        // Giữ draft và bản ghi trên máy; trang xác nhận tiếp tục tải lên và chốt ở nền.
+        finishedInfo.current = {
+          elapsedSeconds,
+          reason,
+          answered: outcome.answered,
+          finishedAt: Date.now(),
+          ...(outcome.serverId ? { serverAttemptId: outcome.serverId } : {}),
+        };
+        try {
+          writeDraft();
+        } catch {
+          // Không ghi được draft: bản ghi vẫn còn trong IndexedDB/bộ nhớ của phiên này.
+        }
+        navigate(doneUrl(examId, { elapsed: String(elapsedSeconds) }));
+      }
+      return;
+    }
     await clearStored();
     navigate(
       written
@@ -293,6 +359,12 @@ export default function AttemptSession({
     ended.current = true;
     window.clearTimeout(writeTimer.current);
     await sealRecordings();
+    // "Không lưu": xóa lượt trên máy chủ (lỗi mạng thì xếp hàng xóa sau) rồi dọn dữ liệu trên máy.
+    try {
+      await snapshot.current.cancel?.();
+    } catch {
+      // Không chặn người học thoát.
+    }
     await clearStored();
     exit();
   }
@@ -317,6 +389,7 @@ export default function AttemptSession({
       saving.current = false;
     }
   }
+  if (redirectDone) return null;
   return (
     <>
       {options && (
@@ -330,6 +403,7 @@ export default function AttemptSession({
           timeWarn={timer.timeWarn}
           countdown={timer.countdown}
           timeExpired={dialog === "expired"}
+          limitMinutes={limitMinutes}
           onBegin={() => {
             if (skill === "Speaking") startEpoch.current ??= Date.now();
             setBegun(true);
@@ -379,6 +453,7 @@ export default function AttemptSession({
             kind={dialog}
             skill={skill}
             real={real}
+            busy={busy}
             memoryOnly={
               snapshot.current.persistent
                 ? !snapshot.current.persistent()

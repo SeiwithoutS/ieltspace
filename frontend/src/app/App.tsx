@@ -22,13 +22,15 @@ const publicSamplePages: readonly PageName[] = ["SampleLibrary", "SampleWriting"
 const publicLibraryPages: readonly PageName[] = [
  ...publicSamplePages, "FullTests", "ExamDetail", "PracticeHub", "PracticeListening", "PracticeReading", "PracticeWriting", "PracticeSpeaking", "PracticeLibrary", "PracticeWS", "Vocab",
 ];
-const learnerStudyPages: readonly PageName[] = ['Profile', 'Flashcard', 'StudentLanding', 'StudentHome', 'PracticeHistory', 'MyWS'];
+const learnerStudyPages: readonly PageName[] = ['Profile', 'Flashcard', 'StudentLanding', 'StudentHome', 'PracticeHistory', 'MyWS', 'StudentAttemptDone'];
 function resolve(name: string): PageName { name=name.split('?')[0]; return (aliases[name] || name) in pages ? (aliases[name] || name) as PageName : 'Main'; }
 export default function App() {
  const auth=useAuth();
  useEffect(()=>{void refresh().catch(()=>{});},[]);
  // Dọn draft và bản ghi âm Speaking quá 24 giờ còn sót trên máy.
  useEffect(()=>{void sweepAttemptStorage();},[]);
+ // Xóa lượt "Không lưu" còn xếp hàng khi trước đó mất mạng.
+ useEffect(()=>{if(auth.user?.id)void import("../lib/attempts/attempt-sync").then(m=>m.flushPendingDeletes(auth.user?.id)).catch(()=>{});},[auth.user?.id]);
  useEffect(() => {
   if (!auth.user?.id) return;
   function checkVisibleSession() {

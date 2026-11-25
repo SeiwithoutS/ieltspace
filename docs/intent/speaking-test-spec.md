@@ -59,31 +59,39 @@ Danh sách mức theo kỹ năng, đặt thành hằng số trong `lib/attempts/
 - Đổi chữ dialog `exit` ở `AttemptConfirmation.tsx:75` (đang ghi "trong cùng tab") cho khớp lưu bền.
 - `ConnectionNotice` nhắc không tắt màn hình, không chuyển trang; cân nhắc Screen Wake Lock nếu trình duyệt hỗ trợ.
 
-## 5. Dữ liệu và backend (cần duyệt trước khi làm)
-Theo `CLAUDE.md`, thêm model/migration phải hỏi trước. Việc cần quyết:
-- API đề Speaking cho Người học (không trả đáp án, theo `exam_versions`), hiện chỉ có API admin.
-- Lưu bài nói: bảng bài làm (attempt) và bản ghi âm từng câu (file trong storage, đường dẫn trong DB), thời gian hoàn thành (`elapsed_seconds`), mode, thời gian tối đa đã chọn. Nộp idempotent.
-- Giáo viên: danh sách bài chờ chấm, nghe âm thanh, chấm 4 tiêu chí.
-- Thời điểm bắt đầu lượt làm phải do máy chủ ghi và dùng để tính giờ còn lại; `startedAtEpoch` trong localStorage chỉ là bản tạm, người dùng sửa được để kéo dài giờ hoặc làm lại câu Thi thật. Backend cũng phải kiểm lại luật "mỗi câu ghi một lần" khi nhận bản ghi.
-- Lưu ghi âm 14 ngày (mô tả luật hiện ở `SpeakingTest.tsx:304-308`): cần xác nhận lại với yêu cầu mới trước khi giữ.
-Frontend giai đoạn đầu có thể dùng dữ liệu mẫu như phần còn lại của app, nhưng cấu trúc đề phải dùng `SpeakingEditorState`.
+## 5. Dữ liệu và backend (đã nối theo hợp đồng API, backend làm song song)
+Frontend gọi qua `lib/attempts/skill-attempts-api.ts` (dùng `apiFetch`, không log URL tải lên/tải xuống):
+- `GET /learner/exam-skills/:id/speaking`: đề cho Người học, không đáp án. `examSkillId` tra từ `examId` trong URL qua `/exam-sets/practice-items?skill=SPEAKING` (hoặc tham số `skillId` trên URL). Lỗi, chưa có backend hoặc quá 5 giây thì dùng `data/speaking-test.sample.ts` như cũ.
+- `POST /learner/skill-attempts` (`clientAttemptId` = `attemptId` trong draft, idempotent): gọi khi bắt đầu làm bài (sau kiểm tra micro hoặc khi vào lại). Lỗi mạng thì làm offline, thử lại ở nền (backoff) và khi có mạng. `serverAttemptId` lưu trong `SpeakingProgress` của draft; mất thì tạo lại bằng cùng `clientAttemptId`.
+- Bản ghi: `POST .../recordings` rồi PUT blob lên `uploadUrl` rồi `POST .../recordings/:questionId/confirm`. Chạy qua `UploadQueue` (`lib/attempts/upload-queue.ts`): đọc blob từ `RecordingStore` (IndexedDB), thử lại có backoff với lỗi tạm (mạng, 408, 429, 5xx, 401), lỗi 4xx khác đánh dấu `failed` chờ "Thử lại", 409 `RECORDING_ALREADY_EXISTS` coi như xong, cùng `version` (`recordedAt`) không tải lại, `online` thì chạy ngay. `partIndex` gửi lên là chỉ số Part từ 0.
+- Hoàn thành/Lưu (kể cả hết giờ chọn Lưu): `finishAttempt` (`finish-flow.ts`) đẩy hết bản ghi còn lại (chờ tối đa 60 giây) rồi `POST .../complete` (`reason` `SUBMITTED` hoặc `TIME_UP`). Chỉ khi cả hai thành công mới xóa draft và bản ghi trên máy. Chưa xong thì giữ nguyên dữ liệu, ghi `finished` vào draft, sang trang xác nhận với trạng thái "chưa tải lên đủ"; trang đó tiếp tục tải và chốt ở nền (15 giây một lần, khi có mạng, nút "Thử lại"). Mở lại đề có draft `finished` thì chuyển thẳng sang trang xác nhận.
+- "Không lưu": `DELETE /learner/skill-attempts/:id`; lỗi mạng thì xếp vào `pending-deletes` (localStorage, chỉ chứa mã lượt) và xóa lại khi mở app hoặc có mạng.
+- Nghe lại: bản ghi còn trên máy thì phát blob local; đã chốt thì `GET .../recordings/:questionId/url` (hết hạn 410 `CONTENT_EXPIRED`).
+- Gửi chấm: `POST .../grading-request`; hiện backend trả 501 `GRADING_NOT_AVAILABLE`, giao diện báo "Tính năng gửi chấm sẽ sớm khả dụng", không báo lỗi đỏ.
+Bổ sung theo review bước 5 (frontend):
+- `limitMinutes` gửi khi tạo lượt: số nguyên 1..30 hoặc `null` (Không giới hạn gửi `null`, không gửi 0; Thi thật gửi `null`), qua `apiLimitMinutes` ở `time-limits.ts`.
+- `POST .../recordings` có thể trả `alreadyUploaded: true`: bỏ PUT, gọi confirm luôn. PUT bị storage từ chối vì trùng (400/409, `statusCode` "409") cũng đi tiếp sang confirm, không đánh `failed`.
+- `ATTEMPT_TIME_EXPIRED` / `ATTEMPT_NOT_ACTIVE` từ ghi nhận hoặc xác nhận bản ghi: mục đó thành `expired` (không tải được, không thử lại) nhưng vẫn `complete`; trang xác nhận ghi "<Câu> không tải lên được vì quá giờ".
+- Rơi về đề mẫu (đề lỗi hoặc quá 5 giây): `offlineSample`, không tạo lượt, không xếp upload, không dùng `serverAttemptId` cũ; Hoàn thành sang trang xác nhận `?sample=1` ghi "bài làm thử với đề mẫu, không lưu lên máy chủ", không gửi chấm.
+- `elapsedSeconds` gửi `complete` kẹp 0..24 giờ (`clampElapsed`); `complete` lỗi 4xx cố định (trừ 401/408/425/429) thì trang xác nhận dừng thử lại và báo, không lặp mãi.
+- `DELETE` trả 409 `ATTEMPT_ALREADY_COMPLETED`: coi là không xóa được, không báo lỗi, bỏ khỏi `pending-deletes`. `POST /skill-attempts` trả 409 `CLIENT_ATTEMPT_ID_CONFLICT`: sinh mã mới đúng một lần rồi tạo lại, lỗi lần hai là lỗi cố định.
+- "Số câu đã trả lời" chỉ đếm bản ghi `UPLOADED` (đã chốt) hoặc bản local trong phiên; ô số liệu viền 1.5px.
+Còn lại backend phải làm: giờ bắt đầu do máy chủ ghi (thay `startedAtEpoch` local), kiểm lại luật "mỗi câu ghi một lần" ở Thi thật, hạn lưu 14 ngày tính từ lúc hoàn thành (BR-CONTENT-001), danh sách chờ chấm cho Giáo viên.
 
-## 6. Việc cần gỡ hoặc đổi trong code hiện có
-- Gỡ hard-code giờ ở `AttemptSession.tsx:147-157`, thay bằng giá trị từ `TimeLimitPicker`.
-- Gỡ đoạn lọc Part ở `StartTestDialog.tsx:130-133`.
-- Thay nội dung tĩnh của `SpeakingTest.tsx` bằng dữ liệu đề thật và các trạng thái ở mục 3. Giữ style bám canvas và [DESIGN.md](../DESIGN.md); chưa có thiết kế cho `MicCheck`, `RecorderControl`, `AttemptDone`, cần hỏi người dùng hoặc xin thiết kế.
-- Thêm trang `AttemptDone` vào `app/pages.ts`, đặt tên trang đúng tiền tố phân quyền (hiện regex ở `App.tsx` khớp `Student*`, `Admin*`, `Teacher*`).
-- Phát thời gian hoàn thành vào `finish()` và kết quả.
+## 6. Việc đã làm và còn lại trong code
+- Đã gỡ giờ hard-code, đoạn lọc Part, thay nội dung tĩnh bằng luồng thật (xem mục 3, 4).
+- Trang xác nhận mới `StudentAttemptDone` (`pages/attempts/`, đăng ký ở `app/pages.ts`, thêm vào `learnerStudyPages` ở `App.tsx` để chỉ Người học vào được; tiền tố `Student` giữ ngữ cảnh Người học). Phần giao diện dùng chung nằm ở `components/attempts/AttemptDoneSummary.tsx` để Writing dùng lại: thời gian hoàn thành (mm:ss), số câu đã trả lời, trạng thái tải lên, hạn lưu bản ghi, nghe lại từng câu, "Gửi cho Giáo viên chấm", "Về trang chủ", "Lịch sử làm bài". Có ghi rõ hoàn thành chưa tự gửi chấm. Giao diện tự dựng theo khung hộp thoại `attempt-card`, chưa có thiết kế trên canvas nên cần người dùng duyệt.
+- Writing chưa nối `complete`/xác nhận; `finish()` của Writing và Reading, Listening giữ như cũ.
+- Draft ở localStorage vẫn hết hạn sau 24 giờ: bản ghi chưa tải lên được quá 24 giờ sẽ bị dọn như trước.
 
-## 7. Thứ tự làm đề xuất
-1. Hằng số `time-limits.ts` + `TimeLimitPicker` + `AttemptTimer` + `TimeUpDialog` (dùng được ngay cho Reading, không đụng backend).
-2. `ModePicker` (tách từ `StartTestDialog`), gỡ hard-code giờ.
-3. `MicCheck` + `RecorderControl` + luồng câu hỏi Speaking (dữ liệu mẫu).
-4. Lưu offline IndexedDB + khôi phục theo luật mục 4.
-5. `AttemptDone` + gửi chấm (cần backend đã duyệt ở mục 5).
+## 7. Thứ tự làm đề xuất (còn lại)
+1. Backend chạy thật các endpoint ở mục 5, kiểm thử nối đầu cuối.
+2. Gửi chấm khi module lượt chấm W/S sẵn sàng.
+3. Nối Writing vào `AttemptDoneSummary`.
 
 ## 8. Câu hỏi còn mở
-- Lưu offline chỉ trong trình duyệt hay cả khi đóng tab và mở lại trên cùng máy (đề xuất: cả hai, IndexedDB bền qua đóng tab).
-- Có thêm bảng dữ liệu bài nói và hạ tầng lưu file âm thanh (Supabase Storage?) không, thời hạn lưu ghi âm bao lâu.
-- Thiết kế giao diện cho `MicCheck`, `RecorderControl`, `AttemptDone`.
-- "Gửi Giáo viên chấm" có tính một lượt chấm của Người học ngay khi gửi không (theo [BUSINESS_RULES.md](../BUSINESS_RULES.md)).
+- Đơn vị `prep`/`speak` của thẻ Part 2 trong API (phút như editor hay giây); frontend đang coi số lớn hơn 10 là giây.
+- `partIndex` bắt đầu từ 0 hay 1 (frontend gửi từ 0).
+- Draft hết hạn 24 giờ có cần kéo dài cho bài chưa tải lên được không.
+- Thiết kế giao diện chính thức cho `MicCheck`, `RecorderControl`, `AttemptDone`.
+- "Gửi Giáo viên chấm" tính một lượt chấm ngay khi gửi (theo [BUSINESS_RULES.md](../BUSINESS_RULES.md), BR-REQUEST-001: có, trong cùng giao dịch).

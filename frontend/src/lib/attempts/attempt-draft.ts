@@ -25,6 +25,19 @@ export interface AttemptDraft {
    * khi rời đi nên giây đã dùng luôn là (bây giờ - mốc), không cộng dồn từng lần lưu.
    */
   startedAtEpoch?: number;
+  /**
+   * Speaking: bài đã bấm Hoàn thành/Lưu nhưng chưa tải lên đủ hoặc chưa chốt được
+   * trên máy chủ. Còn draft + bản ghi trên máy để thử lại; mở lại đề thì sang trang xác nhận.
+   */
+  finished?: FinishedInfo;
+}
+export interface FinishedInfo {
+  elapsedSeconds: number;
+  reason: "SUBMITTED" | "TIME_UP";
+  serverAttemptId?: string;
+  /** Số câu đã trả lời lúc kết thúc. */
+  answered: number;
+  finishedAt: number;
 }
 
 const SPEAKING_PHASES = [
@@ -53,12 +66,44 @@ function cleanSpeaking(value: unknown): SpeakingProgress | undefined {
     !answered.every((id) => typeof id === "string" && id.length <= 100)
   )
     return undefined;
+  const serverAttemptId = (value as Record<string, unknown>).serverAttemptId;
   return {
     attemptId,
     stepId,
     index: index as number,
     phase: phase as SpeakingProgress["phase"],
     answered: answered as string[],
+    ...(typeof serverAttemptId === "string" &&
+    serverAttemptId &&
+    serverAttemptId.length <= 100
+      ? { serverAttemptId }
+      : {}),
+  };
+}
+
+function cleanFinished(value: unknown): FinishedInfo | undefined {
+  if (!isObject(value)) return undefined;
+  const { elapsedSeconds, reason, serverAttemptId, answered, finishedAt } = value;
+  if (
+    typeof elapsedSeconds !== "number" ||
+    !Number.isFinite(elapsedSeconds) ||
+    elapsedSeconds < 0
+  )
+    return undefined;
+  if (reason !== "SUBMITTED" && reason !== "TIME_UP") return undefined;
+  if (!Number.isInteger(answered) || (answered as number) < 0) return undefined;
+  if (typeof finishedAt !== "number" || !Number.isFinite(finishedAt))
+    return undefined;
+  return {
+    elapsedSeconds,
+    reason,
+    answered: answered as number,
+    finishedAt,
+    ...(typeof serverAttemptId === "string" &&
+    serverAttemptId &&
+    serverAttemptId.length <= 100
+      ? { serverAttemptId }
+      : {}),
   };
 }
 
@@ -190,12 +235,14 @@ export function parseAttemptDraft(raw: string | null): AttemptDraft | null {
       value.startedAtEpoch >= 0
         ? { startedAtEpoch: value.startedAtEpoch }
         : {};
+    const finished = cleanFinished(value.finished);
     return {
       options: { mode, parts, ...limit },
       seconds: value.seconds,
       state,
       ...savedAt,
       ...startedAtEpoch,
+      ...(finished ? { finished } : {}),
     };
   } catch {
     return null;

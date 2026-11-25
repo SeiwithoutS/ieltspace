@@ -6,6 +6,8 @@ import QuestionCard from "../../components/attempts/QuestionCard";
 import RecorderControl from "../../components/attempts/RecorderControl";
 import type { ScreenProps } from "../../components/attempts/types";
 import { speakingTestSample } from "../../data/speaking-test.sample";
+import type { SpeakingEditorState } from "../../lib/exams/exam-editor";
+import { getAttemptSync, loadSpeakingTest } from "../../lib/attempts/attempt-sync";
 import { micErrorMessage, requestMicStream, stopStream, streamIsLive } from "../../lib/attempts/mic";
 import {
   getAuthUser,
@@ -65,7 +67,39 @@ const chipBase =
 const headerButton =
   "inline-flex items-center justify-center gap-2 [height:42px] [padding:0_20px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border font-semibold [font-size:14px] no-underline whitespace-nowrap";
 
-export default function SpeakingTest({
+/** Lấy đề từ máy chủ; lỗi hoặc chưa có backend thì dùng đề mẫu như trước (không chặn người học). */
+export default function SpeakingTest(props: ScreenProps) {
+  const [test, setTest] = useState<SpeakingEditorState | null>(null);
+  // Rơi về đề mẫu: bài chỉ làm cục bộ, không tạo lượt và không tải lên máy chủ.
+  const [offlineSample, setOfflineSample] = useState(false);
+  useEffect(() => {
+    let live = true;
+    const examId = new URLSearchParams(location.hash.split("?")[1]).get("examId");
+    void loadSpeakingTest(examId).then((loaded) => {
+      if (!live) return;
+      setOfflineSample(!loaded);
+      setTest(loaded ?? speakingTestSample);
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
+  if (!test)
+    return (
+      <div
+        role="status"
+        className="attempt-sans [padding:40px_32px] text-center [color:var(--attempt-text-706473)]"
+      >
+        {"Đang tải đề…"}
+      </div>
+    );
+  return <SpeakingRun {...props} test={test} offlineSample={offlineSample} />;
+}
+
+function SpeakingRun({
+  test,
+  offlineSample = false,
+  limitMinutes = 0,
   initialState,
   timeText,
   timeExpired = false,
@@ -78,11 +112,10 @@ export default function SpeakingTest({
   onSubmit,
   onBegin,
   onSnapshot,
-}: ScreenProps) {
+}: ScreenProps & { test: SpeakingEditorState; offlineSample?: boolean }) {
   const onAccent = accentForeground(accent);
   const mode = cheDo === "Luyện tập" ? "practice" : "real";
   const practice = mode === "practice";
-  const test = speakingTestSample;
   const steps = useMemo(
     () =>
       buildSpeakingSteps(
@@ -105,6 +138,27 @@ export default function SpeakingTest({
   const [store] = useState(() =>
     createDurableRecordingStore(recordingScope(userId, examId, attemptId)),
   );
+  // Đồng bộ với máy chủ: tạo lượt làm, tải bản ghi ở nền, chốt khi Hoàn thành. Lỗi mạng không chặn bài.
+  const [sync] = useState(() =>
+    getAttemptSync({
+      userId,
+      examId,
+      clientAttemptId: attemptId,
+      mode,
+      limitMinutes,
+      store,
+      offlineSample,
+      serverId: saved?.serverAttemptId,
+    }),
+  );
+  const partOf = (id: string) => steps.find((st) => st.id === id)?.part ?? 0;
+  /** Bắt đầu làm bài (sau kiểm tra micro hoặc khi vào lại): tạo lượt trên máy chủ, không chờ. */
+  function begin() {
+    void sync.ensureCreated().then((id) => {
+      if (id && alive.current) emitSnapshot();
+    });
+    onBegin?.();
+  }
   // Các câu đã có bản ghi (cập nhật ngay, không chờ render) và các lần lưu đang chạy.
   const answeredIds = useRef(new Set<string>());
   const pendingPuts = useRef(new Set<Promise<unknown>>());
@@ -190,6 +244,13 @@ export default function SpeakingTest({
         }
         answeredIds.current = new Set(Object.keys(found));
         setAnswers(found);
+        // Đối chiếu với máy chủ rồi xếp hàng tải các bản ghi chưa lên.
+        const versions: Record<string, number> = {};
+        for (const [id, a] of Object.entries(found)) versions[id] = a.recordedAt;
+        void sync.reconcile(versions).finally(() => {
+          for (const [id, a] of Object.entries(found))
+            sync.queue.enqueue(id, partOf(id), a.recordedAt);
+        });
         const restored = restoreFlowDetailed(
           steps,
           saved,
@@ -242,7 +303,7 @@ export default function SpeakingTest({
         if (notes.length) setRestoreNote(notes.join(" "));
         if (mic) {
           setStream(mic);
-          onBegin?.();
+          begin();
         }
         setLoading(false);
       })();
@@ -302,41 +363,11 @@ export default function SpeakingTest({
   // Vị trí và câu đã ghi cho phiên làm bài; blob nằm trong IndexedDB, không đi qua snapshot/draft.
   const onSnapshotRef = useRef(onSnapshot);
   onSnapshotRef.current = onSnapshot;
-  function emitSnapshot() {
-    if (loading) return;
-    // Vào lại bài mà chưa qua kiểm tra micro: câu chưa hiện ra nên chưa ghi đè vị trí đã lưu
-    // (F5 tiếp ở màn kiểm tra micro không làm mất thêm câu nào).
-    if (saved && !streamRef.current) return;
-    const current = flowRef.current;
-    const began = !!streamRef.current || !!saved;
-    const at = steps[current.index];
-    onSnapshotRef.current?.({
-      state: {
-        ...initialState,
-        current: current.index,
-        ...(began
-          ? {
-              speaking: {
-                attemptId,
-                stepId: at?.id ?? "",
-                index: current.index,
-                phase: current.phase,
-                answered: [...answeredIds.current],
-              },
-            }
-          : {}),
-      },
-      model: {
-        questions: steps.map((st, i) => ({
-          n: i + 1,
-          value:
-            answeredIds.current.has(st.id) || answersRef.current[st.id]
-              ? "đã ghi âm"
-              : "",
-        })),
-      },
+  /** Việc dùng cho Lưu và thoát, Hoàn thành, Không lưu; có sẵn cả khi đang khôi phục hoặc chờ kiểm tra micro. */
+  function hooks() {
+    return {
       // Lưu và thoát / kết thúc: chờ bản ghi đang dừng và đang lưu vào kho xong rồi chốt danh sách câu đã ghi.
-      flush: async (options) => {
+      flush: async (options?: { seal?: boolean }) => {
         // Kết thúc bài: từ đây không nhận bản ghi mới (bản đang ghi dở bị bỏ cùng bài).
         if (options?.seal) sealed.current = true;
         else if (
@@ -355,6 +386,74 @@ export default function SpeakingTest({
         emitSnapshot();
       },
       persistent: () => store.persistent(),
+      // Hoàn thành/Lưu: tải hết bản ghi còn lại rồi chốt trên máy chủ. Chỉ "completed" mới cho dọn dữ liệu máy.
+      complete: async (input: {
+        elapsedSeconds: number;
+        reason: "SUBMITTED" | "TIME_UP";
+      }) => {
+        let ids: string[] = [];
+        try {
+          ids = (await store.ids()).filter((id) => steps.some((st) => st.id === id));
+        } catch {
+          ids = [...answeredIds.current];
+        }
+        const known = new Set(sync.queue.items().map((i) => i.questionId));
+        for (const id of ids)
+          if (!known.has(id))
+            sync.queue.enqueue(
+              id,
+              partOf(id),
+              (await store.get(id).catch(() => undefined))?.recordedAt ?? 0,
+            );
+        if (offlineSample) return { status: "local" as const, answered: ids.length };
+        const outcome = await sync.finish(input.elapsedSeconds, input.reason);
+        const skipped =
+          outcome.status === "completed" ? outcome.expiredIds.length : 0;
+        return { ...outcome, answered: ids.length - skipped };
+      },
+      cancel: () => sync.cancel(),
+    };
+  }
+  function emitSnapshot() {
+    // Đang khôi phục hoặc vào lại bài mà chưa qua kiểm tra micro: chưa ghi đè vị trí đã lưu
+    // (F5 tiếp ở màn kiểm tra micro không làm mất thêm câu nào), nhưng vẫn cho Hoàn thành/Không lưu
+    // (vd hết giờ khi đang khôi phục) đi đúng đường tải lên.
+    if (loading || (saved && !streamRef.current)) {
+      onSnapshotRef.current?.({ state: initialState, model: null, ...hooks() });
+      return;
+    }
+    const current = flowRef.current;
+    const began = !!streamRef.current || !!saved;
+    const at = steps[current.index];
+    onSnapshotRef.current?.({
+      state: {
+        ...initialState,
+        current: current.index,
+        ...(began
+          ? {
+              speaking: {
+                attemptId,
+                stepId: at?.id ?? "",
+                index: current.index,
+                phase: current.phase,
+                answered: [...answeredIds.current],
+                ...(sync.serverId && !offlineSample
+                  ? { serverAttemptId: sync.serverId }
+                  : {}),
+              },
+            }
+          : {}),
+      },
+      model: {
+        questions: steps.map((st, i) => ({
+          n: i + 1,
+          value:
+            answeredIds.current.has(st.id) || answersRef.current[st.id]
+              ? "đã ghi âm"
+              : "",
+        })),
+      },
+      ...hooks(),
     });
   }
   useEffect(() => {
@@ -389,6 +488,8 @@ export default function SpeakingTest({
         // bản ghi vẫn nghe lại được trong phiên này nhưng không khôi phục được sau khi tải lại.
         if (store.persistent()) answeredIds.current.add(id);
         setAnswers((current) => ({ ...current, [id]: answer }));
+        // Tải lên ở nền ngay khi ghi xong; chưa có mạng thì giữ trong hàng đợi.
+        sync.queue.enqueue(id, partOf(id), answer.recordedAt);
       })
       .catch(() => undefined);
     track(job);
@@ -553,7 +654,7 @@ export default function SpeakingTest({
             onAccent={onAccent}
             onPassed={(next) => {
               setStream(next);
-              onBegin?.();
+              begin();
             }}
           />
           <div className="mx-auto [max-width:560px] [padding:0_32px_24px]">
@@ -625,14 +726,7 @@ export default function SpeakingTest({
                 step={step}
                 phase={flow.phase}
                 seconds={flow.seconds}
-              />
-            )}
-            {step?.instr && flow.phase !== "done" && (
-              <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
-                {step.instr}
-              </div>
-            )}
-            {flow.phase !== "done" && (
+                footer={
               <RecorderControl
                 stream={stream}
                 questionId={step?.id ?? ""}
@@ -699,6 +793,13 @@ export default function SpeakingTest({
                   </button>
                 }
               />
+                }
+              />
+            )}
+            {step?.instr && flow.phase !== "done" && (
+              <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
+                {step.instr}
+              </div>
             )}
             <ConnectionNotice persistent={store.persistent()} />
             <div className="[font-size:13px] [color:var(--attempt-text-706473)] text-center">

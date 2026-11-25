@@ -1,5 +1,6 @@
 import type { AttemptSummary } from "./AttemptConfirmation";
 import type { SpeakingPhase } from "../../lib/attempts/speaking-flow";
+import type { FinishOutcome, FinishReason } from "../../lib/attempts/finish-flow";
 
 export type AttemptMode = "practice" | "real";
 export type Skill = "reading" | "listening" | "writing" | "speaking";
@@ -21,6 +22,8 @@ export interface SpeakingProgress {
   phase: SpeakingPhase;
   /** Các câu đã có bản ghi lúc lưu. */
   answered: string[];
+  /** Mã lượt làm trên máy chủ (đã tạo được); chưa có thì tạo lại bằng attemptId (idempotent). */
+  serverAttemptId?: string;
 }
 
 /** Persisted UI state. Keys also accept drafts saved before the TSX migration. */
@@ -56,6 +59,20 @@ export interface Snapshot {
   flush?: (options?: { seal?: boolean }) => Promise<void>;
   /** false khi bản ghi chỉ còn trong bộ nhớ (IndexedDB lỗi) và sẽ mất nếu thoát. */
   persistent?: () => boolean;
+  /**
+   * Speaking: tải hết bản ghi còn lại rồi chốt lượt làm trên máy chủ. Chỉ khi trả
+   * `completed` mới được dọn dữ liệu trên máy.
+   */
+  complete?: (input: {
+    elapsedSeconds: number;
+    reason: FinishReason;
+  }) => Promise<
+    | (FinishOutcome & { answered: number })
+    /** Bài làm thử với đề mẫu: chỉ làm cục bộ, không có lượt trên máy chủ. */
+    | { status: "local"; answered: number }
+  >;
+  /** Speaking, "Không lưu": xóa lượt trên máy chủ (lỗi mạng thì xếp hàng xóa sau). */
+  cancel?: () => Promise<void>;
 }
 export interface ScreenProps {
   initialState?: AttemptState;
@@ -70,6 +87,8 @@ export interface ScreenProps {
    * đó đồng hồ chưa chạy. Trang không dùng thì đồng hồ chạy ngay như cũ.
    */
   onBegin?: () => void;
+  /** Mức thời gian đã chọn (phút, 0 là không giới hạn). */
+  limitMinutes?: number;
   task?: number | string;
   selectedParts?: number[];
   cheDo?: string;

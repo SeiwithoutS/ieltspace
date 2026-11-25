@@ -22,6 +22,8 @@ interface ConfirmationProps {
   real: boolean;
   /** Speaking: trình duyệt không lưu được bản ghi lên đĩa, bản ghi sẽ mất nếu thoát. */
   memoryOnly?: boolean;
+  /** Đang tải bản ghi lên và chốt bài: khóa nút, hiện trạng thái. */
+  busy?: boolean;
   model: AttemptSummary | null;
   back: () => void;
   save: () => void;
@@ -92,6 +94,7 @@ export default function AttemptConfirmation({
   skill,
   real,
   memoryOnly = false,
+  busy = false,
   model,
   back,
   save,
@@ -184,6 +187,11 @@ export default function AttemptConfirmation({
       )}
       <h2 id="attempt-confirm-title">{titles[kind]}</h2>
       <p>{descriptions[kind]}</p>
+      {busy && (
+        <p role="status">
+          {"Đang tải bản ghi lên và chốt bài, vui lòng giữ nguyên trang…"}
+        </p>
+      )}
       {objective && (
         <>
           <QuestionList label="Chưa làm" numbers={missing} jump={jump} />
@@ -202,7 +210,11 @@ export default function AttemptConfirmation({
       )}
       <div className="flex flex-wrap justify-end gap-3">
         {kind === "expired" && (
-          <button className="danger" onClick={() => setAskDiscard(true)}>
+          <button
+            className="danger"
+            disabled={busy}
+            onClick={() => setAskDiscard(true)}
+          >
             Không lưu
           </button>
         )}
@@ -215,7 +227,7 @@ export default function AttemptConfirmation({
           </>
         )}
         {kind !== "expired" && kind !== "discardConfirm" && (
-          <button onClick={back}>
+          <button onClick={back} disabled={busy}>
             {saveExit
               ? "Ở lại"
               : written
@@ -224,7 +236,11 @@ export default function AttemptConfirmation({
           </button>
         )}
         {kind !== "saveError" && kind !== "discardConfirm" && (
-          <button className="primary" onClick={saveExit ? save : finish}>
+          <button
+            className="primary"
+            disabled={busy}
+            onClick={saveExit ? save : finish}
+          >
             {saveExit
               ? loseRecordings
                 ? "Vẫn thoát"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import "./question-card.css";
 import { formatClock } from "./AttemptTimer";
 import {
@@ -13,6 +13,8 @@ interface QuestionCardProps {
   phase: SpeakingPhase;
   /** Giây còn lại (preparing, viewing) hoặc đã nói (recording). */
   seconds: number;
+  /** Khu ghi âm đặt trong cùng thẻ, dưới phần câu hỏi. */
+  footer?: ReactNode;
 }
 
 const chip =
@@ -72,13 +74,15 @@ function Face({ step }: { step: SpeakingStep }) {
 }
 
 const cardClass =
-  "p-7 [min-height:240px] box-border [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)]";
+  "box-border overflow-hidden [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:22px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)]";
+const topClass = "[padding:24px_28px] [min-height:200px] box-border";
 
 /**
  * Flashcard câu hỏi: mỗi lúc chỉ hiện một câu. Đổi câu thì thẻ cũ trượt ra, thẻ
- * mới trượt vào (tắt khi người dùng chọn giảm chuyển động).
+ * mới trượt vào (tắt khi người dùng chọn giảm chuyển động). `footer` (khu ghi
+ * âm) nằm trong cùng thẻ, bên dưới đường kẻ, nên trượt/lật cùng thẻ.
  */
-export default function QuestionCard({ step, phase, seconds }: QuestionCardProps) {
+export default function QuestionCard({ step, phase, seconds, footer }: QuestionCardProps) {
   const [shown, setShown] = useState(step);
   const [leaving, setLeaving] = useState<SpeakingStep | null>(null);
   if (step.id !== shown.id) {
@@ -101,17 +105,19 @@ export default function QuestionCard({ step, phase, seconds }: QuestionCardProps
     <div className="qcard-stage">
       {leaving && (
         <div className={"qcard-out " + cardClass} aria-hidden="true">
-          <Face step={leaving} />
+          <div className={topClass}>
+            <Face step={leaving} />
+          </div>
         </div>
       )}
       <div key={shown.id} className={"qcard-in " + cardClass} role="group" aria-label="Câu hỏi hiện tại">
-        <Face step={shown} />
-        <div className="flex flex-col [gap:10px] [margin-top:20px]">
+        <div className={topClass + " flex flex-col [gap:14px]"}>
           <span className={chip + " self-start"} style={{ background: toneBg, color: toneFg }}>
             {/* Chỉ đổi trạng thái mới được đọc; số giây đổi mỗi nhịp nên nằm ngoài vùng live. */}
             <span aria-live="polite">{status.text}</span>
             {status.time && <span className="tabular-nums">{"· " + status.time}</span>}
           </span>
+          <Face step={shown} />
           {status.total > 0 && (
             <div
               role="progressbar"
@@ -128,6 +134,11 @@ export default function QuestionCard({ step, phase, seconds }: QuestionCardProps
             </div>
           )}
         </div>
+        {footer && (
+          <div className="[padding:16px_28px_18px] [border-top:1.5px_solid_var(--attempt-line-d6d4d0)] [background:var(--attempt-bg-faf9f5)]">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );

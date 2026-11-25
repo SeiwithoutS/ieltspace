@@ -48,7 +48,7 @@ interface RecorderControlProps {
 const pill =
   "inline-flex items-center justify-center gap-2 [height:40px] [padding:0_16px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border [background:var(--attempt-bg-ffffff)] [color:var(--attempt-text-352637)] font-semibold [font-size:14px] whitespace-nowrap cursor-pointer";
 const round =
-  "w-12 h-12 [border-radius:50%] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [background:var(--attempt-bg-c0412a)] [color:var(--attempt-text-on-c0412a)] flex items-center justify-center cursor-pointer";
+  "w-11 h-11 [border-radius:50%] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [background:var(--attempt-bg-c0412a)] [color:var(--attempt-text-on-c0412a)] flex items-center justify-center cursor-pointer";
 
 const icon = {
   width: 18,
@@ -187,20 +187,16 @@ export default function RecorderControl({
   })();
 
   return (
-    <div className="[padding:14px_18px] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [border-radius:16px] [background:var(--attempt-bg-ffffff)] [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)]">
+    <div>
       <div className="flex flex-col [gap:10px]">
+        <LevelBars levels={levels} height={36} live={recording} />
         <div className="flex flex-wrap items-center [gap:12px_16px]">
-          <div className="flex items-center [gap:12px]">
-            <div className="[width:120px] shrink-0">
-              <LevelBars levels={levels.slice(-15)} height={40} live={recording} />
-            </div>
-            <div
-              className="[font-size:24px] font-bold [letter-spacing:-0.015em] font-sans tabular-nums whitespace-nowrap"
-              role="timer"
-              aria-label="Thời gian ghi âm"
-            >
-              {clock}
-            </div>
+          <div
+            className="[font-size:20px] font-bold [letter-spacing:-0.015em] font-sans tabular-nums whitespace-nowrap"
+            role="timer"
+            aria-label="Thời gian ghi âm"
+          >
+            {clock}
           </div>
           <div className="flex flex-wrap items-center justify-end [gap:10px] ml-auto">
             {phase === "preparing" && !real && (

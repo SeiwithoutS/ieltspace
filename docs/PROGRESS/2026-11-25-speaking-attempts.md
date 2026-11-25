@@ -1,5 +1,7 @@
 # Tiến độ backend lượt làm và bản ghi âm Speaking ngày 25/11/2026
 
+> Bản bàn giao đầy đủ (frontend, lịch sử W/S, việc còn mở cho nhóm): [2026-11-25-speaking-ban-giao.md](2026-11-25-speaking-ban-giao.md).
+
 ## Phạm vi và trạng thái
 
 Backend cho trang làm bài Speaking theo [intent](../intent/speaking-test.md) và [spec mục 5](../intent/speaking-test-spec.md). Đã viết mã, build và kiểm thử bằng DB/storage giả. **Migration 26 đã áp lên database dùng chung ngày 2026-11-25 (các bảng liên quan rỗng, kiểm lại cột, index, ràng buộc đều đúng). Chưa kiểm thử đầu cuối với Supabase Storage thật; bucket `speaking-recordings` đã được tạo.** Frontend làm song song theo hợp đồng ở [API.md](../API.md).

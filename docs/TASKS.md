@@ -111,5 +111,22 @@ Các dòng là backlog đề xuất, trạng thái ban đầu **TODO**. Cột �
 | GQ-09 | Xóa bản QuestionCard và QuestionCards cũ (đã chốt 19/11) | GQ-07 | Xóa QuestionCard.jsx, QuestionCards.jsx, gỡ dòng route lazy trong pages.ts; cập nhật BAO_CAO_BAN_GIAO và DESIGN.md. |
 | GQ-10 | Xóa Flow-chart riêng và gộp vào Diagram (đã chốt 19/11) | GQ-01..09 | Xóa FlowCard.tsx, mã FLOW_COMP ở FE & BE; gộp vào DIAGRAM_COMP nhãn 'Diagram / Map / Flow-chart Completion'; kiểm tra CSDL có 0 nhóm lưu FLOW_COMP; build và tests 100% pass. |
 | GQ-08 | Báo cáo tiến độ cập nhật thẻ câu hỏi theo 5 nhóm | GQ-00..10 | Hoàn thành biên bản tiến độ docs/PROGRESS/2026-11-19-the-cau-hoi-gop.md và docs/PROGRESS/2026-11-19-type-picker-gon.md. |
+| SPK-01 | Trang làm bài Speaking hai chế độ (test mic, thẻ câu hỏi gộp khu ghi âm, ghi âm từng câu) | EXAM-02 | **Xong.** Thi thật tự ghi và không ghi lại, Practice ghi lại được. Part 2 có 1 phút chuẩn bị. Có test máy trạng thái. Chi tiết ở [PROGRESS](PROGRESS/2026-11-25-speaking-ban-giao.md). |
+| SPK-02 | Bộ chọn thời gian dùng chung và hộp hết giờ Lưu/Không lưu | SPK-01 | **Xong.** Speaking 15 cố định hoặc không giới hạn đến 30 phút; Reading một section đến 20 phút, full test 60. Ghi thời gian hoàn thành mọi chế độ. |
+| SPK-03 | Backend lượt làm Speaking, upload bản ghi, hoàn thành, hủy, dọn dẹp | WS-01, migration 26 | **Xong, đã áp migration 26.** Máy chủ giữ giờ, Thi thật một bản ghi mỗi câu, hạn 14 ngày. Còn thiếu kiểm DELETE và job dọn dẹp trên DB thật. |
+| SPK-04 | Khôi phục bài dở và lưu offline (IndexedDB, nháp localStorage 24 giờ) | SPK-01, SPK-03 | **Xong.** Luật vào lại chặt cho Thi thật; bốn kỹ năng dùng chung nháp; nút Tiếp tục làm bài ở ExamDetail. Chưa kiểm tay Reading/Listening/Writing sau khi đổi sang localStorage. |
+| SPK-05 | Trang xác nhận hoàn thành và hàng đợi upload | SPK-03 | **Xong.** Chỉ dọn dữ liệu local sau khi máy chủ chốt. Nút Gửi chấm chờ SPK-10. |
+| SPK-06 | Lịch sử W/S: menu ba chấm (Nghe lại, Tải ghi âm .zip) và nút chính theo trạng thái | SPK-03 | **Xong.** `GET /learner/results` thêm trạng thái nội dung, hạn lưu, trạng thái chấm. Tải ghi âm đã chạy với Supabase thật. |
+| SPK-07 | Nút Làm bài một màu chung và bỏ link Làm full test ở ExamDetail | QLBD-13 | **Xong.** |
+| SPK-10 | Gửi yêu cầu chấm thật cho Speaking/Writing (thay 501) | CREDIT-01, SPK-03 | Một giao dịch trừ lượt, tạo yêu cầu `WAITING_ASSIGNMENT`, chuyển `content_status` sang `HELD`, hạn phân công 72 giờ. Lịch sử W/S hiện "Chờ phân công" sau khi gửi. Gửi lặp không trừ hai lượt. |
+| SPK-11 | Trang xem kết quả W/S theo id lượt làm | GRADE-03, SPK-10 | Điểm tổng, bốn tiêu chí, nhận xét, nghe lại. Nút "Xem kết quả" ở MyWS mở đúng bài. Điểm giữ khi nội dung hết hạn. |
+| SPK-12 | Giữ nội dung khi chờ chấm trong job dọn dẹp, hủy lượt và đọc bản ghi | SPK-10 | Job và `DELETE` không xóa bài `HELD`. Chốt lùi `content_expires_at` khi giữ. Hết hạn thì chặn đọc, tải. |
+| SPK-13 | Gắn lịch job `attempts:cleanup` và kiểm trên bản sao DB | SPK-03 | Chạy `--apply` theo lịch; lượt `IN_PROGRESS` quá 48 giờ chuyển `ABANDONED` và file bị xóa; chạy lại không hỏng dữ liệu. |
+| SPK-14 | Dùng thời điểm bắt đầu từ máy chủ khi khôi phục bài | SPK-04 | Sửa nháp localStorage không kéo dài thời gian làm; vào lại lấy `startedAt` từ `GET /skill-attempts/:id`. |
+| SPK-15 | Writing dùng chung luồng lượt làm mới (tạo, hủy, hoàn thành) | SPK-05, WS-01 | Không lưu xóa bài trên máy chủ; trang xác nhận dùng `AttemptDoneSummary`; Tải .docx ở lịch sử hoạt động. |
+| SPK-16 | Trang làm bài đọc lựa chọn Part/Section và mức thời gian nhiều section | SPK-02 | `selectedParts` được dùng ở Reading, Listening, Speaking. Mức trần Reading tính theo số section thật. |
+| SPK-17 | Ghi theo đoạn để không mất phần đang nói khi đóng tab đột ngột | SPK-04 | F5 giữa lúc nói giữ được phần đã ghi (đến ranh giới đoạn). |
+| SPK-18 | Kiểm tay và kiểm tích hợp trên DB thật các luồng còn thiếu | SPK-03..06 | Ghi kết quả vào PROGRESS: Practice, hủy bài, 410 hết hạn, mất mạng, F5, hai thiết bị. |
+| SPK-19 | Chốt thiết kế các màn tự dựng và token màu trạng thái | SPK-01, SPK-05, SPK-06 | Người dùng duyệt MicCheck, thẻ gộp, trang xác nhận, MenuButton, chip W/S; thống nhất token chip và banner với DESIGN.md. |
 
 Khi nhận một dòng liên quan nhiều kỹ năng, thực hiện và kiểm tra từng kỹ năng bằng fixture riêng. Với API mới, cập nhật [hợp đồng](API.md) cùng thay đổi phía gọi và phía phục vụ.

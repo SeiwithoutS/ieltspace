@@ -40,6 +40,11 @@ Ghi ở mọi chế độ và kỹ năng, kể cả "không giới hạn". Hiể
 - Trang chi tiết bộ đề: có bài làm dở thì nút đổi thành "Tiếp tục làm bài". Speaking đã hết giờ mà chưa lưu thì dòng thông tin ghi "đã hết giờ, chưa lưu" (nút vẫn là "Tiếp tục làm bài").
 - Backend (làm sau): phải lưu thời điểm bắt đầu lượt làm ở máy chủ để chặn việc sửa localStorage kéo dài thời gian hoặc làm lại câu; frontend không đáng tin cho giờ làm bài.
 
+## Lịch sử luyện tập (Writing/Speaking)
+- Mỗi hàng Speaking có menu ba chấm gom "Nghe lại" (hộp liệt kê từng câu kèm trình phát) và "Tải ghi âm" (tải tất cả về một file .zip), cùng một nút chính theo trạng thái: "Gửi yêu cầu chấm" (chưa gửi), "Xem kết quả" (đã công bố), "Gửi lại yêu cầu" (đã hủy).
+- Các trạng thái hiển thị: đã lưu chưa gửi chấm, chờ phân công, đang chấm, đã có kết quả, đã hủy, tạm giữ, nội dung đã hết hạn (điểm đã công bố vẫn được giữ).
+- Nút "Gửi yêu cầu chấm" và "Xem kết quả" chờ phần lượt chấm do thành viên khác làm (xem docs/PROGRESS/2026-11-25-speaking-ban-giao.md).
+
 ## Sau khi gửi
 Bài vào hàng chờ chấm của Giáo viên theo luật lượt chấm W/S. Người học nhận thông báo, xem điểm tổng và điểm 4 tiêu chí (Fluency, Lexical, Grammar, Pronunciation), nghe lại từng câu và đọc nhận xét.
 

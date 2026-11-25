@@ -239,11 +239,14 @@ test("listInProgressInfo flags a Speaking draft whose time ran out while away", 
   // Chưa bắt đầu tính giờ (không mốc, không tiến độ): không coi là hết giờ.
   stores.local.setItem(draftKey("u1", "SpeakingTest", "idle"), make({}));
   stores.local.setItem(draftKey("u1", "WritingTest", "late"), make({ startedAtEpoch: NOW - 16 * 60_000 }));
+  stores.local.setItem(draftKey("u1", "WritingTest", "old"), make({}));
   const info = listInProgressInfo("u1", NOW, stores);
   assert.equal(info.get(inProgressId("SpeakingTest", "late")).timedOut, true);
   assert.equal(info.get(inProgressId("SpeakingTest", "ok")).timedOut, false);
   assert.equal(info.get(inProgressId("SpeakingTest", "idle")).timedOut, false);
-  assert.equal(info.get(inProgressId("WritingTest", "late")).timedOut, false);
+  // Writing nay cũng tính giờ theo mốc tuyệt đối như Speaking; draft Writing cũ (không mốc, không tiến độ) thì không.
+  assert.equal(info.get(inProgressId("WritingTest", "late")).timedOut, true);
+  assert.equal(info.get(inProgressId("WritingTest", "old")).timedOut, false);
   assert.equal(speakingTimedOut({ options: { mode: "real", parts: [0] }, seconds: 0, startedAtEpoch: 1 }, NOW), false);
 });
 

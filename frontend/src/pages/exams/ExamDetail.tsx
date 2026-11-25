@@ -366,7 +366,7 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
                   : " · có bài làm dở")
               : PAGES[k[0]][1],
             btnSt:
-              "display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 18px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; cursor: pointer",
+              "display: inline-flex; align-items: center; justify-content: center; height: 34px; padding: 0 18px; border-radius: 999px; box-sizing: border-box; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; border: 1.5px solid #D6D4D0; background: #FFFFFF; color: #352637; cursor: pointer",
             pick: function (e?: Ev) {
               stop(e);
               self.handleStartTest(pageName + examQuery);

@@ -34,7 +34,7 @@ function statusOf(step: SpeakingStep, phase: SpeakingPhase, seconds: number) {
 const tones: Record<string, [string, string]> = {
   blue: ["var(--attempt-bg-e3ecfd)", "var(--attempt-text-2963cc)"],
   violet: ["var(--attempt-bg-e8e4fa)", "var(--attempt-text-5543b0)"],
-  red: ["var(--attempt-bg-fbdcd3)", "var(--attempt-text-c0412a)"],
+  red: ["var(--attempt-bg-fbdcd3)", "var(--attempt-text-9d301e)"],
   green: ["var(--attempt-bg-dcede2)", "var(--attempt-text-2e6a48)"],
 };
 
@@ -125,7 +125,7 @@ export default function QuestionCard({ step, phase, seconds, footer }: QuestionC
               aria-valuemin={0}
               aria-valuemax={status.total}
               aria-valuenow={seconds}
-              className="[height:6px] rounded-full [background:var(--attempt-bg-f3f0ea)] overflow-hidden"
+              className="[height:8px] box-border rounded-full [background:var(--attempt-bg-f3f0ea)] [border:1px_solid_var(--attempt-line-dddbd7)] overflow-hidden"
             >
               <div
                 className="qcard-bar h-full rounded-full"
@@ -135,7 +135,7 @@ export default function QuestionCard({ step, phase, seconds, footer }: QuestionC
           )}
         </div>
         {footer && (
-          <div className="[padding:16px_28px_18px] [border-top:1.5px_solid_var(--attempt-line-d6d4d0)] [background:var(--attempt-bg-faf9f5)]">
+          <div className="[padding:16px_28px] [border-top:1px_solid_var(--attempt-line-e6e4e0)] [background:var(--attempt-bg-faf9f5)]">
             {footer}
           </div>
         )}

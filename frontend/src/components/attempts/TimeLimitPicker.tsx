@@ -32,7 +32,7 @@ export default function TimeLimitPicker({
       >
         {label}
         {locked && (
-          <span className="inline-flex items-center [height:20px] [padding:0_8px] rounded-full [font-size:11px] font-bold normal-case [letter-spacing:0] [background:var(--attempt-bg-f3f0ea)] [color:var(--attempt-text-706473)]">
+          <span className="inline-flex items-center [height:22px] [padding:0_8px] rounded-full [font-size:11px] font-bold normal-case [letter-spacing:0] [background:var(--attempt-bg-f3f0ea)] [color:var(--attempt-text-706473)]">
             {"Cố định"}
           </span>
         )}
@@ -45,10 +45,10 @@ export default function TimeLimitPicker({
           disabled={locked}
           onChange={(e) => onChange(Number(e.target.value))}
           className={
-            "w-full [height:44px] box-border [padding:0_40px_0_14px] [border-radius:10px] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [color:var(--attempt-text-352637)] [font-size:14px] font-semibold appearance-none attempt-select focus-visible:[outline:2px_solid_var(--attempt-text-2963cc)] focus-visible:[outline-offset:2px] " +
+            "w-full [height:44px] box-border [padding:0_40px_0_14px] [border-radius:10px] [border:1.5px_solid_var(--attempt-line-8e8392)] [color:var(--attempt-text-352637)] [font-size:14px] font-semibold appearance-none attempt-select focus-visible:[outline:2px_solid_var(--attempt-text-2963cc)] focus-visible:[outline-offset:2px] " +
             (locked
               ? "[background:var(--attempt-bg-f3f0ea)] [cursor:not-allowed]"
-              : "[background:var(--attempt-bg-ffffff)] cursor-pointer hover:[border-color:var(--attempt-text-2963cc)]")
+              : "[background:var(--attempt-bg-ffffff)] cursor-pointer hover:[border-color:var(--attempt-line-6a5d6c)]")
           }
         >
           {options.map((minutes) => (

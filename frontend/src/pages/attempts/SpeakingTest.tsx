@@ -16,6 +16,11 @@ import {
 } from "../../lib/auth/auth";
 import { draftKey, loadDraft } from "../../lib/attempts/attempt-storage";
 import {
+  assembleChunks,
+  planOrphanChunks,
+  type RecordingChunk,
+} from "../../lib/attempts/recording-chunks";
+import {
   createDurableRecordingStore,
   purgeRecordingsExcept,
   recordingPrefix,
@@ -65,7 +70,7 @@ async function silentMicStream(): Promise<MediaStream | null> {
 const chipBase =
   "inline-flex items-center [gap:6px] [height:26px] [padding:0_10px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] [font-size:13px] font-semibold whitespace-nowrap";
 const headerButton =
-  "inline-flex items-center justify-center gap-2 [height:42px] [padding:0_20px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border font-semibold [font-size:14px] no-underline whitespace-nowrap";
+  "attempt-hover inline-flex items-center justify-center gap-2 [height:44px] [padding:0_20px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border font-semibold [font-size:14px] no-underline whitespace-nowrap";
 
 /** Lấy đề từ máy chủ; lỗi hoặc chưa có backend thì dùng đề mẫu như trước (không chặn người học). */
 export default function SpeakingTest(props: ScreenProps) {
@@ -214,6 +219,28 @@ function SpeakingRun({
     } else {
       void (async () => {
         const found: Record<string, RecordedAnswer> = {};
+        // Đoạn ghi dở mồ côi (đóng tab/F5/sập giữa lúc nói): Thi thật ghép thành bản dở làm đáp án của câu,
+        // Practice bỏ (câu dở về đầu câu). Câu đã có bản hoàn chỉnh thì bản hoàn chỉnh thắng.
+        const recovered: string[] = [];
+        try {
+          const plan = planOrphanChunks({
+            chunkQuestionIds: await store.chunkQuestionIds(),
+            completeIds: await store.ids(),
+            stepIds: steps.map((st) => st.id),
+            mode,
+          });
+          for (const id of plan.recover) {
+            const part = assembleChunks(await store.readChunks(id));
+            if (part && part.blob.size > 0) {
+              await store.put(id, part);
+              recovered.push(id);
+            }
+          }
+          for (const id of [...plan.drop, ...plan.recover])
+            await store.dropChunks(id);
+        } catch {
+          // Không đọc được đoạn: bỏ qua, câu dở được xử lý như chưa có bản ghi.
+        }
         try {
           for (const id of await store.ids()) {
             if (!steps.some((st) => st.id === id)) {
@@ -260,6 +287,19 @@ function SpeakingRun({
         );
         setFlow(restored.flow);
         const notes: string[] = [];
+        const recoveredKept = recovered.filter((id) => found[id]);
+        if (recoveredKept.length > 0) {
+          const parts = [
+            ...new Set(
+              recoveredKept.map((id) => "Part " + (partOf(id) + 1)),
+            ),
+          ].join(", ");
+          notes.push(
+            "Phần bạn đang nói dở ở " +
+              parts +
+              " được khôi phục từ bản ghi tạm và giữ làm đáp án của câu đó (có thể mất vài giây cuối). Bài thi đầy đủ không cho ghi lại.",
+          );
+        }
         if (restored.closedId) {
           const closed = steps.find((st) => st.id === restored.closedId);
           const partNo = closed ? "Part " + (closed.part + 1) + ": " : "";
@@ -477,11 +517,29 @@ function SpeakingRun({
       ]);
     }
   }
+  // Hàng đợi tuần tự cho đoạn ghi và bản ghi cuối: đoạn cuối luôn vào kho trước bản hoàn chỉnh,
+  // và đoạn chỉ bị xóa sau khi bản hoàn chỉnh đã lưu xong (sập giữa chừng vẫn còn đoạn để khôi phục).
+  const chunkChain = useRef<Promise<unknown>>(Promise.resolve());
+  function handleChunk(id: string, chunk: RecordingChunk | null) {
+    // Practice không dùng bản dở khi vào lại nên không tốn ghi đoạn.
+    if (practice || sealed.current || !canWrite()) return;
+    chunkChain.current = chunkChain.current
+      .then(() => {
+        if (sealed.current || !canWrite()) return;
+        return chunk
+          ? store.appendChunk(id, chunk).then(() => undefined)
+          : store.dropChunks(id);
+      })
+      .catch(() => undefined);
+  }
   function handleRecorded(id: string, answer: RecordedAnswer) {
     // Bài đã kết thúc hoặc trang đã rời đi: bỏ, không ghi vào kho vừa dọn.
     if (sealed.current || !alive.current || !canWrite()) return;
-    const job = store
-      .put(id, answer)
+    const stored = chunkChain.current
+      .then(() => store.put(id, answer))
+      .then(() => store.dropChunks(id));
+    chunkChain.current = stored.catch(() => undefined);
+    const job = stored
       .then(() => {
         if (sealed.current || !alive.current || !canWrite()) return;
         // Chỉ tính vào danh sách câu đã ghi (draft) sau khi lưu xong; kho rơi về bộ nhớ thì
@@ -551,7 +609,7 @@ function SpeakingRun({
             </span>
             <span>{"IELTSpace"}</span>
           </PageLink>
-          <div className="[padding-left:20px] [border-left:1.5px_solid_var(--attempt-line-e6e4e0)]">
+          <div className="[padding-left:20px] [border-left:1px_solid_var(--attempt-line-e6e4e0)]">
             <div className="[font-size:13px] [color:var(--attempt-text-706473)]">
               {practice
                 ? "Luyện Speaking"
@@ -564,7 +622,7 @@ function SpeakingRun({
               className={
                 "inline-flex items-center [gap:6px] [height:26px] [padding:0_10px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] [font-size:13px] font-semibold whitespace-nowrap " +
                 (warn
-                  ? "[background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-c0412a)]"
+                  ? "[background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-9d301e)]"
                   : "[background:var(--attempt-bg-ffffff)] [color:var(--attempt-text-352637)]")
               }
             >
@@ -640,7 +698,7 @@ function SpeakingRun({
             <div className="mx-auto [max-width:560px] [padding:24px_32px_0]">
               <div
                 role="status"
-                className="[padding:12px_14px] rounded-xl [background:var(--attempt-bg-e3ecfd)] [color:var(--attempt-text-2963cc)] [font-size:14px]"
+                className="[padding:12px_14px] rounded-xl [background:var(--attempt-bg-e3ecfd)] [color:var(--attempt-text-2257b8)] [font-size:14px]"
               >
                 {"Đã khôi phục bài làm đang dở. Đồng hồ vẫn chạy trong lúc bạn rời đi; hãy kiểm tra micro để làm tiếp. " +
                   (practice
@@ -667,7 +725,7 @@ function SpeakingRun({
             {restoreNote && (
               <div
                 role="alert"
-                className="[padding:10px_14px] rounded-xl [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-c0412a)] [font-size:13px]"
+                className="[padding:10px_14px] rounded-xl [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-9d301e)] [font-size:13px]"
               >
                 {restoreNote}
               </div>
@@ -737,6 +795,7 @@ function SpeakingRun({
                 answer={step ? answers[step.id] : undefined}
                 onRecorded={handleRecorded}
                 onStopping={track}
+                onChunk={handleChunk}
                 flushRef={flushRecorder}
                 onStart={handleStart}
                 onStop={() => setFlow(stopRecording)}
@@ -765,7 +824,7 @@ function SpeakingRun({
                         ),
                       )
                     }
-                    className="inline-flex items-center justify-center gap-2 [height:40px] [padding:0_18px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border font-semibold [font-size:14px] whitespace-nowrap"
+                    className="inline-flex items-center justify-center gap-2 [height:38px] [padding:0_18px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border font-semibold [font-size:14px] whitespace-nowrap"
                     style={
                       nextEnabled
                         ? { background: accent, color: onAccent, borderColor: accent }

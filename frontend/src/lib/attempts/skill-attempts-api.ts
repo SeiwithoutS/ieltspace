@@ -1,8 +1,10 @@
 import { ApiError, apiFetch } from "../shared/api";
 import type { UploadTransport } from "./upload-queue";
+import type { TextTransport } from "./writing-queue";
+import type { WritingTaskKey } from "./writing-text";
 
 /**
- * Client có kiểu cho API lượt làm kỹ năng của Người học (Speaking trước, Writing dùng lại sau).
+ * Client có kiểu cho API lượt làm kỹ năng của Người học (Speaking và Writing).
  * Không log URL tải lên/tải xuống: đó là đường dẫn có chữ ký, chỉ dùng một lần.
  */
 export type AttemptMode = "REAL" | "PRACTICE";
@@ -21,6 +23,27 @@ export interface SpeakingExamDto {
   durationMinutes: number;
   parts: SpeakingExamPart[];
 }
+export interface WritingExamTask {
+  taskKey: WritingTaskKey;
+  prompt: string;
+  imageUrl: string | null;
+  minWords: number;
+  essayType?: string | null;
+  topic?: string | null;
+}
+export interface WritingExamDto {
+  examSkillId: string;
+  title: string;
+  form: "ACADEMIC" | "GENERAL" | null;
+  durationMinutes: number;
+  tasks: WritingExamTask[];
+}
+export interface WritingTaskText {
+  taskKey: WritingTaskKey;
+  text: string;
+  wordCount: number;
+  updatedAt: string | null;
+}
 export interface SkillAttemptCreated {
   id: string;
   status: SkillAttemptStatus;
@@ -36,6 +59,8 @@ export interface ServerRecording {
 }
 export interface SkillAttemptDetail {
   id: string;
+  /** Kỹ năng của lượt (máy chủ cũ có thể chưa trả). */
+  skill?: "SPEAKING" | "WRITING";
   status: SkillAttemptStatus;
   mode: AttemptMode;
   startedAt: string;
@@ -44,6 +69,8 @@ export interface SkillAttemptDetail {
   contentExpiresAt: string | null;
   elapsedSeconds: number | null;
   recordings: ServerRecording[];
+  /** Chỉ lượt Writing: số từ từng Task đã lưu (không kèm nội dung). */
+  tasks?: { taskKey: WritingTaskKey; wordCount: number; updatedAt: string | null }[];
 }
 export interface SkillAttemptCompleted {
   status: SkillAttemptStatus;
@@ -76,11 +103,25 @@ export function getSpeakingExam(examSkillId: string) {
     "/learner/exam-skills/" + encodeURIComponent(examSkillId) + "/speaking",
   );
 }
+export function getWritingExam(examSkillId: string) {
+  return apiFetch<WritingExamDto>(
+    "/learner/exam-skills/" + encodeURIComponent(examSkillId) + "/writing",
+  );
+}
+export function putWritingText(id: string, taskKey: WritingTaskKey, text: string) {
+  return apiFetch<{ taskKey: string; wordCount: number; updatedAt: string }>(
+    root(id) + "/writing/" + taskKey,
+    { method: "PUT", json: { text } },
+  );
+}
+export function getWritingText(id: string, taskKey: WritingTaskKey) {
+  return apiFetch<WritingTaskText>(root(id) + "/writing/" + taskKey);
+}
 export function createSkillAttempt(input: {
   clientAttemptId: string;
   examSkillId: string;
   mode: AttemptMode;
-  /** Số nguyên 1..30 hoặc null (không giới hạn / Thi thật); không bao giờ gửi 0. */
+  /** Số nguyên 1..30 (Speaking) hoặc 1..60 (Writing), hoặc null (không giới hạn / Thi thật); không bao giờ gửi 0. */
   limitMinutes: number | null;
 }) {
   return apiFetch<SkillAttemptCreated>("/learner/skill-attempts", {
@@ -165,5 +206,17 @@ export const recordingTransport: UploadTransport = {
       root(attemptId) + "/recordings/" + encodeURIComponent(questionId) + "/confirm",
       { method: "POST" },
     );
+  },
+};
+
+/** Cổng lưu văn bản Writing cho hàng đợi văn bản. `putOnHide` dùng fetch keepalive (best-effort lúc đóng trang). */
+export const writingTransport: TextTransport = {
+  put: (attemptId, taskKey, text) => putWritingText(attemptId, taskKey, text),
+  putOnHide(attemptId, taskKey, text) {
+    void apiFetch(root(attemptId) + "/writing/" + taskKey, {
+      method: "PUT",
+      json: { text },
+      keepalive: true,
+    }).catch(() => undefined);
   },
 };

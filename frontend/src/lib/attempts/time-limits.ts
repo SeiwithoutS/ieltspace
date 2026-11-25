@@ -92,15 +92,17 @@ export function limitLabel(minutes: number): string {
 }
 
 /**
- * Giới hạn gửi lên máy chủ khi tạo lượt: số nguyên 1..30 (Practice có chọn mức) hoặc null
+ * Giới hạn gửi lên máy chủ khi tạo lượt: số nguyên 1..max (Practice có chọn mức) hoặc null
  * (Không giới hạn, và Thi thật vì giờ do máy chủ tính). 0 hay số ngoài khoảng đều thành null.
  */
 export function apiLimitMinutes(
   mode: "real" | "practice",
   minutes: number | undefined,
+  /** Trần theo kỹ năng: Speaking 30 (mặc định), Writing 60. */
+  max = 30,
 ): number | null {
   if (mode === "real") return null;
-  return Number.isInteger(minutes) && (minutes as number) >= 1 && (minutes as number) <= 30
+  return Number.isInteger(minutes) && (minutes as number) >= 1 && (minutes as number) <= max
     ? (minutes as number)
     : null;
 }

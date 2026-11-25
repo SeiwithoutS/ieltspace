@@ -36,6 +36,8 @@ export type ApiFetchOptions = {
   json?: unknown;
   body?: BodyInit | null;
   headers?: Record<string, string>;
+  /** fetch keepalive: yêu cầu còn được gửi khi trang đang đóng (body tối đa khoảng 64 KB). */
+  keepalive?: boolean;
   /** Gọi khi phản hồi thành công, kèm header Date (null nếu trình duyệt không cho đọc) và mốc gửi/nhận. */
   onResponse?: (info: {
     date: string | null;
@@ -83,6 +85,7 @@ export async function apiFetch<T = any>(
       headers,
       body,
       credentials: authenticated ? 'include' : 'omit',
+      ...(options.keepalive ? { keepalive: true } : {}),
     });
   } catch (_netErr) {
     throw new ApiError(0, 'NETWORK_ERROR', 'Không thể kết nối. Vui lòng thử lại.');

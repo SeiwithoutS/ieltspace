@@ -7,6 +7,7 @@ import {
   recordingScope,
   recordingUserPrefix,
 } from "./recordings.ts";
+import { clearPendingTextsOf, sweepPendingTexts } from "./writing-queue.ts";
 
 /**
  * Draft của cả 4 kỹ năng nằm ở localStorage (bền qua đóng tab) và hết hạn sau
@@ -17,10 +18,11 @@ export const DRAFT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 const DRAFT_TAG = "ieltspace-draft";
 const SPEAKING_PAGE = "SpeakingTest";
+const WRITING_PAGE = "WritingTest";
 const ATTEMPT_PAGES = [
   "ReadingTest",
   "ListeningTest",
-  "WritingTest",
+  WRITING_PAGE,
   SPEAKING_PAGE,
 ];
 
@@ -159,7 +161,7 @@ export function inProgressId(page: string, examId: string): string {
 }
 
 /**
- * Mốc tuyệt đối bắt đầu tính giờ của bài Speaking đã bắt đầu (đồng hồ vẫn chạy
+ * Mốc tuyệt đối bắt đầu tính giờ của bài Speaking/Writing đã bắt đầu (đồng hồ vẫn chạy
  * khi người học rời đi). Draft chưa có mốc thì suy ra từ giây đã dùng tại savedAt.
  */
 export function speakingEpoch(draft: AttemptDraft): number | undefined {
@@ -168,12 +170,19 @@ export function speakingEpoch(draft: AttemptDraft): number | undefined {
   return draft.savedAt - draft.seconds * 1000;
 }
 
-/** Bài Speaking đã bắt đầu tính giờ (có tiến độ hoặc có mốc bắt đầu) trong draft này. */
+/**
+ * Bài Speaking/Writing đã bắt đầu tính giờ (có tiến độ hoặc có mốc bắt đầu) trong draft này.
+ * Draft Writing cũ (trước khi nối máy chủ) không có cả hai nên vẫn theo cách tạm dừng đồng hồ cũ.
+ */
 export function speakingBegan(draft: AttemptDraft): boolean {
-  return !!draft.state?.speaking || draft.startedAtEpoch !== undefined;
+  return (
+    !!draft.state?.speaking ||
+    !!draft.state?.writing ||
+    draft.startedAtEpoch !== undefined
+  );
 }
 
-/** Draft Speaking có giới hạn thời gian mà giờ đã hết (đồng hồ chạy cả khi rời đi). */
+/** Draft Speaking/Writing có giới hạn thời gian mà giờ đã hết (đồng hồ chạy cả khi rời đi). */
 export function speakingTimedOut(draft: AttemptDraft, now: number): boolean {
   const limit = draft.options.limitMinutes ?? 0;
   if (limit <= 0 || !speakingBegan(draft)) return false;
@@ -203,7 +212,9 @@ export function listInProgressInfo(
       // Draft đã Hoàn thành/Lưu (chờ chốt ở trang xác nhận) không phải bài làm dở để tiếp tục.
       if (draft && !draft.finished && isFresh(draft, now))
         found.set(inProgressId(item.page, item.examId), {
-          timedOut: item.page === SPEAKING_PAGE && speakingTimedOut(draft, now),
+          timedOut:
+            (item.page === SPEAKING_PAGE || item.page === WRITING_PAGE) &&
+            speakingTimedOut(draft, now),
         });
     }
   } catch {
@@ -255,6 +266,7 @@ export async function clearAttemptLocalData(
       // Lưu trữ không dùng được: không có draft để xóa.
     }
   }
+  clearPendingTextsOf(stores.local, userId);
   await purgeRecordings(recordingUserPrefix(userId));
 }
 
@@ -269,6 +281,8 @@ export async function sweepAttemptStorage(
   stores: DraftStores = defaultStores(),
   openDb?: OpenRecordingDb,
 ): Promise<void> {
+  // Văn bản Writing chưa lưu lên máy chủ: bỏ bản quá 24 giờ (cùng hạn với nháp).
+  sweepPendingTexts(stores.local, now, DRAFT_MAX_AGE_MS);
   const keepScopes = new Set<string>();
   const keepPrefixes: string[] = [];
   try {

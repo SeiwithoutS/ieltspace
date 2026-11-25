@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 import PageLink from '../../components/navigation/PageLink';
 import Popup from '../../components/attempts/Popup';
 import AttemptRecordingsPopup from '../../components/attempts/AttemptRecordingsPopup';
+import WritingTextPopup from '../../components/attempts/WritingTextPopup';
 import { ConfirmDialog, Icon, MenuButton } from '../../components/shared/ui';
 import { gradingCreditExamples, writingSpeakingExamples } from '../../data/practice-history.sample';
 import { downloadRecordingsZip, RecordingDownloadError } from '../../lib/attempts/recording-download';
@@ -23,12 +24,30 @@ const retentionRules = [
 type HistoryRow = { id: string; title: string; completedAt: string; skill: LearnerSkill; unread?: boolean; view: WsRowView };
 type Notice = { tone: 'info' | 'ok' | 'error'; text: string };
 
-const menuIcons = { listen: 'play', 'download-audio': 'download', 'download-docx': 'download' } as const;
+const menuIcons = { listen: 'play', 'download-audio': 'download', 'view-text': 'eye', 'download-docx': 'download' } as const;
+
+const skillLetters = { LISTENING: 'L', READING: 'R', WRITING: 'W', SPEAKING: 'S' } as const;
+const compactQuery = '(max-width: 767px)';
+
+/** Dưới 768px (DESIGN.md mục 11) hiển thị danh sách thẻ thay cho bảng; chỉ render một dạng tại một thời điểm. */
+function useCompact(): boolean {
+  return useSyncExternalStore(
+    notify => {
+      const media = window.matchMedia(compactQuery);
+      media.addEventListener('change', notify);
+      return () => media.removeEventListener('change', notify);
+    },
+    () => window.matchMedia(compactQuery).matches,
+    () => false,
+  );
+}
 
 export default function MyWS({ sample }: { sample: boolean }) {
+  const compact = useCompact();
   const result = useStudyResults({ kind: 'all', group: 'WS', limit: 15 }, sample);
   const [previewAction, setPreviewAction] = useState<{ label: string; title: string; text: string }>();
   const [listenRow, setListenRow] = useState<HistoryRow>();
+  const [textRow, setTextRow] = useState<HistoryRow>();
   const [confirmRow, setConfirmRow] = useState<{ row: HistoryRow; action: WsAction }>();
   const [busy, setBusy] = useState<{ id: string; text: string }>();
   const [notice, setNotice] = useState<Notice>();
@@ -43,6 +62,7 @@ export default function MyWS({ sample }: { sample: boolean }) {
     }
     if (action.kind === 'view') setPreviewAction({ label: action.label, title: row.title, text: 'Trang xem chi tiết kết quả của bài này sẽ sớm khả dụng.' });
     else if (action.kind === 'listen') setListenRow(row);
+    else if (action.kind === 'view-text') setTextRow(row);
     else if (action.kind === 'download-audio') void downloadAudio(row);
     else if (action.kind === 'grade' || action.kind === 'regrade') setConfirmRow({ row, action });
   }
@@ -76,6 +96,31 @@ export default function MyWS({ sample }: { sample: boolean }) {
       setBusy(undefined);
     }
   }
+
+  const skillChip = (row: HistoryRow) => <span className="ws-chip" data-skill={row.skill}>
+    <span className="ws-chip-letter" aria-hidden="true">{skillLetters[row.skill]}</span>{skillNames[row.skill]}</span>;
+  const statusChip = (row: HistoryRow) => <>
+    <span className="ws-chip" data-outcome={row.view.outcome}>{row.view.status}</span>
+    {row.unread && <span className="ws-unread" role="img" aria-label="Chưa xem" />}
+  </>;
+  const actions = (row: HistoryRow) => {
+    const working = busy?.id === row.id;
+    const primary = row.view.primary;
+    return <div className="ws-row-actions">
+      {primary && <button type="button" disabled={working}
+        className={primary.kind === 'view' ? 'learner-study-button' : 'learner-study-button learner-study-primary'}
+        onClick={() => run(row, primary)}>{working ? busy.text : primary.label}</button>}
+      {!primary && working && <span className="learner-study-muted" role="status">{busy.text}</span>}
+      {row.view.menu.length > 0 && <MenuButton label={`Thao tác khác cho ${row.title}`} items={row.view.menu.map(action => ({
+        key: action.kind,
+        label: action.label,
+        icon: menuIcons[action.kind as keyof typeof menuIcons],
+        disabled: !!action.disabledReason || working,
+        reason: action.disabledReason ?? (working ? 'Đang xử lý bài này.' : undefined),
+        onSelect: () => run(row, action),
+      }))} />}
+    </div>;
+  };
 
   return <div className="ws-history">
     <header className="learner-study-results-header ws-history-header">
@@ -117,42 +162,34 @@ export default function MyWS({ sample }: { sample: boolean }) {
         {sample && <span className="ws-unread-label"><span className="ws-unread" aria-hidden="true" /> Mới có kết quả hoặc vừa bị hủy</span>}
       </header>
       {notice && <p className="ws-notice" data-tone={notice.tone} role={notice.tone === 'error' ? 'alert' : 'status'}>{notice.text}</p>}
-      {rows.length > 0 && <>
-        <p className="ws-scroll-hint">Vuốt ngang để xem đầy đủ bảng.</p>
-        <div className="ws-table-scroll" tabIndex={0} role="region" aria-label="Bảng lịch sử Writing và Speaking">
-          <table>
-            <thead><tr>
-              <th scope="col">Bài</th><th scope="col">Kỹ năng</th><th scope="col">Trạng thái</th><th scope="col">Nội dung bài</th>
-              <th scope="col"><span className="ws-sr-only">Thao tác</span></th>
-            </tr></thead>
-            <tbody>{rows.map(row => {
-              const working = busy?.id === row.id;
-              const primary = row.view.primary;
-              return <tr key={row.id}>
+      {rows.length > 0 && (compact
+        ? <ul className="ws-card-list" aria-label="Danh sách lịch sử Writing và Speaking">{rows.map(row => <li key={row.id} className="ws-card">
+          <div className="ws-card-head">
+            <strong>{row.title}</strong>
+            <time dateTime={row.completedAt}>Hoàn thành {dateTime.format(new Date(row.completedAt))}</time>
+          </div>
+          <div className="ws-card-chips">{skillChip(row)}{statusChip(row)}</div>
+          <p className="ws-card-retention"><span>Nội dung bài</span>{row.view.retention}</p>
+          {actions(row)}
+        </li>)}</ul>
+        : <>
+          <p className="ws-scroll-hint">Vuốt ngang để xem đầy đủ bảng.</p>
+          <div className="ws-table-scroll" tabIndex={0} role="region" aria-label="Bảng lịch sử Writing và Speaking">
+            <table>
+              <thead><tr>
+                <th scope="col">Bài</th><th scope="col">Kỹ năng</th><th scope="col">Trạng thái</th><th scope="col">Nội dung bài</th>
+                <th scope="col"><span className="ws-sr-only">Thao tác</span></th>
+              </tr></thead>
+              <tbody>{rows.map(row => <tr key={row.id}>
                 <th scope="row"><strong>{row.title}</strong><time dateTime={row.completedAt}>Hoàn thành {dateTime.format(new Date(row.completedAt))}</time></th>
-                <td><span className="ws-chip" data-skill={row.skill}>{skillNames[row.skill]}</span></td>
-                <td><span className="ws-chip" data-outcome={row.view.outcome}>{row.view.status}</span>
-                  {row.unread && <span className="ws-unread" role="img" aria-label="Chưa xem" />}</td>
+                <td>{skillChip(row)}</td>
+                <td>{statusChip(row)}</td>
                 <td>{row.view.retention}</td>
-                <td><div className="ws-row-actions">
-                  {primary && <button type="button" disabled={working}
-                    className={primary.kind === 'view' ? 'learner-study-button' : 'learner-study-button learner-study-primary'}
-                    onClick={() => run(row, primary)}>{working ? busy.text : primary.label}</button>}
-                  {!primary && working && <span className="learner-study-muted" role="status">{busy.text}</span>}
-                  {row.view.menu.length > 0 && <MenuButton label={`Thao tác khác cho ${row.title}`} items={row.view.menu.map(action => ({
-                    key: action.kind,
-                    label: action.label,
-                    icon: menuIcons[action.kind as keyof typeof menuIcons],
-                    disabled: !!action.disabledReason || working,
-                    reason: action.disabledReason ?? (working ? 'Đang xử lý bài này.' : undefined),
-                    onSelect: () => run(row, action),
-                  }))} />}
-                </div></td>
-              </tr>;
-            })}</tbody>
-          </table>
-        </div>
-      </>}
+                <td>{actions(row)}</td>
+              </tr>)}</tbody>
+            </table>
+          </div>
+        </>)}
       {result.loading && <p className="learner-study-empty ws-table-state" role="status">Đang tải kết quả…</p>}
       {result.error && <div className="learner-study-empty ws-table-state" role="alert">{result.error}{' '}
         <button type="button" className="learner-study-button" onClick={result.retry}>Thử lại</button>
@@ -172,6 +209,8 @@ export default function MyWS({ sample }: { sample: boolean }) {
     </Popup>}
 
     {listenRow && <AttemptRecordingsPopup attemptId={listenRow.id} title={listenRow.title} onClose={() => setListenRow(undefined)} />}
+
+    {textRow && <WritingTextPopup attemptId={textRow.id} title={textRow.title} onClose={() => setTextRow(undefined)} />}
 
     <ConfirmDialog open={!!confirmRow} onClose={() => setConfirmRow(undefined)} label="Xác nhận gửi yêu cầu chấm"
       icon={<Icon name="send" size={20} />} title={confirmRow?.action.label ?? ''} confirmLabel="Gửi yêu cầu"

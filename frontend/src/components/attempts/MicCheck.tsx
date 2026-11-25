@@ -12,7 +12,7 @@ const HEARD_LEVEL = 0.08;
 const MAX_TEST_SECONDS = 30;
 
 const buttonClass =
-  "inline-flex items-center justify-center gap-2 [height:44px] [padding:0_22px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border font-semibold [font-size:14px] whitespace-nowrap cursor-pointer";
+  "attempt-hover inline-flex items-center justify-center gap-2 [height:44px] [padding:0_22px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border font-semibold [font-size:14px] whitespace-nowrap cursor-pointer";
 
 /**
  * Bước kiểm tra micro trước khi vào làm bài: xin quyền, ghi thử vài giây, nghe
@@ -192,7 +192,7 @@ export default function MicCheck({
             <>
               <div
                 role="alert"
-                className="[padding:12px_14px] rounded-xl [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-c0412a)] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [font-size:14px]"
+                className="[padding:12px_14px] rounded-xl [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-9d301e)] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [font-size:14px]"
               >
                 {error}
               </div>
@@ -245,7 +245,7 @@ export default function MicCheck({
                 onPlay={() => setListened(true)}
               />
               {heard ? (
-                <div role="status" className="[padding:12px_14px] rounded-xl [background:var(--attempt-bg-e6f3ec)] [color:var(--attempt-text-2e6a48)] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [font-size:14px]">
+                <div role="status" className="[padding:12px_14px] rounded-xl [background:var(--attempt-bg-e6f3ec)] [color:var(--attempt-text-24543d)] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [font-size:14px]">
                   {"Đã thu được tiếng nói. Nghe lại, nếu giọng rõ thì vào làm bài."}
                 </div>
               ) : (

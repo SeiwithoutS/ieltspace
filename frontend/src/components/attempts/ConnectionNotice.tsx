@@ -64,7 +64,7 @@ export default function ConnectionNotice({
   return (
     <div
       role={online ? "note" : "alert"}
-      className="flex [gap:10px] items-start [padding:12px_16px] rounded-xl [border:1.5px_solid_var(--attempt-line-d6d4d0)] [font-size:14px] [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-c0412a)]"
+      className="flex [gap:10px] items-start [padding:12px_16px] rounded-xl [border:1.5px_solid_var(--attempt-line-d6d4d0)] [font-size:14px] [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-9d301e)]"
     >
       <span className="[flex:0_0_18px] [margin-top:2px]">
         <svg

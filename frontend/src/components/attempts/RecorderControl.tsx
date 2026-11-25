@@ -4,6 +4,7 @@ import { formatClock } from "./AttemptTimer";
 import { AnswerRecorder, micErrorMessage, streamIsLive } from "../../lib/attempts/mic";
 import { useMicLevel } from "../../lib/attempts/use-mic-level";
 import type { RecordedAnswer } from "../../lib/attempts/recordings";
+import type { RecordingChunk } from "../../lib/attempts/recording-chunks";
 import type { SpeakingMode, SpeakingPhase } from "../../lib/attempts/speaking-flow";
 
 interface RecorderControlProps {
@@ -24,6 +25,11 @@ interface RecorderControlProps {
    * qua onRecorded. Trang dùng để chờ bản ghi vừa dừng trước khi Lưu và thoát.
    */
   onStopping?: (job: Promise<void>) => void;
+  /**
+   * Nhận từng đoạn ghi ngay khi có (lưu bền để khôi phục khi đóng tab đột ngột). `null`: bắt đầu một
+   * lần ghi mới của câu (bỏ đoạn cũ). Đoạn cuối luôn đến trước `onRecorded` của lần ghi đó.
+   */
+  onChunk?: (questionId: string, chunk: RecordingChunk | null) => void;
   /**
    * Trong lúc ghi, ô này giữ hàm dừng ngay lần ghi và giao bản ghi (dùng khi Lưu
    * và thoát giữa lúc đang nói); không ghi thì là null.
@@ -46,9 +52,9 @@ interface RecorderControlProps {
 }
 
 const pill =
-  "inline-flex items-center justify-center gap-2 [height:40px] [padding:0_16px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border [background:var(--attempt-bg-ffffff)] [color:var(--attempt-text-352637)] font-semibold [font-size:14px] whitespace-nowrap cursor-pointer";
+  "attempt-hover inline-flex items-center justify-center gap-2 [height:38px] [padding:0_16px] rounded-full [border:1.5px_solid_var(--attempt-line-d6d4d0)] box-border [background:var(--attempt-bg-ffffff)] [color:var(--attempt-text-352637)] font-semibold [font-size:14px] whitespace-nowrap cursor-pointer";
 const round =
-  "w-11 h-11 [border-radius:50%] [border:1.5px_solid_var(--attempt-line-d6d4d0)] [background:var(--attempt-bg-c0412a)] [color:var(--attempt-text-on-c0412a)] flex items-center justify-center cursor-pointer";
+  "attempt-hover w-11 h-11 [border-radius:50%] [border:1.5px_solid_var(--attempt-bg-c0412a)] [background:var(--attempt-bg-c0412a)] [color:var(--attempt-text-on-c0412a)] flex items-center justify-center cursor-pointer";
 
 const icon = {
   width: 18,
@@ -77,6 +83,7 @@ export default function RecorderControl({
   answer,
   onRecorded,
   onStopping,
+  onChunk,
   flushRef,
   onStart,
   onStop,
@@ -98,6 +105,8 @@ export default function RecorderControl({
   fail.current = onFail;
   const stopping = useRef(onStopping);
   stopping.current = onStopping;
+  const chunkSink = useRef(onChunk);
+  chunkSink.current = onChunk;
   const { levels } = useMicLevel(stream, recording);
 
   useEffect(() => {
@@ -107,8 +116,12 @@ export default function RecorderControl({
       return;
     }
     let recorder: AnswerRecorder;
+    const qid = questionId;
     try {
-      recorder = new AnswerRecorder(stream);
+      chunkSink.current?.(qid, null);
+      recorder = new AnswerRecorder(stream, (chunk) =>
+        chunkSink.current?.(qid, chunk),
+      );
       recorder.start();
     } catch (e) {
       fail.current(micErrorMessage(e));
@@ -253,7 +266,7 @@ export default function RecorderControl({
           </div>
         </div>
         {(micLost || micError) && (
-          <div role="alert" className="[padding:8px_12px] rounded-xl [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-c0412a)] [font-size:13px]">
+          <div role="alert" className="[padding:8px_12px] rounded-xl [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-9d301e)] [font-size:13px]">
             {micError || "Micro đã bị ngắt. Hãy bật lại micro."}
           </div>
         )}

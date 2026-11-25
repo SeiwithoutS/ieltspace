@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import AttemptDoneSummary, {
   type DoneRecording,
+  type DoneTask,
   type GradingView,
   type UploadView,
 } from "../../components/attempts/AttemptDoneSummary";
 import DesktopOnly from "../../components/attempts/DesktopOnly";
+import WritingTextPopup from "../../components/attempts/WritingTextPopup";
 import { getAttemptSync } from "../../lib/attempts/attempt-sync";
 import { clearAttemptDraft, draftKey, loadDraft } from "../../lib/attempts/attempt-storage";
 import {
@@ -23,12 +25,14 @@ import {
 } from "../../lib/attempts/skill-attempts-api";
 import { compareRecordingIds, recordingLabel } from "../../lib/attempts/recording-files";
 import { getAuthUser, navigate } from "../../lib/auth/auth";
+import { pendingKey, readPendingTexts, toUploadSummary } from "../../lib/attempts/writing-queue";
+import { WRITING_DEFAULT_MIN_WORDS, countWords, taskKeyOf, type WritingTaskKey } from "../../lib/attempts/writing-text";
 
 /**
- * Trang xác nhận hoàn thành bài Speaking. Hai trường hợp:
+ * Trang xác nhận hoàn thành bài Speaking hoặc Writing (`skill=writing` trên URL). Hai trường hợp:
  * - Đã chốt trên máy chủ: URL có `attempt` (mã lượt), dữ liệu lấy từ máy chủ.
- * - Chưa tải lên đủ / chưa chốt được: draft còn `finished`, bản ghi còn trên máy; trang tiếp tục
- *   tải lên và chốt ở nền, xong mới dọn dữ liệu trên máy.
+ * - Chưa tải lên/lưu đủ / chưa chốt được: draft còn `finished`, bản ghi (Speaking) hoặc văn bản (Writing)
+ *   còn trên máy; trang tiếp tục tải lên/lưu và chốt ở nền, xong mới dọn dữ liệu trên máy.
  */
 function partOf(id: string): number {
   const m = /^p(\d+)q/.exec(id);
@@ -39,12 +43,14 @@ function Body() {
   const query = useMemo(() => new URLSearchParams(location.hash.split("?")[1]), []);
   const examId = query.get("examId");
   const userId = getAuthUser()?.id;
+  const writingMode = query.get("skill") === "writing";
+  const pageName = writingMode ? "WritingTest" : "SpeakingTest";
   const serverParam = query.get("attempt");
   // Bài làm thử với đề mẫu: không có lượt trên máy chủ.
   const sample = query.get("sample") === "1";
-  const [draft] = useState(() => loadDraft(draftKey(userId, "SpeakingTest", examId)).draft);
+  const [draft] = useState(() => loadDraft(draftKey(userId, pageName, examId)).draft);
   const finished = serverParam ? undefined : draft?.finished;
-  const progress = draft?.state?.speaking;
+  const progress = writingMode ? draft?.state?.writing : draft?.state?.speaking;
   const clientId = progress?.attemptId;
 
   const [completed, setCompleted] = useState(!!serverParam);
@@ -67,30 +73,43 @@ function Body() {
 
   const store = useMemo(
     () =>
-      clientId && finished
+      clientId && finished && !writingMode
         ? createDurableRecordingStore(recordingScope(userId, examId, clientId))
         : null,
-    [clientId, finished, userId, examId],
+    [clientId, finished, userId, examId, writingMode],
   );
   const sync = useMemo(
     () =>
-      clientId && finished && store && draft
+      clientId && finished && (store || writingMode) && draft
         ? getAttemptSync({
             userId,
             examId,
             clientAttemptId: clientId,
             mode: draft.options.mode,
             limitMinutes: draft.options.limitMinutes ?? 0,
-            store,
+            ...(store ? { store } : {}),
+            skill: writingMode ? "WRITING" : "SPEAKING",
             serverId: finished.serverAttemptId ?? progress?.serverAttemptId,
           })
         : null,
-    [clientId, finished, store, draft, userId, examId, progress?.serverAttemptId],
+    [clientId, finished, store, draft, userId, examId, progress?.serverAttemptId, writingMode],
   );
+  // Writing: văn bản còn trên máy (nháp + bản chờ lưu), để xem lại và để lưu nốt.
+  const [localTexts] = useState<Partial<Record<WritingTaskKey, string>>>(() => {
+    if (!writingMode || !finished || !clientId) return {};
+    const pending = readPendingTexts(localStorage, pendingKey(userId, clientId));
+    const out: Partial<Record<WritingTaskKey, string>> = {};
+    for (const n of [1, 2] as const) {
+      const text = pending[taskKeyOf(n)] ?? draft?.state?.texts?.[n] ?? "";
+      if (text) out[taskKeyOf(n)] = text;
+    }
+    return out;
+  });
+  const [viewText, setViewText] = useState(false);
 
   // Lượt đã chốt trên máy chủ (URL có mã lượt): dọn draft còn sót của đề này.
   useEffect(() => {
-    if (serverParam || sample) clearAttemptDraft(userId, "SpeakingTest", examId);
+    if (serverParam || sample) clearAttemptDraft(userId, pageName, examId);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -112,12 +131,13 @@ function Body() {
 
   // Chưa chốt: dựng hàng đợi từ bản ghi trên máy, tải lên và chốt ở nền.
   useEffect(() => {
-    if (completed || !sync || !store || !finished) return;
+    if (completed || !sync || (!store && !writingMode) || !finished) return;
     let stopped = false;
     let running = false;
+    const summaryOf = () => (sync.texts ? toUploadSummary(sync.texts.summary()) : sync.summary());
     const refreshView = () => {
       if (stopped) return;
-      const s = sync.summary();
+      const s = summaryOf();
       setServerId(sync.serverId);
       setExpiredIds(s.expiredIds);
       const offline = !navigator.onLine;
@@ -128,15 +148,15 @@ function Body() {
       });
     };
     async function tryFinalize() {
-      if (running || stopped || !sync || !store || !finished) return;
+      if (running || stopped || !sync || (!store && !writingMode) || !finished) return;
       running = true;
       try {
         const outcome = await sync.finish(finished.elapsedSeconds, finished.reason, 20_000);
         // Máy chủ đã chốt thì dọn máy dù người học vừa rời trang (không để draft `finished` nằm lại).
         if (outcome.status === "completed") {
-          clearAttemptDraft(userId, "SpeakingTest", examId);
-          await purgeRecordings(recordingPrefix(userId, examId));
-          clearAttemptDraft(userId, "SpeakingTest", examId);
+          clearAttemptDraft(userId, pageName, examId);
+          if (!writingMode) await purgeRecordings(recordingPrefix(userId, examId));
+          clearAttemptDraft(userId, pageName, examId);
         }
         if (stopped) return;
         if (outcome.status === "incomplete" && outcome.permanent) {
@@ -155,17 +175,26 @@ function Body() {
           });
           setServerId(outcome.serverId);
           setCompleted(true);
-          setUpload({ state: "done", done: sync.summary().done, total: sync.summary().total });
+          setUpload({ state: "done", done: summaryOf().done, total: summaryOf().total });
         } else refreshView();
       } finally {
         running = false;
       }
     }
     retryRef.current = () => {
-      void sync.queue.drain().then(() => tryFinalize());
+      void (sync.texts ? sync.texts.flush(true) : sync.queue.drain()).then(() => tryFinalize());
       void sync.ensureCreated().then(() => tryFinalize());
     };
     void (async () => {
+      if (sync.texts) {
+        // Writing: nạp văn bản còn trên máy vào hàng đợi (nếu hàng đợi chưa có), rồi lưu và chốt.
+        for (const [key, text] of Object.entries(localTexts) as [WritingTaskKey, string][])
+          if (sync.texts.text(key) === undefined) sync.texts.adopt(key, text, false);
+        refreshView();
+        void tryFinalize();
+        return;
+      }
+      if (!store) return;
       let ids: string[] = [];
       try {
         ids = await store.ids();
@@ -184,6 +213,7 @@ function Body() {
     const timer = window.setInterval(() => void tryFinalize(), 15_000);
     const online = () => {
       sync.queue.kick();
+      sync.texts?.kick();
       void tryFinalize();
     };
     window.addEventListener("online", online);
@@ -195,7 +225,7 @@ function Body() {
       window.removeEventListener("online", online);
       window.removeEventListener("offline", refreshView);
     };
-  }, [completed, sync, store, finished, userId, examId]);
+  }, [completed, sync, store, finished, userId, examId, writingMode, localTexts, pageName]);
   const recordings: DoneRecording[] = completed
     ? (detail?.recordings ?? [])
         .map((r) => r.questionId)
@@ -247,7 +277,9 @@ function Body() {
     result?.durationSeconds ??
     finished?.elapsedSeconds ??
     num("elapsed");
-  const uploadedCount = detail?.recordings.filter((r) => r.status === "UPLOADED").length;
+  const uploadedCount = writingMode
+    ? detail?.tasks?.filter((t) => t.wordCount > 0).length
+    : detail?.recordings.filter((r) => r.status === "UPLOADED").length;
   const answered = completed
     ? (uploadedCount ?? num("answered"))
     : sample
@@ -265,11 +297,38 @@ function Body() {
   const missing = !completed && !finished && !sample;
   const notices: string[] = [];
   if (sample)
-    notices.push("Đây là bài làm thử với đề mẫu, không lưu lên máy chủ. Bản ghi chỉ ở trên máy này và không gửi chấm được.");
+    notices.push(
+      writingMode
+        ? "Đây là bài làm thử với đề mẫu, không lưu lên máy chủ và không gửi chấm được."
+        : "Đây là bài làm thử với đề mẫu, không lưu lên máy chủ. Bản ghi chỉ ở trên máy này và không gửi chấm được.",
+    );
   for (const id of expiredIds)
-    notices.push(recordingLabel(id) + " không tải lên được vì quá giờ.");
+    notices.push(
+      writingMode
+        ? (id === "task1" ? "Task 1" : "Task 2") + " không lưu lên được vì quá giờ nhận bài."
+        : recordingLabel(id) + " không tải lên được vì quá giờ.",
+    );
   if (blocked)
-    notices.push("Máy chủ không nhận việc chốt bài này nên hệ thống đã dừng thử lại. Bản ghi vẫn còn trên máy; hãy liên hệ hỗ trợ nếu cần.");
+    notices.push(
+      "Máy chủ không nhận việc chốt bài này nên hệ thống đã dừng thử lại. " +
+        (writingMode ? "Bài viết" : "Bản ghi") +
+        " vẫn còn trên máy; hãy liên hệ hỗ trợ nếu cần.",
+    );
+
+  // Writing: số từ từng Task (từ máy chủ khi đã chốt, từ bản trên máy khi chưa).
+  const tasks: DoneTask[] | undefined = writingMode && !(completed && !detail)
+    ? ([1, 2] as const).map((n) => {
+        const key = taskKeyOf(n);
+        const server = completed ? detail?.tasks?.find((t) => t.taskKey === key) : undefined;
+        return {
+          key,
+          label: "Task " + n,
+          words: server ? server.wordCount : countWords(localTexts[key] ?? ""),
+          minWords: WRITING_DEFAULT_MIN_WORDS[n],
+        };
+      })
+    : undefined;
+  const canViewText = writingMode && !sample && (completed ? !!serverId : Object.keys(localTexts).length > 0);
 
   return (
     <div className="attempt-sans [color:var(--attempt-text-352637)] [background:var(--attempt-bg-faf9f5)] [font-size:15px] [line-height:1.6] [min-height:100vh] flex items-start justify-center [padding:48px_16px]">
@@ -282,13 +341,15 @@ function Body() {
         </div>
       ) : (
         <AttemptDoneSummary
-          skill="Speaking"
+          skill={writingMode ? "Writing" : "Speaking"}
           elapsedSeconds={elapsed}
           answered={answered}
           upload={uploadView}
           onRetryUpload={() => retryRef.current()}
           expiresAt={detail?.contentExpiresAt ?? result?.contentExpiresAt ?? null}
           recordings={recordings}
+          tasks={tasks}
+          onViewText={canViewText ? () => setViewText(true) : undefined}
           loadAudio={loadAudio}
           grading={grading}
           onSendGrading={() => void sendGrading()}
@@ -296,6 +357,13 @@ function Body() {
           canGrade={completed && !!serverId && !sample}
           onHome={() => navigate("StudentHome")}
           onHistory={() => navigate("MyWS")}
+        />
+      )}
+      {viewText && (
+        <WritingTextPopup
+          title={"Bài Writing vừa hoàn thành"}
+          {...(completed && serverId ? { attemptId: serverId } : { texts: localTexts })}
+          onClose={() => setViewText(false)}
         />
       )}
     </div>

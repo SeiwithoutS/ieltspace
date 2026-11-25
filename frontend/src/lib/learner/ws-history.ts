@@ -2,7 +2,7 @@ import type { StudyResult } from './study-overview';
 
 /** Ánh xạ một dòng lịch sử Writing/Speaking sang trạng thái hiển thị, nút chính và các mục menu ba chấm. */
 export type WsOutcome = 'saved' | 'waiting' | 'assigned' | 'published' | 'cancelled' | 'expired';
-export type WsActionKind = 'grade' | 'regrade' | 'view' | 'listen' | 'download-audio' | 'download-docx';
+export type WsActionKind = 'grade' | 'regrade' | 'view' | 'listen' | 'download-audio' | 'view-text' | 'download-docx';
 export type WsAction = { kind: WsActionKind; label: string; disabledReason?: string };
 export type WsRowView = { outcome: WsOutcome; status: string; retention: string; primary?: WsAction; menu: WsAction[] };
 
@@ -12,6 +12,7 @@ export const actionLabels: Record<WsActionKind, string> = {
   view: 'Xem kết quả',
   listen: 'Nghe lại',
   'download-audio': 'Tải ghi âm',
+  'view-text': 'Xem bài viết',
   'download-docx': 'Tải .docx',
 };
 export const EXPIRED_REASON = 'Nội dung đã hết hạn nên bản ghi và bài viết đã bị xóa.';
@@ -37,8 +38,9 @@ function mediaMenu(skill: StudyResult['skill'], expired: boolean, recordingCount
     const reason = expired ? EXPIRED_REASON : recordingCount === 0 ? NO_RECORDING_REASON : undefined;
     return [action('listen', reason), action('download-audio', reason)];
   }
-  // Chưa có API tải .docx: mục luôn khóa, nhưng ẩn khi nội dung đã hết hạn (không còn gì để tải).
-  return expired ? [] : [action('download-docx', NO_DOCX_REASON)];
+  // Writing: đọc lại văn bản qua API (khóa khi hết hạn). Chưa có API tải .docx: mục luôn khóa,
+  // nhưng ẩn khi nội dung đã hết hạn (không còn gì để tải).
+  return expired ? [action('view-text', EXPIRED_REASON)] : [action('view-text'), action('download-docx', NO_DOCX_REASON)];
 }
 
 export function describeWsRow(item: Pick<StudyResult, 'skill' | 'band' | 'contentStatus' | 'contentExpiresAt' | 'grading' | 'published' | 'recordingCount'>): WsRowView {
@@ -80,7 +82,7 @@ export function describeSampleRow(
   const labels = example.actions ?? [];
   const kinds = (Object.keys(actionLabels) as WsActionKind[]).filter(kind => labels.includes(actionLabels[kind]));
   const reasonOf = (kind: WsActionKind) =>
-    example.outcome === 'expired' && (kind === 'listen' || kind === 'download-audio' || kind === 'download-docx') ? EXPIRED_REASON : undefined;
+    example.outcome === 'expired' && (kind === 'listen' || kind === 'download-audio' || kind === 'view-text' || kind === 'download-docx') ? EXPIRED_REASON : undefined;
   const make = (kind: WsActionKind) => action(kind, reasonOf(kind));
   const primaryKind = kinds.find(kind => kind === 'grade' || kind === 'regrade' || kind === 'view');
   return {

@@ -11,11 +11,15 @@ import {
   errorStatus,
   getSkillAttempt,
   getSpeakingExam,
+  getWritingExam,
   isNetworkError,
   recordingTransport,
+  writingTransport,
   type SpeakingExamDto,
   type SkillAttemptDetail,
+  type WritingExamDto,
 } from "./skill-attempts-api";
+import { TextQueue, pendingKey, toUploadSummary } from "./writing-queue";
 import { apiLimitMinutes } from "./time-limits";
 import { UploadQueue, defaultBackoff, type UploadSummary } from "./upload-queue";
 
@@ -30,7 +34,10 @@ export interface AttemptSyncInit {
   clientAttemptId: string;
   mode: "real" | "practice";
   limitMinutes: number;
-  store: RecordingStore;
+  /** Kho bản ghi âm (Speaking); Writing không dùng. */
+  store?: RecordingStore;
+  /** Kỹ năng của lượt; mặc định Speaking. */
+  skill?: "SPEAKING" | "WRITING";
   /** Mã lượt trên máy chủ đã lưu trong draft (nếu có). */
   serverId?: string;
   /** Làm thử với đề mẫu: chỉ làm cục bộ, không tạo lượt, không tải lên. */
@@ -38,19 +45,26 @@ export interface AttemptSyncInit {
 }
 
 const skillIdCache = new Map<string, string>();
-/** Tra mã kỹ năng Speaking của một bộ đề (examId trong URL) qua danh mục công khai. */
-export async function resolveSpeakingSkillId(
+/** Tra mã kỹ năng Speaking/Writing của một bộ đề (examId trong URL) qua danh mục công khai. */
+export async function resolveSkillId(
   examId: string | null,
+  skill: "SPEAKING" | "WRITING" = "SPEAKING",
 ): Promise<string | undefined> {
   if (!examId) return undefined;
   const fromQuery = new URLSearchParams(location.hash.split("?")[1]).get("skillId");
   if (fromQuery) return fromQuery;
-  const cached = skillIdCache.get(examId);
+  const cacheKey = skill + ":" + examId;
+  const cached = skillIdCache.get(cacheKey);
   if (cached) return cached;
-  const items = await getPracticeItems("SPEAKING");
-  for (const item of items) skillIdCache.set(item.examId, item.examSkillId);
-  return skillIdCache.get(examId);
+  const items = await getPracticeItems(skill);
+  // Một đề Writing có thể có cả bản Academic và General (nhiều ô kỹ năng): lấy ô đầu tiên của danh mục.
+  for (const item of items)
+    if (!skillIdCache.has(skill + ":" + item.examId))
+      skillIdCache.set(skill + ":" + item.examId, item.examSkillId);
+  return skillIdCache.get(cacheKey);
 }
+export const resolveSpeakingSkillId = (examId: string | null) =>
+  resolveSkillId(examId, "SPEAKING");
 
 function minutes(value: number | string | undefined): string {
   const n = Number(value);
@@ -99,9 +113,28 @@ export async function loadSpeakingTest(
   ]);
 }
 
+/** Lấy đề Writing từ máy chủ; lỗi hoặc quá `timeoutMs` thì trả null để dùng dữ liệu mẫu. */
+export async function loadWritingTest(
+  examId: string | null,
+  timeoutMs = 5000,
+): Promise<WritingExamDto | null> {
+  const job = (async () => {
+    const skillId = await resolveSkillId(examId, "WRITING");
+    if (!skillId) return null;
+    const dto = await getWritingExam(skillId);
+    return dto.tasks?.length ? dto : null;
+  })().catch(() => null);
+  return Promise.race([
+    job,
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), timeoutMs)),
+  ]);
+}
+
 export class AttemptSync {
   readonly clientAttemptId: string;
   readonly queue: UploadQueue;
+  /** Hàng đợi lưu văn bản (chỉ lượt Writing). */
+  readonly texts: TextQueue | null;
   serverId: string | undefined;
   private init: AttemptSyncInit;
   private creating: Promise<string | undefined> | null = null;
@@ -114,6 +147,7 @@ export class AttemptSync {
   private listeners = new Set<() => void>();
   private onlineHandler = () => {
     this.queue.kick();
+    this.texts?.kick();
     if (!this.serverId) void this.ensureCreated();
     void flushPendingDeletes(this.init.userId);
   };
@@ -126,11 +160,28 @@ export class AttemptSync {
     this.serverId = init.offlineSample ? undefined : init.serverId;
     this.queue = new UploadQueue({
       transport: recordingTransport,
-      readAnswer: (id) => this.init.store.get(id),
+      readAnswer: async (id) => this.init.store?.get(id),
       getAttemptId: () => this.serverId,
       onChange: () => this.listeners.forEach((fn) => fn()),
     });
+    this.texts =
+      init.skill === "WRITING"
+        ? new TextQueue({
+            transport: writingTransport,
+            getAttemptId: () => this.serverId,
+            // Đề mẫu: chỉ làm cục bộ, không giữ bản chờ trong localStorage.
+            storage: init.offlineSample ? null : localStorage,
+            storageKey: pendingKey(init.userId, init.clientAttemptId),
+            // Máy chủ không còn lượt này: tạo lại (cùng clientAttemptId) rồi PUT lại.
+            onAttemptGone: () => {
+              this.serverId = undefined;
+              void this.ensureCreated();
+            },
+            onChange: () => this.listeners.forEach((fn) => fn()),
+          })
+        : null;
     window.addEventListener("online", this.onlineHandler);
+    if (init.offlineSample) this.texts?.dispose();
     // Hàng đợi tắt hẳn: enqueue không làm gì, không có upload nào cho bài mẫu.
     if (init.offlineSample) this.queue.dispose();
   }
@@ -157,13 +208,24 @@ export class AttemptSync {
     if (this.creating) return this.creating;
     this.creating = (async () => {
       try {
-        const skillId = await resolveSpeakingSkillId(this.init.examId);
-        if (!skillId) throw new Error("Chưa xác định được bài Speaking");
+        const writing = this.init.skill === "WRITING";
+        const skillId = await resolveSkillId(
+          this.init.examId,
+          writing ? "WRITING" : "SPEAKING",
+        );
+        if (!skillId)
+          throw new Error(
+            writing ? "Chưa xác định được bài Writing" : "Chưa xác định được bài Speaking",
+          );
         const created = await createSkillAttempt({
           clientAttemptId: this.createId,
           examSkillId: skillId,
           mode: this.init.mode === "real" ? "REAL" : "PRACTICE",
-          limitMinutes: apiLimitMinutes(this.init.mode, this.init.limitMinutes),
+          limitMinutes: apiLimitMinutes(
+            this.init.mode,
+            this.init.limitMinutes,
+            writing ? 60 : 30,
+          ),
         });
         this.serverId = created.id;
         this.failures = 0;
@@ -173,6 +235,7 @@ export class AttemptSync {
           return undefined;
         }
         this.queue.kick();
+        this.texts?.kick();
         return created.id;
       } catch (e) {
         this.failures += 1;
@@ -232,16 +295,23 @@ export class AttemptSync {
     }
   }
 
-  finish(elapsedSeconds: number, reason: FinishReason, timeoutMs?: number): Promise<FinishOutcome> {
-    return finishAttempt({
+  /**
+   * Hoàn thành: Speaking tải nốt bản ghi; Writing lưu lần cuối cả hai Task (sau complete không sửa được)
+   * rồi mới gọi complete. Chỉ khi chốt xong mới dọn bản chờ lưu trên máy.
+   */
+  async finish(elapsedSeconds: number, reason: FinishReason, timeoutMs?: number): Promise<FinishOutcome> {
+    const texts = this.texts;
+    const outcome = await finishAttempt({
       ensureCreated: () => this.ensureCreated(),
-      drain: () => this.queue.drain(),
-      summary: () => this.queue.summary(),
+      drain: texts ? async () => toUploadSummary(await texts.drain()) : () => this.queue.drain(),
+      summary: texts ? () => toUploadSummary(texts.summary()) : () => this.queue.summary(),
       complete: (id, input) => completeSkillAttempt(id, input),
       elapsedSeconds,
       reason,
       timeoutMs,
     });
+    if (outcome.status === "completed") texts?.clearStorage();
+    return outcome;
   }
 
   private async removeRemote() {
@@ -262,6 +332,7 @@ export class AttemptSync {
   /** "Không lưu": xóa lượt trên máy chủ (lỗi mạng thì xếp hàng xóa sau) và dừng đồng bộ. */
   async cancel(): Promise<void> {
     this.cancelled = true;
+    this.texts?.clearStorage();
     this.dispose();
     if (this.creating) {
       // Lượt đang được tạo: chờ tối đa vài giây; tạo xong muộn thì tự xóa (xem ensureCreated).
@@ -278,6 +349,7 @@ export class AttemptSync {
     this.retryTimer = undefined;
     window.removeEventListener("online", this.onlineHandler);
     this.queue.dispose();
+    this.texts?.dispose();
     syncs.delete(this.clientAttemptId);
   }
 }

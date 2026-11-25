@@ -57,3 +57,23 @@ test("a malformed speaking part keeps startedAtEpoch so the clock is not reset",
  assert.equal(speakingBegan(noEpoch),false);
  assert.equal(speakingEpoch(noEpoch),1700000000000-40000);
 });
+
+test("draft Writing giữ tiến độ lượt làm hợp lệ và bỏ phần sai dạng", async () => {
+  const { parseAttemptDraft } = await import("../src/lib/attempts/attempt-draft.ts");
+  const make = (writing) =>
+    JSON.stringify({
+      options: { mode: "real", parts: [], limitMinutes: 60 },
+      seconds: 10,
+      state: { texts: { 1: "a", 2: "b" }, writing },
+      savedAt: 1,
+      startedAtEpoch: 1,
+    });
+  const ok = parseAttemptDraft(make({ attemptId: "c1", serverAttemptId: "s1", extra: "bỏ" }));
+  assert.deepEqual(ok.state.writing, { attemptId: "c1", serverAttemptId: "s1" });
+  assert.deepEqual(ok.state.texts, { 1: "a", 2: "b" });
+  const noServer = parseAttemptDraft(make({ attemptId: "c1" }));
+  assert.deepEqual(noServer.state.writing, { attemptId: "c1" });
+  const bad = parseAttemptDraft(make({ attemptId: "" }));
+  assert.equal(bad.state.writing, undefined);
+  assert.deepEqual(bad.state.texts, { 1: "a", 2: "b" });
+});

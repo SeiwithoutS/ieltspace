@@ -13,7 +13,7 @@ export type LoadAudio = (id: string) => Promise<string | null>;
 
 // Màu và viền nút lấy từ .attempt-card button (kể cả chế độ tối); ở đây chỉ chỉnh kích thước.
 export const attemptButton =
-  "[height:40px] font-semibold [font-size:14px] whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-60";
+  "[height:38px] font-semibold [font-size:14px] whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-60";
 
 const DEFAULT_FAILURE = "Chưa nghe lại được lúc này, hãy thử lại sau.";
 

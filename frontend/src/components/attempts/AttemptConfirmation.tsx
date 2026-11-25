@@ -143,7 +143,9 @@ export default function AttemptConfirmation({
           (real
             ? "Câu Part 1 hoặc Part 3 đang nói dở được giữ làm đáp án rồi chuyển sang câu kế, không ghi lại được; Part 2 đang làm dở quay về phần chuẩn bị."
             : "Câu đang nói dở sẽ được làm lại từ đầu.")
-        : "Đồng hồ sẽ tạm dừng. Bài được lưu trên máy này trong 24 giờ; mở lại đề trên máy này để làm tiếp từ thời gian còn lại.",
+        : skill === "Writing"
+          ? "Bài viết được giữ trên máy này và tự lưu lên máy chủ khi có mạng. Đồng hồ vẫn chạy khi bạn rời đi. Mở lại đề trên máy này để làm tiếp."
+          : "Đồng hồ sẽ tạm dừng. Bài được lưu trên máy này trong 24 giờ; mở lại đề trên máy này để làm tiếp từ thời gian còn lại.",
     // Speaking không dùng hộp này (ConnectionNotice báo mất mạng, bài vẫn chạy).
     offline: "Bạn có thể lưu bài trên máy này và tiếp tục sau trên máy này trong 24 giờ.",
     saveError: "Trình duyệt chưa lưu được bản nháp. Hãy quay lại bài làm.",
@@ -156,12 +158,13 @@ export default function AttemptConfirmation({
       <span
         className="dialog-icon"
         data-tone={
-          kind === "expired" ||
-          kind === "discardConfirm" ||
-          kind === "offline" ||
-          (written && kind === "submit")
-            ? "butter"
-            : kind === "exit" || (skill === "Listening" && real)
+          kind === "discardConfirm"
+            ? "danger"
+            : kind === "expired" ||
+                kind === "offline" ||
+                (written && kind === "submit")
+              ? "butter"
+              : kind === "exit" || (skill === "Listening" && real)
               ? "sky"
               : objective && !real
                 ? "mint"
@@ -191,7 +194,9 @@ export default function AttemptConfirmation({
       <p>{descriptions[kind]}</p>
       {busy && (
         <p role="status">
-          {"Đang tải bản ghi lên và chốt bài, vui lòng giữ nguyên trang…"}
+          {skill === "Writing"
+            ? "Đang lưu bài viết và chốt bài, vui lòng giữ nguyên trang…"
+            : "Đang tải bản ghi lên và chốt bài, vui lòng giữ nguyên trang…"}
         </p>
       )}
       {objective && (
@@ -223,7 +228,7 @@ export default function AttemptConfirmation({
         {kind === "discardConfirm" && (
           <>
             <button onClick={() => setAskDiscard(false)}>Quay lại</button>
-            <button className="danger" onClick={discard}>
+            <button className="danger-solid" onClick={discard}>
               Xóa bài làm
             </button>
           </>

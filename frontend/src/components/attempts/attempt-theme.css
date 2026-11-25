@@ -42,6 +42,14 @@
   --attempt-line-ffffff: #ffffff;
   --attempt-text-on-352637: #ffffff;
   --attempt-text-on-c0412a: #ffffff;
+  /* Màu banner 12.6 (lỗi/thành công/thông tin) và các token bổ sung mục 2 DESIGN.md */
+  --attempt-text-9d301e: #9d301e;
+  --attempt-text-24543d: #24543d;
+  --attempt-text-2257b8: #2257b8;
+  --attempt-bg-fdf3f0: #fdf3f0;
+  --attempt-line-f1b3a3: #f1b3a3;
+  --attempt-line-8e8392: #8e8392;
+  --attempt-line-6a5d6c: #6a5d6c;
 }
 .dark {
   --attempt-text-c0412a: #f49a85;
@@ -78,4 +86,11 @@
   --attempt-line-ffffff: #292a2e;
   --attempt-text-on-352637: #202125;
   --attempt-text-on-c0412a: #202125;
+  --attempt-text-9d301e: #f49a85;
+  --attempt-text-24543d: #a7d7b6;
+  --attempt-text-2257b8: #a9c2f7;
+  --attempt-bg-fdf3f0: #3a2a28;
+  --attempt-line-f1b3a3: #7a4238;
+  --attempt-line-8e8392: #85868d;
+  --attempt-line-6a5d6c: #b2b3b9;
 }

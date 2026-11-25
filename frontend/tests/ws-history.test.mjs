@@ -82,3 +82,19 @@ test("API cũ chưa trả trường mới thì suy giảm êm", () => {
   assert.equal(describeWsRow({ skill: "WRITING", band: null }).outcome, "saved");
   assert.equal(describeWsRow({ skill: "WRITING", band: 6 }).outcome, "published");
 });
+
+test("Writing: menu có Xem bài viết (khóa khi hết hạn) và Tải .docx vẫn khóa vì chưa có API", async () => {
+  const { describeWsRow, NO_DOCX_REASON, EXPIRED_REASON } = await import("../src/lib/learner/ws-history.ts");
+  const saved = describeWsRow({ skill: "WRITING", band: null, contentStatus: "AVAILABLE", contentExpiresAt: "2026-12-09T00:00:00Z", grading: null, published: false });
+  assert.deepEqual(saved.menu.map((m) => m.kind), ["view-text", "download-docx"]);
+  assert.equal(saved.menu[0].disabledReason, undefined);
+  assert.equal(saved.menu[1].disabledReason, NO_DOCX_REASON);
+  assert.equal(saved.menu[0].label, "Xem bài viết");
+  assert.equal(saved.primary.kind, "grade");
+  const expired = describeWsRow({ skill: "WRITING", band: null, contentStatus: "EXPIRED", grading: null, published: false });
+  assert.deepEqual(expired.menu.map((m) => m.kind), ["view-text"]);
+  assert.equal(expired.menu[0].disabledReason, EXPIRED_REASON);
+  // Speaking không đổi.
+  const speaking = describeWsRow({ skill: "SPEAKING", band: null, contentStatus: "AVAILABLE", grading: null, published: false, recordingCount: 3 });
+  assert.deepEqual(speaking.menu.map((m) => m.kind), ["listen", "download-audio"]);
+});

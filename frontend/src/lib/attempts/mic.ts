@@ -1,4 +1,5 @@
 import type { RecordedAnswer } from "./recordings";
+import { CHUNK_TIMESLICE_MS, type RecordingChunk } from "./recording-chunks.ts";
 
 const MIME_CANDIDATES = [
   "audio/webm;codecs=opus",
@@ -62,7 +63,12 @@ export class AnswerRecorder {
   private finish!: (answer: RecordedAnswer) => void;
   private fail!: (error: unknown) => void;
 
-  constructor(stream: MediaStream) {
+  private seq = 0;
+  private onChunk?: (chunk: RecordingChunk) => void;
+
+  /** `onChunk` nhận từng đoạn ngay khi trình duyệt trả (để lưu bền, xem recording-chunks.ts). */
+  constructor(stream: MediaStream, onChunk?: (chunk: RecordingChunk) => void) {
+    this.onChunk = onChunk;
     const mimeType = pickMimeType();
     this.recorder = new MediaRecorder(
       stream,
@@ -73,7 +79,19 @@ export class AnswerRecorder {
       this.fail = reject;
     });
     this.recorder.ondataavailable = (event) => {
-      if (event.data.size > 0) this.chunks.push(event.data);
+      if (event.data.size === 0) return;
+      this.chunks.push(event.data);
+      try {
+        this.onChunk?.({
+          seq: this.seq++,
+          blob: event.data,
+          mimeType: this.recorder.mimeType || mimeType || "audio/webm",
+          startedAt: this.startedAt,
+          at: Date.now(),
+        });
+      } catch {
+        // Lưu đoạn lỗi không được làm hỏng bản ghi đang chạy.
+      }
     };
     this.recorder.onerror = (event) => this.fail(event);
     this.recorder.onstop = () => {
@@ -89,8 +107,8 @@ export class AnswerRecorder {
 
   start() {
     this.startedAt = Date.now();
-    // timeslice 1 giây: nếu trang bị đóng đột ngột, các đoạn đã có vẫn được giữ.
-    this.recorder.start(1000);
+    // timeslice: nếu trang bị đóng đột ngột, các đoạn đã lưu (onChunk) vẫn ghép lại được.
+    this.recorder.start(CHUNK_TIMESLICE_MS);
   }
 
   stop(): Promise<RecordedAnswer> {

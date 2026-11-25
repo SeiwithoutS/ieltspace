@@ -4,6 +4,8 @@
  * diện này mà không sửa trang làm bài. `createMemoryRecordingStore` giữ trong bộ nhớ trình
  * duyệt: mất khi tải lại hoặc đóng tab.
  */
+import { canAppendChunk, type RecordingChunk } from "./recording-chunks.ts";
+
 export interface RecordedAnswer {
   blob: Blob;
   mimeType: string;
@@ -295,6 +297,8 @@ export function createIndexedDbRecordingStore(
     async clear() {
       const tx = (await db()).transaction(STORE_NAME, "readwrite");
       tx.objectStore(STORE_NAME).delete(rangeOf(prefix));
+      // Cả đoạn ghi dở của lượt này (khóa dùng dấu phân cách khác).
+      tx.objectStore(STORE_NAME).delete(rangeOf(chunkPrefix(scope)));
       await transactionDone(tx);
     },
     async ids() {
@@ -314,7 +318,148 @@ export function createIndexedDbRecordingStore(
   };
 }
 
-export interface DurableRecordingStore extends RecordingStore {
+/**
+ * Kho đoạn ghi dở (SPK-17), cùng phạm vi lượt làm với RecordingStore nhưng khóa riêng nên không lẫn vào `ids()`.
+ * Đoạn chỉ có ích nếu trang bị đóng đột ngột: dừng bình thường thì bản hoàn chỉnh được `put` rồi `dropChunks`.
+ */
+export interface ChunkStore {
+  /** Lưu một đoạn; trả false nếu bị bỏ vì vượt trần số đoạn/dung lượng của câu (bản ghi chính không ảnh hưởng). */
+  appendChunk(questionId: string, chunk: RecordingChunk): Promise<boolean>;
+  /** Mọi đoạn của câu, theo thứ tự seq. */
+  readChunks(questionId: string): Promise<RecordingChunk[]>;
+  /** Các câu đang có đoạn. */
+  chunkQuestionIds(): Promise<string[]>;
+  /** Xóa đoạn của câu (bắt đầu ghi mới, ghi xong, bỏ bản dở). */
+  dropChunks(questionId: string): Promise<void>;
+}
+
+/** Bộ đếm trần theo câu, dùng chung cho mọi kho đoạn. */
+function createChunkBudget() {
+  const used = new Map<string, { count: number; bytes: number }>();
+  return {
+    allow(id: string, chunk: RecordingChunk): boolean {
+      const cur = used.get(id) ?? { count: 0, bytes: 0 };
+      if (!canAppendChunk(cur, chunk.blob)) return false;
+      used.set(id, { count: cur.count + 1, bytes: cur.bytes + chunk.blob.size });
+      return true;
+    },
+    reset(id: string) {
+      used.delete(id);
+    },
+    resetAll() {
+      used.clear();
+    },
+  };
+}
+
+export function createMemoryChunkStore(): ChunkStore {
+  const map = new Map<string, RecordingChunk[]>();
+  const budget = createChunkBudget();
+  return {
+    async appendChunk(id, chunk) {
+      if (!budget.allow(id, chunk)) return false;
+      map.set(id, [...(map.get(id) ?? []), chunk]);
+      return true;
+    },
+    async readChunks(id) {
+      return [...(map.get(id) ?? [])].sort((a, b) => a.seq - b.seq);
+    },
+    async chunkQuestionIds() {
+      return [...map.keys()];
+    },
+    async dropChunks(id) {
+      map.delete(id);
+      budget.reset(id);
+    },
+  };
+}
+
+const CHUNK_SEP = "\u0002";
+const chunkPrefix = (scope: string) => scope + CHUNK_SEP;
+const chunkKey = (scope: string, id: string, seq: number) =>
+  scope + CHUNK_SEP + id + CHUNK_SEP + String(seq).padStart(6, "0");
+
+/** Kho đoạn trong cùng object store IndexedDB (khóa dùng dấu phân cách khác nên `ids()` không thấy). */
+export function createIndexedDbChunkStore(
+  scope: string,
+  openDb: OpenRecordingDb = openRecordingDb,
+): ChunkStore & { close(): void } {
+  const budget = createChunkBudget();
+  let opened: Promise<IDBDatabase> | null = null;
+  const db = () =>
+    (opened ??= openDb().then((conn) => {
+      conn.onversionchange = () => {
+        conn.close();
+        opened = null;
+      };
+      return conn;
+    }));
+  const rangeFor = (id: string) => rangeOf(chunkKey(scope, id, 0).slice(0, -6));
+  return {
+    async appendChunk(id, chunk) {
+      if (!budget.allow(id, chunk)) return false;
+      const tx = (await db()).transaction(STORE_NAME, "readwrite");
+      tx.objectStore(STORE_NAME).put({
+        key: chunkKey(scope, id, chunk.seq),
+        scope,
+        id,
+        seq: chunk.seq,
+        blob: chunk.blob,
+        mimeType: chunk.mimeType,
+        startedAt: chunk.startedAt,
+        at: chunk.at,
+        recordedAt: chunk.startedAt,
+      });
+      await transactionDone(tx);
+      return true;
+    },
+    async readChunks(id) {
+      const rows = (await requestToPromise(
+        (await db()).transaction(STORE_NAME).objectStore(STORE_NAME).getAll(rangeFor(id)),
+      )) as Array<Partial<RecordingChunk>>;
+      return rows
+        .filter(
+          (r): r is RecordingChunk =>
+            typeof r.seq === "number" &&
+            r.blob instanceof Blob &&
+            typeof r.startedAt === "number" &&
+            typeof r.at === "number",
+        )
+        .map((r) => ({
+          seq: r.seq,
+          blob: r.blob,
+          mimeType: r.mimeType ?? "",
+          startedAt: r.startedAt,
+          at: r.at,
+        }))
+        .sort((a, b) => a.seq - b.seq);
+    },
+    async chunkQuestionIds() {
+      const prefix = chunkPrefix(scope);
+      const keys = await requestToPromise(
+        (await db()).transaction(STORE_NAME).objectStore(STORE_NAME).getAllKeys(rangeOf(prefix)),
+      );
+      return [
+        ...new Set(
+          keys.map((k) => String(k).slice(prefix.length).split(CHUNK_SEP)[0]),
+        ),
+      ];
+    },
+    async dropChunks(id) {
+      budget.reset(id);
+      const tx = (await db()).transaction(STORE_NAME, "readwrite");
+      tx.objectStore(STORE_NAME).delete(rangeFor(id));
+      await transactionDone(tx);
+    },
+    close() {
+      const current = opened;
+      opened = null;
+      void current?.then((conn) => conn.close()).catch(() => undefined);
+    },
+  };
+}
+
+export interface DurableRecordingStore extends RecordingStore, ChunkStore {
   /** false khi IndexedDB lỗi/bị chặn và bản ghi chỉ còn trong bộ nhớ. */
   persistent(): boolean;
 }
@@ -330,6 +475,7 @@ export function createDurableRecordingStore(
 ): DurableRecordingStore {
   const memory = createMemoryRecordingStore();
   const idb = createIndexedDbRecordingStore(scope, openDb);
+  const chunks = createIndexedDbChunkStore(scope, openDb);
   let healthy = true;
   async function attempt<T>(job: () => Promise<T>): Promise<T | undefined> {
     try {
@@ -356,7 +502,24 @@ export function createDurableRecordingStore(
       await memory.clear();
       await attempt(() => idb.clear());
     },
-    close: () => idb.close?.(),
+    close: () => {
+      idb.close?.();
+      chunks.close();
+    },
+    // Đoạn ghi dở chỉ có ích sau khi tải lại trang nên không giữ bản trong bộ nhớ; IndexedDB lỗi thì bỏ đoạn
+    // (bản ghi chính vẫn ghép trong bộ nhớ khi dừng bình thường) và đánh dấu kho không bền.
+    async appendChunk(id, chunk) {
+      return (await attempt(() => chunks.appendChunk(id, chunk))) ?? false;
+    },
+    async readChunks(id) {
+      return (await attempt(() => chunks.readChunks(id))) ?? [];
+    },
+    async chunkQuestionIds() {
+      return (await attempt(() => chunks.chunkQuestionIds())) ?? [];
+    },
+    async dropChunks(id) {
+      await attempt(() => chunks.dropChunks(id));
+    },
     async ids() {
       const local = await memory.ids();
       const stored = (await attempt(() => idb.ids())) ?? [];

@@ -43,6 +43,8 @@ export type ServerAttemptTime =
       status: string;
       startedAt: string;
       deadlineAt: string | null;
+      /** Chế độ của lượt do máy chủ giữ (SPK-17b); thiếu thì coi như chưa biết. */
+      mode?: "REAL" | "PRACTICE";
     }
   | { ok: false; httpStatus?: number };
 
@@ -57,6 +59,8 @@ export type ClockResolution =
       epoch: number;
       deadlineEpoch: number | null;
       limitSeconds: number | null;
+      /** Chế độ lượt theo máy chủ (undefined nếu máy chủ không trả). */
+      mode: "real" | "practice" | undefined;
     }
   /** Chưa hỏi được máy chủ: dùng mốc trong nháp (có thể undefined nếu nháp không có). */
   | { kind: "draft"; epoch: number | undefined };
@@ -94,5 +98,39 @@ export function resolveClock(input: {
       deadlineEpoch = epoch + limitSeconds * 1000;
     }
   }
-  return { kind: "server", epoch, deadlineEpoch, limitSeconds };
+  const mode =
+    server.mode === "REAL" ? "real" : server.mode === "PRACTICE" ? "practice" : undefined;
+  return { kind: "server", epoch, deadlineEpoch, limitSeconds, mode };
+}
+
+/** Giới hạn giờ Thi thật Speaking (giây). Mức này cố định ở client. */
+export const REAL_LIMIT_SECONDS = 15 * 60;
+/** Giới hạn giờ Thi thật Writing (giây): máy chủ giữ deadline = startedAt + 60 phút. */
+export const WRITING_REAL_LIMIT_SECONDS = 60 * 60;
+
+/**
+ * Luật theo máy chủ khi vào lại: Thi thật luôn 15 phút (không đọc từ nháp);
+ * Practice lấy giới hạn từ deadline của máy chủ, không có deadline là không giới hạn (0).
+ */
+export function serverAttemptRules(
+  mode: "real" | "practice",
+  deadlineLimitSeconds: number | null,
+  realLimitSeconds: number = REAL_LIMIT_SECONDS,
+): { mode: "real" | "practice"; limitSeconds: number } {
+  return {
+    mode,
+    limitSeconds: mode === "real" ? realLimitSeconds : (deadlineLimitSeconds ?? 0),
+  };
+}
+
+/** Ghi đè mode và giới hạn của nháp bằng luật máy chủ (các trường khác giữ nguyên). */
+export function applyServerRules<T extends { mode: string; limitMinutes?: number }>(
+  options: T,
+  rules: { mode: "real" | "practice"; limitSeconds: number },
+): T {
+  return {
+    ...options,
+    mode: rules.mode,
+    limitMinutes: Math.ceil(rules.limitSeconds / 60),
+  };
 }

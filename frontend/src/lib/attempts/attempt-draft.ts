@@ -2,6 +2,7 @@ import type {
   AttemptMode,
   AttemptState,
   SpeakingProgress,
+  WritingProgress,
 } from "../../components/attempts/types";
 
 export interface AttemptOptions {
@@ -21,12 +22,12 @@ export interface AttemptDraft {
   /** Thời điểm lưu (ms, Date.now); dùng tính thời gian gián đoạn của bài Speaking. */
   savedAt?: number;
   /**
-   * Speaking: mốc tuyệt đối (ms, Date.now) bắt đầu tính giờ. Đồng hồ không dừng
+   * Speaking và Writing: mốc tuyệt đối (ms, Date.now) bắt đầu tính giờ. Đồng hồ không dừng
    * khi rời đi nên giây đã dùng luôn là (bây giờ - mốc), không cộng dồn từng lần lưu.
    */
   startedAtEpoch?: number;
   /**
-   * Speaking: bài đã bấm Hoàn thành/Lưu nhưng chưa tải lên đủ hoặc chưa chốt được
+   * Speaking và Writing: bài đã bấm Hoàn thành/Lưu nhưng chưa tải lên đủ hoặc chưa chốt được
    * trên máy chủ. Còn draft + bản ghi trên máy để thử lại; mở lại đề thì sang trang xác nhận.
    */
   finished?: FinishedInfo;
@@ -73,6 +74,22 @@ function cleanSpeaking(value: unknown): SpeakingProgress | undefined {
     index: index as number,
     phase: phase as SpeakingProgress["phase"],
     answered: answered as string[],
+    ...(typeof serverAttemptId === "string" &&
+    serverAttemptId &&
+    serverAttemptId.length <= 100
+      ? { serverAttemptId }
+      : {}),
+  };
+}
+
+/** Tiến độ Writing hợp lệ, hoặc undefined nếu sai dạng. */
+function cleanWriting(value: unknown): WritingProgress | undefined {
+  if (!isObject(value)) return undefined;
+  const { attemptId, serverAttemptId } = value;
+  if (typeof attemptId !== "string" || !attemptId || attemptId.length > 100)
+    return undefined;
+  return {
+    attemptId,
     ...(typeof serverAttemptId === "string" &&
     serverAttemptId &&
     serverAttemptId.length <= 100
@@ -223,6 +240,13 @@ export function parseAttemptDraft(raw: string | null): AttemptDraft | null {
       const speaking = cleanSpeaking(raw);
       state = speaking ? { ...rest, speaking } : rest;
     }
+    if (state && "writing" in state) {
+      const { writing: raw, ...rest } = state as AttemptState & {
+        writing: unknown;
+      };
+      const writing = cleanWriting(raw);
+      state = writing ? { ...rest, writing } : rest;
+    }
     const savedAt =
       typeof value.savedAt === "number" &&
       Number.isFinite(value.savedAt) &&
@@ -236,8 +260,12 @@ export function parseAttemptDraft(raw: string | null): AttemptDraft | null {
         ? { startedAtEpoch: value.startedAtEpoch }
         : {};
     const finished = cleanFinished(value.finished);
+    // Draft cũ có thể lưu parts trùng/không theo thứ tự: chuẩn hóa (tối đa 10 mục).
+    const cleanParts = [...new Set(parts as number[])]
+      .sort((a, b) => a - b)
+      .slice(0, 10);
     return {
-      options: { mode, parts, ...limit },
+      options: { mode, parts: cleanParts, ...limit },
       seconds: value.seconds,
       state,
       ...savedAt,

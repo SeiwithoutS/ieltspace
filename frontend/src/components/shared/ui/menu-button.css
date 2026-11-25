@@ -28,13 +28,15 @@
   border-radius: 12px;
   background: var(--attempt-bg-ffffff);
   color: var(--attempt-text-352637);
-  box-shadow: 0 1px 2px #35263708, 0 8px 24px #35263712;
+  box-shadow: 0 1px 2px #3526370a, 0 12px 28px #35263729;
 }
 .ui-menu__item {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   width: 100%;
+  min-height: 40px;
+  box-sizing: border-box;
   padding: 9px 12px;
   border: 0;
   border-radius: 8px;

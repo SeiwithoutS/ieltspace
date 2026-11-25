@@ -26,6 +26,14 @@ export interface SpeakingProgress {
   serverAttemptId?: string;
 }
 
+/** Tiến độ bài Writing để vào lại bài (văn bản nằm ở `texts`, bản chưa lưu còn ở hàng đợi văn bản). */
+export interface WritingProgress {
+  /** Mã lượt làm do client đặt (clientAttemptId), tạo lượt idempotent trên máy chủ. */
+  attemptId: string;
+  /** Mã lượt làm trên máy chủ (đã tạo được); chưa có thì tạo lại bằng attemptId. */
+  serverAttemptId?: string;
+}
+
 /** Persisted UI state. Keys also accept drafts saved before the TSX migration. */
 export interface AttemptState {
   ans?: Record<number, string>;
@@ -48,6 +56,7 @@ export interface AttemptState {
   speed?: string;
   vol?: number;
   speaking?: SpeakingProgress;
+  writing?: WritingProgress;
 }
 export interface Snapshot {
   state: AttemptState | undefined;
@@ -60,7 +69,7 @@ export interface Snapshot {
   /** false khi bản ghi chỉ còn trong bộ nhớ (IndexedDB lỗi) và sẽ mất nếu thoát. */
   persistent?: () => boolean;
   /**
-   * Speaking: tải hết bản ghi còn lại rồi chốt lượt làm trên máy chủ. Chỉ khi trả
+   * Speaking: tải hết bản ghi còn lại; Writing: lưu lần cuối cả hai Task; rồi chốt lượt làm trên máy chủ. Chỉ khi trả
    * `completed` mới được dọn dữ liệu trên máy.
    */
   complete?: (input: {
@@ -71,7 +80,7 @@ export interface Snapshot {
     /** Bài làm thử với đề mẫu: chỉ làm cục bộ, không có lượt trên máy chủ. */
     | { status: "local"; answered: number }
   >;
-  /** Speaking, "Không lưu": xóa lượt trên máy chủ (lỗi mạng thì xếp hàng xóa sau). */
+  /** Speaking và Writing, "Không lưu": xóa lượt trên máy chủ (lỗi mạng thì xếp hàng xóa sau). */
   cancel?: () => Promise<void>;
 }
 export interface ScreenProps {

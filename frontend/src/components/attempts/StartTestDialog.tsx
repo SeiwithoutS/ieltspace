@@ -6,6 +6,11 @@ import {
   getTimeLimitConfig,
   resolveTimeLimit,
 } from "../../lib/attempts/time-limits";
+import {
+  READING_PLAYABLE_PASSAGES,
+  initialPartsFromSection,
+  runnableCount,
+} from "../../lib/attempts/part-choice";
 
 import type { AttemptMode, Skill } from "./types";
 interface StartProps {
@@ -13,6 +18,8 @@ interface StartProps {
   cheDo?: AttemptMode;
   title?: string;
   accent?: string;
+  /** `section` trên URL (1-based, từ trang chi tiết): phần được chọn sẵn khi hợp lệ. */
+  section?: string | null;
   onClose: () => void;
   onStart: (mode: AttemptMode, parts: number[], limitMinutes: number) => void;
 }
@@ -61,8 +68,8 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
         href: "#ReadingTest",
         legend: "Chọn Passage",
         unit: "câu",
-        // TODO: trang Reading chưa đọc `parts`, tạm chỉ làm một Passage; mở chọn nhiều ở bước sau.
-        single: true,
+        // Trang Reading còn dùng dữ liệu mẫu một passage nên chỉ chọn một; tự mở chọn nhiều khi trang chạy được nhiều passage.
+        single: READING_PLAYABLE_PASSAGES <= 1,
         parts: [
           ["Passage 1", "13 câu", 13],
           ["Passage 2", "13 câu", 13],
@@ -79,7 +86,7 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
         href: "#ListeningTest",
         legend: "Chọn Section",
         unit: "câu",
-        // TODO: trang Listening chưa đọc `parts`, tạm chỉ làm một Section; mở chọn nhiều ở bước sau.
+        // Listening Practice chỉ làm một Section mỗi lượt.
         single: true,
         parts: [
           ["Section 1", "10 câu", 10],
@@ -140,8 +147,15 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
     const allParts = K.parts.map(function (_, i) {
       return i;
     });
+    const preset = initialPartsFromSection(P.section, K.parts.length);
     const sel =
-      S.sel && S.skill === skill ? S.sel : skill === "speaking" ? allParts : [0];
+      S.sel && S.skill === skill
+        ? S.sel
+        : preset
+          ? preset
+          : skill === "speaking"
+            ? allParts
+            : [0];
     function setSel(a: number[]) {
       self.setState({ sel: a, skill: skill });
     }
@@ -191,7 +205,10 @@ class StartTestDialog extends React.Component<StartProps, StartState> {
     const timeConfig = getTimeLimitConfig({
       skill,
       mode,
-      sectionCount: chosen.length,
+      sectionCount: runnableCount(
+        chosen.length,
+        skill === "reading" ? READING_PLAYABLE_PASSAGES : undefined,
+      ),
     });
     const limit = resolveTimeLimit(timeConfig, S.limitIndex);
     return {

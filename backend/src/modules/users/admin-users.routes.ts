@@ -10,6 +10,7 @@ import { listAccountAudit, listLoginHistory } from './account-history.js';
 import { accountAction, retryAccountDeletion, updateAccount } from './account-actions.js';
 import { authenticatorCode, verifyAdminAction } from '../auth/authenticator.js';
 import { createStaffAccount, staffAccount } from './staff-accounts.js';
+import { availableBonusCredit } from '../grading/grading.service.js';
 import { env } from '../../config.js';
 
 const roles = ['LEARNER', 'TEACHER', 'ADMIN'] as const;
@@ -34,7 +35,10 @@ type DirectoryUser = {
   created_at: Date | string;
   last_login_at?: Date | string | null;
 };
-type DirectoryProfile = DirectoryUser & { auth_user_id: string | null; avatar_url: string | null; cleanup_pending: boolean };
+type LearningSummary = { completedAttempts: number; availableBonusCredits: number; pendingGradingRequests: number };
+type DirectoryProfile = DirectoryUser & {
+  auth_user_id: string | null; avatar_url: string | null; cleanup_pending: boolean; learning: LearningSummary | null;
+};
 type DirectoryPage = {
   total: number;
   page: number;
@@ -209,7 +213,17 @@ adminUsersRouter.get('/:id', asyncHandler(async (req, res) => {
   const [user] = await prisma.$queryRaw<DirectoryProfile[]>`
     SELECT ${directoryColumns}, auth_user_id, avatar_url,
       (SELECT created_at FROM public.user_login_events WHERE user_id = account.id ORDER BY created_at DESC, id DESC LIMIT 1) AS last_login_at,
-      exists(SELECT 1 FROM public.account_deletion_jobs WHERE user_id = account.id AND completed_at IS NULL) AS cleanup_pending
+      exists(SELECT 1 FROM public.account_deletion_jobs WHERE user_id = account.id AND completed_at IS NULL) AS cleanup_pending,
+      CASE WHEN account.role = 'LEARNER' THEN jsonb_build_object(
+        'completedAttempts', (SELECT count(*)::int FROM public.attempts a
+          WHERE a.user_id = account.id AND a.status = 'COMPLETED' AND a.completed_at <= statement_timestamp()),
+        'availableBonusCredits', (SELECT count(*)::int FROM public.support_credits
+          WHERE user_id = account.id AND ${availableBonusCredit(Prisma.sql`statement_timestamp()`)}),
+        'pendingGradingRequests', (SELECT count(*)::int FROM public.attempts a
+          JOIN public.skill_attempts k ON k.attempt_id = a.id
+          JOIN public.grading_requests g ON g.skill_attempt_id = k.id
+          WHERE a.user_id = account.id AND g.status IN ('WAITING_ASSIGNMENT', 'ASSIGNED'))
+      ) END AS learning
     FROM public.users account WHERE id = ${id.data}::uuid
   `;
   if (!user) throw new HttpError(404, 'USER_NOT_FOUND', 'Không tìm thấy người dùng.');
@@ -218,5 +232,5 @@ adminUsersRouter.get('/:id', asyncHandler(async (req, res) => {
     readAuthDetails(user.auth_user_id),
     readAvatar(user.id, user.avatar_url),
   ]);
-  res.json({ ...toDirectoryUser(user), auth, avatar, cleanupPending: user.cleanup_pending });
+  res.json({ ...toDirectoryUser(user), auth, avatar, cleanupPending: user.cleanup_pending, learning: user.learning });
 }));

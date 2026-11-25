@@ -65,9 +65,9 @@ function ProfileDetails({ user, onRetry, onChangeRole, revision }: {
       ['Đăng nhập gần nhất', lastLoginAt ? formatUserDate(lastLoginAt, true) : authFallback],
     ]} />
     {user.role === 'LEARNER' && <DetailsSection title="Học tập" rows={[
-      ['Bài đã hoàn thành', '—'],
-      ['Bonus chấm còn lại', '—'],
-      ['Yêu cầu chấm chưa có kết quả', '—'],
+      ['Bài đã hoàn thành', user.learning?.completedAttempts ?? unavailable],
+      ['Bonus chấm còn lại', user.learning?.availableBonusCredits ?? unavailable],
+      ['Yêu cầu chấm chưa có kết quả', user.learning?.pendingGradingRequests ?? unavailable],
     ]} />}
     <AccountHistory userId={user.id} kind="login" />
     <AccountHistory key={revision} userId={user.id} kind="admin" />

@@ -4,6 +4,7 @@ import { env as settings } from './config.js';
 import { runNotificationDispatch } from './jobs/notification-dispatch.js';
 import { startAttemptCleanupWorker } from './jobs/attempt-cleanup.js';
 import { startSampleMediaCleanupWorker } from './jobs/sample-media-cleanup.js';
+import { startVocabularyImageCleanupWorker } from './jobs/vocabulary-image-cleanup.js';
 import { runGradingDispatch } from './jobs/grading-dispatch.js';
 let dispatching = false;
 let gradingDispatch: Promise<void> | undefined;
@@ -22,12 +23,14 @@ async function dispatch() {
 let closing = false;
 let stopAttemptCleanup: ReturnType<typeof startAttemptCleanupWorker> | undefined;
 let stopSampleMediaCleanup: ReturnType<typeof startSampleMediaCleanupWorker> | undefined;
+let stopVocabularyImageCleanup: ReturnType<typeof startVocabularyImageCleanupWorker> | undefined;
 const server = app.listen(env.port, () => {
   console.log(`Backend: http://localhost:${env.port}/api`);
   if (settings.NOTIFICATION_WORKER_ENABLED) void dispatch();
   if (settings.GRADING_WORKER_ENABLED) grade();
   if (settings.ATTEMPT_CLEANUP_WORKER_ENABLED && !closing) stopAttemptCleanup = startAttemptCleanupWorker();
   if (settings.SAMPLE_MEDIA_CLEANUP_WORKER_ENABLED && !closing) stopSampleMediaCleanup = startSampleMediaCleanupWorker();
+  if (settings.VOCABULARY_IMAGE_CLEANUP_WORKER_ENABLED && !closing) stopVocabularyImageCleanup = startVocabularyImageCleanupWorker();
 });
 const dispatchTimer = settings.NOTIFICATION_WORKER_ENABLED ? setInterval(() => void dispatch(), 30_000).unref() : undefined;
 const gradingTimer = settings.GRADING_WORKER_ENABLED ? setInterval(grade, 30_000).unref() : undefined;
@@ -37,7 +40,9 @@ const shutdown = () => {
   clearInterval(dispatchTimer);
   clearInterval(gradingTimer);
   server.close(() => {
-    void Promise.allSettled([stopAttemptCleanup?.(), stopSampleMediaCleanup?.(), gradingDispatch]).then(() => process.exit(0));
+    void Promise.allSettled([
+      stopAttemptCleanup?.(), stopSampleMediaCleanup?.(), stopVocabularyImageCleanup?.(), gradingDispatch,
+    ]).then(() => process.exit(0));
   });
   setTimeout(() => process.exit(1), 10_000).unref();
 };

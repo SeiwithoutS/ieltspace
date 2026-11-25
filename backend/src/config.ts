@@ -13,6 +13,7 @@ const envSchema = z.object({
   NOTIFICATION_WORKER_ENABLED: z.enum(['true', 'false']).default('true').transform(value => value === 'true'),
   ATTEMPT_CLEANUP_WORKER_ENABLED: z.enum(['true', 'false']).default('false').transform(value => value === 'true'),
   SAMPLE_MEDIA_CLEANUP_WORKER_ENABLED: z.enum(['true', 'false']).default('false').transform(value => value === 'true'),
+  VOCABULARY_IMAGE_CLEANUP_WORKER_ENABLED: z.enum(['true', 'false']).default('false').transform(value => value === 'true'),
   GRADING_WORKER_ENABLED: z.enum(['true', 'false']).default('true').transform(value => value === 'true'),
 
   NODE_ENV: z

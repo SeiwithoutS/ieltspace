@@ -21,6 +21,11 @@ const requestSource = Prisma.sql`public.grading_requests g JOIN public.skill_att
 const ws = Prisma.sql`e.skill IN ('WRITING','SPEAKING')`;
 const notFound = () => new HttpError(404, 'ATTEMPT_NOT_FOUND', 'Không tìm thấy bài làm.');
 
+export function availableBonusCredit(at: Date | Prisma.Sql) {
+  return Prisma.sql`credit_type='BONUS' AND used_at IS NULL
+    AND valid_from<=${at}::timestamptz AND expires_at>${at}::timestamptz`;
+}
+
 async function latestRequest(db: Tx, attemptId: string) {
   const [row] = await db.$queryRaw<Request[]>`SELECT ${requestColumns} FROM public.grading_requests g
     WHERE g.skill_attempt_id=${attemptId}::uuid ORDER BY (g.status<>'CANCELLED') DESC,g.requested_at DESC,g.id DESC LIMIT 1`;
@@ -91,10 +96,11 @@ export function createGradingService(db: typeof prisma = prisma, clock?: () => D
       await assertRole(db, userId, 'LEARNER');
       const now = await currentTime(db);
       const week = await weekWindow(db, now);
+      const bonus = availableBonusCredit(now);
       const [row] = await db.$queryRaw<{ freeUsed: boolean; bonusCount: number; bonusExpires: Date | null }[]>`
         SELECT COALESCE(bool_or(used_at IS NOT NULL) FILTER (WHERE credit_type='FREE_WEEKLY' AND week_start=${week.monday}::date),false) AS "freeUsed",
-          count(*) FILTER (WHERE credit_type='BONUS' AND used_at IS NULL AND valid_from<=${now}::timestamptz AND expires_at>${now}::timestamptz)::int AS "bonusCount",
-          min(expires_at) FILTER (WHERE credit_type='BONUS' AND used_at IS NULL AND valid_from<=${now}::timestamptz AND expires_at>${now}::timestamptz) AS "bonusExpires"
+          count(*) FILTER (WHERE ${bonus})::int AS "bonusCount",
+          min(expires_at) FILTER (WHERE ${bonus}) AS "bonusExpires"
         FROM public.support_credits WHERE user_id=${userId}::uuid AND (week_start=${week.monday}::date OR expires_at>${now}::timestamptz)`;
       return { free: { count: row.freeUsed ? 0 : 1, expiresAt: week.end },
         bonus: { count: row.bonusCount, expiresAt: row.bonusExpires } };

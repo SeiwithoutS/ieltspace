@@ -112,7 +112,7 @@ Các API quản lý người dùng yêu cầu Bearer và hồ sơ `ADMIN` đang 
 | Method và đường dẫn | Đầu vào | Thành công | Lỗi cần xử lý |
 |---|---|---|---|
 | GET /admin/users | `q` tìm tên/email, tối đa 150 ký tự. `role` là LEARNER/TEACHER/ADMIN. `status` là ACTIVE/LOCKED/DELETED. `page` mặc định 1, `pageSize` mặc định 20, tối đa 50. Bỏ bộ lọc để lấy mọi vai trò/trạng thái. | `{ items, total, page, pageSize, counts: { all, byRole, byStatus } }`. `total` theo bộ lọc; `counts` toàn bộ danh sách. Sắp xếp ngày tạo và ID mới nhất trước. Trang vượt giới hạn trả trang cuối. | 400 INVALID_USER_FILTER, 401, 403 |
-| GET /admin/users/:id | UUID của `public.users.id` | Hồ sơ cùng `auth` và `avatar` | 400 INVALID_USER_ID, 401, 403, 404 USER_NOT_FOUND |
+| GET /admin/users/:id | UUID của `public.users.id` | Hồ sơ cùng `auth`, `avatar` và `learning` | 400 INVALID_USER_ID, 401, 403, 404 USER_NOT_FOUND |
 | GET /admin/users/activity | `role` tùy chọn, `page` mặc định 1 | `{ items, nextPage }`, 20 sự kiện Email/Google mỗi trang, lọc theo vai trò hiện tại của tài khoản. | 400, 401, 403 |
 | GET /admin/users/:id/history | `kind=login\|admin`, `page` mặc định 1 | `{ items, nextPage }`, 5 sự kiện mỗi trang. Nhật ký quản trị trả hành động, người thao tác, giá trị trước/sau, lý do và thời điểm. | 400, 401, 403, 404 |
 | PATCH /admin/users/:id/role hoặc /status | `{ action, code? }` với `Origin` hợp lệ. Tùy hành động, `action` có `kind`, `previousRole`, `previousStatus`, `role` hoặc `status` mới và `reason` (1–500 ký tự). Thay đổi liên quan đến Quản lý cần mã TOTP 6 số của người thao tác. | `{ id, role, status, changed }`. Gửi lại cùng thay đổi đã thành công trả `changed:false`. | 400, 401, 403, 404, 409, 429, 503 |
@@ -125,6 +125,10 @@ Mỗi hồ sơ có `id`, `name` (ưu tiên tên hiển thị), `email`, `role`, 
 Lịch sử đăng nhập bắt đầu từ khi triển khai, dùng mã băm session để ghi một lần. Tạo tài khoản, đổi vai trò, khóa/mở và xóa ghi `audit_logs`. Quy tắc tự thao tác và bảo vệ Quản lý cuối cùng được kiểm tra trên server. Website chuyển mã TOTP của mỗi thao tác cần xác thực đến Supabase Auth. Các lỗi 403 gồm `AUTHENTICATOR_REQUIRED`, `AUTHENTICATOR_NOT_CONFIGURED` và `AUTHENTICATOR_FAILED`. 429 báo giới hạn thử mã.
 
 Trạng thái `INVITED` dùng cho hồ sơ cũ. Liên kết mời cũ đã hết hiệu lực. Chi tiết trả `cleanupPending`. Thao tác ghi của Quản lý yêu cầu Bearer và `Origin` hợp lệ.
+
+Khi tài khoản Người học chuyển sang `DELETED`, migration 27 xóa các phiếu do tài khoản đó gửi, gồm nội dung, phản hồi và lịch sử cập nhật, trong cùng giao dịch. Số đếm trên Dashboard và hàng đợi Quản lý phản ánh các phiếu còn lại.
+
+`learning` chỉ có số liệu cho hồ sơ Người học. `completedAttempts` đếm mỗi lượt làm đã hoàn thành một lần, kể cả lượt có nhiều kỹ năng hay luyện một Task/Part. `availableBonusCredits` đếm toàn bộ bonus còn hiệu lực chưa dùng chung cho Writing và Speaking. `pendingGradingRequests` đếm yêu cầu còn chờ phân công hoặc đã giao, kể cả khi Giáo viên đã lưu nháp. Mỗi chỉ số trả `0` khi không có bản ghi phù hợp. Hồ sơ Giáo viên và Quản lý trả `learning: null`.
 
 ## Thống kê tổng quan Quản lý
 
@@ -186,6 +190,8 @@ Backend có tác vụ kiểm tra mỗi 30 giây khi đang chạy. Hạ tầng ch
 | POST /api/admin/vocabulary/media/cleanup | Quản lý dọn tối đa 25 ảnh từ 24 giờ trở lên không còn tham chiếu trong nháp hoặc bản công bố, kể cả bản đã ẩn. Trả `{ removed, pending }`. Tệp lỗi có thể dọn lại. |
 
 Bản nháp lưu `vocab-image:<uuid>` cho ảnh từ và ảnh bìa trên R2. Danh sách quản lý và API đọc nháp trả thêm URL xem trước có hạn 5 phút. URL ký chỉ dùng để hiển thị. Ảnh bên ngoài qua HTTPS và bìa màu vẫn đọc được. Giữ ảnh công bố cũ cho tới khi công bố lại thay đổi từ nháp.
+
+`VOCABULARY_IMAGE_CLEANUP_WORKER_ENABLED=true` cho backend dọn ảnh lúc khởi động và mỗi giờ bằng cùng quy tắc với API. Cờ mặc định tắt. Worker thử lại tệp dọn lỗi ở lần chạy sau. Cần migration 22 và kết nối R2 của môi trường triển khai.
 
 ## Quản lý bộ đề (Exam Sets)
 

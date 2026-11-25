@@ -56,6 +56,7 @@ export type UserDetails = DirectoryUser & {
   } | { state: 'missing' | 'unavailable' };
   avatar: { url: string | null; unavailable: boolean };
   cleanupPending: boolean;
+  learning: { completedAttempts: number; availableBonusCredits: number; pendingGradingRequests: number } | null;
 };
 
 export function listUsers({ q, role, status, page }: DirectoryFilters) {

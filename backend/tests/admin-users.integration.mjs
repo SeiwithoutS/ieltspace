@@ -71,7 +71,7 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
   `);
   for (const name of ['01_tao_cau_truc_moi', '08_ho_so_auth', '16_learner_checkins', '17_nhat_ky_dang_nhap',
     '18_ma_bao_mat_quan_tri', '19a_staff_invitation_auth_compat', '19_staff_invitations', '20_account_deletion',
-    '21_notifications_support_reports', '23_announcements_and_notification_settings']) {
+    '21_notifications_support_reports', '23_announcements_and_notification_settings', '27_remove_deleted_learner_support_reports']) {
     if (name.startsWith('19a')) {
       await db.exec(`
         alter function public.ieltspace_create_learner_profile() rename to handle_new_auth_user;
@@ -80,7 +80,7 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
     }
     const migration = await readFile(new URL(`../../docs/csdl/${name}.sql`, import.meta.url), 'utf8');
     await db.exec(migration);
-    if (name === '19_staff_invitations' || name === '20_account_deletion') await db.exec(migration);
+    if (/^(19_|20_|27_)/.test(name)) await db.exec(migration);
   }
   const permissions = await db.query(`
     select bool_and(relrowsecurity) as protected, bool_or(has_table_privilege('authenticated', oid, 'SELECT')) as exposed
@@ -281,8 +281,12 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
   const base = 'http://127.0.0.1:' + server.address().port + '/api';
   async function request(path, { token, method = 'GET', json, cookie } = {}) {
     const headers = { Origin: origin, ...(token ? { Authorization: 'Bearer ' + token } : {}), ...(cookie ? { Cookie: cookie } : {}) };
-    if (json) headers['Content-Type'] = 'application/json';
-    const response = await fetchHttp(base + path, { method, headers, body: json && JSON.stringify(json), redirect: 'manual' });
+    const payload = json && JSON.stringify(json);
+    if (payload) {
+      headers['Content-Type'] = 'application/json';
+      headers['Content-Length'] = String(Buffer.byteLength(payload));
+    }
+    const response = await fetchHttp(base + path, { method, headers, body: payload, redirect: 'manual' });
     const body = response.headers.get('content-type')?.includes('json') ? await response.json() : null;
     return { status: response.status, body, location: response.headers.get('location'),
       cookies: response.headers.getSetCookie(), cache: response.headers.get('cache-control') };
@@ -477,6 +481,18 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
     const { dispatchExpiryReminders, recordGradingTransition } = await import('../dist/modules/notifications/grading-notifications.js');
     const config = '/admin/notifications/settings';
     const manager = { token: tokens.actor };
+    const learnerPath = '/admin/users/' + learner.id;
+    const learningSummary = async () => {
+      const response = await request(learnerPath, manager);
+      assert.equal(response.status, 200);
+      assert.equal(response.cache, 'private, no-store');
+      return response.body.learning;
+    };
+    assert.deepEqual(await learningSummary(), { completedAttempts: 0, availableBonusCredits: 0, pendingGradingRequests: 0 });
+    assert.equal((await request(learnerPath)).status, 401);
+    assert.equal((await request(learnerPath, { token: tokens.learner })).status, 403);
+    assert.equal((await request('/admin/users/' + actor.id, manager)).body.learning, null);
+
     const patch = (event, json) => request(`${config}/${event}`, { ...manager, method: 'PATCH', json });
     const result = (await request(config, manager)).body.items;
     assert.equal(result.length, 6);
@@ -492,13 +508,27 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
         SELECT id,'SPEAKING',1,12 FROM exam RETURNING id),
       section AS (INSERT INTO public.exam_sections(exam_skill_id,title,section_type,order_no)
         SELECT id,'Part','PART',1 FROM skill RETURNING id),
-      attempt AS (INSERT INTO public.attempts(user_id,exam_id,attempt_type,status)
-        SELECT $1,id,'FULL_SKILL','COMPLETED' FROM exam RETURNING id),
+      writing AS (INSERT INTO public.exam_skills(exam_id,skill,form,version_number,duration_minutes)
+        SELECT id,'WRITING','ACADEMIC',1,60 FROM exam RETURNING id),
+      attempt AS (INSERT INTO public.attempts(user_id,exam_id,attempt_type,status,completed_at)
+        SELECT $1,id,'FULL_EXAM','COMPLETED',now() FROM exam RETURNING id,exam_id),
+      extra_attempts AS (INSERT INTO public.attempts(user_id,exam_id,attempt_type,status,completed_at)
+        SELECT $1::uuid,id,'FULL_SKILL','ABANDONED',NULL FROM exam
+        UNION ALL SELECT $1::uuid,id,'FULL_SKILL','COMPLETED',now()+interval '1 day' FROM exam
+        UNION ALL SELECT $2::uuid,id,'FULL_SKILL','COMPLETED',now() FROM exam),
+      second_skill AS (INSERT INTO public.skill_attempts(attempt_id,exam_skill_id,status,deadline_at,completed_at)
+        SELECT attempt.id,writing.id,'COMPLETED',now()+interval '1 minute',now() FROM attempt,writing),
       done AS (INSERT INTO public.skill_attempts(attempt_id,exam_skill_id,status,deadline_at,content_expires_at)
         SELECT attempt.id,skill.id,'COMPLETED',now()+interval '1 minute',now()+interval '1 hour' FROM attempt,skill RETURNING id)
       INSERT INTO public.submission_contents(skill_attempt_id,section_id,text_content)
       SELECT done.id,section.id,'Private fixture' FROM done,section RETURNING skill_attempt_id AS skill_id
-    `, [learner.id])).rows;
+    `, [learner.id, actor.id])).rows;
+    await db.query(`
+      INSERT INTO public.support_credits(user_id,credit_type,week_start,valid_from,expires_at)
+      VALUES ($1,'BONUS',NULL,now()-interval '2 days',now()-interval '1 day'),
+             ($1,'BONUS',NULL,now()+interval '1 day',now()+interval '2 days'),
+             ($1,'FREE_WEEKLY',date_trunc('week',now())::date,now(),now()+interval '1 day'),
+             ($2,'BONUS',NULL,now(),now()+interval '1 day')`, [learner.id, actor.id]);
     assert.equal(await dispatchExpiryReminders(), 1);
     assert.equal(await dispatchExpiryReminders(), 0);
     const [notice] = (await db.query("SELECT id,title,content FROM public.notifications WHERE reference_id=$1 AND type='CONTENT_EXPIRING'", [skillId])).rows;
@@ -510,24 +540,31 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
     await db.query("UPDATE public.skill_attempts SET content_expires_at=now()-interval '1 second' WHERE id=$1", [skillId]);
     assert.equal((await request(target, { token: tokens.learner })).status, 410);
     const [grading] = (await db.query(`
-      WITH credit AS (INSERT INTO public.support_credits(user_id,credit_type,valid_from,expires_at)
-        VALUES($1,'BONUS',now(),now()+interval '2 days') RETURNING id)
+      WITH credit AS (INSERT INTO public.support_credits(user_id,credit_type,valid_from,expires_at,used_at)
+        VALUES($1,'BONUS',now(),now()+interval '2 days',now()) RETURNING id)
       INSERT INTO public.grading_requests(skill_attempt_id,used_credit_id,assignment_deadline)
       SELECT $2,id,now()+interval '72 hours' FROM credit RETURNING id
     `, [learner.id, skillId])).rows;
+    assert.deepEqual(await learningSummary(), { completedAttempts: 1, availableBonusCredits: 0, pendingGradingRequests: 1 });
     const event = type => db.transaction(tx => recordGradingTransition(sqlClient(tx), type, grading.id));
     await event('GRADING_REQUEST_ACCEPTED');
     await event('GRADING_REQUEST_ACCEPTED');
     await event('GRADING_RESULT_PUBLISHED'); // Draft/waiting state must not announce a result.
     await db.query("UPDATE public.skill_attempts SET content_expires_at=now()+interval '2 hours' WHERE id=$1", [skillId]);
     assert.equal(await dispatchExpiryReminders(), 0, 'Active grading disables the reminder');
+    const { invalidateUserCache } = await import('../dist/middleware/auth.js');
     await db.query("UPDATE public.users SET role='TEACHER' WHERE id=$1", [second.id]);
+    invalidateUserCache(second.auth);
     await db.query("UPDATE public.grading_requests SET status='ASSIGNED',teacher_id=$2,assigned_at=now() WHERE id=$1", [grading.id, second.id]);
+    assert.equal((await request(learnerPath, { token: tokens.second })).status, 403);
+    assert.equal((await request('/admin/users/' + second.id, manager)).body.learning, null);
+    assert.equal((await learningSummary()).pendingGradingRequests, 1);
     await event('GRADING_ASSIGNED');
     const [assigned] = (await db.query("SELECT id,recipient_id FROM public.notifications WHERE reference_id=$1 AND type='GRADING_ASSIGNED'", [grading.id])).rows;
     assert.equal(assigned.recipient_id, second.id);
     assert.equal((await request('/notifications/' + assigned.id + '/target', { token: tokens.second })).status, 200);
     await db.query("UPDATE public.grading_requests SET status='CANCELLED',cancelled_at=now(),cancel_reason='TEACHER_UNAVAILABLE' WHERE id=$1", [grading.id]);
+    assert.equal((await learningSummary()).pendingGradingRequests, 0);
     await event('GRADING_CANCELLED_REFUNDED');
     await event('GRADING_CANCELLED');
     assert.equal((await request('/notifications/' + assigned.id + '/target', { token: tokens.second })).status, 404);
@@ -541,8 +578,8 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
     assert.deepEqual((await db.query("SELECT type FROM public.notifications WHERE recipient_id=$1 AND reference_id=$2 ORDER BY type",
       [learner.id, grading.id])).rows, [{ type: 'GRADING_CANCELLED_REFUNDED' }, { type: 'GRADING_REQUEST_ACCEPTED' }]);
     const [published] = (await db.query(`
-      WITH credit AS (INSERT INTO public.support_credits(user_id,credit_type,valid_from,expires_at)
-        VALUES($1,'BONUS',now(),now()+interval '2 days') RETURNING id),
+      WITH credit AS (INSERT INTO public.support_credits(user_id,credit_type,valid_from,expires_at,used_at)
+        VALUES($1,'BONUS',now(),now()+interval '2 days',now()) RETURNING id),
       rule AS (INSERT INTO public.grading_rules(name,skill,assessment_scope,version,aggregation_rules,rounding_rules)
         VALUES('Fixture','SPEAKING','FULL_SKILL',1,'{}','{}') RETURNING id),
       submitted AS (INSERT INTO public.grading_requests(skill_attempt_id,used_credit_id,assignment_deadline,status,teacher_id,assigned_at)
@@ -550,11 +587,14 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
       INSERT INTO public.grading_reviews(grading_request_id,teacher_id,grading_rule_id,status,overall_score,published_at)
       SELECT submitted.id,$3,rule.id,'PUBLISHED',7.5,now() FROM submitted,rule RETURNING grading_request_id AS id
     `, [learner.id, skillId, second.id])).rows;
+    const balance = await request('/learner/grading/credits', { token: tokens.learner });
+    assert.equal(balance.status, 200);
+    assert.equal(balance.body.bonus.count, 1);
+    assert.deepEqual(await learningSummary(), { completedAttempts: 1, availableBonusCredits: balance.body.bonus.count, pendingGradingRequests: 0 });
     await db.transaction(tx => recordGradingTransition(sqlClient(tx), 'GRADING_RESULT_PUBLISHED', published.id));
     assert.equal((await db.query("SELECT recipient_id FROM public.notifications WHERE reference_id=$1 AND type='GRADING_RESULT_PUBLISHED'", [published.id])).rows[0].recipient_id, learner.id);
     assert.equal(await dispatchExpiryReminders(), 1, 'A changed effective deadline has its own reminder');
     await db.query("UPDATE public.users SET role='ADMIN' WHERE id=$1", [second.id]);
-    const { invalidateUserCache } = await import('../dist/middleware/auth.js');
     invalidateUserCache(second.auth);
   });
 
@@ -779,4 +819,37 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
   assert.deepEqual(removedAvatars, [avatar]);
   assert.equal((await remove(profile.id, deleteAction)).body.changed, false);
   assert.equal((await db.query("SELECT count(*)::int AS n FROM public.audit_logs WHERE entity_id=$1 AND action='USER_DELETED'", [profile.id])).rows[0].n, 1);
+
+  await t.test('Deleting a learner removes their support tickets and replies in the same transaction', async () => {
+    await db.query("UPDATE public.users SET role='LEARNER' WHERE id=$1", [learner.id]);
+    const options = { token: activeToken };
+    const queue = '/admin/support/reports';
+    const before = (await request(queue, options)).body;
+    const [answered] = before.items.filter(item => item.status === 'IN_PROGRESS');
+    assert.ok(answered.reply);
+
+    const action = { ...deleteAction, previousRole: 'LEARNER' };
+    failAudit = true;
+    try {
+      assert.equal((await remove(learner.id, action)).status, 500);
+    } finally {
+      failAudit = false;
+    }
+    assert.deepEqual((await request(queue, options)).body, before);
+    assert.equal((await request(statsPath, options)).body.supportReports, 2);
+
+    assert.equal((await remove(learner.id, action)).status, 200);
+    const after = (await request(queue, options)).body;
+    assert.deepEqual(after.counts, { PENDING: 1 });
+    assert.equal(after.items.length, 1);
+    assert.ok(before.items.some(item => item.id === after.items[0].id));
+    assert.equal((await request(statsPath, options)).body.supportReports, 0);
+    assert.equal((await db.query('SELECT count(*)::int AS n FROM public.support_reports WHERE owner_id=$1', [learner.id])).rows[0].n, 0);
+    assert.equal((await db.query('SELECT count(*)::int AS n FROM public.support_report_updates WHERE report_id=$1', [answered.id])).rows[0].n, 0);
+    assert.equal((await db.query('SELECT count(*)::int AS n FROM public.notifications WHERE reference_id=$1', [answered.id])).rows[0].n, 0);
+    const update = await request(`${queue}/${answered.id}`, { ...options, method: 'PATCH',
+      json: { status: 'RESOLVED', reply: 'Fixture', revision: answered.revision } });
+    assert.equal(update.status, 404);
+    assert.equal((await remove(learner.id, action)).body.changed, false);
+  });
 });

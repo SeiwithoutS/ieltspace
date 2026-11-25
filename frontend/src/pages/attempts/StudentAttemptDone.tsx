@@ -21,6 +21,7 @@ import {
   requestGrading,
   type SkillAttemptDetail,
 } from "../../lib/attempts/skill-attempts-api";
+import { compareRecordingIds, recordingLabel } from "../../lib/attempts/recording-files";
 import { getAuthUser, navigate } from "../../lib/auth/auth";
 
 /**
@@ -29,16 +30,10 @@ import { getAuthUser, navigate } from "../../lib/auth/auth";
  * - Chưa tải lên đủ / chưa chốt được: draft còn `finished`, bản ghi còn trên máy; trang tiếp tục
  *   tải lên và chốt ở nền, xong mới dọn dữ liệu trên máy.
  */
-function labelOf(id: string): string {
-  const m = /^p(\d+)q(\d+)$/.exec(id);
-  if (!m) return id;
-  return Number(m[1]) === 2 ? "Part 2" : "Part " + m[1] + " · Câu " + (Number(m[2]) + 1);
-}
 function partOf(id: string): number {
   const m = /^p(\d+)q/.exec(id);
   return m ? Math.max(0, Number(m[1]) - 1) : 0;
 }
-const orderOf = (a: string, b: string) => a.localeCompare(b, undefined, { numeric: true });
 
 function Body() {
   const query = useMemo(() => new URLSearchParams(location.hash.split("?")[1]), []);
@@ -177,7 +172,7 @@ function Body() {
       } catch {
         ids = [];
       }
-      setLocalIds(ids.sort(orderOf));
+      setLocalIds(ids.sort(compareRecordingIds));
       const known = new Set(sync.queue.items().map((i) => i.questionId));
       for (const id of ids)
         if (!known.has(id))
@@ -204,9 +199,9 @@ function Body() {
   const recordings: DoneRecording[] = completed
     ? (detail?.recordings ?? [])
         .map((r) => r.questionId)
-        .sort(orderOf)
-        .map((id) => ({ id, label: labelOf(id) }))
-    : localIds.map((id) => ({ id, label: labelOf(id) }));
+        .sort(compareRecordingIds)
+        .map((id) => ({ id, label: recordingLabel(id) }))
+    : localIds.map((id) => ({ id, label: recordingLabel(id) }));
 
   async function loadAudio(id: string): Promise<string | null> {
     // Còn bản ghi trên máy thì nghe ngay, không cần tải về.
@@ -272,7 +267,7 @@ function Body() {
   if (sample)
     notices.push("Đây là bài làm thử với đề mẫu, không lưu lên máy chủ. Bản ghi chỉ ở trên máy này và không gửi chấm được.");
   for (const id of expiredIds)
-    notices.push(labelOf(id) + " không tải lên được vì quá giờ.");
+    notices.push(recordingLabel(id) + " không tải lên được vì quá giờ.");
   if (blocked)
     notices.push("Máy chủ không nhận việc chốt bài này nên hệ thống đã dừng thử lại. Bản ghi vẫn còn trên máy; hãy liên hệ hỗ trợ nếu cần.");
 

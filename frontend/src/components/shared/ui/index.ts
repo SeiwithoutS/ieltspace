@@ -24,3 +24,5 @@ export { default as DataTable, DataCard } from "./DataTable";
 export { default as CoverThumb } from "./CoverThumb";
 export { default as CoverPicker } from "./CoverPicker";
 export type { CoverPreset } from "./CoverPicker";
+export { default as MenuButton } from "./MenuButton";
+export type { MenuButtonItem } from "./MenuButton";

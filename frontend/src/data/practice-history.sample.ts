@@ -62,6 +62,26 @@ export const writingSpeakingExamples = [
     skill: 'WRITING', band: null, outcome: 'expired', status: 'Chưa có điểm',
     retention: 'Nội dung đã hết hạn 11/11',
   },
+  {
+    id: 'sample-ws-07', title: 'Speaking Part 1 · Hometown', completedAt: '2026-11-22T09:20:00+07:00',
+    skill: 'SPEAKING', band: null, outcome: 'saved', status: 'Đã lưu · chưa gửi chấm',
+    retention: 'Giữ đến 06/12', actions: ['Gửi yêu cầu chấm', 'Nghe lại', 'Tải ghi âm'],
+  },
+  {
+    id: 'sample-ws-08', title: 'Speaking Part 2 · A memorable trip', completedAt: '2026-11-21T21:05:00+07:00',
+    skill: 'SPEAKING', band: null, outcome: 'waiting', status: 'Chờ phân công · còn 40 giờ',
+    retention: 'Tạm giữ', actions: ['Nghe lại', 'Tải ghi âm'],
+  },
+  {
+    id: 'sample-ws-09', title: 'Speaking Full test · Cambridge 19 Test 1', completedAt: '2026-11-15T18:45:00+07:00',
+    skill: 'SPEAKING', band: null, outcome: 'published', status: 'Đã có kết quả · 7.0',
+    retention: 'Giữ đến 03/12', actions: ['Xem kết quả', 'Nghe lại', 'Tải ghi âm'],
+  },
+  {
+    id: 'sample-ws-10', title: 'Speaking Part 3 · Education', completedAt: '2026-10-25T20:00:00+07:00',
+    skill: 'SPEAKING', band: null, outcome: 'expired', status: 'Nội dung đã hết hạn',
+    retention: 'Nội dung đã hết hạn 08/11', actions: ['Nghe lại', 'Tải ghi âm'],
+  },
 ] satisfies WritingSpeakingExample[];
 
 export const gradingCreditExamples = {

@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import PageLink from '../../components/navigation/PageLink';
 import Popup from '../../components/attempts/Popup';
-import { gradingCreditExamples, writingSpeakingExamples, type WritingSpeakingAction, type WritingSpeakingExample } from '../../data/practice-history.sample';
-import { skillNames, useStudyResults } from '../../lib/learner/study-overview';
+import AttemptRecordingsPopup from '../../components/attempts/AttemptRecordingsPopup';
+import { ConfirmDialog, Icon, MenuButton } from '../../components/shared/ui';
+import { gradingCreditExamples, writingSpeakingExamples } from '../../data/practice-history.sample';
+import { downloadRecordingsZip, RecordingDownloadError } from '../../lib/attempts/recording-download';
+import { errorCode, errorStatus, requestGrading } from '../../lib/attempts/skill-attempts-api';
+import { skillNames, useStudyResults, type LearnerSkill } from '../../lib/learner/study-overview';
+import { describeSampleRow, describeWsRow, type WsAction, type WsRowView } from '../../lib/learner/ws-history';
 import './my-ws.css';
 
 const dateTime = new Intl.DateTimeFormat('vi-VN', {
@@ -15,23 +20,62 @@ const retentionRules = [
   ['Đã có kết quả', '14 ngày từ lúc công bố'],
 ] as const;
 
-type HistoryRow = Omit<WritingSpeakingExample, 'skill'> & { skill: keyof typeof skillNames };
+type HistoryRow = { id: string; title: string; completedAt: string; skill: LearnerSkill; unread?: boolean; view: WsRowView };
+type Notice = { tone: 'info' | 'ok' | 'error'; text: string };
 
-const actionIcons: Partial<Record<WritingSpeakingAction, string>> = {
-  'Tải .docx': 'M12 4v12M7 11l5 5 5-5M4 20h16',
-  'Tải ghi âm': 'M12 4v12M7 11l5 5 5-5M4 20h16',
-  'Nghe lại': 'M8 5l11 7-11 7z',
-};
+const menuIcons = { listen: 'play', 'download-audio': 'download', 'download-docx': 'download' } as const;
 
 export default function MyWS({ sample }: { sample: boolean }) {
   const result = useStudyResults({ kind: 'all', group: 'WS', limit: 15 }, sample);
-  const [previewAction, setPreviewAction] = useState<{ label: string; title: string }>();
-  const rows: readonly HistoryRow[] = sample ? writingSpeakingExamples : result.items.map(item => ({
-    ...item,
-    outcome: item.band === null ? 'saved' : 'published',
-    status: item.band === null ? 'Chưa có điểm' : `Đã có kết quả · ${item.band.toFixed(1)}`,
-    retention: '—',
-  }));
+  const [previewAction, setPreviewAction] = useState<{ label: string; title: string; text: string }>();
+  const [listenRow, setListenRow] = useState<HistoryRow>();
+  const [confirmRow, setConfirmRow] = useState<{ row: HistoryRow; action: WsAction }>();
+  const [busy, setBusy] = useState<{ id: string; text: string }>();
+  const [notice, setNotice] = useState<Notice>();
+  const rows = useMemo<readonly HistoryRow[]>(() => sample
+    ? [...writingSpeakingExamples].sort((a, b) => b.completedAt.localeCompare(a.completedAt)).map(item => ({ ...item, view: describeSampleRow(item) }))
+    : result.items.map(item => ({ ...item, view: describeWsRow(item) })), [sample, result.items]);
+
+  function run(row: HistoryRow, action: WsAction) {
+    if (sample) {
+      setPreviewAction({ label: action.label, title: row.title, text: 'Đây là thao tác minh họa trong chế độ xem dữ liệu mẫu.' });
+      return;
+    }
+    if (action.kind === 'view') setPreviewAction({ label: action.label, title: row.title, text: 'Trang xem chi tiết kết quả của bài này sẽ sớm khả dụng.' });
+    else if (action.kind === 'listen') setListenRow(row);
+    else if (action.kind === 'download-audio') void downloadAudio(row);
+    else if (action.kind === 'grade' || action.kind === 'regrade') setConfirmRow({ row, action });
+  }
+
+  async function downloadAudio(row: HistoryRow) {
+    setNotice(undefined);
+    setBusy({ id: row.id, text: 'Đang chuẩn bị bản ghi…' });
+    try {
+      await downloadRecordingsZip(row.id, row.title, (done, total) => setBusy({ id: row.id, text: `Đang tải bản ghi ${Math.min(done + 1, total)}/${total}…` }));
+      setNotice({ tone: 'ok', text: `Đã tải xong bản ghi của bài “${row.title}”.` });
+    } catch (error) {
+      setNotice({ tone: 'error', text: error instanceof RecordingDownloadError ? error.message : 'Chưa tải được bản ghi, hãy thử lại sau.' });
+    } finally {
+      setBusy(undefined);
+    }
+  }
+
+  async function sendGrading(row: HistoryRow) {
+    setConfirmRow(undefined);
+    setNotice(undefined);
+    setBusy({ id: row.id, text: 'Đang gửi yêu cầu chấm…' });
+    try {
+      await requestGrading(row.id);
+      setNotice({ tone: 'ok', text: `Đã gửi yêu cầu chấm bài “${row.title}”.` });
+      result.retry();
+    } catch (error) {
+      if (errorStatus(error) === 501 || errorCode(error) === 'GRADING_NOT_AVAILABLE')
+        setNotice({ tone: 'info', text: 'Tính năng gửi chấm sẽ sớm khả dụng. Bài của bạn đã được lưu, bạn có thể gửi sau.' });
+      else setNotice({ tone: 'error', text: error instanceof Error && error.message ? error.message : 'Chưa gửi được yêu cầu chấm, hãy thử lại.' });
+    } finally {
+      setBusy(undefined);
+    }
+  }
 
   return <div className="ws-history">
     <header className="learner-study-results-header ws-history-header">
@@ -72,30 +116,40 @@ export default function MyWS({ sample }: { sample: boolean }) {
         <h2 id="ws-history-table-title">{sample ? `${rows.length} bài trong 30 ngày` : 'Bài đã hoàn thành'}</h2>
         {sample && <span className="ws-unread-label"><span className="ws-unread" aria-hidden="true" /> Mới có kết quả hoặc vừa bị hủy</span>}
       </header>
+      {notice && <p className="ws-notice" data-tone={notice.tone} role={notice.tone === 'error' ? 'alert' : 'status'}>{notice.text}</p>}
       {rows.length > 0 && <>
         <p className="ws-scroll-hint">Vuốt ngang để xem đầy đủ bảng.</p>
         <div className="ws-table-scroll" tabIndex={0} role="region" aria-label="Bảng lịch sử Writing và Speaking">
           <table>
             <thead><tr>
               <th scope="col">Bài</th><th scope="col">Kỹ năng</th><th scope="col">Trạng thái</th><th scope="col">Nội dung bài</th>
-              {sample && <th scope="col" aria-label="Thao tác" />}
+              <th scope="col"><span className="ws-sr-only">Thao tác</span></th>
             </tr></thead>
-            <tbody>{rows.map(row => <tr key={row.id}>
-              <th scope="row"><strong>{row.title}</strong><time dateTime={row.completedAt}>Hoàn thành {dateTime.format(new Date(row.completedAt))}</time></th>
-              <td><span className="ws-chip" data-skill={row.skill}>{skillNames[row.skill]}</span></td>
-              <td><span className="ws-chip" data-outcome={row.outcome}>{row.status}</span>
-                {row.unread && <span className="ws-unread" role="img" aria-label="Chưa xem" />}</td>
-              <td>{row.retention}</td>
-              {sample && <td><div className="ws-row-actions">{row.actions?.map(label =>
-                <button key={label} type="button" className={label.startsWith('Gửi') ? 'learner-study-button learner-study-primary' : 'learner-study-button'}
-                  onClick={() => setPreviewAction({ label, title: row.title })}>
-                  {actionIcons[label] && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={actionIcons[label]} /></svg>}
-                  {label}
-                </button>)}
-                {row.outcome === 'expired' && <span className="learner-study-muted">Không mở hoặc tải được</span>}
-              </div></td>}
-            </tr>)}</tbody>
+            <tbody>{rows.map(row => {
+              const working = busy?.id === row.id;
+              const primary = row.view.primary;
+              return <tr key={row.id}>
+                <th scope="row"><strong>{row.title}</strong><time dateTime={row.completedAt}>Hoàn thành {dateTime.format(new Date(row.completedAt))}</time></th>
+                <td><span className="ws-chip" data-skill={row.skill}>{skillNames[row.skill]}</span></td>
+                <td><span className="ws-chip" data-outcome={row.view.outcome}>{row.view.status}</span>
+                  {row.unread && <span className="ws-unread" role="img" aria-label="Chưa xem" />}</td>
+                <td>{row.view.retention}</td>
+                <td><div className="ws-row-actions">
+                  {primary && <button type="button" disabled={working}
+                    className={primary.kind === 'view' ? 'learner-study-button' : 'learner-study-button learner-study-primary'}
+                    onClick={() => run(row, primary)}>{working ? busy.text : primary.label}</button>}
+                  {!primary && working && <span className="learner-study-muted" role="status">{busy.text}</span>}
+                  {row.view.menu.length > 0 && <MenuButton label={`Thao tác khác cho ${row.title}`} items={row.view.menu.map(action => ({
+                    key: action.kind,
+                    label: action.label,
+                    icon: menuIcons[action.kind as keyof typeof menuIcons],
+                    disabled: !!action.disabledReason || working,
+                    reason: action.disabledReason ?? (working ? 'Đang xử lý bài này.' : undefined),
+                    onSelect: () => run(row, action),
+                  }))} />}
+                </div></td>
+              </tr>;
+            })}</tbody>
           </table>
         </div>
       </>}
@@ -112,9 +166,18 @@ export default function MyWS({ sample }: { sample: boolean }) {
       <section className="attempt-card flex flex-col gap-4">
         <h2>{previewAction.label}</h2>
         <p>{previewAction.title}</p>
-        <p>Đây là thao tác minh họa trong chế độ xem dữ liệu mẫu.</p>
+        <p>{previewAction.text}</p>
         <button className="primary" type="button" onClick={() => setPreviewAction(undefined)}>Đã hiểu</button>
       </section>
     </Popup>}
+
+    {listenRow && <AttemptRecordingsPopup attemptId={listenRow.id} title={listenRow.title} onClose={() => setListenRow(undefined)} />}
+
+    <ConfirmDialog open={!!confirmRow} onClose={() => setConfirmRow(undefined)} label="Xác nhận gửi yêu cầu chấm"
+      icon={<Icon name="send" size={20} />} title={confirmRow?.action.label ?? ''} confirmLabel="Gửi yêu cầu"
+      onConfirm={() => confirmRow && void sendGrading(confirmRow.row)}>
+      Bài “{confirmRow?.row.title}” sẽ được gửi cho Giáo viên chấm và dùng một lượt chấm, theo quy định lượt miễn phí hằng tuần
+      (lượt miễn phí dùng chung Writing và Speaking, không cộng dồn; lượt bonus nếu có). Hệ thống kiểm tra lượt còn lại khi bạn gửi.
+    </ConfirmDialog>
   </div>;
 }

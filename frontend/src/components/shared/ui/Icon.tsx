@@ -50,6 +50,15 @@ const PATHS = {
   "chevron-down": <path d="M6 9l6 6 6-6" />,
   caret: <path d="M7 10l5 5 5-5" />,
   send: <path d="M4 12l16-8-6 16-3-7z" />,
+  more: (
+    <>
+      <circle cx="12" cy="5" r="1.2" />
+      <circle cx="12" cy="12" r="1.2" />
+      <circle cx="12" cy="19" r="1.2" />
+    </>
+  ),
+  download: <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />,
+  play: <path d="M8 5l11 7-11 7z" />,
 } satisfies Record<string, ReactNode>;
 
 export type IconName = keyof typeof PATHS;

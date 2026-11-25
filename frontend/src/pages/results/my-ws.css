@@ -51,7 +51,7 @@
 .ws-chip[data-outcome="cancelled"] { background: var(--attempt-bg-fbdcd3); color: var(--attempt-text-c0412a); }
 .ws-unread { display: inline-block; width: 7px; height: 7px; flex: 0 0 7px; margin-inline-start: 5px; border-radius: 50%; background: var(--attempt-bg-e5604a); vertical-align: middle; }
 .ws-unread-label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--study-muted); }
-.ws-row-actions { display: flex; gap: 6px; }
+.ws-row-actions { display: flex; align-items: center; gap: 6px; }
 .ws-row-actions .learner-study-button {
   min-height: 34px;
   padding: 0 20px;
@@ -71,3 +71,9 @@
   .ws-credits { gap: 8px; }
   .ws-credits > div { padding: 9px; }
 }
+.ws-chip[data-outcome="saved"] { background: var(--attempt-bg-e3ecfd); color: var(--attempt-text-2963cc); }
+.ws-chip[data-outcome="expired"] { background: var(--study-hover); color: var(--study-muted); }
+.ws-notice { margin: 0 16px 12px; padding: 10px 14px; border-radius: 12px; background: var(--attempt-bg-e3ecfd); color: var(--attempt-text-2963cc); font-size: 14px; }
+.ws-notice[data-tone="ok"] { background: var(--study-green-soft); color: var(--study-green); }
+.ws-notice[data-tone="error"] { background: var(--attempt-bg-fbdcd3); color: var(--attempt-text-c0412a); }
+.ws-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

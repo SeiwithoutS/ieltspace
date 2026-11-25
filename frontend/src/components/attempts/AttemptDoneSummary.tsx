@@ -1,5 +1,7 @@
-import { useState } from "react";
 import "./attempt.css";
+import RecordingList, { attemptButton, type DoneRecording, type LoadAudio } from "./RecordingList";
+
+export type { DoneRecording };
 
 /**
  * Nội dung trang xác nhận hoàn thành bài viết/nói (Speaking trước, Writing dùng lại sau):
@@ -15,10 +17,6 @@ export type GradingView = {
   state: "idle" | "sending" | "unavailable" | "sent" | "error";
   message?: string;
 };
-export interface DoneRecording {
-  id: string;
-  label: string;
-}
 export interface AttemptDoneSummaryProps {
   skill: "Speaking" | "Writing";
   /** Thời gian hoàn thành (giây). */
@@ -30,7 +28,7 @@ export interface AttemptDoneSummaryProps {
   expiresAt: string | null;
   recordings: DoneRecording[];
   /** Trả đường phát (blob local hoặc URL tạm); null nếu chưa nghe được. */
-  loadAudio: (id: string) => Promise<string | null>;
+  loadAudio: LoadAudio;
   grading: GradingView;
   onSendGrading: () => void;
   /** Chưa chốt xong trên máy chủ thì chưa cho gửi chấm. */
@@ -61,40 +59,8 @@ export function formatExpiry(iso: string | null): string {
   return Number.isNaN(date.getTime()) ? "" : dateFormat.format(date);
 }
 
-// Màu và viền nút lấy từ .attempt-card button (kể cả chế độ tối); ở đây chỉ chỉnh kích thước.
-const secondary =
-  "[height:40px] font-semibold [font-size:14px] whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-60";
+const secondary = attemptButton;
 const primary = secondary + " primary";
-
-function Play({ item, loadAudio }: { item: DoneRecording; loadAudio: AttemptDoneSummaryProps["loadAudio"] }) {
-  const [src, setSrc] = useState<string | null>(null);
-  const [state, setState] = useState<"idle" | "loading" | "failed">("idle");
-  async function open() {
-    setState("loading");
-    const url = await loadAudio(item.id).catch(() => null);
-    if (url) {
-      setSrc(url);
-      setState("idle");
-    } else setState("failed");
-  }
-  return (
-    <li className="flex flex-wrap items-center [gap:10px] [padding:10px_0] [border-top:1px_solid_var(--attempt-line-e6e4e0)]">
-      <span className="[flex:1_1_120px] font-semibold">{item.label}</span>
-      {src ? (
-        <audio controls autoPlay src={src} aria-label={"Nghe lại " + item.label} className="[height:36px]" />
-      ) : (
-        <button type="button" className={secondary} onClick={open} disabled={state === "loading"}>
-          {state === "loading" ? "Đang tải…" : "Nghe lại"}
-        </button>
-      )}
-      {state === "failed" && (
-        <span role="status" className="[font-size:13px] [color:var(--attempt-text-c0412a)]">
-          {"Chưa nghe lại được lúc này, hãy thử lại sau."}
-        </span>
-      )}
-    </li>
-  );
-}
 
 export default function AttemptDoneSummary(props: AttemptDoneSummaryProps) {
   const { skill, elapsedSeconds, answered, upload, expiresAt, grading } = props;
@@ -187,11 +153,7 @@ export default function AttemptDoneSummary(props: AttemptDoneSummaryProps) {
       {props.recordings.length > 0 && (
         <div>
           <strong>{"Nghe lại bài nói"}</strong>
-          <ul className="m-0 [padding:0] [list-style:none] [margin-top:6px]">
-            {props.recordings.map((item) => (
-              <Play key={item.id} item={item} loadAudio={props.loadAudio} />
-            ))}
-          </ul>
+          <RecordingList items={props.recordings} loadAudio={props.loadAudio} />
         </div>
       )}
       <div className="[padding:12px_14px] rounded-xl [background:var(--attempt-bg-e3ecfd)] [color:var(--attempt-text-2963cc)] [font-size:14px]">

@@ -46,6 +46,17 @@ export type StudyResult = {
   accuracy: number | null;
   correct: number | null;
   total: number | null;
+  // Chỉ có ở bài Writing/Speaking; API cũ chưa trả thì coi như không có (undefined hoặc null).
+  contentStatus?: 'AVAILABLE' | 'HELD' | 'EXPIRED' | 'DELETED' | null;
+  contentExpiresAt?: string | null;
+  grading?: {
+    status: 'WAITING_ASSIGNMENT' | 'ASSIGNED' | 'COMPLETED' | 'CANCELLED' | null;
+    cancelReason?: string | null;
+    assignmentDeadlineAt?: string | null;
+  } | null;
+  published?: boolean;
+  recordingCount?: number;
+  attemptMode?: 'REAL' | 'PRACTICE' | null;
 };
 
 export function getStudyDashboard(days: DashboardRange) {

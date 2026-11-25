@@ -151,6 +151,7 @@ function SpeakingRun({
       clientAttemptId: attemptId,
       mode,
       limitMinutes,
+      selectedParts,
       store,
       offlineSample,
       serverId: saved?.serverAttemptId,

@@ -7,6 +7,8 @@ const auditLabel = {
   USER_LOCKED: 'Khóa tài khoản',
   USER_UNLOCKED: 'Mở khóa tài khoản',
   USER_DELETED: 'Xóa tài khoản',
+  GRADING_PERMISSION_CHANGED: 'Đổi quyền hoặc giới hạn chấm',
+  GRADING_TEACHER_UNAVAILABLE: 'Hủy bài đang giao và hoàn bonus',
   USER_INVITED: 'Tạo lời mời',
   USER_CREATED: 'Tạo tài khoản',
   USER_INVITE_REISSUED: 'Gửi lại lời mời',

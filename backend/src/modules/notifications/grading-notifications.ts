@@ -55,7 +55,6 @@ function message(template: TemplateValue, variables: Record<string, string>) {
   return { title: render(template.title, variables, 200), content: render(template.content, variables, 3000) };
 }
 
-// Call inside the transaction that commits the grading transition.
 export async function recordGradingTransition(tx: Prisma.TransactionClient, event: RequestEvent, requestId: string) {
   const [request] = await tx.$queryRaw<{
     owner: string; teacher: string | null; skill: string; status: string; reason: string | null; published: boolean; refunded: boolean;
@@ -69,8 +68,8 @@ export async function recordGradingTransition(tx: Prisma.TransactionClient, even
   `;
   if (!request || request.reason === 'LEARNER_DELETED') return;
   const ready = {
-    GRADING_REQUEST_ACCEPTED: request.status === 'WAITING_ASSIGNMENT',
-    GRADING_ASSIGNED: request.status === 'ASSIGNED' && !!request.teacher,
+    GRADING_REQUEST_ACCEPTED: true,
+    GRADING_ASSIGNED: (request.status === 'ASSIGNED' || request.status === 'COMPLETED') && !!request.teacher,
     GRADING_RESULT_PUBLISHED: request.status === 'COMPLETED' && request.published,
     GRADING_CANCELLED_REFUNDED: request.status === 'CANCELLED' && request.refunded,
     GRADING_CANCELLED: request.status === 'CANCELLED' && !request.refunded &&
@@ -86,8 +85,33 @@ export async function recordGradingTransition(tx: Prisma.TransactionClient, even
   });
 }
 
-export async function dispatchExpiryReminders() {
-  return prisma.$transaction(async tx => {
+// Dùng trạng thái đã commit làm nguồn thử lại. Lỗi hộp thư không làm lùi giao dịch chấm hoặc hoàn lượt.
+export async function dispatchPendingGradingNotifications(db: typeof prisma = prisma) {
+  const pending = await db.$queryRaw<{ id: string; event: RequestEvent }[]>`
+    SELECT g.id,queued.event FROM public.grading_requests g
+      JOIN public.skill_attempts k ON k.id=g.skill_attempt_id JOIN public.attempts a ON a.id=k.attempt_id
+      JOIN public.exam_skills e ON e.id=k.exam_skill_id
+    CROSS JOIN LATERAL (VALUES
+      (1,'GRADING_REQUEST_ACCEPTED',a.user_id,'LEARNER',true),
+      (2,'GRADING_ASSIGNED',g.teacher_id,'TEACHER',g.status IN ('ASSIGNED','COMPLETED')),
+      (3,'GRADING_CANCELLED_REFUNDED',a.user_id,'LEARNER',g.status='CANCELLED' AND EXISTS (
+        SELECT 1 FROM public.credit_refunds r WHERE r.grading_request_id=g.id AND r.status='COMPLETED')),
+      (4,'GRADING_RESULT_PUBLISHED',a.user_id,'LEARNER',g.status='COMPLETED' AND EXISTS (
+        SELECT 1 FROM public.grading_reviews r WHERE r.grading_request_id=g.id AND r.status='PUBLISHED')),
+      (5,'GRADING_CANCELLED',a.user_id,'LEARNER',g.status='CANCELLED' AND g.cancel_reason IS DISTINCT FROM 'ASSIGNMENT_TIMEOUT'
+        AND g.cancel_reason IS DISTINCT FROM 'TEACHER_UNAVAILABLE' AND NOT EXISTS (
+          SELECT 1 FROM public.credit_refunds r WHERE r.grading_request_id=g.id AND r.status='COMPLETED'))
+    ) queued(position,event,recipient,role,enabled)
+    JOIN public.users u ON u.id=queued.recipient AND u.role=queued.role AND u.status='ACTIVE'
+    WHERE e.skill IN ('WRITING','SPEAKING') AND g.cancel_reason IS DISTINCT FROM 'LEARNER_DELETED' AND queued.enabled
+      AND NOT EXISTS (SELECT 1 FROM public.notifications n WHERE n.recipient_id=u.id
+        AND n.event_key='grading:' || g.id || ':' || queued.event)
+    ORDER BY g.requested_at,g.id,queued.position LIMIT 50`;
+  for (const { id, event } of pending) await db.$transaction(tx => recordGradingTransition(tx, event, id));
+}
+
+export async function dispatchExpiryReminders(db: typeof prisma = prisma, now = new Date()) {
+  return db.$transaction(async tx => {
     const event = 'CONTENT_EXPIRING';
     const template = await getTemplate(tx, event);
     if (!template.enabled) return 0;
@@ -100,7 +124,8 @@ export async function dispatchExpiryReminders() {
       JOIN public.exam_skills e ON e.id=k.exam_skill_id JOIN public.users u ON u.id=a.user_id
       WHERE e.skill IN ('WRITING','SPEAKING') AND k.status='COMPLETED' AND k.content_status='AVAILABLE'
         AND u.status='ACTIVE' AND u.role='LEARNER'
-        AND k.content_expires_at>now() AND k.content_expires_at<=now()+${template.leadHours ?? 24}::int*interval '1 hour'
+        AND k.content_expires_at>${now}::timestamptz
+        AND k.content_expires_at<=${now}::timestamptz+${template.leadHours ?? 24}::int*interval '1 hour'
         AND EXISTS (SELECT 1 FROM public.submission_contents c WHERE c.skill_attempt_id=k.id
           AND (c.text_content IS NOT NULL OR c.audio_path IS NOT NULL))
         AND NOT EXISTS(SELECT 1 FROM public.grading_requests g WHERE g.skill_attempt_id=k.id
@@ -132,9 +157,12 @@ export async function dispatchExpiryReminders() {
   });
 }
 
-export async function readGradingNotificationTarget(notificationId: string, recipientId: string, role: string) {
-  const [target] = await prisma.$queryRaw<{ skill: string; status: string; expiresAt: Date | null; expired: boolean }[]>`
-    SELECT e.skill,coalesce(g.status,k.content_status) AS status,
+export async function readGradingNotificationTarget(notificationId: string, recipientId: string, role: string, db: typeof prisma = prisma) {
+  const [target] = await db.$queryRaw<{ skill: string; status: string; expiresAt: Date | null; expired: boolean; hasResult: boolean;
+    attemptId: string; requestId: string | null; referenceType: string }[]>`
+    SELECT e.skill,coalesce(g.status,k.content_status) AS status,k.id AS "attemptId",g.id AS "requestId",n.reference_type AS "referenceType",
+      EXISTS(SELECT 1 FROM public.grading_requests v JOIN public.grading_reviews r ON r.grading_request_id=v.id
+        WHERE v.skill_attempt_id=k.id AND v.status='COMPLETED' AND r.status='PUBLISHED') AS "hasResult",
       CASE WHEN k.content_status='AVAILABLE' THEN k.content_expires_at END AS "expiresAt",
       (k.content_status IN ('EXPIRED','DELETED') OR
         (k.content_status='AVAILABLE' AND k.content_expires_at<=now())) AS expired
@@ -148,6 +176,9 @@ export async function readGradingNotificationTarget(notificationId: string, reci
         OR (${role}='TEACHER' AND g.teacher_id=n.recipient_id AND g.status IN ('ASSIGNED','COMPLETED')))
   `;
   if (!target) throw new HttpError(404, 'NOTIFICATION_TARGET_NOT_FOUND', 'Không tìm thấy chi tiết thông báo.');
-  if (target.expired) throw new HttpError(410, 'NOTIFICATION_TARGET_EXPIRED', 'Nội dung bài đã hết hạn lưu.');
-  return { skill: target.skill, status: target.status, expiresAt: target.expiresAt };
+  if (target.expired && !target.hasResult && target.referenceType === 'SKILL_ATTEMPT') {
+    throw new HttpError(410, 'NOTIFICATION_TARGET_EXPIRED', 'Nội dung bài đã hết hạn lưu.');
+  }
+  const destination = role === 'TEACHER' ? `TeacherGrade?request=${target.requestId}` : `ResultWS?attempt=${target.attemptId}`;
+  return { skill: target.skill, status: target.status, expiresAt: target.expired ? null : target.expiresAt, destination };
 }

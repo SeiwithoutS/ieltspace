@@ -22,7 +22,7 @@ const publicSamplePages: readonly PageName[] = ["SampleLibrary", "SampleWriting"
 const publicLibraryPages: readonly PageName[] = [
  ...publicSamplePages, "FullTests", "ExamDetail", "PracticeHub", "PracticeListening", "PracticeReading", "PracticeWriting", "PracticeSpeaking", "PracticeLibrary", "PracticeWS", "Vocab",
 ];
-const learnerStudyPages: readonly PageName[] = ['Profile', 'Flashcard', 'StudentLanding', 'StudentHome', 'PracticeHistory', 'MyWS', 'StudentAttemptDone'];
+const learnerStudyPages: readonly PageName[] = ['Profile', 'Flashcard', 'StudentLanding', 'StudentHome', 'PracticeHistory', 'MyWS', 'StudentAttemptDone', 'ResultWS'];
 function resolve(name: string): PageName { name=name.split('?')[0]; return (aliases[name] || name) in pages ? (aliases[name] || name) as PageName : 'Main'; }
 export default function App() {
  const auth=useAuth();
@@ -199,9 +199,11 @@ export default function App() {
  const AttemptPage = page === "ReadingTest" || page === "ListeningTest" || page === "WritingTest" || page === "SpeakingTest" ? pages[page] : null;
  const query = new URLSearchParams(routeHash.split("?")[1]);
  const vocabularySetId = query.get("set") ?? undefined;
+ const gradingProps = page === 'TeacherGrade' ? { requestId: query.get('request') ?? undefined }
+  : page === 'ResultWS' ? { attemptId: query.get('attempt') ?? undefined } : {};
  const remindPassword = auth.user?.must_change_password && auth.user.role !== 'LEARNER' && !publicPage && page !== 'StaffProfile';
  return <>{remindPassword && <div role="status" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-[var(--attempt-bg-e2ebfb,#E2EBFB)] px-4 py-2 text-center text-sm text-[var(--attempt-text-352637,#352637)]">
   <span>Bạn đang dùng mật khẩu tạm.</span>
   <button type="button" className="border-0 bg-transparent p-0 font-semibold text-inherit underline" onClick={() => navigate('StaffProfile')}>Đổi mật khẩu trong Hồ sơ cá nhân</button>
- </div>}<React.Suspense fallback={<div role="status" style={{padding:24,fontFamily:"Inter, sans-serif"}}>Đang tải…</div>}>{AttemptPage ? <DesktopOnly key={page}><AttemptSession page={page} Screen={AttemptPage}/></DesktopOnly> : React.createElement(Page as React.ComponentType<any>, {key:page === "Flashcard" ? `Flashcard:${auth.user?.id ?? ""}:${vocabularySetId ?? ""}` : page === "MyWS" ? "PracticeHistory" : page, vocabularySetId, historyGroup:page === "MyWS" || query.get("tab") === "ws" ? "WS" : "LR", previewHistory:query.get("demo") === "1", reportId:query.get("report") || undefined, focusSupport:query.get("support") === "1", themeRevision:revision, kyNang:query.get("skill") || undefined, cheDo:query.get("mode") || undefined, sampleId:query.get("id") || undefined, sampleType:query.get("sampleType") || undefined, sampleQuery:isPublicSamplePage ? query.toString() : undefined, callbackNotice:googleNotice || emailCallback?.notice})}</React.Suspense>{menu && <AccountMenu opener={menu} onClose={()=>setMenu(null)} />}</>;
+ </div>}<React.Suspense fallback={<div role="status" style={{padding:24,fontFamily:"Inter, sans-serif"}}>Đang tải…</div>}>{AttemptPage ? <DesktopOnly key={page}><AttemptSession page={page} Screen={AttemptPage}/></DesktopOnly> : React.createElement(Page as React.ComponentType<any>, {key:page === "Flashcard" ? `Flashcard:${auth.user?.id ?? ""}:${vocabularySetId ?? ""}` : page === "MyWS" ? "PracticeHistory" : page === 'TeacherGrade' || page === 'ResultWS' ? routeHash : page, ...gradingProps, vocabularySetId, historyGroup:page === "MyWS" || query.get("tab") === "ws" ? "WS" : "LR", reportId:query.get("report") || undefined, focusSupport:query.get("support") === "1", themeRevision:revision, kyNang:query.get("skill") || undefined, cheDo:query.get("mode") || undefined, sampleId:query.get("id") || undefined, sampleType:query.get("sampleType") || undefined, sampleQuery:isPublicSamplePage ? query.toString() : undefined, callbackNotice:googleNotice || emailCallback?.notice})}</React.Suspense>{menu && <AccountMenu opener={menu} onClose={()=>setMenu(null)} />}</>;
 }

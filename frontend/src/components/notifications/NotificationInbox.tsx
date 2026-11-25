@@ -15,7 +15,6 @@ export default function NotificationInbox({ role }: { role: Role }) {
   const [page, setPage] = useState<NotificationPage>();
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [detail, setDetail] = useState<{ owner: string | undefined; title: string; skill: string; status: string; expiresAt: string | null }>();
   const request = useRef(0);
   const [owner, setOwner] = useState<string>();
   const visible = owner === userId ? page : undefined;
@@ -42,14 +41,14 @@ export default function NotificationInbox({ role }: { role: Role }) {
     return () => { request.current++; };
   }, [filter, revision, unread, userId]);
 
-  async function update(action: () => Promise<void>, destination?: string) {
+  async function update(action: () => Promise<void | string>, destination?: string) {
     if (busy) return;
     setBusy(true);
     try {
-      await action();
+      const target = (await action()) || destination;
       if (getAuthUser()?.id !== userId) return;
       setError("");
-      if (destination) navigate(destination);
+      if (target) navigate(target);
       else setRevision(value => value + 1);
     } catch (failure) {
       if (getAuthUser()?.id === userId) setError((failure as Error).message);
@@ -77,12 +76,11 @@ export default function NotificationInbox({ role }: { role: Role }) {
 
   async function openGradingDetail(item: Notification) {
     await update(async () => {
-      setDetail(undefined);
       if (!item.readAt) await markNotificationRead(item.id);
-      const result = await apiFetch<{ skill: string; status: string; expiresAt: string | null }>(
+      const result = await apiFetch<{ destination: string }>(
         `/notifications/${encodeURIComponent(item.id)}/target`,
       );
-      if (getAuthUser()?.id === userId) setDetail({ owner: userId, title: item.title, ...result });
+      return result.destination;
     });
   }
 
@@ -147,12 +145,6 @@ export default function NotificationInbox({ role }: { role: Role }) {
         </p>
       )}
       {!visible && !error && <p role="status" style={{ padding: "0 18px" }}>Đang tải thông báo…</p>}
-      {detail && detail.owner === userId && <div role="status" style={{ padding: "0 18px" }}>
-        <strong>{detail.title}</strong>
-        <p>{detail.skill === "WRITING" ? "Writing" : "Speaking"}
-          {detail.expiresAt && ` · Hạn lưu ${new Date(detail.expiresAt).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })} (giờ Việt Nam)`}</p>
-        <button type="button" style={actionStyle} onClick={() => setDetail(undefined)}>Đóng chi tiết</button>
-      </div>}
       {visible?.items.map((item) => {
         const isUnread = item.readAt === null;
         const destination = item.referenceType === "SUPPORT_REPORT" && item.referenceId && role !== "admin"

@@ -6,7 +6,7 @@ export type WsActionKind = 'grade' | 'regrade' | 'view' | 'listen' | 'download-a
 export type WsAction = { kind: WsActionKind; label: string; disabledReason?: string };
 export type WsRowView = { outcome: WsOutcome; status: string; retention: string; primary?: WsAction; menu: WsAction[] };
 
-export const actionLabels: Record<WsActionKind, string> = {
+const actionLabels: Record<WsActionKind, string> = {
   grade: 'Gửi yêu cầu chấm',
   regrade: 'Gửi lại yêu cầu',
   view: 'Xem kết quả',
@@ -15,8 +15,7 @@ export const actionLabels: Record<WsActionKind, string> = {
   'view-text': 'Xem bài viết',
   'download-docx': 'Tải .docx',
 };
-export const EXPIRED_REASON = 'Nội dung đã hết hạn nên bản ghi và bài viết đã bị xóa.';
-export const NO_DOCX_REASON = 'Tính năng tải .docx sẽ sớm khả dụng.';
+export const EXPIRED_REASON = 'Nội dung đã hết hạn lưu.';
 export const NO_RECORDING_REASON = 'Bài này chưa có bản ghi nào.';
 
 const shortDate = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' });
@@ -38,9 +37,14 @@ function mediaMenu(skill: StudyResult['skill'], expired: boolean, recordingCount
     const reason = expired ? EXPIRED_REASON : recordingCount === 0 ? NO_RECORDING_REASON : undefined;
     return [action('listen', reason), action('download-audio', reason)];
   }
-  // Writing: đọc lại văn bản qua API (khóa khi hết hạn). Chưa có API tải .docx: mục luôn khóa,
-  // nhưng ẩn khi nội dung đã hết hạn (không còn gì để tải).
-  return expired ? [action('view-text', EXPIRED_REASON)] : [action('view-text'), action('download-docx', NO_DOCX_REASON)];
+  const reason = expired ? EXPIRED_REASON : undefined;
+  return [action('view-text', reason), action('download-docx', reason)];
+}
+
+export function wsSectionsLabel(skill: 'Writing' | 'Speaking', sections?: number[] | null) {
+  if (!sections?.length) return null;
+  if (sections.length === (skill === 'Writing' ? 2 : 3)) return 'Cả kỹ năng';
+  return `${skill === 'Writing' ? 'Task' : 'Part'} ${sections.join(', ')}`;
 }
 
 export function describeWsRow(item: Pick<StudyResult, 'skill' | 'band' | 'contentStatus' | 'contentExpiresAt' | 'grading' | 'published' | 'recordingCount'>): WsRowView {
@@ -73,23 +77,4 @@ export function describeWsRow(item: Pick<StudyResult, 'skill' | 'band' | 'conten
   if (grading === 'CANCELLED') return { outcome: 'cancelled', status: 'Đã hủy', retention, primary: action('regrade'), menu };
   if (content === 'HELD') return { outcome: 'waiting', status: 'Tạm giữ', retention, menu };
   return { outcome: 'saved', status: 'Đã lưu · chưa gửi chấm', retention, primary: action('grade'), menu };
-}
-
-/** Dòng mẫu (?demo=1) khai báo sẵn danh sách thao tác bằng nhãn; Nghe lại/Tải khi hết hạn thì khóa. */
-export function describeSampleRow(
-  example: { skill: StudyResult['skill']; outcome: WsOutcome; status: string; retention: string; actions?: readonly string[] },
-): WsRowView {
-  const labels = example.actions ?? [];
-  const kinds = (Object.keys(actionLabels) as WsActionKind[]).filter(kind => labels.includes(actionLabels[kind]));
-  const reasonOf = (kind: WsActionKind) =>
-    example.outcome === 'expired' && (kind === 'listen' || kind === 'download-audio' || kind === 'view-text' || kind === 'download-docx') ? EXPIRED_REASON : undefined;
-  const make = (kind: WsActionKind) => action(kind, reasonOf(kind));
-  const primaryKind = kinds.find(kind => kind === 'grade' || kind === 'regrade' || kind === 'view');
-  return {
-    outcome: example.outcome,
-    status: example.status,
-    retention: example.retention,
-    primary: primaryKind ? make(primaryKind) : undefined,
-    menu: kinds.filter(kind => kind !== primaryKind).map(make),
-  };
 }

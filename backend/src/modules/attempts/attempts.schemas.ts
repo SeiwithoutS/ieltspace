@@ -23,6 +23,18 @@ export const DOWNLOAD_URL_TTL_SECONDS = 300;
 export const STALE_IN_PROGRESS_HOURS = 48;
 
 const uuid = z.string().uuid();
+const selectedSections = z.array(z.number().int().min(1).max(3)).min(1).max(3);
+const storedScope = z.object({ wsSections: selectedSections });
+
+export function readWsSections(scope: unknown): number[] | null {
+  const parsed = storedScope.safeParse(scope);
+  return parsed.success ? parsed.data.wsSections : null;
+}
+
+export function effectiveContentStatus(status: string | null, expiresAt: Date | null, now: Date) {
+  return status === 'AVAILABLE' && expiresAt && now >= expiresAt ? 'EXPIRED' : status;
+}
+
 export const questionKeySchema = z.string().regex(/^[A-Za-z0-9_.:-]{1,64}$/);
 
 export const idParamSchema = z.object({ id: uuid });
@@ -36,6 +48,7 @@ export const createAttemptSchema = z
     mode: z.enum(['REAL', 'PRACTICE']),
     // Tối đa 60 theo Writing; service hạ về 30 cho Speaking (400 VALIDATION_ERROR nếu vượt).
     limitMinutes: z.number().int().min(1).max(WRITING_PRACTICE_MAX_LIMIT_MINUTES).nullable(),
+    sections: selectedSections.optional(),
   })
   .strict();
 

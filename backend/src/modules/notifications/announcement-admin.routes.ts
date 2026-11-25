@@ -87,7 +87,15 @@ announcementAdminRouter.patch('/announcements/:id', asyncHandler(async (req, res
       UPDATE public.announcements SET title=${title},content=${content},audience=${audience},revision=revision+1
       WHERE id=${id.data}::uuid AND status='DRAFT' AND revision=${expected} RETURNING ${fields}
     `;
-    if (!saved) conflict();
+    if (!saved) {
+      // Một lần sửa thành công có thể đã mất phản hồi. Chỉ nhận lại đúng phiên bản và nội dung của lần ghi đó.
+      const [replayed] = await tx.$queryRaw<Announcement[]>`
+        SELECT ${fields} FROM public.announcements WHERE id=${id.data}::uuid AND status='DRAFT' AND revision=${expected + 1}
+          AND title=${title} AND content=${content} AND audience=${audience}
+      `;
+      if (!replayed) conflict();
+      return replayed;
+    }
     await writeAudit(tx, { actorId, action: 'ANNOUNCEMENT_DRAFT_UPDATED', entityType: 'ANNOUNCEMENT', entityId: saved.id,
       changeData: { audience, revision: saved.revision } });
     return saved;

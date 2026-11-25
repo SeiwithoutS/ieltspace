@@ -27,6 +27,7 @@ test('SAMPLE-01 handlers and authorization guards against isolated PostgreSQL', 
   );
   const { createSampleImportRouter } = await import('../dist/modules/samples/sample-import.routes.js');
   const { cleanupSampleMedia } = await import('../dist/modules/samples/sample-assets.service.js');
+  const { startSampleMediaCleanupWorker } = await import('../dist/jobs/sample-media-cleanup.js');
   const { requireAuth, requireRole } = await import('../dist/middleware/auth.js');
   const engine = new PGlite();
   try {
@@ -326,11 +327,31 @@ test('SAMPLE-01 handlers and authorization guards against isolated PostgreSQL', 
       assert.equal((await engine.query('select state from public.sample_media_assets where path = $1', [promptImage.path])).rows[0].state, 'DELETING');
       await assert.rejects(saveAcademic(withFirstImage, 8), errorIs('SAMPLE_ASSET_INVALID', 400));
       failRemoval = false;
-      assert.deepEqual(await cleanupSampleMedia(client, true), { candidates: 1, removed: 1, failed: 0 });
+      const runs = [];
+      let completeRuns, failRuns;
+      const completed = new Promise((resolve, reject) => { completeRuns = resolve; failRuns = reject; });
+      const stopCleanup = startSampleMediaCleanupWorker(async () => {
+        try {
+          const result = await cleanupSampleMedia(client, true);
+          runs.push(result);
+          if (runs.length === 2) completeRuns();
+          return result;
+        } catch (error) {
+          failRuns(error);
+          throw error;
+        }
+      }, 10);
+      const deadline = setTimeout(() => failRuns(new Error('Sample cleanup worker did not run twice')), 3000);
+      try {
+        await completed;
+      } finally {
+        clearTimeout(deadline);
+        await stopCleanup();
+      }
+      assert.deepEqual(runs, [{ candidates: 1, removed: 1, failed: 0 }, { candidates: 0, removed: 0, failed: 0 }]);
       assert.equal(storageObjects.has(promptImage.path), false);
       assert.equal((await engine.query('select 1 from public.sample_media_assets where path = $1', [promptImage.path])).rows.length, 0);
       assert.deepEqual(new Set(storageObjects), new Set([replacement.path, audio.path, fresh.path]));
-      assert.deepEqual(await cleanupSampleMedia(client, true), { candidates: 0, removed: 0, failed: 0 });
     } finally {
       globalThis.fetch = realFetch;
     }

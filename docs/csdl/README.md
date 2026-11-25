@@ -12,6 +12,8 @@ Chạy [19_staff_invitations.sql](19_staff_invitations.sql) rồi [20_account_de
 
 Chạy [21_notifications_support_reports.sql](21_notifications_support_reports.sql) trước khi triển khai API thông báo, hỗ trợ và Dashboard có số phiếu. Tệp thêm chỉ mục chưa đọc vào bảng `notifications` hiện có và tạo `support_reports`, `support_report_updates`. Hai bảng bật RLS và chỉ đọc/ghi qua backend.
 
+Sau 20 và 21, chạy [27_remove_deleted_learner_support_reports.sql](27_remove_deleted_learner_support_reports.sql) để xóa phiếu, phản hồi và lịch sử phiếu khi tài khoản Người học chuyển sang `DELETED`. Quy tắc áp dụng cho những lượt xóa phát sinh sau khi cài migration.
+
 Chạy [22_vocabulary_image_assets.sql](22_vocabulary_image_assets.sql) trước khi bật tải ảnh từ vựng qua R2. Tệp cần các bảng từ vựng và bảng bản nháp đã có. Tệp tạo bảng tham chiếu ảnh riêng cho backend, bật RLS và thêm chỉ mục kiểm tra ảnh đã công bố.
 
 Chạy [23_announcements_and_notification_settings.sql](23_announcements_and_notification_settings.sql) trước khi phát hành thông báo chung và tác vụ nhắc hết hạn. Tệp tạo bảng lịch gửi và cài đặt mẫu, bật RLS và thu hồi quyền trực tiếp của khách/người dùng. Mẫu mặc định nằm trong backend và chỉ sinh bản ghi cài đặt khi Quản lý lưu thay đổi.

@@ -7,6 +7,7 @@ import { publicExamsRouter } from './modules/exams/exams.public.routes.js';
 import { createSamplesPublicRouter } from './modules/samples/samples.routes.js';
 import { createLearnerStudyRouter } from './modules/learner/study.routes.js';
 import { createAttemptsRouter } from './modules/attempts/attempts.routes.js';
+import { createGradingRouter } from './modules/grading/grading.routes.js';
 import { adminUsersRouter } from './modules/users/admin-users.routes.js';
 import { adminStatisticsRouter } from './modules/statistics/admin-statistics.routes.js';
 import { notificationsRouter } from './modules/notifications/notifications.routes.js';
@@ -14,6 +15,9 @@ import { announcementAdminRouter } from './modules/notifications/announcement-ad
 import { adminSupportRouter, supportRouter } from './modules/support/support.routes.js';
 
 export const routes = Router();
+routes.use('/learner/grading', createGradingRouter('LEARNER'));
+routes.use('/teacher/grading', createGradingRouter('TEACHER'));
+routes.use('/admin/grading', createGradingRouter('ADMIN'));
 routes.use('/learner', createLearnerStudyRouter());
 routes.use('/learner', createAttemptsRouter());
 routes.use('/samples', createSamplesPublicRouter(prisma));

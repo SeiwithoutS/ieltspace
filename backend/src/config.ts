@@ -11,6 +11,10 @@ const bucketName = z.string().regex(/^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$/);
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3001),
   NOTIFICATION_WORKER_ENABLED: z.enum(['true', 'false']).default('true').transform(value => value === 'true'),
+  ATTEMPT_CLEANUP_WORKER_ENABLED: z.enum(['true', 'false']).default('false').transform(value => value === 'true'),
+  SAMPLE_MEDIA_CLEANUP_WORKER_ENABLED: z.enum(['true', 'false']).default('false').transform(value => value === 'true'),
+  VOCABULARY_IMAGE_CLEANUP_WORKER_ENABLED: z.enum(['true', 'false']).default('false').transform(value => value === 'true'),
+  GRADING_WORKER_ENABLED: z.enum(['true', 'false']).default('true').transform(value => value === 'true'),
 
   NODE_ENV: z
       .enum(["development", "test", "production"])

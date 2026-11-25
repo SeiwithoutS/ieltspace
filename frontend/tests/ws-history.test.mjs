@@ -4,6 +4,8 @@ import { nextMenuIndex } from "../src/lib/shared/menu-nav.ts";
 import { crc32, createZip } from "../src/lib/shared/zip.ts";
 import { extensionForMime, recordingFileName, recordingZipName, sanitizeName, formatRecordingLength } from "../src/lib/attempts/recording-files.ts";
 import { describeWsRow } from "../src/lib/learner/ws-history.ts";
+import { strFromU8, unzipSync } from "fflate";
+import { createWritingDocx } from "../src/lib/attempts/writing-docx.ts";
 
 test("điều hướng menu bằng bàn phím", () => {
   assert.equal(nextMenuIndex(3, -1, "ArrowDown"), 0);
@@ -83,18 +85,34 @@ test("API cũ chưa trả trường mới thì suy giảm êm", () => {
   assert.equal(describeWsRow({ skill: "WRITING", band: 6 }).outcome, "published");
 });
 
-test("Writing: menu có Xem bài viết (khóa khi hết hạn) và Tải .docx vẫn khóa vì chưa có API", async () => {
-  const { describeWsRow, NO_DOCX_REASON, EXPIRED_REASON } = await import("../src/lib/learner/ws-history.ts");
+test("Writing: mở xem và tải .docx khi còn hạn", async () => {
+  const { describeWsRow, EXPIRED_REASON, wsSectionsLabel } = await import("../src/lib/learner/ws-history.ts");
   const saved = describeWsRow({ skill: "WRITING", band: null, contentStatus: "AVAILABLE", contentExpiresAt: "2026-12-09T00:00:00Z", grading: null, published: false });
   assert.deepEqual(saved.menu.map((m) => m.kind), ["view-text", "download-docx"]);
   assert.equal(saved.menu[0].disabledReason, undefined);
-  assert.equal(saved.menu[1].disabledReason, NO_DOCX_REASON);
+  assert.equal(saved.menu[1].disabledReason, undefined);
   assert.equal(saved.menu[0].label, "Xem bài viết");
   assert.equal(saved.primary.kind, "grade");
   const expired = describeWsRow({ skill: "WRITING", band: null, contentStatus: "EXPIRED", grading: null, published: false });
-  assert.deepEqual(expired.menu.map((m) => m.kind), ["view-text"]);
-  assert.equal(expired.menu[0].disabledReason, EXPIRED_REASON);
+  assert.ok(expired.menu.every((m) => m.disabledReason === EXPIRED_REASON));
+  assert.equal(wsSectionsLabel('Writing', [2]), 'Task 2');
+  assert.equal(wsSectionsLabel('Speaking', [1, 3]), 'Part 1, 3');
+  assert.equal(wsSectionsLabel('Speaking', [1, 2, 3]), 'Cả kỹ năng');
+  assert.equal(wsSectionsLabel('Writing', null), null);
   // Speaking không đổi.
   const speaking = describeWsRow({ skill: "SPEAKING", band: null, contentStatus: "AVAILABLE", grading: null, published: false, recordingCount: 3 });
   assert.deepEqual(speaking.menu.map((m) => m.kind), ["listen", "download-audio"]);
+});
+
+test('DOCX giữ Unicode, xuống đoạn, tab và chỉ xuất Task đã lưu', () => {
+  const bytes = createWritingDocx('Bài viết & đề', [{ taskKey: 'task2', text: 'Dòng 1 <x>\r\n\r\n  Tiếng Việt\t📝\u0001' }]);
+  const parts = unzipSync(bytes);
+  const body = strFromU8(parts['word/document.xml']);
+  assert.deepEqual(Object.keys(parts).sort(), ['[Content_Types].xml', '_rels/.rels', 'word/document.xml']);
+  assert.match(strFromU8(parts['_rels/.rels']), /Target="word\/document.xml"/);
+  assert.match(body, /Bài viết &amp; đề/);
+  assert.doesNotMatch(body, /Task 1|\u0001/);
+  assert.match(body, /Task 2/);
+  assert.match(body, /Dòng 1 &lt;x&gt;<\/w:t><\/w:r><\/w:p><w:p><w:r><w:t xml:space="preserve"><\/w:t>/);
+  assert.match(body, /  Tiếng Việt<\/w:t><w:tab\/><w:t xml:space="preserve">📝/);
 });

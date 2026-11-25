@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { IncomingMessage, ServerResponse } from 'node:http';
+import { Duplex } from 'node:stream';
 
 Object.assign(process.env, {
   NODE_ENV: 'test', FRONTEND_ORIGIN: 'http://localhost:3000', AUTH_EMAIL_REDIRECT_URL: 'http://localhost:3000/login',
@@ -46,12 +48,12 @@ function fakeRepo() {
     async createAttempt(i) {
       if (s.foreignClientIds?.has(i.clientAttemptId)) throw Object.assign(new Error('x'), { statusCode: 409, code: 'CLIENT_ATTEMPT_ID_CONFLICT' });
       const dup = await this.findByClientAttemptId(i.userId, i.clientAttemptId);
-      if (dup) return dup;
+      if (dup) return { attempt: dup, created: false };
       const a = { id: `att-${++s.seq}`, parentAttemptId: `p-${s.seq}`, userId: i.userId, clientId: i.clientAttemptId, examSkillId: i.examSkillId, skill: i.examSkillId === WSKILL ? 'WRITING' : 'SPEAKING',
-        mode: i.mode, status: 'IN_PROGRESS', startedAt: i.startedAt, deadlineAt: i.deadlineAt, completedAt: null,
+        mode: i.mode, sections: i.sections, status: 'IN_PROGRESS', startedAt: i.startedAt, deadlineAt: i.deadlineAt, completedAt: null,
         contentExpiresAt: null, contentStatus: 'AVAILABLE', durationSeconds: null };
       s.attempts.set(a.id, a);
-      return a;
+      return { attempt: a, created: true };
     },
     async getAttempt(id) { return s.attempts.get(id) ?? null; },
     async resolveSectionId(_a, idx) { return sections[idx] ?? null; },
@@ -207,7 +209,6 @@ test('quyền sở hữu: người khác không đọc, ghi, hoàn thành, nghe 
   assert.equal(await code(ctx.service.getRecordingUrl(U2, body.id, 'p1q1')), '404:ATTEMPT_NOT_FOUND');
   await ctx.service.deleteAttempt(U2, body.id);
   assert.ok(ctx.repo.s.attempts.has(body.id));
-  assert.equal(await code(ctx.service.requestGrading(U2, body.id)), '404:ATTEMPT_NOT_FOUND');
 });
 
 test('ghi âm: pending rồi confirm, hiện trong GET lượt, kiểm dung lượng', async () => {
@@ -395,14 +396,6 @@ test('hủy bài: lượt đã COMPLETED trả 409 ATTEMPT_ALREADY_COMPLETED, kh
   await ctx.service.deleteAttempt(U2, body.id); // người khác vẫn không có tác dụng, không lỗi
 });
 
-test('gửi chấm là ranh giới: 501 GRADING_NOT_AVAILABLE, không đổi trạng thái', async () => {
-  const ctx = setup();
-  const { body } = await create(ctx.service);
-  await ctx.service.completeAttempt(U1, body.id, { elapsedSeconds: 1 });
-  assert.equal(await code(ctx.service.requestGrading(U1, body.id)), '501:GRADING_NOT_AVAILABLE');
-  assert.equal(ctx.repo.s.attempts.get(body.id).status, 'COMPLETED');
-});
-
 test('dọn dẹp: xóa lượt hết hạn, bỏ qua lượt còn hạn hoặc có yêu cầu chấm, lỗi storage thì thử lại', async () => {
   const ctx = setup();
   const mk = async (cid, grading) => {
@@ -434,15 +427,30 @@ test('dọn dẹp: xóa lượt hết hạn, bỏ qua lượt còn hạn hoặc 
 
 test('API từ chối yêu cầu chưa đăng nhập trước khi chạm DB', async () => {
   const { app } = await import('../dist/app.js');
-  const server = app.listen(0, '127.0.0.1');
-  await new Promise((resolve) => server.once('listening', resolve));
-  try {
-    const base = `http://127.0.0.1:${server.address().port}/api/learner`;
-    for (const [method, path] of [['GET', `/exam-skills/${SKILL}/speaking`], ['GET', `/exam-skills/${SKILL}/writing`], ['PUT', `/skill-attempts/${SKILL}/writing/task1`], ['GET', `/skill-attempts/${SKILL}/writing/task1`], ['POST', '/skill-attempts'], ['GET', `/skill-attempts/${SKILL}`],
-      ['POST', `/skill-attempts/${SKILL}/complete`], ['DELETE', `/skill-attempts/${SKILL}`], ['POST', `/skill-attempts/${SKILL}/grading-request`]]) {
-      assert.equal((await fetch(base + path, { method })).status, 401, `${method} ${path}`);
+  const routes = [['GET', `/exam-skills/${SKILL}/speaking`], ['GET', `/exam-skills/${SKILL}/writing`],
+    ['PUT', `/skill-attempts/${SKILL}/writing/task1`], ['GET', `/skill-attempts/${SKILL}/writing/task1`],
+    ['GET', `/skill-attempts/${SKILL}/writing`], ['POST', '/skill-attempts'], ['GET', `/skill-attempts/${SKILL}`],
+    ['POST', `/skill-attempts/${SKILL}/complete`], ['DELETE', `/skill-attempts/${SKILL}`], ['POST', `/skill-attempts/${SKILL}/grading-request`]];
+  for (const [method, path] of routes) {
+    // Đi qua app Express với request/response Node thật, lưu phản hồi vào stream thay cho cổng loopback.
+    const chunks = [];
+    const socket = new Duplex({ read() {}, write(chunk, _encoding, callback) { chunks.push(chunk); callback(); } });
+    try {
+      const req = new IncomingMessage(socket);
+      req.method = method;
+      req.url = '/api/learner' + path;
+      req.headers = {};
+      const res = new ServerResponse(req);
+      res.assignSocket(socket);
+      const finished = new Promise(resolve => res.once('finish', resolve));
+      app(req, res);
+      await finished;
+      assert.match(Buffer.concat(chunks).toString(), /^HTTP\/1\.1 401 /, `${method} ${path}`);
+      if (path.startsWith('/skill-attempts')) assert.equal(res.getHeader('Cache-Control'), 'no-store');
+    } finally {
+      socket.destroy();
     }
-  } finally { await new Promise((resolve) => server.close(resolve)); }
+  }
 });
 
 // ---------- Writing dùng chung luồng lượt làm ----------
@@ -541,7 +549,6 @@ test('Writing: quá hạn + ân hạn thì 409; hoàn thành ghi hạn 14 ngày,
   assert.equal(await code(ctx.service.putWritingText(U1, body.id, 'task1', { text: 'after' })), '409:ATTEMPT_NOT_ACTIVE');
   assert.equal((await ctx.service.getWritingText(U1, body.id, 'task1')).text, 'still ok in grace');
   assert.equal(ctx.repo.s.gradingFor.size, 0);
-  assert.equal(await code(ctx.service.requestGrading(U1, body.id)), '501:GRADING_NOT_AVAILABLE');
 });
 
 test('Writing: đọc văn bản hết hạn 410 CONTENT_EXPIRED; dọn dẹp xóa text, không xóa bài đang chờ chấm', async () => {

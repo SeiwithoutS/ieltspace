@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { buttonClass, controlClass } from "../shared/ui";
 import { apiFetch } from "../../lib/shared/api";
+import { matchesDraft, saveAnnouncementDraft, type AnnouncementDraft as Draft, type PendingAnnouncementSave } from "../../lib/notifications/announcement-draft";
 
 const base = "/admin/notifications";
 const audiences = { ALL: "Tất cả tài khoản hoạt động", LEARNER: "Người học", TEACHER: "Giáo viên" };
 type Audience = keyof typeof audiences;
-type Draft = { title: string; content: string; audience: Audience };
 type Announcement = Draft & { id: string; status: "DRAFT" | "SCHEDULED" | "SENT"; revision: number;
   scheduledAt: string | null; sentAt: string | null; recipientCount: number | null };
 type Setting = { event: string; title: string; content: string; enabled: boolean; leadHours: number | null;
@@ -37,7 +37,7 @@ export default function AdminNotifications() {
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
   const [reload, setReload] = useState(0);
-  const createKey = useRef<string>();
+  const pendingSave = useRef<PendingAnnouncementSave>({});
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
@@ -67,12 +67,11 @@ export default function AdminNotifications() {
   async function saveDraft(event: FormEvent) {
     event.preventDefault();
     await run(async () => {
-      createKey.current ??= crypto.randomUUID();
-      const saved = editing
-        ? await apiFetch<Announcement>(`${base}/announcements/${editing.id}`, { method: "PATCH", json: { ...draft, revision: editing.revision } })
-        : await apiFetch<Announcement>(base + "/announcements", { method: "POST", json: { ...draft, requestId: createKey.current } });
-      setEditing(saved);
-      createKey.current = undefined;
+      await saveAnnouncementDraft(draft, editing, pendingSave.current, {
+        create: json => apiFetch<Announcement>(base + "/announcements", { method: "POST", json }),
+        edit: ({ id, draft, revision }) => apiFetch<Announcement>(`${base}/announcements/${id}`, { method: "PATCH", json: { ...draft, revision } }),
+        received: setEditing,
+      });
       setStatus("Đã lưu bản nháp.");
     });
   }
@@ -89,7 +88,7 @@ export default function AdminNotifications() {
       setStatus(item.status === "SENT" ? `Đã gửi cho ${item.recipientCount} tài khoản.` : "Đã đưa thông báo vào lịch gửi.");
     });
   }
-  const saved = editing && draft.title.trim() === editing.title && draft.content.trim() === editing.content && draft.audience === editing.audience;
+  const saved = editing?.status === "DRAFT" && matchesDraft(draft, editing);
 
   return <div className="grid gap-4">
     <div role="tablist" aria-label="Quản lý thông báo" className={tabList}>
@@ -118,6 +117,7 @@ export default function AdminNotifications() {
             {item.scheduledAt && ` · ${formatter.format(new Date(item.sentAt ?? item.scheduledAt))} giờ Việt Nam`}
             {item.recipientCount !== null && ` · ${item.recipientCount} người nhận`}</p>
           {item.status === "DRAFT" && <button type="button" className={button} onClick={() => {
+            pendingSave.current = {};
             setEditing(item); setDraft({ title: item.title, content: item.content, audience: item.audience }); setSchedule(""); show(1);
           }}>Sửa bản nháp</button>}
         </article>)}
@@ -141,6 +141,7 @@ export default function AdminNotifications() {
         <div className="flex flex-wrap gap-2">
           <button className={button} disabled={busy} type="submit">Lưu bản nháp</button>
           {editing && <button className={button} disabled={busy} type="button" onClick={() => {
+            pendingSave.current = {};
             setDraft(emptyDraft); setEditing(undefined); setSchedule(""); setStatus("");
           }}>Tạo bản nháp khác</button>}
         </div>

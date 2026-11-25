@@ -29,7 +29,7 @@ export default function AdminUsers() {
   const [filters, setFilters] = useState(initialFilters);
   const [attempt, setAttempt] = useState(0);
   const [result, setResult] = useState<ListResult>();
-  const [selected, setSelected] = useState<string>();
+  const [selected, setSelected] = useState<string | undefined>(() => new URLSearchParams(location.hash.split('?')[1]).get('userId') ?? undefined);
   const [tab, setTab] = useState<UserTab>('directory');
   const [createOpen, setCreateOpen] = useState(false);
 

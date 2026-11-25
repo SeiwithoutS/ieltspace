@@ -121,10 +121,15 @@ adminSupportRouter.patch('/:id', asyncHandler(async (req, res) => {
   const { status, revision } = parsed.data;
   const reply = parsed.data.reply || null;
   const report = await prisma.$transaction(async tx => {
-    const [actor] = await tx.$queryRaw<{ id: string }[]>`
-      SELECT id FROM public.users WHERE id = ${actorId}::uuid AND role = 'ADMIN' AND status = 'ACTIVE' FOR SHARE
+    // Lock accounts in the same order as account deletion before locking the report.
+    const profiles = await tx.$queryRaw<{ id: string; role: string; status: string }[]>`
+      SELECT id, role, status FROM public.users
+      WHERE id IN (${actorId}::uuid, (SELECT owner_id FROM public.support_reports WHERE id = ${id.data}::uuid))
+      ORDER BY id FOR SHARE
     `;
-    if (!actor) throw new HttpError(403, 'FORBIDDEN', 'Bạn không còn quyền xử lý báo cáo.');
+    if (!profiles.some(profile => profile.id === actorId && profile.role === 'ADMIN' && profile.status === 'ACTIVE')) {
+      throw new HttpError(403, 'FORBIDDEN', 'Bạn không còn quyền xử lý báo cáo.');
+    }
     const [row] = await tx.$queryRaw<(Report & { ownerId: string })[]>`
       SELECT ${reportFields}, r.owner_id AS "ownerId" FROM public.support_reports r
       WHERE r.id = ${id.data}::uuid FOR UPDATE

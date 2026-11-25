@@ -1,4 +1,5 @@
 import { ApiError, apiFetch } from "../shared/api";
+import type { GradingRequest } from '../grading/grading';
 import type { UploadTransport } from "./upload-queue";
 import type { TextTransport } from "./writing-queue";
 import type { WritingTaskKey } from "./writing-text";
@@ -44,6 +45,10 @@ export interface WritingTaskText {
   wordCount: number;
   updatedAt: string | null;
 }
+export interface SavedWriting {
+  sections: number[] | null;
+  tasks: Pick<WritingTaskText, 'taskKey' | 'text'>[];
+}
 export interface SkillAttemptCreated {
   id: string;
   status: SkillAttemptStatus;
@@ -67,6 +72,8 @@ export interface SkillAttemptDetail {
   deadlineAt: string | null;
   completedAt: string | null;
   contentExpiresAt: string | null;
+  contentStatus?: 'AVAILABLE' | 'HELD' | 'EXPIRED' | 'DELETED';
+  sections?: number[] | null;
   elapsedSeconds: number | null;
   recordings: ServerRecording[];
   /** Chỉ lượt Writing: số từ từng Task đã lưu (không kèm nội dung). */
@@ -117,12 +124,16 @@ export function putWritingText(id: string, taskKey: WritingTaskKey, text: string
 export function getWritingText(id: string, taskKey: WritingTaskKey) {
   return apiFetch<WritingTaskText>(root(id) + "/writing/" + taskKey);
 }
+export function getSavedWriting(id: string) {
+  return apiFetch<SavedWriting>(root(id) + '/writing');
+}
 export function createSkillAttempt(input: {
   clientAttemptId: string;
   examSkillId: string;
   mode: AttemptMode;
   /** Số nguyên 1..30 (Speaking) hoặc 1..60 (Writing), hoặc null (không giới hạn / Thi thật); không bao giờ gửi 0. */
   limitMinutes: number | null;
+  sections?: number[];
 }) {
   return apiFetch<SkillAttemptCreated>("/learner/skill-attempts", {
     method: "POST",
@@ -163,8 +174,11 @@ export function getRecordingUrl(id: string, questionId: string) {
     root(id) + "/recordings/" + encodeURIComponent(questionId) + "/url",
   );
 }
-export function requestGrading(id: string) {
-  return apiFetch<unknown>(root(id) + "/grading-request", { method: "POST" });
+export function getGradingRequest(id: string) {
+  return apiFetch<{ request: GradingRequest | null }>(root(id) + '/grading-request');
+}
+export function requestGrading(id: string, retryOf?: string) {
+  return apiFetch<GradingRequest>(root(id) + '/grading-request', { method: 'POST', json: { retryOf } });
 }
 
 /** Cổng tải bản ghi lên cho hàng đợi: xin đường tải, PUT blob, xác nhận. */

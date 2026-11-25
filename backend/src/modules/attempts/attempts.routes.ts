@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import type { ZodType } from 'zod';
+import { z, type ZodType } from 'zod';
 import { env } from '../../config.js';
 import { publicUrl } from '../../integrations/storage/supabase-storage.js';
 import { supabaseRecordingStorage } from '../../integrations/storage/recording-storage.js';
@@ -11,6 +11,7 @@ import {
   completeAttemptSchema, createAttemptSchema, createRecordingSchema, examSkillParamSchema, idParamSchema, putWritingSchema, recordingParamSchema, writingTaskParamSchema,
 } from './attempts.schemas.js';
 import { createAttemptsService, type AttemptsDeps } from './attempts.service.js';
+import { createGradingService } from '../grading/grading.service.js';
 
 function parse<T>(schema: ZodType<T>, value: unknown, code = 'VALIDATION_ERROR'): T {
   const result = schema.safeParse(value);
@@ -20,6 +21,7 @@ function parse<T>(schema: ZodType<T>, value: unknown, code = 'VALIDATION_ERROR')
 
 // Gắn dưới /api/learner. Người học chỉ thao tác trên lượt của chính mình (kiểm ở service).
 export function createAttemptsRouter(deps?: Partial<AttemptsDeps>, db: typeof prisma = prisma) {
+  const grading = createGradingService(db, deps?.clock);
   const service = createAttemptsService({
     repo: deps?.repo ?? createAttemptsRepository(db),
     storage: deps?.storage ?? supabaseRecordingStorage,
@@ -79,6 +81,11 @@ export function createAttemptsRouter(deps?: Partial<AttemptsDeps>, db: typeof pr
     res.json(await service.putWritingText(uid(req), id, taskKey, parse(putWritingSchema, req.body)));
   }));
 
+  router.get('/skill-attempts/:id/writing', asyncHandler(async (req, res) => {
+    const { id } = parse(idParamSchema, req.params, 'ATTEMPT_NOT_FOUND');
+    res.json(await service.getSavedWriting(uid(req), id));
+  }));
+
   router.get('/skill-attempts/:id/writing/:taskKey', asyncHandler(async (req, res) => {
     const { id, taskKey } = parse(writingTaskParamSchema, req.params, 'TASK_NOT_FOUND');
     res.json(await service.getWritingText(uid(req), id, taskKey));
@@ -95,11 +102,16 @@ export function createAttemptsRouter(deps?: Partial<AttemptsDeps>, db: typeof pr
     res.status(204).end();
   }));
 
-  // Ranh giới: lượt chấm W/S, phân công và điểm do thành viên khác làm. Hoàn thành bài KHÔNG tự gửi chấm (BR-CONTENT-001).
+  router.get('/skill-attempts/:id/grading-request', asyncHandler(async (req, res) => {
+    const { id } = parse(idParamSchema, req.params, 'ATTEMPT_NOT_FOUND');
+    res.json({ request: await grading.requestStatus(uid(req), id) });
+  }));
+
   router.post('/skill-attempts/:id/grading-request', asyncHandler(async (req, res) => {
     const { id } = parse(idParamSchema, req.params, 'ATTEMPT_NOT_FOUND');
-    await service.requestGrading(uid(req), id);
-    res.status(501).end();
+    const { retryOf } = parse(z.object({ retryOf: z.string().uuid().optional() }).strict(), req.body ?? {});
+    const result = await grading.submit(uid(req), id, retryOf);
+    res.status(result.created ? 201 : 200).json(result.request);
   }));
 
   return router;

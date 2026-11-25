@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { prisma } from '../../lib/prisma.js';
 import { invalidateUserCache } from '../../middleware/auth.js';
 import { writeAudit } from '../../shared/audit.js';
+import { lockAccountWrites } from '../../shared/account-write-lock.js';
 import { HttpError } from '../../utils/http.js';
 import { accountAuditActions } from './account-history.js';
 import { finishAccountDeletion } from './account-deletion.js';
@@ -58,7 +59,7 @@ export async function updateAccount(actorId: string, targetId: string, action: A
 
   const result = await prisma.$transaction(async tx => {
     // Every administration write takes this lock before checking the actor or counting active admins.
-    await tx.$queryRaw`SELECT 1 FROM pg_advisory_xact_lock(hashtextextended('ieltspace:admin-accounts', 0))`;
+    await lockAccountWrites(tx);
     const profiles = await tx.$queryRaw<Profile[]>`
       SELECT id, auth_user_id, role, status FROM public.users WHERE id IN (${actorId}::uuid, ${targetId}::uuid)
       ORDER BY id FOR UPDATE

@@ -95,7 +95,9 @@ export async function finishAttempt(deps: FinishDeps): Promise<FinishOutcome> {
       status: "completed",
       serverId,
       expiredIds: summary.expiredIds ?? [],
-      ...result,
+      completedAt: result.completedAt,
+      contentExpiresAt: result.contentExpiresAt,
+      durationSeconds: result.durationSeconds,
     };
   } catch (e) {
     return {

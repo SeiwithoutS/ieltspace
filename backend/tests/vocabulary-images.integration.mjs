@@ -4,6 +4,7 @@ import { once } from 'node:events';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
+import { setTimeout as delay } from 'node:timers/promises';
 import { pathToFileURL } from 'node:url';
 import { exportJWK, generateKeyPair, SignJWT } from 'jose';
 
@@ -22,6 +23,7 @@ test('Vocabulary assets persist independently of published revisions', { skip: !
   const { Prisma } = await import('@prisma/client');
   const { app } = await import('../dist/app.js');
   const { prisma } = await import('../dist/lib/prisma.js');
+  const { startVocabularyImageCleanupWorker } = await import('../dist/jobs/vocabulary-image-cleanup.js');
   const db = new PGlite();
   await db.exec('CREATE ROLE anon; CREATE ROLE authenticated; CREATE SCHEMA auth; CREATE TABLE auth.users(id uuid PRIMARY KEY);');
   for (const name of ['01_tao_cau_truc_moi', '09_bo_sung_tu_vung_tren_01_cu', '22_vocabulary_image_assets']) {
@@ -58,12 +60,14 @@ test('Vocabulary assets persist independently of published revisions', { skip: !
 
   const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jf2kAAAAASUVORK5CYII=', 'base64');
   const objects = new Map();
+  const removalAttempts = [];
   let rejectR2 = false;
   const http = globalThis.fetch;
   t.mock.method(globalThis, 'fetch', async (input, options) => {
     const url = new URL(input instanceof Request ? input.url : input);
     if (url.origin === r2Origin) {
       assert.ok(input.headers.get('authorization')?.startsWith('AWS4-HMAC-SHA256 '));
+      if (input.method === 'DELETE') removalAttempts.push(url.pathname);
       if (rejectR2) return new Response(null, { status: 503 });
       if (input.method === 'PUT') {
         objects.set(url.pathname, Buffer.from(await input.arrayBuffer()));
@@ -152,6 +156,56 @@ test('Vocabulary assets persist independently of published revisions', { skip: !
   assert.equal((await publication('hide', 5)).status, 200);
   assert.equal((await readImage(pix.image)).status, 404);
   assert.deepEqual((await request(media + '/cleanup', admin, 'POST')).result, { removed: 0, pending: 0 });
+
+  await t.test('Scheduled cleanup retries old orphans and preserves recent uploads and all saved revisions', async () => {
+    const liveCover = (await upload()).result.image;
+    const draftCover = (await upload()).result.image;
+    const title = 'Visible fixture';
+    const visible = (await request(sets, admin, 'POST', { title, cover: liveCover })).result.set;
+    const visiblePath = `${sets}/${visible.id}`;
+    const visibleWord = { ...word, id: randomUUID(), image: liveCover };
+    assert.equal((await request(`${visiblePath}/draft`, admin, 'PUT', { words: [visibleWord], revision: 0 })).status, 200);
+    assert.equal((await request(`${visiblePath}/publication`, admin, 'POST', { action: 'publish', revision: 1 })).status, 200);
+    assert.equal((await request(visiblePath, admin, 'PATCH', { title, cover: draftCover, revision: 2 })).status, 200);
+
+    const oldId = (await upload()).result.image.split(':')[1];
+    const recentId = (await upload()).result.image.split(':')[1];
+    const oldKey = [...objects.keys()].find(key => key.includes(oldId));
+    const recentKey = [...objects.keys()].find(key => key.includes(recentId));
+    assert.ok(oldKey && recentKey);
+    const state = async () => (await db.query('SELECT state FROM public.vocabulary_image_assets WHERE id=$1', [oldId])).rows[0]?.state;
+    await db.query("UPDATE public.vocabulary_image_assets SET created_at=now()-interval '2 days' WHERE id<>$1", [recentId]);
+
+    async function waitFor(check) {
+      const deadline = Date.now() + 4000;
+      while (!(await check())) {
+        assert.ok(Date.now() < deadline, 'Scheduled cleanup did not reach the expected state');
+        await delay(10);
+      }
+    }
+
+    const previouslyAttempted = removalAttempts.length;
+    rejectR2 = true;
+    const stop = startVocabularyImageCleanupWorker(40);
+    try {
+      await waitFor(() => removalAttempts.includes(oldKey));
+      assert.equal(await state(), 'DELETING');
+      assert.equal(objects.has(oldKey), true);
+      rejectR2 = false;
+      await waitFor(async () => (await state()) === undefined);
+      assert.equal(objects.has(oldKey), false);
+      assert.equal(objects.has(recentKey), true);
+      assert.equal(objects.size, 5);
+      assert.equal((await readImage(liveCover)).status, 302);
+      const draftPreview = media + '/preview?image=' + encodeURIComponent(draftCover);
+      assert.equal((await request(draftPreview, admin)).status, 200);
+      const attempts = removalAttempts.slice(previouslyAttempted);
+      assert.ok(attempts.length >= 2 && attempts.every(key => key === oldKey));
+    } finally {
+      rejectR2 = false;
+      await stop();
+    }
+  });
   assert.equal((await publication('show', 6)).status, 200);
   assert.equal((await readImage(pix.image)).status, 302);
 });

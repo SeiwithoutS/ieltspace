@@ -146,12 +146,23 @@ export default function AttemptDoneSummary(props: AttemptDoneSummaryProps) {
         >
           {uploadText}
         </span>
-        {upload.state === "incomplete" && (
-          <button type="button" className={secondary} onClick={props.onRetryUpload}>
-            {"Thử lại"}
+        {(upload.state === "incomplete" || upload.state === "uploading" || upload.state === "unknown") && (
+          <button type="button" className={primary} onClick={props.onRetryUpload}>
+            {"Lưu bài làm"}
           </button>
         )}
       </div>
+      {upload.state === "done" && (
+        <div
+          role="status"
+          className="[padding:10px_14px] rounded-xl [background:var(--attempt-bg-dcede2)] [color:var(--attempt-text-2e6a48)] [font-size:14px] font-semibold"
+        >
+          {expiry ? "Bài làm đã được lưu đến " + expiry + "." : "Bài làm đã được lưu."}
+        </div>
+      )}
+      {upload.state !== "done" && upload.state !== "local" && (
+        <p>{"Bài làm chưa được lưu xong. Bấm “Lưu bài làm” để tải lên và lưu ngay."}</p>
+      )}
       {upload.state === "incomplete" && (
         <p>
           {"Bản ghi của bạn vẫn được giữ trên máy này. Hãy giữ nguyên trang hoặc quay lại sau khi có mạng, hệ thống sẽ tải lên và chốt bài tiếp."}
@@ -169,8 +180,8 @@ export default function AttemptDoneSummary(props: AttemptDoneSummaryProps) {
       {upload.state !== "local" && (
       <p>
         {expiry
-          ? "Bản ghi được lưu đến " + expiry + " (14 ngày kể từ lúc hoàn thành)."
-          : "Bản ghi được lưu 14 ngày kể từ lúc hoàn thành. Hạn lưu sẽ hiện ở đây khi bài được chốt."}
+          ? "Bản ghi được giữ đến " + expiry + " (14 ngày kể từ lúc hoàn thành)."
+          : "Bản ghi được giữ 14 ngày kể từ lúc hoàn thành. Hạn lưu sẽ hiện ở đây khi bài được chốt."}
       </p>
       )}
       {props.recordings.length > 0 && (

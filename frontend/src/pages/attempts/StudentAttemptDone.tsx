@@ -6,7 +6,7 @@ import AttemptDoneSummary, {
 } from "../../components/attempts/AttemptDoneSummary";
 import DesktopOnly from "../../components/attempts/DesktopOnly";
 import { getAttemptSync } from "../../lib/attempts/attempt-sync";
-import { draftKey, loadDraft } from "../../lib/attempts/attempt-storage";
+import { clearAttemptDraft, draftKey, loadDraft } from "../../lib/attempts/attempt-storage";
 import {
   createDurableRecordingStore,
   purgeRecordings,
@@ -93,6 +93,11 @@ function Body() {
     [clientId, finished, store, draft, userId, examId, progress?.serverAttemptId],
   );
 
+  // Lượt đã chốt trên máy chủ (URL có mã lượt): dọn draft còn sót của đề này.
+  useEffect(() => {
+    if (serverParam || sample) clearAttemptDraft(userId, "SpeakingTest", examId);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     alive.current = true;
     return () => {
@@ -132,6 +137,12 @@ function Body() {
       running = true;
       try {
         const outcome = await sync.finish(finished.elapsedSeconds, finished.reason, 20_000);
+        // Máy chủ đã chốt thì dọn máy dù người học vừa rời trang (không để draft `finished` nằm lại).
+        if (outcome.status === "completed") {
+          clearAttemptDraft(userId, "SpeakingTest", examId);
+          await purgeRecordings(recordingPrefix(userId, examId));
+          clearAttemptDraft(userId, "SpeakingTest", examId);
+        }
         if (stopped) return;
         if (outcome.status === "incomplete" && outcome.permanent) {
           // Máy chủ từ chối cố định: dừng thử lại để khỏi lặp mãi.
@@ -142,13 +153,6 @@ function Body() {
         }
         if (outcome.status === "completed") {
           setExpiredIds(outcome.expiredIds);
-          // Chỉ đến đây mới dọn dữ liệu trên máy.
-          try {
-            localStorage.removeItem(draftKey(userId, "SpeakingTest", examId));
-          } catch {
-            // Draft còn lại tự hết hạn sau 24 giờ.
-          }
-          await purgeRecordings(recordingPrefix(userId, examId));
           sync.dispose();
           setResult({
             durationSeconds: outcome.durationSeconds,

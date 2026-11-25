@@ -246,3 +246,34 @@ test("listInProgressInfo flags a Speaking draft whose time ran out while away", 
   assert.equal(info.get(inProgressId("WritingTest", "late")).timedOut, false);
   assert.equal(speakingTimedOut({ options: { mode: "real", parts: [0] }, seconds: 0, startedAtEpoch: 1 }, NOW), false);
 });
+
+test("clearAttemptDraft removes every draft of the attempt, including finished ones, and is idempotent", async () => {
+  const { clearAttemptDraft, listInProgressInfo } = await import(
+    "../src/lib/attempts/attempt-storage.ts"
+  );
+  const stores = setup();
+  const key = draftKey("u1", "SpeakingTest", "e1");
+  stores.local.setItem(key, draft(NOW - 1000));
+  stores.session.setItem(key, draft(NOW - 1000));
+  assert.equal(listInProgressInfo("u1", NOW, stores).size, 1);
+  clearAttemptDraft("u1", "SpeakingTest", "e1", stores);
+  clearAttemptDraft("u1", "SpeakingTest", "e1", stores);
+  assert.equal(stores.local.getItem(key), null);
+  assert.equal(stores.session.getItem(key), null);
+  assert.equal(listInProgressInfo("u1", NOW, stores).size, 0);
+});
+
+test("listInProgressInfo skips drafts already finished (waiting for confirmation)", async () => {
+  const { listInProgressInfo } = await import("../src/lib/attempts/attempt-storage.ts");
+  const stores = setup();
+  stores.local.setItem(
+    draftKey("u1", "SpeakingTest", "e1"),
+    JSON.stringify({
+      options: { mode: "real", parts: [0] },
+      seconds: 5,
+      savedAt: NOW - 1000,
+      finished: { elapsedSeconds: 60, reason: "SUBMITTED", answered: 3, finishedAt: NOW - 500 },
+    }),
+  );
+  assert.equal(listInProgressInfo("u1", NOW, stores).size, 0);
+});

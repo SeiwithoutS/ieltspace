@@ -86,7 +86,14 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
       });
   }
 
+  // Đọc lại bài làm dở khi quay lại tab/trang hoặc draft đổi ở tab khác, không giữ trạng thái cũ.
+  refreshProgress = () => this.forceUpdate();
+
   componentDidMount() {
+    window.addEventListener("focus", this.refreshProgress);
+    window.addEventListener("pageshow", this.refreshProgress);
+    window.addEventListener("storage", this.refreshProgress);
+    document.addEventListener("visibilitychange", this.refreshProgress);
     var hash = window.location.hash || "";
     var query = hash.includes("?")
       ? hash.slice(hash.indexOf("?") + 1)
@@ -98,6 +105,10 @@ class ExamDetail extends React.Component<Record<string, unknown>, State> {
     }
   }
   componentWillUnmount() {
+    window.removeEventListener("focus", this.refreshProgress);
+    window.removeEventListener("pageshow", this.refreshProgress);
+    window.removeEventListener("storage", this.refreshProgress);
+    document.removeEventListener("visibilitychange", this.refreshProgress);
     clearTimeout(this._t);
   }
   renderVals() {

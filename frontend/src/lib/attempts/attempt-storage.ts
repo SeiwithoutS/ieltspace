@@ -200,7 +200,8 @@ export function listInProgressInfo(
     for (const item of draftKeys(stores.local)) {
       if (item.userId !== userId || !item.examId) continue;
       const draft = parseAttemptDraft(stores.local?.getItem(item.key) ?? null);
-      if (draft && isFresh(draft, now))
+      // Draft đã Hoàn thành/Lưu (chờ chốt ở trang xác nhận) không phải bài làm dở để tiếp tục.
+      if (draft && !draft.finished && isFresh(draft, now))
         found.set(inProgressId(item.page, item.examId), {
           timedOut: item.page === SPEAKING_PAGE && speakingTimedOut(draft, now),
         });
@@ -218,6 +219,26 @@ export function listInProgress(
   stores: DraftStores = defaultStores(),
 ): Set<string> {
   return new Set(listInProgressInfo(userId, now, stores).keys());
+}
+
+/**
+ * Xóa mọi draft (localStorage và sessionStorage cũ, kể cả bản `finished`) của một lượt
+ * theo người dùng + trang + đề. Idempotent; không đụng bản ghi âm.
+ */
+export function clearAttemptDraft(
+  userId: string | null | undefined,
+  page: string,
+  examId: string | null | undefined,
+  stores: DraftStores = defaultStores(),
+): void {
+  const key = draftKey(userId, page, examId);
+  for (const storage of [stores.local, stores.session]) {
+    try {
+      storage?.removeItem(key);
+    } catch {
+      // Lưu trữ không dùng được: không có draft để xóa.
+    }
+  }
 }
 
 /** Đăng xuất: xóa draft mọi kỹ năng và bản ghi âm của người dùng khỏi máy này. */

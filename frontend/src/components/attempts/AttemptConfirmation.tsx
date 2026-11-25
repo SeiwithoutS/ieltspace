@@ -103,11 +103,13 @@ export default function AttemptConfirmation({
   jump,
 }: ConfirmationProps) {
   const [askDiscard, setAskDiscard] = useState(false);
+  const written = ["Writing", "Speaking"].includes(skill);
+  // Hết giờ và Hoàn thành bài W/S cùng hỏi "lưu bài làm không?" (Lưu / Không lưu).
+  const askSave = baseKind === "expired" || (baseKind === "submit" && written);
   const kind: ConfirmationKind =
-    baseKind === "expired" && askDiscard ? "discardConfirm" : baseKind;
+    askSave && askDiscard ? "discardConfirm" : baseKind;
   const saveExit = kind === "exit" || kind === "offline";
   const loseRecordings = kind === "exit" && skill === "Speaking" && memoryOnly;
-  const written = ["Writing", "Speaking"].includes(skill);
   const objective = kind === "submit" && !written;
   const scope = skill === "Reading" ? "Passage 1" : "Section 1";
   const rows = [...(model?.formRows || []), ...(model?.questions || [])];
@@ -123,7 +125,7 @@ export default function AttemptConfirmation({
     offline: "Đang mất kết nối",
     saveError: "Chưa lưu được bản nháp",
     submit: written
-      ? "Hoàn thành bài " + skill + "?"
+      ? "Lưu bài làm?"
       : real
         ? "Nộp bài " + skill + "?"
         : "Nộp phần đã chọn: " + scope,
@@ -146,7 +148,7 @@ export default function AttemptConfirmation({
     offline: "Bạn có thể lưu bài trên máy này và tiếp tục sau trên máy này trong 24 giờ.",
     saveError: "Trình duyệt chưa lưu được bản nháp. Hãy quay lại bài làm.",
     submit: written
-      ? "Hoàn thành không tự gửi chấm và không dùng lượt hỗ trợ."
+      ? "Bạn có muốn lưu bài làm không? Lưu bài không tự gửi chấm và không dùng lượt hỗ trợ."
       : `Bạn đã trả lời ${rows.length - missing.length} trên ${rows.length} câu. Bấm số câu để quay lại làm tiếp.`,
   };
   return (
@@ -209,7 +211,7 @@ export default function AttemptConfirmation({
         </>
       )}
       <div className="flex flex-wrap justify-end gap-3">
-        {kind === "expired" && (
+        {(kind === "expired" || (kind === "submit" && written)) && (
           <button
             className="danger"
             disabled={busy}
@@ -230,7 +232,7 @@ export default function AttemptConfirmation({
           <button onClick={back} disabled={busy}>
             {saveExit
               ? "Ở lại"
-              : written
+              : written && kind !== "submit"
                 ? "Quay lại bài làm"
                 : "Quay lại làm tiếp"}
           </button>
@@ -250,7 +252,7 @@ export default function AttemptConfirmation({
                   ? "Lưu"
                   : "Nộp bài"
                 : written
-                  ? "Hoàn thành"
+                  ? "Lưu bài làm"
                   : real
                     ? "Nộp bài"
                     : "Nộp phần đã chọn"}

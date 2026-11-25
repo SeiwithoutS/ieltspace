@@ -28,6 +28,7 @@ import {
   recordingPrefix,
 } from "../../lib/attempts/recordings";
 import {
+  clearAttemptDraft,
   draftKey,
   loadDraft,
   speakingBegan,
@@ -177,9 +178,16 @@ export default function AttemptSession({
   }
   /** Xóa draft và bản ghi âm đã lưu trên máy của đề này (hoàn thành, hủy, hết hạn). */
   async function clearStored() {
+    // Từ đây mọi đường ghi draft (autosave, pagehide, unmount) bị chặn.
+    ended.current = true;
+    window.clearTimeout(writeTimer.current);
+    clearAttemptDraft(userId, page, examId);
     storage.removeItem(key);
     if (skill === "Speaking")
       await purgeRecordings(recordingPrefix(userId, examId));
+    // Dọn lại lần cuối, phòng có bản ghi chen vào trong lúc chờ dọn bản ghi âm.
+    clearAttemptDraft(userId, page, examId);
+    storage.removeItem(key);
   }
   // Sau khi hoàn thành/hủy/lưu thoát: không ghi lại draft nữa (kể cả khi trang còn phát snapshot muộn).
   const ended = useRef(redirectDone);
@@ -196,8 +204,10 @@ export default function AttemptSession({
   );
   const writeTimer = useRef<number | undefined>(undefined);
   /** Ghi draft ngay bây giờ; ném lỗi nếu trình duyệt không lưu được. */
-  function writeDraft() {
+  function writeDraft(force = false) {
     if (!options) return;
+    // Đã chốt/hủy: không ghi lại draft (chỉ lần ghi bản `finished` chủ động mới được vượt).
+    if (ended.current && !force) return;
     // Phiên đã đổi/đang đăng xuất: không ghi bài của người dùng cũ xuống máy.
     if (loggedOut.current || isSigningOut() || getAuthUser()?.id !== userId)
       throw new Error("Phiên đăng nhập đã thay đổi");
@@ -220,8 +230,8 @@ export default function AttemptSession({
     );
     lastWrite.current = now;
   }
-  const writeRef = useRef(writeDraft);
-  writeRef.current = writeDraft;
+  const writeRef = useRef<() => void>(() => writeDraft());
+  writeRef.current = () => writeDraft();
   /**
    * Speaking tự lưu draft mỗi khi vị trí/bản ghi đổi và khi rời trang, để F5,
    * đóng tab hay trình duyệt sập đều vào lại được (Thi thật không lách được bằng F5).
@@ -333,7 +343,7 @@ export default function AttemptSession({
           ...(outcome.serverId ? { serverAttemptId: outcome.serverId } : {}),
         };
         try {
-          writeDraft();
+          writeDraft(true);
         } catch {
           // Không ghi được draft: bản ghi vẫn còn trong IndexedDB/bộ nhớ của phiên này.
         }
@@ -379,7 +389,7 @@ export default function AttemptSession({
       } catch {
         // Lưu bản ghi lỗi: draft vẫn ghi; câu thiếu bản ghi sẽ được làm lại khi vào lại.
       }
-      writeDraft();
+      writeDraft(true);
       ended.current = true;
       window.clearTimeout(writeTimer.current);
       exit();

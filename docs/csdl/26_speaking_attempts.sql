@@ -1,4 +1,4 @@
--- 26: Lượt làm Speaking (idempotent, chạy lại an toàn). CHƯA áp dụng lên database nào; cần người duyệt.
+-- 26: Lượt làm Speaking (idempotent, chạy lại an toàn). Đã áp lên database Supabase dùng chung (ap-northeast-2) ngày 2026-11-25 trong một transaction, lúc đó attempts, skill_attempts, submission_contents đều rỗng.
 -- Làm gì: thêm client_attempt_id (idempotent theo người dùng), mode/time_limit_minutes cho lượt làm,
 -- cho deadline_at nhận NULL (Practice không giới hạn), và khóa theo câu hỏi cho bản ghi âm ở submission_contents.
 -- Cần có sẵn: các bảng users, exams, exam_skills, exam_sections, attempts, skill_attempts, submission_contents

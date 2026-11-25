@@ -2,7 +2,7 @@
 
 ## Phạm vi và trạng thái
 
-Backend cho trang làm bài Speaking theo [intent](../intent/speaking-test.md) và [spec mục 5](../intent/speaking-test-spec.md). Đã viết mã, build và kiểm thử bằng DB/storage giả. **Chưa áp migration, chưa chạy với Postgres và Supabase Storage thật.** Frontend làm song song theo hợp đồng ở [API.md](../API.md).
+Backend cho trang làm bài Speaking theo [intent](../intent/speaking-test.md) và [spec mục 5](../intent/speaking-test-spec.md). Đã viết mã, build và kiểm thử bằng DB/storage giả. **Migration 26 đã áp lên database dùng chung ngày 2026-11-25 (các bảng liên quan rỗng, kiểm lại cột, index, ràng buộc đều đúng). Chưa kiểm thử đầu cuối với Supabase Storage thật; bucket `speaking-recordings` đã được tạo.** Frontend làm song song theo hợp đồng ở [API.md](../API.md).
 
 ## Công việc đã thực hiện
 
@@ -28,7 +28,7 @@ SQL trong `attempts.repository.ts` chưa chạy trên Postgres thật.
 
 ## Phần còn mở
 
-- Người duyệt áp [migration 26](../csdl/26_speaking_attempts.sql) lên bản sao thử trước, rồi môi trường chính. Việc đổi unique của `submission_contents` và `deadline_at` NULL cần được xem xét.
+- Migration 26 đã áp (xem trên). Còn lại: Việc đổi unique của `submission_contents` và `deadline_at` NULL cần được xem xét.
 - Tạo bucket riêng tư `speaking-recordings` (hoặc tên khác qua env); thử luồng đầy đủ PUT file, confirm, tải về với dịch vụ thật. URL tải lên do Supabase ký sống 2 giờ, không rút ngắn được.
 - Lịch chạy job dọn dẹp chưa gắn: chưa có cron nào gọi `npm run attempts:cleanup -- --apply`, nên file chỉ bị xóa khi người triển khai đặt lịch. Lượt IN_PROGRESS không bao giờ hoàn thành (mồ côi) cũng chỉ được dọn bởi job này sau 48 giờ; tới lúc đó file còn nằm trên storage.
 - Dọn dẹp hai bước: đổi trạng thái DB có điều kiện trước (hàng `submission_contents` thành `DELETED`, giữ `audio_path`), xóa file sau, rồi mới đặt `audio_path` NULL; lỗi xóa file được thử lại ở lần chạy sau (`retried`).

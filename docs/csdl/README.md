@@ -20,7 +20,7 @@ Chạy [24_staff_accounts_and_authenticator.sql](24_staff_accounts_and_authentic
 
 Sau khi triển khai, Quản lý mở **Hồ sơ cá nhân → Google Authenticator**, quét QR và xác nhận mã 6 số. Quản lý tạo nhân sự trong trang **Người dùng** và chuyển thông tin đăng nhập qua kênh riêng. Nếu một email còn hồ sơ `INVITED` cũ, xử lý hồ sơ đó trong trang **Người dùng** trước khi tạo tài khoản bằng cùng email.
 
-Chạy [26_speaking_attempts.sql](26_speaking_attempts.sql) trước khi bật API lượt làm Speaking (`/learner/skill-attempts`). Tệp thêm `client_attempt_id`, `mode`, `time_limit_minutes`, cho `deadline_at` nhận NULL và khóa theo câu hỏi cho bản ghi âm ở `submission_contents`. Chưa áp dụng lên database nào, cần duyệt.
+Chạy [26_speaking_attempts.sql](26_speaking_attempts.sql) trước khi bật API lượt làm Speaking (`/learner/skill-attempts`). Tệp thêm `client_attempt_id`, `mode`, `time_limit_minutes`, cho `deadline_at` nhận NULL và khóa theo câu hỏi cho bản ghi âm ở `submission_contents`. Đã áp lên database Supabase dùng chung ngày 2026-11-25 (các bảng liên quan lúc đó rỗng). Database khác thì chạy lại, tệp idempotent.
 
 Tiền đề của 26: đã có các bảng `attempts`, `skill_attempts`, `submission_contents` (từ 01 hoặc 01 mới; database cũ chạy 04, 05). Tệp 26 không tự tạo các bảng này và dừng bằng lỗi nếu thiếu hoặc nếu `recording_status` có giá trị ngoài `PENDING`, `UPLOADED`, `DELETED`. Kiểm tra trước khi áp:
 

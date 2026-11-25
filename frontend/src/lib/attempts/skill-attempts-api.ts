@@ -91,6 +91,20 @@ export function createSkillAttempt(input: {
 export function getSkillAttempt(id: string) {
   return apiFetch<SkillAttemptDetail>(root(id));
 }
+/** Như getSkillAttempt, kèm mốc gửi/nhận và header Date để ước lượng lệch đồng hồ (xem server-clock.ts). */
+export async function getSkillAttemptTimed(id: string) {
+  let timing: { date: string | null; sentAt: number; receivedAt: number } = {
+    date: null,
+    sentAt: 0,
+    receivedAt: 0,
+  };
+  const detail = await apiFetch<SkillAttemptDetail>(root(id), {
+    onResponse: (info) => {
+      timing = info;
+    },
+  });
+  return { detail, timing };
+}
 export function completeSkillAttempt(
   id: string,
   input: { elapsedSeconds: number; reason: CompleteReason },

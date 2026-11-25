@@ -10,6 +10,16 @@ import {
   navigate,
   onLogoutElsewhere,
 } from "../../lib/auth/auth";
+import {
+  errorStatus,
+  getSkillAttemptTimed,
+  type SkillAttemptDetail,
+} from "../../lib/attempts/skill-attempts-api";
+import {
+  estimateOffsetMs,
+  resolveClock,
+  type ServerAttemptTime,
+} from "../../lib/attempts/server-clock";
 import "./attempt.css";
 
 export { default as Popup } from "./Popup";
@@ -105,6 +115,20 @@ export default function AttemptSession({
       ? speakingEpoch(draft)
       : undefined,
   );
+  // Vào lại bài Speaking đã có lượt trên máy chủ: gốc thời gian là startedAt/deadlineAt của máy chủ
+  // (nháp sửa được nên chỉ là dự phòng), xem server-clock.ts.
+  const serverAttemptId =
+    skill === "Speaking" && draft && !draft.finished && initialEpoch !== undefined
+      ? draft.state?.speaking?.serverAttemptId
+      : undefined;
+  const [clock, setClock] = useState<
+    "none" | "checking" | "server" | "draft" | "completed" | "gone"
+  >(serverAttemptId ? "checking" : "none");
+  const clockRef = useRef(clock);
+  clockRef.current = clock;
+  // Mốc đang dùng cho đồng hồ (đổi khi áp mốc máy chủ) và giới hạn do máy chủ quy định (giây).
+  const [epoch, setEpoch] = useState(initialEpoch);
+  const [serverLimit, setServerLimit] = useState<number | null>(null);
   const startEpoch = useRef<number | undefined>(initialEpoch);
   const [initialElapsed] = useState(() => {
     if (!draft) return 0;
@@ -119,7 +143,9 @@ export default function AttemptSession({
   const [dialog, setDialog] = useState<ConfirmationKind | "start" | "">(() =>
     !draft
       ? "start"
-      : skill === "Speaking" &&
+      : // Đang chờ máy chủ: chưa kết luận hết giờ, sẽ quyết định khi có gốc thời gian.
+        !serverAttemptId &&
+          skill === "Speaking" &&
           (options?.limitMinutes ?? 0) > 0 &&
           initialElapsed >= (options?.limitMinutes ?? 0) * 60
         ? "expired"
@@ -134,16 +160,19 @@ export default function AttemptSession({
     if (redirectDone) navigate(doneUrl(examId, {}));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const real = options?.mode === "real";
-  const limitMinutes = options?.limitMinutes ?? 0;
+  // Giới hạn do máy chủ quy định (từ deadlineAt) thắng mức đã chọn trong nháp.
+  const limitSeconds = serverLimit ?? (options?.limitMinutes ?? 0) * 60;
+  const limitMinutes = Math.ceil(limitSeconds / 60);
   // Speaking kiểm tra micro trước; đồng hồ chỉ chạy khi trang gọi onBegin.
   // Vào lại bài Speaking đã bắt đầu thì đồng hồ chạy ngay (kể cả lúc kiểm tra lại micro).
   const [begun, setBegun] = useState(
     skill !== "Speaking" || (!!draft && speakingBegan(draft)),
   );
   const timer = useAttemptTimer({
-    active: !!options && begun,
-    limitSeconds: limitMinutes * 60,
+    active: !!options && begun && (clock === "none" || clock === "server" || clock === "draft"),
+    limitSeconds,
     initialElapsed,
+    epoch,
     onExpire: () => setDialog("expired"),
   });
   const elapsedRef = useRef(timer.elapsedSeconds);
@@ -279,6 +308,104 @@ export default function AttemptSession({
       window.clearTimeout(writeTimer.current);
     };
   }, [skill, options]);
+  // Vào lại bài Speaking đã có lượt trên máy chủ: hỏi máy chủ để lấy gốc thời gian.
+  // Chưa hỏi được (mất mạng, lỗi) thì dùng mốc trong nháp, thử lại khi có mạng và áp mốc máy chủ khi hỏi được.
+  useEffect(() => {
+    if (!serverAttemptId) return;
+    let live = true;
+    let inFlight = false;
+    let retry: number | undefined;
+    let giveUp: number | undefined;
+    const draftLimit = (options?.limitMinutes ?? 0) * 60;
+    const expiredAt = (from: number | undefined, limit: number) =>
+      from !== undefined &&
+      limit > 0 &&
+      Math.floor((Date.now() - from) / 1000) >= limit;
+    const stop = () => {
+      window.clearTimeout(giveUp);
+      window.clearInterval(retry);
+      window.removeEventListener("online", check);
+    };
+    function fallback() {
+      if (clockRef.current !== "checking" || retry !== undefined) return;
+      setClock("draft");
+      if (expiredAt(initialEpoch, draftLimit)) setDialog("expired");
+      retry = window.setInterval(() => void check(), 10000);
+      window.addEventListener("online", check);
+    }
+    async function check() {
+      if (inFlight || ended.current || clockRef.current === "server") return;
+      inFlight = true;
+      let server: ServerAttemptTime;
+      let offsetMs = 0;
+      let detail: SkillAttemptDetail | undefined;
+      try {
+        const got = await getSkillAttemptTimed(serverAttemptId as string);
+        detail = got.detail;
+        server = {
+          ok: true,
+          status: got.detail.status,
+          startedAt: got.detail.startedAt,
+          deadlineAt: got.detail.deadlineAt,
+        };
+        offsetMs = estimateOffsetMs({
+          sentAt: got.timing.sentAt,
+          receivedAt: got.timing.receivedAt,
+          dateHeader: got.timing.date,
+        });
+      } catch (e) {
+        server = { ok: false, httpStatus: errorStatus(e) };
+      }
+      inFlight = false;
+      if (!live || ended.current) return;
+      const result = resolveClock({
+        server,
+        draftEpoch: initialEpoch,
+        now: Date.now(),
+        offsetMs,
+      });
+      if (result.kind === "completed") {
+        // Đã chốt ở thiết bị/tab khác: sang trang xác nhận và dọn nháp, bản ghi trên máy.
+        stop();
+        setClock("completed");
+        const uploaded = (detail?.recordings ?? []).filter(
+          (r) => r.status === "UPLOADED",
+        ).length;
+        await clearStored();
+        navigate(
+          doneUrl(examId, {
+            attempt: serverAttemptId as string,
+            elapsed: String(detail?.elapsedSeconds ?? 0),
+            answered: String(uploaded),
+          }),
+        );
+      } else if (result.kind === "gone") {
+        // Lượt đã bị xóa/hủy: nháp này không còn dùng được, mở lại như bài mới.
+        stop();
+        setClock("gone");
+        await clearStored();
+        window.setTimeout(() => location.reload(), 2500);
+      } else if (result.kind === "server") {
+        stop();
+        const first = clockRef.current === "checking";
+        startEpoch.current = result.epoch;
+        setEpoch(result.epoch);
+        if (result.limitSeconds !== null) setServerLimit(result.limitSeconds);
+        setClock("server");
+        // Lần đầu có gốc thời gian: hết giờ thì mở hộp hết giờ ngay, không xin micro.
+        if (first && expiredAt(result.epoch, result.limitSeconds ?? draftLimit))
+          setDialog("expired");
+      } else if (clockRef.current === "checking") {
+        fallback();
+      }
+    }
+    giveUp = window.setTimeout(fallback, 4000);
+    void check();
+    return () => {
+      live = false;
+      stop();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   /** Chờ bản ghi đang lưu dở xong và chặn bản ghi mới, để dọn xong không còn bản ghi mồ côi. */
   async function sealRecordings() {
     try {
@@ -299,7 +426,7 @@ export default function AttemptSession({
       skill === "Speaking" && epoch !== undefined
         ? Math.max(0, Math.floor((Date.now() - epoch) / 1000))
         : timer.elapsedSeconds;
-    if (limitMinutes > 0) elapsedSeconds = Math.min(elapsedSeconds, limitMinutes * 60);
+    if (limitSeconds > 0) elapsedSeconds = Math.min(elapsedSeconds, limitSeconds);
     elapsedSeconds = clampElapsed(elapsedSeconds);
     const result: AttemptResult = {
       elapsedSeconds,
@@ -400,8 +527,31 @@ export default function AttemptSession({
     }
   }
   if (redirectDone) return null;
+  if (clock === "checking" || clock === "completed" || clock === "gone")
+    return (
+      <div
+        role="status"
+        className="attempt-sans [padding:40px_32px] text-center [color:var(--attempt-text-706473)]"
+      >
+        {clock === "gone"
+          ? "Bài làm này không còn trên máy chủ (đã hủy hoặc bị xóa). Đang mở lại như bài mới…"
+          : clock === "completed"
+            ? "Bài làm này đã được hoàn thành ở nơi khác. Đang chuyển sang trang xác nhận…"
+            : "Đang đối chiếu giờ làm bài với máy chủ…"}
+      </div>
+    );
   return (
     <>
+      {clock === "draft" && (
+        <div
+          role="status"
+          className="fixed z-50 [bottom:12px] [left:50%] [transform:translateX(-50%)] [max-width:560px] [padding:10px_14px] rounded-xl [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-c0412a)] [font-size:13px]"
+        >
+          {
+            "Chưa đối chiếu được giờ làm bài với máy chủ nên đồng hồ đang tính theo dữ liệu trên máy này. Khi có kết nối, giờ sẽ được cập nhật theo máy chủ và có thể thay đổi vài giây."
+          }
+        </div>
+      )}
       {options && (
         <Screen
           onSnapshot={(value) => {

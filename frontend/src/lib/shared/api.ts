@@ -36,6 +36,12 @@ export type ApiFetchOptions = {
   json?: unknown;
   body?: BodyInit | null;
   headers?: Record<string, string>;
+  /** Gọi khi phản hồi thành công, kèm header Date (null nếu trình duyệt không cho đọc) và mốc gửi/nhận. */
+  onResponse?: (info: {
+    date: string | null;
+    sentAt: number;
+    receivedAt: number;
+  }) => void;
 };
 
 export async function apiFetch<T = any>(
@@ -70,6 +76,7 @@ export async function apiFetch<T = any>(
   const url = apiUrl(path);
 
   let res: Response;
+  const sentAt = Date.now();
   try {
     res = await fetch(url, {
       method,
@@ -115,6 +122,11 @@ export async function apiFetch<T = any>(
     throw new ApiError(res.status, code, message, details);
   }
 
+  options.onResponse?.({
+    date: res.headers.get('date'),
+    sentAt,
+    receivedAt: Date.now(),
+  });
   return data as T;
 }
 

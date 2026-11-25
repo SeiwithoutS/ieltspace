@@ -17,6 +17,11 @@ interface TimerOptions {
   /** Số giây đã dùng khi bắt đầu hoặc làm tiếp. */
   initialElapsed: number;
   onExpire: () => void;
+  /**
+   * Mốc tuyệt đối (ms, Date.now) bắt đầu tính giờ. Có thì giây đã dùng luôn là
+   * (bây giờ - mốc) và đổi mốc làm đồng hồ nhảy theo (đồng bộ với máy chủ); không có thì đếm từ initialElapsed.
+   */
+  epoch?: number;
 }
 
 /** Đồng hồ làm bài: đếm ngược khi có giới hạn, đếm lên khi không; luôn trả số giây đã dùng. */
@@ -25,6 +30,7 @@ export function useAttemptTimer({
   limitSeconds,
   initialElapsed,
   onExpire,
+  epoch,
 }: TimerOptions) {
   const [elapsed, setElapsed] = useState(initialElapsed);
   const expire = useRef(onExpire);
@@ -35,9 +41,13 @@ export function useAttemptTimer({
     if (!active) return;
     const from = base.current;
     const startedAt = Date.now();
-    setElapsed(from);
+    const used = () =>
+      epoch !== undefined
+        ? Math.max(0, Math.floor((Date.now() - epoch) / 1000))
+        : from + Math.floor((Date.now() - startedAt) / 1000);
+    setElapsed(used());
     const timer = setInterval(() => {
-      const value = from + Math.floor((Date.now() - startedAt) / 1000);
+      const value = used();
       if (limitSeconds > 0 && value >= limitSeconds) {
         clearInterval(timer);
         setElapsed(limitSeconds);
@@ -47,7 +57,7 @@ export function useAttemptTimer({
       setElapsed(value);
     }, 500);
     return () => clearInterval(timer);
-  }, [active, limitSeconds]);
+  }, [active, limitSeconds, epoch]);
   const countdown = limitSeconds > 0;
   const remaining = countdown ? Math.max(0, limitSeconds - elapsed) : 0;
   return {

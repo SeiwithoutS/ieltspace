@@ -50,6 +50,7 @@ export type StudyResult = {
   contentStatus?: 'AVAILABLE' | 'HELD' | 'EXPIRED' | 'DELETED' | null;
   contentExpiresAt?: string | null;
   grading?: {
+    id?: string | null;
     status: 'WAITING_ASSIGNMENT' | 'ASSIGNED' | 'COMPLETED' | 'CANCELLED' | null;
     cancelReason?: string | null;
     assignmentDeadlineAt?: string | null;
@@ -57,6 +58,7 @@ export type StudyResult = {
   published?: boolean;
   recordingCount?: number;
   attemptMode?: 'REAL' | 'PRACTICE' | null;
+  sections?: number[] | null;
 };
 
 export function getStudyDashboard(days: DashboardRange) {
@@ -77,15 +79,14 @@ export function getStudyResults(filters: ResultFilters & { before?: string }) {
   return apiFetch<{ items: StudyResult[]; nextCursor: string | null }>(`/learner/results?${params}`);
 }
 
-export function useStudyResults({ kind, skill, group, limit }: ResultFilters, preview: boolean) {
+export function useStudyResults({ kind, skill, group, limit }: ResultFilters) {
   const [items, setItems] = useState<StudyResult[]>([]);
   const [next, setNext] = useState<string | null>(null);
   const [request, setRequest] = useState<{ before?: string }>({});
-  const [loading, setLoading] = useState(!preview);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (preview) return;
     let active = true;
     setLoading(true);
     setError('');
@@ -96,10 +97,11 @@ export function useStudyResults({ kind, skill, group, limit }: ResultFilters, pr
     }).catch(() => { if (active) setError('Chưa tải được lịch sử kết quả.'); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [request, kind, skill, group, limit, preview]);
+  }, [request, kind, skill, group, limit]);
 
   return { items, loading, error, next,
     retry: () => setRequest(current => ({ ...current })),
+    reload: () => setRequest({}),
     loadMore: () => { if (next && !loading) setRequest({ before: next }); },
   };
 }

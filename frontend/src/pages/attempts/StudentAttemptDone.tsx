@@ -7,23 +7,27 @@ import AttemptDoneSummary, {
 } from "../../components/attempts/AttemptDoneSummary";
 import DesktopOnly from "../../components/attempts/DesktopOnly";
 import WritingTextPopup from "../../components/attempts/WritingTextPopup";
+import { ConfirmDialog, Icon } from '../../components/shared/ui';
 import { getAttemptSync } from "../../lib/attempts/attempt-sync";
 import { clearAttemptDraft, draftKey, loadDraft } from "../../lib/attempts/attempt-storage";
 import {
   createDurableRecordingStore,
   purgeRecordings,
-  recordingPrefix,
   recordingScope,
 } from "../../lib/attempts/recordings";
 import {
-  errorCode,
   errorStatus,
   getRecordingUrl,
   getSkillAttempt,
+  getGradingRequest,
   requestGrading,
   type SkillAttemptDetail,
 } from "../../lib/attempts/skill-attempts-api";
 import { compareRecordingIds, recordingLabel } from "../../lib/attempts/recording-files";
+import { downloadRecordingsZip, recordingErrorMessage } from "../../lib/attempts/recording-download";
+import { downloadWritingDocx, writingContentError } from "../../lib/attempts/writing-download";
+import { wsSectionsLabel } from "../../lib/learner/ws-history";
+import { cancellationText, formatGradingDate, gradingStatusName, useGradingBalance, type GradingRequest } from '../../lib/grading/grading';
 import { getAuthUser, navigate } from "../../lib/auth/auth";
 import { pendingKey, readPendingTexts, toUploadSummary } from "../../lib/attempts/writing-queue";
 import { WRITING_DEFAULT_MIN_WORDS, countWords, taskKeyOf, type WritingTaskKey } from "../../lib/attempts/writing-text";
@@ -58,6 +62,10 @@ function Body() {
     serverParam ?? finished?.serverAttemptId ?? progress?.serverAttemptId,
   );
   const [detail, setDetail] = useState<SkillAttemptDetail | null>(null);
+  const [detailError, setDetailError] = useState("");
+  const [detailRetry, setDetailRetry] = useState(0);
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
   const [result, setResult] = useState<{ durationSeconds: number; contentExpiresAt: string | null } | null>(null);
   const [localIds, setLocalIds] = useState<string[]>([]);
   const [upload, setUpload] = useState<UploadView>({ state: "unknown", done: 0, total: 0 });
@@ -67,9 +75,11 @@ function Body() {
   );
   const [blocked, setBlocked] = useState(false);
   const [grading, setGrading] = useState<GradingView>({ state: "idle" });
+  const [gradingRequest, setGradingRequest] = useState<GradingRequest | null>(null);
+  const [confirmGrading, setConfirmGrading] = useState(false);
+  const balance = useGradingBalance(completed && !sample);
   const retryRef = useRef<() => void>(() => undefined);
   const urls = useRef<string[]>([]);
-  const alive = useRef(true);
 
   const store = useMemo(
     () =>
@@ -87,6 +97,7 @@ function Body() {
             clientAttemptId: clientId,
             mode: draft.options.mode,
             limitMinutes: draft.options.limitMinutes ?? 0,
+            selectedParts: draft.options.parts,
             ...(store ? { store } : {}),
             skill: writingMode ? "WRITING" : "SPEAKING",
             serverId: finished.serverAttemptId ?? progress?.serverAttemptId,
@@ -107,27 +118,45 @@ function Body() {
   });
   const [viewText, setViewText] = useState(false);
 
-  // Lượt đã chốt trên máy chủ (URL có mã lượt): dọn draft còn sót của đề này.
   useEffect(() => {
-    if (serverParam || sample) clearAttemptDraft(userId, pageName, examId);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    alive.current = true;
     return () => {
-      alive.current = false;
       urls.current.forEach((u) => URL.revokeObjectURL(u));
       store?.close?.();
     };
   }, [store]);
 
-  // Đã chốt: lấy chi tiết từ máy chủ. Máy chủ lỗi thì trang vẫn hiện số liệu từ URL.
+  // Xác nhận quyền sở hữu và tình trạng của lượt khi mở lại hoặc F5.
   useEffect(() => {
     if (!completed || !serverId) return;
+    let active = true;
+    setDetailError("");
     getSkillAttempt(serverId)
-      .then((d) => alive.current && setDetail(d))
-      .catch(() => undefined);
-  }, [completed, serverId]);
+      .then((d) => {
+        if (!active) return;
+        if (d.status !== 'COMPLETED' || (d.skill && d.skill !== (writingMode ? 'WRITING' : 'SPEAKING'))) {
+          setDetailError('Không tìm thấy bài đã hoàn thành.');
+          return;
+        }
+        setDetail(d);
+      })
+      .catch((error) => {
+        if (active) setDetailError(errorStatus(error) === 404 || errorStatus(error) === 400
+          ? 'Không tìm thấy bài đã hoàn thành.' : 'Chưa tải được bài đã hoàn thành.');
+      });
+    return () => { active = false; };
+  }, [completed, serverId, detailRetry, writingMode]);
+
+  useEffect(() => {
+    if (!completed || !serverId || sample) return;
+    let active = true;
+    const refresh = () => getGradingRequest(serverId).then(({ request }) => {
+      if (!active) return;
+      setGradingRequest(request);
+    }).catch(() => undefined);
+    void refresh();
+    const interval = window.setInterval(refresh, 30_000);
+    return () => { active = false; window.clearInterval(interval); };
+  }, [completed, serverId, sample]);
 
   // Chưa chốt: dựng hàng đợi từ bản ghi trên máy, tải lên và chốt ở nền.
   useEffect(() => {
@@ -154,9 +183,14 @@ function Body() {
         const outcome = await sync.finish(finished.elapsedSeconds, finished.reason, 20_000);
         // Máy chủ đã chốt thì dọn máy dù người học vừa rời trang (không để draft `finished` nằm lại).
         if (outcome.status === "completed") {
+          if (!stopped) {
+            const params = new URLSearchParams(location.hash.split('?')[1]);
+            params.set('attempt', outcome.serverId);
+            if (outcome.expiredIds.length) params.set('expired', outcome.expiredIds.join(','));
+            history.replaceState(history.state, '', '#StudentAttemptDone?' + params.toString());
+          }
           clearAttemptDraft(userId, pageName, examId);
-          if (!writingMode) await purgeRecordings(recordingPrefix(userId, examId));
-          clearAttemptDraft(userId, pageName, examId);
+          if (!writingMode) await purgeRecordings(recordingScope(userId, examId, sync.clientAttemptId));
         }
         if (stopped) return;
         if (outcome.status === "incomplete" && outcome.permanent) {
@@ -228,6 +262,7 @@ function Body() {
   }, [completed, sync, store, finished, userId, examId, writingMode, localTexts, pageName]);
   const recordings: DoneRecording[] = completed
     ? (detail?.recordings ?? [])
+        .filter((r) => r.status === 'UPLOADED')
         .map((r) => r.questionId)
         .sort(compareRecordingIds)
         .map((id) => ({ id, label: recordingLabel(id) }))
@@ -246,25 +281,40 @@ function Body() {
     if (!serverId || !completed) return null;
     try {
       return (await getRecordingUrl(serverId, id)).url;
-    } catch {
-      return null;
+    } catch (error) {
+      throw new Error(recordingErrorMessage(error));
+    }
+  }
+
+  async function download() {
+    if (!serverId || downloading) return;
+    setDownloadError("");
+    setDownloading(true);
+    try {
+      if (writingMode) await downloadWritingDocx(serverId, 'Bài Writing');
+      else await downloadRecordingsZip(serverId, 'Bài Speaking');
+    } catch (error) {
+      setDownloadError(writingMode ? writingContentError(error) : recordingErrorMessage(error));
+      setDetailRetry(value => value + 1);
+    } finally {
+      setDownloading(false);
     }
   }
 
   async function sendGrading() {
-    if (!serverId) return;
+    if (!serverId || grading.state === 'sending') return;
+    setConfirmGrading(false);
     setGrading({ state: "sending" });
     try {
-      await requestGrading(serverId);
-      setGrading({ state: "sent" });
+      const request = await requestGrading(serverId, gradingRequest?.status === 'CANCELLED' ? gradingRequest.id : undefined);
+      setGradingRequest(request);
+      setGrading({ state: 'idle' });
+      setDetailRetry(value => value + 1);
     } catch (e) {
-      if (errorStatus(e) === 501 || errorCode(e) === "GRADING_NOT_AVAILABLE")
-        setGrading({ state: "unavailable" });
-      else
-        setGrading({
-          state: "error",
-          message: e instanceof Error && e.message ? e.message : undefined,
-        });
+      setGrading({ state: 'error', message: e instanceof Error ? e.message : undefined });
+      setDetailRetry(value => value + 1);
+    } finally {
+      balance.reload();
     }
   }
 
@@ -317,7 +367,7 @@ function Body() {
 
   // Writing: số từ từng Task (từ máy chủ khi đã chốt, từ bản trên máy khi chưa).
   const tasks: DoneTask[] | undefined = writingMode && !(completed && !detail)
-    ? ([1, 2] as const).map((n) => {
+    ? ([1, 2] as const).filter(n => !detail?.sections || detail.sections.includes(n)).map((n) => {
         const key = taskKeyOf(n);
         const server = completed ? detail?.tasks?.find((t) => t.taskKey === key) : undefined;
         return {
@@ -328,11 +378,33 @@ function Body() {
         };
       })
     : undefined;
-  const canViewText = writingMode && !sample && (completed ? !!serverId : Object.keys(localTexts).length > 0);
+  const hasContent = detail && detail.contentStatus !== 'EXPIRED' && detail.contentStatus !== 'DELETED';
+  const canViewText = writingMode && !sample && (completed ? !!hasContent : Object.keys(localTexts).length > 0);
+  const canDownload = completed && hasContent && !!uploadedCount;
+  const pendingRecordings = detail?.recordings.some(row => row.status === 'PENDING');
+  const held = detail?.contentStatus === 'HELD';
+  const canSend = completed && !!hasContent && !!serverId && !sample && !pendingRecordings &&
+    (gradingRequest ? gradingRequest.status === 'CANCELLED' : !held);
+  const gradingHint = gradingRequest ? (gradingRequest.status === 'WAITING_ASSIGNMENT'
+    ? `Chờ phân công đến ${formatGradingDate(gradingRequest.assignmentDeadline)}.`
+    : gradingRequest.status === 'CANCELLED' ? cancellationText(gradingRequest.cancelReason) : gradingStatusName[gradingRequest.status])
+    : held ? 'Bài đã được gửi chấm.' : pendingRecordings ? 'Bản ghi chưa tải lên xong.' : undefined;
+  const credits = balance.credits;
+  const creditHint = balance.error || (credits
+    ? `Còn ${credits.free.count} lượt miễn phí, ${credits.bonus.count} lượt bonus.` +
+      (credits.free.expiresAt ? ` Lượt miễn phí đặt lại lúc ${formatGradingDate(credits.free.expiresAt)}.` : '') +
+      (credits.bonus.expiresAt ? ` Hạn bonus gần nhất là ${formatGradingDate(credits.bonus.expiresAt)}.` : '')
+    : undefined);
 
   return (
     <div className="attempt-sans [color:var(--attempt-text-352637)] [background:var(--attempt-bg-faf9f5)] [font-size:15px] [line-height:1.6] [min-height:100vh] flex items-start justify-center [padding:48px_16px]">
-      {missing ? (
+      {completed && !detail ? (
+        <div role={detailError ? 'alert' : 'status'} className="attempt-card flex flex-col gap-3">
+          <p>{detailError || 'Đang mở bài đã hoàn thành…'}</p>
+          {detailError && <button type="button" className="underline" onClick={() => setDetailRetry(value => value + 1)}>Thử lại</button>}
+          <button type="button" className="underline" onClick={() => navigate('MyWS')}>Về lịch sử luyện tập</button>
+        </div>
+      ) : missing ? (
         <div role="status" className="[padding:40px_32px] text-center [color:var(--attempt-text-706473)]">
           {"Không tìm thấy bài làm cần xác nhận. "}
           <button type="button" className="underline" onClick={() => navigate("StudentHome")}>
@@ -347,14 +419,21 @@ function Body() {
           upload={uploadView}
           onRetryUpload={() => retryRef.current()}
           expiresAt={detail?.contentExpiresAt ?? result?.contentExpiresAt ?? null}
+          contentStatus={detail?.contentStatus}
+          sectionLabel={wsSectionsLabel(writingMode ? 'Writing' : 'Speaking', detail?.sections)}
           recordings={recordings}
           tasks={tasks}
           onViewText={canViewText ? () => setViewText(true) : undefined}
+          onDownload={canDownload ? () => void download() : undefined}
+          downloading={downloading}
           loadAudio={loadAudio}
           grading={grading}
-          onSendGrading={() => void sendGrading()}
-          notices={notices}
-          canGrade={completed && !!serverId && !sample}
+          onSendGrading={() => setConfirmGrading(true)}
+          gradingHint={gradingHint}
+          creditHint={creditHint}
+          gradingLabel={gradingRequest?.status === 'CANCELLED' ? 'Gửi lại yêu cầu chấm' : undefined}
+          notices={downloadError ? [...notices, downloadError] : notices}
+          canGrade={canSend}
           onHome={() => navigate("StudentHome")}
           onHistory={() => navigate("MyWS")}
         />
@@ -366,6 +445,11 @@ function Body() {
           onClose={() => setViewText(false)}
         />
       )}
+      <ConfirmDialog open={confirmGrading} onClose={() => setConfirmGrading(false)} label="Xác nhận gửi yêu cầu chấm"
+        icon={<Icon name="send" size={20} />} title="Gửi yêu cầu chấm" confirmLabel="Gửi yêu cầu"
+        confirmDisabled={!canSend} onConfirm={() => void sendGrading()}>
+        Bài sẽ dùng 1 lượt hỗ trợ chấm còn hiệu lực. Sau khi gửi, hệ thống có 72 giờ để phân công giáo viên.
+      </ConfirmDialog>
     </div>
   );
 }

@@ -128,6 +128,7 @@ class WritingRun extends React.Component<RunProps, AttemptState> {
     clientAttemptId: this.attemptId,
     mode: this.props.cheDo === "practice" ? "practice" : "real",
     limitMinutes: this.props.limitMinutes ?? 0,
+    selectedParts: this.props.selectedParts,
     skill: "WRITING",
     offlineSample: this.props.offlineSample,
     serverId: this.props.initialState?.writing?.serverAttemptId,

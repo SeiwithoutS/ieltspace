@@ -1,4 +1,5 @@
 import { createZip, type ZipEntry } from '../shared/zip';
+import { downloadBlob } from '../shared/download';
 import { errorCode, errorStatus, getRecordingUrl, getSkillAttempt, isNetworkError } from './skill-attempts-api';
 import { compareRecordingIds, recordingFileName, recordingZipName } from './recording-files';
 
@@ -30,6 +31,9 @@ export async function downloadRecordingsZip(
     detail = await getSkillAttempt(attemptId);
   } catch (error) {
     throw new RecordingDownloadError(recordingErrorMessage(error));
+  }
+  if (detail.contentStatus === 'EXPIRED' || detail.contentStatus === 'DELETED') {
+    throw new RecordingDownloadError(EXPIRED_MESSAGE);
   }
   const ids = detail.recordings
     .filter(item => item.status === 'UPLOADED')
@@ -63,16 +67,5 @@ export async function downloadRecordingsZip(
   }
 
   const blob = new Blob([createZip(entries)], { type: 'application/zip' });
-  const href = URL.createObjectURL(blob);
-  try {
-    const link = document.createElement('a');
-    link.href = href;
-    link.download = recordingZipName(title);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  } finally {
-    // Để trình duyệt kịp bắt đầu tải rồi mới thu hồi.
-    window.setTimeout(() => URL.revokeObjectURL(href), 10_000);
-  }
+  downloadBlob(blob, recordingZipName(title));
 }

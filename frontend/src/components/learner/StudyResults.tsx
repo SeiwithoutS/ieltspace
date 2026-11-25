@@ -9,7 +9,7 @@ const scopes: Record<StudyResult['scope'], string> = {
   FULL_EXAM: 'Toàn bài', FULL_SKILL: 'Toàn kỹ năng', SECTION: 'Theo phần', QUESTION_GROUP: 'Theo nhóm câu',
 };
 
-export default function StudyResults({ recent = false, sample }: { recent?: boolean; sample?: readonly StudyResult[] }) {
+export default function StudyResults({ recent = false }: { recent?: boolean }) {
   const [kind, setKind] = useState<ResultKind>('all');
   const [skill, setSkill] = useState<LearnerSkill | ''>('');
 
@@ -43,17 +43,14 @@ export default function StudyResults({ recent = false, sample }: { recent?: bool
         </label>
       </div>
     </div>
-    <ResultList key={`${kind}:${skill}`} kind={kind} skill={skill || undefined} sample={sample} />
+    <ResultList key={`${kind}:${skill}`} kind={kind} skill={skill || undefined} />
   </section>;
 }
 
-function ResultList({ kind, skill, recent = false, sample }: {
-  kind: ResultKind; skill?: LearnerSkill; recent?: boolean; sample?: readonly StudyResult[];
+function ResultList({ kind, skill, recent = false }: {
+  kind: ResultKind; skill?: LearnerSkill; recent?: boolean;
 }) {
-  const result = useStudyResults({ kind, skill, group: recent ? undefined : 'LR', limit: recent ? 4 : 15 }, Boolean(sample));
-  const { next, loading, error, retry, loadMore } = result;
-  const items = sample?.filter(item => (!skill || item.skill === skill) &&
-    (kind === 'all' || (kind === 'band' ? item.band !== null : item.accuracy !== null))) ?? result.items;
+  const { items, next, loading, error, retry, loadMore } = useStudyResults({ kind, skill, group: recent ? undefined : 'LR', limit: recent ? 4 : 15 });
 
   return <div className="learner-study-result-list" aria-busy={loading}>
     {!!items.length && <ul className={recent ? 'learner-study-recent' : undefined}>

@@ -11,7 +11,7 @@ const base = { id: 'a', title: 'T', completedAt: past, skill: 'WRITING', form: n
 
 test('bài chưa gửi chấm', () => {
   const item = shapeResultItem(base, now);
-  assert.deepEqual(item.grading, { status: null, cancelReason: null, assignmentDeadlineAt: null });
+  assert.deepEqual(item.grading, { id: null, status: null, cancelReason: null, assignmentDeadlineAt: null });
   assert.equal(item.contentStatus, 'AVAILABLE');
   assert.equal(item.contentExpiresAt, future.toISOString());
   assert.equal(item.published, false);
@@ -20,7 +20,7 @@ test('bài chưa gửi chấm', () => {
 test('WAITING_ASSIGNMENT và ASSIGNED', () => {
   for (const status of ['WAITING_ASSIGNMENT', 'ASSIGNED']) {
     const item = shapeResultItem({ ...base, gradingStatus: status, gradingDeadlineAt: future, contentStatus: 'HELD' }, now);
-    assert.deepEqual(item.grading, { status, cancelReason: null, assignmentDeadlineAt: future.toISOString() });
+    assert.deepEqual(item.grading, { id: null, status, cancelReason: null, assignmentDeadlineAt: future.toISOString() });
     assert.equal(item.contentStatus, 'HELD');
   }
 });

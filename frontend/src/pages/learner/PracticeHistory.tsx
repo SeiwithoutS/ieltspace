@@ -6,7 +6,6 @@ import StudyResults from '../../components/learner/StudyResults';
 import LearnerHeader from '../../components/navigation/LearnerHeader';
 import PageLink from '../../components/navigation/PageLink';
 import MyWS from '../results/MyWS';
-import { listeningReadingExamples } from '../../data/practice-history.sample';
 import '../../components/learner/learner-study.css';
 
 const tabs = [
@@ -14,24 +13,13 @@ const tabs = [
   { group: 'WS', name: 'Writing & Speaking' },
 ] as const;
 
-const canPreviewHistory = import.meta.env.DEV || ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
-
-function historyQuery(group: ResultGroup, sample: boolean) {
-  const params = new URLSearchParams();
-  if (group === 'WS') params.set('tab', 'ws');
-  if (sample) params.set('demo', '1');
-  return params.toString();
-}
-
-export default function PracticeHistory({ historyGroup = 'LR', previewHistory = false }: { historyGroup?: ResultGroup; previewHistory?: boolean }) {
+export default function PracticeHistory({ historyGroup = 'LR' }: { historyGroup?: ResultGroup }) {
   const { id } = useAccount();
-  const sample = canPreviewHistory && previewHistory;
   const tabRefs = useRef<Record<ResultGroup, HTMLButtonElement | null>>({ LR: null, WS: null });
 
   function selectTab(group: ResultGroup) {
     if (group === historyGroup) return;
-    const query = historyQuery(group, sample);
-    navigate(query ? `PracticeHistory?${query}` : 'PracticeHistory');
+    navigate(group === 'WS' ? 'PracticeHistory?tab=ws' : 'PracticeHistory');
   }
 
   function onTabKey(event: KeyboardEvent<HTMLButtonElement>) {
@@ -61,16 +49,12 @@ export default function PracticeHistory({ historyGroup = 'LR', previewHistory = 
             id={`history-tab-${group}`} aria-controls={`history-panel-${group}`} aria-selected={group === historyGroup}
             tabIndex={group === historyGroup ? 0 : -1} onKeyDown={onTabKey} onClick={() => selectTab(group)}>{name}</button>)}
         </div>
-        {canPreviewHistory && <PageLink page="PracticeHistory" query={historyQuery(historyGroup, !sample)} className="learner-study-link">
-          {sample ? 'Về dữ liệu của tôi' : 'Xem dữ liệu mẫu'}
-        </PageLink>}
       </div>
-      {sample && <p className="learner-study-empty" role="status">Bạn đang xem dữ liệu mẫu.</p>}
       {tabs.map(({ group }) => <div key={group} role="tabpanel" id={`history-panel-${group}`} aria-labelledby={`history-tab-${group}`}
         tabIndex={group === historyGroup ? 0 : -1} hidden={group !== historyGroup}>
         {group === historyGroup && (group === 'WS'
-          ? <MyWS key={`${id}:${sample}`} sample={sample} />
-          : <StudyResults key={`${id}:${sample}`} sample={sample ? listeningReadingExamples : undefined} />)}
+          ? <MyWS key={id} />
+          : <StudyResults key={id} />)}
       </div>)}
     </main>
   </div>;

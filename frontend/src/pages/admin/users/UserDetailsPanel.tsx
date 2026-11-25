@@ -6,6 +6,7 @@ import { useAuth } from '../../../lib/auth/auth';
 import AccountDialog from './AccountDialog';
 import AccountHistory from './AccountHistory';
 import AccountChangeDialog from './AccountChangeDialog';
+import TeacherGradingPanel from './TeacherGradingPanel';
 import {
   AccountStatus, CloseIcon, closeButton, directoryButton,
   directoryMuted, formatUserDate, roleBadgeStyle, userInitials,
@@ -67,9 +68,6 @@ function ProfileDetails({ user, onRetry, onChangeRole, revision }: {
       ['Bài đã hoàn thành', '—'],
       ['Bonus chấm còn lại', '—'],
       ['Yêu cầu chấm chưa có kết quả', '—'],
-    ]} />}
-    {user.role === 'TEACHER' && <DetailsSection title="Quyền chấm và giới hạn nhận bài" rows={[
-      ['Writing', '—'], ['Speaking', '—'], ['Bài chưa chấm / giới hạn', '—'],
     ]} />}
     <AccountHistory userId={user.id} kind="login" />
     <AccountHistory key={revision} userId={user.id} kind="admin" />
@@ -136,6 +134,8 @@ export default function UserDetailsPanel({ id, onClose, onChanged }: { id: strin
           <button type="button" className={directoryButton} onClick={retry}>Thử lại</button>
         </div>}
         {user && <ProfileDetails user={user} onRetry={retry} revision={attempt} onChangeRole={canChangeAccess ? () => setAction('role') : undefined} />}
+        {user?.role === 'TEACHER' && (user.status === 'ACTIVE' || user.status === 'LOCKED') &&
+          <TeacherGradingPanel id={user.id} onChanged={onChanged} />}
         {user?.cleanupPending && <div className="flex flex-wrap items-center gap-2 text-sm">
           <span role="status">{cleanupMessage || 'Tài khoản đã mất quyền truy cập và đang chờ dọn dữ liệu.'}</span>
           <button type="button" className={directoryButton} disabled={cleanupBusy} onClick={() => void retryCleanup()}>

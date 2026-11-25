@@ -34,6 +34,8 @@ export interface AttemptSyncInit {
   clientAttemptId: string;
   mode: "real" | "practice";
   limitMinutes: number;
+  /** Chỉ số Task/Part từ hộp Bắt đầu, bắt đầu từ 0. API nhận số thứ tự từ 1. */
+  selectedParts?: number[];
   /** Kho bản ghi âm (Speaking); Writing không dùng. */
   store?: RecordingStore;
   /** Kỹ năng của lượt; mặc định Speaking. */
@@ -226,6 +228,9 @@ export class AttemptSync {
             this.init.limitMinutes,
             writing ? 60 : 30,
           ),
+          sections: this.init.selectedParts?.length
+            ? this.init.selectedParts.map((part) => part + 1)
+            : undefined,
         });
         this.serverId = created.id;
         this.failures = 0;

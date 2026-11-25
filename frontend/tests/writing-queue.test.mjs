@@ -271,7 +271,7 @@ test("drain: hết lượt thử mà vẫn lỗi thì báo chưa xong (không đ
   assert.equal(s.dirty, 1);
 });
 
-test("luật hoàn thành: lưu lần cuối cả hai Task TRƯỚC khi complete", async () => {
+test("luật hoàn thành: lưu cả hai Task trước khi chốt, chuẩn hóa trạng thái COMPLETED từ API", async () => {
   const { queue, calls, settle } = setup();
   const order = [];
   queue.set("task1", "bài một");
@@ -282,13 +282,16 @@ test("luật hoàn thành: lưu lần cuối cả hai Task TRƯỚC khi complete
     summary: () => toUploadSummary(queue.summary()),
     complete: async (id, input) => {
       order.push(["complete", calls.length, input.reason]);
-      return { completedAt: "2026-11-25T10:00:00Z", contentExpiresAt: null, durationSeconds: 100 };
+      return { status: "COMPLETED", completedAt: "2026-11-25T10:00:00Z", contentExpiresAt: "2026-12-09T10:00:00Z", durationSeconds: 100 };
     },
     elapsedSeconds: 100,
     reason: "TIME_UP",
   });
   const outcome = await settle(run);
-  assert.equal(outcome.status, "completed");
+  assert.deepEqual(outcome, {
+    status: "completed", serverId: "att-1", expiredIds: [], completedAt: "2026-11-25T10:00:00Z",
+    contentExpiresAt: "2026-12-09T10:00:00Z", durationSeconds: 100,
+  });
   assert.deepEqual(order, [["complete", 2, "TIME_UP"]], "complete chỉ gọi sau khi cả hai PUT xong");
   assert.deepEqual(calls.map((c) => c.text), ["bài một", "bài hai bản cuối"]);
 });

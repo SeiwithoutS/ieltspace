@@ -1,5 +1,5 @@
 import { dispatchAnnouncement } from '../modules/notifications/announcements.js';
-import { dispatchExpiryReminders } from '../modules/notifications/grading-notifications.js';
+import { dispatchExpiryReminders, dispatchPendingGradingNotifications } from '../modules/notifications/grading-notifications.js';
 
 export async function runNotificationDispatch() {
   async function sendDueAnnouncements() {
@@ -7,7 +7,7 @@ export async function runNotificationDispatch() {
       if (!await dispatchAnnouncement()) break;
     }
   }
-  const results = await Promise.allSettled([sendDueAnnouncements(), dispatchExpiryReminders()]);
+  const results = await Promise.allSettled([sendDueAnnouncements(), dispatchExpiryReminders(), dispatchPendingGradingNotifications()]);
   const failures = results.flatMap(result => result.status === 'rejected' ? [result.reason] : []);
   if (failures.length) throw new AggregateError(failures, 'Notification dispatch failed');
 }

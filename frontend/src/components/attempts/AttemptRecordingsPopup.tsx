@@ -18,6 +18,10 @@ export default function AttemptRecordingsPopup({ attemptId, title, onClose }: { 
     getSkillAttempt(attemptId)
       .then((detail) => {
         if (!active) return;
+        if (detail.contentStatus === 'EXPIRED' || detail.contentStatus === 'DELETED') {
+          setError(EXPIRED_MESSAGE);
+          return;
+        }
         setItems(
           detail.recordings
             .filter((item) => item.status === "UPLOADED")

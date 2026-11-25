@@ -421,11 +421,18 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
     assert.equal((await request(path, { token: tokens.learner })).status, 403);
     const created = await create(submitted);
     assert.equal(created.status, 201);
-    assert.equal((await create(submitted)).body.id, created.body.id);
+    const recovered = await create(submitted);
+    assert.equal(recovered.status, 200);
+    assert.equal(recovered.body.id, created.body.id);
     assert.equal((await create({ ...submitted, title: 'Thay đổi' })).status, 409);
     const id = created.body.id;
     const revise = json => request(`${path}/${id}`, { ...manager, method: 'PATCH', json });
-    assert.equal((await revise({ title: 'Tin đã sửa', content: submitted.content, audience: 'TEACHER', revision: 0 })).body.revision, 1);
+    const edit = { title: 'Tin đã sửa', content: submitted.content, audience: 'TEACHER', revision: recovered.body.revision };
+    const updated = await revise(edit);
+    assert.equal(updated.body.revision, 1);
+    assert.deepEqual((await revise(edit)).body, updated.body);
+    assert.equal((await revise({ ...edit, title: 'Sửa từ tab khác' })).status, 409);
+    assert.equal((await db.query("SELECT count(*)::int AS n FROM public.audit_logs WHERE entity_id=$1 AND action='ANNOUNCEMENT_DRAFT_UPDATED'", [id])).rows[0].n, 1);
     const send = json => request(`${path}/${id}/send`, { ...manager, method: 'POST', json });
     assert.equal((await send({ mode: 'scheduled', revision: 1, scheduledAt: '2000-01-01T00:00:00Z' })).status, 400);
     assert.equal((await send({ mode: 'scheduled', revision: 1, scheduledAt: new Date(Date.now() + 3_600_000).toISOString() })).status, 202);
@@ -725,6 +732,7 @@ test('Admin account history, staff creation, MFA, deletion and protection agains
   assert.equal((await reset('123456', tampered)).body.code, 'INVALID_RECOVERY');
   assert.equal((await reset('000000', recovery)).body.code, 'AUTHENTICATOR_FAILED');
   assert.equal((await reset('123456', recovery)).status, 200);
+  assert.equal((await reset('123456')).body.code, 'INVALID_RECOVERY');
 
   const deleteAction = { kind: 'delete', previousRole: 'TEACHER', previousStatus: 'ACTIVE', reason: 'Kiểm tra xóa' };
   const remove = (target, action) => request('/admin/users/' + target, { token: activeToken, method: 'DELETE', json: { action } });

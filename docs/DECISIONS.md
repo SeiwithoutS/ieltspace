@@ -21,6 +21,7 @@
 | D17 | Trọng Phúc chốt 15/11 (Kế hoạch 15/11 đợt 2, O-R4). | Giữ `DesktopOnly.tsx` của THuong làm nơi duy nhất thực thi: màn dưới 1024px hoặc cảm ứng không làm bài được, kể cả lượt đã bắt đầu (bị che, nội dung vẫn giữ). `ExamDetail` dùng chung điều kiện (`lib/device.ts`) để chặn trước khi tạo lượt. |
 | D18 | Người dùng chốt 20/11, quản trị đợt 2–3. | Giữ toàn bộ lịch sử đăng nhập ứng dụng. Cấm Quản lý tự khóa và tự hạ quyền. Có thể thao tác trên Quản lý khác nếu giữ ít nhất một Quản lý hoạt động. Cấp/thu hồi vai trò Quản lý và khóa/mở tài khoản Quản lý cần mã bảo mật dùng một lần do website gửi. |
 | D19 | Người dùng chốt 20/11, quản trị đợt 4–5. | Mời/xóa Quản lý cần mã bảo mật. Khi xóa, bỏ Auth, tên/email/ảnh, dữ liệu học cá nhân, ghi chú và bài nộp. Giữ ID ẩn danh, điểm/kết quả đã công bố và audit. Dùng hộp xác nhận quản trị hiện có. |
+| D20 | Người dùng chốt 25/11 về cách đếm phiên luyện Writing và Speaking. | Lượt hoàn thành, dù luyện một phần hay cả kỹ năng, tính một phiên và một lượt của kỹ năng đó. Giữ `attempt_type = FULL_SKILL` cho luồng đếm, ghi số thứ tự Task/Part trong `attempts.selected_scope.wsSections`. Lượt cũ thiếu phạm vi hiện `null`. |
 
 ## Điểm mở trước khi triển khai
 

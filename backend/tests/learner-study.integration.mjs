@@ -31,11 +31,14 @@ test('Study goals, Flashcard sessions and check-ins persist with independent pro
       CREATE TABLE public.exam_sets (id uuid primary key, name text);
       CREATE TABLE public.exams (id uuid primary key, exam_set_id uuid, title text);
       CREATE TABLE public.exam_skills (id uuid primary key, exam_id uuid, skill text, form text);
-      CREATE TABLE public.attempts (id uuid primary key, user_id uuid, exam_id uuid, attempt_type text, status text, completed_at timestamptz);
+      CREATE TABLE public.attempts (id uuid primary key, user_id uuid, exam_id uuid, attempt_type text, status text, completed_at timestamptz, selected_scope jsonb);
       CREATE TABLE public.skill_attempts (id uuid primary key, attempt_id uuid, exam_skill_id uuid, status text, completed_at timestamptz,
-        section_id uuid, question_group_id uuid, band_score numeric, accuracy numeric, correct_count int, total_questions int);
-      CREATE TABLE public.grading_requests (id uuid primary key, skill_attempt_id uuid, status text);
+        section_id uuid, question_group_id uuid, band_score numeric, accuracy numeric, correct_count int, total_questions int,
+        content_status text DEFAULT 'AVAILABLE', content_expires_at timestamptz, mode text);
+      CREATE TABLE public.grading_requests (id uuid primary key, skill_attempt_id uuid, status text,
+        cancel_reason text, assignment_deadline timestamptz, requested_at timestamptz);
       CREATE TABLE public.grading_reviews (grading_request_id uuid, status text, published_at timestamptz);
+      CREATE TABLE public.submission_contents (skill_attempt_id uuid, recording_status text);
       ${definitions.join('\n')}`);
     await db.exec(await readFile(new URL('../../docs/csdl/14_learner_study_history.sql', import.meta.url), 'utf8'));
     const activityMigration = await readFile(new URL('../../docs/csdl/15_learner_activity.sql', import.meta.url), 'utf8');

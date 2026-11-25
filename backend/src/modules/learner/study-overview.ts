@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import { effectiveContentStatus, readWsSections } from '../attempts/attempts.schemas.js';
 import { z } from 'zod';
 import type { prisma } from '../../lib/prisma.js';
 
@@ -172,26 +173,28 @@ export async function readLearnerDashboard(db: typeof prisma, userId: string, da
 type HistoryRow = { id: string; title: string; completedAt: Date; skill: string; form: string | null;
   scope: string; band: number | null; accuracy: number | null; correct: number | null; total: number | null;
   contentStatus?: string | null; contentExpiresAt?: Date | null; gradingStatus?: string | null;
-  gradingCancelReason?: string | null; gradingDeadlineAt?: Date | null; published?: boolean | null;
-  recordingCount?: number | null; attemptMode?: string | null };
+  gradingId?: string | null; gradingCancelReason?: string | null; gradingDeadlineAt?: Date | null; published?: boolean | null;
+  recordingCount?: number | null; attemptMode?: string | null; selectedScope?: unknown };
 
 const contentStatuses = ['AVAILABLE', 'HELD', 'EXPIRED', 'DELETED'];
 const gradingStatuses = ['WAITING_ASSIGNMENT', 'ASSIGNED', 'COMPLETED', 'CANCELLED'];
 
 // Kỹ năng LR giữ nguyên các trường cũ; Writing/Speaking được thêm trường nội dung và trạng thái chấm.
 export function shapeResultItem(row: HistoryRow, now: Date = new Date()) {
-  const { contentStatus, contentExpiresAt, gradingStatus, gradingCancelReason, gradingDeadlineAt, published,
-    recordingCount, attemptMode, ...base } = row;
+  const { contentStatus, contentExpiresAt, gradingStatus, gradingId, gradingCancelReason, gradingDeadlineAt, published,
+    recordingCount, attemptMode, selectedScope, ...base } = row;
   if (row.skill !== 'WRITING' && row.skill !== 'SPEAKING') return base;
   const expiresAt = contentExpiresAt ? new Date(contentExpiresAt) : null;
   const known = contentStatus && contentStatuses.includes(contentStatus) ? contentStatus : null;
-  const expired = known && known === 'AVAILABLE' && expiresAt && now.getTime() >= expiresAt.getTime();
+  const effective = effectiveContentStatus(known, expiresAt, now);
   const status = gradingStatus && gradingStatuses.includes(gradingStatus) ? gradingStatus : null;
   return {
     ...base,
-    contentStatus: expired ? 'EXPIRED' : known,
-    contentExpiresAt: expiresAt ? expiresAt.toISOString() : null,
+    contentStatus: effective,
+    contentExpiresAt: effective === 'HELD' ? null : expiresAt?.toISOString() ?? null,
+    sections: readWsSections(selectedScope),
     grading: {
+      id: gradingId ?? null,
       status,
       cancelReason: status === 'CANCELLED' ? gradingCancelReason ?? null : null,
       assignmentDeadlineAt: status && gradingDeadlineAt ? new Date(gradingDeadlineAt).toISOString() : null,
@@ -221,26 +224,26 @@ export async function readLearnerResults(db: typeof prisma, userId: string, quer
         CASE WHEN sk.skill IN ('LISTENING','READING') THEN sa.correct_count END AS correct,
         CASE WHEN sk.skill IN ('LISTENING','READING') THEN sa.total_questions END AS total,
         sa.content_status AS "contentStatus", sa.content_expires_at AS "contentExpiresAt",
-        lg.status AS "gradingStatus", lg.cancel_reason AS "gradingCancelReason", lg.assignment_deadline AS "gradingDeadlineAt",
+        lg.id AS "gradingId", lg.status AS "gradingStatus", lg.cancel_reason AS "gradingCancelReason", lg.assignment_deadline AS "gradingDeadlineAt",
         (sk.skill IN ('WRITING','SPEAKING') AND EXISTS (
           SELECT 1 FROM public.grading_requests pr JOIN public.grading_reviews pv ON pv.grading_request_id=pr.id
           WHERE pr.skill_attempt_id=sa.id AND pv.status='PUBLISHED' AND pv.published_at <= statement_timestamp()
         )) AS published,
         CASE WHEN sk.skill='SPEAKING' THEN (SELECT count(*)::int FROM public.submission_contents sc
           WHERE sc.skill_attempt_id=sa.id AND sc.recording_status='UPLOADED') END AS "recordingCount",
-        sa.mode AS "attemptMode"
+        sa.mode AS "attemptMode", a.selected_scope AS "selectedScope"
       FROM public.attempts a JOIN public.skill_attempts sa ON sa.attempt_id=a.id
       JOIN public.exam_skills sk ON sk.id=sa.exam_skill_id AND sk.exam_id=a.exam_id
       JOIN public.exams e ON e.id=a.exam_id JOIN public.exam_sets es ON es.id=e.exam_set_id
-      LEFT JOIN LATERAL (SELECT g.status,g.cancel_reason,g.assignment_deadline FROM public.grading_requests g
-        WHERE g.skill_attempt_id=sa.id ORDER BY g.requested_at DESC,g.id DESC LIMIT 1) lg ON sk.skill IN ('WRITING','SPEAKING')
+      LEFT JOIN LATERAL (SELECT g.id,g.status,g.cancel_reason,g.assignment_deadline FROM public.grading_requests g
+        WHERE g.skill_attempt_id=sa.id ORDER BY (g.status<>'CANCELLED') DESC,g.requested_at DESC,g.id DESC LIMIT 1) lg ON sk.skill IN ('WRITING','SPEAKING')
       WHERE a.user_id=${userId}::uuid AND a.status='COMPLETED' AND sa.status='COMPLETED'
         AND sa.completed_at <= statement_timestamp()
         ${groupFilter}
         ${query.skill ? Prisma.sql`AND sk.skill=${query.skill}` : Prisma.empty}
     ) SELECT id,title,completed_at AS "completedAt",skill,form,scope,band,accuracy,correct,total,
-        "contentStatus","contentExpiresAt","gradingStatus","gradingCancelReason","gradingDeadlineAt",published,
-        "recordingCount","attemptMode"
+        "contentStatus","contentExpiresAt","gradingId","gradingStatus","gradingCancelReason","gradingDeadlineAt",published,
+        "recordingCount","attemptMode","selectedScope"
       FROM results r WHERE ${scoreFilter}
       ${query.before ? Prisma.sql`AND (r.completed_at,r.id) < (SELECT completed_at,id FROM results WHERE id=${query.before}::uuid AND ${scoreFilter})` : Prisma.empty}
       ORDER BY completed_at DESC,id DESC LIMIT ${limit + 1}::int`;

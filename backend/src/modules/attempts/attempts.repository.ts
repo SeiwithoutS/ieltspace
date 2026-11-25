@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { HttpError } from '../../utils/http.js';
 import type { RawSection } from '../exams/exam-content.mapper.js';
+import { readWsSections } from './attempts.schemas.js';
 
 // Truy cập dữ liệu lượt làm Speaking bằng SQL thô (schema.prisma không map skill_attempts/submission_contents).
 // Mỗi hàm là một câu lệnh nguyên tử hoặc một transaction; quy tắc nghiệp vụ nằm ở attempts.service.ts.
@@ -17,6 +18,7 @@ export type AttemptRecord = {
   examSkillId: string;
   skill: AttemptSkill;
   mode: AttemptMode | null;
+  sections: number[] | null;
   status: AttemptStatus;
   startedAt: Date;
   deadlineAt: Date | null;
@@ -78,11 +80,12 @@ export type AttemptsRepository = {
     limitMinutes: number | null;
     startedAt: Date;
     deadlineAt: Date | null;
-  }): Promise<AttemptRecord>;
+    sections: number[];
+  }): Promise<{ attempt: AttemptRecord; created: boolean }>;
   getAttempt(id: string): Promise<AttemptRecord | null>;
   resolveSectionId(attempt: AttemptRecord, partIndex: number): Promise<string | null>;
   listRecordings(skillAttemptId: string): Promise<RecordingRecord[]>;
-  // Văn bản Writing: hàng submission_contents có question_key = taskKey và text_content không NULL.
+  // Văn bản Writing: dùng khóa Task, có thể suy ra từ section_id với bản ghi cũ.
   listWritingTexts(skillAttemptId: string): Promise<WritingTextRecord[]>;
   getWritingText(skillAttemptId: string, taskKey: string): Promise<WritingTextRecord | null>;
   // Ghi đè văn bản của Task (idempotent theo (lượt, taskKey)); trả hàng sau khi lưu.
@@ -103,7 +106,7 @@ export type AttemptsRepository = {
     contentExpiresAt: Date;
   }): Promise<AttemptRecord | null>;
   hasGradingRequest(skillAttemptId: string): Promise<boolean>;
-  // Xóa lượt và mọi hàng liên quan trong một transaction; trả danh sách file cần xóa khỏi storage.
+  // Hủy lượt trong một transaction và trả đường dẫn file cần xóa khỏi Storage.
   // Chỉ xóa lượt chưa COMPLETED và chưa có yêu cầu chấm; lượt COMPLETED trả reason 'COMPLETED'.
   deleteAttempt(
     attempt: AttemptRecord
@@ -126,6 +129,7 @@ type AttemptRow = {
   examSkillId: string;
   skill: string;
   mode: string | null;
+  selectedScope: unknown;
   status: string;
   startedAt: Date;
   deadlineAt: Date | null;
@@ -138,15 +142,17 @@ type AttemptRow = {
 const attemptColumns = Prisma.sql`sa.id, sa.attempt_id AS "parentAttemptId", a.user_id AS "userId",
   sa.exam_skill_id AS "examSkillId", k.skill AS "skill", sa.mode, sa.status, sa.started_at AS "startedAt", sa.deadline_at AS "deadlineAt",
   sa.completed_at AS "completedAt", sa.content_expires_at AS "contentExpiresAt", sa.content_status AS "contentStatus",
-  sa.duration_seconds AS "durationSeconds"`;
+  sa.duration_seconds AS "durationSeconds", a.selected_scope AS "selectedScope"`;
 // Chỉ lượt của kỹ năng Speaking và Writing mới đi qua module này (Listening/Reading có luồng riêng).
 const attemptFrom = Prisma.sql`public.skill_attempts sa
   JOIN public.attempts a ON a.id = sa.attempt_id
   JOIN public.exam_skills k ON k.id = sa.exam_skill_id AND k.skill IN ('SPEAKING', 'WRITING')`;
 
 function toAttempt(row: AttemptRow): AttemptRecord {
+  const { selectedScope, ...attempt } = row;
   return {
-    ...row,
+    ...attempt,
+    sections: readWsSections(selectedScope),
     skill: row.skill === 'WRITING' ? 'WRITING' : 'SPEAKING',
     mode: row.mode === 'REAL' || row.mode === 'PRACTICE' ? row.mode : null,
     status: row.status as AttemptStatus,
@@ -192,6 +198,27 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
       SELECT ${attemptColumns} FROM ${attemptFrom} WHERE sa.id = ${id}::uuid`;
     return row ? toAttempt(row) : null;
   };
+
+  async function lockContentWrite(tx: Pick<typeof prisma, '$queryRaw'>, id: string, allowCompleted = false) {
+    const [row] = await tx.$queryRaw<Array<{ status: string; content_status: string }>>`
+      SELECT status, content_status FROM public.skill_attempts WHERE id = ${id}::uuid FOR UPDATE`;
+    if (!row) throw new HttpError(404, 'ATTEMPT_NOT_FOUND', 'Không tìm thấy lượt làm bài.');
+    if (row.content_status === 'EXPIRED' || row.content_status === 'DELETED') {
+      throw new HttpError(410, 'CONTENT_EXPIRED', 'Nội dung đã hết hạn lưu.');
+    }
+    if (row.status !== 'IN_PROGRESS' && !(allowCompleted && row.status === 'COMPLETED')) {
+      throw new HttpError(409, 'ATTEMPT_NOT_ACTIVE', 'Lượt làm bài không còn nhận nội dung.');
+    }
+  }
+
+  function readWritingTexts(skillAttemptId: string) {
+    return db.$queryRaw<WritingTextRecord[]>`
+      SELECT DISTINCT ON (s.order_no) 'task' || s.order_no AS "taskKey", sc.text_content AS text, sc.updated_at AS "updatedAt"
+      FROM public.submission_contents sc JOIN public.exam_sections s ON s.id = sc.section_id
+      WHERE sc.skill_attempt_id = ${skillAttemptId}::uuid AND s.order_no IN (1,2) AND sc.text_content IS NOT NULL
+        AND sc.question_key IN ('', 'task' || s.order_no)
+      ORDER BY s.order_no, (sc.question_key <> '') DESC, sc.updated_at DESC`;
+  }
 
   return {
     async findPublishedSkill(examSkillId, kind) {
@@ -249,7 +276,7 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
       return db.$transaction(async (tx) => {
         const inserted = await tx.$queryRaw<Array<{ id: string }>>`
           INSERT INTO public.attempts (user_id, exam_id, attempt_type, selected_scope, status, started_at, client_attempt_id)
-          VALUES (${input.userId}::uuid, ${input.examId}::uuid, 'FULL_SKILL', '{}'::jsonb, 'IN_PROGRESS',
+          VALUES (${input.userId}::uuid, ${input.examId}::uuid, 'FULL_SKILL', ${JSON.stringify({ wsSections: input.sections })}::jsonb, 'IN_PROGRESS',
             ${input.startedAt}::timestamptz, ${input.clientAttemptId}::uuid)
           ON CONFLICT (user_id, client_attempt_id) DO NOTHING
           RETURNING id`;
@@ -265,7 +292,7 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
           WHERE a.user_id = ${input.userId}::uuid AND a.client_attempt_id = ${input.clientAttemptId}::uuid`;
         // Không đọc lại được: mã đã dùng cho lượt không phải Speaking (attemptFrom chỉ lấy Speaking).
         if (!row) throw new HttpError(409, 'CLIENT_ATTEMPT_ID_CONFLICT', 'Mã lượt làm đã được dùng cho lượt khác.');
-        return toAttempt(row);
+        return { attempt: toAttempt(row), created: Boolean(inserted[0]) };
       });
     },
 
@@ -286,34 +313,25 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
       return rows.map(toRecording);
     },
 
-    async listWritingTexts(skillAttemptId) {
-      const rows = await db.$queryRaw<Array<{ taskKey: string; text: string; updatedAt: Date }>>`
-        SELECT sc.question_key AS "taskKey", sc.text_content AS text, sc.updated_at AS "updatedAt"
-        FROM public.submission_contents sc JOIN public.exam_sections s ON s.id = sc.section_id
-        WHERE sc.skill_attempt_id = ${skillAttemptId}::uuid AND sc.question_key <> '' AND sc.text_content IS NOT NULL
-        ORDER BY s.order_no`;
-      return rows;
-    },
+    listWritingTexts: readWritingTexts,
 
     async getWritingText(skillAttemptId, taskKey) {
-      const [row] = await db.$queryRaw<Array<{ taskKey: string; text: string; updatedAt: Date }>>`
-        SELECT question_key AS "taskKey", text_content AS text, updated_at AS "updatedAt"
-        FROM public.submission_contents
-        WHERE skill_attempt_id = ${skillAttemptId}::uuid AND question_key = ${taskKey} AND text_content IS NOT NULL`;
-      return row ?? null;
+      return (await readWritingTexts(skillAttemptId)).find(row => row.taskKey === taskKey) ?? null;
     },
 
     async upsertWritingText(input) {
-      // Chỉ ghi vào hàng cùng section (khóa Task không đổi Task); hàng đã DELETED (nội dung hết hạn) không ghi lại.
-      const [row] = await db.$queryRaw<Array<{ taskKey: string; text: string; updatedAt: Date }>>`
-        INSERT INTO public.submission_contents AS sc (skill_attempt_id, section_id, question_key, text_content, updated_at)
-        VALUES (${input.skillAttemptId}::uuid, ${input.sectionId}::uuid, ${input.taskKey}, ${input.text},
-          ${input.now}::timestamptz)
-        ON CONFLICT (skill_attempt_id, question_key) WHERE question_key <> '' DO UPDATE SET
-          text_content = EXCLUDED.text_content, updated_at = EXCLUDED.updated_at
-        WHERE sc.section_id = EXCLUDED.section_id AND sc.recording_status IS DISTINCT FROM 'DELETED'
-        RETURNING sc.question_key AS "taskKey", sc.text_content AS text, sc.updated_at AS "updatedAt"`;
-      return row ?? null;
+      return db.$transaction(async (tx) => {
+        await lockContentWrite(tx, input.skillAttemptId);
+        const [row] = await tx.$queryRaw<WritingTextRecord[]>`
+          INSERT INTO public.submission_contents AS sc (skill_attempt_id, section_id, question_key, text_content, updated_at)
+          VALUES (${input.skillAttemptId}::uuid, ${input.sectionId}::uuid, ${input.taskKey}, ${input.text},
+            ${input.now}::timestamptz)
+          ON CONFLICT (skill_attempt_id, question_key) WHERE question_key <> '' DO UPDATE SET
+            text_content = EXCLUDED.text_content, updated_at = EXCLUDED.updated_at
+          WHERE sc.section_id = EXCLUDED.section_id AND sc.recording_status IS DISTINCT FROM 'DELETED'
+          RETURNING sc.question_key AS "taskKey", sc.text_content AS text, sc.updated_at AS "updatedAt"`;
+        return row ?? null;
+      });
     },
 
     async getRecording(skillAttemptId, questionKey) {
@@ -325,29 +343,36 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
     },
 
     async upsertRecording(input) {
-      const rows = await db.$queryRaw<Array<{ id: string }>>`
-        INSERT INTO public.submission_contents AS sc
-          (skill_attempt_id, section_id, question_key, audio_path, file_type, file_size, audio_duration, recording_status, updated_at)
-        VALUES (${input.skillAttemptId}::uuid, ${input.sectionId}::uuid, ${input.questionKey}, ${input.audioPath},
-          ${input.mimeType}, ${input.size}::bigint, ${input.durationMs / 1000}::numeric, 'PENDING', ${input.now}::timestamptz)
-        ON CONFLICT (skill_attempt_id, question_key) WHERE question_key <> '' DO UPDATE SET
-          audio_path = EXCLUDED.audio_path, file_type = EXCLUDED.file_type, file_size = EXCLUDED.file_size,
-          audio_duration = EXCLUDED.audio_duration, recording_status = 'PENDING', updated_at = EXCLUDED.updated_at
-        WHERE ${input.overwrite}::boolean OR sc.recording_status IS DISTINCT FROM 'UPLOADED'
-        RETURNING sc.id`;
-      if (!rows[0]) return null;
-      const [row] = await db.$queryRaw<RecordingRow[]>`
-        SELECT ${recordingColumns} FROM ${recordingFrom} WHERE sc.id = ${rows[0].id}::uuid`;
-      return row ? toRecording(row) : null;
+      return db.$transaction(async (tx) => {
+        await lockContentWrite(tx, input.skillAttemptId);
+        const [saved] = await tx.$queryRaw<Array<{ id: string }>>`
+          INSERT INTO public.submission_contents AS sc
+            (skill_attempt_id, section_id, question_key, audio_path, file_type, file_size, audio_duration, recording_status, updated_at)
+          VALUES (${input.skillAttemptId}::uuid, ${input.sectionId}::uuid, ${input.questionKey}, ${input.audioPath},
+            ${input.mimeType}, ${input.size}::bigint, ${input.durationMs / 1000}::numeric, 'PENDING', ${input.now}::timestamptz)
+          ON CONFLICT (skill_attempt_id, question_key) WHERE question_key <> '' DO UPDATE SET
+            audio_path = EXCLUDED.audio_path, file_type = EXCLUDED.file_type, file_size = EXCLUDED.file_size,
+            audio_duration = EXCLUDED.audio_duration, recording_status = 'PENDING', updated_at = EXCLUDED.updated_at
+          WHERE sc.section_id = EXCLUDED.section_id AND sc.recording_status IS DISTINCT FROM 'DELETED'
+            AND (${input.overwrite}::boolean OR sc.recording_status IS DISTINCT FROM 'UPLOADED')
+          RETURNING sc.id`;
+        if (!saved) return null;
+        const [row] = await tx.$queryRaw<RecordingRow[]>`
+          SELECT ${recordingColumns} FROM ${recordingFrom} WHERE sc.id = ${saved.id}::uuid`;
+        return row ? toRecording(row) : null;
+      });
     },
 
     async confirmRecording(skillAttemptId, questionKey, size, now) {
-      const count = await db.$executeRaw`
-        UPDATE public.submission_contents SET recording_status = 'UPLOADED', file_size = ${size}::bigint,
-          updated_at = ${now}::timestamptz
-        WHERE skill_attempt_id = ${skillAttemptId}::uuid AND question_key = ${questionKey} AND audio_path IS NOT NULL
-          AND recording_status IN ('PENDING', 'UPLOADED')`;
-      return count > 0;
+      return db.$transaction(async (tx) => {
+        await lockContentWrite(tx, skillAttemptId, true);
+        const count = await tx.$executeRaw`
+          UPDATE public.submission_contents SET recording_status = 'UPLOADED', file_size = ${size}::bigint,
+            updated_at = ${now}::timestamptz
+          WHERE skill_attempt_id = ${skillAttemptId}::uuid AND question_key = ${questionKey} AND audio_path IS NOT NULL
+            AND recording_status IN ('PENDING', 'UPLOADED')`;
+        return count > 0;
+      });
     },
 
     async completeAttempt({ attempt, completedAt, durationSeconds, contentExpiresAt }) {
@@ -375,22 +400,35 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
     async deleteAttempt(attempt) {
       return db.$transaction(async (tx) => {
         // Khóa hàng để không chạy đua với complete: chỉ lượt chưa COMPLETED mới hủy được.
-        const [cur] = await tx.$queryRaw<Array<{ status: string }>>`
-          SELECT status FROM public.skill_attempts WHERE id = ${attempt.id}::uuid FOR UPDATE`;
+        const [cur] = await tx.$queryRaw<Array<{ status: string; content_status: string }>>`
+          SELECT status, content_status FROM public.skill_attempts WHERE id = ${attempt.id}::uuid FOR UPDATE`;
         if (!cur) return { deleted: true, paths: [] };
         if (cur.status === 'COMPLETED') return { deleted: false, paths: [], reason: 'COMPLETED' as const };
+        if (cur.content_status === 'HELD') return { deleted: false, paths: [], reason: 'SUBMITTED' as const };
         const [req] = await tx.$queryRaw<Array<{ found: boolean }>>`
           SELECT EXISTS (SELECT 1 FROM public.grading_requests WHERE skill_attempt_id = ${attempt.id}::uuid) AS found`;
         if (req?.found) return { deleted: false, paths: [], reason: 'SUBMITTED' as const };
-        const files = await tx.$queryRaw<Array<{ path: string }>>`
-          DELETE FROM public.submission_contents WHERE skill_attempt_id = ${attempt.id}::uuid RETURNING audio_path AS path`;
+        const [media] = await tx.$queryRaw<Array<{ present: boolean }>>`
+          SELECT EXISTS (SELECT 1 FROM public.submission_contents WHERE skill_attempt_id = ${attempt.id}::uuid AND audio_path IS NOT NULL) AS present`;
+        if (media?.present) {
+          // Giữ đường dẫn để job thử lại nếu xóa kho tệp thất bại sau khi hủy.
+          const now = new Date();
+          await tx.$executeRaw`UPDATE public.skill_attempts SET status = 'ABANDONED', content_status = 'DELETED',
+            content_deleted_at = ${now}::timestamptz WHERE id = ${attempt.id}::uuid`;
+          await tx.$executeRaw`UPDATE public.attempts SET status = 'ABANDONED'
+            WHERE id = ${attempt.parentAttemptId}::uuid AND status = 'IN_PROGRESS'
+              AND NOT EXISTS (SELECT 1 FROM public.skill_attempts x WHERE x.attempt_id = attempts.id AND x.status <> 'ABANDONED')`;
+          const [item] = await markContentRows(tx, [attempt.id], now);
+          return { deleted: true, paths: item.paths };
+        }
+        await tx.$executeRaw`DELETE FROM public.submission_contents WHERE skill_attempt_id = ${attempt.id}::uuid`;
         await tx.$executeRaw`DELETE FROM public.attempt_answers WHERE skill_attempt_id = ${attempt.id}::uuid`;
         await tx.$executeRaw`DELETE FROM public.attempt_section_states WHERE skill_attempt_id = ${attempt.id}::uuid`;
         await tx.$executeRaw`DELETE FROM public.skill_attempts WHERE id = ${attempt.id}::uuid`;
         await tx.$executeRaw`
           DELETE FROM public.attempts a WHERE a.id = ${attempt.parentAttemptId}::uuid
             AND NOT EXISTS (SELECT 1 FROM public.skill_attempts x WHERE x.attempt_id = a.id)`;
-        return { deleted: true, paths: files.map((f) => f.path).filter(Boolean) };
+        return { deleted: true, paths: [] };
       });
     },
 
@@ -398,7 +436,8 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
       // BR-CONTENT-002: không xóa khi còn yêu cầu chấm đang chờ/đã phân công.
       return withPaths(db, await db.$queryRaw<Array<{ id: string }>>`
         SELECT sa.id FROM ${attemptFrom}
-        WHERE sa.status = 'COMPLETED' AND sa.content_status = 'AVAILABLE' AND sa.content_expires_at <= ${now}::timestamptz
+        WHERE sa.status = 'COMPLETED' AND (sa.content_status = 'EXPIRED' OR
+          (sa.content_status = 'AVAILABLE' AND sa.content_expires_at <= ${now}::timestamptz))
           AND NOT EXISTS (SELECT 1 FROM public.grading_requests g WHERE g.skill_attempt_id = sa.id
             AND g.status IN ('WAITING_ASSIGNMENT', 'ASSIGNED'))
         ORDER BY sa.content_expires_at LIMIT ${limit}`);
@@ -410,12 +449,14 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
         const claimed = await tx.$queryRaw<Array<{ id: string }>>`
           UPDATE public.skill_attempts sa SET content_status = 'DELETED', content_deleted_at = ${now}::timestamptz
           WHERE sa.id IN (
-              SELECT x.id FROM public.skill_attempts x WHERE x.status = 'COMPLETED' AND x.content_status = 'AVAILABLE'
-                AND x.content_expires_at <= ${now}::timestamptz
+              SELECT x.id FROM public.skill_attempts x JOIN public.exam_skills k ON k.id = x.exam_skill_id
+              WHERE k.skill IN ('WRITING','SPEAKING') AND x.status = 'COMPLETED' AND (x.content_status = 'EXPIRED' OR
+                (x.content_status = 'AVAILABLE' AND x.content_expires_at <= ${now}::timestamptz))
                 AND NOT EXISTS (SELECT 1 FROM public.grading_requests g WHERE g.skill_attempt_id = x.id
                   AND g.status IN ('WAITING_ASSIGNMENT', 'ASSIGNED'))
-              ORDER BY x.content_expires_at LIMIT ${limit} FOR UPDATE SKIP LOCKED)
-            AND sa.status = 'COMPLETED' AND sa.content_status = 'AVAILABLE'
+              ORDER BY x.content_expires_at LIMIT ${limit} FOR UPDATE OF x SKIP LOCKED)
+            AND sa.status = 'COMPLETED' AND (sa.content_status = 'EXPIRED' OR
+              (sa.content_status = 'AVAILABLE' AND sa.content_expires_at <= ${now}::timestamptz))
             AND NOT EXISTS (SELECT 1 FROM public.grading_requests g WHERE g.skill_attempt_id = sa.id
               AND g.status IN ('WAITING_ASSIGNMENT', 'ASSIGNED'))
           RETURNING sa.id`;
@@ -429,17 +470,20 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
           UPDATE public.skill_attempts sa SET status = 'ABANDONED', content_status = 'DELETED',
             content_deleted_at = ${now}::timestamptz
           WHERE sa.id IN (
-              SELECT x.id FROM public.skill_attempts x WHERE x.status = 'IN_PROGRESS'
+              SELECT x.id FROM public.skill_attempts x JOIN public.exam_skills k ON k.id = x.exam_skill_id
+              WHERE k.skill IN ('WRITING','SPEAKING') AND x.status = 'IN_PROGRESS' AND x.content_status <> 'HELD'
                 AND x.started_at <= ${olderThan}::timestamptz
                 AND NOT EXISTS (SELECT 1 FROM public.grading_requests g WHERE g.skill_attempt_id = x.id
                   AND g.status IN ('WAITING_ASSIGNMENT', 'ASSIGNED'))
-              ORDER BY x.started_at LIMIT ${limit} FOR UPDATE SKIP LOCKED)
+              ORDER BY x.started_at LIMIT ${limit} FOR UPDATE OF x SKIP LOCKED)
             AND sa.status = 'IN_PROGRESS'
           RETURNING sa.id, sa.attempt_id AS "attemptId"`;
         if (claimed.length > 0) {
           await tx.$executeRaw`
             UPDATE public.attempts SET status = 'ABANDONED'
-            WHERE id = ANY(${claimed.map((r) => r.attemptId)}::uuid[]) AND status = 'IN_PROGRESS'`;
+            WHERE id = ANY(${claimed.map((r) => r.attemptId)}::uuid[]) AND status = 'IN_PROGRESS'
+              AND NOT EXISTS (SELECT 1 FROM public.skill_attempts x
+                WHERE x.attempt_id = attempts.id AND x.status <> 'ABANDONED')`;
         }
         return markContentRows(tx, claimed.map((r) => r.id), now);
       });
@@ -447,9 +491,11 @@ export function createAttemptsRepository(db: typeof prisma = prisma): AttemptsRe
 
     async listPendingFileDeletes(limit) {
       const rows = await db.$queryRaw<Array<{ id: string; paths: string[] }>>`
-        SELECT skill_attempt_id AS id, array_agg(audio_path) AS paths FROM public.submission_contents
-        WHERE recording_status = 'DELETED' AND audio_path IS NOT NULL
-        GROUP BY skill_attempt_id ORDER BY min(updated_at) LIMIT ${limit}`;
+        SELECT sc.skill_attempt_id AS id, array_agg(sc.audio_path) AS paths FROM public.submission_contents sc
+        JOIN public.skill_attempts sa ON sa.id = sc.skill_attempt_id
+        JOIN public.exam_skills k ON k.id = sa.exam_skill_id
+        WHERE k.skill IN ('WRITING','SPEAKING') AND sc.recording_status = 'DELETED' AND sc.audio_path IS NOT NULL
+        GROUP BY sc.skill_attempt_id ORDER BY min(sc.updated_at) LIMIT ${limit}`;
       return rows.map((r) => ({ id: r.id, paths: r.paths }));
     },
 

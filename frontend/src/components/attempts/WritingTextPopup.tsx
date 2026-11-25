@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import Popup from "./Popup";
 import { attemptButton } from "./RecordingList";
-import { errorCode, errorStatus, getWritingText } from "../../lib/attempts/skill-attempts-api";
+import { getSavedWriting } from "../../lib/attempts/skill-attempts-api";
+import { writingContentError } from "../../lib/attempts/writing-download";
 import { countWords, type WritingTaskKey } from "../../lib/attempts/writing-text";
 
 /**
  * Popup "Xem bài viết" (trang xác nhận hoàn thành và lịch sử Writing): đọc lại văn bản từng Task.
  * Có `texts` (bài còn trên máy, chưa chốt) thì hiện luôn, không gọi máy chủ; không thì lấy qua
- * GET writing/:taskKey. Chỉ đọc, không đổi hạn lưu. Nội dung bài viết không được ghi log.
+ * GET writing. Chỉ đọc và giữ nguyên hạn lưu.
  */
 const TASKS: { key: WritingTaskKey; label: string }[] = [
   { key: "task1", label: "Task 1" },
@@ -29,26 +30,23 @@ export default function WritingTextPopup({
   const [loaded, setLoaded] = useState<Loaded | null>(texts ?? null);
   const [error, setError] = useState("");
   const [active, setActive] = useState<WritingTaskKey>("task2");
+  const [sections, setSections] = useState<number[] | null>(null);
 
   useEffect(() => {
     if (texts || !attemptId) return;
     let live = true;
-    Promise.all(TASKS.map((t) => getWritingText(attemptId, t.key)))
-      .then((rows) => {
+    getSavedWriting(attemptId)
+      .then((saved) => {
         if (!live) return;
         const next: Loaded = {};
-        rows.forEach((row, i) => (next[TASKS[i].key] = row.text));
+        saved.tasks.forEach((row) => (next[row.taskKey] = row.text));
+        setSections(saved.sections);
         setLoaded(next);
-        // Mở sẵn Task có chữ (ưu tiên Task 2 như bài chính).
-        if (!next.task2 && next.task1) setActive("task1");
+        if ((saved.sections && !saved.sections.includes(2)) || (!next.task2 && next.task1)) setActive("task1");
       })
       .catch((e) => {
         if (!live) return;
-        setError(
-          errorStatus(e) === 410 || errorCode(e) === "CONTENT_EXPIRED"
-            ? "Nội dung bài đã hết hạn nên bài viết đã bị xóa."
-            : "Chưa mở được bài viết lúc này, hãy thử lại sau.",
-        );
+        setError(writingContentError(e));
       });
     return () => {
       live = false;
@@ -68,7 +66,7 @@ export default function WritingTextPopup({
         ) : (
           <>
             <div role="group" aria-label="Chọn Task" className="flex gap-2">
-              {TASKS.map((t) => (
+              {TASKS.filter((_, index) => !sections || sections.includes(index + 1)).map((t) => (
                 <button
                   key={t.key}
                   type="button"

@@ -14,7 +14,7 @@ export type UploadView = {
   total: number;
 };
 export type GradingView = {
-  state: "idle" | "sending" | "unavailable" | "sent" | "error";
+  state: "idle" | "sending" | "error";
   message?: string;
 };
 /** Một Task Writing đã viết: số từ và mức tối thiểu của đề (nếu biết). */
@@ -33,17 +33,24 @@ export interface AttemptDoneSummaryProps {
   onRetryUpload: () => void;
   /** Hạn lưu bản ghi (ISO) từ máy chủ; chưa chốt trên máy chủ thì chưa có. */
   expiresAt: string | null;
+  contentStatus?: 'AVAILABLE' | 'HELD' | 'EXPIRED' | 'DELETED';
+  sectionLabel?: string | null;
   recordings: DoneRecording[];
   /** Writing: số từ từng Task đã viết. */
   tasks?: DoneTask[];
   /** Writing: mở popup đọc lại bài viết (thay cho nghe lại). */
   onViewText?: () => void;
+  onDownload?: () => void;
+  downloading?: boolean;
   /** Trả đường phát (blob local hoặc URL tạm); null nếu chưa nghe được. */
   loadAudio: LoadAudio;
   grading: GradingView;
   onSendGrading: () => void;
   /** Chưa chốt xong trên máy chủ thì chưa cho gửi chấm. */
   canGrade: boolean;
+  gradingLabel?: string;
+  gradingHint?: string;
+  creditHint?: string;
   /** Dòng báo thêm cho người học (câu không tải lên được, bài làm thử...). */
   notices?: string[];
   onHome: () => void;
@@ -76,6 +83,8 @@ const primary = secondary + " primary";
 export default function AttemptDoneSummary(props: AttemptDoneSummaryProps) {
   const { skill, elapsedSeconds, answered, upload, expiresAt, grading } = props;
   const writing = skill === "Writing";
+  const writingActions = writing && !!props.onViewText;
+  const actionPadding = writingActions ? { paddingInline: 12 } : undefined;
   const uploadText =
     upload.state === "local"
       ? "Chỉ lưu trên máy này"
@@ -95,6 +104,9 @@ export default function AttemptDoneSummary(props: AttemptDoneSummaryProps) {
         ? "[background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-9d301e)]"
         : "[background:var(--attempt-bg-e3ecfd)] [color:var(--attempt-text-2257b8)]";
   const expiry = formatExpiry(expiresAt);
+  const retention = props.contentStatus === 'HELD' ? 'Nội dung đang được tạm giữ.'
+    : props.contentStatus === 'EXPIRED' || props.contentStatus === 'DELETED' ? 'Nội dung đã hết hạn lưu.'
+    : expiry ? 'Bài làm được lưu đến ' + expiry + '.' : 'Bài làm đã được lưu.';
   return (
     <section
       className="attempt-card flex flex-col [box-shadow:0_1px_2px_rgba(53,_38,_55,_0.04),_0_6px_16px_rgba(53,_38,_55,_0.07)]"
@@ -107,6 +119,7 @@ export default function AttemptDoneSummary(props: AttemptDoneSummaryProps) {
         </svg>
       </span>
       <h2 id="attempt-done-title">{"Bạn đã hoàn thành bài " + skill}</h2>
+      {props.sectionLabel && <p className="m-0">{props.sectionLabel}</p>}
       <dl className="m-0 grid [grid-template-columns:repeat(auto-fit,minmax(150px,1fr))] [gap:12px]">
         <div className="[padding:12px_14px] rounded-xl [background:var(--attempt-bg-faf9f5)] [border:1.5px_solid_var(--attempt-line-d6d4d0)]">
           <dt className="[font-size:12px] [color:var(--attempt-text-706473)]">{"Thời gian hoàn thành"}</dt>
@@ -156,7 +169,7 @@ export default function AttemptDoneSummary(props: AttemptDoneSummaryProps) {
           role="status"
           className="[padding:10px_14px] rounded-xl [background:var(--attempt-bg-e6f3ec)] [color:var(--attempt-text-24543d)] [font-size:14px] font-semibold"
         >
-          {expiry ? "Bài làm đã được lưu đến " + expiry + "." : "Bài làm đã được lưu."}
+          {retention}
         </div>
       )}
       {upload.state !== "done" && upload.state !== "local" && (
@@ -176,20 +189,10 @@ export default function AttemptDoneSummary(props: AttemptDoneSummaryProps) {
           {text}
         </div>
       ))}
-      {upload.state !== "local" && (
+      {upload.state !== "done" && upload.state !== "local" && (
       <p>
-        {(writing ? "Bài viết" : "Bản ghi") +
-          (expiry
-            ? " được giữ đến " + expiry + " (14 ngày kể từ lúc hoàn thành)."
-            : " được giữ 14 ngày kể từ lúc hoàn thành. Hạn lưu sẽ hiện ở đây khi bài được chốt.")}
+        {(writing ? "Bài viết" : "Bản ghi") + " được giữ 14 ngày kể từ lúc hoàn thành. Hạn lưu sẽ hiện ở đây khi bài được chốt."}
       </p>
-      )}
-      {writing && props.onViewText && (
-        <div>
-          <button type="button" className={secondary} onClick={props.onViewText}>
-            {"Xem lại bài viết"}
-          </button>
-        </div>
       )}
       {!writing && props.recordings.length > 0 && (
         <div>
@@ -197,38 +200,38 @@ export default function AttemptDoneSummary(props: AttemptDoneSummaryProps) {
           <RecordingList items={props.recordings} loadAudio={props.loadAudio} />
         </div>
       )}
-      <div className="[padding:12px_14px] rounded-xl [background:var(--attempt-bg-e3ecfd)] [color:var(--attempt-text-2257b8)] [font-size:14px]">
-        {"Hoàn thành chưa tự gửi bài đi chấm và chưa dùng lượt chấm. Khi sẵn sàng, bấm “Gửi cho Giáo viên chấm”; lượt chấm được tính theo quy định lượt miễn phí hằng tuần."}
-      </div>
-      {grading.state === "unavailable" && (
-        <div role="status" className="[padding:10px_14px] rounded-xl [background:var(--attempt-bg-fbedbf)] [color:var(--attempt-text-7a5a0e)] [font-size:14px]">
-          {"Tính năng gửi chấm sẽ sớm khả dụng. Bài của bạn đã được lưu, bạn có thể gửi sau."}
-        </div>
-      )}
-      {grading.state === "sent" && (
-        <div role="status" className="[padding:10px_14px] rounded-xl [background:var(--attempt-bg-e6f3ec)] [color:var(--attempt-text-24543d)] [font-size:14px]">
-          {grading.message || "Đã gửi bài cho Giáo viên chấm."}
-        </div>
-      )}
+      {props.onDownload && <div>
+        <button type="button" className={secondary} onClick={props.onDownload} disabled={props.downloading}>
+          {props.downloading ? 'Đang chuẩn bị tệp…' : writing ? 'Tải .docx' : 'Tải ghi âm (.zip)'}
+        </button>
+      </div>}
+      {props.gradingHint && <p className="m-0 text-sm" role="status">{props.gradingHint}</p>}
+      {props.creditHint && <p className="m-0 text-sm">{props.creditHint}</p>}
       {grading.state === "error" && (
         <div role="alert" className="[padding:10px_14px] rounded-xl [background:var(--attempt-bg-fbdcd3)] [color:var(--attempt-text-9d301e)] [font-size:14px]">
           {grading.message || "Chưa gửi được bài. Hãy thử lại."}
         </div>
       )}
-      <div className="flex flex-wrap justify-end gap-3">
-        <button type="button" className={secondary} onClick={props.onHome}>
+      <div className={"flex flex-wrap items-center justify-end " + (writingActions ? "gap-2" : "gap-3")}>
+        {writingActions && (
+          <button type="button" className={secondary + " mr-auto"} style={actionPadding} onClick={props.onViewText}>
+            {"Xem lại bài viết"}
+          </button>
+        )}
+        <button type="button" className={secondary} style={actionPadding} onClick={props.onHome}>
           {"Về trang chủ"}
         </button>
-        <button type="button" className={secondary} onClick={props.onHistory}>
+        <button type="button" className={secondary} style={actionPadding} onClick={props.onHistory}>
           {"Lịch sử làm bài"}
         </button>
         <button
           type="button"
           className={primary}
+          style={actionPadding}
           onClick={props.onSendGrading}
-          disabled={!props.canGrade || grading.state === "sending" || grading.state === "sent"}
+          disabled={!props.canGrade || grading.state === "sending"}
         >
-          {grading.state === "sending" ? "Đang gửi…" : "Gửi cho Giáo viên chấm"}
+          {grading.state === "sending" ? "Đang gửi…" : props.gradingLabel ?? "Gửi cho Giáo viên chấm"}
         </button>
       </div>
     </section>
